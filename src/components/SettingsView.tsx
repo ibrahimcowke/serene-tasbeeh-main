@@ -24,6 +24,9 @@ const themes = [
   { id: 'light', label: 'Light', description: 'Warm and calm' },
   { id: 'dark', label: 'Dark', description: 'Night dhikr' },
   { id: 'amoled', label: 'AMOLED', description: 'True black' },
+  { id: 'theme-midnight', label: 'Midnight', description: 'Deep blue serenity' },
+  { id: 'theme-rose', label: 'Rose Gold', description: 'Soft & elegant' },
+  { id: 'theme-nature', label: 'Nature', description: 'Earthy greens' },
 ] as const;
 
 export function SettingsView({ children }: SettingsViewProps) {
@@ -32,10 +35,12 @@ export function SettingsView({ children }: SettingsViewProps) {
     hapticEnabled,
     soundEnabled,
     theme,
+    counterShape,
     toggleTransliteration,
     toggleHaptic,
     toggleSound,
     setTheme,
+    setCounterShape,
     exportData,
     importData,
     clearAllData,
@@ -81,13 +86,13 @@ export function SettingsView({ children }: SettingsViewProps) {
       <SheetTrigger asChild>
         {children}
       </SheetTrigger>
-      <SheetContent side="bottom" className="bg-sheet-bg rounded-t-3xl h-[80vh]">
+      <SheetContent side="bottom" className="bg-sheet-bg rounded-t-3xl h-[85vh]">
         <div className="sheet-handle" />
         <SheetHeader className="text-left pb-4">
           <SheetTitle className="text-lg font-medium">Settings</SheetTitle>
         </SheetHeader>
 
-        <div className="overflow-y-auto pb-8 space-y-6">
+        <div className="overflow-y-auto pb-8 space-y-6 max-h-[calc(85vh-80px)]">
           {/* Display settings */}
           <div className="space-y-1">
             <p className="text-xs text-muted-foreground uppercase tracking-wide mb-3">Display</p>
@@ -101,6 +106,32 @@ export function SettingsView({ children }: SettingsViewProps) {
                 checked={showTransliteration}
                 onCheckedChange={toggleTransliteration}
               />
+            </div>
+          </div>
+
+          {/* Counter Shape Config */}
+          <div className="space-y-1">
+            <p className="text-xs text-muted-foreground uppercase tracking-wide mb-3">Counter Style</p>
+            <div className="grid grid-cols-3 gap-2">
+              {[
+                { id: 'minimal', label: 'Minimal', icon: '○' },
+                { id: 'classic', label: 'Classic', icon: '□' },
+                { id: 'beads', label: 'Beads', icon: 'ooo' },
+              ].map((style) => (
+                <button
+                  key={style.id}
+                  onClick={() => setCounterShape(style.id as any)}
+                  className={`
+                    p-3 rounded-xl border text-center transition-all
+                    ${counterShape === style.id
+                      ? 'bg-primary/10 border-primary text-primary'
+                      : 'bg-card border-transparent text-muted-foreground hover:bg-secondary'}
+                  `}
+                >
+                  <p className="text-lg mb-1 opacity-70">{style.icon}</p>
+                  <p className="text-xs font-medium">{style.label}</p>
+                </button>
+              ))}
             </div>
           </div>
 

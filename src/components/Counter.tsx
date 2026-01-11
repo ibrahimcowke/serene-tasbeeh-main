@@ -14,6 +14,7 @@ export function Counter() {
     increment,
     exitSessionMode,
     soundEnabled,
+    counterShape,
   } = useTasbeehStore();
 
   const [showCompletion, setShowCompletion] = useState(false);
@@ -45,7 +46,7 @@ export function Counter() {
   };
 
   const handleTap = useCallback(() => {
-    if (sessionMode.isComplete) return;
+    if (sessionMode.type === 'tasbih100' && sessionMode.isComplete) return;
 
     increment();
 
@@ -76,7 +77,7 @@ export function Counter() {
         setShowSessionComplete(true);
       }, 500);
     }
-  }, [increment, currentCount, sessionMode]);
+  }, [increment, currentCount, sessionMode, soundEnabled]);
 
   const handleDismissSessionComplete = () => {
     setShowSessionComplete(false);
@@ -164,42 +165,69 @@ export function Counter() {
         )}
       </div>
 
-      {/* Counter with progress ring */}
+      {/* Counter visualization */}
       <div className="relative">
-        <ProgressRing
-          progress={progress}
-          size={280}
-          strokeWidth={4}
-        />
+        {counterShape === 'minimal' && (
+          <ProgressRing
+            progress={progress}
+            size={280}
+            strokeWidth={4}
+          />
+        )}
+
+        {counterShape === 'classic' && (
+          <div className="absolute inset-x-0 -top-8 bottom-0 bg-secondary/30 rounded-3xl border-4 border-muted flex items-center justify-center -z-10 transform scale-110">
+            {/* Decorative screws */}
+            <div className="absolute top-3 left-3 w-3 h-3 rounded-full bg-muted-foreground/30" />
+            <div className="absolute top-3 right-3 w-3 h-3 rounded-full bg-muted-foreground/30" />
+            <div className="absolute bottom-3 left-3 w-3 h-3 rounded-full bg-muted-foreground/30" />
+            <div className="absolute bottom-3 right-3 w-3 h-3 rounded-full bg-muted-foreground/30" />
+          </div>
+        )}
 
         {/* Counter button */}
         <motion.button
           onClick={handleTap}
-          disabled={sessionMode.isComplete}
+          disabled={sessionMode.type === 'tasbih100' && sessionMode.isComplete}
           className={`
-            absolute inset-4
-            rounded-full 
-            bg-counter-bg
+            ${counterShape === 'minimal' ? 'absolute inset-4 rounded-full bg-counter-bg' : ''}
+            ${counterShape === 'classic' ? 'w-64 h-64 rounded-2xl bg-gradient-to-br from-card to-background shadow-inner flex flex-col items-center justify-center border-2 border-border/50' : ''}
+            ${counterShape === 'beads' ? 'w-64 h-64 rounded-full bg-transparent flex items-center justify-center' : ''}
+            
             flex items-center justify-center
             cursor-pointer
             select-none
             touch-manipulation
             transition-shadow duration-300
             disabled:opacity-50
-            ${showCompletion ? 'animate-completion' : 'counter-glow'}
+            ${showCompletion && counterShape === 'minimal' ? 'animate-completion' : ''}
+            ${!showCompletion && counterShape === 'minimal' ? 'counter-glow' : ''}
+            ${counterShape === 'beads' ? 'hover:scale-105 active:scale-95' : ''}
           `}
           whileTap={{ scale: 0.97 }}
           transition={{ duration: 0.1 }}
           aria-label="Increment counter"
         >
-          <div className="absolute inset-3 rounded-full border border-border/50" />
+          {counterShape === 'minimal' && (
+            <div className="absolute inset-3 rounded-full border border-border/50" />
+          )}
+
+          {counterShape === 'beads' && (
+            // Visual beads ring
+            <div className={`absolute inset-0 rounded-full border-[16px] border-primary/20 transition-all duration-300 ${showCompletion ? 'border-primary' : ''}`}>
+              <div className="absolute -top-4 left-1/2 -translate-x-1/2 w-4 h-8 bg-primary/40 rounded-full" />
+            </div>
+          )}
 
           <motion.span
             key={currentCount}
             initial={{ scale: 1.5, opacity: 0.5 }}
             animate={{ scale: 1, opacity: 1 }}
             transition={{ duration: 0.15, ease: [0.34, 1.56, 0.64, 1] }}
-            className="counter-number text-6xl md:text-7xl text-counter-text"
+            className={`
+              counter-number text-counter-text
+              ${counterShape === 'classic' ? 'font-mono text-7xl tracking-widest bg-black/10 px-6 py-2 rounded-lg inset-shadow' : 'text-6xl md:text-7xl'}
+            `}
           >
             {currentCount}
           </motion.span>
@@ -213,7 +241,7 @@ export function Counter() {
         </p>
 
         <AnimatePresence>
-          {showCompletion && !sessionMode.isComplete && (
+          {showCompletion && !(sessionMode.type === 'tasbih100' && sessionMode.isComplete) && (
             <motion.div
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
