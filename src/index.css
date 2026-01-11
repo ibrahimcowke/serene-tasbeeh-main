@@ -70,11 +70,12 @@
     --primary: 43 96% 64%;
     --primary-foreground: 224 25% 8%;
 
-    --secondary: 224 15% 16%;
+    --secondary: 224 20% 16%;
     --secondary-foreground: 210 20% 90%;
 
-    --muted: 224 15% 16%;
-    --muted-foreground: 215 15% 65%;
+    /* More visible track color */
+    --muted: 224 20% 25%;
+    --muted-foreground: 215 15% 75%;
 
     --accent: 43 96% 64%;
     --accent-foreground: 224 25% 8%;
@@ -82,20 +83,20 @@
     --destructive: 0 62% 30%;
     --destructive-foreground: 0 85% 95%;
 
-    --border: 224 20% 18%;
-    --input: 224 20% 18%;
+    --border: 224 25% 25%;
+    --input: 224 25% 25%;
     --ring: 43 96% 64%;
 
-    /* Counter specific */
-    --counter-bg: 224 20% 11%;
+    /* Counter specific - DISTINCT from background */
+    --counter-bg: 224 25% 15%;
     --counter-ring: 43 96% 64%;
     --counter-text: 43 96% 64%;
     --counter-glow: 43 100% 50%;
 
     --arabic-text: 210 20% 98%;
-    --progress-track: 224 15% 18%;
+    --progress-track: 224 25% 25%;
     --progress-fill: 43 96% 64%;
-    --sheet-bg: 224 25% 10%;
+    --sheet-bg: 224 25% 12%;
   }
 
   .amoled {
@@ -103,21 +104,22 @@
     --background: 0 0% 0%;
     --foreground: 0 0% 100%;
 
-    --card: 0 0% 8%;
+    --card: 0 0% 12%;
     --card-foreground: 0 0% 100%;
 
-    --popover: 0 0% 8%;
+    --popover: 0 0% 10%;
     --popover-foreground: 0 0% 100%;
 
     /* Bright Teal for contrast against black */
     --primary: 170 100% 50%;
     --primary-foreground: 0 0% 0%;
 
-    --secondary: 0 0% 12%;
-    --secondary-foreground: 0 0% 90%;
+    --secondary: 0 0% 18%;
+    --secondary-foreground: 0 0% 95%;
 
-    --muted: 0 0% 15%;
-    --muted-foreground: 0 0% 60%;
+    /* Highly visible distinct grey */
+    --muted: 0 0% 25%;
+    --muted-foreground: 0 0% 70%;
 
     --accent: 170 100% 50%;
     --accent-foreground: 0 0% 0%;
@@ -125,17 +127,17 @@
     --destructive: 0 70% 40%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 0 0% 15%;
-    --input: 0 0% 15%;
+    --border: 0 0% 25%;
+    --input: 0 0% 25%;
     --ring: 170 100% 50%;
 
-    --counter-bg: 0 0% 0%;
+    --counter-bg: 0 0% 12%;
     --counter-ring: 170 100% 50%;
     --counter-text: 170 100% 50%;
     --counter-glow: 170 100% 40%;
 
     --arabic-text: 0 0% 100%;
-    --progress-track: 0 0% 20%;
+    --progress-track: 0 0% 30%;
     --progress-fill: 170 100% 50%;
   }
 
@@ -144,21 +146,21 @@
     --background: 224 35% 8%;
     --foreground: 210 30% 98%;
 
-    --card: 224 30% 12%;
+    --card: 224 30% 15%;
     --card-foreground: 210 30% 98%;
 
-    --popover: 224 30% 12%;
+    --popover: 224 30% 15%;
     --popover-foreground: 210 30% 98%;
 
     /* Electric Blue/Cyan for high visibility */
     --primary: 195 90% 60%;
     --primary-foreground: 224 35% 8%;
 
-    --secondary: 224 25% 16%;
-    --secondary-foreground: 210 30% 90%;
+    --secondary: 224 30% 20%;
+    --secondary-foreground: 210 30% 95%;
 
-    --muted: 224 25% 16%;
-    --muted-foreground: 215 20% 70%;
+    --muted: 224 30% 25%;
+    --muted-foreground: 215 25% 75%;
 
     --accent: 195 90% 60%;
     --accent-foreground: 224 35% 8%;
@@ -166,19 +168,20 @@
     --destructive: 0 62% 30%;
     --destructive-foreground: 0 85% 95%;
 
-    --border: 224 25% 18%;
-    --input: 224 25% 18%;
+    --border: 224 30% 25%;
+    --input: 224 30% 25%;
     --ring: 195 90% 60%;
 
-    --counter-bg: 224 30% 10%;
+    /* Distinct from background */
+    --counter-bg: 224 30% 14%;
     --counter-ring: 195 90% 60%;
     --counter-text: 195 90% 70%;
     --counter-glow: 195 100% 60%;
 
     --arabic-text: 210 30% 98%;
-    --progress-track: 224 25% 16%;
+    --progress-track: 224 30% 25%;
     --progress-fill: 195 90% 60%;
-    --sheet-bg: 224 30% 10%;
+    --sheet-bg: 224 30% 12%;
   }
 
   .theme-rose {
@@ -186,21 +189,22 @@
     --background: 350 30% 98%;
     --foreground: 350 20% 20%;
 
-    --card: 350 25% 96%;
+    --card: 350 25% 94%;
     --card-foreground: 350 20% 20%;
 
-    --popover: 350 30% 98%;
+    --popover: 350 30% 96%;
     --popover-foreground: 350 20% 20%;
 
     /* Vivid Rose for visibility */
     --primary: 340 60% 60%;
     --primary-foreground: 350 30% 98%;
 
-    --secondary: 350 25% 93%;
+    --secondary: 350 25% 90%;
     --secondary-foreground: 350 20% 30%;
 
-    --muted: 350 20% 91%;
-    --muted-foreground: 350 10% 50%;
+    /* Darker pink for visibility */
+    --muted: 350 20% 88%;
+    --muted-foreground: 350 20% 40%;
 
     --accent: 340 60% 60%;
     --accent-foreground: 350 30% 98%;
@@ -208,19 +212,19 @@
     --destructive: 0 65% 55%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 350 25% 89%;
-    --input: 350 25% 89%;
+    --border: 350 25% 85%;
+    --input: 350 25% 85%;
     --ring: 340 60% 60%;
 
-    --counter-bg: 350 30% 95%;
+    --counter-bg: 350 30% 92%;
     --counter-ring: 340 60% 60%;
     --counter-text: 350 30% 20%;
     --counter-glow: 340 70% 70%;
 
     --arabic-text: 350 30% 20%;
-    --progress-track: 350 20% 89%;
+    --progress-track: 350 20% 85%;
     --progress-fill: 340 60% 60%;
-    --sheet-bg: 350 30% 98%;
+    --sheet-bg: 350 30% 96%;
   }
 
   .theme-nature {
@@ -228,21 +232,22 @@
     --background: 120 20% 97%;
     --foreground: 120 25% 15%;
 
-    --card: 120 15% 95%;
+    --card: 120 15% 93%;
     --card-foreground: 120 25% 15%;
 
-    --popover: 120 20% 97%;
+    --popover: 120 20% 95%;
     --popover-foreground: 120 25% 15%;
 
     /* Deep Forest Green for contrast */
     --primary: 135 50% 40%;
     --primary-foreground: 120 20% 97%;
 
-    --secondary: 120 15% 91%;
+    --secondary: 120 15% 89%;
     --secondary-foreground: 120 25% 25%;
 
-    --muted: 120 15% 89%;
-    --muted-foreground: 120 10% 50%;
+    /* Darker green for track visibility */
+    --muted: 120 15% 85%;
+    --muted-foreground: 120 20% 40%;
 
     --accent: 135 50% 40%;
     --accent-foreground: 120 20% 97%;
@@ -250,19 +255,19 @@
     --destructive: 0 65% 55%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 120 15% 86%;
-    --input: 120 15% 86%;
+    --border: 120 15% 82%;
+    --input: 120 15% 82%;
     --ring: 135 50% 40%;
 
-    --counter-bg: 120 20% 93%;
+    --counter-bg: 120 20% 90%;
     --counter-ring: 135 50% 40%;
     --counter-text: 120 30% 15%;
     --counter-glow: 135 50% 50%;
 
     --arabic-text: 120 30% 15%;
-    --progress-track: 120 15% 86%;
+    --progress-track: 120 15% 82%;
     --progress-fill: 135 50% 40%;
-    --sheet-bg: 120 20% 97%;
+    --sheet-bg: 120 20% 95%;
   }
 }
 
