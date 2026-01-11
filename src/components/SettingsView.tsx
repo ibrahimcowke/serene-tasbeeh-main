@@ -30,6 +30,8 @@ const themes = [
 ] as const;
 
 export function SettingsView({ children }: SettingsViewProps) {
+  const [open, setOpen] = useState(false);
+
   const {
     showTransliteration,
     hapticEnabled,
@@ -82,7 +84,7 @@ export function SettingsView({ children }: SettingsViewProps) {
   };
 
   return (
-    <Sheet>
+    <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger asChild>
         {children}
       </SheetTrigger>
@@ -124,7 +126,10 @@ export function SettingsView({ children }: SettingsViewProps) {
               ].map((style) => (
                 <button
                   key={style.id}
-                  onClick={() => setCounterShape(style.id as 'minimal' | 'classic' | 'beads' | 'flower' | 'waveform' | 'hexagon' | 'orb')}
+                  onClick={() => {
+                    setCounterShape(style.id as 'minimal' | 'classic' | 'beads' | 'flower' | 'waveform' | 'hexagon' | 'orb');
+                    setOpen(false);
+                  }}
                   className={`
                     p-3 rounded-xl border text-center transition-all relative overflow-hidden
                     ${counterShape === style.id
@@ -149,7 +154,10 @@ export function SettingsView({ children }: SettingsViewProps) {
                   initial={{ opacity: 0, y: 5 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: index * 0.05 }}
-                  onClick={() => setTheme(t.id)}
+                  onClick={() => {
+                    setTheme(t.id);
+                    setOpen(false);
+                  }}
                   className={`
                     w-full p-4 rounded-2xl text-left
                     transition-colors duration-200
@@ -174,6 +182,7 @@ export function SettingsView({ children }: SettingsViewProps) {
               ))}
             </div>
           </div>
+
 
           {/* Feedback settings */}
           <div className="space-y-1">
