@@ -121,16 +121,14 @@ export const defaultDhikrs: Dhikr[] = [
 const getTodayDate = () => new Date().toISOString().split('T')[0];
 
 const getDefaultSessionMode = (): SessionMode => ({
-  type: 'free', // Changed from 'single' to 'free'
-  currentPhase: 0,
-  phaseCounts: [0, 0, 0, 0],
-  isComplete: false,
+  type: 'free',
 });
 
 export const useTasbeehStore = create<TasbeehState>()(
   persist(
     (set, get) => ({
       // Initial state
+      count: 0, // Legacy support
       currentDhikr: defaultDhikrs[0],
       currentCount: 0,
       targetCount: 33, // Renamed to target in the diff, but keeping targetCount for now
