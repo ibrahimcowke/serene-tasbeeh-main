@@ -120,15 +120,15 @@ export function SettingsView({ children }: SettingsViewProps) {
               ].map((style) => (
                 <button
                   key={style.id}
-                  onClick={() => setCounterShape(style.id as any)}
+                  onClick={() => setCounterShape(style.id as 'minimal' | 'classic' | 'beads')}
                   className={`
-                    p-3 rounded-xl border text-center transition-all
+                    p-3 rounded-xl border text-center transition-all relative overflow-hidden
                     ${counterShape === style.id
-                      ? 'bg-primary/10 border-primary text-primary'
+                      ? 'bg-primary/10 border-primary text-primary ring-1 ring-primary'
                       : 'bg-card border-transparent text-muted-foreground hover:bg-secondary'}
                   `}
                 >
-                  <p className="text-lg mb-1 opacity-70">{style.icon}</p>
+                  <p className="text-lg mb-1 opacity-70 scale-125">{style.icon}</p>
                   <p className="text-xs font-medium">{style.label}</p>
                 </button>
               ))}
