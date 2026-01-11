@@ -249,6 +249,80 @@ export function Counter() {
           </div>
         )}
 
+        {counterShape === 'hexagon' && (
+          <div className="absolute inset-0 flex items-center justify-center -z-10">
+            <svg width="300" height="300" viewBox="0 0 100 100" className="transform -rotate-90">
+              <path
+                d="M50 5 L93.3 30 V75 L50 100 L6.7 75 V30 Z"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                className="text-muted/20"
+              />
+              <motion.path
+                d="M50 5 L93.3 30 V75 L50 100 L6.7 75 V30 Z"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="4"
+                className="text-primary"
+                initial={{ pathLength: 0 }}
+                animate={{ pathLength: progress }}
+                transition={{ duration: 0.3 }}
+              />
+            </svg>
+            {/* Inner pulse */}
+            <div className="absolute inset-0 flex items-center justify-center">
+              <motion.div
+                className="w-48 h-48 bg-primary/5 clip-path-hexagon"
+                animate={{ scale: [1, 1.05, 1] }}
+                transition={{ duration: 2, repeat: Infinity }}
+                style={{ clipPath: 'polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)' }}
+              />
+            </div>
+          </div>
+        )}
+
+        {counterShape === 'orb' && (
+          <div className="absolute inset-0 flex items-center justify-center -z-10">
+            <div className="w-[260px] h-[260px] rounded-full bg-secondary/30 relative overflow-hidden shadow-inner border border-white/10">
+              {/* Liquid Fill */}
+              <motion.div
+                className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-primary to-primary/60"
+                initial={{ height: '0%' }}
+                animate={{ height: `${progress * 100}%` }}
+                transition={{ type: 'spring', bounce: 0, duration: 0.5 }}
+              >
+                <div className="absolute top-0 left-0 right-0 h-2 bg-white/20 blur-sm" />
+              </motion.div>
+
+              {/* Glass Reflection */}
+              <div className="absolute top-4 left-8 right-8 h-32 bg-gradient-to-b from-white/10 to-transparent rounded-full blur-md" />
+
+              {/* Center Glow */}
+              <motion.div
+                className="absolute inset-0 bg-primary/20 blur-xl"
+                animate={{ opacity: [0.3, 0.6, 0.3] }}
+                transition={{ duration: 3, repeat: Infinity }}
+              />
+            </div>
+
+            {/* External Progress Ring for extra clarity */}
+            <svg className="absolute w-[290px] h-[290px] -rotate-90 pointer-events-none">
+              <circle cx="145" cy="145" r="142" stroke="currentColor" fill="none" strokeWidth="1" className="text-muted/20" />
+              <motion.circle
+                cx="145" cy="145" r="142"
+                stroke="currentColor"
+                fill="none"
+                strokeWidth="2"
+                className="text-primary/50"
+                initial={{ pathLength: 0 }}
+                animate={{ pathLength: progress }}
+                transition={{ duration: 0.3 }}
+              />
+            </svg>
+          </div>
+        )}
+
         {/* Counter button */}
         <motion.button
           onClick={handleTap}
@@ -259,6 +333,8 @@ export function Counter() {
             ${counterShape === 'beads' ? 'w-64 h-64 rounded-full bg-transparent flex items-center justify-center' : ''}
             ${counterShape === 'flower' ? 'w-64 h-64 rounded-full bg-background/50 backdrop-blur-sm border border-primary/20 flex items-center justify-center shadow-lg' : ''}
             ${counterShape === 'waveform' ? 'w-72 h-72 rounded-full flex items-center justify-center backdrop-blur-sm' : ''}
+            ${counterShape === 'hexagon' ? 'w-64 h-64 flex items-center justify-center bg-card/10 backdrop-blur-sm' : ''}
+            ${counterShape === 'orb' ? 'w-64 h-64 rounded-full flex items-center justify-center' : ''}
             
             flex items-center justify-center
             cursor-pointer
@@ -269,6 +345,7 @@ export function Counter() {
             ${showCompletion && counterShape === 'minimal' ? 'animate-completion' : ''}
             ${!showCompletion && counterShape === 'minimal' ? 'counter-glow' : ''}
             ${counterShape === 'beads' ? 'hover:scale-105 active:scale-95' : ''}
+            ${counterShape === 'orb' ? 'shadow-2xl shadow-primary/20' : ''}
           `}
           whileTap={{ scale: 0.97 }}
           transition={{ duration: 0.1 }}
@@ -316,6 +393,7 @@ export function Counter() {
               counter-number text-counter-text
               ${counterShape === 'classic' ? 'font-mono text-7xl tracking-widest bg-black/10 px-6 py-2 rounded-lg inset-shadow mb-4' : 'text-6xl md:text-7xl'}
               ${counterShape === 'waveform' ? 'drop-shadow-md z-10' : ''}
+              ${counterShape === 'orb' ? 'text-white mix-blend-overlay' : ''}
             `}
           >
             {currentCount}
