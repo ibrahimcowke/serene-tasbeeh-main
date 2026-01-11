@@ -117,10 +117,12 @@ export function SettingsView({ children }: SettingsViewProps) {
                 { id: 'minimal', label: 'Minimal', icon: '○' },
                 { id: 'classic', label: 'Classic', icon: '□' },
                 { id: 'beads', label: 'Beads', icon: 'ooo' },
+                { id: 'flower', label: 'Flower', icon: '❀' },
+                { id: 'waveform', label: 'Wave', icon: '〰' },
               ].map((style) => (
                 <button
                   key={style.id}
-                  onClick={() => setCounterShape(style.id as 'minimal' | 'classic' | 'beads')}
+                  onClick={() => setCounterShape(style.id as 'minimal' | 'classic' | 'beads' | 'flower' | 'waveform')}
                   className={`
                     p-3 rounded-xl border text-center transition-all relative overflow-hidden
                     ${counterShape === style.id

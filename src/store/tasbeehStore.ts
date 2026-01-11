@@ -40,7 +40,7 @@ interface TasbeehState {
   theme: 'light' | 'dark' | 'amoled' | 'theme-midnight' | 'theme-rose' | 'theme-nature';
   language: 'en' | 'ar';
   vibrationIntensity: 'light' | 'medium' | 'heavy';
-  counterShape: 'minimal' | 'classic' | 'beads';
+  counterShape: 'minimal' | 'classic' | 'beads' | 'flower' | 'waveform';
   showTransliteration: boolean;
   
   // Data

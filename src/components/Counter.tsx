@@ -166,6 +166,7 @@ export function Counter() {
       </div>
 
       {/* Counter visualization */}
+      {/* Counter visualization */}
       <div className="relative">
         {counterShape === 'minimal' && (
           <ProgressRing
@@ -176,12 +177,75 @@ export function Counter() {
         )}
 
         {counterShape === 'classic' && (
-          <div className="absolute inset-x-0 -top-8 bottom-0 bg-secondary/30 rounded-3xl border-4 border-muted flex items-center justify-center -z-10 transform scale-110">
+          <div className="absolute inset-x-0 -top-8 bottom-0 bg-secondary/30 rounded-3xl border-4 border-muted flex items-center justify-center -z-10 transform scale-110 flex-col">
             {/* Decorative screws */}
             <div className="absolute top-3 left-3 w-3 h-3 rounded-full bg-muted-foreground/30" />
             <div className="absolute top-3 right-3 w-3 h-3 rounded-full bg-muted-foreground/30" />
             <div className="absolute bottom-3 left-3 w-3 h-3 rounded-full bg-muted-foreground/30" />
             <div className="absolute bottom-3 right-3 w-3 h-3 rounded-full bg-muted-foreground/30" />
+
+            {/* Progress Bar for Classic */}
+            <div className="absolute bottom-8 left-8 right-8 h-2 bg-muted/50 rounded-full overflow-hidden">
+              <motion.div
+                className="h-full bg-primary"
+                initial={{ width: 0 }}
+                animate={{ width: `${progress * 100}%` }}
+                transition={{ duration: 0.3 }}
+              />
+            </div>
+          </div>
+        )}
+
+        {counterShape === 'flower' && (
+          <div className="absolute inset-0 flex items-center justify-center -z-10">
+            {/* Flower petals rotating */}
+            <motion.div
+              animate={{ rotate: currentCount * 10 }}
+              className="w-[280px] h-[280px] relative opacity-20"
+            >
+              {[...Array(8)].map((_, i) => (
+                <div
+                  key={i}
+                  className="absolute top-1/2 left-1/2 w-24 h-24 bg-primary rounded-full origin-bottom-right"
+                  style={{ transform: `rotate(${i * 45}deg) translate(-50%, -100%)` }}
+                />
+              ))}
+            </motion.div>
+            {/* Progress Pulse */}
+            <svg className="absolute w-[300px] h-[300px] -rotate-90 pointer-events-none">
+              <circle
+                cx="150" cy="150" r="140"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                className="text-muted/20"
+              />
+              <motion.circle
+                cx="150" cy="150" r="140"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="4"
+                className="text-primary"
+                strokeDasharray="880"
+                strokeDashoffset={880 - (880 * progress)}
+                strokeLinecap="round"
+                transition={{ duration: 0.5 }}
+              />
+            </svg>
+          </div>
+        )}
+
+        {counterShape === 'waveform' && (
+          <div className="absolute inset-0 rounded-full overflow-hidden -z-10 border-4 border-muted/20">
+            <div className="absolute inset-0 bg-secondary/30" />
+            <motion.div
+              className="absolute bottom-0 left-0 right-0 bg-primary/20"
+              initial={{ height: 0 }}
+              animate={{ height: `${progress * 100}%` }}
+              transition={{ type: 'spring', bounce: 0, duration: 0.5 }}
+            >
+              <div className="absolute top-0 left-0 right-0 h-4 bg-primary/30 blur-md transform -translate-y-1/2" />
+            </motion.div>
           </div>
         )}
 
@@ -193,6 +257,8 @@ export function Counter() {
             ${counterShape === 'minimal' ? 'absolute inset-4 rounded-full bg-counter-bg' : ''}
             ${counterShape === 'classic' ? 'w-64 h-64 rounded-2xl bg-gradient-to-br from-card to-background shadow-inner flex flex-col items-center justify-center border-2 border-border/50' : ''}
             ${counterShape === 'beads' ? 'w-64 h-64 rounded-full bg-transparent flex items-center justify-center' : ''}
+            ${counterShape === 'flower' ? 'w-64 h-64 rounded-full bg-background/50 backdrop-blur-sm border border-primary/20 flex items-center justify-center shadow-lg' : ''}
+            ${counterShape === 'waveform' ? 'w-72 h-72 rounded-full flex items-center justify-center backdrop-blur-sm' : ''}
             
             flex items-center justify-center
             cursor-pointer
@@ -213,9 +279,31 @@ export function Counter() {
           )}
 
           {counterShape === 'beads' && (
-            // Visual beads ring
-            <div className={`absolute inset-0 rounded-full border-[16px] border-primary/20 transition-all duration-300 ${showCompletion ? 'border-primary' : ''}`}>
-              <div className="absolute -top-4 left-1/2 -translate-x-1/2 w-4 h-8 bg-primary/40 rounded-full" />
+            // Visual beads ring - Enhanced
+            <div className="absolute inset-0 rounded-full">
+              <svg className="w-full h-full -rotate-90">
+                <circle cx="50%" cy="50%" r="48%" stroke="currentColor" fill="none" strokeWidth="1" className="text-muted/20" />
+                {/* Beads Progress Ring */}
+                <motion.circle
+                  cx="50%" cy="50%" r="48%"
+                  stroke="currentColor"
+                  fill="none"
+                  strokeWidth="12"
+                  className="text-primary/20"
+                  strokeDasharray="1 15" // Dotted line effect
+                />
+                <motion.circle
+                  cx="50%" cy="50%" r="48%"
+                  stroke="currentColor"
+                  fill="none"
+                  strokeWidth="12"
+                  className="text-primary"
+                  strokeDasharray="1 15"
+                  initial={{ pathLength: 0 }}
+                  animate={{ pathLength: progress }}
+                  transition={{ duration: 0.3 }}
+                />
+              </svg>
             </div>
           )}
 
@@ -226,7 +314,8 @@ export function Counter() {
             transition={{ duration: 0.15, ease: [0.34, 1.56, 0.64, 1] }}
             className={`
               counter-number text-counter-text
-              ${counterShape === 'classic' ? 'font-mono text-7xl tracking-widest bg-black/10 px-6 py-2 rounded-lg inset-shadow' : 'text-6xl md:text-7xl'}
+              ${counterShape === 'classic' ? 'font-mono text-7xl tracking-widest bg-black/10 px-6 py-2 rounded-lg inset-shadow mb-4' : 'text-6xl md:text-7xl'}
+              ${counterShape === 'waveform' ? 'drop-shadow-md z-10' : ''}
             `}
           >
             {currentCount}
