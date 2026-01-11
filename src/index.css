@@ -1,0 +1,277 @@
+@import url('https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Inter:wght@300;400;500;600&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Warm, serene light theme */
+    --background: 40 30% 97%;
+    --foreground: 30 15% 20%;
+
+    --card: 40 25% 95%;
+    --card-foreground: 30 15% 20%;
+
+    --popover: 40 30% 97%;
+    --popover-foreground: 30 15% 20%;
+
+    /* Soft sage green - spiritual, calming */
+    --primary: 150 25% 45%;
+    --primary-foreground: 40 30% 98%;
+
+    --secondary: 40 20% 92%;
+    --secondary-foreground: 30 15% 25%;
+
+    --muted: 40 15% 90%;
+    --muted-foreground: 30 10% 50%;
+
+    --accent: 150 20% 90%;
+    --accent-foreground: 150 25% 35%;
+
+    --destructive: 0 65% 55%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 40 20% 88%;
+    --input: 40 20% 88%;
+    --ring: 150 25% 45%;
+
+    --radius: 1rem;
+
+    /* Counter specific */
+    --counter-bg: 40 25% 94%;
+    --counter-ring: 150 25% 45%;
+    --counter-text: 30 20% 15%;
+    --counter-glow: 150 30% 50%;
+
+    /* Arabic text */
+    --arabic-text: 30 25% 18%;
+
+    /* Progress ring */
+    --progress-track: 40 15% 88%;
+    --progress-fill: 150 25% 45%;
+
+    /* Sheet/modal */
+    --sheet-bg: 40 30% 98%;
+  }
+
+  .dark {
+    /* Deep, restful dark theme */
+    --background: 220 20% 10%;
+    --foreground: 40 15% 90%;
+
+    --card: 220 18% 13%;
+    --card-foreground: 40 15% 90%;
+
+    --popover: 220 20% 12%;
+    --popover-foreground: 40 15% 90%;
+
+    /* Warm amber accent for dark mode */
+    --primary: 38 70% 55%;
+    --primary-foreground: 220 20% 10%;
+
+    --secondary: 220 15% 18%;
+    --secondary-foreground: 40 15% 85%;
+
+    --muted: 220 15% 20%;
+    --muted-foreground: 40 10% 55%;
+
+    --accent: 38 30% 20%;
+    --accent-foreground: 38 60% 70%;
+
+    --destructive: 0 60% 45%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 220 15% 20%;
+    --input: 220 15% 20%;
+    --ring: 38 70% 55%;
+
+    /* Counter specific */
+    --counter-bg: 220 18% 14%;
+    --counter-ring: 38 70% 55%;
+    --counter-text: 40 20% 92%;
+    --counter-glow: 38 80% 50%;
+
+    /* Arabic text */
+    --arabic-text: 40 20% 95%;
+
+    /* Progress ring */
+    --progress-track: 220 15% 22%;
+    --progress-fill: 38 70% 55%;
+
+    /* Sheet/modal */
+    --sheet-bg: 220 18% 12%;
+  }
+
+  .amoled {
+    --background: 0 0% 0%;
+    --foreground: 40 15% 90%;
+
+    --card: 0 0% 5%;
+    --card-foreground: 40 15% 90%;
+
+    --popover: 0 0% 3%;
+    --popover-foreground: 40 15% 90%;
+
+    --primary: 38 70% 50%;
+    --primary-foreground: 0 0% 0%;
+
+    --secondary: 0 0% 8%;
+    --secondary-foreground: 40 15% 85%;
+
+    --muted: 0 0% 12%;
+    --muted-foreground: 40 10% 50%;
+
+    --accent: 38 30% 15%;
+    --accent-foreground: 38 60% 70%;
+
+    --border: 0 0% 15%;
+    --input: 0 0% 15%;
+    --ring: 38 70% 50%;
+
+    /* Counter specific */
+    --counter-bg: 0 0% 6%;
+    --counter-ring: 38 70% 50%;
+    --counter-text: 40 20% 92%;
+    --counter-glow: 38 80% 45%;
+
+    --arabic-text: 40 20% 95%;
+    --progress-track: 0 0% 15%;
+    --progress-fill: 38 70% 50%;
+    --sheet-bg: 0 0% 5%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  html,
+  body,
+  #root {
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-family: 'Inter', sans-serif;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
+    user-select: none;
+  }
+
+  /* Arabic typography */
+  .font-arabic {
+    font-family: 'Amiri', serif;
+    direction: rtl;
+    line-height: 1.8;
+  }
+
+  /* Counter number styling */
+  .counter-number {
+    font-family: 'Inter', sans-serif;
+    font-weight: 300;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.02em;
+  }
+}
+
+@layer components {
+
+  /* Subtle glow effect for counter */
+  .counter-glow {
+    box-shadow:
+      0 0 60px -20px hsl(var(--counter-glow) / 0.15),
+      0 0 100px -30px hsl(var(--counter-glow) / 0.1);
+  }
+
+  /* Soft press effect */
+  .press-effect {
+    transition: transform 0.1s ease-out;
+  }
+
+  .press-effect:active {
+    transform: scale(0.98);
+  }
+
+  /* Smooth number animation */
+  .number-animate {
+    transition: transform 0.15s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  /* Progress ring */
+  .progress-ring {
+    transition: stroke-dashoffset 0.3s ease-out;
+  }
+
+  /* Bottom sheet handle */
+  .sheet-handle {
+    @apply w-10 h-1 rounded-full bg-muted-foreground/20 mx-auto mb-4;
+  }
+
+  /* Safe area padding */
+  .safe-area-bottom {
+    padding-bottom: max(1rem, env(safe-area-inset-bottom));
+  }
+
+  .safe-area-top {
+    padding-top: max(1rem, env(safe-area-inset-top));
+  }
+}
+
+@layer utilities {
+
+  /* Haptic feedback simulation via animation */
+  @keyframes gentle-pulse {
+
+    0%,
+    100% {
+      opacity: 1;
+    }
+
+    50% {
+      opacity: 0.8;
+    }
+  }
+
+  .animate-gentle-pulse {
+    animation: gentle-pulse 0.2s ease-out;
+  }
+
+  /* Subtle fade in */
+  @keyframes fade-in-up {
+    from {
+      opacity: 0;
+      transform: translateY(8px);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .animate-fade-in-up {
+    animation: fade-in-up 0.4s ease-out;
+  }
+
+  /* Completion celebration - subtle */
+  @keyframes gentle-glow {
+
+    0%,
+    100% {
+      box-shadow: 0 0 60px -20px hsl(var(--counter-glow) / 0.15);
+    }
+
+    50% {
+      box-shadow: 0 0 80px -15px hsl(var(--counter-glow) / 0.3);
+    }
+  }
+
+  .animate-completion {
+    animation: gentle-glow 1s ease-in-out 3;
+  }
+}
