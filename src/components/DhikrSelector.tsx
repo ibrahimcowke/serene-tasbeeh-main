@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Check, Plus, Trash2 } from 'lucide-react';
+import { Check, Plus, Trash2, Search } from 'lucide-react';
 import { useTasbeehStore, Dhikr } from '@/store/tasbeehStore';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import { Input } from '@/components/ui/input';
@@ -18,7 +18,13 @@ const customDhikrSchema = z.object({
 
 export function DhikrSelector({ children }: DhikrSelectorProps) {
   const { dhikrs, customDhikrs, currentDhikr, setDhikr, addCustomDhikr, removeCustomDhikr, sessionMode } = useTasbeehStore();
-  const allDhikrs = [...dhikrs, ...customDhikrs];
+  const [searchQuery, setSearchQuery] = useState('');
+
+  const allDhikrs = [...dhikrs, ...customDhikrs].filter(d =>
+    d.transliteration.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    d.meaning.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    d.arabic.includes(searchQuery)
+  );
 
   const [showAddForm, setShowAddForm] = useState(false);
   const [newDhikr, setNewDhikr] = useState({ arabic: '', transliteration: '', meaning: '' });
