@@ -81,7 +81,7 @@ interface TasbeehState {
   updateStreak: () => void;
   
   // New Settings Actions
-  setCounterShape: (shape: 'minimal' | 'classic' | 'beads') => void;
+  setCounterShape: (shape: 'minimal' | 'classic' | 'beads' | 'flower' | 'waveform' | 'hexagon' | 'orb') => void;
   setVibrationIntensity: (intensity: 'light' | 'medium' | 'heavy') => void;
 }
 
