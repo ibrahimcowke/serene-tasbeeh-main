@@ -51,6 +51,11 @@ interface TasbeehState {
   dhikrs: Dhikr[];
   customDhikrs: Dhikr[];
   
+  // Streak tracking
+  streakDays: number;
+  lastActiveDate: string | null;
+  longestStreak: number;
+  
   // Actions
   increment: () => void;
   decrement: () => void;
@@ -60,7 +65,7 @@ interface TasbeehState {
   toggleTransliteration: () => void;
   toggleHaptic: () => void;
   toggleSound: () => void;
-  setTheme: (theme: 'light' | 'dark' | 'amoled') => void;
+  setTheme: (theme: 'light' | 'dark' | 'amoled' | 'theme-midnight' | 'theme-rose' | 'theme-nature') => void;
   setLanguage: (lang: 'ar' | 'en') => void;
   addCustomDhikr: (dhikr: Omit<Dhikr, 'id'>) => void;
   removeCustomDhikr: (id: string) => void;
