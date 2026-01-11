@@ -184,15 +184,37 @@ export function Counter() {
             <div className="absolute bottom-3 left-3 w-3 h-3 rounded-full bg-muted-foreground/30" />
             <div className="absolute bottom-3 right-3 w-3 h-3 rounded-full bg-muted-foreground/30" />
 
-            {/* Progress Bar for Classic */}
-            <div className="absolute bottom-8 left-8 right-8 h-2 bg-muted/50 rounded-full overflow-hidden">
+            {/* HIGH VISIBILITY Progress Bar for Classic */}
+            <div className="absolute bottom-8 left-8 right-8 h-3 bg-muted rounded-full overflow-hidden border border-muted-foreground/20">
               <motion.div
-                className="h-full bg-primary"
+                className="h-full bg-primary shadow-[0_0_10px_rgba(0,0,0,0.2)]"
                 initial={{ width: 0 }}
                 animate={{ width: `${progress * 100}%` }}
                 transition={{ duration: 0.3 }}
               />
             </div>
+          </div>
+        )}
+
+        {counterShape === 'beads' && (
+          <div className="absolute inset-0 flex items-center justify-center -z-10 pointer-events-none">
+            <svg className="w-[300px] h-[300px] -rotate-90">
+              {/* Track Dots */}
+              <circle cx="150" cy="150" r="140" stroke="currentColor" fill="none" strokeWidth="8" className="text-muted/30" strokeDasharray="1 18" />
+              {/* Progress Dots */}
+              <motion.circle
+                cx="150" cy="150" r="140"
+                stroke="currentColor"
+                fill="none"
+                strokeWidth="10"
+                className="text-primary drop-shadow-[0_0_8px_rgba(var(--primary),0.5)]"
+                strokeDasharray="1 18"
+                strokeLinecap="round"
+                initial={{ pathLength: 0 }}
+                animate={{ pathLength: progress }}
+                transition={{ duration: 0.3 }}
+              />
+            </svg>
           </div>
         )}
 
