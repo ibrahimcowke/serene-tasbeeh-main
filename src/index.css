@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Inter:wght@300;400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Inter:wght@300;400;500;600&family=Outfit:wght@300;400;500;600&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -6,138 +6,136 @@
 
 @layer base {
   :root {
-    /* Warm, serene light theme */
-    --background: 40 30% 97%;
-    --foreground: 30 15% 20%;
+    /* Premium Warm Theme - "Serene Dawn" */
+    --background: 40 30% 98%;
+    --foreground: 30 10% 15%;
 
-    --card: 40 25% 95%;
-    --card-foreground: 30 15% 20%;
+    --card: 0 0% 100%;
+    --card-foreground: 30 10% 15%;
 
-    --popover: 40 30% 97%;
-    --popover-foreground: 30 15% 20%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 30 10% 15%;
 
-    /* Soft sage green - spiritual, calming */
-    --primary: 150 25% 45%;
-    --primary-foreground: 40 30% 98%;
+    /* Sophisticated polished emerald */
+    --primary: 158 45% 35%;
+    --primary-foreground: 0 0% 100%;
 
-    --secondary: 40 20% 92%;
-    --secondary-foreground: 30 15% 25%;
+    --secondary: 40 20% 96%;
+    --secondary-foreground: 30 10% 25%;
 
-    --muted: 40 15% 90%;
-    --muted-foreground: 30 10% 50%;
+    --muted: 40 10% 94%;
+    --muted-foreground: 30 5% 50%;
 
-    --accent: 150 20% 90%;
-    --accent-foreground: 150 25% 35%;
+    --accent: 158 30% 96%;
+    --accent-foreground: 158 45% 30%;
 
-    --destructive: 0 65% 55%;
-    --destructive-foreground: 0 0% 100%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 98%;
 
-    --border: 40 20% 88%;
-    --input: 40 20% 88%;
-    --ring: 150 25% 45%;
+    --border: 40 10% 92%;
+    --input: 40 10% 92%;
+    --ring: 158 45% 35%;
 
-    --radius: 1rem;
+    --radius: 1.5rem;
 
-    /* Counter specific */
-    --counter-bg: 40 25% 94%;
-    --counter-ring: 150 25% 45%;
-    --counter-text: 30 20% 15%;
-    --counter-glow: 150 30% 50%;
+    /* Counter specific - Premium glass effect */
+    --counter-bg: 40 30% 98%;
+    --counter-ring: 158 45% 35%;
+    --counter-text: 158 50% 20%;
+    --counter-glow: 158 60% 70%;
 
     /* Arabic text */
-    --arabic-text: 30 25% 18%;
+    --arabic-text: 30 15% 15%;
 
     /* Progress ring */
-    --progress-track: 40 15% 88%;
-    --progress-fill: 150 25% 45%;
+    --progress-track: 40 10% 90%;
+    --progress-fill: 158 45% 35%;
 
     /* Sheet/modal */
-    --sheet-bg: 40 30% 98%;
+    --sheet-bg: 0 0% 100%;
   }
 
   .dark {
-    /* Deep, restful dark theme */
-    --background: 220 20% 10%;
-    --foreground: 40 15% 90%;
+    /* Premium Dark Theme - "Midnight Prayer" */
+    --background: 224 25% 8%;
+    --foreground: 210 20% 98%;
 
-    --card: 220 18% 13%;
-    --card-foreground: 40 15% 90%;
+    --card: 224 20% 12%;
+    --card-foreground: 210 20% 98%;
 
-    --popover: 220 20% 12%;
-    --popover-foreground: 40 15% 90%;
+    --popover: 224 25% 10%;
+    --popover-foreground: 210 20% 98%;
 
-    /* Warm amber accent for dark mode */
-    --primary: 38 70% 55%;
-    --primary-foreground: 220 20% 10%;
+    /* Luxurious gold/amber for dark mode */
+    --primary: 45 90% 55%;
+    --primary-foreground: 224 25% 8%;
 
-    --secondary: 220 15% 18%;
-    --secondary-foreground: 40 15% 85%;
+    --secondary: 224 15% 16%;
+    --secondary-foreground: 210 20% 90%;
 
-    --muted: 220 15% 20%;
-    --muted-foreground: 40 10% 55%;
+    --muted: 224 15% 16%;
+    --muted-foreground: 215 15% 65%;
 
-    --accent: 38 30% 20%;
-    --accent-foreground: 38 60% 70%;
+    --accent: 45 20% 16%;
+    --accent-foreground: 45 90% 55%;
 
-    --destructive: 0 60% 45%;
-    --destructive-foreground: 0 0% 100%;
+    --destructive: 0 62% 30%;
+    --destructive-foreground: 0 85% 95%;
 
-    --border: 220 15% 20%;
-    --input: 220 15% 20%;
-    --ring: 38 70% 55%;
+    --border: 224 20% 18%;
+    --input: 224 20% 18%;
+    --ring: 45 90% 55%;
 
     /* Counter specific */
-    --counter-bg: 220 18% 14%;
-    --counter-ring: 38 70% 55%;
-    --counter-text: 40 20% 92%;
-    --counter-glow: 38 80% 50%;
+    --counter-bg: 224 20% 11%;
+    --counter-ring: 45 90% 55%;
+    --counter-text: 45 90% 55%;
+    --counter-glow: 45 100% 50%;
 
-    /* Arabic text */
-    --arabic-text: 40 20% 95%;
-
-    /* Progress ring */
-    --progress-track: 220 15% 22%;
-    --progress-fill: 38 70% 55%;
-
-    /* Sheet/modal */
-    --sheet-bg: 220 18% 12%;
+    --arabic-text: 210 20% 98%;
+    --progress-track: 224 15% 18%;
+    --progress-fill: 45 90% 55%;
+    --sheet-bg: 224 25% 10%;
   }
 
   .amoled {
+    /* True Black - "Night" */
     --background: 0 0% 0%;
-    --foreground: 40 15% 90%;
+    --foreground: 0 0% 100%;
 
-    --card: 0 0% 5%;
-    --card-foreground: 40 15% 90%;
+    --card: 0 0% 8%;
+    --card-foreground: 0 0% 100%;
 
-    --popover: 0 0% 3%;
-    --popover-foreground: 40 15% 90%;
+    --popover: 0 0% 8%;
+    --popover-foreground: 0 0% 100%;
 
-    --primary: 38 70% 50%;
+    --primary: 158 60% 50%;
     --primary-foreground: 0 0% 0%;
 
-    --secondary: 0 0% 8%;
-    --secondary-foreground: 40 15% 85%;
+    --secondary: 0 0% 12%;
+    --secondary-foreground: 0 0% 90%;
 
-    --muted: 0 0% 12%;
-    --muted-foreground: 40 10% 50%;
+    --muted: 0 0% 15%;
+    --muted-foreground: 0 0% 60%;
 
-    --accent: 38 30% 15%;
-    --accent-foreground: 38 60% 70%;
+    --accent: 158 20% 15%;
+    --accent-foreground: 158 60% 50%;
+
+    --destructive: 0 70% 40%;
+    --destructive-foreground: 0 0% 100%;
 
     --border: 0 0% 15%;
     --input: 0 0% 15%;
-    --ring: 38 70% 50%;
+    --ring: 158 60% 50%;
 
-    /* Counter specific */
-    --counter-bg: 0 0% 6%;
-    --counter-ring: 38 70% 50%;
-    --counter-text: 40 20% 92%;
-    --counter-glow: 38 80% 45%;
+    --counter-bg: 0 0% 0%;
+    --counter-ring: 158 60% 50%;
+    --counter-text: 158 60% 50%;
+    --counter-glow: 158 70% 40%;
 
-    --arabic-text: 40 20% 95%;
-    --progress-track: 0 0% 15%;
-    --progress-fill: 38 70% 50%;
+    --arabic-text: 0 0% 100%;
+    --progress-track: 0 0% 20%;
+    --progress-fill: 158 60% 50%;
     --sheet-bg: 0 0% 5%;
   }
 }
@@ -157,7 +155,10 @@
 
   body {
     @apply bg-background text-foreground antialiased;
-    font-family: 'Inter', sans-serif;
+    font-family: 'Outfit', 'Inter', sans-serif;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
     -webkit-tap-highlight-color: transparent;
     -webkit-touch-callout: none;
     user-select: none;
@@ -167,111 +168,124 @@
   .font-arabic {
     font-family: 'Amiri', serif;
     direction: rtl;
-    line-height: 1.8;
+    line-height: 2;
   }
 
   /* Counter number styling */
   .counter-number {
-    font-family: 'Inter', sans-serif;
+    font-family: 'Outfit', sans-serif;
     font-weight: 300;
     font-variant-numeric: tabular-nums;
     letter-spacing: -0.02em;
+    text-shadow: 0 0 1px rgba(0, 0, 0, 0.1);
   }
 }
 
 @layer components {
 
-  /* Subtle glow effect for counter */
+  /* Subtle glow effect for counter - refined */
   .counter-glow {
     box-shadow:
-      0 0 60px -20px hsl(var(--counter-glow) / 0.15),
-      0 0 100px -30px hsl(var(--counter-glow) / 0.1);
+      0 0 40px -10px hsl(var(--counter-glow) / 0.1),
+      0 0 80px -20px hsl(var(--counter-glow) / 0.05);
   }
 
   /* Soft press effect */
   .press-effect {
-    transition: transform 0.1s ease-out;
+    transition: transform 0.1s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
   .press-effect:active {
-    transform: scale(0.98);
+    transform: scale(0.96);
   }
 
   /* Smooth number animation */
   .number-animate {
-    transition: transform 0.15s cubic-bezier(0.34, 1.56, 0.64, 1);
+    transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
   }
 
   /* Progress ring */
   .progress-ring {
-    transition: stroke-dashoffset 0.3s ease-out;
+    transition: stroke-dashoffset 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
   /* Bottom sheet handle */
   .sheet-handle {
-    @apply w-10 h-1 rounded-full bg-muted-foreground/20 mx-auto mb-4;
+    @apply w-12 h-1.5 rounded-full bg-muted-foreground/15 mx-auto mb-6;
   }
 
   /* Safe area padding */
   .safe-area-bottom {
-    padding-bottom: max(1rem, env(safe-area-inset-bottom));
+    padding-bottom: max(1.5rem, env(safe-area-inset-bottom));
   }
 
   .safe-area-top {
-    padding-top: max(1rem, env(safe-area-inset-top));
+    padding-top: max(1.5rem, env(safe-area-inset-top));
+  }
+
+  /* Card hover effects */
+  .hover-card-effect {
+    @apply transition-all duration-300 hover:bg-accent/50 hover:shadow-sm;
   }
 }
 
 @layer utilities {
 
-  /* Haptic feedback simulation via animation */
+  /* Refined Haptic feedback simulation */
   @keyframes gentle-pulse {
-
-    0%,
-    100% {
+    0% {
+      transform: scale(1);
       opacity: 1;
     }
 
     50% {
-      opacity: 0.8;
+      transform: scale(0.98);
+      opacity: 0.9;
+    }
+
+    100% {
+      transform: scale(1);
+      opacity: 1;
     }
   }
 
   .animate-gentle-pulse {
-    animation: gentle-pulse 0.2s ease-out;
+    animation: gentle-pulse 0.15s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
-  /* Subtle fade in */
+  /* Premium fade in */
   @keyframes fade-in-up {
     from {
       opacity: 0;
-      transform: translateY(8px);
+      transform: translateY(12px);
+      filter: blur(2px);
     }
 
     to {
       opacity: 1;
       transform: translateY(0);
+      filter: blur(0);
     }
   }
 
   .animate-fade-in-up {
-    animation: fade-in-up 0.4s ease-out;
+    animation: fade-in-up 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
   }
 
-  /* Completion celebration - subtle */
+  /* Completion celebration - Elegant */
   @keyframes gentle-glow {
 
     0%,
     100% {
-      box-shadow: 0 0 60px -20px hsl(var(--counter-glow) / 0.15);
+      box-shadow: 0 0 40px -10px hsl(var(--counter-glow) / 0.1);
     }
 
     50% {
-      box-shadow: 0 0 80px -15px hsl(var(--counter-glow) / 0.3);
+      box-shadow: 0 0 70px -10px hsl(var(--counter-glow) / 0.25);
     }
   }
 
   .animate-completion {
-    animation: gentle-glow 1s ease-in-out 3;
+    animation: gentle-glow 1.5s ease-in-out infinite;
   }
 }

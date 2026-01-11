@@ -16,7 +16,6 @@ export function Counter() {
     soundEnabled,
   } = useTasbeehStore();
 
-  const [isAnimating, setIsAnimating] = useState(false);
   const [showCompletion, setShowCompletion] = useState(false);
   const [showSessionComplete, setShowSessionComplete] = useState(false);
   const lastCompletionRef = useRef<number>(0);
@@ -54,9 +53,6 @@ export function Counter() {
     if (soundEnabled) {
       SoundManager.playClick();
     }
-
-    setIsAnimating(true);
-    setTimeout(() => setIsAnimating(false), 150);
 
     // Check for phase/target completion
     const currentTarget = getCurrentTarget();
@@ -200,7 +196,7 @@ export function Counter() {
 
           <motion.span
             key={currentCount}
-            initial={isAnimating ? { scale: 1.08, opacity: 0.8 } : false}
+            initial={{ scale: 1.5, opacity: 0.5 }}
             animate={{ scale: 1, opacity: 1 }}
             transition={{ duration: 0.15, ease: [0.34, 1.56, 0.64, 1] }}
             className="counter-number text-6xl md:text-7xl text-counter-text"

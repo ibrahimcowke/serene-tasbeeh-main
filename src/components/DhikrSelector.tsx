@@ -19,7 +19,7 @@ const customDhikrSchema = z.object({
 export function DhikrSelector({ children }: DhikrSelectorProps) {
   const { dhikrs, customDhikrs, currentDhikr, setDhikr, addCustomDhikr, removeCustomDhikr, sessionMode } = useTasbeehStore();
   const allDhikrs = [...dhikrs, ...customDhikrs];
-  
+
   const [showAddForm, setShowAddForm] = useState(false);
   const [newDhikr, setNewDhikr] = useState({ arabic: '', transliteration: '', meaning: '' });
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -31,7 +31,7 @@ export function DhikrSelector({ children }: DhikrSelectorProps) {
 
   const handleAddCustom = () => {
     const result = customDhikrSchema.safeParse(newDhikr);
-    
+
     if (!result.success) {
       const fieldErrors: Record<string, string> = {};
       result.error.errors.forEach((err) => {
@@ -42,7 +42,7 @@ export function DhikrSelector({ children }: DhikrSelectorProps) {
       setErrors(fieldErrors);
       return;
     }
-    
+
     addCustomDhikr({
       arabic: result.data.arabic,
       transliteration: result.data.transliteration,
@@ -68,13 +68,26 @@ export function DhikrSelector({ children }: DhikrSelectorProps) {
         <SheetHeader className="text-left pb-4">
           <SheetTitle className="text-lg font-medium">Select Dhikr</SheetTitle>
         </SheetHeader>
-        
-        <div className="space-y-2 overflow-y-auto pb-8 max-h-[calc(80vh-120px)]">
+
+        <div className="flex items-center gap-2 px-1 mb-4">
+          <div className="relative flex-1">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+            <input
+              type="text"
+              placeholder="Search dhikr..."
+              className="w-full pl-9 pr-4 py-2 rounded-xl bg-secondary border-none focus:ring-1 focus:ring-primary/20 text-sm"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
+          </div>
+        </div>
+
+        <div className="space-y-2 overflow-y-auto pb-8 max-h-[calc(80vh-160px)]">
           {/* Dhikr list */}
           {allDhikrs.map((dhikr, index) => {
             const isCustom = dhikr.id.startsWith('custom_');
             const isDisabled = sessionMode.type === 'tasbih100';
-            
+
             return (
               <motion.button
                 key={dhikr.id}
@@ -86,8 +99,8 @@ export function DhikrSelector({ children }: DhikrSelectorProps) {
                 className={`
                   w-full p-4 rounded-2xl text-left relative
                   transition-colors duration-200
-                  ${currentDhikr.id === dhikr.id 
-                    ? 'bg-accent border border-primary/20' 
+                  ${currentDhikr.id === dhikr.id
+                    ? 'bg-accent border border-primary/20'
                     : 'bg-card hover:bg-secondary'
                   }
                   ${isDisabled ? 'opacity-50 cursor-not-allowed' : ''}
@@ -144,7 +157,7 @@ export function DhikrSelector({ children }: DhikrSelectorProps) {
               className="p-4 rounded-2xl bg-card space-y-4"
             >
               <p className="text-sm font-medium text-foreground">Add Custom Dhikr</p>
-              
+
               <div className="space-y-3">
                 <div>
                   <Input
@@ -156,7 +169,7 @@ export function DhikrSelector({ children }: DhikrSelectorProps) {
                   />
                   {errors.arabic && <p className="text-xs text-destructive mt-1">{errors.arabic}</p>}
                 </div>
-                
+
                 <div>
                   <Input
                     placeholder="Transliteration (e.g., SubhanAllah)"
@@ -166,7 +179,7 @@ export function DhikrSelector({ children }: DhikrSelectorProps) {
                   />
                   {errors.transliteration && <p className="text-xs text-destructive mt-1">{errors.transliteration}</p>}
                 </div>
-                
+
                 <div>
                   <Input
                     placeholder="Meaning (e.g., Glory be to Allah)"
@@ -177,7 +190,7 @@ export function DhikrSelector({ children }: DhikrSelectorProps) {
                   {errors.meaning && <p className="text-xs text-destructive mt-1">{errors.meaning}</p>}
                 </div>
               </div>
-              
+
               <div className="flex gap-2">
                 <button
                   onClick={() => {
@@ -198,7 +211,7 @@ export function DhikrSelector({ children }: DhikrSelectorProps) {
               </div>
             </motion.div>
           )}
-          
+
           {sessionMode.type === 'tasbih100' && (
             <p className="text-xs text-muted-foreground text-center pt-2">
               Dhikr selection is disabled during 100 session mode

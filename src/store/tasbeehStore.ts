@@ -162,14 +162,26 @@ export const useTasbeehStore = create<TasbeehState>()(
           const newTotal = state.totalAllTime + 1;
           
           // Update daily record
-          const existingRecordIndex = state.dailyRecords.findIndex(r => r.date === today);
           const updatedRecords = [...state.dailyRecords];
+          const lastRecordIndex = updatedRecords.length - 1;
+          const lastRecord = updatedRecords[lastRecordIndex];
           
-          if (existingRecordIndex >= 0) {
-            const record = { ...updatedRecords[existingRecordIndex] };
+          let targetIndex = -1;
+          
+          // Optimization: Check the last record first (O(1)) as it's most likely today
+          if (lastRecord && lastRecord.date === today) {
+            targetIndex = lastRecordIndex;
+          } else {
+            // Fallback to searching (O(N)) - only needed if date changed or history is unsorted
+            targetIndex = updatedRecords.findIndex(r => r.date === today);
+          }
+          
+          if (targetIndex >= 0) {
+            const record = { ...updatedRecords[targetIndex] };
+            record.counts = { ...record.counts }; // Ensure deep copy of counts
             record.counts[state.currentDhikr.id] = (record.counts[state.currentDhikr.id] || 0) + 1;
             record.totalCount += 1;
-            updatedRecords[existingRecordIndex] = record;
+            updatedRecords[targetIndex] = record;
           } else {
             updatedRecords.push({
               date: today,
@@ -229,6 +241,11 @@ export const useTasbeehStore = create<TasbeehState>()(
       
       reset: () => {
         const state = get();
+        // Always vibrate on reset for feedback
+        if (state.hapticEnabled && navigator.vibrate) {
+          navigator.vibrate([30, 50, 30]);
+        }
+
         if (state.sessionMode.type === 'tasbih100') {
           // Reset the entire 100 session
           set({ 
