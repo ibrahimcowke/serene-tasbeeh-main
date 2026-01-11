@@ -89,15 +89,8 @@ export default defineConfig(({ mode }) => ({
     },
   },
   build: {
-    minify: "terser",
-    cssMinify: true,
-    rollupOptions: {
-      output: {
-        manualChunks: {
-          vendor: ["react", "react-dom", "framer-motion"],
-          radix: ["@radix-ui/react-dialog", "@radix-ui/react-slot", "@radix-ui/react-toast"],
-        },
-      },
-    },
+    // Reverting to default esbuild minification to fix production issue
+    outDir: "dist",
+    sourcemap: false,
   },
 }));
