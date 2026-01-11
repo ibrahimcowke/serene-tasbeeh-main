@@ -14,7 +14,7 @@ export function Counter() {
     increment,
     exitSessionMode,
     soundEnabled,
-    counterShape,
+    counterShape = 'minimal', // Default to minimal if undefined in persisted state
   } = useTasbeehStore();
 
   const [showCompletion, setShowCompletion] = useState(false);
