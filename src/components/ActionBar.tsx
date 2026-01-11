@@ -20,21 +20,6 @@ import {
 export function ActionBar() {
   const { currentCount, decrement, reset } = useTasbeehStore();
   const [showResetConfirm, setShowResetConfirm] = useState(false);
-  const [longPressTimer, setLongPressTimer] = useState<NodeJS.Timeout | null>(null);
-
-  const handleResetStart = useCallback(() => {
-    const timer = setTimeout(() => {
-      setShowResetConfirm(true);
-    }, 500);
-    setLongPressTimer(timer);
-  }, []);
-
-  const handleResetEnd = useCallback(() => {
-    if (longPressTimer) {
-      clearTimeout(longPressTimer);
-      setLongPressTimer(null);
-    }
-  }, [longPressTimer]);
 
   const handleConfirmReset = () => {
     reset();
@@ -43,7 +28,7 @@ export function ActionBar() {
 
   return (
     <>
-      <motion.div 
+      <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         className="px-6 pb-4 safe-area-bottom"
@@ -61,17 +46,13 @@ export function ActionBar() {
             <Minus className="w-5 h-5 text-muted-foreground" />
           </motion.button>
 
-          {/* Reset button (long press) */}
+          {/* Reset button */}
           <motion.button
             whileTap={{ scale: 0.95 }}
-            onMouseDown={handleResetStart}
-            onMouseUp={handleResetEnd}
-            onMouseLeave={handleResetEnd}
-            onTouchStart={handleResetStart}
-            onTouchEnd={handleResetEnd}
+            onClick={() => setShowResetConfirm(true)}
             disabled={currentCount === 0}
             className="w-12 h-12 rounded-full bg-card flex items-center justify-center disabled:opacity-30 transition-opacity"
-            aria-label="Reset counter (hold)"
+            aria-label="Reset counter"
           >
             <RotateCcw className="w-5 h-5 text-muted-foreground" />
           </motion.button>
@@ -132,7 +113,7 @@ export function ActionBar() {
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel className="rounded-xl">Cancel</AlertDialogCancel>
-            <AlertDialogAction 
+            <AlertDialogAction
               onClick={handleConfirmReset}
               className="rounded-xl"
             >
