@@ -86,13 +86,13 @@ export function SettingsView({ children }: SettingsViewProps) {
       <SheetTrigger asChild>
         {children}
       </SheetTrigger>
-      <SheetContent side="bottom" className="bg-sheet-bg rounded-t-3xl h-[85vh]">
-        <div className="sheet-handle" />
-        <SheetHeader className="text-left pb-4">
+      <SheetContent side="bottom" className="bg-sheet-bg rounded-t-3xl h-[85vh] flex flex-col gap-0 outline-none border-t-0">
+        <div className="sheet-handle mx-auto mt-3 mb-1 bg-muted shrink-0" />
+        <SheetHeader className="text-left px-6 py-4 shrink-0">
           <SheetTitle className="text-lg font-medium">Settings</SheetTitle>
         </SheetHeader>
 
-        <div className="overflow-y-auto pb-8 space-y-6 max-h-[calc(85vh-80px)]">
+        <div className="overflow-y-auto px-6 pb-8 space-y-6 flex-1">
           {/* Display settings */}
           <div className="space-y-1">
             <p className="text-xs text-muted-foreground uppercase tracking-wide mb-3">Display</p>
