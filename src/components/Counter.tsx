@@ -224,12 +224,13 @@ export function Counter() {
                 cx="150" cy="150" r="140"
                 fill="none"
                 stroke="currentColor"
-                strokeWidth="4"
+                strokeWidth="6"
                 className="text-primary"
                 strokeDasharray="880"
-                strokeDashoffset={880 - (880 * progress)}
+                initial={{ strokeDashoffset: 880 }}
+                animate={{ strokeDashoffset: 880 - (880 * progress) }}
                 strokeLinecap="round"
-                transition={{ duration: 0.5 }}
+                transition={{ duration: 0.5, ease: "easeOut" }}
               />
             </svg>
           </div>
@@ -241,11 +242,13 @@ export function Counter() {
             <motion.div
               className="absolute bottom-0 left-0 right-0 bg-primary/20"
               initial={{ height: 0 }}
-              animate={{ height: `${progress * 100}%` }}
+              animate={{ height: `${Math.max(progress * 100, 5)}%` }} // Minimum 5% visibility
               transition={{ type: 'spring', bounce: 0, duration: 0.5 }}
             >
               <div className="absolute top-0 left-0 right-0 h-4 bg-primary/30 blur-md transform -translate-y-1/2" />
             </motion.div>
+            {/* Wave Line */}
+            <div className="absolute inset-0 rounded-full border-2 border-primary/20" />
           </div>
         )}
 
@@ -256,24 +259,26 @@ export function Counter() {
                 d="M50 5 L93.3 30 V75 L50 100 L6.7 75 V30 Z"
                 fill="none"
                 stroke="currentColor"
-                strokeWidth="2"
+                strokeWidth="3"
                 className="text-muted/20"
               />
               <motion.path
                 d="M50 5 L93.3 30 V75 L50 100 L6.7 75 V30 Z"
                 fill="none"
                 stroke="currentColor"
-                strokeWidth="4"
+                strokeWidth="5"
                 className="text-primary"
-                initial={{ pathLength: 0 }}
-                animate={{ pathLength: progress }}
-                transition={{ duration: 0.3 }}
+                strokeDasharray="300"
+                initial={{ strokeDashoffset: 300 }}
+                animate={{ strokeDashoffset: 300 - (300 * progress) }}
+                strokeLinecap="round"
+                transition={{ duration: 0.3, ease: "linear" }}
               />
             </svg>
             {/* Inner pulse */}
             <div className="absolute inset-0 flex items-center justify-center">
               <motion.div
-                className="w-48 h-48 bg-primary/5 clip-path-hexagon"
+                className="w-48 h-48 bg-primary/10 clip-path-hexagon"
                 animate={{ scale: [1, 1.05, 1] }}
                 transition={{ duration: 2, repeat: Infinity }}
                 style={{ clipPath: 'polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)' }}
@@ -284,39 +289,34 @@ export function Counter() {
 
         {counterShape === 'orb' && (
           <div className="absolute inset-0 flex items-center justify-center -z-10">
-            <div className="w-[260px] h-[260px] rounded-full bg-secondary/30 relative overflow-hidden shadow-inner border border-white/10">
-              {/* Liquid Fill */}
+            <div className="w-[260px] h-[260px] rounded-full bg-secondary/40 relative overflow-hidden shadow-2xl border border-white/5">
+              {/* Liquid Fill - Explicit height calculation */}
               <motion.div
-                className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-primary to-primary/60"
+                className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-primary/80 to-primary/40"
                 initial={{ height: '0%' }}
                 animate={{ height: `${progress * 100}%` }}
                 transition={{ type: 'spring', bounce: 0, duration: 0.5 }}
               >
-                <div className="absolute top-0 left-0 right-0 h-2 bg-white/20 blur-sm" />
+                <div className="absolute top-0 left-0 right-0 h-1 bg-white/30" />
               </motion.div>
 
               {/* Glass Reflection */}
-              <div className="absolute top-4 left-8 right-8 h-32 bg-gradient-to-b from-white/10 to-transparent rounded-full blur-md" />
-
-              {/* Center Glow */}
-              <motion.div
-                className="absolute inset-0 bg-primary/20 blur-xl"
-                animate={{ opacity: [0.3, 0.6, 0.3] }}
-                transition={{ duration: 3, repeat: Infinity }}
-              />
+              <div className="absolute top-4 left-8 right-8 h-32 bg-gradient-to-b from-white/20 to-transparent rounded-full blur-xl pointer-events-none" />
             </div>
 
             {/* External Progress Ring for extra clarity */}
             <svg className="absolute w-[290px] h-[290px] -rotate-90 pointer-events-none">
-              <circle cx="145" cy="145" r="142" stroke="currentColor" fill="none" strokeWidth="1" className="text-muted/20" />
+              <circle cx="145" cy="145" r="142" stroke="currentColor" fill="none" strokeWidth="2" className="text-muted/20" />
               <motion.circle
                 cx="145" cy="145" r="142"
                 stroke="currentColor"
                 fill="none"
-                strokeWidth="2"
-                className="text-primary/50"
-                initial={{ pathLength: 0 }}
-                animate={{ pathLength: progress }}
+                strokeWidth="4"
+                className="text-primary"
+                strokeDasharray="892"
+                initial={{ strokeDashoffset: 892 }}
+                animate={{ strokeDashoffset: 892 - (892 * progress) }}
+                strokeLinecap="round"
                 transition={{ duration: 0.3 }}
               />
             </svg>
