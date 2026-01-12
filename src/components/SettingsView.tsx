@@ -23,10 +23,10 @@ interface SettingsViewProps {
 const themes = [
   { id: 'light', label: 'Light', description: 'Warm and calm' },
   { id: 'dark', label: 'Dark', description: 'Night dhikr' },
-  { id: 'amoled', label: 'AMOLED', description: 'True black' },
   { id: 'theme-midnight', label: 'Midnight', description: 'Deep blue serenity' },
-  { id: 'theme-rose', label: 'Rose Gold', description: 'Soft & elegant' },
-  { id: 'theme-nature', label: 'Nature', description: 'Earthy greens' },
+  { id: 'theme-neon', label: 'Neon', description: 'Vibrant pink & purple' },
+  { id: 'theme-green', label: 'Matrix', description: 'Terminal green code' },
+  { id: 'theme-cyberpunk', label: 'Cyberpunk', description: 'High-tech yellow & blue' },
 ] as const;
 
 export function SettingsView({ children }: SettingsViewProps) {
@@ -34,19 +34,29 @@ export function SettingsView({ children }: SettingsViewProps) {
 
   const {
     showTransliteration,
-    hapticEnabled,
-    soundEnabled,
     theme,
+    themeSettings,
     counterShape,
     toggleTransliteration,
     toggleHaptic,
     toggleSound,
+    setVibrationIntensity,
+    setFontScale,
+    setSoundType,
     setTheme,
     setCounterShape,
     exportData,
     importData,
     clearAllData,
   } = useTasbeehStore();
+
+  const currentSettings = themeSettings?.[theme] || {
+    hapticEnabled: true,
+    soundEnabled: false,
+    vibrationIntensity: 'medium',
+    fontScale: 1,
+    soundType: 'click'
+  };
 
   const [importStatus, setImportStatus] = useState<'idle' | 'success' | 'error'>('idle');
 
@@ -88,7 +98,7 @@ export function SettingsView({ children }: SettingsViewProps) {
       <SheetTrigger asChild>
         {children}
       </SheetTrigger>
-      <SheetContent side="bottom" className="bg-sheet-bg rounded-t-3xl h-[85vh] flex flex-col gap-0 outline-none border-t-0">
+      <SheetContent side="bottom" className="!bg-sheet-bg rounded-t-3xl h-[85vh] flex flex-col gap-0 outline-none border-t-0">
         <div className="sheet-handle mx-auto mt-3 mb-1 bg-muted shrink-0" />
         <SheetHeader className="text-left px-6 py-4 shrink-0">
           <SheetTitle className="text-lg font-medium">Settings</SheetTitle>
@@ -108,6 +118,34 @@ export function SettingsView({ children }: SettingsViewProps) {
                 checked={showTransliteration}
                 onCheckedChange={toggleTransliteration}
               />
+            </div>
+          </div>
+
+          {/* Theme Customization */}
+          <div className="space-y-1">
+            <p className="text-xs text-muted-foreground uppercase tracking-wide mb-3">Theme Customization</p>
+
+            {/* Font Scale */}
+            <div className="p-4 rounded-2xl bg-card mb-2">
+              <div className="flex items-center justify-between mb-3">
+                <p className="text-sm font-medium text-foreground">Font Size</p>
+              </div>
+              <div className="grid grid-cols-3 gap-2">
+                {[0.8, 1, 1.2].map((scale) => (
+                  <button
+                    key={scale}
+                    onClick={() => setFontScale(scale as 0.8 | 1 | 1.2)}
+                    className={`
+                        py-2 px-3 rounded-lg text-xs font-medium border transition-colors
+                        ${currentSettings.fontScale === scale
+                        ? 'bg-primary text-primary-foreground border-primary'
+                        : 'bg-background border-border hover:bg-muted'}
+                      `}
+                  >
+                    {scale === 0.8 ? 'Small' : scale === 1 ? 'Normal' : 'Large'}
+                  </button>
+                ))}
+              </div>
             </div>
           </div>
 
@@ -188,26 +226,68 @@ export function SettingsView({ children }: SettingsViewProps) {
           <div className="space-y-1">
             <p className="text-xs text-muted-foreground uppercase tracking-wide mb-3">Feedback</p>
 
-            <div className="flex items-center justify-between p-4 rounded-2xl bg-card mb-2">
-              <div>
-                <p className="text-sm font-medium text-foreground">Haptic feedback</p>
-                <p className="text-xs text-muted-foreground">Vibrate on each count</p>
+            <div className="p-4 rounded-2xl bg-card mb-2 space-y-4">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm font-medium text-foreground">Haptic feedback</p>
+                  <p className="text-xs text-muted-foreground">Vibrate on each count</p>
+                </div>
+                <Switch
+                  checked={currentSettings.hapticEnabled}
+                  onCheckedChange={toggleHaptic}
+                />
               </div>
-              <Switch
-                checked={hapticEnabled}
-                onCheckedChange={toggleHaptic}
-              />
+
+              {currentSettings.hapticEnabled && (
+                <div className="grid grid-cols-3 gap-2 pt-2 border-t border-border/50">
+                  {['light', 'medium', 'heavy'].map((intensity) => (
+                    <button
+                      key={intensity}
+                      onClick={() => setVibrationIntensity(intensity as 'light' | 'medium' | 'heavy')}
+                      className={`
+                        py-1.5 px-3 rounded-lg text-xs font-medium border transition-colors capitalize
+                        ${currentSettings.vibrationIntensity === intensity
+                          ? 'bg-primary/20 text-primary border-primary'
+                          : 'bg-background border-border hover:bg-muted'}
+                      `}
+                    >
+                      {intensity}
+                    </button>
+                  ))}
+                </div>
+              )}
             </div>
 
-            <div className="flex items-center justify-between p-4 rounded-2xl bg-card">
-              <div>
-                <p className="text-sm font-medium text-foreground">Click sound</p>
-                <p className="text-xs text-muted-foreground">Play a gentle click on tap</p>
+            <div className="p-4 rounded-2xl bg-card space-y-4">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm font-medium text-foreground">Sound effects</p>
+                  <p className="text-xs text-muted-foreground">Play sound on tap</p>
+                </div>
+                <Switch
+                  checked={currentSettings.soundEnabled}
+                  onCheckedChange={toggleSound}
+                />
               </div>
-              <Switch
-                checked={soundEnabled}
-                onCheckedChange={toggleSound}
-              />
+
+              {currentSettings.soundEnabled && (
+                <div className="grid grid-cols-3 gap-2 pt-2 border-t border-border/50">
+                  {['click', 'soft', 'water'].map((type) => (
+                    <button
+                      key={type}
+                      onClick={() => setSoundType(type as 'click' | 'soft' | 'water')}
+                      className={`
+                        py-1.5 px-3 rounded-lg text-xs font-medium border transition-colors capitalize
+                        ${currentSettings.soundType === type
+                          ? 'bg-primary/20 text-primary border-primary'
+                          : 'bg-background border-border hover:bg-muted'}
+                      `}
+                    >
+                      {type}
+                    </button>
+                  ))}
+                </div>
+              )}
             </div>
           </div>
 

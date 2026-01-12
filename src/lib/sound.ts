@@ -11,28 +11,58 @@ export class SoundManager {
     }
   }
   
-  public static playClick() {
+  public static playClick(type: 'click' | 'soft' | 'water' = 'click') {
     try {
       this.init();
       if (!this.audioContext) return;
       
+      const now = this.audioContext.currentTime;
       const osc = this.audioContext.createOscillator();
       const gain = this.audioContext.createGain();
       
-      // Creating a soft "pop" or "contact" sound
-      // Short sine wave burst with exponential decay
-      osc.type = 'sine';
-      osc.frequency.setValueAtTime(800, this.audioContext.currentTime);
-      osc.frequency.exponentialRampToValueAtTime(100, this.audioContext.currentTime + 0.1);
-      
-      gain.gain.setValueAtTime(0.5, this.audioContext.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.01, this.audioContext.currentTime + 0.1);
-      
-      osc.connect(gain);
-      gain.connect(this.audioContext.destination);
-      
-      osc.start();
-      osc.stop(this.audioContext.currentTime + 0.1);
+      if (type === 'water') {
+        // Water/Bubble sound: Sine sweep down
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(600, now);
+        osc.frequency.exponentialRampToValueAtTime(300, now + 0.15);
+        
+        gain.gain.setValueAtTime(0.3, now);
+        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.15);
+        
+        osc.connect(gain);
+        gain.connect(this.audioContext.destination);
+        
+        osc.start(now);
+        osc.stop(now + 0.15);
+      } else if (type === 'soft') {
+         // Soft thud: Triangle wave, low freq
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(200, now);
+        osc.frequency.exponentialRampToValueAtTime(50, now + 0.1);
+        
+        gain.gain.setValueAtTime(0.3, now);
+        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.1);
+        
+        osc.connect(gain);
+        gain.connect(this.audioContext.destination);
+        
+        osc.start(now);
+        osc.stop(now + 0.1);
+      } else {
+        // Default Click (Sharp sine)
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(800, now);
+        osc.frequency.exponentialRampToValueAtTime(100, now + 0.1);
+        
+        gain.gain.setValueAtTime(0.5, now);
+        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.1);
+        
+        osc.connect(gain);
+        gain.connect(this.audioContext.destination);
+        
+        osc.start(now);
+        osc.stop(now + 0.1);
+      }
     } catch (e) {
       console.error('Audio playback failed', e);
     }

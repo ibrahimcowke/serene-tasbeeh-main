@@ -35,11 +35,14 @@ interface TasbeehState {
   
   // Settings
   currentDhikr: Dhikr;
-  hapticEnabled: boolean;
-  soundEnabled: boolean;
-  theme: 'light' | 'dark' | 'amoled' | 'theme-midnight' | 'theme-rose' | 'theme-nature';
+  // hapticEnabled/soundEnabled removed in favor of themeSettings
+  theme: 'light' | 'dark' | 'theme-midnight' | 'theme-neon' | 'theme-green' | 'theme-cyberpunk';
   language: 'en' | 'ar';
-  vibrationIntensity: 'light' | 'medium' | 'heavy';
+  
+  // Theme-specific settings container
+  themeSettings: Record<string, ThemeSettings>;
+
+  // Global preference (not per theme)
   counterShape: 'minimal' | 'classic' | 'beads' | 'flower' | 'waveform' | 'hexagon' | 'orb';
   showTransliteration: boolean;
   
@@ -63,9 +66,14 @@ interface TasbeehState {
   setDhikr: (dhikr: Dhikr) => void;
   setTarget: (target: number) => void;
   toggleTransliteration: () => void;
+  // Settings actions now update the specific theme
   toggleHaptic: () => void;
   toggleSound: () => void;
-  setTheme: (theme: 'light' | 'dark' | 'amoled' | 'theme-midnight' | 'theme-rose' | 'theme-nature') => void;
+  setVibrationIntensity: (intensity: 'light' | 'medium' | 'heavy') => void;
+  setFontScale: (scale: 0.8 | 1 | 1.2) => void;
+  setSoundType: (type: 'click' | 'soft' | 'water') => void;
+  
+  setTheme: (theme: 'light' | 'dark' | 'theme-midnight' | 'theme-neon' | 'theme-green' | 'theme-cyberpunk') => void;
   setLanguage: (lang: 'ar' | 'en') => void;
   addCustomDhikr: (dhikr: Omit<Dhikr, 'id'>) => void;
   removeCustomDhikr: (id: string) => void;
@@ -82,8 +90,32 @@ interface TasbeehState {
   
   // New Settings Actions
   setCounterShape: (shape: 'minimal' | 'classic' | 'beads' | 'flower' | 'waveform' | 'hexagon' | 'orb') => void;
-  setVibrationIntensity: (intensity: 'light' | 'medium' | 'heavy') => void;
 }
+
+export type ThemeSettings = {
+  hapticEnabled: boolean;
+  soundEnabled: boolean;
+  vibrationIntensity: 'light' | 'medium' | 'heavy';
+  fontScale: 0.8 | 1 | 1.2;
+  soundType: 'click' | 'soft' | 'water';
+};
+
+const defaultThemeSettings: ThemeSettings = {
+  hapticEnabled: true,
+  soundEnabled: false,
+  vibrationIntensity: 'medium',
+  fontScale: 1,
+  soundType: 'click',
+};
+
+const initialThemeSettings: Record<string, ThemeSettings> = {
+  'light': { ...defaultThemeSettings },
+  'dark': { ...defaultThemeSettings },
+  'theme-midnight': { ...defaultThemeSettings },
+  'theme-neon': { ...defaultThemeSettings },
+  'theme-green': { ...defaultThemeSettings },
+  'theme-cyberpunk': { ...defaultThemeSettings },
+};
 
 export const defaultDhikrs: Dhikr[] = [
   {
@@ -142,12 +174,14 @@ export const useTasbeehStore = create<TasbeehState>()(
       lastActiveDate: null,
       longestStreak: 0,
       
+      themeSettings: initialThemeSettings,
       showTransliteration: true,
-      hapticEnabled: true,
-      soundEnabled: false,
+      
+      // Removed top-level haptic/sound/vib in favor of themeSettings, but keeping them accessing current theme would be ideal or we just migrate
+      // We will access them via getters or helpers in the components.
+      
       theme: 'light',
       language: 'en', // Keeping language for now
-      vibrationIntensity: 'medium', // New
       counterShape: 'minimal', // New
       
       dailyRecords: [],
@@ -161,9 +195,11 @@ export const useTasbeehStore = create<TasbeehState>()(
         const state = get();
         const today = getTodayDate();
         
-        // Trigger haptic if enabled
-        if (state.hapticEnabled && navigator.vibrate) {
-          const intensity = state.vibrationIntensity === 'light' ? 10 : state.vibrationIntensity === 'medium' ? 15 : 25;
+        const currentSettings = state.themeSettings[state.theme] || defaultThemeSettings;
+        
+        // Trigger haptic if enabled for this theme
+        if (currentSettings.hapticEnabled && navigator.vibrate) {
+          const intensity = currentSettings.vibrationIntensity === 'light' ? 10 : currentSettings.vibrationIntensity === 'medium' ? 15 : 25;
           navigator.vibrate(intensity);
         }
         
@@ -239,10 +275,11 @@ export const useTasbeehStore = create<TasbeehState>()(
       },
       
       reset: () => {
-         const state = get();
-         if (state.hapticEnabled && navigator.vibrate) {
-            navigator.vibrate([30, 50, 30]);
-         }
+          const state = get();
+          const currentSettings = state.themeSettings[state.theme] || defaultThemeSettings;
+          if (currentSettings.hapticEnabled && navigator.vibrate) {
+             navigator.vibrate([30, 50, 30]);
+          }
          
          if (state.sessionMode.type === 'tasbih100') {
            set({ 
@@ -264,13 +301,61 @@ export const useTasbeehStore = create<TasbeehState>()(
       setDhikr: (dhikr) => set({ currentDhikr: dhikr, currentCount: 0, sessionStartTime: null }),
       setTarget: (target) => set({ targetCount: target }),
       toggleTransliteration: () => set((state) => ({ showTransliteration: !state.showTransliteration })),
-      toggleHaptic: () => set((state) => ({ hapticEnabled: !state.hapticEnabled })),
-      toggleSound: () => set((state) => ({ soundEnabled: !state.soundEnabled })),
+      
+      toggleHaptic: () => set((state) => ({
+        themeSettings: {
+          ...state.themeSettings,
+          [state.theme]: {
+            ...state.themeSettings[state.theme],
+            hapticEnabled: !state.themeSettings[state.theme].hapticEnabled
+          }
+        }
+      })),
+      
+      toggleSound: () => set((state) => ({
+        themeSettings: {
+          ...state.themeSettings,
+          [state.theme]: {
+            ...state.themeSettings[state.theme],
+            soundEnabled: !state.themeSettings[state.theme].soundEnabled
+          }
+        }
+      })),
+
+      setVibrationIntensity: (intensity) => set((state) => ({
+        themeSettings: {
+          ...state.themeSettings,
+          [state.theme]: {
+            ...state.themeSettings[state.theme],
+            vibrationIntensity: intensity
+          }
+        }
+      })),
+
+      setFontScale: (scale) => set((state) => ({
+        themeSettings: {
+          ...state.themeSettings,
+          [state.theme]: {
+            ...state.themeSettings[state.theme],
+            fontScale: scale
+          }
+        }
+      })),
+
+      setSoundType: (type) => set((state) => ({
+        themeSettings: {
+          ...state.themeSettings,
+          [state.theme]: {
+            ...state.themeSettings[state.theme],
+            soundType: type
+          }
+        }
+      })),
       
       setTheme: (theme) => {
         set({ theme });
         const root = window.document.documentElement;
-        root.classList.remove('light', 'dark', 'amoled', 'theme-midnight', 'theme-rose', 'theme-nature');
+        root.classList.remove('light', 'dark', 'theme-midnight', 'theme-neon', 'theme-green', 'theme-cyberpunk', 'amoled', 'theme-rose', 'theme-nature');
         root.classList.add(theme);
       },
       
@@ -305,18 +390,14 @@ export const useTasbeehStore = create<TasbeehState>()(
       exportData: () => {
         const state = get();
         return JSON.stringify({
-            // ... existing export structure
             dailyRecords: state.dailyRecords,
             totalAllTime: state.totalAllTime,
             customDhikrs: state.customDhikrs,
             streakDays: state.streakDays,
             settings: {
-                theme: state.theme,
-                hapticEnabled: state.hapticEnabled,
-                soundEnabled: state.soundEnabled,
                 counterShape: state.counterShape,
-                vibrationIntensity: state.vibrationIntensity,
-                target: state.targetCount
+                target: state.targetCount,
+                themeSettings: state.themeSettings
             }
         });
       },
@@ -326,7 +407,7 @@ export const useTasbeehStore = create<TasbeehState>()(
           const parsed = JSON.parse(data);
           if (parsed.settings?.theme) {
              const root = window.document.documentElement;
-             root.classList.remove('light', 'dark', 'amoled', 'theme-midnight', 'theme-rose', 'theme-nature');
+             root.classList.remove('light', 'dark', 'theme-midnight', 'theme-neon', 'theme-green', 'theme-cyberpunk', 'amoled', 'theme-rose', 'theme-nature');
              root.classList.add(parsed.settings.theme);
           }
           
@@ -336,7 +417,7 @@ export const useTasbeehStore = create<TasbeehState>()(
               // Basic merge, real logic might be slightly safer but this works for simple restore
              theme: parsed.settings?.theme || state.theme,
              counterShape: parsed.settings?.counterShape || state.counterShape,
-             vibrationIntensity: parsed.settings?.vibrationIntensity || state.vibrationIntensity
+             themeSettings: parsed.settings?.themeSettings || state.themeSettings
           }));
           return true;
         } catch {
@@ -382,22 +463,18 @@ export const useTasbeehStore = create<TasbeehState>()(
       },
       
       setCounterShape: (shape) => set({ counterShape: shape }),
-      setVibrationIntensity: (intensity) => set({ vibrationIntensity: intensity }),
     }),
     {
        name: 'tasbeeh-storage',
        partialize: (state) => ({
-         // ... persiste logic
          currentDhikr: state.currentDhikr,
          currentCount: state.currentCount,
          targetCount: state.targetCount,
          showTransliteration: state.showTransliteration,
-         hapticEnabled: state.hapticEnabled,
-         soundEnabled: state.soundEnabled,
+         themeSettings: state.themeSettings,
          theme: state.theme,
          language: state.language,
          counterShape: state.counterShape,
-         vibrationIntensity: state.vibrationIntensity,
          dailyRecords: state.dailyRecords,
          totalAllTime: state.totalAllTime,
          customDhikrs: state.customDhikrs,

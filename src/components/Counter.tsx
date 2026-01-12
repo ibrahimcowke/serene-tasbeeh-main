@@ -13,9 +13,18 @@ export function Counter() {
     sessionMode,
     increment,
     exitSessionMode,
-    soundEnabled,
+    theme,
+    themeSettings,
     counterShape = 'minimal', // Default to minimal if undefined in persisted state
   } = useTasbeehStore();
+
+  const currentSettings = themeSettings?.[theme] || {
+    hapticEnabled: true,
+    soundEnabled: false,
+    vibrationIntensity: 'medium',
+    fontScale: 1,
+    soundType: 'click'
+  };
 
   const [showCompletion, setShowCompletion] = useState(false);
   const [showSessionComplete, setShowSessionComplete] = useState(false);
@@ -51,8 +60,8 @@ export function Counter() {
     increment();
 
     // Play detailed click sound
-    if (soundEnabled) {
-      SoundManager.playClick();
+    if (currentSettings.soundEnabled) {
+      SoundManager.playClick(currentSettings.soundType as 'click' | 'soft' | 'water');
     }
 
     // Check for phase/target completion
@@ -64,7 +73,7 @@ export function Counter() {
       setShowCompletion(true);
 
       // Play completion sound
-      if (soundEnabled) {
+      if (currentSettings.soundEnabled) {
         SoundManager.playCompletion();
       }
 
@@ -77,7 +86,7 @@ export function Counter() {
         setShowSessionComplete(true);
       }, 500);
     }
-  }, [increment, currentCount, sessionMode, soundEnabled]);
+  }, [increment, currentCount, sessionMode, currentSettings]);
 
   const handleDismissSessionComplete = () => {
     setShowSessionComplete(false);
@@ -88,7 +97,18 @@ export function Counter() {
   const totalProgress = getTotalSessionProgress();
 
   return (
-    <div className="flex flex-col items-center justify-center flex-1 px-6 relative">
+    <div className="flex flex-col items-center justify-center flex-1 px-6 relative w-full h-full">
+      {/* Universal BrogressBar - "EVERY SHAPE MUST HAVE A BROGRESSBAR" */}
+      {/* Universal BrogressBar - "EVERY SHAPE MUST HAVE A BROGRESSBAR" */}
+      <div className="fixed top-0 left-0 right-0 h-2 bg-muted z-50">
+        <motion.div
+          className="h-full bg-primary shadow-[0_0_10px_rgba(var(--primary),0.5)]"
+          initial={{ width: 0 }}
+          animate={{ width: `${progress * 100}%` }}
+          transition={{ type: 'spring', bounce: 0, duration: 0.5 }}
+        />
+      </div>
+
       {/* Session mode indicator */}
       <AnimatePresence>
         {sessionMode.type === 'tasbih100' && (
@@ -427,6 +447,9 @@ export function Counter() {
               ${counterShape === 'waveform' ? 'drop-shadow-md z-10' : ''}
               ${counterShape === 'orb' ? 'text-white mix-blend-overlay' : ''}
             `}
+            style={{
+              fontSize: `${(counterShape === 'classic' ? 4.5 : 4.5) * currentSettings.fontScale}rem`
+            }}
           >
             {currentCount}
           </motion.span>
