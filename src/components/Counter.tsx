@@ -137,7 +137,7 @@ export function Counter() {
       </AnimatePresence>
 
       {/* Dhikr text */}
-      <div className="text-center mb-8 animate-fade-in-up pt-8">
+      <div className="text-center mb-12 animate-fade-in-up pt-20">
         <AnimatePresence mode="wait">
           <motion.p
             key={currentDhikr.id}
