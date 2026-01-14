@@ -36,7 +36,7 @@ interface TasbeehState {
   // Settings
   currentDhikr: Dhikr;
   // hapticEnabled/soundEnabled removed in favor of themeSettings
-  theme: 'light' | 'dark' | 'theme-midnight' | 'theme-neon' | 'theme-green' | 'theme-cyberpunk';
+  theme: 'light' | 'dark' | 'theme-midnight' | 'theme-neon' | 'theme-green' | 'theme-cyberpunk' | 'theme-glass';
   language: 'en' | 'ar';
   
   // Theme-specific settings container
@@ -73,7 +73,7 @@ interface TasbeehState {
   setFontScale: (scale: 0.8 | 1 | 1.2) => void;
   setSoundType: (type: 'click' | 'soft' | 'water') => void;
   
-  setTheme: (theme: 'light' | 'dark' | 'theme-midnight' | 'theme-neon' | 'theme-green' | 'theme-cyberpunk') => void;
+  setTheme: (theme: 'light' | 'dark' | 'theme-midnight' | 'theme-neon' | 'theme-green' | 'theme-cyberpunk' | 'theme-glass') => void;
   setLanguage: (lang: 'ar' | 'en') => void;
   addCustomDhikr: (dhikr: Omit<Dhikr, 'id'>) => void;
   removeCustomDhikr: (id: string) => void;
@@ -115,6 +115,7 @@ const initialThemeSettings: Record<string, ThemeSettings> = {
   'theme-neon': { ...defaultThemeSettings },
   'theme-green': { ...defaultThemeSettings },
   'theme-cyberpunk': { ...defaultThemeSettings },
+  'theme-glass': { ...defaultThemeSettings },
 };
 
 export const defaultDhikrs: Dhikr[] = [
@@ -355,7 +356,7 @@ export const useTasbeehStore = create<TasbeehState>()(
       setTheme: (theme) => {
         set({ theme });
         const root = window.document.documentElement;
-        root.classList.remove('light', 'dark', 'theme-midnight', 'theme-neon', 'theme-green', 'theme-cyberpunk', 'amoled', 'theme-rose', 'theme-nature');
+        root.classList.remove('light', 'dark', 'theme-midnight', 'theme-neon', 'theme-green', 'theme-cyberpunk', 'theme-glass');
         root.classList.add(theme);
       },
       
@@ -407,7 +408,7 @@ export const useTasbeehStore = create<TasbeehState>()(
           const parsed = JSON.parse(data);
           if (parsed.settings?.theme) {
              const root = window.document.documentElement;
-             root.classList.remove('light', 'dark', 'theme-midnight', 'theme-neon', 'theme-green', 'theme-cyberpunk', 'amoled', 'theme-rose', 'theme-nature');
+             root.classList.remove('light', 'dark', 'theme-midnight', 'theme-neon', 'theme-green', 'theme-cyberpunk', 'theme-glass');
              root.classList.add(parsed.settings.theme);
           }
           

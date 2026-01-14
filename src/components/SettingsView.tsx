@@ -27,6 +27,7 @@ const themes = [
   { id: 'theme-neon', label: 'Neon', description: 'Vibrant pink & purple' },
   { id: 'theme-green', label: 'Matrix', description: 'Terminal green code' },
   { id: 'theme-cyberpunk', label: 'Cyberpunk', description: 'High-tech yellow & blue' },
+  { id: 'theme-glass', label: 'Glass', description: 'Pure & icy morphism' },
 ] as const;
 
 export function SettingsView({ children }: SettingsViewProps) {

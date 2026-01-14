@@ -55,181 +55,221 @@
     --sheet-bg: 0 0% 100%;
   }
 
-  .dark {
+  .theme-midnight {
     color-scheme: dark;
-    /* Premium Dark Theme - "Midnight Prayer" */
-    --background: 224 25% 8%;
-    --foreground: 210 20% 98%;
+    /* Midnight Blue */
+    --background: 224 71% 4%;
+    --foreground: 213 31% 91%;
 
-    --card: 224 20% 12%;
-    --card-foreground: 210 20% 98%;
+    --card: 224 71% 7%;
+    --card-foreground: 213 31% 91%;
 
-    --popover: 224 25% 10%;
-    --popover-foreground: 210 20% 98%;
+    --popover: 224 71% 7%;
+    --popover-foreground: 213 31% 91%;
 
+    /* Deep Blue/Gold */
+    --primary: 43 100% 64%;
+    /* Gold */
+    --primary-foreground: 224 71% 4%;
 
-    /* Luxurious gold/amber for dark mode - High Contrast */
-    --primary: 43 96% 64%;
-    --primary-foreground: 224 25% 8%;
+    --secondary: 224 71% 10%;
+    --secondary-foreground: 213 31% 91%;
 
-    --secondary: 224 20% 16%;
-    --secondary-foreground: 210 20% 90%;
+    --muted: 224 50% 15%;
+    --muted-foreground: 224 20% 60%;
 
-    /* More visible track color */
-    --muted: 224 20% 25%;
-    --muted-foreground: 215 15% 75%;
+    --accent: 43 100% 64%;
+    --accent-foreground: 224 71% 4%;
 
-    --accent: 43 96% 64%;
-    --accent-foreground: 224 25% 8%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 210 40% 98%;
 
-    --destructive: 0 62% 30%;
-    --destructive-foreground: 0 85% 95%;
+    --border: 224 50% 15%;
+    --input: 224 50% 15%;
+    --ring: 43 100% 64%;
 
-    --border: 224 25% 25%;
-    --input: 224 25% 25%;
-    --ring: 43 96% 64%;
+    --counter-bg: 224 71% 8%;
+    --counter-ring: 43 100% 64%;
+    --counter-text: 43 100% 64%;
+    --counter-glow: 43 100% 64%;
 
-    /* Counter specific - DISTINCT from background */
-    --counter-bg: 224 25% 15%;
-    --counter-ring: 43 96% 64%;
-    --counter-text: 43 96% 64%;
-    --counter-glow: 43 100% 50%;
-
-    --arabic-text: 210 20% 98%;
-    --progress-track: 224 25% 25%;
-    --progress-fill: 43 96% 64%;
-    --sheet-bg: 224 25% 12%;
+    --arabic-text: 213 31% 91%;
+    --progress-track: 224 50% 15%;
+    --progress-fill: 43 100% 64%;
+    --sheet-bg: 224 71% 6%;
   }
 
   .theme-neon {
     color-scheme: dark;
     /* High contrast Neon */
-    --background: 260 50% 10%;
+    --background: 260 50% 8%;
     --foreground: 280 20% 98%;
 
-    --card: 260 40% 15%;
+    --card: 260 45% 12%;
     --card-foreground: 280 20% 98%;
 
-    --popover: 260 40% 12%;
+    --popover: 260 45% 12%;
     --popover-foreground: 280 20% 98%;
 
     /* Neon Pink */
-    --primary: 320 100% 60%;
+    --primary: 310 100% 65%;
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 260 30% 20%;
+    --secondary: 260 40% 18%;
     --secondary-foreground: 280 20% 90%;
 
-    --muted: 260 30% 25%;
+    --muted: 260 40% 20%;
     --muted-foreground: 260 20% 70%;
 
-    --accent: 320 100% 60%;
+    --accent: 310 100% 65%;
     --accent-foreground: 0 0% 100%;
 
     --destructive: 0 62% 30%;
     --destructive-foreground: 0 85% 95%;
 
-    --border: 260 40% 25%;
-    --input: 260 40% 25%;
-    --ring: 320 100% 60%;
+    --border: 260 40% 20%;
+    --input: 260 40% 20%;
+    --ring: 310 100% 65%;
 
-    --counter-bg: 260 40% 14%;
-    --counter-ring: 320 100% 60%;
-    --counter-text: 320 100% 70%;
-    --counter-glow: 320 100% 60%;
+    --counter-bg: 260 45% 10%;
+    --counter-ring: 310 100% 65%;
+    --counter-text: 310 100% 75%;
+    --counter-glow: 310 100% 60%;
 
     --arabic-text: 280 20% 98%;
-    --progress-track: 260 40% 25%;
-    --progress-fill: 320 100% 60%;
-    --sheet-bg: 260 40% 12%;
+    --progress-track: 260 40% 20%;
+    --progress-fill: 310 100% 65%;
+    --sheet-bg: 260 45% 10%;
   }
 
   .theme-green {
     color-scheme: dark;
     /* Matrix Green */
-    --background: 120 10% 5%;
-    --foreground: 120 50% 90%;
+    --background: 140 30% 3%;
+    --foreground: 140 60% 90%;
 
-    --card: 120 15% 10%;
-    --card-foreground: 120 50% 90%;
+    --card: 140 30% 6%;
+    --card-foreground: 140 60% 90%;
 
-    --popover: 120 15% 10%;
-    --popover-foreground: 120 50% 90%;
+    --popover: 140 30% 6%;
+    --popover-foreground: 140 60% 90%;
 
     /* Terminal Green */
-    --primary: 120 100% 50%;
-    --primary-foreground: 120 10% 5%;
+    --primary: 140 100% 55%;
+    --primary-foreground: 140 30% 3%;
 
-    --secondary: 120 20% 12%;
-    --secondary-foreground: 120 50% 80%;
+    --secondary: 140 30% 10%;
+    --secondary-foreground: 140 60% 80%;
 
-    --muted: 120 20% 15%;
-    --muted-foreground: 120 30% 60%;
+    --muted: 140 30% 12%;
+    --muted-foreground: 140 40% 50%;
 
-    --accent: 120 100% 50%;
-    --accent-foreground: 120 10% 5%;
+    --accent: 140 100% 55%;
+    --accent-foreground: 140 30% 3%;
 
     --destructive: 0 62% 30%;
     --destructive-foreground: 0 85% 95%;
 
-    --border: 120 30% 20%;
-    --input: 120 30% 20%;
-    --ring: 120 100% 50%;
+    --border: 140 30% 15%;
+    --input: 140 30% 15%;
+    --ring: 140 100% 55%;
 
-    --counter-bg: 120 20% 8%;
-    --counter-ring: 120 100% 50%;
-    --counter-text: 120 100% 60%;
-    --counter-glow: 120 100% 45%;
+    --counter-bg: 140 30% 5%;
+    --counter-ring: 140 100% 55%;
+    --counter-text: 140 100% 65%;
+    --counter-glow: 140 100% 40%;
 
-    --arabic-text: 120 50% 95%;
-    --progress-track: 120 30% 15%;
-    --progress-fill: 120 100% 50%;
-    --sheet-bg: 120 20% 10%;
+    --arabic-text: 140 60% 95%;
+    --progress-track: 140 30% 12%;
+    --progress-fill: 140 100% 55%;
+    --sheet-bg: 140 30% 5%;
   }
 
   .theme-cyberpunk {
     color-scheme: dark;
     /* Cyberpunk Blue/Yellow */
-    --background: 240 25% 10%;
-    --foreground: 60 100% 90%;
+    --background: 245 40% 12%;
+    --foreground: 55 100% 90%;
 
-    --card: 240 20% 15%;
-    --card-foreground: 60 100% 90%;
+    --card: 245 35% 16%;
+    --card-foreground: 55 100% 90%;
 
-    --popover: 240 20% 15%;
-    --popover-foreground: 60 100% 90%;
+    --popover: 245 40% 15%;
+    --popover-foreground: 55 100% 90%;
 
     /* Cyber Yellow */
-    --primary: 60 100% 50%;
-    --primary-foreground: 240 25% 10%;
+    --primary: 60 100% 60%;
+    --primary-foreground: 245 40% 12%;
 
-    --secondary: 240 30% 20%;
-    --secondary-foreground: 180 100% 50%;
-    /* Cyan secondary text */
+    --secondary: 245 35% 20%;
+    --secondary-foreground: 180 100% 60%;
 
-    --muted: 240 30% 25%;
-    --muted-foreground: 240 20% 60%;
+    --muted: 245 35% 25%;
+    --muted-foreground: 245 20% 65%;
 
-    --accent: 180 100% 50%;
-    /* Cyan Accent */
-    --accent-foreground: 240 25% 10%;
+    --accent: 180 100% 60%;
+    /* Cyan */
+    --accent-foreground: 245 40% 12%;
 
-    --destructive: 0 100% 50%;
+    --destructive: 0 100% 60%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 240 30% 30%;
-    --input: 240 30% 30%;
-    --ring: 60 100% 50%;
+    --border: 245 35% 25%;
+    --input: 245 35% 25%;
+    --ring: 60 100% 60%;
 
-    --counter-bg: 240 25% 13%;
-    --counter-ring: 60 100% 50%;
-    --counter-text: 60 100% 50%;
+    --counter-bg: 245 35% 14%;
+    --counter-ring: 60 100% 60%;
+    --counter-text: 60 100% 60%;
     --counter-glow: 60 100% 50%;
 
     --arabic-text: 60 100% 95%;
-    --progress-track: 240 30% 25%;
-    --progress-fill: 60 100% 50%;
-    --sheet-bg: 240 25% 14%;
+    --progress-track: 245 35% 25%;
+    --progress-fill: 60 100% 60%;
+    --sheet-bg: 245 35% 14%;
+  }
+
+  .theme-glass {
+    color-scheme: light;
+    /* Icy Glass */
+    --background: 200 40% 97%;
+    --foreground: 220 40% 20%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 220 40% 20%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 220 40% 20%;
+
+    /* Crystal Blue */
+    --primary: 200 90% 45%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 200 30% 94%;
+    --secondary-foreground: 220 40% 30%;
+
+    --muted: 200 20% 92%;
+    --muted-foreground: 220 20% 60%;
+
+    --accent: 200 90% 45%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 80% 60%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 200 20% 88%;
+    --input: 200 20% 88%;
+    --ring: 200 90% 45%;
+
+    --counter-bg: 0 0% 100%;
+    --counter-ring: 200 90% 45%;
+    --counter-text: 200 90% 40%;
+    --counter-glow: 200 90% 70%;
+
+    --arabic-text: 220 40% 20%;
+    --progress-track: 200 20% 90%;
+    --progress-fill: 200 90% 45%;
+    --sheet-bg: 200 40% 98%;
   }
 }
 
