@@ -90,7 +90,7 @@
 
     --counter-bg: 224 71% 8%;
     --counter-ring: 43 100% 64%;
-    --counter-text: 43 100% 64%;
+    --counter-text: 43 100% 90%;
     --counter-glow: 43 100% 64%;
 
     --arabic-text: 213 31% 91%;
@@ -133,7 +133,7 @@
 
     --counter-bg: 260 45% 10%;
     --counter-ring: 310 100% 65%;
-    --counter-text: 310 100% 75%;
+    --counter-text: 310 100% 90%;
     --counter-glow: 310 100% 60%;
 
     --arabic-text: 280 20% 98%;
@@ -176,7 +176,7 @@
 
     --counter-bg: 140 30% 5%;
     --counter-ring: 140 100% 55%;
-    --counter-text: 140 100% 65%;
+    --counter-text: 140 100% 90%;
     --counter-glow: 140 100% 40%;
 
     --arabic-text: 140 60% 95%;
@@ -220,7 +220,7 @@
 
     --counter-bg: 245 35% 14%;
     --counter-ring: 60 100% 60%;
-    --counter-text: 60 100% 60%;
+    --counter-text: 60 100% 90%;
     --counter-glow: 60 100% 50%;
 
     --arabic-text: 60 100% 95%;
