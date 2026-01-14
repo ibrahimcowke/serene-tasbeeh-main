@@ -524,90 +524,91 @@ export function Counter() {
             {currentCount}
           </motion.span>
         </motion.button>
-        {/* Target indicator */}
-        <div className="mt-3 text-center">
-          <p className="text-sm text-muted-foreground">
-            {currentCount} / {getCurrentTarget()}
-          </p>
+      </div>
+      {/* Target indicator */}
+      <div className="mt-3 text-center">
+        <p className="text-sm text-muted-foreground">
+          {currentCount} / {getCurrentTarget()}
+        </p>
 
-          <AnimatePresence>
-            {showCompletion && !(sessionMode.type === 'tasbih100' && sessionMode.isComplete) && (
-              <motion.div
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -10 }}
-                className="mt-3"
-              >
-                <p className="text-primary text-sm font-medium">
-                  {sessionMode.type === 'tasbih100' && sessionMode.currentPhase < 3
-                    ? '✓ Phase complete'
-                    : '✓ Set complete'
-                  }
-                </p>
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </div>
-
-        {/* Session Complete Modal */}
         <AnimatePresence>
-          {showSessionComplete && (
+          {showCompletion && !(sessionMode.type === 'tasbih100' && sessionMode.isComplete) && (
             <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              className="fixed inset-0 bg-background/80 backdrop-blur-sm flex items-center justify-center z-50 p-6"
-              onClick={handleDismissSessionComplete}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              className="mt-3"
             >
-              <motion.div
-                initial={{ scale: 0.9, opacity: 0 }}
-                animate={{ scale: 1, opacity: 1 }}
-                exit={{ scale: 0.9, opacity: 0 }}
-                className="bg-card rounded-3xl p-8 max-w-sm w-full text-center shadow-xl"
-                onClick={(e) => e.stopPropagation()}
-              >
-                <motion.div
-                  initial={{ scale: 0 }}
-                  animate={{ scale: 1 }}
-                  transition={{ delay: 0.2, type: 'spring' }}
-                  className="w-20 h-20 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-6"
-                >
-                  <span className="text-4xl">✨</span>
-                </motion.div>
-
-                <h2 className="text-2xl font-medium text-foreground mb-2">
-                  ما شاء الله
-                </h2>
-                <p className="text-lg text-foreground mb-1 font-arabic">
-                  Session Complete
-                </p>
-                <p className="text-muted-foreground text-sm mb-6">
-                  You have completed 100 dhikr
-                  <br />
-                  <span className="text-xs">33 + 33 + 33 + 1</span>
-                </p>
-
-                <div className="grid grid-cols-4 gap-2 mb-6">
-                  {defaultDhikrs.slice(0, 4).map((d, i) => (
-                    <div key={d.id} className="text-center">
-                      <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-1">
-                        <span className="text-xs text-primary">✓</span>
-                      </div>
-                      <p className="text-xs text-muted-foreground">{i === 3 ? '1' : '33'}</p>
-                    </div>
-                  ))}
-                </div>
-
-                <button
-                  onClick={handleDismissSessionComplete}
-                  className="w-full py-3 rounded-xl bg-primary text-primary-foreground font-medium"
-                >
-                  Alhamdulillah
-                </button>
-              </motion.div>
+              <p className="text-primary text-sm font-medium">
+                {sessionMode.type === 'tasbih100' && sessionMode.currentPhase < 3
+                  ? '✓ Phase complete'
+                  : '✓ Set complete'
+                }
+              </p>
             </motion.div>
           )}
         </AnimatePresence>
       </div>
-      );
+
+      {/* Session Complete Modal */}
+      <AnimatePresence>
+        {showSessionComplete && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-background/80 backdrop-blur-sm flex items-center justify-center z-50 p-6"
+            onClick={handleDismissSessionComplete}
+          >
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              className="bg-card rounded-3xl p-8 max-w-sm w-full text-center shadow-xl"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <motion.div
+                initial={{ scale: 0 }}
+                animate={{ scale: 1 }}
+                transition={{ delay: 0.2, type: 'spring' }}
+                className="w-20 h-20 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-6"
+              >
+                <span className="text-4xl">✨</span>
+              </motion.div>
+
+              <h2 className="text-2xl font-medium text-foreground mb-2">
+                ما شاء الله
+              </h2>
+              <p className="text-lg text-foreground mb-1 font-arabic">
+                Session Complete
+              </p>
+              <p className="text-muted-foreground text-sm mb-6">
+                You have completed 100 dhikr
+                <br />
+                <span className="text-xs">33 + 33 + 33 + 1</span>
+              </p>
+
+              <div className="grid grid-cols-4 gap-2 mb-6">
+                {defaultDhikrs.slice(0, 4).map((d, i) => (
+                  <div key={d.id} className="text-center">
+                    <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-1">
+                      <span className="text-xs text-primary">✓</span>
+                    </div>
+                    <p className="text-xs text-muted-foreground">{i === 3 ? '1' : '33'}</p>
+                  </div>
+                ))}
+              </div>
+
+              <button
+                onClick={handleDismissSessionComplete}
+                className="w-full py-3 rounded-xl bg-primary text-primary-foreground font-medium"
+              >
+                Alhamdulillah
+              </button>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
 }
