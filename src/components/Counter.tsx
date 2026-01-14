@@ -98,16 +98,7 @@ export function Counter() {
 
   return (
     <div className="flex flex-col items-center justify-center flex-1 px-6 relative w-full h-full">
-      {/* Universal BrogressBar - "EVERY SHAPE MUST HAVE A BROGRESSBAR" */}
-      {/* Universal BrogressBar - "EVERY SHAPE MUST HAVE A BROGRESSBAR" */}
-      <div className="fixed top-0 left-0 right-0 h-2 bg-muted z-50">
-        <motion.div
-          className="h-full bg-primary shadow-[0_0_10px_rgba(var(--primary),0.5)]"
-          initial={{ width: 0 }}
-          animate={{ width: `${progress * 100}%` }}
-          transition={{ type: 'spring', bounce: 0, duration: 0.5 }}
-        />
-      </div>
+
 
       {/* Session mode indicator */}
       <AnimatePresence>
