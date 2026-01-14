@@ -447,14 +447,72 @@ export function Counter() {
         </motion.button>
       </div>
 
-      {/* Shape-Proximity BrogressBar - Positioned immediately next to/below counter */}
-      <div className="w-64 h-1.5 bg-muted/30 rounded-full overflow-hidden mt-6 backdrop-blur-sm">
-        <motion.div
-          className="h-full bg-primary shadow-[0_0_10px_rgba(var(--primary),0.5)]"
-          initial={{ width: 0 }}
-          animate={{ width: `${progress * 100}%` }}
-          transition={{ type: 'spring', bounce: 0, duration: 0.5 }}
-        />
+      {/* Dynamic Shape BrogressBar */}
+      <div className="mt-6 flex justify-center">
+        {counterShape === 'classic' && (
+          // Rectangle Bar for Classic
+          <div className="w-64 h-2 bg-muted/30 backdrop-blur-sm border border-muted-foreground/10 rounded-sm overflow-hidden">
+            <motion.div
+              className="h-full bg-primary"
+              initial={{ width: 0 }}
+              animate={{ width: `${progress * 100}%` }}
+              transition={{ type: 'spring', bounce: 0, duration: 0.5 }}
+            />
+          </div>
+        )}
+
+        {counterShape === 'hexagon' && (
+          // Mini Hexagon for Hexagon
+          <svg width="40" height="40" viewBox="0 0 100 100" className="transform -rotate-90">
+            <path
+              d="M50 5 L93.3 30 V75 L50 100 L6.7 75 V30 Z"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="8"
+              className="text-muted/30"
+            />
+            <motion.path
+              d="M50 5 L93.3 30 V75 L50 100 L6.7 75 V30 Z"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="8"
+              className="text-primary"
+              strokeDasharray="300"
+              initial={{ strokeDashoffset: 300 }}
+              animate={{ strokeDashoffset: 300 - (300 * progress) }}
+              transition={{ type: 'spring', bounce: 0, duration: 0.5 }}
+            />
+          </svg>
+        )}
+
+        {['minimal', 'beads', 'flower', 'waveform', 'orb'].includes(counterShape) && (
+          // Mini Ring for Round Shapes
+          <svg width="40" height="40" className="-rotate-90">
+            <circle
+              cx="20"
+              cy="20"
+              r="16"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="4"
+              className="text-muted/30"
+            />
+            <motion.circle
+              cx="20"
+              cy="20"
+              r="16"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="4"
+              className="text-primary"
+              strokeDasharray="100.5"
+              initial={{ strokeDashoffset: 100.5 }}
+              animate={{ strokeDashoffset: 100.5 - (100.5 * progress) }}
+              strokeLinecap="round"
+              transition={{ type: 'spring', bounce: 0, duration: 0.5 }}
+            />
+          </svg>
+        )}
       </div>
 
       {/* Target indicator */}
