@@ -259,11 +259,7 @@ export function Counter() {
         </div>
 
         {counterShape === 'minimal' && (
-          <ProgressRing
-            progress={progress}
-            size={280}
-            strokeWidth={4}
-          />
+          <div className="absolute inset-4 rounded-full border border-border/50" />
         )}
 
         {counterShape === 'classic' && (
@@ -273,37 +269,14 @@ export function Counter() {
             <div className="absolute top-3 right-3 w-3 h-3 rounded-full bg-muted-foreground/30" />
             <div className="absolute bottom-3 left-3 w-3 h-3 rounded-full bg-muted-foreground/30" />
             <div className="absolute bottom-3 right-3 w-3 h-3 rounded-full bg-muted-foreground/30" />
-
-            {/* HIGH VISIBILITY Progress Bar for Classic */}
-            <div className="absolute bottom-8 left-8 right-8 h-3 bg-muted rounded-full overflow-hidden border border-muted-foreground/20">
-              <motion.div
-                className="h-full bg-primary shadow-[0_0_10px_rgba(0,0,0,0.2)]"
-                initial={{ width: 0 }}
-                animate={{ width: `${progress * 100}%` }}
-                transition={{ duration: 0.3 }}
-              />
-            </div>
           </div>
         )}
 
         {counterShape === 'beads' && (
           <div className="absolute inset-0 flex items-center justify-center -z-10 pointer-events-none">
             <svg className="w-[300px] h-[300px] -rotate-90">
-              {/* Track Dots */}
-              <circle cx="150" cy="150" r="140" stroke="currentColor" fill="none" strokeWidth="8" className="text-muted/30" strokeDasharray="1 18" />
-              {/* Progress Dots */}
-              <motion.circle
-                cx="150" cy="150" r="140"
-                stroke="currentColor"
-                fill="none"
-                strokeWidth="10"
-                className="text-primary drop-shadow-[0_0_8px_rgba(var(--primary),0.5)]"
-                strokeDasharray="1 18"
-                strokeLinecap="round"
-                initial={{ pathLength: 0 }}
-                animate={{ pathLength: progress }}
-                transition={{ duration: 0.3 }}
-              />
+              {/* Track Dots - subtle guide only */}
+              <circle cx="150" cy="150" r="140" stroke="currentColor" fill="none" strokeWidth="2" className="text-muted/10" strokeDasharray="1 30" />
             </svg>
           </div>
         )}
@@ -323,28 +296,6 @@ export function Counter() {
                 />
               ))}
             </motion.div>
-            {/* High Contrast Progress Ring */}
-            <svg className="absolute w-[300px] h-[300px] -rotate-90 pointer-events-none">
-              <circle
-                cx="150" cy="150" r="140"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="4"
-                className="text-muted/40"
-              />
-              <motion.circle
-                cx="150" cy="150" r="140"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="8"
-                className="text-primary drop-shadow-md"
-                strokeDasharray="880"
-                initial={{ strokeDashoffset: 880 }}
-                animate={{ strokeDashoffset: 880 - (880 * progress) }}
-                strokeLinecap="round"
-                transition={{ duration: 0.5, ease: "easeOut" }}
-              />
-            </svg>
           </div>
         )}
 
@@ -371,27 +322,6 @@ export function Counter() {
 
         {counterShape === 'hexagon' && (
           <div className="absolute inset-0 flex items-center justify-center -z-10">
-            <svg width="300" height="300" viewBox="0 0 100 100" className="transform -rotate-90">
-              <path
-                d="M50 5 L93.3 30 V75 L50 100 L6.7 75 V30 Z"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="4"
-                className="text-muted/40"
-              />
-              <motion.path
-                d="M50 5 L93.3 30 V75 L50 100 L6.7 75 V30 Z"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="6"
-                className="text-primary drop-shadow-[0_0_8px_rgba(var(--primary),0.6)]"
-                strokeDasharray="300"
-                initial={{ strokeDashoffset: 300 }}
-                animate={{ strokeDashoffset: 300 - (300 * progress) }}
-                strokeLinecap="round"
-                transition={{ duration: 0.3, ease: "linear" }}
-              />
-            </svg>
             {/* Distinct Inner Hexagon */}
             <div className="absolute inset-0 flex items-center justify-center">
               <div
@@ -425,23 +355,6 @@ export function Counter() {
               {/* Glass Glare */}
               <div className="absolute top-6 left-10 right-10 h-32 bg-gradient-to-b from-white/20 to-transparent rounded-full blur-xl pointer-events-none" />
             </div>
-
-            {/* Outer Progress Ring - High Visibility */}
-            <svg className="absolute w-[290px] h-[290px] -rotate-90 pointer-events-none">
-              <circle cx="145" cy="145" r="142" stroke="currentColor" fill="none" strokeWidth="3" className="text-muted/40" />
-              <motion.circle
-                cx="145" cy="145" r="142"
-                stroke="currentColor"
-                fill="none"
-                strokeWidth="5"
-                className="text-primary drop-shadow-[0_0_4px_currentColor]"
-                strokeDasharray="892"
-                initial={{ strokeDashoffset: 892 }}
-                animate={{ strokeDashoffset: 892 - (892 * progress) }}
-                strokeLinecap="round"
-                transition={{ duration: 0.3 }}
-              />
-            </svg>
           </div>
         )}
 
