@@ -391,29 +391,17 @@ export function Counter() {
           )}
 
           {counterShape === 'beads' && (
-            // Visual beads ring - Enhanced
+            // Visual beads ring - Static decoration only
             <div className="absolute inset-0 rounded-full">
               <svg className="w-full h-full -rotate-90">
                 <circle cx="50%" cy="50%" r="48%" stroke="currentColor" fill="none" strokeWidth="1" className="text-muted/20" />
-                {/* Beads Progress Ring */}
-                <motion.circle
+                <circle
                   cx="50%" cy="50%" r="48%"
                   stroke="currentColor"
                   fill="none"
                   strokeWidth="12"
-                  className="text-primary/20"
-                  strokeDasharray="1 15" // Dotted line effect
-                />
-                <motion.circle
-                  cx="50%" cy="50%" r="48%"
-                  stroke="currentColor"
-                  fill="none"
-                  strokeWidth="12"
-                  className="text-primary"
+                  className="text-primary/10"
                   strokeDasharray="1 15"
-                  initial={{ pathLength: 0 }}
-                  animate={{ pathLength: progress }}
-                  transition={{ duration: 0.3 }}
                 />
               </svg>
             </div>
