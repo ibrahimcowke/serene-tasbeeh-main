@@ -178,7 +178,7 @@ export function Counter() {
 
       {/* Counter visualization */}
       {/* Counter visualization */}
-      <div className="relative">
+      <div className="relative w-[300px] h-[300px] flex items-center justify-center my-4">
         {/* Encircled BrogressBar - Wraps the counter button */}
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-0">
           {counterShape === 'classic' && (
