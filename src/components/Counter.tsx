@@ -179,6 +179,85 @@ export function Counter() {
       {/* Counter visualization */}
       {/* Counter visualization */}
       <div className="relative">
+        {/* Encircled BrogressBar - Wraps the counter button */}
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-0">
+          {counterShape === 'classic' && (
+            <svg width="280" height="280" viewBox="0 0 280 280" className="-rotate-90">
+              <rect
+                x="10" y="10" width="260" height="260" rx="24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="4"
+                className="text-muted/30"
+              />
+              <motion.rect
+                x="10" y="10" width="260" height="260" rx="24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="4"
+                className="text-primary drop-shadow-[0_0_10px_rgba(var(--primary),0.5)]"
+                pathLength="1"
+                strokeDasharray="1"
+                initial={{ strokeDashoffset: 1 }}
+                animate={{ strokeDashoffset: 1 - progress }}
+                transition={{ type: 'spring', bounce: 0, duration: 0.5 }}
+              />
+            </svg>
+          )}
+
+          {counterShape === 'hexagon' && (
+            <svg width="290" height="290" viewBox="0 0 100 100" className="transform -rotate-90">
+              <path
+                d="M50 2 L95 28 V72 L50 98 L5 72 V28 Z"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="3"
+                className="text-muted/30"
+              />
+              <motion.path
+                d="M50 2 L95 28 V72 L50 98 L5 72 V28 Z"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="3"
+                className="text-primary drop-shadow-[0_0_10px_rgba(var(--primary),0.5)]"
+                pathLength="1"
+                strokeDasharray="1"
+                initial={{ strokeDashoffset: 1 }}
+                animate={{ strokeDashoffset: 1 - progress }}
+                transition={{ type: 'spring', bounce: 0, duration: 0.5 }}
+              />
+            </svg>
+          )}
+
+          {['minimal', 'beads', 'flower', 'waveform', 'orb'].includes(counterShape) && (
+            <svg width="290" height="290" className="-rotate-90">
+              <circle
+                cx="145"
+                cy="145"
+                r="140"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="4"
+                className="text-muted/30"
+              />
+              <motion.circle
+                cx="145"
+                cy="145"
+                r="140"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="4"
+                className="text-primary drop-shadow-[0_0_10px_rgba(var(--primary),0.5)]"
+                strokeDasharray="880"
+                initial={{ strokeDashoffset: 880 }}
+                animate={{ strokeDashoffset: 880 - (880 * progress) }}
+                strokeLinecap="round"
+                transition={{ type: 'spring', bounce: 0, duration: 0.5 }}
+              />
+            </svg>
+          )}
+        </div>
+
         {counterShape === 'minimal' && (
           <ProgressRing
             progress={progress}
@@ -445,160 +524,90 @@ export function Counter() {
             {currentCount}
           </motion.span>
         </motion.button>
-      </div>
+        {/* Target indicator */}
+        <div className="mt-3 text-center">
+          <p className="text-sm text-muted-foreground">
+            {currentCount} / {getCurrentTarget()}
+          </p>
 
-      {/* Dynamic Shape BrogressBar */}
-      <div className="mt-6 flex justify-center">
-        {counterShape === 'classic' && (
-          // Rectangle Bar for Classic
-          <div className="w-64 h-2 bg-muted/30 backdrop-blur-sm border border-muted-foreground/10 rounded-sm overflow-hidden">
-            <motion.div
-              className="h-full bg-primary"
-              initial={{ width: 0 }}
-              animate={{ width: `${progress * 100}%` }}
-              transition={{ type: 'spring', bounce: 0, duration: 0.5 }}
-            />
-          </div>
-        )}
+          <AnimatePresence>
+            {showCompletion && !(sessionMode.type === 'tasbih100' && sessionMode.isComplete) && (
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                className="mt-3"
+              >
+                <p className="text-primary text-sm font-medium">
+                  {sessionMode.type === 'tasbih100' && sessionMode.currentPhase < 3
+                    ? '✓ Phase complete'
+                    : '✓ Set complete'
+                  }
+                </p>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
 
-        {counterShape === 'hexagon' && (
-          // Mini Hexagon for Hexagon
-          <svg width="40" height="40" viewBox="0 0 100 100" className="transform -rotate-90">
-            <path
-              d="M50 5 L93.3 30 V75 L50 100 L6.7 75 V30 Z"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="8"
-              className="text-muted/30"
-            />
-            <motion.path
-              d="M50 5 L93.3 30 V75 L50 100 L6.7 75 V30 Z"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="8"
-              className="text-primary"
-              strokeDasharray="300"
-              initial={{ strokeDashoffset: 300 }}
-              animate={{ strokeDashoffset: 300 - (300 * progress) }}
-              transition={{ type: 'spring', bounce: 0, duration: 0.5 }}
-            />
-          </svg>
-        )}
-
-        {['minimal', 'beads', 'flower', 'waveform', 'orb'].includes(counterShape) && (
-          // Mini Ring for Round Shapes
-          <svg width="40" height="40" className="-rotate-90">
-            <circle
-              cx="20"
-              cy="20"
-              r="16"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="4"
-              className="text-muted/30"
-            />
-            <motion.circle
-              cx="20"
-              cy="20"
-              r="16"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="4"
-              className="text-primary"
-              strokeDasharray="100.5"
-              initial={{ strokeDashoffset: 100.5 }}
-              animate={{ strokeDashoffset: 100.5 - (100.5 * progress) }}
-              strokeLinecap="round"
-              transition={{ type: 'spring', bounce: 0, duration: 0.5 }}
-            />
-          </svg>
-        )}
-      </div>
-
-      {/* Target indicator */}
-      <div className="mt-3 text-center">
-        <p className="text-sm text-muted-foreground">
-          {currentCount} / {getCurrentTarget()}
-        </p>
-
+        {/* Session Complete Modal */}
         <AnimatePresence>
-          {showCompletion && !(sessionMode.type === 'tasbih100' && sessionMode.isComplete) && (
+          {showSessionComplete && (
             <motion.div
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -10 }}
-              className="mt-3"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 bg-background/80 backdrop-blur-sm flex items-center justify-center z-50 p-6"
+              onClick={handleDismissSessionComplete}
             >
-              <p className="text-primary text-sm font-medium">
-                {sessionMode.type === 'tasbih100' && sessionMode.currentPhase < 3
-                  ? '✓ Phase complete'
-                  : '✓ Set complete'
-                }
-              </p>
+              <motion.div
+                initial={{ scale: 0.9, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                exit={{ scale: 0.9, opacity: 0 }}
+                className="bg-card rounded-3xl p-8 max-w-sm w-full text-center shadow-xl"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <motion.div
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1 }}
+                  transition={{ delay: 0.2, type: 'spring' }}
+                  className="w-20 h-20 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-6"
+                >
+                  <span className="text-4xl">✨</span>
+                </motion.div>
+
+                <h2 className="text-2xl font-medium text-foreground mb-2">
+                  ما شاء الله
+                </h2>
+                <p className="text-lg text-foreground mb-1 font-arabic">
+                  Session Complete
+                </p>
+                <p className="text-muted-foreground text-sm mb-6">
+                  You have completed 100 dhikr
+                  <br />
+                  <span className="text-xs">33 + 33 + 33 + 1</span>
+                </p>
+
+                <div className="grid grid-cols-4 gap-2 mb-6">
+                  {defaultDhikrs.slice(0, 4).map((d, i) => (
+                    <div key={d.id} className="text-center">
+                      <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-1">
+                        <span className="text-xs text-primary">✓</span>
+                      </div>
+                      <p className="text-xs text-muted-foreground">{i === 3 ? '1' : '33'}</p>
+                    </div>
+                  ))}
+                </div>
+
+                <button
+                  onClick={handleDismissSessionComplete}
+                  className="w-full py-3 rounded-xl bg-primary text-primary-foreground font-medium"
+                >
+                  Alhamdulillah
+                </button>
+              </motion.div>
             </motion.div>
           )}
         </AnimatePresence>
       </div>
-
-      {/* Session Complete Modal */}
-      <AnimatePresence>
-        {showSessionComplete && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-background/80 backdrop-blur-sm flex items-center justify-center z-50 p-6"
-            onClick={handleDismissSessionComplete}
-          >
-            <motion.div
-              initial={{ scale: 0.9, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.9, opacity: 0 }}
-              className="bg-card rounded-3xl p-8 max-w-sm w-full text-center shadow-xl"
-              onClick={(e) => e.stopPropagation()}
-            >
-              <motion.div
-                initial={{ scale: 0 }}
-                animate={{ scale: 1 }}
-                transition={{ delay: 0.2, type: 'spring' }}
-                className="w-20 h-20 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-6"
-              >
-                <span className="text-4xl">✨</span>
-              </motion.div>
-
-              <h2 className="text-2xl font-medium text-foreground mb-2">
-                ما شاء الله
-              </h2>
-              <p className="text-lg text-foreground mb-1 font-arabic">
-                Session Complete
-              </p>
-              <p className="text-muted-foreground text-sm mb-6">
-                You have completed 100 dhikr
-                <br />
-                <span className="text-xs">33 + 33 + 33 + 1</span>
-              </p>
-
-              <div className="grid grid-cols-4 gap-2 mb-6">
-                {defaultDhikrs.slice(0, 4).map((d, i) => (
-                  <div key={d.id} className="text-center">
-                    <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-1">
-                      <span className="text-xs text-primary">✓</span>
-                    </div>
-                    <p className="text-xs text-muted-foreground">{i === 3 ? '1' : '33'}</p>
-                  </div>
-                ))}
-              </div>
-
-              <button
-                onClick={handleDismissSessionComplete}
-                className="w-full py-3 rounded-xl bg-primary text-primary-foreground font-medium"
-              >
-                Alhamdulillah
-              </button>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </div>
-  );
+      );
 }
