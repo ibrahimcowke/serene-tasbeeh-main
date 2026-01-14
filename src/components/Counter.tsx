@@ -447,6 +447,16 @@ export function Counter() {
         </motion.button>
       </div>
 
+      {/* Shape-Proximity BrogressBar - Positioned immediately next to/below counter */}
+      <div className="w-64 h-1.5 bg-muted/30 rounded-full overflow-hidden mt-6 backdrop-blur-sm">
+        <motion.div
+          className="h-full bg-primary shadow-[0_0_10px_rgba(var(--primary),0.5)]"
+          initial={{ width: 0 }}
+          animate={{ width: `${progress * 100}%` }}
+          transition={{ type: 'spring', bounce: 0, duration: 0.5 }}
+        />
+      </div>
+
       {/* Target indicator */}
       <div className="mt-3 text-center">
         <p className="text-sm text-muted-foreground">
