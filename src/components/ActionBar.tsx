@@ -31,7 +31,7 @@ export function ActionBar() {
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="px-6 pb-4 safe-area-bottom"
+        className="px-6 pb-4 safe-area-bottom w-full max-w-3xl mx-auto"
       >
         {/* Primary actions row */}
         <div className="flex items-center justify-center gap-4 mb-4">
