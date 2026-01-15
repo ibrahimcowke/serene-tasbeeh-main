@@ -13,7 +13,9 @@ const presetTargets = [
   { value: 33, label: '33', description: 'One set' },
   { value: 99, label: '99', description: 'Names of Allah' },
   { value: 100, label: '100', description: 'Standard round' },
+  { value: 500, label: '500', description: 'Long session' },
   { value: 1000, label: '1000', description: 'Extended session' },
+  { value: 0, label: '∞', description: 'No limit' },
 ];
 
 export function TargetSelector({ children }: TargetSelectorProps) {
@@ -56,7 +58,7 @@ export function TargetSelector({ children }: TargetSelectorProps) {
         <SheetHeader className="text-left pb-4">
           <SheetTitle className="text-lg font-medium">Set Target</SheetTitle>
         </SheetHeader>
-        
+
         <div className="space-y-4 pb-8">
           {/* 100 Session Mode */}
           <motion.button
@@ -66,8 +68,8 @@ export function TargetSelector({ children }: TargetSelectorProps) {
             className={`
               w-full p-4 rounded-2xl text-left
               transition-all duration-200
-              ${sessionMode.type === 'tasbih100' 
-                ? 'bg-primary/10 border-2 border-primary' 
+              ${sessionMode.type === 'tasbih100'
+                ? 'bg-primary/10 border-2 border-primary'
                 : 'bg-gradient-to-r from-primary/5 to-accent/50 border border-primary/20 hover:border-primary/40'
               }
             `}
@@ -90,8 +92,8 @@ export function TargetSelector({ children }: TargetSelectorProps) {
             </div>
             <div className="mt-3 flex gap-1">
               {['سُبْحَانَ اللهِ', 'الْحَمْدُ لِلَّهِ', 'اللهُ أَكْبَرُ', 'لَا إِلَٰهَ إِلَّا اللهُ'].map((text, i) => (
-                <span 
-                  key={i} 
+                <span
+                  key={i}
                   className="flex-1 text-center py-1 px-1 rounded-lg bg-background/50 text-xs font-arabic text-muted-foreground"
                 >
                   {i === 3 ? '×1' : '×33'}
@@ -121,8 +123,8 @@ export function TargetSelector({ children }: TargetSelectorProps) {
                 className={`
                   p-4 rounded-2xl text-left
                   transition-colors duration-200
-                  ${targetCount === preset.value && sessionMode.type === 'single'
-                    ? 'bg-accent border border-primary/20' 
+                  ${targetCount === preset.value && sessionMode.type === 'free'
+                    ? 'bg-accent border border-primary/20'
                     : 'bg-card hover:bg-secondary'
                   }
                 `}
@@ -136,7 +138,7 @@ export function TargetSelector({ children }: TargetSelectorProps) {
                       {preset.description}
                     </p>
                   </div>
-                  {targetCount === preset.value && sessionMode.type === 'single' && (
+                  {targetCount === preset.value && sessionMode.type === 'free' && (
                     <div className="w-5 h-5 rounded-full bg-primary flex items-center justify-center">
                       <Check className="w-3 h-3 text-primary-foreground" />
                     </div>

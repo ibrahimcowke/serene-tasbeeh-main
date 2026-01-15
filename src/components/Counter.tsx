@@ -15,6 +15,7 @@ export function Counter() {
     exitSessionMode,
     theme,
     themeSettings,
+    layout = 'default',
     counterShape = 'minimal', // Default to minimal if undefined in persisted state
   } = useTasbeehStore();
 
@@ -66,18 +67,21 @@ export function Counter() {
 
     // Check for phase/target completion
     const currentTarget = getCurrentTarget();
-    const completionMilestone = Math.floor((currentCount + 1) / currentTarget);
 
-    if ((currentCount + 1) % currentTarget === 0 && completionMilestone > lastCompletionRef.current) {
-      lastCompletionRef.current = completionMilestone;
-      setShowCompletion(true);
+    if (currentTarget > 0) {
+      const completionMilestone = Math.floor((currentCount + 1) / currentTarget);
 
-      // Play completion sound
-      if (currentSettings.soundEnabled) {
-        SoundManager.playCompletion();
+      if ((currentCount + 1) % currentTarget === 0 && completionMilestone > lastCompletionRef.current) {
+        lastCompletionRef.current = completionMilestone;
+        setShowCompletion(true);
+
+        // Play completion sound
+        if (currentSettings.soundEnabled) {
+          SoundManager.playCompletion();
+        }
+
+        setTimeout(() => setShowCompletion(false), 1500);
       }
-
-      setTimeout(() => setShowCompletion(false), 1500);
     }
 
     // Check for 100 session complete
@@ -97,9 +101,9 @@ export function Counter() {
   const totalProgress = getTotalSessionProgress();
 
   return (
-    <div className="flex flex-col items-center justify-center flex-1 px-6 relative w-full h-full">
-
-
+    <div className={`flex flex-col items-center flex-1 px-6 relative w-full h-full transition-all duration-500
+      ${layout === 'ergonomic' ? 'justify-end pb-16' : 'justify-center'}
+    `}>
       {/* Session mode indicator */}
       <AnimatePresence>
         {sessionMode.type === 'tasbih100' && (
@@ -107,7 +111,7 @@ export function Counter() {
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
-            className="absolute top-4 left-0 right-0"
+            className={`absolute left-0 right-0 ${layout === 'focus' ? 'top-2' : 'top-4'}`}
           >
             <div className="flex justify-center gap-2 mb-2">
               {[0, 1, 2, 3].map((phase) => (
@@ -137,7 +141,13 @@ export function Counter() {
       </AnimatePresence>
 
       {/* Dhikr text */}
-      <div className="text-center mb-6 animate-fade-in-up pt-4">
+      <div className={`
+        transition-all duration-500
+        ${layout === 'focus' ? 'absolute top-12 scale-90 opacity-80' : ''}
+        ${layout === 'ergonomic' ? 'absolute top-[15%] scale-110' : ''}
+        ${layout === 'default' ? 'text-center mb-6 pt-4' : 'text-center'}
+        animate-fade-in-up
+      `}>
         <AnimatePresence mode="wait">
           <motion.p
             key={currentDhikr.id}
@@ -177,8 +187,14 @@ export function Counter() {
       </div>
 
       {/* Counter visualization */}
-      {/* Counter visualization */}
-      <div className="relative w-[300px] h-[300px] flex items-center justify-center my-4">
+      <motion.div
+        layout
+        className={`relative flex items-center justify-center
+          ${layout === 'focus' ? 'scale-110' : ''}
+          ${layout === 'ergonomic' ? 'scale-100 translate-y-4' : ''}
+        `}
+        style={{ width: 300, height: 300 }}
+      >
         {/* Encircled BrogressBar - Wraps the counter button */}
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-0">
           {counterShape === 'classic' && (
@@ -425,11 +441,12 @@ export function Counter() {
             {currentCount}
           </motion.span>
         </motion.button>
-      </div>
+      </motion.div>
+
       {/* Target indicator */}
-      <div className="mt-3 text-center">
+      <div className={`mt-3 text-center transition-opacity duration-300 ${layout === 'focus' ? 'opacity-50 hover:opacity-100' : ''}`}>
         <p className="text-sm text-muted-foreground">
-          {currentCount} / {getCurrentTarget()}
+          {currentCount} / {getCurrentTarget() > 0 ? getCurrentTarget() : '∞'}
         </p>
 
         <AnimatePresence>

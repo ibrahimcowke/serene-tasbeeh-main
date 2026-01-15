@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Check, Download, Upload, Trash2 } from 'lucide-react';
+import { Check, Download, Upload, Trash2, RotateCcw, Layout, Smartphone, Maximize } from 'lucide-react';
 import { useTasbeehStore } from '@/store/tasbeehStore';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import { Switch } from '@/components/ui/switch';
@@ -46,9 +46,12 @@ export function SettingsView({ children }: SettingsViewProps) {
     setSoundType,
     setTheme,
     setCounterShape,
+    layout,
+    setLayout,
     exportData,
     importData,
     clearAllData,
+    resetSettings,
   } = useTasbeehStore();
 
   const currentSettings = themeSettings?.[theme] || {
@@ -147,6 +150,35 @@ export function SettingsView({ children }: SettingsViewProps) {
                   </button>
                 ))}
               </div>
+            </div>
+          </div>
+
+          {/* Layout Config */}
+          <div className="space-y-1">
+            <p className="text-xs text-muted-foreground uppercase tracking-wide mb-3">Layout</p>
+            <div className="grid grid-cols-3 gap-2">
+              {[
+                { id: 'default', label: 'Classic', icon: Layout },
+                { id: 'focus', label: 'Focus', icon: Maximize },
+                { id: 'ergonomic', label: 'Bottom', icon: Smartphone },
+              ].map((l) => (
+                <button
+                  key={l.id}
+                  onClick={() => {
+                    setLayout(l.id as 'default' | 'focus' | 'ergonomic');
+                    setOpen(false);
+                  }}
+                  className={`
+                    p-3 rounded-xl border text-center transition-all relative overflow-hidden flex flex-col items-center gap-2
+                    ${layout === l.id
+                      ? 'bg-primary/10 border-primary text-primary ring-1 ring-primary'
+                      : 'bg-card border-transparent text-muted-foreground hover:bg-secondary'}
+                  `}
+                >
+                  <l.icon className="w-6 h-6 opacity-70" />
+                  <p className="text-xs font-medium">{l.label}</p>
+                </button>
+              ))}
             </div>
           </div>
 
@@ -323,6 +355,36 @@ export function SettingsView({ children }: SettingsViewProps) {
                 </p>
               </div>
             </button>
+
+            <AlertDialog>
+              <AlertDialogTrigger asChild>
+                <button className="w-full flex items-center gap-3 p-4 rounded-2xl bg-card hover:bg-secondary transition-colors text-left group">
+                  <RotateCcw className="w-5 h-5 text-muted-foreground group-hover:text-primary transition-colors" />
+                  <div>
+                    <p className="text-sm font-medium text-foreground group-hover:text-primary transition-colors">Reset Settings</p>
+                    <p className="text-xs text-muted-foreground">Restore default appearance & preferences</p>
+                  </div>
+                </button>
+              </AlertDialogTrigger>
+              <AlertDialogContent className="rounded-3xl">
+                <AlertDialogHeader>
+                  <AlertDialogTitle>Reset settings?</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    This will reset your theme, counter shape, and preferences to default.
+                    Your count history and custom dhikrs will NOT be deleted.
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel className="rounded-xl">Cancel</AlertDialogCancel>
+                  <AlertDialogAction
+                    onClick={resetSettings}
+                    className="rounded-xl bg-primary text-primary-foreground"
+                  >
+                    Reset Settings
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
 
             <AlertDialog>
               <AlertDialogTrigger asChild>

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Check, Plus, Trash2, Search } from 'lucide-react';
+import { Check, Plus, Trash2, Search, Heart } from 'lucide-react';
 import { useTasbeehStore, Dhikr } from '@/store/tasbeehStore';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import { Input } from '@/components/ui/input';
@@ -17,14 +17,17 @@ const customDhikrSchema = z.object({
 });
 
 export function DhikrSelector({ children }: DhikrSelectorProps) {
-  const { dhikrs, customDhikrs, currentDhikr, setDhikr, addCustomDhikr, removeCustomDhikr, sessionMode } = useTasbeehStore();
+  const { dhikrs, customDhikrs, currentDhikr, setDhikr, addCustomDhikr, removeCustomDhikr, sessionMode, favoriteDhikrIds, toggleFavorite } = useTasbeehStore();
   const [searchQuery, setSearchQuery] = useState('');
+  const [filterMode, setFilterMode] = useState<'all' | 'favorites'>('all');
 
-  const allDhikrs = [...dhikrs, ...customDhikrs].filter(d =>
-    d.transliteration.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    d.meaning.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    d.arabic.includes(searchQuery)
-  );
+  const allDhikrs = [...dhikrs, ...customDhikrs].filter(d => {
+    const matchesSearch = d.transliteration.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      d.meaning.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      d.arabic.includes(searchQuery);
+    const matchesFilter = filterMode === 'all' || favoriteDhikrIds.includes(d.id);
+    return matchesSearch && matchesFilter;
+  });
 
   const [showAddForm, setShowAddForm] = useState(false);
   const [newDhikr, setNewDhikr] = useState({ arabic: '', transliteration: '', meaning: '' });
@@ -64,6 +67,11 @@ export function DhikrSelector({ children }: DhikrSelectorProps) {
     removeCustomDhikr(id);
   };
 
+  const handleToggleFavorite = (id: string, e: React.MouseEvent) => {
+    e.stopPropagation();
+    toggleFavorite(id);
+  };
+
   return (
     <Sheet>
       <SheetTrigger asChild>
@@ -75,8 +83,8 @@ export function DhikrSelector({ children }: DhikrSelectorProps) {
           <SheetTitle className="text-lg font-medium">Select Dhikr</SheetTitle>
         </SheetHeader>
 
-        <div className="flex items-center gap-2 px-1 mb-4">
-          <div className="relative flex-1">
+        <div className="flex flex-col gap-3 px-1 mb-4">
+          <div className="relative w-full">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
             <input
               type="text"
@@ -86,13 +94,29 @@ export function DhikrSelector({ children }: DhikrSelectorProps) {
               onChange={(e) => setSearchQuery(e.target.value)}
             />
           </div>
+
+          <div className="flex gap-2 p-1 bg-secondary rounded-xl">
+            <button
+              onClick={() => setFilterMode('all')}
+              className={`flex-1 py-1.5 text-xs font-medium rounded-lg transition-all ${filterMode === 'all' ? 'bg-card shadow-sm text-foreground' : 'text-muted-foreground'}`}
+            >
+              All Dhikr
+            </button>
+            <button
+              onClick={() => setFilterMode('favorites')}
+              className={`flex-1 py-1.5 text-xs font-medium rounded-lg transition-all ${filterMode === 'favorites' ? 'bg-card shadow-sm text-foreground' : 'text-muted-foreground'}`}
+            >
+              Favorites
+            </button>
+          </div>
         </div>
 
-        <div className="space-y-2 overflow-y-auto pb-8 max-h-[calc(80vh-160px)]">
+        <div className="space-y-2 overflow-y-auto pb-8 max-h-[calc(80vh-180px)]">
           {/* Dhikr list */}
           {allDhikrs.map((dhikr, index) => {
             const isCustom = dhikr.id.startsWith('custom_');
             const isDisabled = sessionMode.type === 'tasbih100';
+            const isFavorite = favoriteDhikrIds.includes(dhikr.id);
 
             return (
               <motion.button
@@ -125,6 +149,14 @@ export function DhikrSelector({ children }: DhikrSelectorProps) {
                     </p>
                   </div>
                   <div className="flex items-center gap-2">
+                    <button
+                      onClick={(e) => handleToggleFavorite(dhikr.id, e)}
+                      className={`p-2 rounded-full hover:bg-muted transition-colors ${isFavorite ? 'text-red-500' : 'text-muted-foreground/50'}`}
+                      aria-label="Toggle favorite"
+                    >
+                      <Heart className={`w-4 h-4 ${isFavorite ? 'fill-current' : ''}`} />
+                    </button>
+
                     {isCustom && (
                       <button
                         onClick={(e) => handleDeleteCustom(dhikr.id, e)}

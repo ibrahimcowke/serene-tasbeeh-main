@@ -44,6 +44,7 @@ interface TasbeehState {
 
   // Global preference (not per theme)
   counterShape: 'minimal' | 'classic' | 'beads' | 'flower' | 'waveform' | 'hexagon' | 'orb';
+  layout: 'default' | 'focus' | 'ergonomic';
   showTransliteration: boolean;
   
   // Data
@@ -54,16 +55,18 @@ interface TasbeehState {
   dhikrs: Dhikr[];
   customDhikrs: Dhikr[];
   
-  // Streak tracking
   streakDays: number;
   lastActiveDate: string | null;
   longestStreak: number;
+  
+  favoriteDhikrIds: string[];
   
   // Actions
   increment: () => void;
   decrement: () => void;
   reset: () => void;
   setDhikr: (dhikr: Dhikr) => void;
+  resetSettings: () => void;
   setTarget: (target: number) => void;
   toggleTransliteration: () => void;
   // Settings actions now update the specific theme
@@ -85,11 +88,12 @@ interface TasbeehState {
   startTasbih100: () => void;
   exitSessionMode: () => void;
   
-  // Streak actions
   updateStreak: () => void;
+  toggleFavorite: (id: string) => void;
   
   // New Settings Actions
   setCounterShape: (shape: 'minimal' | 'classic' | 'beads' | 'flower' | 'waveform' | 'hexagon' | 'orb') => void;
+  setLayout: (layout: 'default' | 'focus' | 'ergonomic') => void;
 }
 
 export type ThemeSettings = {
@@ -184,6 +188,7 @@ export const useTasbeehStore = create<TasbeehState>()(
       theme: 'light',
       language: 'en', // Keeping language for now
       counterShape: 'minimal', // New
+      layout: 'default',
       
       dailyRecords: [],
       totalAllTime: 0,
@@ -275,6 +280,28 @@ export const useTasbeehStore = create<TasbeehState>()(
         }));
       },
       
+      favoriteDhikrIds: [],
+      
+      toggleFavorite: (id) => set((state) => ({
+        favoriteDhikrIds: state.favoriteDhikrIds.includes(id)
+          ? state.favoriteDhikrIds.filter(fid => fid !== id)
+          : [...state.favoriteDhikrIds, id]
+      })),
+      
+      resetSettings: () => {
+         const root = window.document.documentElement;
+         root.classList.remove('light', 'dark', 'theme-midnight', 'theme-neon', 'theme-green', 'theme-cyberpunk', 'theme-glass');
+         root.classList.add('light');
+         
+         set({ 
+            themeSettings: initialThemeSettings, 
+            theme: 'light', 
+            counterShape: 'minimal',
+            layout: 'default',
+            showTransliteration: true 
+         });
+      },
+
       reset: () => {
           const state = get();
           const currentSettings = state.themeSettings[state.theme] || defaultThemeSettings;
@@ -418,6 +445,7 @@ export const useTasbeehStore = create<TasbeehState>()(
               // Basic merge, real logic might be slightly safer but this works for simple restore
              theme: parsed.settings?.theme || state.theme,
              counterShape: parsed.settings?.counterShape || state.counterShape,
+             layout: parsed.settings?.layout || state.layout,
              themeSettings: parsed.settings?.themeSettings || state.themeSettings
           }));
           return true;
@@ -464,6 +492,7 @@ export const useTasbeehStore = create<TasbeehState>()(
       },
       
       setCounterShape: (shape) => set({ counterShape: shape }),
+      setLayout: (layout) => set({ layout }),
     }),
     {
        name: 'tasbeeh-storage',
@@ -476,6 +505,7 @@ export const useTasbeehStore = create<TasbeehState>()(
          theme: state.theme,
          language: state.language,
          counterShape: state.counterShape,
+         layout: state.layout,
          dailyRecords: state.dailyRecords,
          totalAllTime: state.totalAllTime,
          customDhikrs: state.customDhikrs,

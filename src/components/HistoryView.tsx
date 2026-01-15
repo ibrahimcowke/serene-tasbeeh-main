@@ -1,6 +1,7 @@
 import { useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { Flame } from 'lucide-react';
+import { BarChart, Bar, XAxis, Tooltip, ResponsiveContainer } from 'recharts';
 import { useTasbeehStore } from '@/store/tasbeehStore';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 
@@ -83,6 +84,21 @@ function HistoryStats() {
     return [...dailyRecords]
       .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
       .slice(0, 14);
+  }, [dailyRecords]);
+
+  const chartData = useMemo(() => {
+    const data = [];
+    for (let i = 13; i >= 0; i--) {
+      const date = new Date();
+      date.setDate(date.getDate() - i);
+      const dateStr = date.toISOString().split('T')[0];
+      const record = dailyRecords.find(r => r.date === dateStr);
+      data.push({
+        date: date.toLocaleDateString('en-US', { day: 'numeric', month: 'short' }),
+        count: record?.totalCount || 0,
+      });
+    }
+    return data;
   }, [dailyRecords]);
 
   const formatDate = (dateStr: string) => {
@@ -189,7 +205,36 @@ function HistoryStats() {
         ))}
       </div>
 
-      {/* Recent activity */}
+      {/* Activity Chart */}
+      <div className="p-4 rounded-2xl bg-card">
+        <p className="text-sm text-muted-foreground mb-4">Activity Trend (Last 14 Days)</p>
+        <div className="h-48 w-full">
+          <ResponsiveContainer width="100%" height="100%">
+            <BarChart data={chartData}>
+              <XAxis
+                dataKey="date"
+                stroke="#888888"
+                fontSize={10}
+                tickLine={false}
+                axisLine={false}
+                interval={2}
+              />
+              <Tooltip
+                contentStyle={{ backgroundColor: 'hsl(var(--card))', borderRadius: '8px', border: '1px solid hsl(var(--border))' }}
+                itemStyle={{ color: 'hsl(var(--foreground))' }}
+                cursor={{ fill: 'hsl(var(--muted)/0.2)' }}
+              />
+              <Bar
+                dataKey="count"
+                fill="hsl(var(--primary))"
+                radius={[4, 4, 0, 0]}
+                maxBarSize={40}
+              />
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
+      </div>
+
       {recentDays.length > 0 && (
         <div>
           <p className="text-sm text-muted-foreground mb-3">Recent Activity</p>
