@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Dhikr } from '@/store/tasbeehStore';
+import { Dhikr, useTasbeehStore } from '@/store/tasbeehStore';
 
 export function HadithSlider({ dhikr }: { dhikr: Dhikr }) {
+    const hadithSlideDuration = useTasbeehStore((state) => state.hadithSlideDuration);
     const [index, setIndex] = useState(0);
-    const DURATION = 15000; // 15 seconds
+    const DURATION = hadithSlideDuration * 1000; // Convert seconds to milliseconds
 
     useEffect(() => {
         // Reset index when dhikr changes
@@ -19,7 +20,7 @@ export function HadithSlider({ dhikr }: { dhikr: Dhikr }) {
         }, DURATION);
 
         return () => clearInterval(timer);
-    }, [dhikr.hadiths]);
+    }, [dhikr.hadiths, hadithSlideDuration]);
 
     // Fallback content if no specific hadiths are available
     // Arabic fallback: "Keep your tongue wet with the remembrance of Allah" -> "لا يزال لسانك رطباً من ذكر الله"
@@ -34,7 +35,7 @@ export function HadithSlider({ dhikr }: { dhikr: Dhikr }) {
     const isArabic = /[\u0600-\u06FF]/.test(hadith.text);
 
     return (
-        <div className="w-full max-w-sm mx-auto md:mx-0 min-h-[160px] bg-card/40 hover:bg-card/60 backdrop-blur-md rounded-2xl border border-border/40 p-5 flex flex-col justify-center relative overflow-hidden transition-colors duration-300 group">
+        <div className="w-full max-w-sm mx-auto md:mx-0 min-h-[140px] sm:min-h-[160px] bg-card/40 hover:bg-card/60 backdrop-blur-md rounded-2xl border border-border/40 p-4 sm:p-5 flex flex-col justify-center relative overflow-hidden transition-colors duration-300 group">
 
             {/* Background Decoration */}
             <div className={`absolute top-0 ${isArabic ? 'left-0' : 'right-0'} p-3 opacity-10 group-hover:opacity-20 transition-opacity`}>
@@ -60,7 +61,7 @@ export function HadithSlider({ dhikr }: { dhikr: Dhikr }) {
                         </span>
                     </div>
 
-                    <p className={`text-base font-medium text-foreground/90 leading-loose ${isArabic ? 'font-arabic' : ''}`}>
+                    <p className={`text-sm sm:text-base font-medium text-foreground/90 leading-loose break-words ${isArabic ? 'font-arabic' : ''}`}>
                         "{hadith.text}"
                     </p>
 

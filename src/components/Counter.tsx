@@ -18,6 +18,7 @@ export function Counter() {
     themeSettings,
     layout = 'default',
     counterShape = 'minimal', // Default to minimal if undefined in persisted state
+    hadithSlidePosition = 'right',
   } = useTasbeehStore();
 
   // Ensure we have the latest data (e.g. hadiths) even if state is persisted
@@ -105,7 +106,7 @@ export function Counter() {
   const totalProgress = getTotalSessionProgress();
 
   return (
-    <div className={`flex flex-col items-center flex-1 px-6 relative w-full h-full transition-all duration-500
+    <div className={`flex flex-col items-center flex-1 px-4 sm:px-6 md:px-8 lg:px-12 relative w-full min-h-full transition-all duration-500 py-6
       ${layout === 'ergonomic' ? 'justify-end pb-16' : 'justify-center'}
     `}>
       {/* Session mode indicator */}
@@ -146,10 +147,10 @@ export function Counter() {
 
       {/* Dhikr text */}
       <div className={`
-        transition-all duration-500
-        ${layout === 'focus' ? 'absolute top-12 scale-90 opacity-80' : ''}
-        ${layout === 'ergonomic' ? 'absolute top-[15%] scale-110' : ''}
-        ${layout === 'default' ? 'text-center mb-6 pt-4' : 'text-center'}
+        transition-all duration-500 px-4 sm:px-0
+        ${layout === 'focus' ? 'absolute top-8 sm:top-12 scale-90 opacity-80' : ''}
+        ${layout === 'ergonomic' ? 'absolute top-[15%] sm:top-[12%] scale-100 sm:scale-110' : ''}
+        ${layout === 'default' ? 'text-center mb-8 sm:mb-12 pt-2 sm:pt-4' : 'text-center'}
         animate-fade-in-up
       `}>
         <AnimatePresence mode="wait">
@@ -158,7 +159,7 @@ export function Counter() {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
-            className="font-arabic text-4xl md:text-5xl text-foreground leading-relaxed mb-3"
+            className="font-arabic text-2xl sm:text-4xl md:text-5xl lg:text-6xl text-foreground leading-relaxed mb-2 sm:mb-3"
           >
             {currentDhikr.arabic}
           </motion.p>
@@ -171,7 +172,7 @@ export function Counter() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -5 }}
               transition={{ duration: 0.2 }}
-              className="text-muted-foreground text-base tracking-wide"
+              className="text-muted-foreground text-sm sm:text-base tracking-wide"
             >
               {currentDhikr.transliteration}
             </motion.p>
@@ -183,7 +184,7 @@ export function Counter() {
           <motion.p
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            className="text-xs text-primary mt-2"
+            className="text-xs text-primary mt-4 pb-6"
           >
             Phase {sessionMode.currentPhase + 1} of 4 • {sessionMode.currentPhase === 3 ? '1' : '33'} counts
           </motion.p>
@@ -191,16 +192,16 @@ export function Counter() {
       </div>
 
       {/* Main Content Area: Counter + Hadith Side Panel */}
-      <div className="relative flex flex-col items-center justify-center w-full max-w-6xl mx-auto z-10">
+      <div className="relative flex flex-col items-center justify-center w-full max-w-7xl mx-auto z-10">
 
         {/* Counter visualization */}
         <motion.div
           layout
           className={`relative flex items-center justify-center
-          ${layout === 'focus' ? 'scale-110' : ''}
-          ${layout === 'ergonomic' ? 'scale-100 translate-y-4' : ''}
+          ${layout === 'focus' ? 'scale-100 sm:scale-110' : ''}
+          ${layout === 'ergonomic' ? 'scale-90 sm:scale-100 translate-y-2 sm:translate-y-4' : ''}
         `}
-          style={{ width: 300, height: 300 }}
+          style={{ width: 'min(300px, 85vw)', height: 'min(300px, 85vw)', maxWidth: '350px', maxHeight: '350px' }}
         >
           {/* Encircled BrogressBar - Wraps the counter button */}
           <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-0">
@@ -437,7 +438,7 @@ export function Counter() {
               transition={{ duration: 0.15, ease: [0.34, 1.56, 0.64, 1] }}
               className={`
               counter-number text-counter-text
-              ${counterShape === 'classic' ? 'font-mono text-7xl tracking-widest bg-black/10 px-6 py-2 rounded-lg inset-shadow mb-4' : 'text-6xl md:text-7xl'}
+              ${counterShape === 'classic' ? 'font-mono text-5xl sm:text-6xl md:text-7xl tracking-widest bg-black/10 px-4 sm:px-6 py-2 rounded-lg inset-shadow mb-4' : 'text-5xl sm:text-6xl md:text-7xl lg:text-8xl'}
               ${counterShape === 'waveform' ? 'drop-shadow-md z-10' : ''}
               ${counterShape === 'orb' ? 'text-white mix-blend-overlay' : ''}
             `}
@@ -450,21 +451,37 @@ export function Counter() {
           </motion.button>
         </motion.div>
 
-        {/* Hadith Slider - Right Panel */}
-        <motion.div
-          initial={{ opacity: 0, x: 20 }}
-          animate={{ opacity: 1, x: 0 }}
-          className="hidden lg:block absolute right-0 top-1/2 -translate-y-1/2 w-80 z-20"
-        >
+        {/* Hadith Slider - Desktop Positioned */}
+        {hadithSlidePosition !== 'hidden' && hadithSlidePosition !== 'bottom' && (
+          <motion.div
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            className={`hidden lg:block absolute w-80 z-20 ${hadithSlidePosition === 'top-right' ? 'top-4 right-0' :
+              hadithSlidePosition === 'top-left' ? 'top-4 left-0' :
+                hadithSlidePosition === 'bottom-right' ? 'bottom-4 right-0' :
+                  hadithSlidePosition === 'bottom-left' ? 'bottom-4 left-0' :
+                    'right-0 top-1/2 -translate-y-1/2' // right (default)
+              }`}
+          >
+            <HadithSlider dhikr={currentDhikr} />
+          </motion.div>
+        )}
+
+      </div>
+
+      {/* Hadith Slider - Bottom (Mobile or when set to bottom) */}
+      {hadithSlidePosition === 'bottom' && (
+        <div className="w-full max-w-sm mt-6 mb-2 px-4 relative z-20">
           <HadithSlider dhikr={currentDhikr} />
-        </motion.div>
+        </div>
+      )}
 
-      </div>
-
-      {/* Mobile Hadith Slider (Below counter) */}
-      <div className="lg:hidden w-full max-w-sm mt-6 mb-2 px-4 relative z-20">
-        <HadithSlider dhikr={currentDhikr} />
-      </div>
+      {/* Mobile Hadith Slider (Below counter) - only when position is not bottom or hidden */}
+      {hadithSlidePosition !== 'bottom' && hadithSlidePosition !== 'hidden' && (
+        <div className="lg:hidden w-full max-w-sm mt-6 mb-2 px-4 relative z-20">
+          <HadithSlider dhikr={currentDhikr} />
+        </div>
+      )}
 
       {/* Target indicator */}
       <div className={`mt-3 text-center transition-opacity duration-300 ${layout === 'focus' ? 'opacity-50 hover:opacity-100' : ''}`}>

@@ -48,6 +48,10 @@ export function SettingsView({ children }: SettingsViewProps) {
     setCounterShape,
     layout,
     setLayout,
+    hadithSlideDuration,
+    hadithSlidePosition,
+    setHadithSlideDuration,
+    setHadithSlidePosition,
     exportData,
     importData,
     clearAllData,
@@ -251,6 +255,92 @@ export function SettingsView({ children }: SettingsViewProps) {
                   </div>
                 </motion.button>
               ))}
+            </div>
+          </div>
+
+          {/* Hadith Slider Settings */}
+          <div className="space-y-1">
+            <p className="text-xs text-muted-foreground uppercase tracking-wide mb-3">Hadith Slider</p>
+
+            {/* Slide Duration */}
+            <div className="p-4 rounded-2xl bg-card mb-2">
+              <div className="flex items-center justify-between mb-3">
+                <div>
+                  <p className="text-sm font-medium text-foreground">Slide Duration</p>
+                  <p className="text-xs text-muted-foreground">{hadithSlideDuration} seconds per slide</p>
+                </div>
+              </div>
+              <input
+                type="range"
+                min="5"
+                max="60"
+                step="5"
+                value={hadithSlideDuration}
+                onChange={(e) => setHadithSlideDuration(Number(e.target.value))}
+                className="w-full h-2 bg-muted rounded-lg appearance-none cursor-pointer accent-primary"
+              />
+              <div className="flex justify-between text-xs text-muted-foreground mt-1">
+                <span>5s</span>
+                <span>60s</span>
+              </div>
+            </div>
+
+            {/* Slide Position */}
+            <div className="p-4 rounded-2xl bg-card">
+              <div className="flex items-center justify-between mb-3">
+                <p className="text-sm font-medium text-foreground">Position</p>
+              </div>
+              <div className="grid grid-cols-3 gap-2 mb-2">
+                {[
+                  { id: 'top-left', label: '↖ Top Left' },
+                  { id: 'top-right', label: '↗ Top Right' },
+                  { id: 'right', label: '→ Right' },
+                ].map((pos) => (
+                  <button
+                    key={pos.id}
+                    onClick={() => setHadithSlidePosition(pos.id as any)}
+                    className={`
+                      py-2 px-2 rounded-lg text-xs font-medium border transition-colors
+                      ${hadithSlidePosition === pos.id
+                        ? 'bg-primary text-primary-foreground border-primary'
+                        : 'bg-background border-border hover:bg-muted'}
+                    `}
+                  >
+                    {pos.label}
+                  </button>
+                ))}
+              </div>
+              <div className="grid grid-cols-3 gap-2">
+                {[
+                  { id: 'bottom-left', label: '↙ Bottom Left' },
+                  { id: 'bottom-right', label: '↘ Bottom Right' },
+                  { id: 'bottom', label: '↓ Bottom' },
+                ].map((pos) => (
+                  <button
+                    key={pos.id}
+                    onClick={() => setHadithSlidePosition(pos.id as any)}
+                    className={`
+                      py-2 px-2 rounded-lg text-xs font-medium border transition-colors
+                      ${hadithSlidePosition === pos.id
+                        ? 'bg-primary text-primary-foreground border-primary'
+                        : 'bg-background border-border hover:bg-muted'}
+                    `}
+                  >
+                    {pos.label}
+                  </button>
+                ))}
+              </div>
+              <button
+                onClick={() => setHadithSlidePosition('hidden')}
+                className={`
+                  w-full mt-2 py-2 px-3 rounded-lg text-xs font-medium border transition-colors
+                  ${hadithSlidePosition === 'hidden'
+                    ? 'bg-primary text-primary-foreground border-primary'
+                    : 'bg-background border-border hover:bg-muted'}
+                `}
+              >
+                ✕ Hidden
+              </button>
             </div>
           </div>
 

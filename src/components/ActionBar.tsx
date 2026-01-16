@@ -31,7 +31,7 @@ export function ActionBar() {
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="px-6 pb-4 safe-area-bottom w-full max-w-3xl mx-auto"
+        className="px-4 sm:px-6 md:px-8 pb-3 sm:pb-4 safe-area-bottom w-full max-w-4xl mx-auto"
       >
         {/* Primary actions row */}
         <div className="flex items-center justify-center gap-4 mb-4">
@@ -40,10 +40,10 @@ export function ActionBar() {
             whileTap={{ scale: 0.95 }}
             onClick={decrement}
             disabled={currentCount === 0}
-            className="w-12 h-12 rounded-full bg-card flex items-center justify-center disabled:opacity-30 transition-opacity"
+            className="w-11 h-11 sm:w-12 sm:h-12 md:w-14 md:h-14 rounded-full bg-card flex items-center justify-center disabled:opacity-30 transition-opacity hover:bg-card/80"
             aria-label="Undo last count"
           >
-            <Minus className="w-5 h-5 text-muted-foreground" />
+            <Minus className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 text-muted-foreground" />
           </motion.button>
 
           {/* Reset button */}
@@ -51,10 +51,10 @@ export function ActionBar() {
             whileTap={{ scale: 0.95 }}
             onClick={() => setShowResetConfirm(true)}
             disabled={currentCount === 0}
-            className="w-12 h-12 rounded-full bg-card flex items-center justify-center disabled:opacity-30 transition-opacity"
+            className="w-11 h-11 sm:w-12 sm:h-12 md:w-14 md:h-14 rounded-full bg-card flex items-center justify-center disabled:opacity-30 transition-opacity hover:bg-card/80"
             aria-label="Reset counter"
           >
-            <RotateCcw className="w-5 h-5 text-muted-foreground" />
+            <RotateCcw className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 text-muted-foreground" />
           </motion.button>
         </div>
 
@@ -63,40 +63,40 @@ export function ActionBar() {
           <DhikrSelector>
             <motion.button
               whileTap={{ scale: 0.95 }}
-              className="flex-1 flex flex-col items-center py-3 px-4 rounded-xl hover:bg-secondary transition-colors"
+              className="flex-1 flex flex-col items-center py-2 sm:py-3 px-2 sm:px-4 rounded-xl hover:bg-secondary transition-colors min-w-0"
             >
-              <BookOpen className="w-5 h-5 text-muted-foreground mb-1" />
-              <span className="text-xs text-muted-foreground">Dhikr</span>
+              <BookOpen className="w-4 h-4 sm:w-5 sm:h-5 text-muted-foreground mb-0.5 sm:mb-1" />
+              <span className="text-[10px] sm:text-xs text-muted-foreground truncate w-full text-center">Dhikr</span>
             </motion.button>
           </DhikrSelector>
 
           <TargetSelector>
             <motion.button
               whileTap={{ scale: 0.95 }}
-              className="flex-1 flex flex-col items-center py-3 px-4 rounded-xl hover:bg-secondary transition-colors"
+              className="flex-1 flex flex-col items-center py-2 sm:py-3 px-2 sm:px-4 rounded-xl hover:bg-secondary transition-colors min-w-0"
             >
-              <Target className="w-5 h-5 text-muted-foreground mb-1" />
-              <span className="text-xs text-muted-foreground">Target</span>
+              <Target className="w-4 h-4 sm:w-5 sm:h-5 text-muted-foreground mb-0.5 sm:mb-1" />
+              <span className="text-[10px] sm:text-xs text-muted-foreground truncate w-full text-center">Target</span>
             </motion.button>
           </TargetSelector>
 
           <HistoryView>
             <motion.button
               whileTap={{ scale: 0.95 }}
-              className="flex-1 flex flex-col items-center py-3 px-4 rounded-xl hover:bg-secondary transition-colors"
+              className="flex-1 flex flex-col items-center py-2 sm:py-3 px-2 sm:px-4 rounded-xl hover:bg-secondary transition-colors min-w-0"
             >
-              <History className="w-5 h-5 text-muted-foreground mb-1" />
-              <span className="text-xs text-muted-foreground">History</span>
+              <History className="w-4 h-4 sm:w-5 sm:h-5 text-muted-foreground mb-0.5 sm:mb-1" />
+              <span className="text-[10px] sm:text-xs text-muted-foreground truncate w-full text-center">History</span>
             </motion.button>
           </HistoryView>
 
           <SettingsView>
             <motion.button
               whileTap={{ scale: 0.95 }}
-              className="flex-1 flex flex-col items-center py-3 px-4 rounded-xl hover:bg-secondary transition-colors"
+              className="flex-1 flex flex-col items-center py-2 sm:py-3 px-2 sm:px-4 rounded-xl hover:bg-secondary transition-colors min-w-0"
             >
-              <Settings className="w-5 h-5 text-muted-foreground mb-1" />
-              <span className="text-xs text-muted-foreground">Settings</span>
+              <Settings className="w-4 h-4 sm:w-5 sm:h-5 text-muted-foreground mb-0.5 sm:mb-1" />
+              <span className="text-[10px] sm:text-xs text-muted-foreground truncate w-full text-center">Settings</span>
             </motion.button>
           </SettingsView>
         </div>

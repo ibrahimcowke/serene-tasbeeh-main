@@ -48,6 +48,10 @@ interface TasbeehState {
   layout: 'default' | 'focus' | 'ergonomic';
   showTransliteration: boolean;
   
+  // Hadith slider settings
+  hadithSlideDuration: number; // in seconds
+  hadithSlidePosition: 'top-right' | 'top-left' | 'bottom-right' | 'bottom-left' | 'right' | 'bottom' | 'hidden';
+  
   // Data
   dailyRecords: DailyRecord[];
   totalAllTime: number;
@@ -95,6 +99,8 @@ interface TasbeehState {
   // New Settings Actions
   setCounterShape: (shape: 'minimal' | 'classic' | 'beads' | 'flower' | 'waveform' | 'hexagon' | 'orb') => void;
   setLayout: (layout: 'default' | 'focus' | 'ergonomic') => void;
+  setHadithSlideDuration: (duration: number) => void;
+  setHadithSlidePosition: (position: 'top-right' | 'top-left' | 'bottom-right' | 'bottom-left' | 'right' | 'bottom' | 'hidden') => void;
 }
 
 export type ThemeSettings = {
@@ -140,6 +146,18 @@ export const defaultDhikrs: Dhikr[] = [
       {
         text: "كَلِمَتَانِ خَفِيفَتَانِ عَلَى اللِّسَانِ، ثَقِيلَتَانِ فِي الْمِيزَانِ، حَبِيبَتَانِ إِلَى الرَّحْمَنِ: سُبْحَانَ اللَّهِ وَبِحَمْدِهِ، سُبْحَانَ اللَّهِ الْعَظِيمِ",
         source: "صحيح البخاري"
+      },
+      {
+        text: "مَنْ قَالَ: سُبْحَانَ اللَّهِ وَبِحَمْدِهِ، فِي يَوْمٍ مِائَةَ مَرَّةٍ، حُطَّتْ خَطَايَاهُ وَإِنْ كَانَتْ مِثْلَ زَبَدِ الْبَحْرِ",
+        source: "صحيح البخاري"
+      },
+      {
+        text: "سُبْحَانَ اللَّهِ عَدَدَ خَلْقِهِ، سُبْحَانَ اللَّهِ رِضَا نَفْسِهِ، سُبْحَانَ اللَّهِ زِنَةَ عَرْشِهِ، سُبْحَانَ اللَّهِ مِدَادَ كَلِمَاتِهِ",
+        source: "صحيح مسلم"
+      },
+      {
+        text: "أَلَا أُخْبِرُكَ بِأَحَبِّ الْكَلَامِ إِلَى اللَّهِ؟ إِنَّ أَحَبَّ الْكَلَامِ إِلَى اللَّهِ: سُبْحَانَ اللَّهِ وَبِحَمْدِهِ",
+        source: "صحيح مسلم"
       }
     ]
   },
@@ -156,6 +174,18 @@ export const defaultDhikrs: Dhikr[] = [
       {
         text: "إِنَّ اللَّهَ لَيَرْضَى عَنِ الْعَبْدِ أَنْ يَأْكُلَ الْأَكْلَةَ فَيَحْمَدَهُ عَلَيْهَا، أَوْ يَشْرَبَ الشَّرْبَةَ فَيَحْمَدَهُ عَلَيْهَا",
         source: "صحيح مسلم"
+      },
+      {
+        text: "الْحَمْدُ لِلَّهِ تَمْلَأُ الْمِيزَانَ، وَسُبْحَانَ اللَّهِ وَالْحَمْدُ لِلَّهِ تَمْلَآنِ مَا بَيْنَ السَّمَاءِ وَالْأَرْضِ",
+        source: "صحيح مسلم"
+      },
+      {
+        text: "مَنْ قَالَ: الْحَمْدُ لِلَّهِ عَدَدَ مَا خَلَقَ، وَالْحَمْدُ لِلَّهِ مِلْءَ مَا خَلَقَ، وَالْحَمْدُ لِلَّهِ عَدَدَ مَا فِي السَّمَاوَاتِ وَالْأَرْضِ، وَالْحَمْدُ لِلَّهِ عَدَدَ مَا أَحْصَى كِتَابُهُ، وَالْحَمْدُ لِلَّهِ مِلْءَ مَا أَحْصَى كِتَابُهُ، وَالْحَمْدُ لِلَّهِ عَدَدَ كُلِّ شَيْءٍ، وَالْحَمْدُ لِلَّهِ مِلْءَ كُلِّ شَيْءٍ",
+        source: "سنن أبي داود"
+      },
+      {
+        text: "أَفْضَلُ الذِّكْرِ لَا إِلَهَ إِلَّا اللَّهُ، وَأَفْضَلُ الدُّعَاءِ الْحَمْدُ لِلَّهِ",
+        source: "سنن الترمذي"
       }
     ]
   },
@@ -172,6 +202,18 @@ export const defaultDhikrs: Dhikr[] = [
       {
         text: "مَا أَهَلَّ مُهِلٌّ قَطُّ إِلَّا بُشِّرَ، وَلَا كَبَّرَ مُكَبِّرٌ قَطُّ إِلَّا بُشِّرَ",
         source: "المعجم الكبير للطبراني"
+      },
+      {
+        text: "التَّكْبِيرُ جَزْمٌ، وَالتَّسْبِيحُ نِصْفٌ، وَالتَّحْمِيدُ شُكْرٌ",
+        source: "الأدب المفرد للبخاري"
+      },
+      {
+        text: "مَنْ قَالَ: لَا إِلَهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ، فِي يَوْمٍ مِائَةَ مَرَّةٍ، كَانَتْ لَهُ عَدْلَ عَشْرِ رِقَابٍ، وَكُتِبَتْ لَهُ مِائَةُ حَسَنَةٍ، وَمُحِيَتْ عَنْهُ مِائَةُ سَيِّئَةٍ",
+        source: "صحيح البخاري"
+      },
+      {
+        text: "الْبَاقِيَاتُ الصَّالِحَاتُ: سُبْحَانَ اللَّهِ، وَالْحَمْدُ لِلَّهِ، وَلَا إِلَهَ إِلَّا اللَّهُ، وَاللَّهُ أَكْبَرُ",
+        source: "سنن النسائي"
       }
     ]
   },
@@ -188,6 +230,18 @@ export const defaultDhikrs: Dhikr[] = [
       {
         text: "مَنْ قَالَ: لَا إِلَهَ إِلَّا اللَّهُ مَنْقَذًا لِنَفْسِهِ مِنْ جُرْمٍ، أَوْ قَالَ: مُخْلِصًا دَخَلَ الْجَنَّةَ",
         source: "صحيح البخاري"
+      },
+      {
+        text: "مَنْ قَالَ: لَا إِلَهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ، عَشْرَ مَرَّاتٍ، كَانَ كَمَنْ أَعْتَقَ أَرْبَعَةَ أَنْفُسٍ مِنْ وَلَدِ إِسْمَاعِيلَ",
+        source: "صحيح البخاري"
+      },
+      {
+        text: "مَنْ كَانَ آخِرُ كَلَامِهِ لَا إِلَهَ إِلَّا اللَّهُ دَخَلَ الْجَنَّةَ",
+        source: "سنن أبي داود"
+      },
+      {
+        text: "جَدِّدُوا إِيمَانَكُمْ، قِيلَ: يَا رَسُولَ اللَّهِ، وَكَيْفَ نُجَدِّدُ إِيمَانَنَا؟ قَالَ: أَكْثِرُوا مِنْ قَوْلِ لَا إِلَهَ إِلَّا اللَّهُ",
+        source: "مسند أحمد"
       }
     ]
   },
@@ -204,6 +258,18 @@ export const defaultDhikrs: Dhikr[] = [
       {
         text: "مَنْ لَزِمَ الِاسْتِغْفَارَ جَعَلَ اللَّهُ لَهُ مِنْ كُلِّ ضِيقٍ مَخْرَجًا، وَمِنْ كُلِّ هَمٍّ فَرَجًا، وَرَزَقَهُ مِنْ حَيْثُ لَا يَحْتَسِبُ",
         source: "سنن أبي داود"
+      },
+      {
+        text: "مَنْ قَالَ: أَسْتَغْفِرُ اللَّهَ الَّذِي لَا إِلَهَ إِلَّا هُوَ الْحَيَّ الْقَيُّومَ وَأَتُوبُ إِلَيْهِ، غُفِرَ لَهُ وَإِنْ كَانَ فَرَّ مِنَ الزَّحْفِ",
+        source: "سنن أبي داود"
+      },
+      {
+        text: "طُوبَى لِمَنْ وَجَدَ فِي صَحِيفَتِهِ اسْتِغْفَارًا كَثِيرًا",
+        source: "سنن ابن ماجه"
+      },
+      {
+        text: "يَا أَيُّهَا النَّاسُ، تُوبُوا إِلَى اللَّهِ، فَإِنِّي أَتُوبُ فِي الْيَوْمِ إِلَيْهِ مِائَةَ مَرَّةٍ",
+        source: "صحيح مسلم"
       }
     ]
   },];
@@ -242,6 +308,8 @@ export const useTasbeehStore = create<TasbeehState>()(
       language: 'en', // Keeping language for now
       counterShape: 'minimal', // New
       layout: 'default',
+      hadithSlideDuration: 15, // 15 seconds default
+      hadithSlidePosition: 'right', // default position
       
       dailyRecords: [],
       totalAllTime: 0,
@@ -546,6 +614,8 @@ export const useTasbeehStore = create<TasbeehState>()(
       
       setCounterShape: (shape) => set({ counterShape: shape }),
       setLayout: (layout) => set({ layout }),
+      setHadithSlideDuration: (duration) => set({ hadithSlideDuration: duration }),
+      setHadithSlidePosition: (position) => set({ hadithSlidePosition: position }),
     }),
     {
        name: 'tasbeeh-storage',
@@ -559,6 +629,8 @@ export const useTasbeehStore = create<TasbeehState>()(
          language: state.language,
          counterShape: state.counterShape,
          layout: state.layout,
+         hadithSlideDuration: state.hadithSlideDuration,
+         hadithSlidePosition: state.hadithSlidePosition,
          dailyRecords: state.dailyRecords,
          totalAllTime: state.totalAllTime,
          customDhikrs: state.customDhikrs,
