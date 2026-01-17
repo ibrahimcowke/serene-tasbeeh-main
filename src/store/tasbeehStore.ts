@@ -299,6 +299,34 @@ const getDefaultSessionMode = (): SessionMode => ({
   isComplete: false,
 });
 
+const calculateStreakFromHistory = (history: DailyRecord[]) => {
+  let streak = 0;
+  const sortedHistory = [...(history || [])].sort((a, b) => b.date.localeCompare(a.date));
+  
+  if (sortedHistory.length === 0) return 0;
+
+  const today = new Date().toISOString().split('T')[0];
+  const yesterday = new Date();
+  yesterday.setDate(yesterday.getDate() - 1);
+  const yesterdayStr = yesterday.toISOString().split('T')[0];
+  
+  const latestDate = sortedHistory[0].date;
+  if (latestDate !== today && latestDate !== yesterdayStr) return 0;
+  
+  let current = new Date(latestDate);
+  let count = 0;
+  
+  for (const record of sortedHistory) {
+      if (record.date === current.toISOString().split('T')[0]) {
+          count++;
+          current.setDate(current.getDate() - 1);
+      } else {
+          break;
+      }
+  }
+  return count;
+};
+
 export const useTasbeehStore = create<TasbeehState>()(
   persist(
     (set, get) => ({
@@ -742,28 +770,44 @@ export const useTasbeehStore = create<TasbeehState>()(
       },
     }),
     {
-       name: 'tasbeeh-storage',
-       partialize: (state) => ({
-         currentDhikr: state.currentDhikr,
-         currentCount: state.currentCount,
-         targetCount: state.targetCount,
-         showTransliteration: state.showTransliteration,
-         themeSettings: state.themeSettings,
-         theme: state.theme,
-         language: state.language,
-         counterShape: state.counterShape,
-         layout: state.layout,
-         hadithSlideDuration: state.hadithSlideDuration,
-         hadithSlidePosition: state.hadithSlidePosition,
-         dailyRecords: state.dailyRecords,
-         totalAllTime: state.totalAllTime,
-         customDhikrs: state.customDhikrs,
-         streakDays: state.streakDays,
-         lastActiveDate: state.lastActiveDate,
-         longestStreak: state.longestStreak,
-         sessionMode: state.sessionMode,
-         dailyGoal: state.dailyGoal,
-       }),
+      name: 'tasbeeh-storage',
+      version: 1,
+      migrate: (persistedState: any, version: number) => {
+        if (version === 0) {
+          const history = persistedState.dailyRecords || [];
+          const streak = calculateStreakFromHistory(history);
+          return {
+            ...persistedState,
+            streakDays: streak,
+            longestStreak: streak,
+            favoriteDhikrIds: persistedState.favoriteDhikrIds || [],
+            dailyGoal: persistedState.dailyGoal || 100,
+          };
+        }
+        return persistedState as TasbeehState;
+      },
+      partialize: (state) => ({
+        currentDhikr: state.currentDhikr,
+        currentCount: state.currentCount,
+        targetCount: state.targetCount,
+        showTransliteration: state.showTransliteration,
+        themeSettings: state.themeSettings,
+        theme: state.theme,
+        language: state.language,
+        counterShape: state.counterShape,
+        layout: state.layout,
+        hadithSlideDuration: state.hadithSlideDuration,
+        hadithSlidePosition: state.hadithSlidePosition,
+        dailyRecords: state.dailyRecords,
+        totalAllTime: state.totalAllTime,
+        customDhikrs: state.customDhikrs,
+        streakDays: state.streakDays,
+        lastActiveDate: state.lastActiveDate,
+        longestStreak: state.longestStreak,
+        sessionMode: state.sessionMode,
+        dailyGoal: state.dailyGoal,
+        favoriteDhikrIds: state.favoriteDhikrIds,
+      }),
     }
   )
 );
