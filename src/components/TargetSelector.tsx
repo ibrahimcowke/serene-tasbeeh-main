@@ -19,7 +19,7 @@ const presetTargets = [
 ];
 
 export function TargetSelector({ children }: TargetSelectorProps) {
-  const { targetCount, setTarget, startTasbih100, sessionMode, exitSessionMode } = useTasbeehStore();
+  const { targetCount, setTarget, startTasbih100, startTasbih1000, sessionMode, exitSessionMode } = useTasbeehStore();
   const [customValue, setCustomValue] = useState('');
   const [isOpen, setIsOpen] = useState(false);
 
@@ -99,6 +99,48 @@ export function TargetSelector({ children }: TargetSelectorProps) {
                   {i === 3 ? '×1' : '×33'}
                 </span>
               ))}
+            </div>
+          </motion.button>
+
+          {/* 1000 Session Mode */}
+          <motion.button
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            onClick={() => {
+              startTasbih1000();
+              setIsOpen(false);
+            }}
+            className={`
+              w-full p-4 rounded-2xl text-left mt-3
+              transition-all duration-200
+              ${sessionMode.type === 'tasbih1000'
+                ? 'bg-primary/10 border-2 border-primary'
+                : 'bg-gradient-to-r from-primary/5 to-accent/50 border border-primary/20 hover:border-primary/40'
+              }
+            `}
+          >
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
+                  <Sparkles className="w-5 h-5 text-primary" />
+                </div>
+                <div>
+                  <p className="text-base font-medium text-foreground">1000 Session</p>
+                  <p className="text-xs text-muted-foreground">General Dhikr • Auto-progression</p>
+                </div>
+              </div>
+              {sessionMode.type === 'tasbih1000' && (
+                <div className="w-6 h-6 rounded-full bg-primary flex items-center justify-center">
+                  <Check className="w-4 h-4 text-primary-foreground" />
+                </div>
+              )}
+            </div>
+            <div className="mt-3 flex gap-1">
+              <span
+                className="w-full text-center py-1 px-1 rounded-lg bg-background/50 text-xs text-muted-foreground"
+              >
+                10 Sets of 100 Counts
+              </span>
             </div>
           </motion.button>
 

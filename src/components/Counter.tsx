@@ -43,6 +43,9 @@ export function Counter() {
       const currentTarget = phaseTargets[sessionMode.currentPhase];
       return Math.min(currentCount / currentTarget, 1);
     }
+    if (sessionMode.type === 'tasbih1000') {
+      return Math.min(currentCount / 100, 1);
+    }
     return targetCount > 0 ? Math.min(currentCount / targetCount, 1) : 0;
   };
 
@@ -50,14 +53,23 @@ export function Counter() {
     if (sessionMode.type === 'tasbih100') {
       return [33, 33, 33, 1][sessionMode.currentPhase];
     }
+    if (sessionMode.type === 'tasbih1000') {
+      return 100;
+    }
     return targetCount;
   };
 
   const getTotalSessionProgress = () => {
-    if (sessionMode.type !== 'tasbih100') return null;
-    const completed = sessionMode.phaseCounts.slice(0, sessionMode.currentPhase).reduce((a, b) => a + b, 0);
-    const total = 100;
-    return ((completed + currentCount) / total) * 100;
+    if (sessionMode.type === 'tasbih100') {
+      const completed = sessionMode.phaseCounts.slice(0, sessionMode.currentPhase).reduce((a, b) => a + b, 0);
+      const total = 100;
+      return ((completed + currentCount) / total) * 100;
+    }
+    if (sessionMode.type === 'tasbih1000') {
+      const completed = sessionMode.currentPhase * 100;
+      return ((completed + currentCount) / 1000) * 100;
+    }
+    return null;
   };
 
   const handleTap = useCallback(() => {
@@ -95,6 +107,13 @@ export function Counter() {
         setShowSessionComplete(true);
       }, 500);
     }
+
+    // Check for 1000 session complete
+    if (sessionMode.type === 'tasbih1000' && sessionMode.currentPhase === 9 && currentCount + 1 >= 100) {
+      setTimeout(() => {
+        setShowSessionComplete(true);
+      }, 500);
+    }
   }, [increment, currentCount, sessionMode, currentSettings]);
 
   const handleDismissSessionComplete = () => {
@@ -116,7 +135,11 @@ export function Counter() {
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
-            className={`absolute left-0 right-0 ${layout === 'focus' ? 'top-2' : 'top-4'}`}
+            className={`
+              ${layout === 'default' ? 'relative w-full mb-20' : 'absolute left-0 right-0'}
+              ${layout === 'focus' ? 'top-2' : ''}
+              ${layout === 'ergonomic' ? 'top-4' : ''}
+            `}
           >
             <div className="flex justify-center gap-2 mb-2">
               {[0, 1, 2, 3].map((phase) => (
@@ -143,14 +166,44 @@ export function Counter() {
             )}
           </motion.div>
         )}
+
+        {sessionMode.type === 'tasbih1000' && (
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            className={`
+              ${layout === 'default' ? 'relative w-full mb-20' : 'absolute left-0 right-0'}
+              ${layout === 'focus' ? 'top-2' : ''}
+              ${layout === 'ergonomic' ? 'top-4' : ''}
+            `}
+          >
+            <div className="flex justify-center items-center gap-2 mb-2">
+              <span className="text-xs text-muted-foreground font-medium">Set {sessionMode.currentPhase + 1} of 10</span>
+            </div>
+            {totalProgress !== null && (
+              <div className="w-48 mx-auto h-1 bg-muted rounded-full overflow-hidden">
+                <motion.div
+                  className="h-full bg-primary rounded-full"
+                  initial={{ width: 0 }}
+                  animate={{ width: `${totalProgress}%` }}
+                  transition={{ duration: 0.3 }}
+                />
+              </div>
+            )}
+            <p className="text-[10px] text-center text-muted-foreground mt-1">
+              {Math.floor((sessionMode.currentPhase * 100) + currentCount)} / 1000
+            </p>
+          </motion.div>
+        )}
       </AnimatePresence>
 
       {/* Dhikr text */}
       <div className={`
         transition-all duration-500 px-4 sm:px-0
-        ${layout === 'focus' ? 'absolute top-8 sm:top-12 scale-90 opacity-80' : ''}
+        ${layout === 'focus' ? 'absolute top-16 sm:top-20 scale-90 opacity-80' : ''}
         ${layout === 'ergonomic' ? 'absolute top-[15%] sm:top-[12%] scale-100 sm:scale-110' : ''}
-        ${layout === 'default' ? 'text-center mb-8 sm:mb-12 pt-2 sm:pt-4' : 'text-center'}
+        ${layout === 'default' ? 'text-center mb-10 sm:mb-14 pt-10 sm:pt-14 mt-10' : 'text-center'}
         animate-fade-in-up
       `}>
         <AnimatePresence mode="wait">
@@ -184,9 +237,18 @@ export function Counter() {
           <motion.p
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            className="text-xs text-primary mt-4 pb-6"
+            className="text-xs text-primary mt-4 mb-2"
           >
             Phase {sessionMode.currentPhase + 1} of 4 • {sessionMode.currentPhase === 3 ? '1' : '33'} counts
+          </motion.p>
+        )}
+        {sessionMode.type === 'tasbih1000' && (
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="text-xs text-primary mt-4 mb-2"
+          >
+            Phase {sessionMode.currentPhase + 1} of 10
           </motion.p>
         )}
       </div>
@@ -500,7 +562,9 @@ export function Counter() {
               <p className="text-primary text-sm font-medium">
                 {sessionMode.type === 'tasbih100' && sessionMode.currentPhase < 3
                   ? '✓ Phase complete'
-                  : '✓ Set complete'
+                  : sessionMode.type === 'tasbih1000' && sessionMode.currentPhase < 9
+                    ? '✓ Set complete'
+                    : '✓ Set complete'
                 }
               </p>
             </motion.div>
@@ -541,13 +605,13 @@ export function Counter() {
                 Session Complete
               </p>
               <p className="text-muted-foreground text-sm mb-6">
-                You have completed 100 dhikr
+                You have completed {sessionMode.type === 'tasbih100' ? '100 dhikr' : '1000 dhikr'}
                 <br />
-                <span className="text-xs">33 + 33 + 33 + 1</span>
+                {sessionMode.type === 'tasbih100' && <span className="text-xs">33 + 33 + 33 + 1</span>}
               </p>
 
               <div className="grid grid-cols-4 gap-2 mb-6">
-                {defaultDhikrs.slice(0, 4).map((d, i) => (
+                {sessionMode.type === 'tasbih100' && defaultDhikrs.slice(0, 4).map((d, i) => (
                   <div key={d.id} className="text-center">
                     <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-1">
                       <span className="text-xs text-primary">✓</span>
@@ -555,6 +619,13 @@ export function Counter() {
                     <p className="text-xs text-muted-foreground">{i === 3 ? '1' : '33'}</p>
                   </div>
                 ))}
+
+                {sessionMode.type === 'tasbih1000' && (
+                  <div className="col-span-4 text-center">
+                    <p className="text-sm font-medium text-foreground">GENERAL DHIKR NOT AS 100</p>
+                    <p className="text-xs text-muted-foreground mt-2">You have completed 1000 counts.</p>
+                  </div>
+                )}
               </div>
 
               <button

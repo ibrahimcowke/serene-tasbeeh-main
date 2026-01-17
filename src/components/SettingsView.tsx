@@ -1,7 +1,8 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Check, Download, Upload, Trash2, RotateCcw, Layout, Smartphone, Maximize } from 'lucide-react';
+import { Check, Download, Upload, Trash2, RotateCcw, Layout, Smartphone, Maximize, Cloud, LogIn, LogOut, RefreshCw } from 'lucide-react';
 import { useTasbeehStore } from '@/store/tasbeehStore';
+import { supabase, signInWithGoogle, signOut, getCurrentUser } from '@/lib/supabase';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import { Switch } from '@/components/ui/switch';
 import {
@@ -56,7 +57,49 @@ export function SettingsView({ children }: SettingsViewProps) {
     importData,
     clearAllData,
     resetSettings,
+    syncToCloud,
+    syncFromCloud,
   } = useTasbeehStore();
+
+  const [user, setUser] = useState<any>(null);
+  const [syncing, setSyncing] = useState(false);
+  const [syncStatus, setSyncStatus] = useState<'idle' | 'success' | 'error'>('idle');
+
+  useEffect(() => {
+    getCurrentUser().then(setUser);
+
+    // Listen for auth changes
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUser(session?.user ?? null);
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
+
+  const handleSyncToCloud = async () => {
+    setSyncing(true);
+    const success = await syncToCloud();
+    setSyncing(false);
+    setSyncStatus(success ? 'success' : 'error');
+    setTimeout(() => setSyncStatus('idle'), 3000);
+  };
+
+  const handleSyncFromCloud = async () => {
+    setSyncing(true);
+    const success = await syncFromCloud();
+    setSyncing(false);
+    setSyncStatus(success ? 'success' : 'error');
+    setTimeout(() => setSyncStatus('idle'), 3000);
+  };
+
+  const handleLogin = async () => {
+    await signInWithGoogle();
+  };
+
+  const handleLogout = async () => {
+    await signOut();
+    setUser(null);
+  };
 
   const currentSettings = themeSettings?.[theme] || {
     hapticEnabled: true,
@@ -113,6 +156,72 @@ export function SettingsView({ children }: SettingsViewProps) {
         </SheetHeader>
 
         <div className="overflow-y-auto px-6 pb-8 space-y-6 flex-1">
+          {/* Cloud Sync Section */}
+          <div className="space-y-1">
+            <p className="text-xs text-muted-foreground uppercase tracking-wide mb-3">Cloud Sync (Beta)</p>
+            <div className="bg-card rounded-2xl p-4 overflow-hidden relative">
+              {!user ? (
+                <div className="flex flex-col items-center justify-center p-2 text-center">
+                  <Cloud className="w-10 h-10 text-muted-foreground mb-3 opacity-50" />
+                  <h3 className="text-sm font-medium text-foreground mb-1">Backup & Sync</h3>
+                  <p className="text-xs text-muted-foreground mb-4 max-w-[200px]">Sign in to save your progress to the cloud and sync across devices.</p>
+                  <button
+                    onClick={handleLogin}
+                    className="flex items-center gap-2 bg-primary text-primary-foreground px-4 py-2 rounded-xl text-sm font-medium hover:opacity-90 transition-opacity"
+                  >
+                    <LogIn className="w-4 h-4" />
+                    Sign in with Google
+                  </button>
+                  {!import.meta.env.VITE_SUPABASE_URL && (
+                    <p className="text-[10px] text-destructive mt-3">Missing Supabase Params in .env</p>
+                  )}
+                </div>
+              ) : (
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between pb-3 border-b border-border/50">
+                    <div className="flex items-center gap-3">
+                      <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
+                        <span className="text-xs font-bold text-primary">{user.email?.charAt(0).toUpperCase()}</span>
+                      </div>
+                      <div>
+                        <p className="text-sm font-medium text-foreground">Logged in</p>
+                        <p className="text-[10px] text-muted-foreground truncate max-w-[150px]">{user.email}</p>
+                      </div>
+                    </div>
+                    <button onClick={handleLogout} className="p-2 hover:bg-secondary rounded-lg">
+                      <LogOut className="w-4 h-4 text-muted-foreground" />
+                    </button>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-3">
+                    <button
+                      onClick={handleSyncToCloud}
+                      disabled={syncing}
+                      className="flex flex-col items-center justify-center gap-2 p-3 rounded-xl bg-secondary/50 hover:bg-secondary transition-colors border-2 border-transparent hover:border-primary/10"
+                    >
+                      <Upload className={`w-5 h-5 text-primary ${syncing ? 'animate-bounce' : ''}`} />
+                      <span className="text-xs font-medium">Save to Cloud</span>
+                    </button>
+                    <button
+                      onClick={handleSyncFromCloud}
+                      disabled={syncing}
+                      className="flex flex-col items-center justify-center gap-2 p-3 rounded-xl bg-secondary/50 hover:bg-secondary transition-colors border-2 border-transparent hover:border-primary/10"
+                    >
+                      <Download className={`w-5 h-5 text-primary ${syncing ? 'animate-bounce' : ''}`} />
+                      <span className="text-xs font-medium">Load from Cloud</span>
+                    </button>
+                  </div>
+
+                  {syncStatus !== 'idle' && (
+                    <div className={`text-center text-xs p-2 rounded-lg ${syncStatus === 'success' ? 'bg-green-500/10 text-green-500' : 'bg-red-500/10 text-red-500'}`}>
+                      {syncStatus === 'success' ? 'Sync successful!' : 'Sync failed. Check connection.'}
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+          </div>
+
           {/* Display settings */}
           <div className="space-y-1">
             <p className="text-xs text-muted-foreground uppercase tracking-wide mb-3">Display</p>

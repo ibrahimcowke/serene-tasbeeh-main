@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
+import { supabase, getCurrentUser } from '@/lib/supabase';
 // Types
 export type Dhikr = {
   id: string;
@@ -10,13 +11,21 @@ export type Dhikr = {
 };
 
 export type SessionMode = 
-  | { type: 'free' } // Changed 'single' to 'free'
+  | { type: 'free' } 
   | { 
       type: 'tasbih100';
       currentPhase: number;
       phaseCounts: number[];
       isComplete: boolean;
+    }
+  | {
+      type: 'tasbih1000';
+      currentPhase: number; // 0-9 (10 sets)
+      currentSetCount: number;
+      isComplete: boolean;
     };
+
+
 
 export type DailyRecord = {
   date: string;
@@ -65,6 +74,7 @@ interface TasbeehState {
   longestStreak: number;
   
   favoriteDhikrIds: string[];
+  dailyGoal: number;
   
   // Actions
   increment: () => void;
@@ -91,16 +101,22 @@ interface TasbeehState {
   
   // Session mode actions
   startTasbih100: () => void;
+  startTasbih1000: () => void;
   exitSessionMode: () => void;
   
   updateStreak: () => void;
   toggleFavorite: (id: string) => void;
+  
+  // Sync
+  syncToCloud: () => Promise<boolean>;
+  syncFromCloud: () => Promise<boolean>;
   
   // New Settings Actions
   setCounterShape: (shape: 'minimal' | 'classic' | 'beads' | 'flower' | 'waveform' | 'hexagon' | 'orb') => void;
   setLayout: (layout: 'default' | 'focus' | 'ergonomic') => void;
   setHadithSlideDuration: (duration: number) => void;
   setHadithSlidePosition: (position: 'top-right' | 'top-left' | 'bottom-right' | 'bottom-left' | 'right' | 'bottom' | 'hidden') => void;
+  setDailyGoal: (goal: number) => void;
 }
 
 export type ThemeSettings = {
@@ -277,7 +293,10 @@ export const defaultDhikrs: Dhikr[] = [
 const getTodayDate = () => new Date().toISOString().split('T')[0];
 
 const getDefaultSessionMode = (): SessionMode => ({
-  type: 'free',
+  type: 'tasbih100',
+  currentPhase: 0,
+  phaseCounts: [0, 0, 0, 0],
+  isComplete: false,
 });
 
 export const useTasbeehStore = create<TasbeehState>()(
@@ -316,6 +335,7 @@ export const useTasbeehStore = create<TasbeehState>()(
       
       dhikrs: defaultDhikrs,
       customDhikrs: [],
+      dailyGoal: 100,
       
       // Actions
       increment: () => {
@@ -380,6 +400,18 @@ export const useTasbeehStore = create<TasbeehState>()(
                 sessionMode.isComplete = true;
               }
             }
+          } else if (sessionMode.type === 'tasbih1000') {
+             sessionMode.currentSetCount = newCount;
+             
+             if (newCount >= 100) {
+               if (sessionMode.currentPhase < 9) {
+                 sessionMode.currentPhase += 1;
+                 newCount = 0;
+                 sessionMode.currentSetCount = 0;
+               } else {
+                 sessionMode.isComplete = true;
+               }
+             }
           }
           
           return {
@@ -442,6 +474,17 @@ export const useTasbeehStore = create<TasbeehState>()(
              },
              currentDhikr: defaultDhikrs[0]
            });
+         } else if (state.sessionMode.type === 'tasbih1000') {
+            set({
+              currentCount: 0,
+              sessionStartTime: null,
+              sessionMode: {
+                type: 'tasbih1000',
+                currentPhase: 0,
+                currentSetCount: 0,
+                isComplete: false
+              }
+            });
          } else {
            set({ currentCount: 0, sessionStartTime: null });
          }
@@ -584,6 +627,15 @@ export const useTasbeehStore = create<TasbeehState>()(
           sessionStartTime: null,
         });
       },
+
+      startTasbih1000: () => {
+        set({
+          sessionMode: { type: 'tasbih1000', currentPhase: 0, currentSetCount: 0, isComplete: false },
+          currentCount: 0,
+          targetCount: 100,
+          sessionStartTime: null,
+        });
+      },
       
       exitSessionMode: () => {
         set({ sessionMode: getDefaultSessionMode(), currentCount: 0, sessionStartTime: null });
@@ -616,6 +668,78 @@ export const useTasbeehStore = create<TasbeehState>()(
       setLayout: (layout) => set({ layout }),
       setHadithSlideDuration: (duration) => set({ hadithSlideDuration: duration }),
       setHadithSlidePosition: (position) => set({ hadithSlidePosition: position }),
+      setDailyGoal: (goal) => set({ dailyGoal: goal }),
+
+      syncToCloud: async () => {
+        const user = await getCurrentUser();
+        if (!user) return false;
+
+        const state = get();
+        const dataToSave = {
+           dailyRecords: state.dailyRecords,
+           totalAllTime: state.totalAllTime,
+           customDhikrs: state.customDhikrs,
+           streakDays: state.streakDays,
+           lastActiveDate: state.lastActiveDate,
+           longestStreak: state.longestStreak,
+           settings: {
+               counterShape: state.counterShape,
+               target: state.targetCount,
+               themeSettings: state.themeSettings,
+               showTransliteration: state.showTransliteration,
+               hadithSlideDuration: state.hadithSlideDuration,
+               hadithSlidePosition: state.hadithSlidePosition,
+               theme: state.theme,
+           }
+        };
+
+        const { error } = await supabase
+          .from('profiles')
+          .upsert({ 
+            id: user.id, 
+            tasbeeh_data: dataToSave,
+            updated_at: new Date().toISOString()
+          });
+          
+        return !error;
+      },
+
+      syncFromCloud: async () => {
+         const user = await getCurrentUser();
+         if (!user) return false;
+
+         const { data, error } = await supabase
+           .from('profiles')
+           .select('tasbeeh_data')
+           .eq('id', user.id)
+           .single();
+           
+         if (error || !data?.tasbeeh_data) return false;
+         
+         const parsed = data.tasbeeh_data; // It's likely already JSON if using supabase-js
+         
+         set((state) => ({
+             ...state,
+             ...parsed,
+             // Ensure nested objects are merged or overwritten correctly
+             theme: parsed.settings?.theme || state.theme,
+             counterShape: parsed.settings?.counterShape || state.counterShape,
+             layout: parsed.settings?.layout || state.layout,
+             themeSettings: parsed.settings?.themeSettings || state.themeSettings,
+             hadithSlideDuration: parsed.settings?.hadithSlideDuration || state.hadithSlideDuration,
+             hadithSlidePosition: parsed.settings?.hadithSlidePosition || state.hadithSlidePosition,
+             showTransliteration: parsed.settings?.showTransliteration !== undefined ? parsed.settings.showTransliteration : state.showTransliteration,
+         }));
+         
+         // If theme changed, apply it
+         if (parsed.settings?.theme) {
+             const root = window.document.documentElement;
+             root.classList.remove('light', 'dark', 'theme-midnight', 'theme-neon', 'theme-green', 'theme-cyberpunk', 'theme-glass');
+             root.classList.add(parsed.settings.theme);
+         }
+         
+         return true;
+      },
     }),
     {
        name: 'tasbeeh-storage',
@@ -638,6 +762,7 @@ export const useTasbeehStore = create<TasbeehState>()(
          lastActiveDate: state.lastActiveDate,
          longestStreak: state.longestStreak,
          sessionMode: state.sessionMode,
+         dailyGoal: state.dailyGoal,
        }),
     }
   )
