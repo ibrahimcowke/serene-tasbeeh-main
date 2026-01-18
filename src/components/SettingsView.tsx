@@ -63,8 +63,12 @@ export function SettingsView({ children }: SettingsViewProps) {
     setVerticalOffset,
     dhikrVerticalOffset,
     setDhikrVerticalOffset,
+    counterVerticalOffset,
+    setCounterVerticalOffset,
     counterScale,
     setCounterScale,
+    countFontSize,
+    setCountFontSize,
   } = useTasbeehStore();
 
   const [user, setUser] = useState<any>(null);
@@ -446,13 +450,34 @@ export function SettingsView({ children }: SettingsViewProps) {
 
               <div className="pt-2 border-t border-border/40">
                 <div className="flex items-center justify-between mb-3">
-                  <p className="text-sm font-medium text-foreground">Counter Scale</p>
+                  <p className="text-sm font-medium text-foreground">Counter Position</p>
+                  <p className="text-xs text-muted-foreground">{counterVerticalOffset > 0 ? `+${counterVerticalOffset}px` : `${counterVerticalOffset}px`}</p>
+                </div>
+                <input
+                  type="range"
+                  min="-100"
+                  max="100"
+                  step="5"
+                  value={counterVerticalOffset}
+                  onChange={(e) => setCounterVerticalOffset(Number(e.target.value))}
+                  className="w-full h-2 bg-muted rounded-lg appearance-none cursor-pointer accent-primary"
+                />
+                <div className="flex justify-between text-xs text-muted-foreground mt-1">
+                  <span>Up</span>
+                  <span>Auto</span>
+                  <span>Down</span>
+                </div>
+              </div>
+
+              <div className="pt-2 border-t border-border/40">
+                <div className="flex items-center justify-between mb-3">
+                  <p className="text-sm font-medium text-foreground">Counter Size</p>
                   <p className="text-xs text-muted-foreground">{Math.round(counterScale * 100)}%</p>
                 </div>
                 <input
                   type="range"
                   min="0.5"
-                  max="1.5"
+                  max="1.7"
                   step="0.05"
                   value={counterScale}
                   onChange={(e) => setCounterScale(Number(e.target.value))}
@@ -461,7 +486,28 @@ export function SettingsView({ children }: SettingsViewProps) {
                 <div className="flex justify-between text-xs text-muted-foreground mt-1">
                   <span>50%</span>
                   <span>100%</span>
-                  <span>150%</span>
+                  <span>170%</span>
+                </div>
+              </div>
+
+              <div className="pt-2 border-t border-border/40">
+                <div className="flex items-center justify-between mb-3">
+                  <p className="text-sm font-medium text-foreground">Number Size</p>
+                  <p className="text-xs text-muted-foreground">{Math.round(countFontSize * 100)}%</p>
+                </div>
+                <input
+                  type="range"
+                  min="0.5"
+                  max="2.0"
+                  step="0.1"
+                  value={countFontSize}
+                  onChange={(e) => setCountFontSize(Number(e.target.value))}
+                  className="w-full h-2 bg-muted rounded-lg appearance-none cursor-pointer accent-primary"
+                />
+                <div className="flex justify-between text-xs text-muted-foreground mt-1">
+                  <span>Small</span>
+                  <span>Normal</span>
+                  <span>Big</span>
                 </div>
               </div>
             </div>

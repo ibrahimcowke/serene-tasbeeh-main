@@ -21,7 +21,9 @@ export function Counter() {
     hadithSlidePosition = 'right',
     verticalOffset = 0,
     dhikrVerticalOffset = 0,
+    counterVerticalOffset = 0,
     counterScale = 1,
+    countFontSize = 1,
   } = useTasbeehStore();
 
   // Ensure we have the latest data (e.g. hadiths) even if state is persisted
@@ -275,7 +277,7 @@ export function Counter() {
             height: 'min(300px, 85vw)',
             maxWidth: '350px',
             maxHeight: '350px',
-            transform: `scale(${counterScale})`
+            transform: `translateY(${counterVerticalOffset}px) scale(${counterScale})`
           }}
         >
           {/* Encircled BrogressBar - Wraps the counter button */}
@@ -518,7 +520,7 @@ export function Counter() {
               ${counterShape === 'orb' ? 'text-white mix-blend-overlay' : ''}
             `}
               style={{
-                fontSize: `${(counterShape === 'classic' ? 4.5 : 4.5) * currentSettings.fontScale}rem`
+                fontSize: `${(counterShape === 'classic' ? 4.5 : 4.5) * currentSettings.fontScale * countFontSize}rem`
               }}
             >
               {currentCount}
