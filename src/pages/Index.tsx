@@ -5,9 +5,9 @@ import { ThemeProvider } from '@/components/ThemeProvider';
 const Index = () => {
   return (
     <ThemeProvider>
-      <div className="h-[100dvh] w-full bg-background flex flex-col safe-area-top overflow-hidden">
+      <div className="h-[100dvh] w-full bg-background flex flex-col overflow-hidden">
         {/* Main counter area - wrapped to handle overflow */}
-        <div className="flex-1 min-h-0 w-full flex flex-col overflow-y-auto [&::-webkit-scrollbar]:hidden">
+        <div className="flex-1 min-h-0 w-full flex flex-col overflow-hidden safe-area-top">
           <Counter />
         </div>
 

@@ -203,7 +203,7 @@ export function Counter() {
         transition-all duration-500 px-4 sm:px-0
         ${layout === 'focus' ? 'absolute top-16 sm:top-20 scale-90 opacity-80' : ''}
         ${layout === 'ergonomic' ? 'absolute top-[15%] sm:top-[12%] scale-100 sm:scale-110' : ''}
-        ${layout === 'default' ? 'text-center mb-10 sm:mb-14 pt-10 sm:pt-14 mt-10' : 'text-center'}
+        ${layout === 'default' ? 'text-center mb-10 sm:mb-16 pt-12 sm:pt-16 mt-4' : 'text-center'}
         animate-fade-in-up
       `}>
         <AnimatePresence mode="wait">
