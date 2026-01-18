@@ -61,6 +61,10 @@ export function SettingsView({ children }: SettingsViewProps) {
     syncFromCloud,
     verticalOffset,
     setVerticalOffset,
+    dhikrVerticalOffset,
+    setDhikrVerticalOffset,
+    counterScale,
+    setCounterScale,
   } = useTasbeehStore();
 
   const [user, setUser] = useState<any>(null);
@@ -393,6 +397,72 @@ export function SettingsView({ children }: SettingsViewProps) {
               <div className="flex justify-between text-xs text-muted-foreground mt-1">
                 <span>5s</span>
                 <span>60s</span>
+              </div>
+            </div>
+
+            {/* Vertical Position Slider */}
+            <div className="p-4 rounded-2xl bg-card mt-2 space-y-4">
+              <div>
+                <div className="flex items-center justify-between mb-3">
+                  <p className="text-sm font-medium text-foreground">Global Vertical Position</p>
+                  <p className="text-xs text-muted-foreground">{verticalOffset > 0 ? `+${verticalOffset}px` : `${verticalOffset}px`}</p>
+                </div>
+                <input
+                  type="range"
+                  min="-150"
+                  max="150"
+                  step="10"
+                  value={verticalOffset}
+                  onChange={(e) => setVerticalOffset(Number(e.target.value))}
+                  className="w-full h-2 bg-muted rounded-lg appearance-none cursor-pointer accent-primary"
+                />
+                <div className="flex justify-between text-xs text-muted-foreground mt-1">
+                  <span>Up</span>
+                  <span>Center</span>
+                  <span>Down</span>
+                </div>
+              </div>
+
+              <div className="pt-2 border-t border-border/40">
+                <div className="flex items-center justify-between mb-3">
+                  <p className="text-sm font-medium text-foreground">Dhikr Text Position</p>
+                  <p className="text-xs text-muted-foreground">{dhikrVerticalOffset > 0 ? `+${dhikrVerticalOffset}px` : `${dhikrVerticalOffset}px`}</p>
+                </div>
+                <input
+                  type="range"
+                  min="-100"
+                  max="100"
+                  step="5"
+                  value={dhikrVerticalOffset}
+                  onChange={(e) => setDhikrVerticalOffset(Number(e.target.value))}
+                  className="w-full h-2 bg-muted rounded-lg appearance-none cursor-pointer accent-primary"
+                />
+                <div className="flex justify-between text-xs text-muted-foreground mt-1">
+                  <span>Up</span>
+                  <span>Auto</span>
+                  <span>Down</span>
+                </div>
+              </div>
+
+              <div className="pt-2 border-t border-border/40">
+                <div className="flex items-center justify-between mb-3">
+                  <p className="text-sm font-medium text-foreground">Counter Scale</p>
+                  <p className="text-xs text-muted-foreground">{Math.round(counterScale * 100)}%</p>
+                </div>
+                <input
+                  type="range"
+                  min="0.5"
+                  max="1.5"
+                  step="0.05"
+                  value={counterScale}
+                  onChange={(e) => setCounterScale(Number(e.target.value))}
+                  className="w-full h-2 bg-muted rounded-lg appearance-none cursor-pointer accent-primary"
+                />
+                <div className="flex justify-between text-xs text-muted-foreground mt-1">
+                  <span>50%</span>
+                  <span>100%</span>
+                  <span>150%</span>
+                </div>
               </div>
             </div>
 

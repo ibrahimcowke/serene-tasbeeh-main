@@ -20,6 +20,8 @@ export function Counter() {
     counterShape = 'minimal', // Default to minimal if undefined in persisted state
     hadithSlidePosition = 'right',
     verticalOffset = 0,
+    dhikrVerticalOffset = 0,
+    counterScale = 1,
   } = useTasbeehStore();
 
   // Ensure we have the latest data (e.g. hadiths) even if state is persisted
@@ -208,7 +210,9 @@ export function Counter() {
         ${layout === 'ergonomic' ? 'absolute top-[15%] sm:top-[12%] scale-100 sm:scale-110' : ''}
         ${layout === 'default' ? 'text-center mb-10 sm:mb-16 pt-12 sm:pt-16 mt-4' : 'text-center'}
         animate-fade-in-up
-      `}>
+      `}
+        style={{ transform: `translateY(${dhikrVerticalOffset}px)` }}
+      >
         <AnimatePresence mode="wait">
           <motion.p
             key={currentDhikr.id}
@@ -266,7 +270,13 @@ export function Counter() {
           ${layout === 'focus' ? 'scale-100 sm:scale-110' : ''}
           ${layout === 'ergonomic' ? 'scale-90 sm:scale-100 translate-y-2 sm:translate-y-4' : ''}
         `}
-          style={{ width: 'min(300px, 85vw)', height: 'min(300px, 85vw)', maxWidth: '350px', maxHeight: '350px' }}
+          style={{
+            width: 'min(300px, 85vw)',
+            height: 'min(300px, 85vw)',
+            maxWidth: '350px',
+            maxHeight: '350px',
+            transform: `scale(${counterScale})`
+          }}
         >
           {/* Encircled BrogressBar - Wraps the counter button */}
           <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-0">

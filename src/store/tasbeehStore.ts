@@ -119,6 +119,10 @@ interface TasbeehState {
   setDailyGoal: (goal: number) => void;
   verticalOffset: number;
   setVerticalOffset: (offset: number) => void;
+  dhikrVerticalOffset: number;
+  setDhikrVerticalOffset: (offset: number) => void;
+  counterScale: number;
+  setCounterScale: (scale: number) => void;
 }
 
 export type ThemeSettings = {
@@ -360,6 +364,8 @@ export const useTasbeehStore = create<TasbeehState>()(
       hadithSlideDuration: 15, // 15 seconds default
       hadithSlidePosition: 'right', // default position
       verticalOffset: 0,
+      dhikrVerticalOffset: 0,
+      counterScale: 1,
       
       dailyRecords: [],
       totalAllTime: 0,
@@ -701,6 +707,8 @@ export const useTasbeehStore = create<TasbeehState>()(
       setHadithSlidePosition: (position) => set({ hadithSlidePosition: position }),
       setDailyGoal: (goal) => set({ dailyGoal: goal }),
       setVerticalOffset: (offset) => set({ verticalOffset: offset }),
+      setDhikrVerticalOffset: (offset) => set({ dhikrVerticalOffset: offset }),
+      setCounterScale: (scale) => set({ counterScale: scale }),
 
       syncToCloud: async () => {
         const user = await getCurrentUser();
@@ -722,6 +730,8 @@ export const useTasbeehStore = create<TasbeehState>()(
                hadithSlideDuration: state.hadithSlideDuration,
                hadithSlidePosition: state.hadithSlidePosition,
                verticalOffset: state.verticalOffset,
+               dhikrVerticalOffset: state.dhikrVerticalOffset,
+               counterScale: state.counterScale,
                theme: state.theme,
            }
         };
@@ -762,6 +772,8 @@ export const useTasbeehStore = create<TasbeehState>()(
              hadithSlideDuration: parsed.settings?.hadithSlideDuration || state.hadithSlideDuration,
              hadithSlidePosition: parsed.settings?.hadithSlidePosition || state.hadithSlidePosition,
              verticalOffset: parsed.settings?.verticalOffset || state.verticalOffset,
+             dhikrVerticalOffset: parsed.settings?.dhikrVerticalOffset || state.dhikrVerticalOffset,
+             counterScale: parsed.settings?.counterScale || state.counterScale,
              showTransliteration: parsed.settings?.showTransliteration !== undefined ? parsed.settings.showTransliteration : state.showTransliteration,
          }));
          
@@ -805,6 +817,8 @@ export const useTasbeehStore = create<TasbeehState>()(
         hadithSlideDuration: state.hadithSlideDuration,
         hadithSlidePosition: state.hadithSlidePosition,
         verticalOffset: state.verticalOffset,
+        dhikrVerticalOffset: state.dhikrVerticalOffset,
+        counterScale: state.counterScale,
         dailyRecords: state.dailyRecords,
         totalAllTime: state.totalAllTime,
         customDhikrs: state.customDhikrs,
