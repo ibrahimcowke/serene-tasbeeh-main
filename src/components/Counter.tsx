@@ -271,12 +271,9 @@ export function Counter() {
           className={`relative flex items-center justify-center
           ${layout === 'focus' ? 'scale-100 sm:scale-110' : ''}
           ${layout === 'ergonomic' ? 'scale-90 sm:scale-100 translate-y-2 sm:translate-y-4' : ''}
+          w-[75vw] h-[75vw] sm:w-[300px] sm:h-[300px] max-w-[350px] max-h-[350px]
         `}
           style={{
-            width: 'min(300px, 85vw)',
-            height: 'min(300px, 85vw)',
-            maxWidth: '350px',
-            maxHeight: '350px',
             transform: `translateY(${counterVerticalOffset}px) scale(${counterScale})`
           }}
         >

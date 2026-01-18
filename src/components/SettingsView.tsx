@@ -16,6 +16,13 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
+import { Slider } from "@/components/ui/slider";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 
 interface SettingsViewProps {
   children: React.ReactNode;
@@ -159,7 +166,7 @@ export function SettingsView({ children }: SettingsViewProps) {
       <SheetTrigger asChild>
         {children}
       </SheetTrigger>
-      <SheetContent side="bottom" className="!bg-sheet-bg rounded-t-3xl h-[85vh] flex flex-col gap-0 outline-none border-t-0">
+      <SheetContent side="bottom" className="bg-background/80 backdrop-blur-md rounded-t-3xl h-[85vh] flex flex-col gap-0 outline-none border-t-0 z-50">
         <div className="sheet-handle mx-auto mt-3 mb-1 bg-muted shrink-0" />
         <SheetHeader className="text-left px-6 py-4 shrink-0">
           <SheetTitle className="text-lg font-medium">Settings</SheetTitle>
@@ -278,7 +285,21 @@ export function SettingsView({ children }: SettingsViewProps) {
 
           {/* Layout Config */}
           <div className="space-y-1">
-            <p className="text-xs text-muted-foreground uppercase tracking-wide mb-3">Layout</p>
+            <div className="flex items-center justify-between mb-3">
+              <p className="text-xs text-muted-foreground uppercase tracking-wide">Layout</p>
+              <button
+                onClick={() => {
+                  setVerticalOffset(0);
+                  setDhikrVerticalOffset(0);
+                  setCounterVerticalOffset(0);
+                  setCounterScale(1);
+                  setCountFontSize(1);
+                }}
+                className="text-[10px] text-primary hover:underline"
+              >
+                Reset Defaults
+              </button>
+            </div>
             <div className="grid grid-cols-3 gap-2">
               {[
                 { id: 'default', label: 'Classic', icon: Layout },
@@ -389,14 +410,12 @@ export function SettingsView({ children }: SettingsViewProps) {
                   <p className="text-xs text-muted-foreground">{hadithSlideDuration} seconds per slide</p>
                 </div>
               </div>
-              <input
-                type="range"
-                min="5"
-                max="60"
-                step="5"
-                value={hadithSlideDuration}
-                onChange={(e) => setHadithSlideDuration(Number(e.target.value))}
-                className="w-full h-2 bg-muted rounded-lg appearance-none cursor-pointer accent-primary"
+              <Slider
+                min={5}
+                max={60}
+                step={5}
+                value={[hadithSlideDuration]}
+                onValueChange={([val]) => setHadithSlideDuration(val)}
               />
               <div className="flex justify-between text-xs text-muted-foreground mt-1">
                 <span>5s</span>
@@ -404,112 +423,118 @@ export function SettingsView({ children }: SettingsViewProps) {
               </div>
             </div>
 
-            {/* Vertical Position Slider */}
-            <div className="p-4 rounded-2xl bg-card mt-2 space-y-4">
-              <div>
-                <div className="flex items-center justify-between mb-3">
-                  <p className="text-sm font-medium text-foreground">Global Vertical Position</p>
-                  <p className="text-xs text-muted-foreground">{verticalOffset > 0 ? `+${verticalOffset}px` : `${verticalOffset}px`}</p>
-                </div>
-                <input
-                  type="range"
-                  min="-150"
-                  max="150"
-                  step="10"
-                  value={verticalOffset}
-                  onChange={(e) => setVerticalOffset(Number(e.target.value))}
-                  className="w-full h-2 bg-muted rounded-lg appearance-none cursor-pointer accent-primary"
-                />
-                <div className="flex justify-between text-xs text-muted-foreground mt-1">
-                  <span>Up</span>
-                  <span>Center</span>
-                  <span>Down</span>
-                </div>
-              </div>
+            {/* Advanced Layout Accordion */}
+            <div className="bg-card rounded-2xl p-1 mt-2">
+              <Accordion type="single" collapsible className="w-full">
+                <AccordionItem value="advanced-layout" className="border-none">
+                  <AccordionTrigger className="px-4 py-3 text-sm font-medium hover:no-underline hover:bg-secondary/50 rounded-xl transition-colors">
+                    Advanced Positioning & Scale
+                  </AccordionTrigger>
+                  <AccordionContent className="px-4 pb-4">
+                    <div className="space-y-6 pt-4">
+                      {/* Global Vertical Position */}
+                      <div>
+                        <div className="flex items-center justify-between mb-3">
+                          <p className="text-sm font-medium text-foreground">Global Position</p>
+                          <p className="text-xs text-muted-foreground">{verticalOffset > 0 ? `+${verticalOffset}px` : `${verticalOffset}px`}</p>
+                        </div>
+                        <Slider
+                          min={-150}
+                          max={150}
+                          step={10}
+                          value={[verticalOffset]}
+                          onValueChange={([val]) => setVerticalOffset(val)}
+                        />
+                        <div className="flex justify-between text-[10px] text-muted-foreground mt-2 px-1">
+                          <span>Up</span>
+                          <span>Center</span>
+                          <span>Down</span>
+                        </div>
+                      </div>
 
-              <div className="pt-2 border-t border-border/40">
-                <div className="flex items-center justify-between mb-3">
-                  <p className="text-sm font-medium text-foreground">Dhikr Text Position</p>
-                  <p className="text-xs text-muted-foreground">{dhikrVerticalOffset > 0 ? `+${dhikrVerticalOffset}px` : `${dhikrVerticalOffset}px`}</p>
-                </div>
-                <input
-                  type="range"
-                  min="-100"
-                  max="100"
-                  step="5"
-                  value={dhikrVerticalOffset}
-                  onChange={(e) => setDhikrVerticalOffset(Number(e.target.value))}
-                  className="w-full h-2 bg-muted rounded-lg appearance-none cursor-pointer accent-primary"
-                />
-                <div className="flex justify-between text-xs text-muted-foreground mt-1">
-                  <span>Up</span>
-                  <span>Auto</span>
-                  <span>Down</span>
-                </div>
-              </div>
+                      {/* Dhikr Text Position */}
+                      <div className="pt-4 border-t border-border/40">
+                        <div className="flex items-center justify-between mb-3">
+                          <p className="text-sm font-medium text-foreground">Dhikr Text</p>
+                          <p className="text-xs text-muted-foreground">{dhikrVerticalOffset > 0 ? `+${dhikrVerticalOffset}px` : `${dhikrVerticalOffset}px`}</p>
+                        </div>
+                        <Slider
+                          min={-100}
+                          max={100}
+                          step={5}
+                          value={[dhikrVerticalOffset]}
+                          onValueChange={([val]) => setDhikrVerticalOffset(val)}
+                        />
+                        <div className="flex justify-between text-[10px] text-muted-foreground mt-2 px-1">
+                          <span>Up</span>
+                          <span>Auto</span>
+                          <span>Down</span>
+                        </div>
+                      </div>
 
-              <div className="pt-2 border-t border-border/40">
-                <div className="flex items-center justify-between mb-3">
-                  <p className="text-sm font-medium text-foreground">Counter Position</p>
-                  <p className="text-xs text-muted-foreground">{counterVerticalOffset > 0 ? `+${counterVerticalOffset}px` : `${counterVerticalOffset}px`}</p>
-                </div>
-                <input
-                  type="range"
-                  min="-100"
-                  max="100"
-                  step="5"
-                  value={counterVerticalOffset}
-                  onChange={(e) => setCounterVerticalOffset(Number(e.target.value))}
-                  className="w-full h-2 bg-muted rounded-lg appearance-none cursor-pointer accent-primary"
-                />
-                <div className="flex justify-between text-xs text-muted-foreground mt-1">
-                  <span>Up</span>
-                  <span>Auto</span>
-                  <span>Down</span>
-                </div>
-              </div>
+                      {/* Counter Position */}
+                      <div className="pt-4 border-t border-border/40">
+                        <div className="flex items-center justify-between mb-3">
+                          <p className="text-sm font-medium text-foreground">Counter Position</p>
+                          <p className="text-xs text-muted-foreground">{counterVerticalOffset > 0 ? `+${counterVerticalOffset}px` : `${counterVerticalOffset}px`}</p>
+                        </div>
+                        <Slider
+                          min={-100}
+                          max={100}
+                          step={5}
+                          value={[counterVerticalOffset]}
+                          onValueChange={([val]) => setCounterVerticalOffset(val)}
+                        />
+                        <div className="flex justify-between text-[10px] text-muted-foreground mt-2 px-1">
+                          <span>Up</span>
+                          <span>Auto</span>
+                          <span>Down</span>
+                        </div>
+                      </div>
 
-              <div className="pt-2 border-t border-border/40">
-                <div className="flex items-center justify-between mb-3">
-                  <p className="text-sm font-medium text-foreground">Counter Size</p>
-                  <p className="text-xs text-muted-foreground">{Math.round(counterScale * 100)}%</p>
-                </div>
-                <input
-                  type="range"
-                  min="0.5"
-                  max="1.7"
-                  step="0.05"
-                  value={counterScale}
-                  onChange={(e) => setCounterScale(Number(e.target.value))}
-                  className="w-full h-2 bg-muted rounded-lg appearance-none cursor-pointer accent-primary"
-                />
-                <div className="flex justify-between text-xs text-muted-foreground mt-1">
-                  <span>50%</span>
-                  <span>100%</span>
-                  <span>170%</span>
-                </div>
-              </div>
+                      {/* Counter Size */}
+                      <div className="pt-4 border-t border-border/40">
+                        <div className="flex items-center justify-between mb-3">
+                          <p className="text-sm font-medium text-foreground">Counter Size</p>
+                          <p className="text-xs text-muted-foreground">{Math.round(counterScale * 100)}%</p>
+                        </div>
+                        <Slider
+                          min={0.5}
+                          max={1.7}
+                          step={0.05}
+                          value={[counterScale]}
+                          onValueChange={([val]) => setCounterScale(val)}
+                        />
+                        <div className="flex justify-between text-[10px] text-muted-foreground mt-2 px-1">
+                          <span>50%</span>
+                          <span>100%</span>
+                          <span>170%</span>
+                        </div>
+                      </div>
 
-              <div className="pt-2 border-t border-border/40">
-                <div className="flex items-center justify-between mb-3">
-                  <p className="text-sm font-medium text-foreground">Number Size</p>
-                  <p className="text-xs text-muted-foreground">{Math.round(countFontSize * 100)}%</p>
-                </div>
-                <input
-                  type="range"
-                  min="0.5"
-                  max="2.0"
-                  step="0.1"
-                  value={countFontSize}
-                  onChange={(e) => setCountFontSize(Number(e.target.value))}
-                  className="w-full h-2 bg-muted rounded-lg appearance-none cursor-pointer accent-primary"
-                />
-                <div className="flex justify-between text-xs text-muted-foreground mt-1">
-                  <span>Small</span>
-                  <span>Normal</span>
-                  <span>Big</span>
-                </div>
-              </div>
+                      {/* Number Size */}
+                      <div className="pt-4 border-t border-border/40">
+                        <div className="flex items-center justify-between mb-3">
+                          <p className="text-sm font-medium text-foreground">Number Size</p>
+                          <p className="text-xs text-muted-foreground">{Math.round(countFontSize * 100)}%</p>
+                        </div>
+                        <Slider
+                          min={0.5}
+                          max={2.0}
+                          step={0.1}
+                          value={[countFontSize]}
+                          onValueChange={([val]) => setCountFontSize(val)}
+                        />
+                        <div className="flex justify-between text-[10px] text-muted-foreground mt-2 px-1">
+                          <span>Small</span>
+                          <span>Normal</span>
+                          <span>Big</span>
+                        </div>
+                      </div>
+                    </div>
+                  </AccordionContent>
+                </AccordionItem>
+              </Accordion>
             </div>
 
             {/* Slide Position */}
