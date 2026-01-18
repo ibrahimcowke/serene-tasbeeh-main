@@ -24,6 +24,7 @@ export function Counter() {
     counterVerticalOffset = 0,
     counterScale = 1,
     countFontSize = 1,
+    dhikrTextPosition = 'below-counter',
   } = useTasbeehStore();
 
   // Ensure we have the latest data (e.g. hadiths) even if state is persisted
@@ -77,6 +78,61 @@ export function Counter() {
     return null;
   };
 
+
+  const renderDhikrText = () => {
+    if (dhikrTextPosition === 'hidden') return null;
+    return (
+      <div className="text-center mt-3 sm:mt-6 mb-2 sm:mb-4 px-3 sm:px-0 relative z-20"
+        style={{ transform: `translateY(${dhikrVerticalOffset}px)` }}
+      >
+        <AnimatePresence mode="wait">
+          <motion.p
+            key={currentDhikr.id}
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            className="font-arabic text-2xl xs:text-3xl sm:text-4xl md:text-5xl text-foreground leading-relaxed mb-1 sm:mb-2"
+          >
+            {currentDhikr.arabic}
+          </motion.p>
+        </AnimatePresence>
+        <AnimatePresence mode="wait">
+          {showTransliteration && (
+            <motion.p
+              key={currentDhikr.transliteration}
+              initial={{ opacity: 0, y: -5 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -5 }}
+              transition={{ duration: 0.2 }}
+              className="text-muted-foreground text-xs xs:text-sm sm:text-base tracking-wide"
+            >
+              {currentDhikr.transliteration}
+            </motion.p>
+          )}
+        </AnimatePresence>
+
+        {/* Phase indicator for 100 session */}
+        {sessionMode.type === 'tasbih100' && (
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="text-[10px] xs:text-xs text-primary mt-2 sm:mt-3 mb-1"
+          >
+            Phase {sessionMode.currentPhase + 1} of 4 • {sessionMode.currentPhase === 3 ? '1' : '33'} counts
+          </motion.p>
+        )}
+        {sessionMode.type === 'tasbih1000' && (
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="text-[10px] xs:text-xs text-primary mt-2 sm:mt-3 mb-1"
+          >
+            Phase {sessionMode.currentPhase + 1} of 10
+          </motion.p>
+        )}
+      </div>
+    )
+  };
   const handleTap = useCallback(() => {
     if (sessionMode.type === 'tasbih100' && sessionMode.isComplete) return;
 
@@ -205,68 +261,16 @@ export function Counter() {
         )}
       </AnimatePresence>
 
-      {/* Dhikr text */}
-      <div className={`
-        transition-all duration-500 px-4 sm:px-0
-        ${layout === 'focus' ? 'absolute top-16 sm:top-20 scale-90 opacity-80' : ''}
-        ${layout === 'ergonomic' ? 'absolute top-[15%] sm:top-[12%] scale-100 sm:scale-110' : ''}
-        ${layout === 'default' ? 'text-center mb-10 sm:mb-16 pt-12 sm:pt-16 mt-4' : 'text-center'}
-        animate-fade-in-up
-      `}
-        style={{ transform: `translateY(${dhikrVerticalOffset}px)` }}
-      >
-        <AnimatePresence mode="wait">
-          <motion.p
-            key={currentDhikr.id}
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            className="font-arabic text-2xl sm:text-4xl md:text-5xl lg:text-6xl text-foreground leading-relaxed mb-2 sm:mb-3"
-          >
-            {currentDhikr.arabic}
-          </motion.p>
-        </AnimatePresence>
-        <AnimatePresence mode="wait">
-          {showTransliteration && (
-            <motion.p
-              key={currentDhikr.transliteration}
-              initial={{ opacity: 0, y: -5 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -5 }}
-              transition={{ duration: 0.2 }}
-              className="text-muted-foreground text-sm sm:text-base tracking-wide"
-            >
-              {currentDhikr.transliteration}
-            </motion.p>
-          )}
-        </AnimatePresence>
-
-        {/* Phase indicator for 100 session */}
-        {sessionMode.type === 'tasbih100' && (
-          <motion.p
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            className="text-xs text-primary mt-4 mb-2"
-          >
-            Phase {sessionMode.currentPhase + 1} of 4 • {sessionMode.currentPhase === 3 ? '1' : '33'} counts
-          </motion.p>
-        )}
-        {sessionMode.type === 'tasbih1000' && (
-          <motion.p
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            className="text-xs text-primary mt-4 mb-2"
-          >
-            Phase {sessionMode.currentPhase + 1} of 10
-          </motion.p>
-        )}
-      </div>
+      {/* Dhikr text removed from here - moved below counter */}
 
       {/* Main Content Area: Counter + Hadith Side Panel */}
       <div className="relative flex flex-col items-center justify-center w-full max-w-7xl mx-auto z-10">
 
+        {/* Dhikr Text - Top Position */}
+        {dhikrTextPosition === 'top' && renderDhikrText()}
+
         {/* Mobile controls (Minus & Reset) placed above counter */}
-        <div className="flex items-center justify-center gap-8 mb-4 lg:hidden relative z-20">
+        <div className="flex items-center justify-center gap-4 xs:gap-6 sm:gap-8 mb-2 xs:mb-3 sm:mb-4 lg:hidden relative z-20">
           <motion.button
             whileTap={{ scale: 0.95 }}
             onClick={(e) => {
@@ -276,7 +280,7 @@ export function Counter() {
               useTasbeehStore.getState().decrement();
             }}
             disabled={currentCount === 0}
-            className="w-12 h-12 rounded-full bg-secondary/50 backdrop-blur-sm flex items-center justify-center disabled:opacity-30 hover:bg-secondary transition-colors border border-white/5"
+            className="w-10 h-10 xs:w-11 xs:h-11 sm:w-12 sm:h-12 rounded-full bg-secondary/50 backdrop-blur-sm flex items-center justify-center disabled:opacity-30 hover:bg-secondary transition-colors border border-white/5"
           >
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14" /></svg>
           </motion.button>
@@ -290,19 +294,22 @@ export function Counter() {
               }
             }}
             disabled={currentCount === 0}
-            className="w-12 h-12 rounded-full bg-secondary/50 backdrop-blur-sm flex items-center justify-center disabled:opacity-30 hover:bg-secondary transition-colors border border-white/5"
+            className="w-10 h-10 xs:w-11 xs:h-11 sm:w-12 sm:h-12 rounded-full bg-secondary/50 backdrop-blur-sm flex items-center justify-center disabled:opacity-30 hover:bg-secondary transition-colors border border-white/5"
           >
             <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 12" /><path d="M3 3v9h9" /></svg>
           </motion.button>
         </div>
 
-        {/* Counter visualization */}
+        {/* Dhikr Text - Above Counter Position */}
+        {dhikrTextPosition === 'above-counter' && renderDhikrText()}
+
+        {/* Counter visualization - Optimized for all mobile screens */}
         <motion.div
           layout
           className={`relative flex items-center justify-center
           ${layout === 'focus' ? 'scale-100 sm:scale-110' : ''}
           ${layout === 'ergonomic' ? 'scale-90 sm:scale-100 translate-y-2 sm:translate-y-4' : ''}
-          w-[75vw] h-[75vw] sm:w-[300px] sm:h-[300px] max-w-[350px] max-h-[350px]
+          w-[65vw] h-[65vw] xs:w-[70vw] xs:h-[70vw] sm:w-[300px] sm:h-[300px] max-w-[280px] max-h-[280px] sm:max-w-[350px] sm:max-h-[350px]
         `}
           style={{
             transform: `translateY(${counterVerticalOffset}px) scale(${counterScale})`
@@ -581,16 +588,22 @@ export function Counter() {
         </div>
       )}
 
-      {/* Mobile Hadith Slider (Below counter) - only when position is not bottom or hidden */}
+      {/* Dhikr text - Positioned between counter and Hadith slider on mobile */}
+      {dhikrTextPosition === 'below-counter' && renderDhikrText()}
+
+      {/* Mobile Hadith Slider (Below dhikr text) - only when position is not bottom or hidden */}
       {hadithSlidePosition !== 'bottom' && hadithSlidePosition !== 'hidden' && (
-        <div className="lg:hidden w-full max-w-sm mt-6 mb-2 px-4 relative z-20">
+        <div className="lg:hidden w-full max-w-sm mt-1 sm:mt-2 mb-1 sm:mb-2 px-3 sm:px-4 relative z-20">
           <HadithSlider dhikr={currentDhikr} />
         </div>
       )}
 
+      {/* Dhikr Text - Bottom Position */}
+      {dhikrTextPosition === 'bottom' && renderDhikrText()}
+
       {/* Target indicator */}
-      <div className={`mt-3 text-center transition-opacity duration-300 ${layout === 'focus' ? 'opacity-50 hover:opacity-100' : ''}`}>
-        <p className="text-sm text-muted-foreground">
+      <div className={`mt-2 sm:mt-3 text-center transition-opacity duration-300 ${layout === 'focus' ? 'opacity-50 hover:opacity-100' : ''}`}>
+        <p className="text-xs xs:text-sm text-muted-foreground">
           {currentCount} / {getCurrentTarget() > 0 ? getCurrentTarget() : '∞'}
         </p>
 

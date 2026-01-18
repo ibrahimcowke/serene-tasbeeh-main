@@ -61,6 +61,9 @@ interface TasbeehState {
   hadithSlideDuration: number; // in seconds
   hadithSlidePosition: 'top-right' | 'top-left' | 'bottom-right' | 'bottom-left' | 'right' | 'bottom' | 'hidden';
   
+  // Dhikr Text Position
+  dhikrTextPosition: 'top' | 'above-counter' | 'below-counter' | 'bottom' | 'hidden';
+  
   // Data
   dailyRecords: DailyRecord[];
   totalAllTime: number;
@@ -127,6 +130,7 @@ interface TasbeehState {
   setCounterScale: (scale: number) => void;
   countFontSize: number;
   setCountFontSize: (scale: number) => void;
+  setDhikrTextPosition: (position: 'top' | 'above-counter' | 'below-counter' | 'bottom' | 'hidden') => void;
 }
 
 export type ThemeSettings = {
@@ -367,6 +371,7 @@ export const useTasbeehStore = create<TasbeehState>()(
       layout: 'default',
       hadithSlideDuration: 15, // 15 seconds default
       hadithSlidePosition: 'right', // default position
+      dhikrTextPosition: 'below-counter', // Default position
       verticalOffset: 0,
       dhikrVerticalOffset: 0,
       counterVerticalOffset: 0,
@@ -717,6 +722,7 @@ export const useTasbeehStore = create<TasbeehState>()(
       setCounterVerticalOffset: (offset) => set({ counterVerticalOffset: offset }),
       setCounterScale: (scale) => set({ counterScale: scale }),
       setCountFontSize: (scale) => set({ countFontSize: scale }),
+      setDhikrTextPosition: (position) => set({ dhikrTextPosition: position }),
 
       syncToCloud: async () => {
         try {
@@ -753,6 +759,7 @@ export const useTasbeehStore = create<TasbeehState>()(
                  counterVerticalOffset: state.counterVerticalOffset,
                  counterScale: state.counterScale,
                  countFontSize: state.countFontSize,
+                 dhikrTextPosition: state.dhikrTextPosition,
                  theme: state.theme,
              }
           };
@@ -807,6 +814,7 @@ export const useTasbeehStore = create<TasbeehState>()(
              counterVerticalOffset: parsed.settings?.counterVerticalOffset || state.counterVerticalOffset,
              counterScale: parsed.settings?.counterScale || state.counterScale,
              countFontSize: parsed.settings?.countFontSize || state.countFontSize,
+             dhikrTextPosition: parsed.settings?.dhikrTextPosition || state.dhikrTextPosition,
              showTransliteration: parsed.settings?.showTransliteration !== undefined ? parsed.settings.showTransliteration : state.showTransliteration,
          }));
          
@@ -849,6 +857,7 @@ export const useTasbeehStore = create<TasbeehState>()(
         layout: state.layout,
         hadithSlideDuration: state.hadithSlideDuration,
         hadithSlidePosition: state.hadithSlidePosition,
+        dhikrTextPosition: state.dhikrTextPosition,
         verticalOffset: state.verticalOffset,
         dhikrVerticalOffset: state.dhikrVerticalOffset,
         counterVerticalOffset: state.counterVerticalOffset,

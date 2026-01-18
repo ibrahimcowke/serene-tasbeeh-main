@@ -61,6 +61,8 @@ export function SettingsView({ children }: SettingsViewProps) {
     hadithSlidePosition,
     setHadithSlideDuration,
     setHadithSlidePosition,
+    dhikrTextPosition,
+    setDhikrTextPosition,
     exportData,
     importData,
     clearAllData,
@@ -442,6 +444,65 @@ export function SettingsView({ children }: SettingsViewProps) {
               </TabsContent>
 
               <TabsContent value="general" className="space-y-6 mt-0">
+                {/* Dhikr Text Settings */}
+                <div className="space-y-1">
+                  <p className="text-xs text-muted-foreground uppercase tracking-wide mb-3">Dhikr Text</p>
+                  <div className="p-4 rounded-2xl bg-card">
+                    <div className="flex items-center justify-between mb-3">
+                      <p className="text-sm font-medium text-foreground">Position</p>
+                    </div>
+                    <div className="grid grid-cols-2 gap-2 mb-2">
+                      {[
+                        { id: 'top', label: '↑ Top' },
+                        { id: 'above-counter', label: '⇡ Above Counter' },
+                      ].map((pos) => (
+                        <button
+                          key={pos.id}
+                          onClick={() => setDhikrTextPosition(pos.id as any)}
+                          className={`
+                              py-2 px-2 rounded-lg text-xs font-medium border transition-colors
+                              ${dhikrTextPosition === pos.id
+                              ? 'bg-primary text-primary-foreground border-primary'
+                              : 'bg-background border-border hover:bg-muted'}
+                            `}
+                        >
+                          {pos.label}
+                        </button>
+                      ))}
+                    </div>
+                    <div className="grid grid-cols-2 gap-2 mb-2">
+                      {[
+                        { id: 'below-counter', label: '⇣ Below Counter' },
+                        { id: 'bottom', label: '↓ Bottom' },
+                      ].map((pos) => (
+                        <button
+                          key={pos.id}
+                          onClick={() => setDhikrTextPosition(pos.id as any)}
+                          className={`
+                              py-2 px-2 rounded-lg text-xs font-medium border transition-colors
+                              ${dhikrTextPosition === pos.id
+                              ? 'bg-primary text-primary-foreground border-primary'
+                              : 'bg-background border-border hover:bg-muted'}
+                            `}
+                        >
+                          {pos.label}
+                        </button>
+                      ))}
+                    </div>
+                    <button
+                      onClick={() => setDhikrTextPosition('hidden')}
+                      className={`
+                          w-full mt-2 py-2 px-3 rounded-lg text-xs font-medium border transition-colors
+                          ${dhikrTextPosition === 'hidden'
+                          ? 'bg-primary text-primary-foreground border-primary'
+                          : 'bg-background border-border hover:bg-muted'}
+                        `}
+                    >
+                      ✕ Hidden
+                    </button>
+                  </div>
+                </div>
+
                 {/* Hadith Slider Settings */}
                 <div className="space-y-1">
                   <p className="text-xs text-muted-foreground uppercase tracking-wide mb-3">Hadith Slider</p>

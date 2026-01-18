@@ -13,6 +13,9 @@ export default {
       },
     },
     extend: {
+      screens: {
+        'xs': '375px', // Extra small devices (older phones)
+      },
       fontFamily: {
         arabic: ['Amiri', 'serif'],
         sans: ['Inter', 'sans-serif'],
