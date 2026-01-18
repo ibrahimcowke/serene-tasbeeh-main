@@ -23,6 +23,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 interface SettingsViewProps {
   children: React.ReactNode;
@@ -172,11 +173,6 @@ export function SettingsView({ children }: SettingsViewProps) {
           <SheetTitle className="text-lg font-medium">Settings</SheetTitle>
         </SheetHeader>
 
-        import {Tabs, TabsContent, TabsList, TabsTrigger} from '@/components/ui/tabs';
-
-        // ... (keep existing imports)
-
-        // Inside SettingsView return statement:
         <div className="flex-1 overflow-hidden flex flex-col">
           <Tabs defaultValue="appearance" className="flex-1 flex flex-col h-full">
             <div className="px-6 pt-2 pb-4 shrink-0 bg-background/50 backdrop-blur-sm z-10">

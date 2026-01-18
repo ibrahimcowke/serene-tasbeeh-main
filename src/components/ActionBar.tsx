@@ -1,6 +1,6 @@
 import { useState, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { RotateCcw, Minus, BookOpen, Target, History, Settings, BarChart3, Trophy, Bell } from 'lucide-react';
+import { RotateCcw, Minus, BookOpen, Target, History, Settings, BarChart3, Trophy, Bell, LayoutGrid } from 'lucide-react';
 import { useTasbeehStore } from '@/store/tasbeehStore';
 import { DhikrSelector } from './DhikrSelector';
 import { TargetSelector } from './TargetSelector';
@@ -9,6 +9,7 @@ import { SettingsView } from './SettingsView';
 import { StatsView } from './StatsView';
 import { AchievementsView } from './AchievementsView';
 import { RemindersView } from './RemindersView';
+import { Drawer, DrawerContent, DrawerTrigger } from '@/components/ui/drawer';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -61,75 +62,152 @@ export function ActionBar() {
           </motion.button>
         </div>
 
-        {/* Secondary actions row */}
-        <div className="flex items-center gap-2 overflow-x-auto bg-card rounded-2xl p-2 scrollbar-hide snap-x">
+        {/* Mobile Navigation (Grid) */}
+        <div className="flex sm:hidden items-center justify-between gap-1 bg-card rounded-2xl p-2 px-4">
+          <DhikrSelector>
+            <motion.button whileTap={{ scale: 0.95 }} className="flex flex-col items-center gap-1 p-2 rounded-xl active:bg-secondary/50">
+              <BookOpen className="w-5 h-5 text-muted-foreground" />
+              <span className="text-[10px] text-muted-foreground font-medium">Dhikr</span>
+            </motion.button>
+          </DhikrSelector>
+
+          <TargetSelector>
+            <motion.button whileTap={{ scale: 0.95 }} className="flex flex-col items-center gap-1 p-2 rounded-xl active:bg-secondary/50">
+              <Target className="w-5 h-5 text-muted-foreground" />
+              <span className="text-[10px] text-muted-foreground font-medium">Target</span>
+            </motion.button>
+          </TargetSelector>
+
+          <Drawer>
+            <DrawerTrigger asChild>
+              <motion.button whileTap={{ scale: 0.95 }} className="flex flex-col items-center gap-1 p-2 rounded-xl active:bg-secondary/50">
+                <LayoutGrid className="w-5 h-5 text-muted-foreground" />
+                <span className="text-[10px] text-muted-foreground font-medium">Menu</span>
+              </motion.button>
+            </DrawerTrigger>
+            <DrawerContent className="bg-background/95 backdrop-blur-xl">
+              <div className="w-full max-w-sm mx-auto p-6">
+                <div className="grid grid-cols-4 gap-4 mb-4">
+                  <StatsView>
+                    <button className="flex flex-col items-center gap-2 p-3 rounded-2xl bg-secondary/30 hover:bg-secondary active:scale-95 transition-all">
+                      <div className="w-10 h-10 rounded-full bg-blue-500/10 flex items-center justify-center">
+                        <BarChart3 className="w-5 h-5 text-blue-500" />
+                      </div>
+                      <span className="text-xs font-medium">Stats</span>
+                    </button>
+                  </StatsView>
+
+                  <AchievementsView>
+                    <button className="flex flex-col items-center gap-2 p-3 rounded-2xl bg-secondary/30 hover:bg-secondary active:scale-95 transition-all">
+                      <div className="w-10 h-10 rounded-full bg-yellow-500/10 flex items-center justify-center">
+                        <Trophy className="w-5 h-5 text-yellow-500" />
+                      </div>
+                      <span className="text-xs font-medium">Awards</span>
+                    </button>
+                  </AchievementsView>
+
+                  <RemindersView>
+                    <button className="flex flex-col items-center gap-2 p-3 rounded-2xl bg-secondary/30 hover:bg-secondary active:scale-95 transition-all">
+                      <div className="w-10 h-10 rounded-full bg-purple-500/10 flex items-center justify-center">
+                        <Bell className="w-5 h-5 text-purple-500" />
+                      </div>
+                      <span className="text-xs font-medium">Alerts</span>
+                    </button>
+                  </RemindersView>
+
+                  <HistoryView>
+                    <button className="flex flex-col items-center gap-2 p-3 rounded-2xl bg-secondary/30 hover:bg-secondary active:scale-95 transition-all">
+                      <div className="w-10 h-10 rounded-full bg-green-500/10 flex items-center justify-center">
+                        <History className="w-5 h-5 text-green-500" />
+                      </div>
+                      <span className="text-xs font-medium">History</span>
+                    </button>
+                  </HistoryView>
+                </div>
+                <div className="text-center">
+                  <p className="text-xs text-muted-foreground/50">More features coming soon</p>
+                </div>
+              </div>
+            </DrawerContent>
+          </Drawer>
+
+          <SettingsView>
+            <motion.button whileTap={{ scale: 0.95 }} className="flex flex-col items-center gap-1 p-2 rounded-xl active:bg-secondary/50">
+              <Settings className="w-5 h-5 text-muted-foreground" />
+              <span className="text-[10px] text-muted-foreground font-medium">Settings</span>
+            </motion.button>
+          </SettingsView>
+        </div>
+
+        {/* Desktop Actions (Scrollable List) */}
+        <div className="hidden sm:flex items-center gap-2 overflow-x-auto bg-card rounded-2xl p-2 scrollbar-hide snap-x justify-center">
           <DhikrSelector>
             <motion.button
               whileTap={{ scale: 0.95 }}
-              className="flex-1 flex flex-col items-center py-2 sm:py-3 px-2 sm:px-4 rounded-xl hover:bg-secondary transition-colors min-w-[70px] snap-center"
+              className="flex-1 flex flex-col items-center py-3 px-4 rounded-xl hover:bg-secondary transition-colors min-w-[70px] snap-center hover:scale-105"
             >
-              <BookOpen className="w-4 h-4 sm:w-5 sm:h-5 text-muted-foreground mb-0.5 sm:mb-1" />
-              <span className="text-[10px] sm:text-xs text-muted-foreground truncate w-full text-center">Dhikr</span>
+              <BookOpen className="w-5 h-5 text-muted-foreground mb-1" />
+              <span className="text-xs text-muted-foreground font-medium">Dhikr</span>
             </motion.button>
           </DhikrSelector>
 
           <TargetSelector>
             <motion.button
               whileTap={{ scale: 0.95 }}
-              className="flex-1 flex flex-col items-center py-2 sm:py-3 px-2 sm:px-4 rounded-xl hover:bg-secondary transition-colors min-w-[70px] snap-center"
+              className="flex-1 flex flex-col items-center py-3 px-4 rounded-xl hover:bg-secondary transition-colors min-w-[70px] snap-center hover:scale-105"
             >
-              <Target className="w-4 h-4 sm:w-5 sm:h-5 text-muted-foreground mb-0.5 sm:mb-1" />
-              <span className="text-[10px] sm:text-xs text-muted-foreground truncate w-full text-center">Target</span>
+              <Target className="w-5 h-5 text-muted-foreground mb-1" />
+              <span className="text-xs text-muted-foreground font-medium">Target</span>
             </motion.button>
           </TargetSelector>
 
           <StatsView>
             <motion.button
               whileTap={{ scale: 0.95 }}
-              className="flex-1 flex flex-col items-center py-2 sm:py-3 px-2 sm:px-4 rounded-xl hover:bg-secondary transition-colors min-w-[70px] snap-center"
+              className="flex-1 flex flex-col items-center py-3 px-4 rounded-xl hover:bg-secondary transition-colors min-w-[70px] snap-center hover:scale-105"
             >
-              <BarChart3 className="w-4 h-4 sm:w-5 sm:h-5 text-muted-foreground mb-0.5 sm:mb-1" />
-              <span className="text-[10px] sm:text-xs text-muted-foreground truncate w-full text-center">Stats</span>
+              <BarChart3 className="w-5 h-5 text-muted-foreground mb-1" />
+              <span className="text-xs text-muted-foreground font-medium">Stats</span>
             </motion.button>
           </StatsView>
 
           <AchievementsView>
             <motion.button
               whileTap={{ scale: 0.95 }}
-              className="flex-1 flex flex-col items-center py-2 sm:py-3 px-2 sm:px-4 rounded-xl hover:bg-secondary transition-colors min-w-[70px] snap-center"
+              className="flex-1 flex flex-col items-center py-3 px-4 rounded-xl hover:bg-secondary transition-colors min-w-[70px] snap-center hover:scale-105"
             >
-              <Trophy className="w-4 h-4 sm:w-5 sm:h-5 text-muted-foreground mb-0.5 sm:mb-1" />
-              <span className="text-[10px] sm:text-xs text-muted-foreground truncate w-full text-center">Awards</span>
+              <Trophy className="w-5 h-5 text-muted-foreground mb-1" />
+              <span className="text-xs text-muted-foreground font-medium">Awards</span>
             </motion.button>
           </AchievementsView>
 
           <RemindersView>
             <motion.button
               whileTap={{ scale: 0.95 }}
-              className="flex-1 flex flex-col items-center py-2 sm:py-3 px-2 sm:px-4 rounded-xl hover:bg-secondary transition-colors min-w-[70px] snap-center"
+              className="flex-1 flex flex-col items-center py-3 px-4 rounded-xl hover:bg-secondary transition-colors min-w-[70px] snap-center hover:scale-105"
             >
-              <Bell className="w-4 h-4 sm:w-5 sm:h-5 text-muted-foreground mb-0.5 sm:mb-1" />
-              <span className="text-[10px] sm:text-xs text-muted-foreground truncate w-full text-center">Alerts</span>
+              <Bell className="w-5 h-5 text-muted-foreground mb-1" />
+              <span className="text-xs text-muted-foreground font-medium">Alerts</span>
             </motion.button>
           </RemindersView>
 
           <HistoryView>
             <motion.button
               whileTap={{ scale: 0.95 }}
-              className="flex-1 flex flex-col items-center py-2 sm:py-3 px-2 sm:px-4 rounded-xl hover:bg-secondary transition-colors min-w-[70px] snap-center"
+              className="flex-1 flex flex-col items-center py-3 px-4 rounded-xl hover:bg-secondary transition-colors min-w-[70px] snap-center hover:scale-105"
             >
-              <History className="w-4 h-4 sm:w-5 sm:h-5 text-muted-foreground mb-0.5 sm:mb-1" />
-              <span className="text-[10px] sm:text-xs text-muted-foreground truncate w-full text-center">History</span>
+              <History className="w-5 h-5 text-muted-foreground mb-1" />
+              <span className="text-xs text-muted-foreground font-medium">History</span>
             </motion.button>
           </HistoryView>
 
           <SettingsView>
             <motion.button
               whileTap={{ scale: 0.95 }}
-              className="flex-1 flex flex-col items-center py-2 sm:py-3 px-2 sm:px-4 rounded-xl hover:bg-secondary transition-colors min-w-[70px] snap-center"
+              className="flex-1 flex flex-col items-center py-3 px-4 rounded-xl hover:bg-secondary transition-colors min-w-[70px] snap-center hover:scale-105"
             >
-              <Settings className="w-4 h-4 sm:w-5 sm:h-5 text-muted-foreground mb-0.5 sm:mb-1" />
-              <span className="text-[10px] sm:text-xs text-muted-foreground truncate w-full text-center">Settings</span>
+              <Settings className="w-5 h-5 text-muted-foreground mb-1" />
+              <span className="text-xs text-muted-foreground font-medium">Settings</span>
             </motion.button>
           </SettingsView>
         </div>

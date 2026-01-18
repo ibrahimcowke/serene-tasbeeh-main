@@ -719,42 +719,63 @@ export const useTasbeehStore = create<TasbeehState>()(
       setCountFontSize: (scale) => set({ countFontSize: scale }),
 
       syncToCloud: async () => {
-        const user = await getCurrentUser();
-        if (!user) return false;
+        try {
+          const user = await getCurrentUser();
+          if (!user) {
+            console.warn('Cannot sync: No user logged in');
+            return false;
+          }
 
-        const state = get();
-        const dataToSave = {
-           dailyRecords: state.dailyRecords,
-           totalAllTime: state.totalAllTime,
-           customDhikrs: state.customDhikrs,
-           streakDays: state.streakDays,
-           lastActiveDate: state.lastActiveDate,
-           longestStreak: state.longestStreak,
-           settings: {
-               counterShape: state.counterShape,
-               target: state.targetCount,
-               themeSettings: state.themeSettings,
-               showTransliteration: state.showTransliteration,
-               hadithSlideDuration: state.hadithSlideDuration,
-               hadithSlidePosition: state.hadithSlidePosition,
-               verticalOffset: state.verticalOffset,
-               dhikrVerticalOffset: state.dhikrVerticalOffset,
-               counterVerticalOffset: state.counterVerticalOffset,
-               counterScale: state.counterScale,
-               countFontSize: state.countFontSize,
-               theme: state.theme,
-           }
-        };
+          // Validate user ID is a proper UUID
+          const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+          if (!uuidRegex.test(user.id)) {
+            console.error('Invalid user ID format:', user.id);
+            return false;
+          }
 
-        const { error } = await supabase
-          .from('profiles')
-          .upsert({ 
-            id: user.id, 
-            tasbeeh_data: dataToSave,
-            updated_at: new Date().toISOString()
-          });
+          const state = get();
+          const dataToSave = {
+             dailyRecords: state.dailyRecords,
+             totalAllTime: state.totalAllTime,
+             customDhikrs: state.customDhikrs,
+             streakDays: state.streakDays,
+             lastActiveDate: state.lastActiveDate,
+             longestStreak: state.longestStreak,
+             settings: {
+                 counterShape: state.counterShape,
+                 target: state.targetCount,
+                 themeSettings: state.themeSettings,
+                 showTransliteration: state.showTransliteration,
+                 hadithSlideDuration: state.hadithSlideDuration,
+                 hadithSlidePosition: state.hadithSlidePosition,
+                 verticalOffset: state.verticalOffset,
+                 dhikrVerticalOffset: state.dhikrVerticalOffset,
+                 counterVerticalOffset: state.counterVerticalOffset,
+                 counterScale: state.counterScale,
+                 countFontSize: state.countFontSize,
+                 theme: state.theme,
+             }
+          };
+
+          const { error } = await supabase
+            .from('profiles')
+            .upsert({ 
+              id: user.id, 
+              tasbeeh_data: dataToSave,
+              updated_at: new Date().toISOString()
+            });
+            
+          if (error) {
+            console.error('Sync to cloud failed:', error);
+            return false;
+          }
           
-        return !error;
+          console.log('✅ Successfully synced to cloud');
+          return true;
+        } catch (err) {
+          console.error('❌ Sync error:', err);
+          return false;
+        }
       },
 
       syncFromCloud: async () => {
