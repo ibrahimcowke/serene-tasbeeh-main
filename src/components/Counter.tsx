@@ -265,6 +265,37 @@ export function Counter() {
       {/* Main Content Area: Counter + Hadith Side Panel */}
       <div className="relative flex flex-col items-center justify-center w-full max-w-7xl mx-auto z-10">
 
+        {/* Mobile controls (Minus & Reset) placed above counter */}
+        <div className="flex items-center justify-center gap-8 mb-4 lg:hidden relative z-20">
+          <motion.button
+            whileTap={{ scale: 0.95 }}
+            onClick={(e) => {
+              e.stopPropagation();
+              // We need to access decrement from store, but it's not destructured. 
+              // Let's rely on the store hook call at top of file.
+              useTasbeehStore.getState().decrement();
+            }}
+            disabled={currentCount === 0}
+            className="w-12 h-12 rounded-full bg-secondary/50 backdrop-blur-sm flex items-center justify-center disabled:opacity-30 hover:bg-secondary transition-colors border border-white/5"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14" /></svg>
+          </motion.button>
+
+          <motion.button
+            whileTap={{ scale: 0.95 }}
+            onClick={(e) => {
+              e.stopPropagation();
+              if (window.confirm('Reset counter?')) {
+                useTasbeehStore.getState().reset();
+              }
+            }}
+            disabled={currentCount === 0}
+            className="w-12 h-12 rounded-full bg-secondary/50 backdrop-blur-sm flex items-center justify-center disabled:opacity-30 hover:bg-secondary transition-colors border border-white/5"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 12" /><path d="M3 3v9h9" /></svg>
+          </motion.button>
+        </div>
+
         {/* Counter visualization */}
         <motion.div
           layout

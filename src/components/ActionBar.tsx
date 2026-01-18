@@ -36,8 +36,8 @@ export function ActionBar() {
         animate={{ opacity: 1, y: 0 }}
         className="px-4 sm:px-6 md:px-8 pb-3 sm:pb-4 safe-area-bottom w-full max-w-4xl mx-auto"
       >
-        {/* Primary actions row */}
-        <div className="flex items-center justify-center gap-4 mb-4">
+        {/* Primary actions row - Hidden on mobile, shown on desktop */}
+        <div className="hidden lg:flex items-center justify-center gap-4 mb-4">
           {/* Undo button */}
           <motion.button
             whileTap={{ scale: 0.95 }}

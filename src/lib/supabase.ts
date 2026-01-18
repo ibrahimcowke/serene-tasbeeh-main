@@ -7,8 +7,21 @@ const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || 'placeholder-k
 export const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
 export async function signInWithGoogle() {
+  if (supabaseUrl === 'https://placeholder.supabase.co') {
+    console.error('Supabase credentials missing! Please add VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY to your .env file.');
+    alert('Cloud features require setup. Please configure Supabase keys in your environment variables.');
+    return { data: null, error: new Error('Missing credentials') };
+  }
+
   const { data, error } = await supabase.auth.signInWithOAuth({
     provider: 'google',
+    options: {
+      redirectTo: `${window.location.origin}/`,
+      queryParams: {
+        access_type: 'offline',
+        prompt: 'consent',
+      },
+    },
   });
   return { data, error };
 }
