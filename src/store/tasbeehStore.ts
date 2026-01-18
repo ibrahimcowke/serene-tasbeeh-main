@@ -117,6 +117,8 @@ interface TasbeehState {
   setHadithSlideDuration: (duration: number) => void;
   setHadithSlidePosition: (position: 'top-right' | 'top-left' | 'bottom-right' | 'bottom-left' | 'right' | 'bottom' | 'hidden') => void;
   setDailyGoal: (goal: number) => void;
+  verticalOffset: number;
+  setVerticalOffset: (offset: number) => void;
 }
 
 export type ThemeSettings = {
@@ -357,6 +359,7 @@ export const useTasbeehStore = create<TasbeehState>()(
       layout: 'default',
       hadithSlideDuration: 15, // 15 seconds default
       hadithSlidePosition: 'right', // default position
+      verticalOffset: 0,
       
       dailyRecords: [],
       totalAllTime: 0,
@@ -697,6 +700,7 @@ export const useTasbeehStore = create<TasbeehState>()(
       setHadithSlideDuration: (duration) => set({ hadithSlideDuration: duration }),
       setHadithSlidePosition: (position) => set({ hadithSlidePosition: position }),
       setDailyGoal: (goal) => set({ dailyGoal: goal }),
+      setVerticalOffset: (offset) => set({ verticalOffset: offset }),
 
       syncToCloud: async () => {
         const user = await getCurrentUser();
@@ -717,6 +721,7 @@ export const useTasbeehStore = create<TasbeehState>()(
                showTransliteration: state.showTransliteration,
                hadithSlideDuration: state.hadithSlideDuration,
                hadithSlidePosition: state.hadithSlidePosition,
+               verticalOffset: state.verticalOffset,
                theme: state.theme,
            }
         };
@@ -756,6 +761,7 @@ export const useTasbeehStore = create<TasbeehState>()(
              themeSettings: parsed.settings?.themeSettings || state.themeSettings,
              hadithSlideDuration: parsed.settings?.hadithSlideDuration || state.hadithSlideDuration,
              hadithSlidePosition: parsed.settings?.hadithSlidePosition || state.hadithSlidePosition,
+             verticalOffset: parsed.settings?.verticalOffset || state.verticalOffset,
              showTransliteration: parsed.settings?.showTransliteration !== undefined ? parsed.settings.showTransliteration : state.showTransliteration,
          }));
          
@@ -798,6 +804,7 @@ export const useTasbeehStore = create<TasbeehState>()(
         layout: state.layout,
         hadithSlideDuration: state.hadithSlideDuration,
         hadithSlidePosition: state.hadithSlidePosition,
+        verticalOffset: state.verticalOffset,
         dailyRecords: state.dailyRecords,
         totalAllTime: state.totalAllTime,
         customDhikrs: state.customDhikrs,

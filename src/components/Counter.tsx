@@ -19,6 +19,7 @@ export function Counter() {
     layout = 'default',
     counterShape = 'minimal', // Default to minimal if undefined in persisted state
     hadithSlidePosition = 'right',
+    verticalOffset = 0,
   } = useTasbeehStore();
 
   // Ensure we have the latest data (e.g. hadiths) even if state is persisted
@@ -127,7 +128,9 @@ export function Counter() {
   return (
     <div className={`flex flex-col items-center flex-1 px-4 sm:px-6 md:px-8 lg:px-12 relative w-full min-h-full transition-all duration-500 py-6
       ${layout === 'ergonomic' ? 'justify-end pb-16' : 'justify-center'}
-    `}>
+    `}
+      style={{ transform: `translateY(${verticalOffset}px)` }}
+    >
       {/* Session mode indicator */}
       <AnimatePresence>
         {sessionMode.type === 'tasbih100' && (
@@ -349,7 +352,7 @@ export function Counter() {
           )}
 
           {counterShape === 'classic' && (
-            <div className="absolute inset-x-0 -top-8 bottom-0 bg-secondary/30 rounded-3xl border-4 border-muted flex items-center justify-center -z-10 transform scale-110 flex-col">
+            <div className="absolute inset-x-0 -top-4 bottom-0 bg-secondary/30 rounded-3xl border-4 border-muted flex items-center justify-center -z-10 flex-col">
               {/* Decorative screws */}
               <div className="absolute top-3 left-3 w-3 h-3 rounded-full bg-muted-foreground/30" />
               <div className="absolute top-3 right-3 w-3 h-3 rounded-full bg-muted-foreground/30" />

@@ -59,6 +59,8 @@ export function SettingsView({ children }: SettingsViewProps) {
     resetSettings,
     syncToCloud,
     syncFromCloud,
+    verticalOffset,
+    setVerticalOffset,
   } = useTasbeehStore();
 
   const [user, setUser] = useState<any>(null);
