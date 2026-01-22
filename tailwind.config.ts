@@ -17,7 +17,7 @@ export default {
         'xs': '375px', // Extra small devices (older phones)
       },
       fontFamily: {
-        arabic: ['Amiri', 'serif'],
+        arabic: ['Madani', 'Uthmanic', 'IndoPak', 'Amiri', 'serif'],
         sans: ['Inter', 'sans-serif'],
       },
       colors: {
