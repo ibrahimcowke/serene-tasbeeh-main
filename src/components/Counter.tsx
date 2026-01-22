@@ -82,7 +82,7 @@ export function Counter() {
   const renderDhikrText = () => {
     if (dhikrTextPosition === 'hidden') return null;
     return (
-      <div className="text-center mt-3 sm:mt-6 mb-2 sm:mb-4 px-3 sm:px-0 relative z-20"
+      <div className="text-center mt-1 xs:mt-3 sm:mt-6 mb-2 sm:mb-4 px-3 sm:px-0 relative z-20"
         style={{ transform: `translateY(${dhikrVerticalOffset}px)` }}
       >
         <AnimatePresence mode="wait">
@@ -187,7 +187,7 @@ export function Counter() {
 
   return (
     <div className={`flex flex-col items-center flex-1 px-4 sm:px-6 md:px-8 lg:px-12 relative w-full min-h-full transition-all duration-500 py-6
-      ${layout === 'ergonomic' ? 'justify-end pb-16' : 'justify-center'}
+      ${layout === 'ergonomic' ? 'justify-end pb-16' : ''}
     `}
       style={{ transform: `translateY(${verticalOffset}px)` }}
     >
@@ -264,7 +264,7 @@ export function Counter() {
       {/* Dhikr text removed from here - moved below counter */}
 
       {/* Main Content Area: Counter + Hadith Side Panel */}
-      <div className="relative flex flex-col items-center justify-center w-full max-w-7xl mx-auto z-10">
+      <div className={`relative flex flex-col items-center justify-center w-full max-w-7xl mx-auto z-10 ${layout !== 'ergonomic' ? 'my-auto' : ''}`}>
 
         {/* Dhikr Text - Top Position */}
         {dhikrTextPosition === 'top' && renderDhikrText()}
@@ -309,7 +309,7 @@ export function Counter() {
           className={`relative flex items-center justify-center
           ${layout === 'focus' ? 'scale-100 sm:scale-110' : ''}
           ${layout === 'ergonomic' ? 'scale-90 sm:scale-100 translate-y-2 sm:translate-y-4' : ''}
-          w-[65vw] h-[65vw] xs:w-[70vw] xs:h-[70vw] sm:w-[300px] sm:h-[300px] max-w-[280px] max-h-[280px] sm:max-w-[350px] sm:max-h-[350px]
+          w-[min(70vw,55vh)] h-[min(70vw,55vh)] sm:w-[300px] sm:h-[300px] max-w-[300px] max-h-[300px]
         `}
           style={{
             transform: `translateY(${counterVerticalOffset}px) scale(${counterScale})`

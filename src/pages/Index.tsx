@@ -7,7 +7,7 @@ const Index = () => {
     <ThemeProvider>
       <div className="h-[100dvh] w-full bg-background flex flex-col overflow-hidden">
         {/* Main counter area - wrapped to handle overflow */}
-        <div className="flex-1 min-h-0 w-full flex flex-col overflow-hidden safe-area-top">
+        <div className="flex-1 min-h-0 w-full flex flex-col overflow-y-auto safe-area-top">
           <Counter />
         </div>
 
