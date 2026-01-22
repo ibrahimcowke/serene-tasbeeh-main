@@ -131,6 +131,10 @@ interface TasbeehState {
   countFontSize: number;
   setCountFontSize: (scale: number) => void;
   setDhikrTextPosition: (position: 'top' | 'above-counter' | 'below-counter' | 'bottom' | 'hidden') => void;
+  
+  // Layout Ordering
+  layoutOrder: string[]; 
+  setLayoutOrder: (order: string[]) => void;
 }
 
 export type ThemeSettings = {
@@ -372,6 +376,7 @@ export const useTasbeehStore = create<TasbeehState>()(
       hadithSlideDuration: 15, // 15 seconds default
       hadithSlidePosition: 'right', // default position
       dhikrTextPosition: 'below-counter', // Default position
+      layoutOrder: ['dhikr', 'counter', 'stats', 'hadith'], // Default order
       verticalOffset: 0,
       dhikrVerticalOffset: 0,
       counterVerticalOffset: 0,
@@ -658,6 +663,7 @@ export const useTasbeehStore = create<TasbeehState>()(
              theme: parsed.settings?.theme || state.theme,
              counterShape: parsed.settings?.counterShape || state.counterShape,
              layout: parsed.settings?.layout || state.layout,
+             layoutOrder: parsed.settings?.layoutOrder || state.layoutOrder,
              themeSettings: parsed.settings?.themeSettings || state.themeSettings
           }));
           return true;
@@ -723,6 +729,7 @@ export const useTasbeehStore = create<TasbeehState>()(
       setCounterScale: (scale) => set({ counterScale: scale }),
       setCountFontSize: (scale) => set({ countFontSize: scale }),
       setDhikrTextPosition: (position) => set({ dhikrTextPosition: position }),
+      setLayoutOrder: (order) => set({ layoutOrder: order }),
 
       syncToCloud: async () => {
         try {
@@ -760,6 +767,7 @@ export const useTasbeehStore = create<TasbeehState>()(
                  counterScale: state.counterScale,
                  countFontSize: state.countFontSize,
                  dhikrTextPosition: state.dhikrTextPosition,
+                 layoutOrder: state.layoutOrder,
                  theme: state.theme,
              }
           };
