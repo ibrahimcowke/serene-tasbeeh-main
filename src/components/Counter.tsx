@@ -163,7 +163,7 @@ export function Counter() {
             <motion.p
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              className="text-[10px] xs:text-xs text-muted-foreground"
+              className="text-[10px] xs:text-xs text-muted-foreground text-center"
             >
               Set {sessionMode.currentPhase + 1} of 10 • {Math.floor((sessionMode.currentPhase * 100) + currentCount)}/1000
             </motion.p>
