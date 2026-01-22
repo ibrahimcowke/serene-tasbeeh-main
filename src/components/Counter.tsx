@@ -282,7 +282,7 @@ export function Counter() {
           className={`relative flex items-center justify-center
           ${layout === 'focus' ? 'scale-100 sm:scale-110' : ''}
           ${layout === 'ergonomic' ? 'scale-90 sm:scale-100 translate-y-2 sm:translate-y-4' : ''}
-          w-[min(70vw,55vh)] h-[min(70vw,55vh)] sm:w-[300px] sm:h-[300px] max-w-[300px] max-h-[300px]
+          w-[min(80vw,60vh)] h-[min(80vw,60vh)] sm:w-[300px] sm:h-[300px] max-w-[320px] max-h-[320px]
         `}
           style={{
             transform: `translateY(${counterVerticalOffset}px) scale(${counterScale})`
@@ -291,7 +291,7 @@ export function Counter() {
           {/* Encircled BrogressBar - Wraps the counter button */}
           <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-0">
             {counterShape === 'classic' && (
-              <svg width="280" height="280" viewBox="0 0 280 280" className="-rotate-90">
+              <svg width="100%" height="100%" viewBox="0 0 280 280" className="-rotate-90">
                 <rect
                   x="10" y="10" width="260" height="260" rx="24"
                   fill="none"
@@ -315,7 +315,7 @@ export function Counter() {
             )}
 
             {counterShape === 'hexagon' && (
-              <svg width="290" height="290" viewBox="0 0 100 100" className="transform -rotate-90">
+              <svg width="100%" height="100%" viewBox="0 0 100 100" className="transform -rotate-90">
                 <path
                   d="M50 2 L95 28 V72 L50 98 L5 72 V28 Z"
                   fill="none"
@@ -339,7 +339,7 @@ export function Counter() {
             )}
 
             {['minimal', 'beads', 'flower', 'waveform', 'orb'].includes(counterShape) && (
-              <svg width="290" height="290" className="-rotate-90">
+              <svg width="100%" height="100%" viewBox="0 0 290 290" className="-rotate-90">
                 <circle
                   cx="145"
                   cy="145"
