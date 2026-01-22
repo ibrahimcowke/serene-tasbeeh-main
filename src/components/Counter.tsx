@@ -111,24 +111,63 @@ export function Counter() {
           )}
         </AnimatePresence>
 
-        {/* Phase indicator for 100 session */}
+        {/* Phase indicator & Progress for 100 session */}
         {sessionMode.type === 'tasbih100' && (
-          <motion.p
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            className="text-[10px] xs:text-xs text-primary mt-2 sm:mt-3 mb-1"
-          >
-            Phase {sessionMode.currentPhase + 1} of 4 • {sessionMode.currentPhase === 3 ? '1' : '33'} counts
-          </motion.p>
+          <div className="flex flex-col items-center mt-3 sm:mt-4 mb-1">
+            <div className="flex justify-center gap-2 mb-2">
+              {[0, 1, 2, 3].map((phase) => (
+                <div
+                  key={phase}
+                  className={`w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full transition-all duration-300 ${phase < sessionMode.currentPhase
+                    ? 'bg-primary'
+                    : phase === sessionMode.currentPhase
+                      ? 'bg-primary animate-pulse scale-125'
+                      : 'bg-muted'
+                    }`}
+                />
+              ))}
+            </div>
+            {totalProgress !== null && (
+              <div className="w-32 xs:w-40 sm:w-48 mx-auto h-1 bg-muted rounded-full overflow-hidden mb-2">
+                <motion.div
+                  className="h-full bg-primary rounded-full"
+                  initial={{ width: 0 }}
+                  animate={{ width: `${totalProgress}%` }}
+                  transition={{ duration: 0.3 }}
+                />
+              </div>
+            )}
+            <motion.p
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="text-[10px] xs:text-xs text-muted-foreground"
+            >
+              Phase {sessionMode.currentPhase + 1} of 4 • {sessionMode.currentPhase === 3 ? '1' : '33'} counts
+            </motion.p>
+          </div>
         )}
+
+        {/* Phase indicator & Progress for 1000 session */}
         {sessionMode.type === 'tasbih1000' && (
-          <motion.p
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            className="text-[10px] xs:text-xs text-primary mt-2 sm:mt-3 mb-1"
-          >
-            Phase {sessionMode.currentPhase + 1} of 10
-          </motion.p>
+          <div className="flex flex-col items-center mt-3 sm:mt-4 mb-1">
+            {totalProgress !== null && (
+              <div className="w-32 xs:w-40 sm:w-48 mx-auto h-1 bg-muted rounded-full overflow-hidden mb-2">
+                <motion.div
+                  className="h-full bg-primary rounded-full"
+                  initial={{ width: 0 }}
+                  animate={{ width: `${totalProgress}%` }}
+                  transition={{ duration: 0.3 }}
+                />
+              </div>
+            )}
+            <motion.p
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="text-[10px] xs:text-xs text-muted-foreground"
+            >
+              Set {sessionMode.currentPhase + 1} of 10 • {Math.floor((sessionMode.currentPhase * 100) + currentCount)}/1000
+            </motion.p>
+          </div>
         )}
       </div>
     )
@@ -191,74 +230,8 @@ export function Counter() {
     `}
       style={{ transform: `translateY(${verticalOffset}px)` }}
     >
-      {/* Session mode indicator */}
       <AnimatePresence>
-        {sessionMode.type === 'tasbih100' && (
-          <motion.div
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            className={`
-              ${layout === 'default' ? 'relative w-full mb-20' : 'absolute left-0 right-0'}
-              ${layout === 'focus' ? 'top-2' : ''}
-              ${layout === 'ergonomic' ? 'top-4' : ''}
-            `}
-          >
-            <div className="flex justify-center gap-2 mb-2">
-              {[0, 1, 2, 3].map((phase) => (
-                <div
-                  key={phase}
-                  className={`w-2 h-2 rounded-full transition-all duration-300 ${phase < sessionMode.currentPhase
-                    ? 'bg-primary'
-                    : phase === sessionMode.currentPhase
-                      ? 'bg-primary animate-pulse'
-                      : 'bg-muted'
-                    }`}
-                />
-              ))}
-            </div>
-            {totalProgress !== null && (
-              <div className="w-48 mx-auto h-1 bg-muted rounded-full overflow-hidden">
-                <motion.div
-                  className="h-full bg-primary rounded-full"
-                  initial={{ width: 0 }}
-                  animate={{ width: `${totalProgress}%` }}
-                  transition={{ duration: 0.3 }}
-                />
-              </div>
-            )}
-          </motion.div>
-        )}
-
-        {sessionMode.type === 'tasbih1000' && (
-          <motion.div
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            className={`
-              ${layout === 'default' ? 'relative w-full mb-20' : 'absolute left-0 right-0'}
-              ${layout === 'focus' ? 'top-2' : ''}
-              ${layout === 'ergonomic' ? 'top-4' : ''}
-            `}
-          >
-            <div className="flex justify-center items-center gap-2 mb-2">
-              <span className="text-xs text-muted-foreground font-medium">Set {sessionMode.currentPhase + 1} of 10</span>
-            </div>
-            {totalProgress !== null && (
-              <div className="w-48 mx-auto h-1 bg-muted rounded-full overflow-hidden">
-                <motion.div
-                  className="h-full bg-primary rounded-full"
-                  initial={{ width: 0 }}
-                  animate={{ width: `${totalProgress}%` }}
-                  transition={{ duration: 0.3 }}
-                />
-              </div>
-            )}
-            <p className="text-[10px] text-center text-muted-foreground mt-1">
-              {Math.floor((sessionMode.currentPhase * 100) + currentCount)} / 1000
-            </p>
-          </motion.div>
-        )}
+        {/* Session mode indicators moved to renderDhikrText to be grouped with Dhikr text */}
       </AnimatePresence>
 
       {/* Dhikr text removed from here - moved below counter */}
