@@ -238,11 +238,12 @@ export function SettingsView({ children }: SettingsViewProps) {
                       { id: 'waveform', label: 'Wave', icon: '〰' },
                       { id: 'hexagon', label: 'Hexagon', icon: '⬡' },
                       { id: 'orb', label: 'Orb', icon: '●' },
+                      { id: 'digital', label: 'Premium', icon: '✨' },
                     ].map((style) => (
                       <button
                         key={style.id}
                         onClick={() => {
-                          setCounterShape(style.id as 'minimal' | 'classic' | 'beads' | 'flower' | 'waveform' | 'hexagon' | 'orb');
+                          setCounterShape(style.id as any);
                           setOpen(false);
                         }}
                         className={`

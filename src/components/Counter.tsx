@@ -323,126 +323,128 @@ export function Counter() {
   };
 
   return (
-    <div className={`flex flex-col items-center flex-1 px-4 sm:px-6 md:px-8 lg:px-12 relative w-full min-h-full transition-all duration-500 py-6
+    <>
+      <div className={`flex flex-col items-center flex-1 px-4 sm:px-6 md:px-8 lg:px-12 relative w-full min-h-full transition-all duration-500 py-6
       ${layout === 'ergonomic' ? 'justify-end pb-16' : ''}
     `}
-      style={{ transform: `translateY(${verticalOffset}px)` }}
-    >
-      <button
-        onClick={() => setIsEditingLayout(!isEditingLayout)}
-        className={`absolute top-4 right-4 z-50 p-2 rounded-full backdrop-blur-md transition-all duration-300 ${isEditingLayout ? 'bg-primary text-primary-foreground shadow-lg scale-110' : 'bg-secondary/30 text-muted-foreground hover:bg-secondary/50'}`}
-        title="Edit Layout"
+        style={{ transform: `translateY(${verticalOffset}px)` }}
       >
-        {isEditingLayout ? (
-          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z" /><polyline points="17 21 17 13 7 13 7 21" /><polyline points="7 3 7 8 15 8" /></svg>
-        ) : (
-          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" /><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" /></svg>
-        )}
-      </button>
+        <button
+          onClick={() => setIsEditingLayout(!isEditingLayout)}
+          className={`absolute top-4 right-4 z-50 p-2 rounded-full backdrop-blur-md transition-all duration-300 ${isEditingLayout ? 'bg-primary text-primary-foreground shadow-lg scale-110' : 'bg-secondary/30 text-muted-foreground hover:bg-secondary/50'}`}
+          title="Edit Layout"
+        >
+          {isEditingLayout ? (
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z" /><polyline points="17 21 17 13 7 13 7 21" /><polyline points="7 3 7 8 15 8" /></svg>
+          ) : (
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" /><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" /></svg>
+          )}
+        </button>
 
-      <AnimatePresence>
-        {/* Session mode indicators moved to renderDhikrText to be grouped with Dhikr text */}
-      </AnimatePresence>
+        <AnimatePresence>
+          {/* Session mode indicators moved to renderDhikrText to be grouped with Dhikr text */}
+        </AnimatePresence>
 
-      <div className={`relative flex flex-col items-center justify-center w-full max-w-7xl mx-auto z-10 ${layout !== 'ergonomic' ? 'my-auto' : ''}`}>
+        <div className={`relative flex flex-col items-center justify-center w-full max-w-7xl mx-auto z-10 ${layout !== 'ergonomic' ? 'my-auto' : ''}`}>
 
-        <Reorder.Group axis="y" values={layoutOrder || ['dhikr', 'counter', 'stats', 'hadith']} onReorder={setLayoutOrder} className="flex flex-col items-center w-full">
-          {(layoutOrder || ['dhikr', 'counter', 'stats', 'hadith']).map(item => (
-            <Reorder.Item key={item} value={item} dragListener={isEditingLayout} className={`w-full flex justify-center touch-none ${isEditingLayout ? 'cursor-grab active:cursor-grabbing border-2 border-dashed border-primary/30 rounded-xl p-4 my-2 hover:bg-primary/5 relative bg-background/50 backdrop-blur-sm' : ''}`}>
-              {isEditingLayout && (
-                <div className="absolute top-2 right-2 text-muted-foreground pointer-events-none">
-                  <svg width="16" height="16" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-4 h-4"><path d="M5.5 3C5.5 3.55228 5.05228 4 4.5 4C3.94772 4 3.5 3.55228 3.5 3C3.5 2.44772 3.94772 2 4.5 2C5.05228 2 5.5 2.44772 5.5 3ZM8.5 3C8.5 3.55228 8.05228 4 7.5 4C6.94772 4 6.5 3.55228 6.5 3C6.5 2.44772 6.94772 2 7.5 2C8.05228 2 8.5 2.44772 8.5 3ZM11.5 3C11.5 3.55228 11.0523 4 10.5 4C9.94772 4 9.5 3.55228 9.5 3C9.5 2.44772 9.94772 2 10.5 2C11.0523 2 11.5 2.44772 11.5 3ZM5.5 7.5C5.5 8.05228 5.05228 8.5 4.5 8.5C3.94772 8.5 3.5 8.05228 3.5 7.5C3.5 6.94772 3.94772 6.5 4.5 6.5C5.05228 6.5 5.5 6.94772 5.5 7.5ZM8.5 7.5C8.5 8.05228 8.05228 8.5 7.5 8.5C6.94772 8.5 6.5 8.05228 6.5 7.5C6.5 6.94772 6.94772 6.5 7.5 6.5C8.05228 6.5 8.5 6.94772 8.5 7.5ZM11.5 7.5C11.5 8.05228 11.0523 8.5 10.5 8.5C9.94772 8.5 9.5 8.05228 9.5 7.5C9.5 6.94772 9.94772 6.5 10.5 6.5C11.0523 6.5 11.5 6.94772 11.5 7.5ZM5.5 12C5.5 12.5523 5.05228 13 4.5 13C3.94772 13 3.5 12.5523 3.5 12C3.5 11.4477 3.94772 11 4.5 11C5.05228 11 5.5 11.4477 5.5 12ZM8.5 12C8.5 12.5523 8.05228 13 7.5 13C6.94772 13 6.5 12.5523 6.5 12C6.5 11.4477 6.94772 11 7.5 11C8.05228 11 8.5 11.4477 8.5 12ZM11.5 12C11.5 12.5523 11.0523 13 10.5 13C9.94772 13 9.5 12.5523 9.5 12C9.5 11.4477 9.94772 11 10.5 11C11.0523 11 11.5 11.4477 11.5 12Z" fill="currentColor" fillRule="evenodd" clipRule="evenodd"></path></svg>
-                </div>
-              )}
-              {renderSection(item)}
-            </Reorder.Item>
-          ))}
-        </Reorder.Group>
+          <Reorder.Group axis="y" values={layoutOrder || ['dhikr', 'counter', 'stats', 'hadith']} onReorder={setLayoutOrder} className="flex flex-col items-center w-full">
+            {(layoutOrder || ['dhikr', 'counter', 'stats', 'hadith']).map(item => (
+              <Reorder.Item key={item} value={item} dragListener={isEditingLayout} className={`w-full flex justify-center touch-none ${isEditingLayout ? 'cursor-grab active:cursor-grabbing border-2 border-dashed border-primary/30 rounded-xl p-4 my-2 hover:bg-primary/5 relative bg-background/50 backdrop-blur-sm' : ''}`}>
+                {isEditingLayout && (
+                  <div className="absolute top-2 right-2 text-muted-foreground pointer-events-none">
+                    <svg width="16" height="16" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-4 h-4"><path d="M5.5 3C5.5 3.55228 5.05228 4 4.5 4C3.94772 4 3.5 3.55228 3.5 3C3.5 2.44772 3.94772 2 4.5 2C5.05228 2 5.5 2.44772 5.5 3ZM8.5 3C8.5 3.55228 8.05228 4 7.5 4C6.94772 4 6.5 3.55228 6.5 3C6.5 2.44772 6.94772 2 7.5 2C8.05228 2 8.5 2.44772 8.5 3ZM11.5 3C11.5 3.55228 11.0523 4 10.5 4C9.94772 4 9.5 3.55228 9.5 3C9.5 2.44772 9.94772 2 10.5 2C11.0523 2 11.5 2.44772 11.5 3ZM5.5 7.5C5.5 8.05228 5.05228 8.5 4.5 8.5C3.94772 8.5 3.5 8.05228 3.5 7.5C3.5 6.94772 3.94772 6.5 4.5 6.5C5.05228 6.5 5.5 6.94772 5.5 7.5ZM8.5 7.5C8.5 8.05228 8.05228 8.5 7.5 8.5C6.94772 8.5 6.5 8.05228 6.5 7.5C6.5 6.94772 6.94772 6.5 7.5 6.5C8.05228 6.5 8.5 6.94772 8.5 7.5ZM11.5 7.5C11.5 8.05228 11.0523 8.5 10.5 8.5C9.94772 8.5 9.5 8.05228 9.5 7.5C9.5 6.94772 9.94772 6.5 10.5 6.5C11.0523 6.5 11.5 6.94772 11.5 7.5ZM5.5 12C5.5 12.5523 5.05228 13 4.5 13C3.94772 13 3.5 12.5523 3.5 12C3.5 11.4477 3.94772 11 4.5 11C5.05228 11 5.5 11.4477 5.5 12ZM8.5 12C8.5 12.5523 8.05228 13 7.5 13C6.94772 13 6.5 12.5523 6.5 12C6.5 11.4477 6.94772 11 7.5 11C8.05228 11 8.5 11.4477 8.5 12ZM11.5 12C11.5 12.5523 11.0523 13 10.5 13C9.94772 13 9.5 12.5523 9.5 12C9.5 11.4477 9.94772 11 10.5 11C11.0523 11 11.5 11.4477 11.5 12Z" fill="currentColor" fillRule="evenodd" clipRule="evenodd"></path></svg>
+                  </div>
+                )}
+                {renderSection(item)}
+              </Reorder.Item>
+            ))}
+          </Reorder.Group>
 
-        {/* Hadith Slider - Desktop Positioned */}
-        {hadithSlidePosition !== 'hidden' && hadithSlidePosition !== 'bottom' && (
-          <motion.div
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            className={`hidden lg:block absolute w-80 z-20 ${hadithSlidePosition === 'top-right' ? 'top-4 right-0' :
-              hadithSlidePosition === 'top-left' ? 'top-4 left-0' :
-                hadithSlidePosition === 'bottom-right' ? 'bottom-4 right-0' :
-                  hadithSlidePosition === 'bottom-left' ? 'bottom-4 left-0' :
-                    'right-0 top-1/2 -translate-y-1/2' // right (default)
-              }`}
-          >
-            <HadithSlider dhikr={currentDhikr} />
-          </motion.div>
-        )}
+          {/* Hadith Slider - Desktop Positioned */}
+          {hadithSlidePosition !== 'hidden' && hadithSlidePosition !== 'bottom' && (
+            <motion.div
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              className={`hidden lg:block absolute w-80 z-20 ${hadithSlidePosition === 'top-right' ? 'top-4 right-0' :
+                hadithSlidePosition === 'top-left' ? 'top-4 left-0' :
+                  hadithSlidePosition === 'bottom-right' ? 'bottom-4 right-0' :
+                    hadithSlidePosition === 'bottom-left' ? 'bottom-4 left-0' :
+                      'right-0 top-1/2 -translate-y-1/2' // right (default)
+                }`}
+            >
+              <HadithSlider dhikr={currentDhikr} />
+            </motion.div>
+          )}
+
+        </div>
 
       </div>
 
-    </div>
-
-    <AnimatePresence>
-      {showSessionComplete && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          className="fixed inset-0 bg-background/80 backdrop-blur-sm flex items-center justify-center z-50 p-6"
-          onClick={handleDismissSessionComplete}
-        >
+      <AnimatePresence>
+        {showSessionComplete && (
           <motion.div
-            initial={{ scale: 0.9, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            exit={{ scale: 0.9, opacity: 0 }}
-            className="bg-card rounded-3xl p-8 max-w-sm w-full text-center shadow-xl"
-            onClick={(e) => e.stopPropagation()}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-background/80 backdrop-blur-sm flex items-center justify-center z-50 p-6"
+            onClick={handleDismissSessionComplete}
           >
             <motion.div
-              initial={{ scale: 0 }}
-              animate={{ scale: 1 }}
-              transition={{ delay: 0.2, type: 'spring' }}
-              className="w-20 h-20 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-6"
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              className="bg-card rounded-3xl p-8 max-w-sm w-full text-center shadow-xl"
+              onClick={(e) => e.stopPropagation()}
             >
-              <span className="text-4xl">✨</span>
-            </motion.div>
+              <motion.div
+                initial={{ scale: 0 }}
+                animate={{ scale: 1 }}
+                transition={{ delay: 0.2, type: 'spring' }}
+                className="w-20 h-20 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-6"
+              >
+                <span className="text-4xl">✨</span>
+              </motion.div>
 
-            <h2 className="text-2xl font-medium text-foreground mb-2">
-              ما شاء الله
-            </h2>
-            <p className="text-lg text-foreground mb-1 font-arabic">
-              Session Complete
-            </p>
-            <p className="text-muted-foreground text-sm mb-6">
-              You have completed {sessionMode.type === 'tasbih100' ? '100 dhikr' : '1000 dhikr'}
-              <br />
-              {sessionMode.type === 'tasbih100' && <span className="text-xs">33 + 33 + 33 + 1</span>}
-            </p>
+              <h2 className="text-2xl font-medium text-foreground mb-2">
+                ما شاء الله
+              </h2>
+              <p className="text-lg text-foreground mb-1 font-arabic">
+                Session Complete
+              </p>
+              <p className="text-muted-foreground text-sm mb-6">
+                You have completed {sessionMode.type === 'tasbih100' ? '100 dhikr' : '1000 dhikr'}
+                <br />
+                {sessionMode.type === 'tasbih100' && <span className="text-xs">33 + 33 + 33 + 1</span>}
+              </p>
 
-            <div className="grid grid-cols-4 gap-2 mb-6">
-              {sessionMode.type === 'tasbih100' && defaultDhikrs.slice(0, 4).map((d, i) => (
-                <div key={d.id} className="text-center">
-                  <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-1">
-                    <span className="text-xs text-primary">✓</span>
+              <div className="grid grid-cols-4 gap-2 mb-6">
+                {sessionMode.type === 'tasbih100' && defaultDhikrs.slice(0, 4).map((d, i) => (
+                  <div key={d.id} className="text-center">
+                    <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-1">
+                      <span className="text-xs text-primary">✓</span>
+                    </div>
+                    <p className="text-xs text-muted-foreground">{i === 3 ? '1' : '33'}</p>
                   </div>
-                  <p className="text-xs text-muted-foreground">{i === 3 ? '1' : '33'}</p>
-                </div>
-              ))}
+                ))}
 
-              {sessionMode.type === 'tasbih1000' && (
-                <div className="col-span-4 text-center">
-                  <p className="text-sm font-medium text-foreground">GENERAL DHIKR NOT AS 100</p>
-                  <p className="text-xs text-muted-foreground mt-2">You have completed 1000 counts.</p>
-                </div>
-              )}
-            </div>
+                {sessionMode.type === 'tasbih1000' && (
+                  <div className="col-span-4 text-center">
+                    <p className="text-sm font-medium text-foreground">GENERAL DHIKR NOT AS 100</p>
+                    <p className="text-xs text-muted-foreground mt-2">You have completed 1000 counts.</p>
+                  </div>
+                )}
+              </div>
 
-            <button
-              onClick={handleDismissSessionComplete}
-              className="w-full py-3 rounded-xl bg-primary text-primary-foreground font-medium"
-            >
-              Alhamdulillah
-            </button>
+              <button
+                onClick={handleDismissSessionComplete}
+                className="w-full py-3 rounded-xl bg-primary text-primary-foreground font-medium"
+              >
+                Alhamdulillah
+              </button>
+            </motion.div>
           </motion.div>
-        </motion.div>
-      )}
-    </AnimatePresence>
+        )}
+      </AnimatePresence>
+    </>
   );
 }

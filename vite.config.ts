@@ -18,11 +18,14 @@ export default defineConfig(({ mode }) => ({
         enabled: true,
       },
       registerType: "autoUpdate",
-      includeAssets: ["favicon.ico", "robots.txt"],
+      includeAssets: ["favicon.ico", "robots.txt", "screenshot-mobile.png", "screenshot-desktop.png"],
       manifest: {
         name: "Tasbeeh - Digital Dhikr Counter",
         short_name: "Tasbeeh",
         description: "A peaceful digital Tasbeeh counter for your daily dhikr practice",
+        lang: "en",
+        dir: "ltr",
+        categories: ["lifestyle", "utilities", "productivity"],
         theme_color: "#f7f5f2",
         background_color: "#f7f5f2",
         display: "standalone",
@@ -31,25 +34,53 @@ export default defineConfig(({ mode }) => ({
         start_url: "/",
         icons: [
           {
-            src: "/icon.jpg",
+            src: "/pwa-192x192.png",
             sizes: "192x192",
-            type: "image/jpeg",
+            type: "image/png",
           },
           {
-            src: "/icon.jpg",
+            src: "/pwa-512x512.png",
             sizes: "512x512",
-            type: "image/jpeg",
+            type: "image/png",
           },
           {
-            src: "/icon.jpg",
+            src: "/pwa-512x512.png",
             sizes: "512x512",
-            type: "image/jpeg",
+            type: "image/png",
             purpose: "maskable",
           },
         ],
+        screenshots: [
+          {
+            src: "/screenshot-mobile.png",
+            sizes: "640x1136",
+            type: "image/png",
+            form_factor: "narrow",
+            label: "Tasbeeh Counter - Mobile View"
+          },
+          {
+            src: "/screenshot-desktop.png",
+            sizes: "1280x720",
+            type: "image/png",
+            form_factor: "wide",
+            label: "Tasbeeh Counter - Desktop View"
+          }
+        ],
+        shortcuts: [
+          {
+            name: "Start Tasbih 100",
+            short_name: "100",
+            description: "Start a 100-count dhikr session",
+            url: "/?session=100",
+            icons: [{ src: "/pwa-192x192.png", sizes: "192x192" }]
+          }
+        ]
       },
       workbox: {
         globPatterns: ["**/*.{js,css,html,ico,png,svg,woff,woff2}"],
+        cleanupOutdatedCaches: true,
+        clientsClaim: true,
+        skipWaiting: true,
         runtimeCaching: [
           {
             urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,

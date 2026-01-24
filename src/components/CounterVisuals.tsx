@@ -3,7 +3,7 @@ import { ThemeSettings } from '@/store/tasbeehStore';
 
 interface CounterVisualsProps {
     layout: 'default' | 'focus' | 'ergonomic';
-    counterShape: 'minimal' | 'classic' | 'beads' | 'flower' | 'waveform' | 'hexagon' | 'orb';
+    counterShape: 'minimal' | 'classic' | 'beads' | 'flower' | 'waveform' | 'hexagon' | 'orb' | 'digital';
     counterVerticalOffset: number;
     counterScale: number;
     progress: number;
@@ -90,7 +90,7 @@ export function CounterVisuals({
                     </svg>
                 )}
 
-                {['minimal', 'beads', 'flower', 'waveform', 'orb'].includes(counterShape) && (
+                {['minimal', 'beads', 'flower', 'waveform', 'orb', 'digital'].includes(counterShape) && (
                     <svg width="100%" height="100%" viewBox="0 0 290 290" className="-rotate-90">
                         <circle
                             cx="145"
@@ -199,22 +199,46 @@ export function CounterVisuals({
                 </div>
             )}
 
-            {counterShape === 'orb' && (
-                <div className="absolute inset-0 flex items-center justify-center -z-10">
-                    <div className="w-[260px] h-[260px] rounded-full bg-secondary/60 relative overflow-hidden shadow-2xl border-2 border-white/10">
-                        {/* Liquid Fill - Explicit height calculation */}
-                        <motion.div
-                            className="absolute bottom-0 left-0 right-0 bg-primary shadow-[0_0_30px_inset_rgba(0,0,0,0.3)]"
-                            initial={{ height: '0%' }}
-                            animate={{ height: `${progress * 100}%` }}
-                            transition={{ type: 'spring', bounce: 0, duration: 0.5 }}
-                        >
-                            {/* Surface tension line */}
-                            <div className="absolute top-0 left-0 right-0 h-1 bg-white/50 shadow-[0_0_10px_white]" />
-                        </motion.div>
+            {counterShape === 'digital' && (
+                <div className="absolute inset-0 flex items-center justify-center -z-10 pointer-events-none">
+                    {/* Ring of 33 beads */}
+                    <svg className="absolute w-[400px] h-[400px] -rotate-90 scale-[1.2] sm:scale-[1.4] opacity-80">
+                        {Array.from({ length: 33 }).map((_, i) => {
+                            const angle = (i * 360) / 33;
+                            const radius = 145;
+                            const x = 200 + radius * Math.cos((angle * Math.PI) / 180);
+                            const y = 200 + radius * Math.sin((angle * Math.PI) / 180);
+                            return (
+                                <circle
+                                    key={i}
+                                    cx={x}
+                                    cy={y}
+                                    r="5.5"
+                                    fill={i < (progress * 33) ? "var(--primary)" : "rgba(255,255,255,0.15)"}
+                                    style={{
+                                        filter: i < (progress * 33) ? 'drop-shadow(0 0 6px var(--primary))' : 'none',
+                                        transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)'
+                                    }}
+                                />
+                            );
+                        })}
+                    </svg>
 
-                        {/* Glass Glare */}
-                        <div className="absolute top-6 left-10 right-10 h-32 bg-gradient-to-b from-white/20 to-transparent rounded-full blur-xl pointer-events-none" />
+                    {/* Golden Device Body */}
+                    <div className="relative w-[210px] h-[260px] bg-gradient-to-b from-[#f3d692] via-[#d4af37] to-[#8b6508] rounded-[50px] shadow-[inset_0_2px_8px_rgba(255,255,255,0.6),0_20px_40px_rgba(0,0,0,0.5)] border-b-[6px] border-[#5c4305] flex flex-col items-center pt-5">
+                        {/* Screen Area */}
+                        <div className="w-[88%] h-[90px] bg-[#050505] rounded-2xl border-[3px] border-[#a07d2a] shadow-[inset_0_5px_15px_rgba(0,0,0,1)] flex flex-col items-center justify-center relative overflow-hidden mb-4">
+                            <div className="absolute top-0 left-0 w-full h-1/2 bg-gradient-to-b from-white/10 to-transparent" />
+                            <span className="text-[#d4af37] font-arabic text-lg mb-0.5 tracking-wider drop-shadow-sm font-medium">تسبيح</span>
+                            <div className="bg-[#142016] px-3 py-1 rounded-sm border border-[#222] shadow-[inset_0_0_8px_rgba(0,0,0,0.8)] min-w-[110px] text-center">
+                                <span className="font-mono text-[#7ea37e] text-3xl tracking-[0.25em] drop-shadow-[0_0_3px_rgba(126,163,126,0.4)]">
+                                    {currentCount.toString().padStart(4, '0')}
+                                </span>
+                            </div>
+                        </div>
+
+                        {/* Static Reset Button Decoration */}
+                        <div className="absolute right-7 bottom-[85px] w-6 h-6 rounded-full bg-gradient-to-b from-[#e6c17a] to-[#8b6508] border-2 border-[#5c4305] shadow-md" />
                     </div>
                 </div>
             )}
@@ -231,6 +255,7 @@ export function CounterVisuals({
         ${counterShape === 'waveform' ? 'w-72 h-72 rounded-full flex items-center justify-center backdrop-blur-sm' : ''}
         ${counterShape === 'hexagon' ? 'w-64 h-64 flex items-center justify-center bg-card/10 backdrop-blur-sm' : ''}
         ${counterShape === 'orb' ? 'w-64 h-64 rounded-full flex items-center justify-center' : ''}
+        ${counterShape === 'digital' ? 'w-24 h-24 rounded-full bg-gradient-to-b from-[#f3d692] to-[#8b6508] border-[3px] border-[#5c4305] shadow-[0_6px_12px_rgba(0,0,0,0.3),inset_0_2px_4px_rgba(255,255,255,0.4)] mt-24 mb-2' : ''}
         
         flex items-center justify-center
         cursor-pointer
@@ -275,17 +300,18 @@ export function CounterVisuals({
                     transition={{ duration: 0.15, ease: [0.34, 1.56, 0.64, 1] }}
                     className={`
           counter-number text-counter-text
+          ${counterShape === 'digital' ? 'hidden' : ''}
           ${counterShape === 'classic' ? 'font-mono text-5xl sm:text-6xl md:text-7xl tracking-widest bg-black/10 px-4 sm:px-6 py-2 rounded-lg inset-shadow mb-4' : 'text-5xl sm:text-6xl md:text-7xl lg:text-8xl'}
           ${counterShape === 'waveform' ? 'drop-shadow-md z-10' : ''}
           ${counterShape === 'orb' ? 'text-white mix-blend-overlay' : ''}
         `}
                     style={{
-                        fontSize: `${(counterShape === 'classic' ? 4.5 : 4.5) * currentSettings.fontScale * countFontSize}rem`
+                        fontSize: counterShape === 'digital' ? '0px' : `${(counterShape === 'classic' ? 4.5 : 4.5) * currentSettings.fontScale * countFontSize}rem`
                     }}
                 >
                     {currentCount}
                 </motion.span>
             </motion.button>
-        </motion.div>
+        </motion.div >
     );
 }

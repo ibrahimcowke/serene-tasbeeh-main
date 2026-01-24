@@ -53,7 +53,7 @@ interface TasbeehState {
   themeSettings: Record<string, ThemeSettings>;
 
   // Global preference (not per theme)
-  counterShape: 'minimal' | 'classic' | 'beads' | 'flower' | 'waveform' | 'hexagon' | 'orb';
+  counterShape: 'minimal' | 'classic' | 'beads' | 'flower' | 'waveform' | 'hexagon' | 'orb' | 'digital';
   layout: 'default' | 'focus' | 'ergonomic';
   showTransliteration: boolean;
   
@@ -115,7 +115,7 @@ interface TasbeehState {
   syncFromCloud: () => Promise<boolean>;
   
   // New Settings Actions
-  setCounterShape: (shape: 'minimal' | 'classic' | 'beads' | 'flower' | 'waveform' | 'hexagon' | 'orb') => void;
+  setCounterShape: (shape: 'minimal' | 'classic' | 'beads' | 'flower' | 'waveform' | 'hexagon' | 'orb' | 'digital') => void;
   setLayout: (layout: 'default' | 'focus' | 'ergonomic') => void;
   setHadithSlideDuration: (duration: number) => void;
   setHadithSlidePosition: (position: 'top-right' | 'top-left' | 'bottom-right' | 'bottom-left' | 'right' | 'bottom' | 'hidden') => void;
