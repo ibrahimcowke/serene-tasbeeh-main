@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Check, Download, Upload, Trash2, RotateCcw, Layout, Smartphone, Maximize, Cloud, LogIn, LogOut, RefreshCw } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { Check, Download, Upload, Trash2, RotateCcw, Layout, Smartphone, Maximize, Cloud, LogIn, LogOut, RefreshCw, Shield } from 'lucide-react';
 import { useTasbeehStore } from '@/store/tasbeehStore';
 import { supabase, signInWithGoogle, signOut, getCurrentUser } from '@/lib/supabase';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
@@ -41,6 +42,7 @@ const themes = [
 
 export function SettingsView({ children }: SettingsViewProps) {
   const [open, setOpen] = useState(false);
+  const navigate = useNavigate();
 
   const {
     showTransliteration,
@@ -829,6 +831,20 @@ export function SettingsView({ children }: SettingsViewProps) {
                       </AlertDialogFooter>
                     </AlertDialogContent>
                   </AlertDialog>
+
+                  <button
+                    onClick={() => {
+                      setOpen(false);
+                      navigate('/privacy');
+                    }}
+                    className="w-full flex items-center gap-3 p-4 rounded-2xl bg-card hover:bg-secondary transition-colors text-left group"
+                  >
+                    <Shield className="w-5 h-5 text-muted-foreground group-hover:text-primary transition-colors" />
+                    <div>
+                      <p className="text-sm font-medium text-foreground group-hover:text-primary transition-colors">Privacy Policy</p>
+                      <p className="text-xs text-muted-foreground">How we protect your spiritual data</p>
+                    </div>
+                  </button>
                 </div>
               </TabsContent>
             </div>
