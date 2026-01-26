@@ -46,16 +46,20 @@ interface TasbeehState {
   // Settings
   currentDhikr: Dhikr;
   // hapticEnabled/soundEnabled removed in favor of themeSettings
-  theme: 'light' | 'dark' | 'theme-midnight' | 'theme-neon' | 'theme-green' | 'theme-cyberpunk' | 'theme-glass';
+  theme: 'light' | 'dark' | 'theme-midnight' | 'theme-neon' | 'theme-green' | 'theme-cyberpunk' | 'theme-glass' | 'theme-sunset' | 'theme-forest' | 'theme-oled';
   language: 'en' | 'ar';
   
   // Theme-specific settings container
   themeSettings: Record<string, ThemeSettings>;
 
   // Global preference (not per theme)
-  counterShape: 'minimal' | 'classic' | 'beads' | 'flower' | 'waveform' | 'hexagon' | 'orb' | 'digital';
+  counterShape: 'minimal' | 'classic' | 'beads' | 'flower' | 'waveform' | 'hexagon' | 'orb' | 'digital' | 'modern-ring' | 'vintage-wood' | 'geometric-star' | 'fluid' | 'neumorph' | 'radar' | 'real-beads' | 'cyber-3d' | 'glass-orb' | 'crystal-iso' | 'portal-depth' | 'luminous-ring' | 'ring-light' | 'galaxy' | 'tally-clicker' | 'minimal-img' | 'classic-img' | 'beads-img' | 'flower-img' | 'waveform-img' | 'hexagon-img' | 'orb-img' | 'digital-img';
   layout: 'default' | 'focus' | 'ergonomic';
   showTransliteration: boolean;
+
+  // Zen Mode
+  zenMode: boolean;
+  setZenMode: (enabled: boolean) => void;
   
   // Hadith slider settings
   hadithSlideDuration: number; // in seconds
@@ -94,7 +98,7 @@ interface TasbeehState {
   setFontScale: (scale: 0.8 | 1 | 1.2) => void;
   setSoundType: (type: 'click' | 'soft' | 'water') => void;
   
-  setTheme: (theme: 'light' | 'dark' | 'theme-midnight' | 'theme-neon' | 'theme-green' | 'theme-cyberpunk' | 'theme-glass') => void;
+  setTheme: (theme: 'light' | 'dark' | 'theme-midnight' | 'theme-neon' | 'theme-green' | 'theme-cyberpunk' | 'theme-glass' | 'theme-sunset' | 'theme-forest' | 'theme-oled') => void;
   setLanguage: (lang: 'ar' | 'en') => void;
   addCustomDhikr: (dhikr: Omit<Dhikr, 'id'>) => void;
   removeCustomDhikr: (id: string) => void;
@@ -115,7 +119,7 @@ interface TasbeehState {
   syncFromCloud: () => Promise<boolean>;
   
   // New Settings Actions
-  setCounterShape: (shape: 'minimal' | 'classic' | 'beads' | 'flower' | 'waveform' | 'hexagon' | 'orb' | 'digital') => void;
+  setCounterShape: (shape: 'minimal' | 'classic' | 'beads' | 'flower' | 'waveform' | 'hexagon' | 'orb' | 'digital' | 'modern-ring' | 'vintage-wood' | 'geometric-star' | 'fluid' | 'neumorph' | 'radar' | 'real-beads' | 'cyber-3d' | 'glass-orb' | 'crystal-iso' | 'portal-depth' | 'luminous-ring' | 'minimal-img' | 'classic-img' | 'beads-img' | 'flower-img' | 'waveform-img' | 'hexagon-img' | 'orb-img' | 'digital-img') => void;
   setLayout: (layout: 'default' | 'focus' | 'ergonomic') => void;
   setHadithSlideDuration: (duration: number) => void;
   setHadithSlidePosition: (position: 'top-right' | 'top-left' | 'bottom-right' | 'bottom-left' | 'right' | 'bottom' | 'hidden') => void;
@@ -161,6 +165,9 @@ const initialThemeSettings: Record<string, ThemeSettings> = {
   'theme-green': { ...defaultThemeSettings },
   'theme-cyberpunk': { ...defaultThemeSettings },
   'theme-glass': { ...defaultThemeSettings },
+  'theme-sunset': { ...defaultThemeSettings },
+  'theme-forest': { ...defaultThemeSettings },
+  'theme-oled': { ...defaultThemeSettings },
 };
 
 
@@ -371,6 +378,7 @@ export const useTasbeehStore = create<TasbeehState>()(
       
       theme: 'light',
       language: 'en', // Keeping language for now
+      zenMode: false,
       counterShape: 'minimal', // New
       layout: 'default',
       hadithSlideDuration: 15, // 15 seconds default
@@ -730,6 +738,7 @@ export const useTasbeehStore = create<TasbeehState>()(
       setCountFontSize: (scale) => set({ countFontSize: scale }),
       setDhikrTextPosition: (position) => set({ dhikrTextPosition: position }),
       setLayoutOrder: (order) => set({ layoutOrder: order }),
+      setZenMode: (enabled) => set({ zenMode: enabled }),
 
       syncToCloud: async () => {
         try {
@@ -861,6 +870,7 @@ export const useTasbeehStore = create<TasbeehState>()(
         themeSettings: state.themeSettings,
         theme: state.theme,
         language: state.language,
+        zenMode: state.zenMode,
         counterShape: state.counterShape,
         layout: state.layout,
         hadithSlideDuration: state.hadithSlideDuration,

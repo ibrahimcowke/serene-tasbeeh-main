@@ -1,21 +1,21 @@
-@import url('https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Inter:wght@300;400;500;600&family=Outfit:wght@300;400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Inter:wght@300;400;500;600&family=Outfit:wght@300;400;500;600&family=Noto+Sans+Arabic:wght@400;700&display=swap');
 
-/* Quran Fonts */
+/* Quran Fonts - Fallbacks using Google Fonts as CDN is unreliable */
 @font-face {
   font-family: 'Uthmanic';
-  src: url('https://cdn.jsdelivr.net/gh/ivandf/quran-fonts@master/fonts/UthmanicHafs1Ver18.woff2') format('woff2');
+  src: local('Amiri'), local('Noto Sans Arabic');
   font-display: swap;
 }
 
 @font-face {
   font-family: 'IndoPak';
-  src: url('https://cdn.jsdelivr.net/gh/ivandf/quran-fonts@master/fonts/indopak.woff2') format('woff2');
+  src: local('Amiri'), local('Noto Sans Arabic');
   font-display: swap;
 }
 
 @font-face {
   font-family: 'Madani';
-  src: url('https://cdn.jsdelivr.net/gh/ivandf/quran-fonts@master/fonts/uthmanic-tanween.woff2') format('woff2');
+  src: local('Amiri'), local('Noto Sans Arabic');
   font-display: swap;
 }
 
@@ -290,6 +290,137 @@
     --progress-fill: 200 90% 45%;
     --sheet-bg: 200 40% 98%;
   }
+
+  .theme-sunset {
+    color-scheme: dark;
+    /* Sunset Gradients */
+    --background: 20 50% 10%;
+    --foreground: 20 30% 95%;
+
+    --card: 20 40% 15%;
+    --card-foreground: 20 30% 95%;
+
+    --popover: 20 40% 15%;
+    --popover-foreground: 20 30% 95%;
+
+    /* Warm Orange */
+    --primary: 25 90% 60%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 20 30% 20%;
+    --secondary-foreground: 20 30% 90%;
+
+    --muted: 20 30% 25%;
+    --muted-foreground: 20 20% 70%;
+
+    --accent: 320 60% 55%;
+    /* Purple Accent */
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 80% 60%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 20 30% 25%;
+    --input: 20 30% 25%;
+    --ring: 25 90% 60%;
+
+    --counter-bg: 20 40% 12%;
+    --counter-ring: 25 90% 60%;
+    --counter-text: 25 100% 85%;
+    --counter-glow: 25 90% 50%;
+
+    --arabic-text: 20 30% 95%;
+    --progress-track: 20 30% 25%;
+    --progress-fill: 25 90% 60%;
+    --sheet-bg: 20 40% 12%;
+  }
+
+  .theme-forest {
+    color-scheme: dark;
+    /* Deep Forest */
+    --background: 150 40% 8%;
+    --foreground: 120 20% 90%;
+
+    --card: 150 30% 12%;
+    --card-foreground: 120 20% 90%;
+
+    --popover: 150 30% 12%;
+    --popover-foreground: 120 20% 90%;
+
+    /* Nature Green */
+    --primary: 140 50% 50%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 150 30% 16%;
+    --secondary-foreground: 120 20% 90%;
+
+    --muted: 150 30% 20%;
+    --muted-foreground: 150 20% 70%;
+
+    --accent: 35 40% 50%;
+    /* Brown Accent */
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 70% 60%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 150 30% 20%;
+    --input: 150 30% 20%;
+    --ring: 140 50% 50%;
+
+    --counter-bg: 150 30% 10%;
+    --counter-ring: 140 50% 50%;
+    --counter-text: 140 60% 85%;
+    --counter-glow: 140 50% 40%;
+
+    --arabic-text: 120 20% 90%;
+    --progress-track: 150 30% 20%;
+    --progress-fill: 140 50% 50%;
+    --sheet-bg: 150 30% 10%;
+  }
+
+  .theme-oled {
+    color-scheme: dark;
+    /* True Black */
+    --background: 0 0% 0%;
+    --foreground: 0 0% 100%;
+
+    --card: 0 0% 5%;
+    --card-foreground: 0 0% 100%;
+
+    --popover: 0 0% 5%;
+    --popover-foreground: 0 0% 100%;
+
+    /* Stark White/Gray for minimal OLED feel */
+    --primary: 0 0% 100%;
+    --primary-foreground: 0 0% 0%;
+
+    --secondary: 0 0% 10%;
+    --secondary-foreground: 0 0% 90%;
+
+    --muted: 0 0% 15%;
+    --muted-foreground: 0 0% 60%;
+
+    --accent: 0 0% 100%;
+    --accent-foreground: 0 0% 0%;
+
+    --destructive: 0 70% 60%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 0 0% 20%;
+    --input: 0 0% 20%;
+    --ring: 0 0% 100%;
+
+    --counter-bg: 0 0% 0%;
+    --counter-ring: 0 0% 100%;
+    --counter-text: 0 0% 100%;
+    --counter-glow: 0 0% 30%;
+
+    --arabic-text: 0 0% 100%;
+    --progress-track: 0 0% 20%;
+    --progress-fill: 0 0% 100%;
+    --sheet-bg: 0 0% 5%;
+  }
 }
 
 @layer base {
@@ -318,7 +449,7 @@
 
   /* Arabic typography */
   .font-arabic {
-    font-family: 'Amiri', serif;
+    font-family: 'Amiri', 'Noto Sans Arabic', serif;
     direction: rtl;
     line-height: 2;
   }

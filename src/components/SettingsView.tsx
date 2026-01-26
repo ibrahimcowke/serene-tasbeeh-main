@@ -25,6 +25,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { StatisticsView } from './StatisticsView';
 
 interface SettingsViewProps {
   children: React.ReactNode;
@@ -38,6 +39,9 @@ const themes = [
   { id: 'theme-green', label: 'Matrix', description: 'Terminal green code' },
   { id: 'theme-cyberpunk', label: 'Cyberpunk', description: 'High-tech yellow & blue' },
   { id: 'theme-glass', label: 'Glass', description: 'Pure & icy morphism' },
+  { id: 'theme-sunset', label: 'Sunset', description: 'Warm gradients' },
+  { id: 'theme-forest', label: 'Forest', description: 'Deep nature greens' },
+  { id: 'theme-oled', label: 'OLED', description: 'True black power saver' },
 ] as const;
 
 export function SettingsView({ children }: SettingsViewProps) {
@@ -81,6 +85,8 @@ export function SettingsView({ children }: SettingsViewProps) {
     setCounterScale,
     countFontSize,
     setCountFontSize,
+    zenMode,
+    setZenMode,
   } = useTasbeehStore();
 
   const [user, setUser] = useState<any>(null);
@@ -180,15 +186,14 @@ export function SettingsView({ children }: SettingsViewProps) {
         <div className="flex-1 overflow-hidden flex flex-col">
           <Tabs defaultValue="appearance" className="flex-1 flex flex-col h-full">
             <div className="px-6 pt-2 pb-4 shrink-0 bg-background/50 backdrop-blur-sm z-10">
-              <TabsList className="grid w-full grid-cols-3">
-                <TabsTrigger value="appearance">Style</TabsTrigger>
-                <TabsTrigger value="general">Logic</TabsTrigger>
-                <TabsTrigger value="data">Data</TabsTrigger>
+              <TabsList className="grid w-full grid-cols-2">
+                <TabsTrigger value="appearance" className="flex-1">Settings</TabsTrigger>
+                <TabsTrigger value="data" className="flex-1">Data</TabsTrigger>
               </TabsList>
             </div>
 
-            <div className="flex-1 overflow-y-auto px-6 pb-8">
-              <TabsContent value="appearance" className="space-y-6 mt-0">
+            <div className="flex-1 overflow-y-auto px-1 py-1 custom-scrollbar">
+              <TabsContent value="appearance" className="space-y-6 mt-0 pb-6 px-1">
                 {/* Theme Customization */}
                 <div className="space-y-1">
                   <p className="text-xs text-muted-foreground uppercase tracking-wide mb-3">Theme</p>
@@ -228,37 +233,21 @@ export function SettingsView({ children }: SettingsViewProps) {
                   </div>
                 </div>
 
-                {/* Counter Shape Config */}
+                {/* Zen Mode Toggle */}
                 <div className="space-y-1">
-                  <p className="text-xs text-muted-foreground uppercase tracking-wide mb-3">Counter Style</p>
-                  <div className="grid grid-cols-3 gap-2">
-                    {[
-                      { id: 'minimal', label: 'Minimal', icon: '○' },
-                      { id: 'classic', label: 'Classic', icon: '□' },
-                      { id: 'beads', label: 'Beads', icon: 'ooo' },
-                      { id: 'flower', label: 'Flower', icon: '❀' },
-                      { id: 'waveform', label: 'Wave', icon: '〰' },
-                      { id: 'hexagon', label: 'Hexagon', icon: '⬡' },
-                      { id: 'orb', label: 'Orb', icon: '●' },
-                      { id: 'digital', label: 'Premium', icon: '✨' },
-                    ].map((style) => (
-                      <button
-                        key={style.id}
-                        onClick={() => {
-                          setCounterShape(style.id as any);
-                          setOpen(false);
-                        }}
-                        className={`
-                          p-3 rounded-xl border text-center transition-all relative overflow-hidden
-                          ${counterShape === style.id
-                            ? 'bg-primary/10 border-primary text-primary ring-1 ring-primary'
-                            : 'bg-card border-transparent text-muted-foreground hover:bg-secondary'}
-                        `}
-                      >
-                        <p className="text-lg mb-1 opacity-70 scale-125">{style.icon}</p>
-                        <p className="text-xs font-medium">{style.label}</p>
-                      </button>
-                    ))}
+                  <p className="text-xs text-muted-foreground uppercase tracking-wide mb-3">Focus</p>
+                  <div className="flex items-center justify-between p-4 rounded-xl bg-card border border-border/50">
+                    <div className="space-y-0.5">
+                      <label className="text-sm font-medium">Zen Mode</label>
+                      <p className="text-xs text-muted-foreground">Hide minimal UI for complete focus</p>
+                    </div>
+                    <Switch
+                      checked={zenMode}
+                      onCheckedChange={(checked) => {
+                        setZenMode(checked);
+                        if (checked) setOpen(false); // Close settings to show effect immediately
+                      }}
+                    />
                   </div>
                 </div>
 
@@ -304,7 +293,7 @@ export function SettingsView({ children }: SettingsViewProps) {
                     ))}
                   </div>
 
-                  {/* Advanced Layout Accordion - Moved closer to Layout Type */}
+                  {/* Advanced Layout Accordion */}
                   <div className="bg-card rounded-2xl p-1 mt-2">
                     <Accordion type="single" collapsible className="w-full">
                       <AccordionItem value="advanced-layout" className="border-none">
@@ -326,11 +315,6 @@ export function SettingsView({ children }: SettingsViewProps) {
                                 value={[verticalOffset]}
                                 onValueChange={([val]) => setVerticalOffset(val)}
                               />
-                              <div className="flex justify-between text-[10px] text-muted-foreground mt-2 px-1">
-                                <span>Up</span>
-                                <span>Center</span>
-                                <span>Down</span>
-                              </div>
                             </div>
 
                             {/* Dhikr Text Position */}
@@ -346,11 +330,6 @@ export function SettingsView({ children }: SettingsViewProps) {
                                 value={[dhikrVerticalOffset]}
                                 onValueChange={([val]) => setDhikrVerticalOffset(val)}
                               />
-                              <div className="flex justify-between text-[10px] text-muted-foreground mt-2 px-1">
-                                <span>Up</span>
-                                <span>Auto</span>
-                                <span>Down</span>
-                              </div>
                             </div>
 
                             {/* Counter Position */}
@@ -366,11 +345,6 @@ export function SettingsView({ children }: SettingsViewProps) {
                                 value={[counterVerticalOffset]}
                                 onValueChange={([val]) => setCounterVerticalOffset(val)}
                               />
-                              <div className="flex justify-between text-[10px] text-muted-foreground mt-2 px-1">
-                                <span>Up</span>
-                                <span>Auto</span>
-                                <span>Down</span>
-                              </div>
                             </div>
 
                             {/* Counter Size */}
@@ -386,11 +360,6 @@ export function SettingsView({ children }: SettingsViewProps) {
                                 value={[counterScale]}
                                 onValueChange={([val]) => setCounterScale(val)}
                               />
-                              <div className="flex justify-between text-[10px] text-muted-foreground mt-2 px-1">
-                                <span>50%</span>
-                                <span>100%</span>
-                                <span>170%</span>
-                              </div>
                             </div>
 
                             {/* Number Size */}
@@ -406,11 +375,6 @@ export function SettingsView({ children }: SettingsViewProps) {
                                 value={[countFontSize]}
                                 onValueChange={([val]) => setCountFontSize(val)}
                               />
-                              <div className="flex justify-between text-[10px] text-muted-foreground mt-2 px-1">
-                                <span>Small</span>
-                                <span>Normal</span>
-                                <span>Big</span>
-                              </div>
                             </div>
                           </div>
                         </AccordionContent>
@@ -432,8 +396,8 @@ export function SettingsView({ children }: SettingsViewProps) {
                           key={scale}
                           onClick={() => setFontScale(scale as 0.8 | 1 | 1.2)}
                           className={`
-                              py-2 px-3 rounded-lg text-xs font-medium border transition-colors
-                              ${currentSettings.fontScale === scale
+                                py-2 px-3 rounded-lg text-xs font-medium border transition-colors
+                                ${currentSettings.fontScale === scale
                               ? 'bg-primary text-primary-foreground border-primary'
                               : 'bg-background border-border hover:bg-muted'}
                             `}
@@ -444,9 +408,7 @@ export function SettingsView({ children }: SettingsViewProps) {
                     </div>
                   </div>
                 </div>
-              </TabsContent>
 
-              <TabsContent value="general" className="space-y-6 mt-0">
                 {/* Dhikr Text Settings */}
                 <div className="space-y-1">
                   <p className="text-xs text-muted-foreground uppercase tracking-wide mb-3">Dhikr Text</p>
@@ -587,10 +549,9 @@ export function SettingsView({ children }: SettingsViewProps) {
                   </div>
                 </div>
 
-                {/* Display settings */}
+                {/* Display settings (Transliteration) */}
                 <div className="space-y-1">
                   <p className="text-xs text-muted-foreground uppercase tracking-wide mb-3">Display</p>
-
                   <div className="flex items-center justify-between p-4 rounded-2xl bg-card">
                     <div>
                       <p className="text-sm font-medium text-foreground">Show transliteration</p>
@@ -673,7 +634,7 @@ export function SettingsView({ children }: SettingsViewProps) {
                 </div>
               </TabsContent>
 
-              <TabsContent value="data" className="space-y-6 mt-0">
+              <TabsContent value="data" className="space-y-6 mt-0 pb-6 px-1">
                 {/* Cloud Sync Section */}
                 <div className="space-y-1">
                   <p className="text-xs text-muted-foreground uppercase tracking-wide mb-3">Cloud Sync (Beta)</p>
@@ -760,73 +721,39 @@ export function SettingsView({ children }: SettingsViewProps) {
                     className="w-full flex items-center gap-3 p-4 rounded-2xl bg-card hover:bg-secondary transition-colors text-left"
                   >
                     <Upload className="w-5 h-5 text-muted-foreground" />
-                    <div className="flex-1">
+                    <div>
                       <p className="text-sm font-medium text-foreground">Import backup</p>
-                      <p className="text-xs text-muted-foreground">
-                        {importStatus === 'success'
-                          ? 'Data imported successfully!'
-                          : importStatus === 'error'
-                            ? 'Import failed. Check file format.'
-                            : 'Restore from a backup file'}
-                      </p>
+                      <p className="text-xs text-muted-foreground">Restore from a backup file</p>
                     </div>
                   </button>
 
                   <AlertDialog>
                     <AlertDialogTrigger asChild>
-                      <button className="w-full flex items-center gap-3 p-4 rounded-2xl bg-card hover:bg-secondary transition-colors text-left group">
-                        <RotateCcw className="w-5 h-5 text-muted-foreground group-hover:text-primary transition-colors" />
+                      <button
+                        className="w-full flex items-center gap-3 p-4 rounded-2xl bg-red-500/5 hover:bg-red-500/10 transition-colors text-left border border-red-500/20 mt-4"
+                      >
+                        <Trash2 className="w-5 h-5 text-red-500" />
                         <div>
-                          <p className="text-sm font-medium text-foreground group-hover:text-primary transition-colors">Reset Settings</p>
-                          <p className="text-xs text-muted-foreground">Restore default appearance & preferences</p>
+                          <p className="text-sm font-medium text-red-500">Reset Data</p>
+                          <p className="text-xs text-red-500/70">Clear all progress and settings</p>
                         </div>
                       </button>
                     </AlertDialogTrigger>
-                    <AlertDialogContent className="rounded-3xl">
+                    <AlertDialogContent>
                       <AlertDialogHeader>
-                        <AlertDialogTitle>Reset settings?</AlertDialogTitle>
+                        <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
                         <AlertDialogDescription>
-                          This will reset your theme, counter shape, and preferences to default.
-                          Your count history and custom dhikrs will NOT be deleted.
+                          This action cannot be undone. This will permanently delete your
+                          current session data and reset all settings to default.
                         </AlertDialogDescription>
                       </AlertDialogHeader>
                       <AlertDialogFooter>
-                        <AlertDialogCancel className="rounded-xl">Cancel</AlertDialogCancel>
-                        <AlertDialogAction
-                          onClick={resetSettings}
-                          className="rounded-xl bg-primary text-primary-foreground"
-                        >
-                          Reset Settings
-                        </AlertDialogAction>
-                      </AlertDialogFooter>
-                    </AlertDialogContent>
-                  </AlertDialog>
-
-                  <AlertDialog>
-                    <AlertDialogTrigger asChild>
-                      <button className="w-full flex items-center gap-3 p-4 rounded-2xl bg-card hover:bg-destructive/10 transition-colors text-left group">
-                        <Trash2 className="w-5 h-5 text-destructive" />
-                        <div>
-                          <p className="text-sm font-medium text-destructive">Clear all data</p>
-                          <p className="text-xs text-muted-foreground">This cannot be undone</p>
-                        </div>
-                      </button>
-                    </AlertDialogTrigger>
-                    <AlertDialogContent className="rounded-3xl">
-                      <AlertDialogHeader>
-                        <AlertDialogTitle>Clear all data?</AlertDialogTitle>
-                        <AlertDialogDescription>
-                          This will permanently delete all your counts, history, and custom dhikrs.
-                          Consider exporting a backup first.
-                        </AlertDialogDescription>
-                      </AlertDialogHeader>
-                      <AlertDialogFooter>
-                        <AlertDialogCancel className="rounded-xl">Cancel</AlertDialogCancel>
+                        <AlertDialogCancel>Cancel</AlertDialogCancel>
                         <AlertDialogAction
                           onClick={clearAllData}
-                          className="rounded-xl bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                          className="bg-red-500 hover:bg-red-600 focus:ring-red-500"
                         >
-                          Clear all
+                          Reset Everything
                         </AlertDialogAction>
                       </AlertDialogFooter>
                     </AlertDialogContent>
@@ -834,16 +761,15 @@ export function SettingsView({ children }: SettingsViewProps) {
 
                   <button
                     onClick={() => {
-                      setOpen(false);
-                      navigate('/privacy');
+                      if (window.confirm('Reset only settings to default? Progress will be kept.')) {
+                        resetSettings();
+                        window.location.reload();
+                      }
                     }}
-                    className="w-full flex items-center gap-3 p-4 rounded-2xl bg-card hover:bg-secondary transition-colors text-left group"
+                    className="w-full flex items-center justify-center gap-2 p-3 mt-2 rounded-xl text-xs text-muted-foreground hover:bg-secondary transition-colors"
                   >
-                    <Shield className="w-5 h-5 text-muted-foreground group-hover:text-primary transition-colors" />
-                    <div>
-                      <p className="text-sm font-medium text-foreground group-hover:text-primary transition-colors">Privacy Policy</p>
-                      <p className="text-xs text-muted-foreground">How we protect your spiritual data</p>
-                    </div>
+                    <RotateCcw className="w-3 h-3" />
+                    Reset Settings Only
                   </button>
                 </div>
               </TabsContent>

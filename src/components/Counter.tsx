@@ -5,6 +5,15 @@ import { ProgressRing } from './ProgressRing';
 import { HadithSlider } from './HadithSlider';
 import { SoundManager } from '@/lib/sound';
 import { CounterVisuals } from './CounterVisuals';
+import { Palette, Shapes } from 'lucide-react';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 export function Counter() {
   const {
@@ -329,6 +338,99 @@ export function Counter() {
     `}
         style={{ transform: `translateY(${verticalOffset}px)` }}
       >
+        {/* NEW THEME CHANGER DROPDOWN */}
+        <div className="absolute top-4 left-4 z-50 flex gap-2">
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <button
+                className="p-2 rounded-full backdrop-blur-md transition-all duration-300 bg-secondary/30 text-muted-foreground hover:bg-secondary/50 hover:text-primary"
+                title="Change Theme"
+              >
+                <Palette className="w-5 h-5" />
+              </button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="start" className="w-48 bg-card/90 backdrop-blur-xl border-border/50 max-h-[50dvh] overflow-hidden flex flex-col">
+              <DropdownMenuLabel>Select Theme</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <div className="overflow-y-auto custom-scrollbar p-1">
+                {[
+                  { id: 'light', label: 'Light', icon: '☀️' },
+                  { id: 'dark', label: 'Dark', icon: '🌙' },
+                  { id: 'theme-midnight', label: 'Midnight', icon: '🌌' },
+                  { id: 'theme-neon', label: 'Neon', icon: '🎆' },
+                  { id: 'theme-green', label: 'Matrix', icon: '💻' },
+                  { id: 'theme-cyberpunk', label: 'Cyberpunk', icon: '🤖' },
+                  { id: 'theme-glass', label: 'Glass', icon: '🧊' },
+                  { id: 'theme-sunset', label: 'Sunset', icon: '🌅' },
+                  { id: 'theme-forest', label: 'Forest', icon: '🌲' },
+                  { id: 'theme-oled', label: 'OLED', icon: '🖤' },
+                ].map((t) => (
+                  <DropdownMenuItem
+                    key={t.id}
+                    onClick={() => useTasbeehStore.getState().setTheme(t.id as any)}
+                    className="flex items-center gap-2 cursor-pointer"
+                  >
+                    <span className="text-base">{t.icon}</span>
+                    <span className={`flex-1 ${theme === t.id ? 'font-bold text-primary' : ''}`}>{t.label}</span>
+                    {theme === t.id && <span className="text-primary text-xs">●</span>}
+                  </DropdownMenuItem>
+                ))}
+              </div>
+            </DropdownMenuContent>
+          </DropdownMenu>
+
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <button
+                className="p-2 rounded-full backdrop-blur-md transition-all duration-300 bg-secondary/30 text-muted-foreground hover:bg-secondary/50 hover:text-primary"
+                title="Change Counter Style"
+              >
+                <Shapes className="w-5 h-5" />
+              </button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="start" className="w-48 bg-card/90 backdrop-blur-xl border-border/50 max-h-[50dvh] overflow-hidden flex flex-col">
+              <DropdownMenuLabel>Counter Style</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <div className="overflow-y-auto custom-scrollbar p-1">
+                {[
+                  { id: 'minimal', label: 'Minimal', icon: '○' },
+                  { id: 'classic', label: 'Classic', icon: '□' },
+                  { id: 'beads', label: 'Beads', icon: 'ooo' },
+                  { id: 'flower', label: 'Flower', icon: '❀' },
+                  { id: 'waveform', label: 'Wave', icon: '〰' },
+                  { id: 'hexagon', label: 'Hexagon', icon: '⬡' },
+                  { id: 'orb', label: 'Orb', icon: '●' },
+                  { id: 'digital', label: 'Premium', icon: '✨' },
+                  { id: 'modern-ring', label: 'Modern', icon: '◎' },
+                  { id: 'vintage-wood', label: 'Vintage', icon: '📜' },
+                  { id: 'geometric-star', label: 'Star', icon: '۞' },
+                  { id: 'fluid', label: 'Fluid', icon: '💧' },
+                  { id: 'neumorph', label: 'Soft', icon: '☁' },
+                  { id: 'real-beads', label: 'Real', icon: '📿' },
+                  { id: 'cyber-3d', label: 'Cyber', icon: '💎' },
+                  { id: 'glass-orb', label: 'Glass', icon: '🔮' },
+                  { id: 'crystal-iso', label: 'Crystal', icon: '🕋' },
+                  { id: 'portal-depth', label: 'Portal', icon: '🌀' },
+                  { id: 'luminous-ring', label: 'Lume', icon: '⭕' },
+                  { id: 'ring-light', label: 'Ring Light', icon: '🔆' },
+                  { id: 'galaxy', label: 'Galaxy', icon: '🌌' },
+                  { id: 'tally-clicker', label: 'Tally 3D', icon: '🖱️' },
+                ].map((style) => (
+                  <DropdownMenuItem
+                    key={style.id}
+                    onClick={() => useTasbeehStore.getState().setCounterShape(style.id as any)}
+                    className="flex items-center gap-2 cursor-pointer"
+                  >
+                    <span className="text-base scale-125 inline-block w-5 text-center">{style.icon}</span>
+                    <span className={`flex-1 ${counterShape === style.id ? 'font-bold text-primary' : ''}`}>{style.label}</span>
+                    {counterShape === style.id && <span className="text-primary text-xs">●</span>}
+                  </DropdownMenuItem>
+                ))}
+              </div>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
+
         <button
           onClick={() => setIsEditingLayout(!isEditingLayout)}
           className={`absolute top-4 right-4 z-50 p-2 rounded-full backdrop-blur-md transition-all duration-300 ${isEditingLayout ? 'bg-primary text-primary-foreground shadow-lg scale-110' : 'bg-secondary/30 text-muted-foreground hover:bg-secondary/50'}`}
