@@ -53,7 +53,7 @@ interface TasbeehState {
   themeSettings: Record<string, ThemeSettings>;
 
   // Global preference (not per theme)
-  counterShape: 'minimal' | 'classic' | 'beads' | 'flower' | 'waveform' | 'hexagon' | 'orb' | 'digital' | 'modern-ring' | 'vintage-wood' | 'geometric-star' | 'fluid' | 'neumorph' | 'radar' | 'real-beads' | 'cyber-3d' | 'glass-orb' | 'crystal-iso' | 'portal-depth' | 'luminous-ring' | 'ring-light' | 'galaxy' | 'tally-clicker' | 'minimal-img' | 'classic-img' | 'beads-img' | 'flower-img' | 'waveform-img' | 'hexagon-img' | 'orb-img' | 'digital-img';
+  counterShape: 'minimal' | 'classic' | 'beads' | 'flower' | 'waveform' | 'hexagon' | 'orb' | 'digital' | 'modern-ring' | 'vintage-wood' | 'geometric-star' | 'fluid' | 'neumorph' | 'radar' | 'real-beads' | 'cyber-3d' | 'glass-orb' | 'crystal-iso' | 'portal-depth' | 'luminous-ring' | 'ring-light' | 'galaxy' | 'tally-clicker' | 'steampunk-nixie' | 'biolum-organic' | 'minimal-img' | 'classic-img' | 'beads-img' | 'flower-img' | 'waveform-img' | 'hexagon-img' | 'orb-img' | 'digital-img';
   layout: 'default' | 'focus' | 'ergonomic';
   showTransliteration: boolean;
 
@@ -552,7 +552,15 @@ export const useTasbeehStore = create<TasbeehState>()(
       },
       
       setDhikr: (dhikr) => set({ currentDhikr: dhikr, currentCount: 0, sessionStartTime: null }),
-      setTarget: (target) => set({ targetCount: target }),
+      setTarget: (target) => set((state) => {
+        const isFreeMode = state.sessionMode.type === 'free';
+        return { 
+          targetCount: target,
+          sessionMode: { type: 'free' },
+          currentCount: isFreeMode ? state.currentCount : 0,
+          sessionStartTime: isFreeMode ? state.sessionStartTime : null
+        };
+      }),
       toggleTransliteration: () => set((state) => ({ showTransliteration: !state.showTransliteration })),
       
       toggleHaptic: () => set((state) => ({

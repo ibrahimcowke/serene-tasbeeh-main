@@ -415,6 +415,8 @@ export function Counter() {
                   { id: 'ring-light', label: 'Ring Light', icon: '🔆' },
                   { id: 'galaxy', label: 'Galaxy', icon: '🌌' },
                   { id: 'tally-clicker', label: 'Tally 3D', icon: '🖱️' },
+                  { id: 'steampunk-nixie', label: 'Steampunk', icon: '⚙️' },
+                  { id: 'biolum-organic', label: 'Bio-Lum', icon: '🧬' },
                 ].map((style) => (
                   <DropdownMenuItem
                     key={style.id}

@@ -3,7 +3,7 @@ import { ThemeSettings } from '@/store/tasbeehStore';
 
 interface CounterVisualsProps {
     layout: 'default' | 'focus' | 'ergonomic';
-    counterShape: 'minimal' | 'classic' | 'beads' | 'flower' | 'waveform' | 'hexagon' | 'orb' | 'digital' | 'modern-ring' | 'vintage-wood' | 'geometric-star' | 'fluid' | 'neumorph' | 'radar' | 'real-beads' | 'cyber-3d' | 'glass-orb' | 'crystal-iso' | 'portal-depth' | 'luminous-ring' | 'ring-light' | 'galaxy' | 'tally-clicker' | 'minimal-img' | 'classic-img' | 'beads-img' | 'flower-img' | 'waveform-img' | 'hexagon-img' | 'orb-img' | 'digital-img';
+    counterShape: 'minimal' | 'classic' | 'beads' | 'flower' | 'waveform' | 'hexagon' | 'orb' | 'digital' | 'modern-ring' | 'vintage-wood' | 'geometric-star' | 'fluid' | 'neumorph' | 'radar' | 'real-beads' | 'cyber-3d' | 'glass-orb' | 'crystal-iso' | 'portal-depth' | 'luminous-ring' | 'ring-light' | 'galaxy' | 'tally-clicker' | 'steampunk-nixie' | 'biolum-organic' | 'minimal-img' | 'classic-img' | 'beads-img' | 'flower-img' | 'waveform-img' | 'hexagon-img' | 'orb-img' | 'digital-img';
     counterVerticalOffset: number;
     counterScale: number;
     progress: number;
@@ -509,6 +509,164 @@ export function CounterVisuals({
                 </div>
             )}
 
+            {counterShape === 'biolum-organic' && (
+                <div className="absolute inset-0 flex items-center justify-center -z-10">
+                    <div className="w-[320px] h-[320px] relative flex items-center justify-center">
+                        {/* Organic Bone Spiral Structure */}
+                        <svg viewBox="0 0 400 400" className="w-full h-full drop-shadow-2xl animate-spin-slow-super">
+                            <defs>
+                                <filter id="bone-relief">
+                                    <feTurbulence type="fractalNoise" baseFrequency="0.01" numOctaves="3" result="noise" />
+                                    <feDiffuseLighting in="noise" lightingColor="#fff" surfaceScale="1">
+                                        <feDistantLight azimuth="45" elevation="60" />
+                                    </feDiffuseLighting>
+                                    <feComposite operator="in" in2="SourceGraphic" result="textured" />
+                                    <feMerge>
+                                        <feMergeNode in="SourceGraphic" />
+                                        <feMergeNode in="textured" mode="multiply" />
+                                    </feMerge>
+                                </filter>
+                                <radialGradient id="bio-pool-grad" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">
+                                    <stop offset="0%" stopColor="#00ffff" stopOpacity="0.9" />
+                                    <stop offset="60%" stopColor="#0088ff" stopOpacity="0.4" />
+                                    <stop offset="100%" stopColor="#000000" stopOpacity="0" />
+                                </radialGradient>
+                                <filter id="glow-cells">
+                                    <feGaussianBlur stdDeviation="4" result="coloredBlur" />
+                                    <feMerge>
+                                        <feMergeNode in="coloredBlur" />
+                                        <feMergeNode in="SourceGraphic" />
+                                    </feMerge>
+                                </filter>
+                            </defs>
+
+                            <g transform="translate(200,200)">
+                                {/* Spiral Arms Construction */}
+                                {[0, 60, 120, 180, 240, 300].map((deg, i) => (
+                                    <g key={i} transform={`rotate(${deg})`}>
+                                        {/* Bone Segment */}
+                                        <path
+                                            d="M0,0 Q40,-60 10,-140 Q-50,-180 -100,-120 Q-60,-50 0,0 Z"
+                                            fill="#e8e4dc"
+                                            stroke="#dcd8d0"
+                                            strokeWidth="1"
+                                            filter="url(#bone-relief)"
+                                            className="drop-shadow-lg"
+                                        />
+                                        {/* Deep Recess for "Pools" */}
+                                        <path
+                                            d="M-20,-60 Q-10,-100 -40,-130 Q-70,-110 -50,-60 Z"
+                                            fill="#1a2530"
+                                            opacity="0.8"
+                                        />
+                                        {/* Glowing Cellular Orbs within Recess */}
+                                        <g filter="url(#glow-cells)">
+                                            <circle cx="-35" cy="-90" r="8" fill="url(#bio-pool-grad)" opacity="0.8">
+                                                <animate attributeName="opacity" values="0.4;1;0.4" dur={`${3 + i * 0.5}s`} repeatCount="indefinite" />
+                                                <animate attributeName="r" values="7;9;7" dur={`${3 + i * 0.5}s`} repeatCount="indefinite" />
+                                            </circle>
+                                            <circle cx="-50" cy="-110" r="5" fill="url(#bio-pool-grad)" opacity="0.6">
+                                                <animate attributeName="opacity" values="0.3;0.8;0.3" dur={`${2 + i * 0.5}s`} repeatCount="indefinite" />
+                                            </circle>
+                                            <circle cx="-25" cy="-75" r="4" fill="url(#bio-pool-grad)" opacity="0.6">
+                                                <animate attributeName="opacity" values="0.3;0.8;0.3" dur={`${4 + i * 0.5}s`} repeatCount="indefinite" />
+                                            </circle>
+                                        </g>
+                                    </g>
+                                ))}
+                            </g>
+                        </svg>
+
+                        {/* Central Cellular Display Pool */}
+                        <div className="absolute w-[140px] h-[140px] rounded-full bg-[#050a0a] shadow-[inset_0_0_30px_rgba(0,255,255,0.4)] flex items-center justify-center overflow-hidden border-4 border-[#dcd8d0] z-20">
+                            {/* Moving Cells Background */}
+                            <div className="absolute inset-[-50%]"
+                                style={{
+                                    backgroundImage: 'radial-gradient(circle, rgba(0,240,255,0.15) 2px, transparent 3px)',
+                                    backgroundSize: '20px 20px',
+                                }}
+                            >
+                                <motion.div
+                                    className="w-full h-full"
+                                    animate={{ rotate: 360 }}
+                                    transition={{ duration: 60, repeat: Infinity, ease: "linear" }}
+                                />
+                            </div>
+
+                            {/* Main Glow Source behind numbers */}
+                            <div className="absolute w-[80%] h-[80%] bg-[#00f0ff] opacity-10 blur-xl rounded-full animate-pulse-slow" />
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {counterShape === 'steampunk-nixie' && (
+                <div className="absolute inset-0 flex items-center justify-center -z-10">
+                    {/* Main Brass Container */}
+                    <div className="w-[280px] h-[280px] rounded-full bg-[#2b1d0e] border-[8px] border-[#c5a059] shadow-[0_10px_30px_rgba(0,0,0,0.8),inset_0_0_40px_rgba(0,0,0,0.9)] flex items-center justify-center relative overflow-hidden">
+                        {/* Brass Texture Overlay */}
+                        <div className="absolute inset-0 opacity-20 bg-[radial-gradient(circle,transparent_20%,#000_120%)] pointer-events-none" />
+
+                        {/* Decorative Bolts */}
+                        {[0, 45, 90, 135, 180, 225, 270, 315].map((deg) => (
+                            <div
+                                key={deg}
+                                className="absolute w-3 h-3 rounded-full bg-[#8a6a36] shadow-[inset_1px_1px_2px_rgba(255,255,255,0.3),1px_1px_2px_rgba(0,0,0,0.8)] border border-[#5c4018]"
+                                style={{
+                                    transform: `rotate(${deg}deg) translateY(-128px)`
+                                }}
+                            >
+                                <div className="w-full h-[1px] bg-[#3e2b14] absolute top-1/2 -translate-y-1/2 rotate-45" />
+                            </div>
+                        ))}
+
+                        {/* Animated Gears Layer 1 (Background) */}
+                        <motion.div
+                            className="absolute inset-[30px] opacity-40"
+                            animate={{ rotate: 360 }}
+                            transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+                        >
+                            <svg viewBox="0 0 100 100" className="w-full h-full fill-[#8a6a36]">
+                                <path d="M50 25 L55 25 L55 35 L62 38 L68 30 L72 33 L68 40 L74 45 L84 45 L84 50 L84 55 L74 55 L68 60 L72 67 L68 70 L62 62 L55 65 L55 75 L45 75 L45 65 L38 62 L32 70 L28 67 L32 60 L26 55 L16 55 L16 45 L26 45 L32 40 L28 33 L32 30 L38 38 L45 35 L45 25 Z" />
+                            </svg>
+                        </motion.div>
+
+                        {/* Animated Clocks/Gears Layer 2 */}
+                        <motion.div
+                            className="absolute top-10 right-10 w-24 h-24 opacity-30"
+                            animate={{ rotate: -360 }}
+                            transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
+                        >
+                            <svg viewBox="0 0 100 100" className="w-full h-full fill-[#b8860b]">
+                                <circle cx="50" cy="50" r="40" stroke="currentColor" strokeWidth="8" strokeDasharray="10 4" fill="none" />
+                                <circle cx="50" cy="50" r="15" fill="currentColor" />
+                                <rect x="45" y="10" width="10" height="40" fill="currentColor" />
+                            </svg>
+                        </motion.div>
+
+
+                        {/* Inner Display Window (Glass Tube Look) */}
+                        <div className="absolute w-[200px] h-[100px] bg-black/80 rounded-xl border-4 border-[#5c4018] shadow-[inset_0_0_20px_rgba(0,0,0,1)] flex items-center justify-center overflow-hidden z-10">
+                            {/* Glass Reflection */}
+                            <div className="absolute top-0 left-0 w-full h-1/2 bg-gradient-to-b from-white/10 to-transparent pointer-events-none z-20" />
+
+                            {/* Mesh Grid Background for Tubes */}
+                            <div className="absolute inset-0 opacity-20" style={{ backgroundImage: 'linear-gradient(#c5a059 1px, transparent 1px), linear-gradient(90deg, #c5a059 1px, transparent 1px)', backgroundSize: '10px 10px' }} />
+
+                            {/* Tube Highlights */}
+                            <div className="absolute inset-0 flex justify-center items-center gap-1 z-0 opacity-30">
+                                <div className="w-12 h-20 rounded-full bg-gradient-to-r from-transparent via-[#c5a059]/20 to-transparent blur-sm" />
+                                <div className="w-12 h-20 rounded-full bg-gradient-to-r from-transparent via-[#c5a059]/20 to-transparent blur-sm" />
+                                <div className="w-12 h-20 rounded-full bg-gradient-to-r from-transparent via-[#c5a059]/20 to-transparent blur-sm" />
+                            </div>
+                        </div>
+
+                        {/* Bottom Brass Plate */}
+                        <div className="absolute bottom-[40px] w-32 h-6 bg-gradient-to-b from-[#8a6a36] to-[#3e2b14] rounded-sm shadow-md border border-[#c5a059]/50" />
+                    </div>
+                </div>
+            )}
+
 
             <motion.button
                 onClick={handleTap}
@@ -537,6 +695,8 @@ export function CounterVisuals({
         ${counterShape === 'crystal-iso' ? 'w-64 h-72 flex items-center justify-center -mt-4' : ''}
         ${counterShape === 'portal-depth' ? 'w-64 h-64 rounded-full flex items-center justify-center text-purple-200' : ''}
         ${counterShape === 'luminous-ring' ? 'w-64 h-64 rounded-full flex items-center justify-center text-yellow-100' : ''}
+        ${counterShape === 'steampunk-nixie' ? 'w-64 h-64 rounded-full flex items-center justify-center' : ''}
+        ${counterShape === 'biolum-organic' ? 'w-64 h-64 rounded-full flex items-center justify-center' : ''}
         
         flex items-center justify-center
         cursor-pointer
@@ -600,6 +760,8 @@ export function CounterVisuals({
           ${counterShape === 'ring-light' ? 'text-white/90 font-thin tracking-tighter drop-shadow-[0_0_20px_rgba(255,255,255,0.8)]' : ''}
           ${counterShape === 'galaxy' ? 'text-white font-bold tracking-widest' : ''}
           ${counterShape === 'tally-clicker' ? 'text-zinc-800 font-mono text-6xl font-bold tracking-wide inset-shadow-sm' : ''}
+          ${counterShape === 'steampunk-nixie' ? 'font-mono text-orange-500 font-bold tracking-widest drop-shadow-[0_0_10px_orange] text-6xl' : ''}
+          ${counterShape === 'biolum-organic' ? 'font-mono text-cyan-400 font-bold tracking-widest drop-shadow-[0_0_15px_cyan] text-6xl' : ''}
         `}
                     style={{
                         fontSize: counterShape === 'digital' ? '0px' : `${(counterShape === 'classic' ? 4.5 : 4.5) * currentSettings.fontScale * countFontSize}rem`
