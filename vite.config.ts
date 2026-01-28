@@ -17,9 +17,13 @@ export default defineConfig(({ mode }) => ({
       devOptions: {
         enabled: true,
       },
+      strategies: "injectManifest",
+      srcDir: "src",
+      filename: "sw.ts",
       registerType: "autoUpdate",
       includeAssets: ["favicon.ico", "robots.txt", "screenshot-mobile.png", "screenshot-desktop.png"],
       manifest: {
+        id: "/",
         name: "Tasbeeh - Digital Dhikr Counter",
         short_name: "Tasbeeh",
         description: "A peaceful digital Tasbeeh counter for your daily dhikr practice",
@@ -29,9 +33,13 @@ export default defineConfig(({ mode }) => ({
         theme_color: "#f7f5f2",
         background_color: "#f7f5f2",
         display: "standalone",
+        display_override: ["window-controls-overlay", "standalone", "minimal-ui"],
         orientation: "portrait",
         scope: "/",
         start_url: "/",
+        launch_handler: {
+          client_mode: "navigate-existing"
+        },
         icons: [
           {
             src: "/pwa-192x192.png",
@@ -55,15 +63,15 @@ export default defineConfig(({ mode }) => ({
         screenshots: [
           {
             src: "/screenshot-mobile.png",
-            sizes: "640x1136",
-            type: "image/png",
+            sizes: "1024x1024",
+            type: "image/jpeg",
             form_factor: "narrow",
             label: "Tasbeeh Counter - Mobile View"
           },
           {
             src: "/screenshot-desktop.png",
-            sizes: "1280x720",
-            type: "image/png",
+            sizes: "1024x1024",
+            type: "image/jpeg",
             form_factor: "wide",
             label: "Tasbeeh Counter - Desktop View"
           }
@@ -76,43 +84,22 @@ export default defineConfig(({ mode }) => ({
             url: "/?session=100",
             icons: [{ src: "/pwa-192x192.png", sizes: "192x192" }]
           }
-        ]
-      },
-      workbox: {
-        globPatterns: ["**/*.{js,css,html,ico,png,svg,woff,woff2}"],
-        cleanupOutdatedCaches: true,
-        clientsClaim: true,
-        skipWaiting: true,
-        runtimeCaching: [
-          {
-            urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,
-            handler: "CacheFirst",
-            options: {
-              cacheName: "google-fonts-cache",
-              expiration: {
-                maxEntries: 10,
-                maxAgeSeconds: 60 * 60 * 24 * 365, // 1 year
-              },
-              cacheableResponse: {
-                statuses: [0, 200],
-              },
-            },
-          },
-          {
-            urlPattern: /^https:\/\/fonts\.gstatic\.com\/.*/i,
-            handler: "CacheFirst",
-            options: {
-              cacheName: "gstatic-fonts-cache",
-              expiration: {
-                maxEntries: 10,
-                maxAgeSeconds: 60 * 60 * 24 * 365, // 1 year
-              },
-              cacheableResponse: {
-                statuses: [0, 200],
-              },
-            },
-          },
         ],
+        protocol_handlers: [
+          {
+            protocol: "web+tasbeeh",
+            url: "/?action=%s"
+          }
+        ],
+        share_target: {
+          action: "/",
+          method: "GET",
+          params: {
+            title: "title",
+            text: "text",
+            url: "url"
+          }
+        }
       },
     }),
   ].filter(Boolean),
