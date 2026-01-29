@@ -33,7 +33,7 @@ interface SettingsViewProps {
 
 const themes = [
   { id: 'light', label: 'Light', description: 'Warm and calm' },
-  { id: 'dark', label: 'Dark', description: 'Night dhikr' },
+  { id: 'dark', label: 'Dark', description: 'Pure black night mode' },
   { id: 'theme-midnight', label: 'Midnight', description: 'Deep blue serenity' },
   { id: 'theme-neon', label: 'Neon', description: 'Vibrant pink & purple' },
   { id: 'theme-green', label: 'Matrix', description: 'Terminal green code' },

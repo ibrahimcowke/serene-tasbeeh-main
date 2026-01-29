@@ -74,6 +74,48 @@
     --sheet-bg: 0 0% 100%;
   }
 
+  .dark {
+    color-scheme: dark;
+    --background: 0 0% 0%;
+    --foreground: 0 0% 100%;
+
+    --card: 0 0% 2%;
+    --card-foreground: 0 0% 100%;
+
+    --popover: 0 0% 2%;
+    --popover-foreground: 0 0% 100%;
+
+    --primary: 0 0% 100%;
+    --primary-foreground: 0 0% 0%;
+
+    --secondary: 0 0% 10%;
+    --secondary-foreground: 0 0% 100%;
+
+    --muted: 0 0% 10%;
+    --muted-foreground: 0 0% 60%;
+
+    --accent: 0 0% 15%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 98%;
+
+    --border: 0 0% 15%;
+    --input: 0 0% 15%;
+    --ring: 0 0% 80%;
+
+    /* Counter specific */
+    --counter-bg: 0 0% 2%;
+    --counter-ring: 0 0% 100%;
+    --counter-text: 0 0% 100%;
+    --counter-glow: 0 0% 40%;
+
+    --arabic-text: 0 0% 100%;
+    --progress-track: 0 0% 15%;
+    --progress-fill: 0 0% 100%;
+    --sheet-bg: 0 0% 2%;
+  }
+
   .theme-midnight {
     color-scheme: dark;
     /* Midnight Blue */

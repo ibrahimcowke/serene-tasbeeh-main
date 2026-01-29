@@ -10,7 +10,7 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
 
   useEffect(() => {
     const root = document.documentElement;
-    root.classList.remove('light', 'dark', 'amoled', 'theme-midnight', 'theme-rose', 'theme-nature');
+    root.classList.remove('light', 'dark', 'theme-midnight', 'theme-neon', 'theme-green', 'theme-cyberpunk', 'theme-glass', 'theme-sunset', 'theme-forest', 'theme-oled');
 
     if (theme !== 'light') {
       root.classList.add(theme);
