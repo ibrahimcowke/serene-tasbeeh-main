@@ -1,10 +1,35 @@
+import { useEffect } from 'react';
 import { Counter } from '@/components/Counter';
 import { ActionBar } from '@/components/ActionBar';
 import { ThemeProvider } from '@/components/ThemeProvider';
 import { useTasbeehStore } from '@/store/tasbeehStore';
+import { toast } from 'sonner';
 
 const Index = () => {
-  const { zenMode, setZenMode } = useTasbeehStore();
+  const { zenMode, setZenMode, syncToCloud } = useTasbeehStore();
+
+  useEffect(() => {
+    const handleOnline = () => {
+      toast.success("You're back online!", {
+        description: "Syncing your data to the cloud..."
+      });
+      syncToCloud();
+    };
+
+    const handleOffline = () => {
+      toast.info("You're offline", {
+        description: "Your progress is saved locally."
+      });
+    };
+
+    window.addEventListener('online', handleOnline);
+    window.addEventListener('offline', handleOffline);
+
+    return () => {
+      window.removeEventListener('online', handleOnline);
+      window.removeEventListener('offline', handleOffline);
+    };
+  }, [syncToCloud]);
 
   return (
     <ThemeProvider>

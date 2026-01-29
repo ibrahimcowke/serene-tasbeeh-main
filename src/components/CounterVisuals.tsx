@@ -394,13 +394,13 @@ export function CounterVisuals({
             {counterShape === 'radar' && (
                 <div className="absolute inset-0 flex items-center justify-center -z-10 bg-black/80 rounded-full border-2 border-primary/30 overflow-hidden">
                     {/* Grid */}
-                    <div className="absolute inset-0" style={{ backgroundImage: 'radial-gradient(circle, rgba(0,255,0,0.2) 1px, transparent 1px)', backgroundSize: '30px 30px' }} />
+                    <div className="absolute inset-0" style={{ backgroundImage: 'radial-gradient(circle, hsl(var(--primary)/0.2) 1px, transparent 1px)', backgroundSize: '30px 30px' }} />
                     <div className="absolute inset-0 border border-primary/20 rounded-full scale-50" />
                     <div className="absolute inset-0 border border-primary/20 rounded-full scale-75" />
 
                     {/* Scanner */}
                     <motion.div
-                        className="absolute inset-0 bg-[conic-gradient(from_0deg,transparent_0deg,rgba(0,255,0,0.5)_360deg)]"
+                        className="absolute inset-0 bg-[conic-gradient(from_0deg,transparent_0deg,hsl(var(--primary)/0.5)_360deg)]"
                         animate={{ rotate: 360 }}
                         transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
                         style={{ clipPath: 'polygon(50% 50%, 100% 50%, 100% 0, 50% 0)' }}
@@ -449,14 +449,14 @@ export function CounterVisuals({
             {counterShape === 'cyber-3d' && (
                 <div className="absolute inset-0 flex items-center justify-center -z-10 perspective-[1000px]">
                     <motion.div
-                        className="w-full h-full rounded-full border-[20px] border-cyan-500/30 shadow-[0_0_50px_rgba(0,255,255,0.4)]"
+                        className="w-full h-full rounded-full border-[20px] border-primary/30 shadow-[0_0_50px_hsl(var(--primary)/0.4)]"
                         style={{ transformStyle: 'preserve-3d' }}
                         animate={{ rotateX: [0, 20, 0, -20, 0], rotateY: [0, 20, 0, -20, 0] }}
                         transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
                     >
-                        <div className="absolute inset-0 rounded-full border-t-2 border-r-2 border-cyan-200 opacity-50 animate-spin-slow" />
+                        <div className="absolute inset-0 rounded-full border-t-2 border-r-2 border-primary/50 opacity-50 animate-spin-slow" />
                         <div className="absolute inset-4 rounded-full bg-black/80 backdrop-blur-md flex items-center justify-center shadow-inner">
-                            <div className="w-full h-full rounded-full bg-[radial-gradient(circle_at_center,transparent_30%,rgba(0,255,255,0.1)_100%)]" />
+                            <div className="w-full h-full rounded-full bg-[radial-gradient(circle_at_center,transparent_30%,hsl(var(--primary)/0.1)_100%)]" />
                         </div>
                     </motion.div>
                 </div>
@@ -466,7 +466,7 @@ export function CounterVisuals({
                 <div className="absolute inset-0 flex items-center justify-center -z-10">
                     <div className="w-[280px] h-[280px] rounded-full bg-gradient-to-br from-white/40 via-white/10 to-transparent backdrop-blur-sm border-2 border-white/50 shadow-[0_20px_50px_rgba(0,0,0,0.2),inset_10px_10px_40px_rgba(255,255,255,0.8)] flex items-center justify-center overflow-hidden">
                         <div className="absolute top-10 left-10 w-32 h-20 bg-white/60 blur-[30px] rounded-full transform -rotate-45" />
-                        <div className="absolute bottom-10 right-10 w-40 h-40 bg-blue-400/20 blur-[40px] rounded-full" />
+                        <div className="absolute bottom-10 right-10 w-40 h-40 bg-primary/20 blur-[40px] rounded-full" />
                     </div>
                 </div>
             )}
@@ -490,7 +490,7 @@ export function CounterVisuals({
                     {Array.from({ length: 5 }).map((_, i) => (
                         <motion.div
                             key={i}
-                            className="absolute inset-0 rounded-full border-2 border-purple-500/50 shadow-[0_0_20px_rgba(168,85,247,0.5)]"
+                            className="absolute inset-0 rounded-full border-2 border-primary/50 shadow-[0_0_20px_hsl(var(--primary)/0.5)]"
                             initial={{ scale: 0.1, opacity: 0 }}
                             animate={{ scale: 2, opacity: [0, 1, 0] }}
                             transition={{ duration: 4, repeat: Infinity, delay: i * 0.8, ease: "linear" }}
@@ -502,9 +502,9 @@ export function CounterVisuals({
 
             {counterShape === 'luminous-ring' && (
                 <div className="absolute inset-0 flex items-center justify-center -z-10">
-                    <div className="w-[280px] h-[280px] rounded-full bg-black flex items-center justify-center shadow-[0_0_60px_rgba(255,255,0,0.3)] border border-yellow-500/20">
-                        <div className="w-[90%] h-[90%] rounded-full border-[6px] border-yellow-400 shadow-[0_0_20px_rgba(255,255,0,0.8),inset_0_0_20px_rgba(255,255,0,0.5)]" />
-                        <div className="absolute inset-0 bg-gradient-to-b from-yellow-200/20 to-transparent rounded-full mix-blend-overlay" />
+                    <div className="w-[280px] h-[280px] rounded-full bg-black flex items-center justify-center shadow-[0_0_60px_hsl(var(--primary)/0.3)] border border-primary/20">
+                        <div className="w-[90%] h-[90%] rounded-full border-[6px] border-primary shadow-[0_0_20px_hsl(var(--primary)/0.8),inset_0_0_20px_hsl(var(--primary)/0.5)]" />
+                        <div className="absolute inset-0 bg-gradient-to-b from-primary/20 to-transparent rounded-full mix-blend-overlay" />
                     </div>
                 </div>
             )}
@@ -527,8 +527,8 @@ export function CounterVisuals({
                                     </feMerge>
                                 </filter>
                                 <radialGradient id="bio-pool-grad" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">
-                                    <stop offset="0%" stopColor="#00ffff" stopOpacity="0.9" />
-                                    <stop offset="60%" stopColor="#0088ff" stopOpacity="0.4" />
+                                    <stop offset="0%" stopColor="hsl(var(--primary))" stopOpacity="0.9" />
+                                    <stop offset="60%" stopColor="hsl(var(--primary))" stopOpacity="0.4" />
                                     <stop offset="100%" stopColor="#000000" stopOpacity="0" />
                                 </radialGradient>
                                 <filter id="glow-cells">
@@ -578,11 +578,11 @@ export function CounterVisuals({
                         </svg>
 
                         {/* Central Cellular Display Pool */}
-                        <div className="absolute w-[140px] h-[140px] rounded-full bg-[#050a0a] shadow-[inset_0_0_30px_rgba(0,255,255,0.4)] flex items-center justify-center overflow-hidden border-4 border-[#dcd8d0] z-20">
+                        <div className="absolute w-[140px] h-[140px] rounded-full bg-[#050a0a] shadow-[inset_0_0_30px_hsl(var(--primary)/0.4)] flex items-center justify-center overflow-hidden border-4 border-[#dcd8d0] z-20">
                             {/* Moving Cells Background */}
                             <div className="absolute inset-[-50%]"
                                 style={{
-                                    backgroundImage: 'radial-gradient(circle, rgba(0,240,255,0.15) 2px, transparent 3px)',
+                                    backgroundImage: 'radial-gradient(circle, hsl(var(--primary)/0.15) 2px, transparent 3px)',
                                     backgroundSize: '20px 20px',
                                 }}
                             >
@@ -594,7 +594,7 @@ export function CounterVisuals({
                             </div>
 
                             {/* Main Glow Source behind numbers */}
-                            <div className="absolute w-[80%] h-[80%] bg-[#00f0ff] opacity-10 blur-xl rounded-full animate-pulse-slow" />
+                            <div className="absolute w-[80%] h-[80%] bg-primary opacity-10 blur-xl rounded-full animate-pulse-slow" />
                         </div>
                     </div>
                 </div>
@@ -687,14 +687,14 @@ export function CounterVisuals({
         ${counterShape === 'vintage-wood' ? 'w-60 h-60 rounded-3xl bg-[#5d4037] border-2 border-[#8d6e63] shadow-[inset_0_5px_15px_rgba(0,0,0,0.3)] mt-2' : ''}
         ${counterShape === 'geometric-star' ? 'w-64 h-64 flex items-center justify-center bg-background/10 backdrop-blur-sm' : ''}
         ${counterShape === 'fluid' ? 'w-64 h-64 flex items-center justify-center backdrop-blur-sm' : ''}
-        ${counterShape === 'neumorph' ? 'w-64 h-64 rounded-[40px] bg-[#e0e5ec] shadow-[9px_9px_16px_rgb(163,177,198,0.6),-9px_-9px_16px_rgba(255,255,255,0.5)] text-[#4d4d4d] border border-white/20' : ''}
-        ${counterShape === 'radar' ? 'w-64 h-64 rounded-full flex items-center justify-center shadow-[0_0_20px_rgba(0,255,0,0.3)]' : ''}
+        ${counterShape === 'neumorph' ? 'w-64 h-64 rounded-[40px] bg-secondary shadow-[9px_9px_16px_rgba(0,0,0,0.1),-9px_-9px_16px_rgba(255,255,255,0.1)] text-foreground border border-white/20' : ''}
+        ${counterShape === 'radar' ? 'w-64 h-64 rounded-full flex items-center justify-center shadow-[0_0_20px_hsl(var(--primary)/0.3)]' : ''}
         ${counterShape === 'real-beads' ? 'w-full h-full rounded-full flex items-center justify-center' : ''}
-        ${counterShape === 'cyber-3d' ? 'w-64 h-64 rounded-full flex items-center justify-center text-cyan-400' : ''}
+        ${counterShape === 'cyber-3d' ? 'w-64 h-64 rounded-full flex items-center justify-center text-primary' : ''}
         ${counterShape === 'glass-orb' ? 'w-64 h-64 rounded-full flex items-center justify-center' : ''}
         ${counterShape === 'crystal-iso' ? 'w-64 h-72 flex items-center justify-center -mt-4' : ''}
-        ${counterShape === 'portal-depth' ? 'w-64 h-64 rounded-full flex items-center justify-center text-purple-200' : ''}
-        ${counterShape === 'luminous-ring' ? 'w-64 h-64 rounded-full flex items-center justify-center text-yellow-100' : ''}
+        ${counterShape === 'portal-depth' ? 'w-64 h-64 rounded-full flex items-center justify-center text-primary-foreground' : ''}
+        ${counterShape === 'luminous-ring' ? 'w-64 h-64 rounded-full flex items-center justify-center text-primary' : ''}
         ${counterShape === 'steampunk-nixie' ? 'w-64 h-64 rounded-full flex items-center justify-center' : ''}
         ${counterShape === 'biolum-organic' ? 'w-64 h-64 rounded-full flex items-center justify-center' : ''}
         
@@ -749,19 +749,19 @@ export function CounterVisuals({
           ${counterShape === 'orb' ? 'text-white mix-blend-overlay' : ''}
           ${counterShape === 'modern-ring' ? 'font-sans font-light tracking-tighter drop-shadow-[0_0_15px_rgba(var(--primary),0.6)]' : ''}
           ${counterShape === 'vintage-wood' ? 'font-serif text-[#d7ccc8] drop-shadow-[0_2px_2px_rgba(0,0,0,0.5)]' : ''}
-          ${counterShape === 'neumorph' ? 'text-gray-600 font-bold drop-shadow-sm' : ''}
-          ${counterShape === 'radar' ? 'font-mono text-green-400 drop-shadow-[0_0_5px_lime]' : ''}
+          ${counterShape === 'neumorph' ? 'text-foreground font-bold drop-shadow-sm' : ''}
+          ${counterShape === 'radar' ? 'font-mono text-primary drop-shadow-[0_0_5px_hsl(var(--primary))]' : ''}
           ${counterShape === 'real-beads' ? 'font-serif text-[#5d4037] text-6xl font-bold drop-shadow-md bg-white/80 w-32 h-32 rounded-full flex items-center justify-center border-4 border-[#8d6e63]' : ''}
-          ${counterShape === 'cyber-3d' ? 'font-mono text-cyan-400 drop-shadow-[0_0_10px_cyan]' : ''}
+          ${counterShape === 'cyber-3d' ? 'font-mono text-primary drop-shadow-[0_0_10px_hsl(var(--primary))]' : ''}
           ${counterShape === 'glass-orb' ? 'text-white/90 drop-shadow-lg font-light' : ''}
           ${counterShape === 'crystal-iso' ? 'text-white drop-shadow-[0_4px_8px_rgba(0,0,0,0.5)] font-bold' : ''}
-          ${counterShape === 'portal-depth' ? 'text-white drop-shadow-[0_0_20px_rgba(255,255,255,0.8)]' : ''}
-          ${counterShape === 'luminous-ring' ? 'text-yellow-100 drop-shadow-[0_0_15px_rgba(255,215,0,0.8)] font-light' : ''}
+          ${counterShape === 'portal-depth' ? 'text-primary-foreground drop-shadow-[0_0_20px_hsl(var(--primary)/0.8)]' : ''}
+          ${counterShape === 'luminous-ring' ? 'text-primary drop-shadow-[0_0_15px_hsl(var(--primary)/0.8)] font-light' : ''}
           ${counterShape === 'ring-light' ? 'text-white/90 font-thin tracking-tighter drop-shadow-[0_0_20px_rgba(255,255,255,0.8)]' : ''}
           ${counterShape === 'galaxy' ? 'text-white font-bold tracking-widest' : ''}
           ${counterShape === 'tally-clicker' ? 'text-zinc-800 font-mono text-6xl font-bold tracking-wide inset-shadow-sm' : ''}
           ${counterShape === 'steampunk-nixie' ? 'font-mono text-orange-500 font-bold tracking-widest drop-shadow-[0_0_10px_orange] text-6xl' : ''}
-          ${counterShape === 'biolum-organic' ? 'font-mono text-cyan-400 font-bold tracking-widest drop-shadow-[0_0_15px_cyan] text-6xl' : ''}
+          ${counterShape === 'biolum-organic' ? 'font-mono text-primary font-bold tracking-widest drop-shadow-[0_0_15px_hsl(var(--primary))] text-6xl' : ''}
         `}
                     style={{
                         fontSize: counterShape === 'digital' ? '0px' : `${(counterShape === 'classic' ? 4.5 : 4.5) * currentSettings.fontScale * countFontSize}rem`

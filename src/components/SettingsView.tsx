@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
-import { Check, Download, Upload, Trash2, RotateCcw, Layout, Smartphone, Maximize, Cloud, LogIn, LogOut, RefreshCw, Shield } from 'lucide-react';
+import { Check, Download, Upload, Trash2, RotateCcw, Layout, Smartphone, Maximize, Cloud, LogIn, LogOut, RefreshCw, Shield, Shapes } from 'lucide-react';
 import { useTasbeehStore } from '@/store/tasbeehStore';
 import { supabase, signInWithGoogle, signOut, getCurrentUser } from '@/lib/supabase';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
@@ -42,6 +42,34 @@ const themes = [
   { id: 'theme-sunset', label: 'Sunset', description: 'Warm gradients' },
   { id: 'theme-forest', label: 'Forest', description: 'Deep nature greens' },
   { id: 'theme-oled', label: 'OLED', description: 'True black power saver' },
+] as const;
+
+const counterShapes = [
+  { id: 'minimal', label: 'Minimal', icon: '○' },
+  { id: 'classic', label: 'Classic', icon: '□' },
+  { id: 'beads', label: 'Beads', icon: '◎' },
+  { id: 'flower', label: 'Flower', icon: '❀' },
+  { id: 'waveform', label: 'Wave', icon: '〰' },
+  { id: 'hexagon', label: 'Hex', icon: '⬡' },
+  { id: 'orb', label: 'Orb', icon: '●' },
+  { id: 'digital', label: 'Digit', icon: '88' },
+  { id: 'modern-ring', label: 'Ring', icon: '○' },
+  { id: 'vintage-wood', label: 'Wood', icon: '▧' },
+  { id: 'geometric-star', label: 'Star', icon: '۞' },
+  { id: 'fluid', label: 'Fluid', icon: '≈' },
+  { id: 'neumorph', label: 'Neu', icon: '❍' },
+  { id: 'radar', label: 'Radar', icon: '⊕' },
+  { id: 'real-beads', label: 'Real', icon: '📿' },
+  { id: 'cyber-3d', label: 'Cyber', icon: '◈' },
+  { id: 'glass-orb', label: 'Glass', icon: '🔮' },
+  { id: 'crystal-iso', label: 'Cryst', icon: '💎' },
+  { id: 'portal-depth', label: 'Portal', icon: '◎' },
+  { id: 'luminous-ring', label: 'Lumi', icon: '✨' },
+  { id: 'ring-light', label: 'Light', icon: '⭕' },
+  { id: 'galaxy', label: 'Galaxy', icon: '🌌' },
+  { id: 'tally-clicker', label: 'Click', icon: '🖱' },
+  { id: 'steampunk-nixie', label: 'Steam', icon: '⚙' },
+  { id: 'biolum-organic', label: 'Bio', icon: '🧬' },
 ] as const;
 
 export function SettingsView({ children }: SettingsViewProps) {
@@ -229,6 +257,31 @@ export function SettingsView({ children }: SettingsViewProps) {
                           )}
                         </div>
                       </motion.button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Counter Design Config */}
+                <div className="space-y-1">
+                  <p className="text-xs text-muted-foreground uppercase tracking-wide mb-3">Counter Design</p>
+                  <div className="grid grid-cols-3 sm:grid-cols-4 gap-2">
+                    {counterShapes.map((shape) => (
+                      <button
+                        key={shape.id}
+                        onClick={() => {
+                          setCounterShape(shape.id as any);
+                          setOpen(false);
+                        }}
+                        className={`
+                          p-3 rounded-xl border text-center transition-all relative overflow-hidden flex flex-col items-center gap-2
+                          ${counterShape === shape.id
+                            ? 'bg-primary/10 border-primary text-primary ring-1 ring-primary'
+                            : 'bg-card border-transparent text-muted-foreground hover:bg-secondary'}
+                        `}
+                      >
+                        <span className="text-xl opacity-70">{shape.icon}</span>
+                        <p className="text-[10px] font-medium truncate w-full">{shape.label}</p>
+                      </button>
                     ))}
                   </div>
                 </div>

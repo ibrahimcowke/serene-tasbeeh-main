@@ -504,7 +504,7 @@ export const useTasbeehStore = create<TasbeehState>()(
       
       resetSettings: () => {
          const root = window.document.documentElement;
-         root.classList.remove('light', 'dark', 'theme-midnight', 'theme-neon', 'theme-green', 'theme-cyberpunk', 'theme-glass');
+         root.classList.remove('light', 'dark', 'theme-midnight', 'theme-neon', 'theme-green', 'theme-cyberpunk', 'theme-glass', 'theme-sunset', 'theme-forest', 'theme-oled');
          root.classList.add('light');
          
          set({ 
@@ -616,7 +616,7 @@ export const useTasbeehStore = create<TasbeehState>()(
       setTheme: (theme) => {
         set({ theme });
         const root = window.document.documentElement;
-        root.classList.remove('light', 'dark', 'theme-midnight', 'theme-neon', 'theme-green', 'theme-cyberpunk', 'theme-glass');
+        root.classList.remove('light', 'dark', 'theme-midnight', 'theme-neon', 'theme-green', 'theme-cyberpunk', 'theme-glass', 'theme-sunset', 'theme-forest', 'theme-oled');
         root.classList.add(theme);
       },
       
