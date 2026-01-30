@@ -6,8 +6,7 @@ import { DhikrSelector } from './DhikrSelector';
 import { TargetSelector } from './TargetSelector';
 import { HistoryView } from './HistoryView';
 import { SettingsView } from './SettingsView';
-import { StatsView } from './StatsView';
-import { AchievementsView } from './AchievementsView';
+import { ProgressView } from './ProgressView';
 import { RemindersView } from './RemindersView';
 import { Drawer, DrawerContent, DrawerTrigger } from '@/components/ui/drawer';
 import {
@@ -88,23 +87,14 @@ export function ActionBar() {
             <DrawerContent className="bg-background/95 backdrop-blur-xl">
               <div className="w-full max-w-sm mx-auto p-6">
                 <div className="grid grid-cols-4 gap-4 mb-4">
-                  <StatsView>
-                    <button className="flex flex-col items-center gap-2 p-3 rounded-2xl bg-secondary/30 hover:bg-secondary active:scale-95 transition-all">
+                  <ProgressView>
+                    <button className="flex flex-col items-center gap-2 p-3 rounded-2xl bg-secondary/30 hover:bg-secondary active:scale-95 transition-all col-span-2">
                       <div className="w-10 h-10 rounded-full bg-blue-500/10 flex items-center justify-center">
                         <BarChart3 className="w-5 h-5 text-blue-500" />
                       </div>
-                      <span className="text-xs font-medium">Stats</span>
+                      <span className="text-xs font-medium">Progress</span>
                     </button>
-                  </StatsView>
-
-                  <AchievementsView>
-                    <button className="flex flex-col items-center gap-2 p-3 rounded-2xl bg-secondary/30 hover:bg-secondary active:scale-95 transition-all">
-                      <div className="w-10 h-10 rounded-full bg-yellow-500/10 flex items-center justify-center">
-                        <Trophy className="w-5 h-5 text-yellow-500" />
-                      </div>
-                      <span className="text-xs font-medium">Awards</span>
-                    </button>
-                  </AchievementsView>
+                  </ProgressView>
 
                   <RemindersView>
                     <button className="flex flex-col items-center gap-2 p-3 rounded-2xl bg-secondary/30 hover:bg-secondary active:scale-95 transition-all">
@@ -161,25 +151,15 @@ export function ActionBar() {
             </motion.button>
           </TargetSelector>
 
-          <StatsView>
+          <ProgressView>
             <motion.button
               whileTap={{ scale: 0.95 }}
               className="flex-1 flex flex-col items-center py-3 px-4 rounded-xl hover:bg-secondary transition-colors min-w-[70px] snap-center hover:scale-105"
             >
               <BarChart3 className="w-5 h-5 text-muted-foreground mb-1" />
-              <span className="text-xs text-muted-foreground font-medium">Stats</span>
+              <span className="text-xs text-muted-foreground font-medium">Progress</span>
             </motion.button>
-          </StatsView>
-
-          <AchievementsView>
-            <motion.button
-              whileTap={{ scale: 0.95 }}
-              className="flex-1 flex flex-col items-center py-3 px-4 rounded-xl hover:bg-secondary transition-colors min-w-[70px] snap-center hover:scale-105"
-            >
-              <Trophy className="w-5 h-5 text-muted-foreground mb-1" />
-              <span className="text-xs text-muted-foreground font-medium">Awards</span>
-            </motion.button>
-          </AchievementsView>
+          </ProgressView>
 
           <RemindersView>
             <motion.button

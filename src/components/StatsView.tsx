@@ -22,13 +22,13 @@ export function StatsView({ children }: StatsViewProps) {
                 <SheetHeader className="text-left pb-4">
                     <SheetTitle className="text-lg font-medium">Statistics</SheetTitle>
                 </SheetHeader>
-                <StatsContent />
+                <StatsViewContent />
             </SheetContent>
         </Sheet>
     );
 }
 
-function StatsContent() {
+export function StatsViewContent() {
     const { dailyRecords: history, dailyGoal = 100, streakDays } = useTasbeehStore();
 
     // Calculate statistics

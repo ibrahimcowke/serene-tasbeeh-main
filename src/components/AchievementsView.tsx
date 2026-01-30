@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useTasbeehStore } from '@/store/tasbeehStore';
 import { motion } from 'framer-motion';
-import { Trophy, Star, Flame, Target, Calendar, Award, Lock, Check } from 'lucide-react';
+import { Trophy, Star, Flame, Target, Calendar, Award, Lock, Check, Crown, Zap } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
@@ -41,7 +41,7 @@ export function AchievementsView({ children }: AchievementsViewProps) {
     );
 }
 
-function AchievementsContent() {
+export function AchievementsContent() {
     const { dailyRecords: history, currentCount } = useTasbeehStore();
 
     // Calculate stats
@@ -107,6 +107,17 @@ function AchievementsContent() {
             progress: Math.min((totalAllTime / 10000) * 100, 100),
         },
         {
+            id: 'first_50000',
+            title: 'Devoted Heart',
+            description: 'Complete 50,000 dhikr',
+            icon: <Trophy className="w-6 h-6" />,
+            requirement: 50000,
+            category: 'count',
+            color: 'from-orange-500 to-amber-500',
+            unlocked: totalAllTime >= 50000,
+            progress: Math.min((totalAllTime / 50000) * 100, 100),
+        },
+        {
             id: 'first_100000',
             title: 'Master of Remembrance',
             description: 'Complete 100,000 dhikr',
@@ -116,6 +127,39 @@ function AchievementsContent() {
             color: 'from-amber-500 to-yellow-500',
             unlocked: totalAllTime >= 100000,
             progress: Math.min((totalAllTime / 100000) * 100, 100),
+        },
+        {
+            id: 'first_250000',
+            title: 'Quarter Million',
+            description: 'Complete 250,000 dhikr',
+            icon: <Trophy className="w-6 h-6" />,
+            requirement: 250000,
+            category: 'count',
+            color: 'from-yellow-500 to-lime-500',
+            unlocked: totalAllTime >= 250000,
+            progress: Math.min((totalAllTime / 250000) * 100, 100),
+        },
+        {
+            id: 'first_500000',
+            title: 'Half Million Master',
+            description: 'Complete 500,000 dhikr',
+            icon: <Crown className="w-6 h-6" />,
+            requirement: 500000,
+            category: 'count',
+            color: 'from-lime-500 to-green-500',
+            unlocked: totalAllTime >= 500000,
+            progress: Math.min((totalAllTime / 500000) * 100, 100),
+        },
+        {
+            id: 'first_1000000',
+            title: 'The Millionaire',
+            description: 'Complete 1,000,000 dhikr',
+            icon: <Crown className="w-6 h-6" />,
+            requirement: 1000000,
+            category: 'count',
+            color: 'from-green-500 to-emerald-500',
+            unlocked: totalAllTime >= 1000000,
+            progress: Math.min((totalAllTime / 1000000) * 100, 100),
         },
 
         // Streak-based achievements
@@ -142,6 +186,17 @@ function AchievementsContent() {
             progress: Math.min((currentStreak / 7) * 100, 100),
         },
         {
+            id: 'streak_14',
+            title: 'Fortnight Focus',
+            description: 'Maintain a 14-day streak',
+            icon: <Flame className="w-6 h-6" />,
+            requirement: 14,
+            category: 'streak',
+            color: 'from-red-400 to-rose-400',
+            unlocked: currentStreak >= 14,
+            progress: Math.min((currentStreak / 14) * 100, 100),
+        },
+        {
             id: 'streak_30',
             title: 'Monthly Champion',
             description: 'Maintain a 30-day streak',
@@ -151,6 +206,17 @@ function AchievementsContent() {
             color: 'from-red-500 to-rose-500',
             unlocked: currentStreak >= 30,
             progress: Math.min((currentStreak / 30) * 100, 100),
+        },
+        {
+            id: 'streak_60',
+            title: 'Two Month Titan',
+            description: 'Maintain a 60-day streak',
+            icon: <Flame className="w-6 h-6" />,
+            requirement: 60,
+            category: 'streak',
+            color: 'from-rose-500 to-pink-500',
+            unlocked: currentStreak >= 60,
+            progress: Math.min((currentStreak / 60) * 100, 100),
         },
         {
             id: 'streak_100',
@@ -188,6 +254,17 @@ function AchievementsContent() {
             progress: Math.min((maxInDay / 1000) * 100, 100),
         },
         {
+            id: 'daily_2500',
+            title: 'Deep Focus',
+            description: 'Complete 2,500 dhikr in one day',
+            icon: <Target className="w-6 h-6" />,
+            requirement: 2500,
+            category: 'session',
+            color: 'from-teal-600 to-cyan-600',
+            unlocked: maxInDay >= 2500,
+            progress: Math.min((maxInDay / 2500) * 100, 100),
+        },
+        {
             id: 'daily_5000',
             title: 'Extreme Dedication',
             description: 'Complete 5,000 dhikr in one day',
@@ -197,6 +274,17 @@ function AchievementsContent() {
             color: 'from-teal-500 to-cyan-500',
             unlocked: maxInDay >= 5000,
             progress: Math.min((maxInDay / 5000) * 100, 100),
+        },
+        {
+            id: 'daily_10000',
+            title: 'Marathon Session',
+            description: 'Complete 10,000 dhikr in one day',
+            icon: <Zap className="w-6 h-6" />,
+            requirement: 10000,
+            category: 'session',
+            color: 'from-cyan-500 to-blue-500',
+            unlocked: maxInDay >= 10000,
+            progress: Math.min((maxInDay / 10000) * 100, 100),
         },
 
         // Consistency achievements
@@ -210,6 +298,17 @@ function AchievementsContent() {
             color: 'from-indigo-500 to-purple-500',
             unlocked: daysActive >= 7,
             progress: Math.min((daysActive / 7) * 100, 100),
+        },
+        {
+            id: 'active_14',
+            title: 'Two Weeks Active',
+            description: 'Be active for 14 days',
+            icon: <Calendar className="w-6 h-6" />,
+            requirement: 14,
+            category: 'consistency',
+            color: 'from-indigo-400 to-violet-400',
+            unlocked: daysActive >= 14,
+            progress: Math.min((daysActive / 14) * 100, 100),
         },
         {
             id: 'active_30',
@@ -232,6 +331,17 @@ function AchievementsContent() {
             color: 'from-violet-500 to-purple-500',
             unlocked: daysActive >= 100,
             progress: Math.min((daysActive / 100) * 100, 100),
+        },
+        {
+            id: 'active_180',
+            title: 'Half Year Dedication',
+            description: 'Be active for 180 days',
+            icon: <Calendar className="w-6 h-6" />,
+            requirement: 180,
+            category: 'consistency',
+            color: 'from-purple-500 to-fuchsia-500',
+            unlocked: daysActive >= 180,
+            progress: Math.min((daysActive / 180) * 100, 100),
         },
         {
             id: 'active_365',
