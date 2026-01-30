@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
-import { Check, Download, Upload, Trash2, RotateCcw, Layout, Smartphone, Maximize, Cloud, LogIn, LogOut, RefreshCw, Shield, Shapes } from 'lucide-react';
+import { Check, Download, Upload, Trash2, RotateCcw, Layout, Smartphone, Maximize, Cloud, LogIn, LogOut, RefreshCw, Shield, Shapes, Wind, Palette, Waves, Crown, Sunset, Zap, CloudMoon, Infinity, Fan, Diamond, Component } from 'lucide-react';
 import { useTasbeehStore } from '@/store/tasbeehStore';
 import { supabase, signInWithGoogle, signOut, getCurrentUser } from '@/lib/supabase';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
@@ -25,6 +25,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Label } from '@/components/ui/label';
 import { StatisticsView } from './StatisticsView';
 
 interface SettingsViewProps {
@@ -33,7 +34,10 @@ interface SettingsViewProps {
 
 const themes = [
   { id: 'light', label: 'Light', description: 'Warm and calm' },
-  { id: 'dark', label: 'Dark', description: 'Pure black night mode' },
+  { id: 'theme-biolum', label: 'Biolum', description: 'Deep sea bioluminescence' },
+  { id: 'theme-radar-tactical', label: 'Tactical', description: 'Phosphor green radar' },
+  { id: 'theme-steampunk', label: 'Steampunk', description: 'Brass, copper & amber' },
+  { id: 'theme-crystal-depth', label: 'Crystal', description: 'Deep purple crystal' },
   { id: 'theme-midnight', label: 'Midnight', description: 'Deep blue serenity' },
   { id: 'theme-neon', label: 'Neon', description: 'Vibrant pink & purple' },
   { id: 'theme-green', label: 'Matrix', description: 'Terminal green code' },
@@ -70,6 +74,14 @@ const counterShapes = [
   { id: 'tally-clicker', label: 'Click', icon: '🖱' },
   { id: 'steampunk-nixie', label: 'Steam', icon: '⚙' },
   { id: 'biolum-organic', label: 'Bio', icon: '🧬' },
+  { id: 'quantum-string', label: 'String', icon: '〰' },
+  { id: 'solar-flare', label: 'Solar', icon: '☀' },
+  { id: 'particle-vortex', label: 'Vortex', icon: '🌀' },
+  { id: 'nebula-cloud', label: 'Nebula', icon: '🌥' },
+  { id: 'infinite-knot', label: 'Knot', icon: '➰' },
+  { id: 'holo-fan', label: 'Fan', icon: '☄' },
+  { id: 'prism-crystal', label: 'Prism', icon: '✵' },
+  { id: 'plasma-coil', label: 'Plasma', icon: '〰' },
 ] as const;
 
 export function SettingsView({ children }: SettingsViewProps) {
@@ -115,6 +127,10 @@ export function SettingsView({ children }: SettingsViewProps) {
     setCountFontSize,
     zenMode,
     setZenMode,
+    breathingGuideEnabled,
+    setBreathingGuide,
+    breathingGuideSpeed,
+    setBreathingGuideSpeed,
   } = useTasbeehStore();
 
   const [user, setUser] = useState<any>(null);
@@ -428,6 +444,54 @@ export function SettingsView({ children }: SettingsViewProps) {
                                 value={[countFontSize]}
                                 onValueChange={([val]) => setCountFontSize(val)}
                               />
+                            </div>
+                          </div>
+                        </AccordionContent>
+                      </AccordionItem>
+
+                      {/* Mindfulness Section */}
+                      <AccordionItem value="mindfulness" className="border-none">
+                        <AccordionTrigger className="hover:no-underline py-4 px-1 rounded-xl transition-all hover:bg-zinc-100/50 dark:hover:bg-zinc-800/30">
+                          <div className="flex items-center gap-3">
+                            <div className="w-10 h-10 rounded-2xl bg-indigo-100 dark:bg-indigo-900/30 flex items-center justify-center text-indigo-600 dark:text-indigo-400">
+                              <Wind className="w-5 h-5" />
+                            </div>
+                            <div className="text-left">
+                              <p className="font-semibold text-zinc-900 dark:text-zinc-100 text-[15px]">Mindfulness</p>
+                              <p className="text-[13px] text-zinc-500 dark:text-zinc-400">Breathing guide & focus aids</p>
+                            </div>
+                          </div>
+                        </AccordionTrigger>
+                        <AccordionContent className="pt-2 pb-6 px-1">
+                          <div className="space-y-6">
+                            <div className="flex items-center justify-between p-3.5 rounded-2xl bg-zinc-50 dark:bg-zinc-900/50 border border-zinc-100 dark:border-zinc-800/50">
+                              <div className="space-y-0.5">
+                                <Label className="text-sm font-medium">Breathing Guide</Label>
+                                <p className="text-xs text-zinc-500">Subtle background pulse for rhythm</p>
+                              </div>
+                              <Switch
+                                checked={breathingGuideEnabled}
+                                onCheckedChange={setBreathingGuide}
+                              />
+                            </div>
+
+                            <div className="space-y-4 px-1">
+                              <div className="flex justify-between items-center text-sm">
+                                <Label className="font-medium text-zinc-700 dark:text-zinc-300">Breath Speed</Label>
+                                <span className="text-zinc-500 font-mono text-xs">{breathingGuideSpeed}s</span>
+                              </div>
+                              <Slider
+                                min={2}
+                                max={8}
+                                step={0.5}
+                                value={[breathingGuideSpeed]}
+                                onValueChange={([val]) => setBreathingGuideSpeed(val)}
+                                className="py-2"
+                              />
+                              <div className="flex justify-between text-[10px] text-zinc-400 uppercase tracking-widest font-semibold px-1">
+                                <span>Fast</span>
+                                <span>Deep</span>
+                              </div>
                             </div>
                           </div>
                         </AccordionContent>

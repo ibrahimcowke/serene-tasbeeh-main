@@ -46,16 +46,22 @@ interface TasbeehState {
   // Settings
   currentDhikr: Dhikr;
   // hapticEnabled/soundEnabled removed in favor of themeSettings
-  theme: 'light' | 'dark' | 'theme-midnight' | 'theme-neon' | 'theme-green' | 'theme-cyberpunk' | 'theme-glass' | 'theme-sunset' | 'theme-forest' | 'theme-oled';
+  theme: 'light' | 'theme-midnight' | 'theme-neon' | 'theme-green' | 'theme-cyberpunk' | 'theme-glass' | 'theme-sunset' | 'theme-forest' | 'theme-oled' | 'theme-biolum' | 'theme-radar-tactical' | 'theme-steampunk' | 'theme-crystal-depth';
   language: 'en' | 'ar';
   
   // Theme-specific settings container
   themeSettings: Record<string, ThemeSettings>;
 
   // Global preference (not per theme)
-  counterShape: 'minimal' | 'classic' | 'beads' | 'flower' | 'waveform' | 'hexagon' | 'orb' | 'digital' | 'modern-ring' | 'vintage-wood' | 'geometric-star' | 'fluid' | 'neumorph' | 'radar' | 'real-beads' | 'cyber-3d' | 'glass-orb' | 'crystal-iso' | 'portal-depth' | 'luminous-ring' | 'ring-light' | 'galaxy' | 'tally-clicker' | 'steampunk-nixie' | 'biolum-organic' | 'minimal-img' | 'classic-img' | 'beads-img' | 'flower-img' | 'waveform-img' | 'hexagon-img' | 'orb-img' | 'digital-img';
+  counterShape: 'minimal' | 'classic' | 'beads' | 'flower' | 'waveform' | 'hexagon' | 'orb' | 'digital' | 'modern-ring' | 'vintage-wood' | 'geometric-star' | 'fluid' | 'neumorph' | 'radar' | 'real-beads' | 'cyber-3d' | 'glass-orb' | 'crystal-iso' | 'portal-depth' | 'luminous-ring' | 'ring-light' | 'galaxy' | 'tally-clicker' | 'steampunk-nixie' | 'biolum-organic' | 'quantum-string' | 'solar-flare' | 'particle-vortex' | 'nebula-cloud' | 'infinite-knot' | 'holo-fan' | 'prism-crystal' | 'plasma-coil' | 'minimal-img' | 'classic-img' | 'beads-img' | 'flower-img' | 'waveform-img' | 'hexagon-img' | 'orb-img' | 'digital-img';
   layout: 'default' | 'focus' | 'ergonomic';
   showTransliteration: boolean;
+
+  // Mindfulness
+  breathingGuideEnabled: boolean;
+  breathingGuideSpeed: number;
+  setBreathingGuide: (enabled: boolean) => void;
+  setBreathingGuideSpeed: (speed: number) => void;
 
   // Zen Mode
   zenMode: boolean;
@@ -98,7 +104,7 @@ interface TasbeehState {
   setFontScale: (scale: 0.8 | 1 | 1.2) => void;
   setSoundType: (type: 'click' | 'soft' | 'water') => void;
   
-  setTheme: (theme: 'light' | 'dark' | 'theme-midnight' | 'theme-neon' | 'theme-green' | 'theme-cyberpunk' | 'theme-glass' | 'theme-sunset' | 'theme-forest' | 'theme-oled') => void;
+  setTheme: (theme: 'light' | 'theme-midnight' | 'theme-neon' | 'theme-green' | 'theme-cyberpunk' | 'theme-glass' | 'theme-sunset' | 'theme-forest' | 'theme-oled' | 'theme-biolum' | 'theme-radar-tactical' | 'theme-steampunk' | 'theme-crystal-depth') => void;
   setLanguage: (lang: 'ar' | 'en') => void;
   addCustomDhikr: (dhikr: Omit<Dhikr, 'id'>) => void;
   removeCustomDhikr: (id: string) => void;
@@ -119,7 +125,7 @@ interface TasbeehState {
   syncFromCloud: () => Promise<boolean>;
   
   // New Settings Actions
-  setCounterShape: (shape: 'minimal' | 'classic' | 'beads' | 'flower' | 'waveform' | 'hexagon' | 'orb' | 'digital' | 'modern-ring' | 'vintage-wood' | 'geometric-star' | 'fluid' | 'neumorph' | 'radar' | 'real-beads' | 'cyber-3d' | 'glass-orb' | 'crystal-iso' | 'portal-depth' | 'luminous-ring' | 'minimal-img' | 'classic-img' | 'beads-img' | 'flower-img' | 'waveform-img' | 'hexagon-img' | 'orb-img' | 'digital-img') => void;
+  setCounterShape: (shape: 'minimal' | 'classic' | 'beads' | 'flower' | 'waveform' | 'hexagon' | 'orb' | 'digital' | 'modern-ring' | 'vintage-wood' | 'geometric-star' | 'fluid' | 'neumorph' | 'radar' | 'real-beads' | 'cyber-3d' | 'glass-orb' | 'crystal-iso' | 'portal-depth' | 'luminous-ring' | 'quantum-string' | 'solar-flare' | 'particle-vortex' | 'nebula-cloud' | 'infinite-knot' | 'holo-fan' | 'prism-crystal' | 'plasma-coil' | 'minimal-img' | 'classic-img' | 'beads-img' | 'flower-img' | 'waveform-img' | 'hexagon-img' | 'orb-img' | 'digital-img') => void;
   setLayout: (layout: 'default' | 'focus' | 'ergonomic') => void;
   setHadithSlideDuration: (duration: number) => void;
   setHadithSlidePosition: (position: 'top-right' | 'top-left' | 'bottom-right' | 'bottom-left' | 'right' | 'bottom' | 'hidden') => void;
@@ -159,7 +165,6 @@ const defaultThemeSettings: ThemeSettings = {
 
 const initialThemeSettings: Record<string, ThemeSettings> = {
   'light': { ...defaultThemeSettings },
-  'dark': { ...defaultThemeSettings },
   'theme-midnight': { ...defaultThemeSettings },
   'theme-neon': { ...defaultThemeSettings },
   'theme-green': { ...defaultThemeSettings },
@@ -168,6 +173,10 @@ const initialThemeSettings: Record<string, ThemeSettings> = {
   'theme-sunset': { ...defaultThemeSettings },
   'theme-forest': { ...defaultThemeSettings },
   'theme-oled': { ...defaultThemeSettings },
+  'theme-biolum': { ...defaultThemeSettings },
+  'theme-radar-tactical': { ...defaultThemeSettings },
+  'theme-steampunk': { ...defaultThemeSettings },
+  'theme-crystal-depth': { ...defaultThemeSettings },
 };
 
 
@@ -380,6 +389,8 @@ export const useTasbeehStore = create<TasbeehState>()(
       language: 'en', // Keeping language for now
       zenMode: false,
       counterShape: 'minimal', // New
+      breathingGuideEnabled: false,
+      breathingGuideSpeed: 4, // seconds per breath cycle
       layout: 'default',
       hadithSlideDuration: 15, // 15 seconds default
       hadithSlidePosition: 'right', // default position
@@ -504,7 +515,7 @@ export const useTasbeehStore = create<TasbeehState>()(
       
       resetSettings: () => {
          const root = window.document.documentElement;
-         root.classList.remove('light', 'dark', 'theme-midnight', 'theme-neon', 'theme-green', 'theme-cyberpunk', 'theme-glass', 'theme-sunset', 'theme-forest', 'theme-oled');
+         root.classList.remove('light', 'dark', 'theme-midnight', 'theme-neon', 'theme-green', 'theme-cyberpunk', 'theme-glass', 'theme-sunset', 'theme-forest', 'theme-oled', 'theme-biolum', 'theme-radar-tactical', 'theme-steampunk', 'theme-crystal-depth');
          root.classList.add('light');
          
          set({ 
@@ -616,7 +627,7 @@ export const useTasbeehStore = create<TasbeehState>()(
       setTheme: (theme) => {
         set({ theme });
         const root = window.document.documentElement;
-        root.classList.remove('light', 'dark', 'theme-midnight', 'theme-neon', 'theme-green', 'theme-cyberpunk', 'theme-glass', 'theme-sunset', 'theme-forest', 'theme-oled');
+        root.classList.remove('light', 'dark', 'theme-midnight', 'theme-neon', 'theme-green', 'theme-cyberpunk', 'theme-glass', 'theme-sunset', 'theme-forest', 'theme-oled', 'theme-biolum', 'theme-radar-tactical', 'theme-steampunk', 'theme-crystal-depth');
         root.classList.add(theme);
       },
       
@@ -668,7 +679,7 @@ export const useTasbeehStore = create<TasbeehState>()(
           const parsed = JSON.parse(data);
           if (parsed.settings?.theme) {
              const root = window.document.documentElement;
-             root.classList.remove('light', 'dark', 'theme-midnight', 'theme-neon', 'theme-green', 'theme-cyberpunk', 'theme-glass');
+             root.classList.remove('light', 'dark', 'theme-midnight', 'theme-neon', 'theme-green', 'theme-cyberpunk', 'theme-glass', 'theme-sunset', 'theme-forest', 'theme-oled', 'theme-biolum', 'theme-radar-tactical', 'theme-steampunk', 'theme-crystal-depth');
              root.classList.add(parsed.settings.theme);
           }
           
@@ -747,6 +758,8 @@ export const useTasbeehStore = create<TasbeehState>()(
       setDhikrTextPosition: (position) => set({ dhikrTextPosition: position }),
       setLayoutOrder: (order) => set({ layoutOrder: order }),
       setZenMode: (enabled) => set({ zenMode: enabled }),
+      setBreathingGuide: (enabled) => set({ breathingGuideEnabled: enabled }),
+      setBreathingGuideSpeed: (speed) => set({ breathingGuideSpeed: speed }),
 
       syncToCloud: async () => {
         try {

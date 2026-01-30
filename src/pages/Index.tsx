@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { Counter } from '@/components/Counter';
 import { ActionBar } from '@/components/ActionBar';
 import { ThemeProvider } from '@/components/ThemeProvider';
+import { BreathingGuide } from '@/components/BreathingGuide';
 import { useTasbeehStore } from '@/store/tasbeehStore';
 import { toast } from 'sonner';
 
@@ -34,6 +35,7 @@ const Index = () => {
   return (
     <ThemeProvider>
       <div className="h-[100dvh] w-full bg-background flex flex-col overflow-hidden relative">
+        <BreathingGuide />
         {/* Main counter area */}
         <div className={`flex-1 min-h-0 w-full flex flex-col overflow-y-auto safe-area-top transition-all duration-500 ${zenMode ? 'justify-center' : ''}`}>
           <Counter />

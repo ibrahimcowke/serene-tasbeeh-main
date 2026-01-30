@@ -74,46 +74,133 @@
     --sheet-bg: 0 0% 100%;
   }
 
-  .dark {
+  .theme-biolum {
     color-scheme: dark;
-    --background: 0 0% 0%;
-    --foreground: 0 0% 100%;
-
-    --card: 0 0% 2%;
-    --card-foreground: 0 0% 100%;
-
-    --popover: 0 0% 2%;
-    --popover-foreground: 0 0% 100%;
-
-    --primary: 0 0% 100%;
-    --primary-foreground: 0 0% 0%;
-
-    --secondary: 0 0% 10%;
-    --secondary-foreground: 0 0% 100%;
-
-    --muted: 0 0% 10%;
-    --muted-foreground: 0 0% 60%;
-
-    --accent: 0 0% 15%;
-    --accent-foreground: 0 0% 100%;
-
+    --background: 180 100% 2%;
+    --foreground: 180 20% 98%;
+    --card: 180 100% 4%;
+    --card-foreground: 180 20% 98%;
+    --popover: 180 100% 4%;
+    --popover-foreground: 180 20% 98%;
+    --primary: 180 100% 50%;
+    /* Bio Cyan/Teal */
+    --primary-foreground: 180 100% 2%;
+    --secondary: 180 50% 10%;
+    --secondary-foreground: 180 20% 90%;
+    --muted: 180 50% 12%;
+    --muted-foreground: 180 20% 60%;
+    --accent: 180 100% 50%;
+    --accent-foreground: 180 100% 2%;
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 98%;
+    --border: 180 50% 15%;
+    --input: 180 50% 15%;
+    --ring: 180 100% 50%;
+    --counter-bg: 180 100% 3%;
+    --counter-ring: 180 100% 50%;
+    --counter-text: 180 100% 90%;
+    --counter-glow: 180 100% 40%;
+    --arabic-text: 180 20% 98%;
+    --progress-track: 180 50% 12%;
+    --progress-fill: 180 100% 50%;
+    --sheet-bg: 180 100% 3%;
+  }
 
-    --border: 0 0% 15%;
-    --input: 0 0% 15%;
-    --ring: 0 0% 80%;
+  .theme-radar-tactical {
+    color-scheme: dark;
+    --background: 120 100% 2%;
+    --foreground: 120 20% 95%;
+    --card: 120 100% 4%;
+    --card-foreground: 120 20% 95%;
+    --popover: 120 100% 4%;
+    --popover-foreground: 120 20% 95%;
+    --primary: 120 100% 45%;
+    /* Phosphor Green */
+    --primary-foreground: 120 100% 2%;
+    --secondary: 120 40% 10%;
+    --secondary-foreground: 120 20% 90%;
+    --muted: 120 40% 12%;
+    --muted-foreground: 120 20% 60%;
+    --accent: 120 100% 45%;
+    --accent-foreground: 120 100% 2%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 120 40% 15%;
+    --input: 120 40% 15%;
+    --ring: 120 100% 45%;
+    --counter-bg: 120 100% 3%;
+    --counter-ring: 120 100% 45%;
+    --counter-text: 120 100% 90%;
+    --counter-glow: 120 100% 35%;
+    --arabic-text: 120 20% 95%;
+    --progress-track: 120 40% 12%;
+    --progress-fill: 120 100% 45%;
+    --sheet-bg: 120 100% 3%;
+  }
 
-    /* Counter specific */
-    --counter-bg: 0 0% 2%;
-    --counter-ring: 0 0% 100%;
-    --counter-text: 0 0% 100%;
-    --counter-glow: 0 0% 40%;
+  .theme-steampunk {
+    color-scheme: dark;
+    --background: 25 30% 6%;
+    --foreground: 45 40% 90%;
+    --card: 25 30% 8%;
+    --card-foreground: 45 40% 90%;
+    --popover: 25 30% 8%;
+    --popover-foreground: 45 40% 90%;
+    --primary: 35 100% 50%;
+    /* Amber/Gold */
+    --primary-foreground: 25 30% 6%;
+    --secondary: 25 20% 15%;
+    --secondary-foreground: 45 40% 80%;
+    --muted: 25 20% 18%;
+    --muted-foreground: 25 10% 60%;
+    --accent: 25 100% 40%;
+    /* Copper */
+    --accent-foreground: 45 40% 95%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 25 20% 20%;
+    --input: 25 20% 20%;
+    --ring: 35 100% 50%;
+    --counter-bg: 25 30% 7%;
+    --counter-ring: 35 100% 50%;
+    --counter-text: 35 100% 90%;
+    --counter-glow: 35 100% 40%;
+    --arabic-text: 45 40% 95%;
+    --progress-track: 25 20% 18%;
+    --progress-fill: 35 100% 50%;
+    --sheet-bg: 25 30% 7%;
+  }
 
-    --arabic-text: 0 0% 100%;
-    --progress-track: 0 0% 15%;
-    --progress-fill: 0 0% 100%;
-    --sheet-bg: 0 0% 2%;
+  .theme-crystal-depth {
+    color-scheme: dark;
+    --background: 260 50% 6%;
+    --foreground: 260 20% 95%;
+    --card: 260 40% 10%;
+    --card-foreground: 260 20% 95%;
+    --popover: 260 40% 10%;
+    --popover-foreground: 260 20% 95%;
+    --primary: 280 100% 65%;
+    /* Crystal Purple */
+    --primary-foreground: 260 50% 6%;
+    --secondary: 260 30% 15%;
+    --secondary-foreground: 260 20% 90%;
+    --muted: 260 30% 18%;
+    --muted-foreground: 260 10% 60%;
+    --accent: 280 100% 65%;
+    --accent-foreground: 260 50% 6%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 260 30% 20%;
+    --input: 260 30% 20%;
+    --ring: 280 100% 65%;
+    --counter-bg: 260 40% 8%;
+    --counter-ring: 280 100% 65%;
+    --counter-text: 280 100% 90%;
+    --counter-glow: 280 100% 45%;
+    --arabic-text: 260 20% 95%;
+    --progress-track: 260 30% 18%;
+    --progress-fill: 280 100% 65%;
+    --sheet-bg: 260 40% 8%;
   }
 
   .theme-midnight {
@@ -463,6 +550,7 @@
     --progress-fill: 0 0% 100%;
     --sheet-bg: 0 0% 5%;
   }
+
 }
 
 @layer base {

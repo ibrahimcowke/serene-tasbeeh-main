@@ -3,7 +3,7 @@ import { ThemeSettings } from '@/store/tasbeehStore';
 
 interface CounterVisualsProps {
     layout: 'default' | 'focus' | 'ergonomic';
-    counterShape: 'minimal' | 'classic' | 'beads' | 'flower' | 'waveform' | 'hexagon' | 'orb' | 'digital' | 'modern-ring' | 'vintage-wood' | 'geometric-star' | 'fluid' | 'neumorph' | 'radar' | 'real-beads' | 'cyber-3d' | 'glass-orb' | 'crystal-iso' | 'portal-depth' | 'luminous-ring' | 'ring-light' | 'galaxy' | 'tally-clicker' | 'steampunk-nixie' | 'biolum-organic' | 'minimal-img' | 'classic-img' | 'beads-img' | 'flower-img' | 'waveform-img' | 'hexagon-img' | 'orb-img' | 'digital-img';
+    counterShape: 'minimal' | 'classic' | 'beads' | 'flower' | 'waveform' | 'hexagon' | 'orb' | 'digital' | 'modern-ring' | 'vintage-wood' | 'geometric-star' | 'fluid' | 'neumorph' | 'radar' | 'real-beads' | 'cyber-3d' | 'glass-orb' | 'crystal-iso' | 'portal-depth' | 'luminous-ring' | 'ring-light' | 'galaxy' | 'tally-clicker' | 'steampunk-nixie' | 'biolum-organic' | 'quantum-string' | 'solar-flare' | 'particle-vortex' | 'nebula-cloud' | 'infinite-knot' | 'holo-fan' | 'prism-crystal' | 'plasma-coil' | 'minimal-img' | 'classic-img' | 'beads-img' | 'flower-img' | 'waveform-img' | 'hexagon-img' | 'orb-img' | 'digital-img';
     counterVerticalOffset: number;
     counterScale: number;
     progress: number;
@@ -667,6 +667,259 @@ export function CounterVisuals({
                 </div>
             )}
 
+            {counterShape === 'quantum-string' && (
+                <div className="absolute inset-0 flex items-center justify-center -z-10 bg-black/5 rounded-full">
+                    <svg viewBox="0 0 200 200" className="w-full h-full">
+                        <motion.path
+                            d="M 20 100 Q 60 80 100 100 Q 140 120 180 100"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                            className="text-primary"
+                            initial={{ pathLength: 0, opacity: 0 }}
+                            animate={{
+                                pathLength: 1,
+                                opacity: 1,
+                                d: [
+                                    "M 20 100 Q 60 80 100 100 Q 140 120 180 100",
+                                    "M 20 100 Q 60 120 100 100 Q 140 80 180 100",
+                                    "M 20 100 Q 60 80 100 100 Q 140 120 180 100"
+                                ]
+                            }}
+                            transition={{
+                                pathLength: { duration: 1 },
+                                opacity: { duration: 1 },
+                                d: { duration: 3, repeat: Infinity, ease: "easeInOut" }
+                            }}
+                        />
+                        <motion.circle
+                            r="4"
+                            fill="currentColor"
+                            className="text-primary"
+                            animate={{
+                                cx: [20, 100, 180, 100, 20],
+                                cy: [100, 80, 100, 120, 100]
+                            }}
+                            transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
+                        />
+                    </svg>
+                </div>
+            )}
+
+            {counterShape === 'solar-flare' && (
+                <div className="absolute inset-0 flex items-center justify-center -z-10">
+                    <div className="relative w-full h-full flex items-center justify-center">
+                        <motion.div
+                            className="w-40 h-40 rounded-full bg-gradient-to-r from-orange-400 to-yellow-600 blur-sm shadow-[0_0_40px_rgba(251,146,60,0.8)]"
+                            animate={{ scale: [1, 1.1, 1] }}
+                            transition={{ duration: 2, repeat: Infinity }}
+                        />
+                        <svg className="absolute inset-0 w-full h-full overflow-visible">
+                            {[...Array(6)].map((_, i) => (
+                                <motion.path
+                                    key={i}
+                                    d="M 150 150 Q 180 100 220 150"
+                                    fill="none"
+                                    stroke="rgba(251,146,60,0.6)"
+                                    strokeWidth="4"
+                                    strokeLinecap="round"
+                                    style={{ transformOrigin: '150px 150px', rotate: i * 60 }}
+                                    animate={{
+                                        d: [
+                                            "M 150 150 Q 180 100 220 150",
+                                            "M 150 150 Q 200 50 250 150",
+                                            "M 150 150 Q 180 100 220 150"
+                                        ],
+                                        opacity: [0.3, 0.8, 0.3]
+                                    }}
+                                    transition={{ duration: 2 + i * 0.5, repeat: Infinity, ease: "easeInOut" }}
+                                />
+                            ))}
+                        </svg>
+                    </div>
+                </div>
+            )}
+
+            {counterShape === 'particle-vortex' && (
+                <div className="absolute inset-0 flex items-center justify-center -z-10">
+                    <svg viewBox="0 0 200 200" className="w-full h-full">
+                        {Array.from({ length: 40 }).map((_, i) => {
+                            const angle = (i * 137.5) * (Math.PI / 180);
+                            const radius = (i / 40) * 80;
+                            const x = 100 + Math.cos(angle) * radius;
+                            const y = 100 + Math.sin(angle) * radius;
+                            return (
+                                <motion.circle
+                                    key={i}
+                                    cx={x}
+                                    cy={y}
+                                    r={1 + (i / 40) * 2}
+                                    fill="currentColor"
+                                    className="text-primary/60"
+                                    animate={{
+                                        cx: [x, 100, x],
+                                        cy: [y, 100, y],
+                                        opacity: [0.3, 1, 0.3],
+                                        scale: [1, 1.5, 1]
+                                    }}
+                                    transition={{
+                                        duration: 3,
+                                        repeat: Infinity,
+                                        delay: i * 0.05,
+                                        ease: "easeInOut"
+                                    }}
+                                />
+                            );
+                        })}
+                        {/* Core pulse */}
+                        <motion.circle
+                            cx="100"
+                            cy="100"
+                            r="10"
+                            fill="currentColor"
+                            className="text-primary"
+                            animate={{ scale: [1, 1.3, 1], opacity: [0.5, 0.8, 0.5] }}
+                            transition={{ duration: 2, repeat: Infinity }}
+                        />
+                    </svg>
+                </div>
+            )}
+
+            {counterShape === 'nebula-cloud' && (
+                <div className="absolute inset-0 flex items-center justify-center -z-10">
+                    <motion.div
+                        className="w-full h-full rounded-full bg-gradient-to-tr from-primary/20 via-transparent to-accent/20 blur-2xl"
+                        animate={{
+                            rotate: 360,
+                            scale: [1, 1.2, 1],
+                        }}
+                        transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
+                    />
+                    {Array.from({ length: 12 }).map((_, i) => (
+                        <motion.div
+                            key={i}
+                            className="absolute w-24 h-24 bg-primary/10 rounded-full blur-xl"
+                            animate={{
+                                x: [0, Math.cos(i) * 100, 0],
+                                y: [0, Math.sin(i) * 100, 0],
+                                opacity: [0.2, 0.5, 0.2],
+                            }}
+                            transition={{ duration: 10 + i, repeat: Infinity, ease: "easeInOut" }}
+                        />
+                    ))}
+                </div>
+            )}
+
+            {counterShape === 'infinite-knot' && (
+                <div className="absolute inset-0 flex items-center justify-center -z-10">
+                    <svg viewBox="0 0 100 100" className="w-full h-full p-4">
+                        <motion.path
+                            d="M 50 20 C 70 20 80 50 50 80 C 20 50 30 20 50 20 Z"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                            className="text-primary"
+                            initial={{ pathLength: 0 }}
+                            animate={{ pathLength: 1, rotate: [0, 360] }}
+                            transition={{
+                                pathLength: { duration: 2 },
+                                rotate: { duration: 20, repeat: Infinity, ease: "linear" }
+                            }}
+                        />
+                        <motion.path
+                            d="M 20 50 C 20 70 50 80 80 50 C 50 20 20 30 20 50 Z"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                            className="text-primary/50"
+                            initial={{ pathLength: 0 }}
+                            animate={{ pathLength: 1, rotate: [0, -360] }}
+                            transition={{
+                                pathLength: { duration: 2, delay: 0.5 },
+                                rotate: { duration: 25, repeat: Infinity, ease: "linear" }
+                            }}
+                        />
+                    </svg>
+                </div>
+            )}
+
+            {counterShape === 'holo-fan' && (
+                <div className="absolute inset-0 flex items-center justify-center -z-10">
+                    {[0, 120, 240].map((deg) => (
+                        <motion.div
+                            key={deg}
+                            className="absolute w-1 h-32 bg-gradient-to-t from-primary/80 to-transparent"
+                            style={{ transformOrigin: 'bottom center', rotate: deg }}
+                            animate={{ rotate: [deg, deg + 360] }}
+                            transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+                        />
+                    ))}
+                    <div className="w-4 h-4 rounded-full bg-primary/50 blur-sm" />
+                </div>
+            )}
+
+            {counterShape === 'prism-crystal' && (
+                <div className="absolute inset-0 flex items-center justify-center -z-10">
+                    <motion.div
+                        className="w-40 h-40 bg-primary/20 backdrop-blur-md border border-white/30"
+                        style={{ clipPath: 'polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%)' }}
+                        animate={{
+                            rotateY: 360,
+                            boxShadow: ["0 0 20px hsl(var(--primary)/0.2)", "0 0 50px hsl(var(--primary)/0.5)", "0 0 20px hsl(var(--primary)/0.2)"]
+                        }}
+                        transition={{
+                            rotateY: { duration: 8, repeat: Infinity, ease: "linear" },
+                            boxShadow: { duration: 4, repeat: Infinity }
+                        }}
+                    >
+                        <div className="absolute inset-0 bg-gradient-to-br from-white/40 to-transparent opacity-50" />
+                    </motion.div>
+                </div>
+            )}
+
+            {counterShape === 'plasma-coil' && (
+                <div className="absolute inset-0 flex items-center justify-center -z-10">
+                    <svg viewBox="0 0 100 100" className="w-full h-full">
+                        {Array.from({ length: 8 }).map((_, i) => (
+                            <motion.circle
+                                key={i}
+                                cx="50"
+                                cy="50"
+                                r={10 + i * 5}
+                                fill="none"
+                                stroke="currentColor"
+                                strokeWidth="0.5"
+                                className="text-primary/40"
+                                animate={{
+                                    r: [10 + i * 5, 15 + i * 5, 10 + i * 5],
+                                    opacity: [0.2, 0.6, 0.2]
+                                }}
+                                transition={{ duration: 2 + i * 0.2, repeat: Infinity }}
+                            />
+                        ))}
+                        <motion.path
+                            d="M 50 10 Q 90 50 50 90 Q 10 50 50 10"
+                            stroke="currentColor"
+                            strokeWidth="1"
+                            fill="none"
+                            className="text-primary"
+                            animate={{
+                                d: ["M 50 10 Q 90 50 50 90 Q 10 50 50 10", "M 50 10 Q 10 50 50 90 Q 90 50 50 10", "M 50 10 Q 90 50 50 90 Q 10 50 50 10"]
+                            }}
+                            transition={{ duration: 4, repeat: Infinity }}
+                        />
+                    </svg>
+                </div>
+            )}
+
+            {/* Global Aura Pulse Effekt - triggers on count change */}
+            <motion.div
+                key={`aura-${currentCount}`}
+                className="absolute inset-[-100px] rounded-full border border-primary/20 pointer-events-none -z-20"
+                initial={{ scale: 0.5, opacity: 0.8 }}
+                animate={{ scale: 2.5, opacity: 0 }}
+                transition={{ duration: 0.8, ease: "easeOut" }}
+            />
 
             <motion.button
                 onClick={handleTap}
@@ -697,6 +950,14 @@ export function CounterVisuals({
         ${counterShape === 'luminous-ring' ? 'w-64 h-64 rounded-full flex items-center justify-center text-primary' : ''}
         ${counterShape === 'steampunk-nixie' ? 'w-64 h-64 rounded-full flex items-center justify-center' : ''}
         ${counterShape === 'biolum-organic' ? 'w-64 h-64 rounded-full flex items-center justify-center' : ''}
+        ${counterShape === 'quantum-string' ? 'w-64 h-64 rounded-full flex items-center justify-center' : ''}
+        ${counterShape === 'solar-flare' ? 'w-64 h-64 rounded-full flex items-center justify-center' : ''}
+        ${counterShape === 'particle-vortex' ? 'w-64 h-64 rounded-full flex items-center justify-center' : ''}
+        ${counterShape === 'nebula-cloud' ? 'w-64 h-64 rounded-full flex items-center justify-center bg-transparent backdrop-blur-sm' : ''}
+        ${counterShape === 'infinite-knot' ? 'w-64 h-64 rounded-full flex items-center justify-center' : ''}
+        ${counterShape === 'holo-fan' ? 'w-64 h-64 rounded-full flex items-center justify-center bg-secondary/10' : ''}
+        ${counterShape === 'prism-crystal' ? 'w-64 h-64 flex items-center justify-center' : ''}
+        ${counterShape === 'plasma-coil' ? 'w-64 h-64 rounded-full flex items-center justify-center' : ''}
         
         flex items-center justify-center
         cursor-pointer
@@ -762,6 +1023,10 @@ export function CounterVisuals({
           ${counterShape === 'tally-clicker' ? 'text-zinc-800 font-mono text-6xl font-bold tracking-wide inset-shadow-sm' : ''}
           ${counterShape === 'steampunk-nixie' ? 'font-mono text-orange-500 font-bold tracking-widest drop-shadow-[0_0_10px_orange] text-6xl' : ''}
           ${counterShape === 'biolum-organic' ? 'font-mono text-primary font-bold tracking-widest drop-shadow-[0_0_15px_hsl(var(--primary))] text-6xl' : ''}
+          ${counterShape === 'quantum-string' ? 'font-sans text-primary drop-shadow-[0_0_10px_rgba(var(--primary),0.5)] font-light' : ''}
+          ${counterShape === 'solar-flare' ? 'text-white drop-shadow-[0_0_20px_orange] font-bold' : ''}
+          ${counterShape === 'particle-vortex' ? 'text-primary drop-shadow-[0_0_15px_rgba(var(--primary),0.8)] font-bold' : ''}
+          ${['nebula-cloud', 'infinite-knot', 'holo-fan', 'prism-crystal', 'plasma-coil'].includes(counterShape) ? 'text-primary drop-shadow-[0_0_12px_rgba(var(--primary),0.6)] font-bold' : ''}
         `}
                     style={{
                         fontSize: counterShape === 'digital' ? '0px' : `${(counterShape === 'classic' ? 4.5 : 4.5) * currentSettings.fontScale * countFontSize}rem`
