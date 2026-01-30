@@ -702,3 +702,18 @@
     animation: gentle-glow 1.5s ease-in-out infinite;
   }
 }
+
+@layer utilities {
+
+  /* Global scrollbar hiding */
+  * {
+    -ms-overflow-style: none;
+    /* IE and Edge */
+    scrollbar-width: none;
+    /* Firefox */
+  }
+
+  *::-webkit-scrollbar {
+    display: none;
+  }
+}

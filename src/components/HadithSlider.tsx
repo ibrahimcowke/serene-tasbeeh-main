@@ -5,6 +5,7 @@ import { Dhikr, useTasbeehStore } from '@/store/tasbeehStore';
 export function HadithSlider({ dhikr }: { dhikr: Dhikr }) {
     const hadithSlideDuration = useTasbeehStore((state) => state.hadithSlideDuration);
     const [index, setIndex] = useState(0);
+    const [isPaused, setIsPaused] = useState(false);
     const DURATION = hadithSlideDuration * 1000; // Convert seconds to milliseconds
 
     useEffect(() => {
@@ -13,14 +14,14 @@ export function HadithSlider({ dhikr }: { dhikr: Dhikr }) {
     }, [dhikr.id]);
 
     useEffect(() => {
-        if (!dhikr.hadiths || dhikr.hadiths.length <= 1) return;
+        if (!dhikr.hadiths || dhikr.hadiths.length <= 1 || isPaused) return;
 
         const timer = setInterval(() => {
             setIndex((prev) => (prev + 1) % dhikr.hadiths!.length);
         }, DURATION);
 
         return () => clearInterval(timer);
-    }, [dhikr.hadiths, hadithSlideDuration]);
+    }, [dhikr.hadiths, hadithSlideDuration, isPaused]);
 
     // Fallback content if no specific hadiths are available
     // Arabic fallback: "Keep your tongue wet with the remembrance of Allah" -> "لا يزال لسانك رطباً من ذكر الله"
@@ -35,7 +36,11 @@ export function HadithSlider({ dhikr }: { dhikr: Dhikr }) {
     const isArabic = /[\u0600-\u06FF]/.test(hadith.text);
 
     return (
-        <div className="w-full max-w-sm mx-auto md:mx-0 min-h-[140px] sm:min-h-[160px] bg-card/40 hover:bg-card/60 backdrop-blur-md rounded-2xl border border-border/40 p-4 sm:p-5 flex flex-col justify-center relative overflow-hidden transition-colors duration-300 group">
+        <div
+            className="w-full max-w-sm mx-auto md:mx-0 min-h-[140px] sm:min-h-[160px] bg-card/40 hover:bg-card/60 backdrop-blur-md rounded-2xl border border-border/40 p-4 sm:p-5 flex flex-col justify-center relative overflow-hidden transition-colors duration-300 group"
+            onMouseEnter={() => setIsPaused(true)}
+            onMouseLeave={() => setIsPaused(false)}
+        >
 
             {/* Background Decoration */}
             <div className={`absolute top-0 ${isArabic ? 'left-0' : 'right-0'} p-3 opacity-10 group-hover:opacity-20 transition-opacity`}>
@@ -59,6 +64,11 @@ export function HadithSlider({ dhikr }: { dhikr: Dhikr }) {
                         <span className="text-[10px] font-bold text-primary uppercase tracking-widest bg-primary/10 px-2 py-0.5 rounded-full">
                             {isArabic ? 'فضائل الذكر' : 'Guidance'}
                         </span>
+                        {isPaused && (
+                            <span className="text-[10px] text-muted-foreground animate-pulse ml-2 bg-background/50 px-2 py-0.5 rounded-full border border-border/50">
+                                Paused
+                            </span>
+                        )}
                     </div>
 
                     <p className={`text-sm sm:text-base font-medium text-foreground/90 leading-loose break-words ${isArabic ? 'font-arabic' : ''}`}>
@@ -72,7 +82,7 @@ export function HadithSlider({ dhikr }: { dhikr: Dhikr }) {
             </AnimatePresence>
 
             {/* Timer Progress Bar */}
-            {dhikr.hadiths && dhikr.hadiths.length > 1 && (
+            {dhikr.hadiths && dhikr.hadiths.length > 1 && !isPaused && (
                 <div className="absolute bottom-0 left-0 right-0 h-1 bg-muted/20">
                     <motion.div
                         key={index}

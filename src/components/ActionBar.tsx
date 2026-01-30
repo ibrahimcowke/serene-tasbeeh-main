@@ -129,8 +129,8 @@ export function ActionBar() {
           </SettingsView>
         </div>
 
-        {/* Desktop Actions (Scrollable List) */}
-        <div className="hidden sm:flex items-center gap-2 overflow-x-auto bg-card rounded-2xl p-2 scrollbar-hide snap-x justify-center">
+        {/* Desktop Actions (Grid/Wrap) */}
+        <div className="hidden sm:flex flex-wrap items-center justify-center gap-2 bg-card rounded-2xl p-2 w-full">
           <DhikrSelector>
             <motion.button
               whileTap={{ scale: 0.95 }}
