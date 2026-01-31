@@ -11,6 +11,17 @@ import { BloomingLotus } from './counter-shapes/BloomingLotus';
 import { Constellation } from './counter-shapes/Constellation';
 import { GlassPill } from './counter-shapes/GlassPill';
 import { EmeraldLoop } from './counter-shapes/EmeraldLoop';
+import { SmartRing } from './counter-shapes/SmartRing';
+import { KaabaCompass } from './counter-shapes/KaabaCompass';
+import { MoonPhase } from './counter-shapes/MoonPhase';
+import { WaterRipple } from './counter-shapes/WaterRipple';
+import { SandHourglass } from './counter-shapes/SandHourglass';
+import { GeometricFlower } from './counter-shapes/GeometricFlower';
+import { CalligraphyStroke } from './counter-shapes/CalligraphyStroke';
+import { ParticleSwarm } from './counter-shapes/ParticleSwarm';
+import { ZikrRingDigital } from './counter-shapes/ZikrRingDigital';
+import { LanternFanous } from './counter-shapes/LanternFanous';
+import { GoldenSpiral } from './counter-shapes/GoldenSpiral';
 
 
 interface CounterVisualsProps {
@@ -732,6 +743,18 @@ export function CounterVisuals({
             {counterShape === 'constellation' && <Constellation currentCount={currentCount} />}
             {counterShape === 'glass-pill' && <GlassPill currentCount={currentCount} />}
             {counterShape === 'emerald-loop' && <EmeraldLoop currentCount={currentCount} />}
+            {counterShape === 'smart-ring' && <SmartRing currentCount={currentCount} />}
+            {counterShape === 'kaaba-compass' && <KaabaCompass currentCount={currentCount} />}
+            {counterShape === 'moon-phase' && <MoonPhase currentCount={currentCount} />}
+            {counterShape === 'water-ripple' && <WaterRipple currentCount={currentCount} />}
+            {counterShape === 'sand-hourglass' && <SandHourglass currentCount={currentCount} />}
+            {counterShape === 'geometric-flower' && <GeometricFlower currentCount={currentCount} />}
+            {counterShape === 'calligraphy-stroke' && <CalligraphyStroke currentCount={currentCount} />}
+            {counterShape === 'particle-swarm' && <ParticleSwarm currentCount={currentCount} />}
+            {counterShape === 'zikr-ring-digital' && <ZikrRingDigital currentCount={currentCount} />}
+            {counterShape === 'lantern-fanous' && <LanternFanous currentCount={currentCount} />}
+            {counterShape === 'golden-spiral' && <GoldenSpiral currentCount={currentCount} />}
+
 
 
 
@@ -781,7 +804,7 @@ export function CounterVisuals({
 
         ${counterShape === 'animated-ripple' ? 'w-64 h-64 flex items-center justify-center' : ''}
         ${counterShape === 'bead-ring' ? 'w-64 h-64 flex items-center justify-center' : ''}
-        ${['helix-strand', 'cyber-hexagon', 'blooming-lotus', 'constellation', 'glass-pill', 'emerald-loop'].includes(counterShape) ? 'w-64 h-64 flex items-center justify-center' : ''}
+        ${['helix-strand', 'cyber-hexagon', 'blooming-lotus', 'constellation', 'glass-pill', 'emerald-loop', 'smart-ring', 'kaaba-compass', 'moon-phase', 'water-ripple', 'sand-hourglass', 'geometric-flower', 'calligraphy-stroke', 'particle-swarm', 'zikr-ring-digital', 'lantern-fanous', 'golden-spiral'].includes(counterShape) ? 'w-64 h-64 flex items-center justify-center' : ''}
 
         flex items-center justify-center
         cursor-pointer
@@ -852,6 +875,10 @@ export function CounterVisuals({
           ${counterShape === 'constellation' ? 'font-thin text-white tracking-widest drop-shadow-[0_0_10px_white]' : ''}
           ${counterShape === 'glass-pill' ? 'font-sans font-medium text-white tracking-widest text-6xl drop-shadow-md' : ''}
           ${counterShape === 'emerald-loop' ? 'font-serif text-emerald-100 font-bold tracking-widest text-5xl drop-shadow-md' : ''}
+          ${counterShape === 'smart-ring' ? 'font-sans font-light text-white tracking-tighter text-6xl drop-shadow-none' : ''}
+          ${['kaaba-compass', 'moon-phase', 'particle-swarm', 'golden-spiral'].includes(counterShape) ? 'font-sans font-light text-white text-5xl drop-shadow-lg' : ''}
+          ${counterShape === 'zikr-ring-digital' ? 'hidden' : ''} 
+          {/* Digital ring has its own display */}
 
           ${counterShape === 'vertical-capsules' ? 'hidden' : ''}
 

@@ -551,6 +551,225 @@
     --sheet-bg: 0 0% 5%;
   }
 
+  .theme-mecca-night {
+    color-scheme: dark;
+    /* Deepest Black & Gold */
+    --background: 0 0% 2%;
+    --foreground: 45 40% 90%;
+
+    --card: 0 0% 5%;
+    --card-foreground: 45 40% 90%;
+
+    --popover: 0 0% 5%;
+    --popover-foreground: 45 40% 90%;
+
+    /* Gold Leaf */
+    --primary: 45 100% 50%;
+    --primary-foreground: 0 0% 0%;
+
+    --secondary: 45 20% 10%;
+    --secondary-foreground: 45 40% 80%;
+
+    --muted: 0 0% 10%;
+    --muted-foreground: 45 10% 60%;
+
+    --accent: 45 100% 50%;
+    --accent-foreground: 0 0% 0%;
+
+    --destructive: 0 60% 30%;
+    --destructive-foreground: 0 0% 98%;
+
+    --border: 45 30% 15%;
+    --input: 45 30% 15%;
+    --ring: 45 100% 50%;
+
+    --counter-bg: 0 0% 4%;
+    --counter-ring: 45 100% 50%;
+    --counter-text: 45 100% 85%;
+    --counter-glow: 45 100% 40%;
+
+    --arabic-text: 45 40% 90%;
+    --progress-track: 45 10% 10%;
+    --progress-fill: 45 100% 50%;
+    --sheet-bg: 0 0% 5%;
+  }
+
+  .theme-medina-rose {
+    color-scheme: light;
+    /* Soft Rose & Green */
+    --background: 340 20% 98%;
+    --foreground: 340 10% 20%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 340 10% 20%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 340 10% 20%;
+
+    /* Prophet's Green */
+    --primary: 150 40% 40%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 340 30% 94%;
+    --secondary-foreground: 340 20% 30%;
+
+    --muted: 150 20% 94%;
+    --muted-foreground: 340 10% 50%;
+
+    --accent: 340 50% 85%;
+    /* Rose accent */
+    --accent-foreground: 340 40% 20%;
+
+    --destructive: 0 80% 60%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 340 20% 90%;
+    --input: 340 20% 90%;
+    --ring: 150 40% 40%;
+
+    --counter-bg: 0 0% 100%;
+    --counter-ring: 150 40% 40%;
+    --counter-text: 150 50% 30%;
+    --counter-glow: 150 40% 70%;
+
+    --arabic-text: 150 40% 25%;
+    --progress-track: 340 20% 92%;
+    --progress-fill: 150 40% 40%;
+    --sheet-bg: 340 20% 99%;
+  }
+
+  .theme-blue-mosque {
+    color-scheme: light;
+    /* Iznik White & Blue */
+    --background: 210 20% 98%;
+    --foreground: 220 60% 20%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 220 60% 20%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 220 60% 20%;
+
+    /* Cobalt Blue */
+    --primary: 220 80% 40%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 210 30% 94%;
+    --secondary-foreground: 220 60% 30%;
+
+    --muted: 210 20% 92%;
+    --muted-foreground: 220 30% 60%;
+
+    --accent: 190 60% 45%;
+    /* Turquoise accent */
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 80% 60%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 220 30% 90%;
+    --input: 220 30% 90%;
+    --ring: 220 80% 40%;
+
+    --counter-bg: 0 0% 100%;
+    --counter-ring: 220 80% 40%;
+    --counter-text: 220 90% 35%;
+    --counter-glow: 220 80% 80%;
+
+    --arabic-text: 220 60% 20%;
+    --progress-track: 220 20% 90%;
+    --progress-fill: 220 80% 40%;
+    --sheet-bg: 210 20% 99%;
+  }
+
+  .theme-desert-starlight {
+    color-scheme: dark;
+    /* Deep Indigo Night */
+    --background: 240 40% 6%;
+    --foreground: 240 20% 95%;
+
+    --card: 240 30% 10%;
+    --card-foreground: 240 20% 95%;
+
+    --popover: 240 30% 10%;
+    --popover-foreground: 240 20% 95%;
+
+    /* Starlight White/Blue */
+    --primary: 200 80% 70%;
+    --primary-foreground: 240 40% 10%;
+
+    --secondary: 240 40% 15%;
+    --secondary-foreground: 240 20% 90%;
+
+    --muted: 240 30% 20%;
+    --muted-foreground: 240 20% 60%;
+
+    --accent: 260 50% 60%;
+    /* Cosmic Purple */
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 60% 50%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 240 30% 20%;
+    --input: 240 30% 20%;
+    --ring: 200 80% 70%;
+
+    --counter-bg: 240 40% 8%;
+    --counter-ring: 200 80% 70%;
+    --counter-text: 200 80% 90%;
+    --counter-glow: 200 80% 60%;
+
+    --arabic-text: 240 20% 95%;
+    --progress-track: 240 30% 20%;
+    --progress-fill: 200 80% 70%;
+    --sheet-bg: 240 30% 8%;
+  }
+
+  .theme-sahara-warmth {
+    color-scheme: light;
+    /* Warm Sand */
+    --background: 35 30% 94%;
+    --foreground: 25 40% 20%;
+
+    --card: 40 20% 98%;
+    --card-foreground: 25 40% 20%;
+
+    --popover: 40 20% 98%;
+    --popover-foreground: 25 40% 20%;
+
+    /* Burnt Orange */
+    --primary: 25 90% 50%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 35 30% 85%;
+    --secondary-foreground: 25 40% 30%;
+
+    --muted: 35 20% 85%;
+    --muted-foreground: 25 30% 50%;
+
+    --accent: 45 80% 60%;
+    /* Golden Sand */
+    --accent-foreground: 25 40% 20%;
+
+    --destructive: 0 70% 50%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 35 30% 80%;
+    --input: 35 30% 80%;
+    --ring: 25 90% 50%;
+
+    --counter-bg: 40 20% 96%;
+    --counter-ring: 25 90% 50%;
+    --counter-text: 25 90% 35%;
+    --counter-glow: 25 90% 70%;
+
+    --arabic-text: 25 40% 20%;
+    --progress-track: 35 30% 85%;
+    --progress-fill: 25 90% 50%;
+    --sheet-bg: 35 30% 96%;
+  }
+
 }
 
 @layer base {

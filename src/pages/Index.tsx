@@ -5,9 +5,13 @@ import { ThemeProvider } from '@/components/ThemeProvider';
 import { BreathingGuide } from '@/components/BreathingGuide';
 import { useTasbeehStore } from '@/store/tasbeehStore';
 import { toast } from 'sonner';
+import { themes, counterShapes } from '@/lib/constants';
 
 const Index = () => {
-  const { zenMode, setZenMode, syncToCloud } = useTasbeehStore();
+  const { zenMode, setZenMode, syncToCloud, theme, counterShape } = useTasbeehStore();
+
+  const currentThemeLabel = themes.find(t => t.id === theme)?.label || 'Unknown';
+  const currentShapeLabel = counterShapes.find(s => s.id === counterShape)?.label || 'Unknown';
 
   useEffect(() => {
     const handleOnline = () => {
@@ -36,6 +40,18 @@ const Index = () => {
     <ThemeProvider>
       <div className="h-[100dvh] w-full bg-background flex flex-col overflow-hidden relative">
         <BreathingGuide />
+
+        {/* Status Indicator (Top Right) */}
+        {!zenMode && (
+          <div className="absolute top-4 right-4 z-50 pointer-events-none opacity-60 hover:opacity-100 transition-opacity">
+            <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-background/20 backdrop-blur-md border border-white/10 shadow-sm">
+              <span className="text-[10px] uppercase tracking-widest font-medium text-foreground/80">
+                {currentShapeLabel} <span className="text-foreground/40 mx-1">|</span> {currentThemeLabel}
+              </span>
+            </div>
+          </div>
+        )}
+
         {/* Main counter area */}
         <div className={`flex-1 min-h-0 w-full flex flex-col overflow-y-auto safe-area-top transition-all duration-500 ${zenMode ? 'justify-center' : ''}`}>
           <Counter />

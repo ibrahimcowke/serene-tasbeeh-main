@@ -32,58 +32,9 @@ interface SettingsViewProps {
   children: React.ReactNode;
 }
 
-const themes = [
-  { id: 'light', label: 'Light', description: 'Warm and calm' },
-  { id: 'theme-biolum', label: 'Biolum', description: 'Deep sea bioluminescence' },
-  { id: 'theme-radar-tactical', label: 'Tactical', description: 'Phosphor green radar' },
-  { id: 'theme-steampunk', label: 'Steampunk', description: 'Brass, copper & amber' },
-  { id: 'theme-crystal-depth', label: 'Crystal', description: 'Deep purple crystal' },
-  { id: 'theme-midnight', label: 'Midnight', description: 'Deep blue serenity' },
-  { id: 'theme-neon', label: 'Neon', description: 'Vibrant pink & purple' },
-  { id: 'theme-green', label: 'Matrix', description: 'Terminal green code' },
-  { id: 'theme-cyberpunk', label: 'Cyberpunk', description: 'High-tech yellow & blue' },
-  { id: 'theme-glass', label: 'Glass', description: 'Pure & icy morphism' },
-  { id: 'theme-sunset', label: 'Sunset', description: 'Warm gradients' },
-  { id: 'theme-forest', label: 'Forest', description: 'Deep nature greens' },
-  { id: 'theme-oled', label: 'OLED', description: 'True black power saver' },
-] as const;
+import { themes, counterShapes } from '@/lib/constants';
 
-const counterShapes = [
-  { id: 'minimal', label: 'Minimal', icon: '○' },
-  { id: 'classic', label: 'Classic', icon: '□' },
-  { id: 'beads', label: 'Beads', icon: '◎' },
-  { id: 'flower', label: 'Flower', icon: '❀' },
-  { id: 'waveform', label: 'Wave', icon: '〰' },
-  { id: 'digital', label: 'Digit', icon: '88' },
-  { id: 'modern-ring', label: 'Ring', icon: '○' },
-  { id: 'vintage-wood', label: 'Wood', icon: '▧' },
-  { id: 'geometric-star', label: 'Star', icon: '۞' },
-  { id: 'fluid', label: 'Fluid', icon: '≈' },
-  { id: 'radar', label: 'Radar', icon: '⊕' },
-  { id: 'real-beads', label: 'Real', icon: '📿' },
-  { id: 'glass-orb', label: 'Glass', icon: '🔮' },
-  { id: 'portal-depth', label: 'Portal', icon: '◎' },
-  { id: 'luminous-ring', label: 'Lumi', icon: '✨' },
-  { id: 'ring-light', label: 'Light', icon: '⭕' },
-  { id: 'steampunk-nixie', label: 'Steam', icon: '⚙' },
-  { id: 'biolum-organic', label: 'Bio', icon: '🧬' },
-  { id: 'solar-flare', label: 'Solar', icon: '☀' },
-  { id: 'nebula-cloud', label: 'Nebula', icon: '🌥' },
-  { id: 'infinite-knot', label: 'Knot', icon: '➰' },
-  { id: 'holo-fan', label: 'Fan', icon: '☄' },
-  { id: 'halo-ring', label: 'Halo', icon: '💫' },
-  { id: 'halo-ring', label: 'Halo', icon: '💫' },
-  { id: 'vertical-capsules', label: 'Capsule', icon: '💊' },
-  { id: 'luminous-beads', label: 'LumiB', icon: '📿' },
-  { id: 'animated-ripple', label: 'Ripple', icon: '◎' },
-  { id: 'bead-ring', label: 'Bead Ring', icon: '📿' },
-  { id: 'helix-strand', label: 'Helix', icon: '🧬' },
-  { id: 'cyber-hexagon', label: 'Hex', icon: '⬡' },
-  { id: 'blooming-lotus', label: 'Lotus', icon: '🌸' },
-  { id: 'constellation', label: 'Stars', icon: '🌌' },
-  { id: 'glass-pill', label: 'iOS Glass', icon: '🔮' },
-  { id: 'emerald-loop', label: 'Emerald', icon: '🕋' },
-] as const;
+
 
 export function SettingsView({ children }: SettingsViewProps) {
   const [open, setOpen] = useState(false);
