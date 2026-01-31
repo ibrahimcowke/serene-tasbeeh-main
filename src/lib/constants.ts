@@ -63,14 +63,8 @@ export const counterShapes = [
   { id: 'smart-ring', label: 'Smart Ring', icon: '⌚' },
 
   // New Shapes
-  { id: 'kaaba-compass', label: 'Kaaba', icon: '🕋' },
   { id: 'moon-phase', label: 'Moon', icon: '🌙' },
   { id: 'water-ripple', label: 'Ripple', icon: '💧' },
   { id: 'sand-hourglass', label: 'Hourglass', icon: '⏳' },
-  { id: 'geometric-flower', label: 'Flower', icon: '🏵️' },
-  { id: 'calligraphy-stroke', label: 'Qalam', icon: '✒️' },
-  { id: 'particle-swarm', label: 'Swarm', icon: '✨' },
-  { id: 'zikr-ring-digital', label: 'D-Ring', icon: '💍' },
   { id: 'lantern-fanous', label: 'Lantern', icon: '🏮' },
-  { id: 'golden-spiral', label: 'Spiral', icon: '🌀' },
 ] as const;
