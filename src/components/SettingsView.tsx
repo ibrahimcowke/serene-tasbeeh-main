@@ -72,16 +72,17 @@ const counterShapes = [
   { id: 'infinite-knot', label: 'Knot', icon: '➰' },
   { id: 'holo-fan', label: 'Fan', icon: '☄' },
   { id: 'halo-ring', label: 'Halo', icon: '💫' },
-  { id: 'zen-stones', label: 'Zen', icon: '🪨' },
+  { id: 'halo-ring', label: 'Halo', icon: '💫' },
   { id: 'vertical-capsules', label: 'Capsule', icon: '💊' },
   { id: 'luminous-beads', label: 'LumiB', icon: '📿' },
-  { id: 'isometric-stack', label: 'Stack', icon: '🧊' },
   { id: 'animated-ripple', label: 'Ripple', icon: '◎' },
   { id: 'bead-ring', label: 'Bead Ring', icon: '📿' },
   { id: 'helix-strand', label: 'Helix', icon: '🧬' },
   { id: 'cyber-hexagon', label: 'Hex', icon: '⬡' },
   { id: 'blooming-lotus', label: 'Lotus', icon: '🌸' },
   { id: 'constellation', label: 'Stars', icon: '🌌' },
+  { id: 'glass-pill', label: 'iOS Glass', icon: '🔮' },
+  { id: 'emerald-loop', label: 'Emerald', icon: '🕋' },
 ] as const;
 
 export function SettingsView({ children }: SettingsViewProps) {

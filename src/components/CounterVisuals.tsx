@@ -2,13 +2,15 @@ import { motion } from 'framer-motion';
 import { ThemeSettings, CounterShape } from '@/store/tasbeehStore';
 import { HaloRing } from './counter-shapes/HaloRing';
 import { BeadRing } from './counter-shapes/BeadRing';
-import { ZenStones } from './counter-shapes/ZenStones';
+
 import { VerticalCapsules } from './counter-shapes/VerticalCapsules';
 import { LuminousBeads } from './counter-shapes/LuminousBeads';
 import { HelixStrand } from './counter-shapes/HelixStrand';
 import { CyberHexagon } from './counter-shapes/CyberHexagon';
 import { BloomingLotus } from './counter-shapes/BloomingLotus';
 import { Constellation } from './counter-shapes/Constellation';
+import { GlassPill } from './counter-shapes/GlassPill';
+import { EmeraldLoop } from './counter-shapes/EmeraldLoop';
 
 
 interface CounterVisualsProps {
@@ -705,14 +707,7 @@ export function CounterVisuals({
 
 
 
-            {counterShape === 'isometric-stack' && (
-                <div className="absolute inset-0 flex items-center justify-center -z-10">
-                    <div className="w-40 h-40 bg-indigo-500 transform rotate-45 skew-x-12 border-4 border-indigo-300 shadow-2xl">
-                        <div className="absolute -top-4 -left-4 w-full h-full bg-indigo-400 border-4 border-indigo-200" />
-                        <div className="absolute -top-8 -left-8 w-full h-full bg-indigo-600 border-4 border-indigo-400" />
-                    </div>
-                </div>
-            )}
+
 
             {counterShape === 'animated-ripple' && (
                 <div className="absolute inset-0 flex items-center justify-center -z-10">
@@ -735,7 +730,11 @@ export function CounterVisuals({
             {counterShape === 'cyber-hexagon' && <CyberHexagon currentCount={currentCount} />}
             {counterShape === 'blooming-lotus' && <BloomingLotus currentCount={currentCount} />}
             {counterShape === 'constellation' && <Constellation currentCount={currentCount} />}
-            {counterShape === 'zen-stones' && <ZenStones currentCount={currentCount} />}
+            {counterShape === 'glass-pill' && <GlassPill currentCount={currentCount} />}
+            {counterShape === 'emerald-loop' && <EmeraldLoop currentCount={currentCount} />}
+
+
+
             {counterShape === 'vertical-capsules' && <VerticalCapsules currentCount={currentCount} />}
             {counterShape === 'luminous-beads' && <LuminousBeads progress={progress} />}
 
@@ -775,14 +774,14 @@ export function CounterVisuals({
         ${counterShape === 'infinite-knot' ? 'w-64 h-64 rounded-full flex items-center justify-center' : ''}
         ${counterShape === 'holo-fan' ? 'w-64 h-64 rounded-full flex items-center justify-center bg-secondary/10' : ''}
         ${counterShape === 'halo-ring' ? 'w-64 h-64 rounded-full flex items-center justify-center' : ''}
-        ${counterShape === 'zen-stones' ? 'w-full h-full flex items-center justify-center' : ''}
+
         ${counterShape === 'vertical-capsules' ? 'w-64 h-[300px] flex items-center justify-center' : ''}
         ${counterShape === 'luminous-beads' ? 'w-64 h-64 rounded-full flex items-center justify-center' : ''}
         
-        ${counterShape === 'isometric-stack' ? 'w-64 h-64 flex items-center justify-center perspective-[1000px]' : ''}
+
         ${counterShape === 'animated-ripple' ? 'w-64 h-64 flex items-center justify-center' : ''}
         ${counterShape === 'bead-ring' ? 'w-64 h-64 flex items-center justify-center' : ''}
-        ${['helix-strand', 'cyber-hexagon', 'blooming-lotus', 'constellation'].includes(counterShape) ? 'w-64 h-64 flex items-center justify-center' : ''}
+        ${['helix-strand', 'cyber-hexagon', 'blooming-lotus', 'constellation', 'glass-pill', 'emerald-loop'].includes(counterShape) ? 'w-64 h-64 flex items-center justify-center' : ''}
 
         flex items-center justify-center
         cursor-pointer
@@ -844,16 +843,18 @@ export function CounterVisuals({
           ${['nebula-cloud', 'infinite-knot', 'holo-fan', 'luminous-beads'].includes(counterShape) ? 'text-primary drop-shadow-[0_0_12px_rgba(var(--primary),0.6)] font-bold' : ''}
           ${counterShape === 'halo-ring' ? 'text-emerald-400 font-bold drop-shadow-[0_0_10px_rgba(52,211,153,0.8)]' : ''}
           
-          ${counterShape === 'isometric-stack' ? 'text-white font-bold text-6xl drop-shadow-[0_4px_4px_rgba(0,0,0,0.3)]' : ''}
+
           ${counterShape === 'animated-ripple' ? 'text-blue-200 font-light text-7xl tracking-widest drop-shadow-[0_0_10px_rgba(59,130,246,0.6)]' : ''}
           ${counterShape === 'bead-ring' ? 'text-amber-500 font-mono text-7xl font-bold tracking-wider drop-shadow-[0_0_10px_rgba(245,158,11,0.6)]' : ''}
           ${counterShape === 'helix-strand' ? 'text-cyan-400 font-mono tracking-widest drop-shadow-[0_0_10px_rgba(34,211,238,0.8)]' : ''}
           ${counterShape === 'cyber-hexagon' ? 'font-mono text-primary font-bold tracking-widest drop-shadow-[0_0_10px_rgba(var(--primary),0.8)]' : ''}
           ${counterShape === 'blooming-lotus' ? 'font-serif text-white/90 drop-shadow-lg font-light' : ''}
           ${counterShape === 'constellation' ? 'font-thin text-white tracking-widest drop-shadow-[0_0_10px_white]' : ''}
+          ${counterShape === 'glass-pill' ? 'font-sans font-medium text-white tracking-widest text-6xl drop-shadow-md' : ''}
+          ${counterShape === 'emerald-loop' ? 'font-serif text-emerald-100 font-bold tracking-widest text-5xl drop-shadow-md' : ''}
 
           ${counterShape === 'vertical-capsules' ? 'hidden' : ''}
-          ${counterShape === 'zen-stones' ? 'hidden' : ''}
+
         `}
                     style={{
                         fontSize: counterShape === 'digital' ? '0px' : `${(counterShape === 'classic' ? 4.5 : 4.5) * currentSettings.fontScale * countFontSize}rem`
