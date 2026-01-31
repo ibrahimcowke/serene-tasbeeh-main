@@ -75,12 +75,13 @@ const counterShapes = [
   { id: 'zen-stones', label: 'Zen', icon: '🪨' },
   { id: 'vertical-capsules', label: 'Capsule', icon: '💊' },
   { id: 'luminous-beads', label: 'LumiB', icon: '📿' },
-  { id: 'nano-pulse', label: 'Nano', icon: '⚡' },
-  { id: 'banana-slide', label: 'Banana', icon: '🍌' },
-  { id: 'bro-counter', label: 'Bro', icon: '👊' },
   { id: 'isometric-stack', label: 'Stack', icon: '🧊' },
   { id: 'animated-ripple', label: 'Ripple', icon: '◎' },
   { id: 'bead-ring', label: 'Bead Ring', icon: '📿' },
+  { id: 'helix-strand', label: 'Helix', icon: '🧬' },
+  { id: 'cyber-hexagon', label: 'Hex', icon: '⬡' },
+  { id: 'blooming-lotus', label: 'Lotus', icon: '🌸' },
+  { id: 'constellation', label: 'Stars', icon: '🌌' },
 ] as const;
 
 export function SettingsView({ children }: SettingsViewProps) {

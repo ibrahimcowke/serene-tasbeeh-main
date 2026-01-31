@@ -5,6 +5,10 @@ import { BeadRing } from './counter-shapes/BeadRing';
 import { ZenStones } from './counter-shapes/ZenStones';
 import { VerticalCapsules } from './counter-shapes/VerticalCapsules';
 import { LuminousBeads } from './counter-shapes/LuminousBeads';
+import { HelixStrand } from './counter-shapes/HelixStrand';
+import { CyberHexagon } from './counter-shapes/CyberHexagon';
+import { BloomingLotus } from './counter-shapes/BloomingLotus';
+import { Constellation } from './counter-shapes/Constellation';
 
 
 interface CounterVisualsProps {
@@ -695,49 +699,11 @@ export function CounterVisuals({
 
 
 
-            {counterShape === 'nano-pulse' && (
-                <div className="absolute inset-0 flex items-center justify-center -z-10">
-                    <div className="relative w-full h-full flex items-center justify-center">
-                        <motion.div
-                            className="absolute w-64 h-64 border-2 border-primary/50 rounded-full"
-                            animate={{ scale: [1, 1.1, 1], opacity: [0.5, 1, 0.5] }}
-                            transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-                        />
-                        <motion.div
-                            className="absolute w-56 h-56 border border-primary/30 rounded-full dashed-circle"
-                            animate={{ rotate: 360 }}
-                            transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
-                        />
-                        <div className="absolute w-48 h-48 bg-primary/10 rounded-full backdrop-blur-sm flex items-center justify-center shadow-[0_0_30px_hsl(var(--primary)/0.3)]">
-                            <div className="w-40 h-40 bg-black/80 rounded-full flex items-center justify-center border border-primary/50">
-                                <div className="text-primary text-4xl animate-pulse">⚡</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            )}
 
-            {counterShape === 'banana-slide' && (
-                <div className="absolute inset-0 flex items-center justify-center -z-10">
-                    <motion.div
-                        className="w-64 h-64 bg-yellow-100 rounded-3xl border-4 border-yellow-400 shadow-xl flex items-center justify-center relative overflow-hidden"
-                        whileTap={{ scale: 0.9, rotate: -5 }}
-                    >
-                        <div className="absolute top-2 right-2 text-2xl">🍌</div>
-                        <div className="absolute bottom-2 left-2 text-2xl transform rotate-180">🍌</div>
-                    </motion.div>
-                </div>
-            )}
 
-            {counterShape === 'bro-counter' && (
-                <div className="absolute inset-0 flex items-center justify-center -z-10">
-                    <div className="w-64 h-64 bg-slate-800 rounded-full border-8 border-slate-600 shadow-2xl flex items-center justify-center">
-                        <div className="w-56 h-56 bg-slate-900 rounded-full flex items-center justify-center border-4 border-slate-700 inset-shadow">
-                            <div className="text-slate-400 text-6xl opacity-20">👊</div>
-                        </div>
-                    </div>
-                </div>
-            )}
+
+
+
 
             {counterShape === 'isometric-stack' && (
                 <div className="absolute inset-0 flex items-center justify-center -z-10">
@@ -765,6 +731,10 @@ export function CounterVisuals({
 
             {counterShape === 'halo-ring' && <HaloRing progress={progress} currentCount={currentCount} />}
             {counterShape === 'bead-ring' && <BeadRing currentCount={currentCount} />}
+            {counterShape === 'helix-strand' && <HelixStrand currentCount={currentCount} />}
+            {counterShape === 'cyber-hexagon' && <CyberHexagon currentCount={currentCount} />}
+            {counterShape === 'blooming-lotus' && <BloomingLotus currentCount={currentCount} />}
+            {counterShape === 'constellation' && <Constellation currentCount={currentCount} />}
             {counterShape === 'zen-stones' && <ZenStones currentCount={currentCount} />}
             {counterShape === 'vertical-capsules' && <VerticalCapsules currentCount={currentCount} />}
             {counterShape === 'luminous-beads' && <LuminousBeads progress={progress} />}
@@ -809,12 +779,10 @@ export function CounterVisuals({
         ${counterShape === 'vertical-capsules' ? 'w-64 h-[300px] flex items-center justify-center' : ''}
         ${counterShape === 'luminous-beads' ? 'w-64 h-64 rounded-full flex items-center justify-center' : ''}
         
-        ${counterShape === 'nano-pulse' ? 'w-64 h-64 rounded-full flex items-center justify-center' : ''}
-        ${counterShape === 'banana-slide' ? 'w-64 h-64 flex items-center justify-center' : ''}
-        ${counterShape === 'bro-counter' ? 'w-64 h-64 rounded-full flex items-center justify-center' : ''}
         ${counterShape === 'isometric-stack' ? 'w-64 h-64 flex items-center justify-center perspective-[1000px]' : ''}
         ${counterShape === 'animated-ripple' ? 'w-64 h-64 flex items-center justify-center' : ''}
         ${counterShape === 'bead-ring' ? 'w-64 h-64 flex items-center justify-center' : ''}
+        ${['helix-strand', 'cyber-hexagon', 'blooming-lotus', 'constellation'].includes(counterShape) ? 'w-64 h-64 flex items-center justify-center' : ''}
 
         flex items-center justify-center
         cursor-pointer
@@ -826,8 +794,6 @@ export function CounterVisuals({
         ${!showCompletion && counterShape === 'minimal' ? 'counter-glow' : ''}
         ${counterShape === 'beads' ? 'hover:scale-105 active:scale-95' : ''}
         ${counterShape === 'vintage-wood' ? 'active:scale-[0.98] transition-transform' : ''}
-        ${counterShape === 'banana-slide' ? 'active:rotate-12 transition-transform' : ''}
-        ${counterShape === 'bro-counter' ? 'active:scale-95 transition-transform' : ''}
       `}
                 whileTap={{ scale: 0.97 }}
                 transition={{ duration: 0.1 }}
@@ -878,12 +844,13 @@ export function CounterVisuals({
           ${['nebula-cloud', 'infinite-knot', 'holo-fan', 'luminous-beads'].includes(counterShape) ? 'text-primary drop-shadow-[0_0_12px_rgba(var(--primary),0.6)] font-bold' : ''}
           ${counterShape === 'halo-ring' ? 'text-emerald-400 font-bold drop-shadow-[0_0_10px_rgba(52,211,153,0.8)]' : ''}
           
-          ${counterShape === 'nano-pulse' ? 'text-primary font-mono text-6xl font-bold tracking-widest drop-shadow-[0_0_15px_hsl(var(--primary))]' : ''}
-          ${counterShape === 'banana-slide' ? 'text-yellow-600 font-sans text-7xl font-bold drop-shadow-md' : ''}
-          ${counterShape === 'bro-counter' ? 'text-slate-200 font-black text-7xl uppercase tracking-tighter drop-shadow-2xl' : ''}
           ${counterShape === 'isometric-stack' ? 'text-white font-bold text-6xl drop-shadow-[0_4px_4px_rgba(0,0,0,0.3)]' : ''}
           ${counterShape === 'animated-ripple' ? 'text-blue-200 font-light text-7xl tracking-widest drop-shadow-[0_0_10px_rgba(59,130,246,0.6)]' : ''}
           ${counterShape === 'bead-ring' ? 'text-amber-500 font-mono text-7xl font-bold tracking-wider drop-shadow-[0_0_10px_rgba(245,158,11,0.6)]' : ''}
+          ${counterShape === 'helix-strand' ? 'text-cyan-400 font-mono tracking-widest drop-shadow-[0_0_10px_rgba(34,211,238,0.8)]' : ''}
+          ${counterShape === 'cyber-hexagon' ? 'font-mono text-primary font-bold tracking-widest drop-shadow-[0_0_10px_rgba(var(--primary),0.8)]' : ''}
+          ${counterShape === 'blooming-lotus' ? 'font-serif text-white/90 drop-shadow-lg font-light' : ''}
+          ${counterShape === 'constellation' ? 'font-thin text-white tracking-widest drop-shadow-[0_0_10px_white]' : ''}
 
           ${counterShape === 'vertical-capsules' ? 'hidden' : ''}
           ${counterShape === 'zen-stones' ? 'hidden' : ''}

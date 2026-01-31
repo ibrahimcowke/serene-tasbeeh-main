@@ -41,7 +41,8 @@ export type CounterShape =
   | 'solar-flare' | 'nebula-cloud' | 'infinite-knot' 
   | 'holo-fan'
   | 'halo-ring' | 'zen-stones' | 'vertical-capsules' | 'luminous-beads'
-  | 'nano-pulse' | 'banana-slide' | 'bro-counter' | 'isometric-stack' | 'animated-ripple' | 'bead-ring';
+  | 'isometric-stack' | 'animated-ripple' | 'bead-ring'
+  | 'helix-strand' | 'cyber-hexagon' | 'blooming-lotus' | 'constellation';
 
 interface TasbeehState {
   // Counts
