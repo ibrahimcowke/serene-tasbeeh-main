@@ -40,8 +40,8 @@ export type CounterShape =
   | 'ring-light' | 'steampunk-nixie' | 'biolum-organic'
   | 'solar-flare' | 'nebula-cloud' | 'infinite-knot' 
   | 'holo-fan'
-  | 'halo-ring' | 'zen-stones' | 'vertical-capsules' | 'luminous-beads' | 'geometric-mandala'
-  | 'nano-pulse' | 'banana-slide' | 'bro-counter' | 'isometric-stack' | 'animated-ripple';
+  | 'halo-ring' | 'zen-stones' | 'vertical-capsules' | 'luminous-beads'
+  | 'nano-pulse' | 'banana-slide' | 'bro-counter' | 'isometric-stack' | 'animated-ripple' | 'bead-ring';
 
 interface TasbeehState {
   // Counts

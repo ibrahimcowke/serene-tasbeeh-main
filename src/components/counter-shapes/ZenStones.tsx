@@ -12,8 +12,17 @@ export function ZenStones({ currentCount }: ZenStonesProps) {
                 {/* Top Stone */}
                 <motion.div
                     className="relative z-30"
-                    animate={{ y: [0, -3, 0] }}
-                    transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+                    animate={{
+                        y: [0, -3, 0],
+                        scale: [1, 1.05, 1],
+                        rotate: [0, 1, -1, 0]
+                    }}
+                    transition={{
+                        y: { duration: 4, repeat: Infinity, ease: "easeInOut" },
+                        scale: { duration: 0.3, ease: "easeOut", repeat: 0 }, // Tap reaction
+                        rotate: { duration: 0.5, ease: "easeInOut", repeat: 0 } // Slight wobble
+                    }}
+                    key={`top-${currentCount}`} // Re-trigger distinct animations on count
                 >
                     <svg width="100" height="60" viewBox="0 0 100 60" className="drop-shadow-lg text-stone-300">
                         <path
@@ -30,8 +39,17 @@ export function ZenStones({ currentCount }: ZenStonesProps) {
                 {/* Middle Stone */}
                 <motion.div
                     className="relative z-20 -mt-2"
-                    animate={{ y: [0, -2, 0] }}
-                    transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+                    animate={{
+                        y: [0, -2, 0],
+                        scaleX: [1, 1.05, 1], // Squash effect
+                        scaleY: [1, 0.95, 1]
+                    }}
+                    transition={{
+                        y: { duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1 },
+                        scaleX: { duration: 0.2, ease: "easeOut" },
+                        scaleY: { duration: 0.2, ease: "easeOut" }
+                    }}
+                    key={`mid-${currentCount}`}
                 >
                     <svg width="140" height="70" viewBox="0 0 140 70" className="drop-shadow-lg text-stone-400">
                         <path
@@ -48,8 +66,15 @@ export function ZenStones({ currentCount }: ZenStonesProps) {
                 {/* Bottom Stone */}
                 <motion.div
                     className="relative z-10 -mt-2"
-                    animate={{ y: [0, -1, 0] }}
-                    transition={{ duration: 6, repeat: Infinity, ease: "easeInOut", delay: 2 }}
+                    animate={{
+                        y: [0, -1, 0],
+                        rotate: [0, -1, 1, 0] // Grounding wobble
+                    }}
+                    transition={{
+                        y: { duration: 6, repeat: Infinity, ease: "easeInOut", delay: 2 },
+                        rotate: { duration: 0.4, ease: "easeOut" }
+                    }}
+                    key={`bot-${currentCount}`}
                 >
                     <svg width="180" height="80" viewBox="0 0 180 80" className="drop-shadow-lg text-stone-500">
                         <path
@@ -64,7 +89,12 @@ export function ZenStones({ currentCount }: ZenStonesProps) {
                 </motion.div>
 
                 {/* Shadow */}
-                <div className="w-32 h-4 bg-black/20 blur-xl rounded-[100%] mt-4" />
+                <motion.div
+                    className="w-32 h-4 bg-black/20 blur-xl rounded-[100%] mt-4"
+                    animate={{ scale: [1, 1.1, 1], opacity: [0.2, 0.3, 0.2] }}
+                    transition={{ duration: 0.2 }}
+                    key={`shadow-${currentCount}`}
+                />
 
                 {/* Count Flash Effect Over Stones */}
                 <motion.div

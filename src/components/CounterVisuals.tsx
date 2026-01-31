@@ -1,10 +1,11 @@
 import { motion } from 'framer-motion';
 import { ThemeSettings, CounterShape } from '@/store/tasbeehStore';
 import { HaloRing } from './counter-shapes/HaloRing';
+import { BeadRing } from './counter-shapes/BeadRing';
 import { ZenStones } from './counter-shapes/ZenStones';
 import { VerticalCapsules } from './counter-shapes/VerticalCapsules';
 import { LuminousBeads } from './counter-shapes/LuminousBeads';
-import { GeometricMandala } from './counter-shapes/GeometricMandala';
+
 
 interface CounterVisualsProps {
     layout: 'default' | 'focus' | 'ergonomic';
@@ -763,10 +764,11 @@ export function CounterVisuals({
             )}
 
             {counterShape === 'halo-ring' && <HaloRing progress={progress} currentCount={currentCount} />}
+            {counterShape === 'bead-ring' && <BeadRing currentCount={currentCount} />}
             {counterShape === 'zen-stones' && <ZenStones currentCount={currentCount} />}
             {counterShape === 'vertical-capsules' && <VerticalCapsules currentCount={currentCount} />}
             {counterShape === 'luminous-beads' && <LuminousBeads progress={progress} />}
-            {counterShape === 'geometric-mandala' && <GeometricMandala currentCount={currentCount} />}
+
 
             {/* Global Aura Pulse Effekt - triggers on count change */}
             <motion.div
@@ -806,13 +808,13 @@ export function CounterVisuals({
         ${counterShape === 'zen-stones' ? 'w-full h-full flex items-center justify-center' : ''}
         ${counterShape === 'vertical-capsules' ? 'w-64 h-[300px] flex items-center justify-center' : ''}
         ${counterShape === 'luminous-beads' ? 'w-64 h-64 rounded-full flex items-center justify-center' : ''}
-        ${counterShape === 'geometric-mandala' ? 'w-64 h-64 rounded-full flex items-center justify-center' : ''}
         
         ${counterShape === 'nano-pulse' ? 'w-64 h-64 rounded-full flex items-center justify-center' : ''}
         ${counterShape === 'banana-slide' ? 'w-64 h-64 flex items-center justify-center' : ''}
         ${counterShape === 'bro-counter' ? 'w-64 h-64 rounded-full flex items-center justify-center' : ''}
         ${counterShape === 'isometric-stack' ? 'w-64 h-64 flex items-center justify-center perspective-[1000px]' : ''}
         ${counterShape === 'animated-ripple' ? 'w-64 h-64 flex items-center justify-center' : ''}
+        ${counterShape === 'bead-ring' ? 'w-64 h-64 flex items-center justify-center' : ''}
 
         flex items-center justify-center
         cursor-pointer
@@ -873,7 +875,7 @@ export function CounterVisuals({
           ${counterShape === 'steampunk-nixie' ? 'font-mono text-orange-500 font-bold tracking-widest drop-shadow-[0_0_10px_orange] text-6xl' : ''}
           ${counterShape === 'biolum-organic' ? 'font-mono text-primary font-bold tracking-widest drop-shadow-[0_0_15px_hsl(var(--primary))] text-6xl' : ''}
           ${counterShape === 'solar-flare' ? 'text-white drop-shadow-[0_0_20px_orange] font-bold' : ''}
-          ${['nebula-cloud', 'infinite-knot', 'holo-fan', 'luminous-beads', 'geometric-mandala'].includes(counterShape) ? 'text-primary drop-shadow-[0_0_12px_rgba(var(--primary),0.6)] font-bold' : ''}
+          ${['nebula-cloud', 'infinite-knot', 'holo-fan', 'luminous-beads'].includes(counterShape) ? 'text-primary drop-shadow-[0_0_12px_rgba(var(--primary),0.6)] font-bold' : ''}
           ${counterShape === 'halo-ring' ? 'text-emerald-400 font-bold drop-shadow-[0_0_10px_rgba(52,211,153,0.8)]' : ''}
           
           ${counterShape === 'nano-pulse' ? 'text-primary font-mono text-6xl font-bold tracking-widest drop-shadow-[0_0_15px_hsl(var(--primary))]' : ''}
@@ -881,6 +883,7 @@ export function CounterVisuals({
           ${counterShape === 'bro-counter' ? 'text-slate-200 font-black text-7xl uppercase tracking-tighter drop-shadow-2xl' : ''}
           ${counterShape === 'isometric-stack' ? 'text-white font-bold text-6xl drop-shadow-[0_4px_4px_rgba(0,0,0,0.3)]' : ''}
           ${counterShape === 'animated-ripple' ? 'text-blue-200 font-light text-7xl tracking-widest drop-shadow-[0_0_10px_rgba(59,130,246,0.6)]' : ''}
+          ${counterShape === 'bead-ring' ? 'text-amber-500 font-mono text-7xl font-bold tracking-wider drop-shadow-[0_0_10px_rgba(245,158,11,0.6)]' : ''}
 
           ${counterShape === 'vertical-capsules' ? 'hidden' : ''}
           ${counterShape === 'zen-stones' ? 'hidden' : ''}
