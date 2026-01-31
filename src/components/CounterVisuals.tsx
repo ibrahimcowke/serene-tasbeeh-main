@@ -1,9 +1,14 @@
 import { motion } from 'framer-motion';
-import { ThemeSettings } from '@/store/tasbeehStore';
+import { ThemeSettings, CounterShape } from '@/store/tasbeehStore';
+import { HaloRing } from './counter-shapes/HaloRing';
+import { ZenStones } from './counter-shapes/ZenStones';
+import { VerticalCapsules } from './counter-shapes/VerticalCapsules';
+import { LuminousBeads } from './counter-shapes/LuminousBeads';
+import { GeometricMandala } from './counter-shapes/GeometricMandala';
 
 interface CounterVisualsProps {
     layout: 'default' | 'focus' | 'ergonomic';
-    counterShape: 'minimal' | 'classic' | 'beads' | 'flower' | 'waveform' | 'hexagon' | 'orb' | 'digital' | 'modern-ring' | 'vintage-wood' | 'geometric-star' | 'fluid' | 'neumorph' | 'radar' | 'real-beads' | 'cyber-3d' | 'glass-orb' | 'crystal-iso' | 'portal-depth' | 'luminous-ring' | 'ring-light' | 'galaxy' | 'tally-clicker' | 'steampunk-nixie' | 'biolum-organic' | 'quantum-string' | 'solar-flare' | 'particle-vortex' | 'nebula-cloud' | 'infinite-knot' | 'holo-fan' | 'prism-crystal' | 'plasma-coil' | 'minimal-img' | 'classic-img' | 'beads-img' | 'flower-img' | 'waveform-img' | 'hexagon-img' | 'orb-img' | 'digital-img';
+    counterShape: CounterShape;
     counterVerticalOffset: number;
     counterScale: number;
     progress: number;
@@ -66,31 +71,9 @@ export function CounterVisuals({
                     </svg>
                 )}
 
-                {counterShape === 'hexagon' && (
-                    <svg width="100%" height="100%" viewBox="0 0 100 100" className="transform -rotate-90">
-                        <path
-                            d="M50 2 L95 28 V72 L50 98 L5 72 V28 Z"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth="3"
-                            className="text-muted/30"
-                        />
-                        <motion.path
-                            d="M50 2 L95 28 V72 L50 98 L5 72 V28 Z"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth="3"
-                            className="text-primary drop-shadow-[0_0_10px_rgba(var(--primary),0.5)]"
-                            pathLength="1"
-                            strokeDasharray="1"
-                            initial={{ strokeDashoffset: 1 }}
-                            animate={{ strokeDashoffset: 1 - progress }}
-                            transition={{ type: 'spring', bounce: 0, duration: 0.5 }}
-                        />
-                    </svg>
-                )}
 
-                {['minimal', 'beads', 'flower', 'waveform', 'orb', 'digital', 'modern-ring', 'ring-light', 'galaxy'].includes(counterShape) && (
+
+                {['minimal', 'beads', 'flower', 'waveform', 'digital', 'modern-ring', 'ring-light'].includes(counterShape) && (
                     <svg width="100%" height="100%" viewBox="0 0 290 290" className="-rotate-90">
                         <circle
                             cx="145"
@@ -148,22 +131,7 @@ export function CounterVisuals({
                 </div>
             )}
 
-            {counterShape === 'galaxy' && (
-                <div className="absolute inset-0 flex items-center justify-center -z-10 overflow-hidden rounded-full">
-                    <div className="absolute inset-0 bg-black" />
-                    <motion.div
-                        className="absolute inset-0 opacity-60"
-                        style={{
-                            backgroundImage: 'radial-gradient(white 1px, transparent 1px), radial-gradient(white 1px, transparent 1px)',
-                            backgroundSize: '30px 30px, 15px 15px',
-                            backgroundPosition: '0 0, 15px 15px'
-                        }}
-                        animate={{ rotate: 360, scale: [1, 1.1, 1] }}
-                        transition={{ duration: 60, repeat: Infinity, ease: 'linear' }}
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-tr from-purple-800/40 via-blue-900/40 to-black/60 mix-blend-overlay" />
-                </div>
-            )}
+
 
             {counterShape === 'classic' && (
                 <div className="absolute inset-x-0 -top-4 bottom-0 bg-secondary/30 rounded-3xl border-4 border-muted flex items-center justify-center -z-10 flex-col">
@@ -175,25 +143,7 @@ export function CounterVisuals({
                 </div>
             )}
 
-            {counterShape === 'tally-clicker' && (
-                <div className="absolute inset-0 flex items-center justify-center -z-10">
-                    {/* Main Chrome Body */}
-                    <div className="w-[260px] h-[260px] rounded-full bg-gradient-to-br from-gray-100 via-gray-300 to-gray-400 border-[6px] border-gray-400 shadow-[0_20px_50px_rgba(0,0,0,0.5),inset_-5px_-5px_20px_rgba(0,0,0,0.2),inset_5px_5px_20px_rgba(255,255,255,1)] flex items-center justify-center relative overflow-hidden">
 
-                        {/* Mechanical Window */}
-                        <div className="absolute top-[35%] w-[60%] h-[20%] bg-black rounded-sm border-4 border-gray-500 shadow-[inset_0_0_5px_rgba(0,0,0,1),0_2px_5px_rgba(255,255,255,0.5)] z-20 overflow-hidden flex items-center justify-center">
-                            {/* Glass reflection on window */}
-                            <div className="absolute top-0 left-0 w-full h-1/2 bg-gradient-to-b from-white/20 to-transparent pointer-events-none" />
-                        </div>
-
-                        {/* Top Clicker Button Visual (Non-functional, purely visual as body is the button) */}
-                        <div className="absolute top-0 w-24 h-12 bg-gradient-to-b from-gray-200 to-gray-400 rounded-b-xl border-x border-b border-gray-500 shadow-lg transform -translate-y-1/2 z-10" />
-
-                        {/* Metallic Texture/Highlight */}
-                        <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-transparent via-white/40 to-transparent pointer-events-none" style={{ backgroundSize: '200% 200%' }} />
-                    </div>
-                </div>
-            )}
 
             {counterShape === 'beads' && (
                 <div className="absolute inset-0 flex items-center justify-center -z-10 pointer-events-none">
@@ -243,23 +193,7 @@ export function CounterVisuals({
                 </div>
             )}
 
-            {counterShape === 'hexagon' && (
-                <div className="absolute inset-0 flex items-center justify-center -z-10">
-                    {/* Distinct Inner Hexagon */}
-                    <div className="absolute inset-0 flex items-center justify-center">
-                        <div
-                            className="w-48 h-48 bg-card/50 border-2 border-primary/20 clip-path-hexagon"
-                            style={{ clipPath: 'polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)' }}
-                        >
-                            <motion.div
-                                className="w-full h-full bg-primary/10"
-                                animate={{ opacity: [0.5, 0.8, 0.5] }}
-                                transition={{ duration: 2, repeat: Infinity }}
-                            />
-                        </div>
-                    </div>
-                </div>
-            )}
+
 
             {counterShape === 'digital' && (
                 <div className="absolute inset-0 flex items-center justify-center -z-10 pointer-events-none">
@@ -391,22 +325,7 @@ export function CounterVisuals({
                 </div>
             )}
 
-            {counterShape === 'radar' && (
-                <div className="absolute inset-0 flex items-center justify-center -z-10 bg-black/80 rounded-full border-2 border-primary/30 overflow-hidden">
-                    {/* Grid */}
-                    <div className="absolute inset-0" style={{ backgroundImage: 'radial-gradient(circle, hsl(var(--primary)/0.2) 1px, transparent 1px)', backgroundSize: '30px 30px' }} />
-                    <div className="absolute inset-0 border border-primary/20 rounded-full scale-50" />
-                    <div className="absolute inset-0 border border-primary/20 rounded-full scale-75" />
 
-                    {/* Scanner */}
-                    <motion.div
-                        className="absolute inset-0 bg-[conic-gradient(from_0deg,transparent_0deg,hsl(var(--primary)/0.5)_360deg)]"
-                        animate={{ rotate: 360 }}
-                        transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
-                        style={{ clipPath: 'polygon(50% 50%, 100% 50%, 100% 0, 50% 0)' }}
-                    />
-                </div>
-            )}
 
             {counterShape === 'real-beads' && (
                 <div className="absolute inset-0 flex items-center justify-center -z-10">
@@ -446,19 +365,22 @@ export function CounterVisuals({
                 </div>
             )}
 
-            {counterShape === 'cyber-3d' && (
-                <div className="absolute inset-0 flex items-center justify-center -z-10 perspective-[1000px]">
+
+
+            {counterShape === 'radar' && (
+                <div className="absolute inset-0 flex items-center justify-center -z-10 bg-black/80 rounded-full border-2 border-primary/30 overflow-hidden">
+                    {/* Grid */}
+                    <div className="absolute inset-0" style={{ backgroundImage: 'radial-gradient(circle, hsl(var(--primary)/0.2) 1px, transparent 1px)', backgroundSize: '30px 30px' }} />
+                    <div className="absolute inset-0 border border-primary/20 rounded-full scale-50" />
+                    <div className="absolute inset-0 border border-primary/20 rounded-full scale-75" />
+
+                    {/* Scanner */}
                     <motion.div
-                        className="w-full h-full rounded-full border-[20px] border-primary/30 shadow-[0_0_50px_hsl(var(--primary)/0.4)]"
-                        style={{ transformStyle: 'preserve-3d' }}
-                        animate={{ rotateX: [0, 20, 0, -20, 0], rotateY: [0, 20, 0, -20, 0] }}
-                        transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
-                    >
-                        <div className="absolute inset-0 rounded-full border-t-2 border-r-2 border-primary/50 opacity-50 animate-spin-slow" />
-                        <div className="absolute inset-4 rounded-full bg-black/80 backdrop-blur-md flex items-center justify-center shadow-inner">
-                            <div className="w-full h-full rounded-full bg-[radial-gradient(circle_at_center,transparent_30%,hsl(var(--primary)/0.1)_100%)]" />
-                        </div>
-                    </motion.div>
+                        className="absolute inset-0 bg-[conic-gradient(from_0deg,transparent_0deg,hsl(var(--primary)/0.5)_360deg)]"
+                        animate={{ rotate: 360 }}
+                        transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+                        style={{ clipPath: 'polygon(50% 50%, 100% 50%, 100% 0, 50% 0)' }}
+                    />
                 </div>
             )}
 
@@ -471,19 +393,7 @@ export function CounterVisuals({
                 </div>
             )}
 
-            {counterShape === 'crystal-iso' && (
-                <div className="absolute inset-0 flex items-center justify-center -z-10">
-                    <div className="w-[220px] h-[260px] relative">
-                        {/* Isometric Crystal Shape using CSS Clip Path */}
-                        <div className="absolute inset-0 bg-gradient-to-br from-indigo-300 via-purple-500 to-indigo-800 opacity-90 clip-path-polygon-[50%_0%,_100%_25%,_100%_75%,_50%_100%,_0%_75%,_0%_25%] shadow-2xl"
-                            style={{ clipPath: 'polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)' }}>
-                            <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
-                            {/* Facets */}
-                            <div className="absolute top-0 left-0 w-full h-full bg-white/10 clip-path-polygon-[50%_0%,_100%_25%,_50%_50%]" style={{ clipPath: 'polygon(50% 0%, 100% 25%, 50% 50%, 0% 25%)' }} />
-                        </div>
-                    </div>
-                </div>
-            )}
+
 
             {counterShape === 'portal-depth' && (
                 <div className="absolute inset-0 flex items-center justify-center -z-10 overflow-hidden rounded-full bg-black">
@@ -667,44 +577,7 @@ export function CounterVisuals({
                 </div>
             )}
 
-            {counterShape === 'quantum-string' && (
-                <div className="absolute inset-0 flex items-center justify-center -z-10 bg-black/5 rounded-full">
-                    <svg viewBox="0 0 200 200" className="w-full h-full">
-                        <motion.path
-                            d="M 20 100 Q 60 80 100 100 Q 140 120 180 100"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth="2"
-                            className="text-primary"
-                            initial={{ pathLength: 0, opacity: 0 }}
-                            animate={{
-                                pathLength: 1,
-                                opacity: 1,
-                                d: [
-                                    "M 20 100 Q 60 80 100 100 Q 140 120 180 100",
-                                    "M 20 100 Q 60 120 100 100 Q 140 80 180 100",
-                                    "M 20 100 Q 60 80 100 100 Q 140 120 180 100"
-                                ]
-                            }}
-                            transition={{
-                                pathLength: { duration: 1 },
-                                opacity: { duration: 1 },
-                                d: { duration: 3, repeat: Infinity, ease: "easeInOut" }
-                            }}
-                        />
-                        <motion.circle
-                            r="4"
-                            fill="currentColor"
-                            className="text-primary"
-                            animate={{
-                                cx: [20, 100, 180, 100, 20],
-                                cy: [100, 80, 100, 120, 100]
-                            }}
-                            transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
-                        />
-                    </svg>
-                </div>
-            )}
+
 
             {counterShape === 'solar-flare' && (
                 <div className="absolute inset-0 flex items-center justify-center -z-10">
@@ -740,50 +613,7 @@ export function CounterVisuals({
                 </div>
             )}
 
-            {counterShape === 'particle-vortex' && (
-                <div className="absolute inset-0 flex items-center justify-center -z-10">
-                    <svg viewBox="0 0 200 200" className="w-full h-full">
-                        {Array.from({ length: 40 }).map((_, i) => {
-                            const angle = (i * 137.5) * (Math.PI / 180);
-                            const radius = (i / 40) * 80;
-                            const x = 100 + Math.cos(angle) * radius;
-                            const y = 100 + Math.sin(angle) * radius;
-                            return (
-                                <motion.circle
-                                    key={i}
-                                    cx={x}
-                                    cy={y}
-                                    r={1 + (i / 40) * 2}
-                                    fill="currentColor"
-                                    className="text-primary/60"
-                                    animate={{
-                                        cx: [x, 100, x],
-                                        cy: [y, 100, y],
-                                        opacity: [0.3, 1, 0.3],
-                                        scale: [1, 1.5, 1]
-                                    }}
-                                    transition={{
-                                        duration: 3,
-                                        repeat: Infinity,
-                                        delay: i * 0.05,
-                                        ease: "easeInOut"
-                                    }}
-                                />
-                            );
-                        })}
-                        {/* Core pulse */}
-                        <motion.circle
-                            cx="100"
-                            cy="100"
-                            r="10"
-                            fill="currentColor"
-                            className="text-primary"
-                            animate={{ scale: [1, 1.3, 1], opacity: [0.5, 0.8, 0.5] }}
-                            transition={{ duration: 2, repeat: Infinity }}
-                        />
-                    </svg>
-                </div>
-            )}
+
 
             {counterShape === 'nebula-cloud' && (
                 <div className="absolute inset-0 flex items-center justify-center -z-10">
@@ -858,59 +688,85 @@ export function CounterVisuals({
                 </div>
             )}
 
-            {counterShape === 'prism-crystal' && (
+
+
+
+
+
+
+            {counterShape === 'nano-pulse' && (
+                <div className="absolute inset-0 flex items-center justify-center -z-10">
+                    <div className="relative w-full h-full flex items-center justify-center">
+                        <motion.div
+                            className="absolute w-64 h-64 border-2 border-primary/50 rounded-full"
+                            animate={{ scale: [1, 1.1, 1], opacity: [0.5, 1, 0.5] }}
+                            transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+                        />
+                        <motion.div
+                            className="absolute w-56 h-56 border border-primary/30 rounded-full dashed-circle"
+                            animate={{ rotate: 360 }}
+                            transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
+                        />
+                        <div className="absolute w-48 h-48 bg-primary/10 rounded-full backdrop-blur-sm flex items-center justify-center shadow-[0_0_30px_hsl(var(--primary)/0.3)]">
+                            <div className="w-40 h-40 bg-black/80 rounded-full flex items-center justify-center border border-primary/50">
+                                <div className="text-primary text-4xl animate-pulse">⚡</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {counterShape === 'banana-slide' && (
                 <div className="absolute inset-0 flex items-center justify-center -z-10">
                     <motion.div
-                        className="w-40 h-40 bg-primary/20 backdrop-blur-md border border-white/30"
-                        style={{ clipPath: 'polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%)' }}
-                        animate={{
-                            rotateY: 360,
-                            boxShadow: ["0 0 20px hsl(var(--primary)/0.2)", "0 0 50px hsl(var(--primary)/0.5)", "0 0 20px hsl(var(--primary)/0.2)"]
-                        }}
-                        transition={{
-                            rotateY: { duration: 8, repeat: Infinity, ease: "linear" },
-                            boxShadow: { duration: 4, repeat: Infinity }
-                        }}
+                        className="w-64 h-64 bg-yellow-100 rounded-3xl border-4 border-yellow-400 shadow-xl flex items-center justify-center relative overflow-hidden"
+                        whileTap={{ scale: 0.9, rotate: -5 }}
                     >
-                        <div className="absolute inset-0 bg-gradient-to-br from-white/40 to-transparent opacity-50" />
+                        <div className="absolute top-2 right-2 text-2xl">🍌</div>
+                        <div className="absolute bottom-2 left-2 text-2xl transform rotate-180">🍌</div>
                     </motion.div>
                 </div>
             )}
 
-            {counterShape === 'plasma-coil' && (
+            {counterShape === 'bro-counter' && (
                 <div className="absolute inset-0 flex items-center justify-center -z-10">
-                    <svg viewBox="0 0 100 100" className="w-full h-full">
-                        {Array.from({ length: 8 }).map((_, i) => (
-                            <motion.circle
-                                key={i}
-                                cx="50"
-                                cy="50"
-                                r={10 + i * 5}
-                                fill="none"
-                                stroke="currentColor"
-                                strokeWidth="0.5"
-                                className="text-primary/40"
-                                animate={{
-                                    r: [10 + i * 5, 15 + i * 5, 10 + i * 5],
-                                    opacity: [0.2, 0.6, 0.2]
-                                }}
-                                transition={{ duration: 2 + i * 0.2, repeat: Infinity }}
-                            />
-                        ))}
-                        <motion.path
-                            d="M 50 10 Q 90 50 50 90 Q 10 50 50 10"
-                            stroke="currentColor"
-                            strokeWidth="1"
-                            fill="none"
-                            className="text-primary"
-                            animate={{
-                                d: ["M 50 10 Q 90 50 50 90 Q 10 50 50 10", "M 50 10 Q 10 50 50 90 Q 90 50 50 10", "M 50 10 Q 90 50 50 90 Q 10 50 50 10"]
-                            }}
-                            transition={{ duration: 4, repeat: Infinity }}
-                        />
-                    </svg>
+                    <div className="w-64 h-64 bg-slate-800 rounded-full border-8 border-slate-600 shadow-2xl flex items-center justify-center">
+                        <div className="w-56 h-56 bg-slate-900 rounded-full flex items-center justify-center border-4 border-slate-700 inset-shadow">
+                            <div className="text-slate-400 text-6xl opacity-20">👊</div>
+                        </div>
+                    </div>
                 </div>
             )}
+
+            {counterShape === 'isometric-stack' && (
+                <div className="absolute inset-0 flex items-center justify-center -z-10">
+                    <div className="w-40 h-40 bg-indigo-500 transform rotate-45 skew-x-12 border-4 border-indigo-300 shadow-2xl">
+                        <div className="absolute -top-4 -left-4 w-full h-full bg-indigo-400 border-4 border-indigo-200" />
+                        <div className="absolute -top-8 -left-8 w-full h-full bg-indigo-600 border-4 border-indigo-400" />
+                    </div>
+                </div>
+            )}
+
+            {counterShape === 'animated-ripple' && (
+                <div className="absolute inset-0 flex items-center justify-center -z-10">
+                    <div className="w-64 h-64 bg-blue-500/10 rounded-full flex items-center justify-center backdrop-blur-sm border border-blue-400/30">
+                        {[...Array(3)].map((_, i) => (
+                            <motion.div
+                                key={i}
+                                className="absolute inset-0 rounded-full border border-blue-400/50"
+                                animate={{ scale: [1, 1.5], opacity: [1, 0] }}
+                                transition={{ duration: 2, repeat: Infinity, delay: i * 0.6 }}
+                            />
+                        ))}
+                    </div>
+                </div>
+            )}
+
+            {counterShape === 'halo-ring' && <HaloRing progress={progress} currentCount={currentCount} />}
+            {counterShape === 'zen-stones' && <ZenStones currentCount={currentCount} />}
+            {counterShape === 'vertical-capsules' && <VerticalCapsules currentCount={currentCount} />}
+            {counterShape === 'luminous-beads' && <LuminousBeads progress={progress} />}
+            {counterShape === 'geometric-mandala' && <GeometricMandala currentCount={currentCount} />}
 
             {/* Global Aura Pulse Effekt - triggers on count change */}
             <motion.div
@@ -927,38 +783,37 @@ export function CounterVisuals({
                 className={`
         ${counterShape === 'minimal' ? 'absolute inset-4 rounded-full bg-counter-bg' : ''}
         ${counterShape === 'ring-light' ? 'w-64 h-64 rounded-full bg-transparent flex items-center justify-center' : ''}
-        ${counterShape === 'galaxy' ? 'w-64 h-64 rounded-full bg-transparent flex items-center justify-center text-white mix-blend-screen' : ''}
-        ${counterShape === 'tally-clicker' ? 'w-full h-full rounded-full flex items-center justify-center' : ''}
         ${counterShape === 'classic' ? 'w-64 h-64 rounded-2xl bg-gradient-to-br from-card to-background shadow-inner flex flex-col items-center justify-center border-2 border-border/50' : ''}
         ${counterShape === 'beads' ? 'w-64 h-64 rounded-full bg-transparent flex items-center justify-center' : ''}
         ${counterShape === 'flower' ? 'w-64 h-64 rounded-full bg-background/50 backdrop-blur-sm border border-primary/20 flex items-center justify-center shadow-lg' : ''}
         ${counterShape === 'waveform' ? 'w-72 h-72 rounded-full flex items-center justify-center backdrop-blur-sm' : ''}
-        ${counterShape === 'hexagon' ? 'w-64 h-64 flex items-center justify-center bg-card/10 backdrop-blur-sm' : ''}
-        ${counterShape === 'orb' ? 'w-64 h-64 rounded-full flex items-center justify-center' : ''}
         ${counterShape === 'digital' ? 'w-24 h-24 rounded-full bg-gradient-to-b from-[#f3d692] to-[#8b6508] border-[3px] border-[#5c4305] shadow-[0_6px_12px_rgba(0,0,0,0.3),inset_0_2px_4px_rgba(255,255,255,0.4)] mt-24 mb-2' : ''}
         ${counterShape === 'modern-ring' ? 'w-64 h-64 rounded-full bg-background/80 backdrop-blur-xl border border-primary/50 shadow-[0_0_30px_rgba(var(--primary),0.2)]' : ''}
         ${counterShape === 'vintage-wood' ? 'w-60 h-60 rounded-3xl bg-[#5d4037] border-2 border-[#8d6e63] shadow-[inset_0_5px_15px_rgba(0,0,0,0.3)] mt-2' : ''}
         ${counterShape === 'geometric-star' ? 'w-64 h-64 flex items-center justify-center bg-background/10 backdrop-blur-sm' : ''}
         ${counterShape === 'fluid' ? 'w-64 h-64 flex items-center justify-center backdrop-blur-sm' : ''}
-        ${counterShape === 'neumorph' ? 'w-64 h-64 rounded-[40px] bg-secondary shadow-[9px_9px_16px_rgba(0,0,0,0.1),-9px_-9px_16px_rgba(255,255,255,0.1)] text-foreground border border-white/20' : ''}
-        ${counterShape === 'radar' ? 'w-64 h-64 rounded-full flex items-center justify-center shadow-[0_0_20px_hsl(var(--primary)/0.3)]' : ''}
         ${counterShape === 'real-beads' ? 'w-full h-full rounded-full flex items-center justify-center' : ''}
-        ${counterShape === 'cyber-3d' ? 'w-64 h-64 rounded-full flex items-center justify-center text-primary' : ''}
         ${counterShape === 'glass-orb' ? 'w-64 h-64 rounded-full flex items-center justify-center' : ''}
-        ${counterShape === 'crystal-iso' ? 'w-64 h-72 flex items-center justify-center -mt-4' : ''}
         ${counterShape === 'portal-depth' ? 'w-64 h-64 rounded-full flex items-center justify-center text-primary-foreground' : ''}
         ${counterShape === 'luminous-ring' ? 'w-64 h-64 rounded-full flex items-center justify-center text-primary' : ''}
         ${counterShape === 'steampunk-nixie' ? 'w-64 h-64 rounded-full flex items-center justify-center' : ''}
         ${counterShape === 'biolum-organic' ? 'w-64 h-64 rounded-full flex items-center justify-center' : ''}
-        ${counterShape === 'quantum-string' ? 'w-64 h-64 rounded-full flex items-center justify-center' : ''}
         ${counterShape === 'solar-flare' ? 'w-64 h-64 rounded-full flex items-center justify-center' : ''}
-        ${counterShape === 'particle-vortex' ? 'w-64 h-64 rounded-full flex items-center justify-center' : ''}
         ${counterShape === 'nebula-cloud' ? 'w-64 h-64 rounded-full flex items-center justify-center bg-transparent backdrop-blur-sm' : ''}
         ${counterShape === 'infinite-knot' ? 'w-64 h-64 rounded-full flex items-center justify-center' : ''}
         ${counterShape === 'holo-fan' ? 'w-64 h-64 rounded-full flex items-center justify-center bg-secondary/10' : ''}
-        ${counterShape === 'prism-crystal' ? 'w-64 h-64 flex items-center justify-center' : ''}
-        ${counterShape === 'plasma-coil' ? 'w-64 h-64 rounded-full flex items-center justify-center' : ''}
+        ${counterShape === 'halo-ring' ? 'w-64 h-64 rounded-full flex items-center justify-center' : ''}
+        ${counterShape === 'zen-stones' ? 'w-full h-full flex items-center justify-center' : ''}
+        ${counterShape === 'vertical-capsules' ? 'w-64 h-[300px] flex items-center justify-center' : ''}
+        ${counterShape === 'luminous-beads' ? 'w-64 h-64 rounded-full flex items-center justify-center' : ''}
+        ${counterShape === 'geometric-mandala' ? 'w-64 h-64 rounded-full flex items-center justify-center' : ''}
         
+        ${counterShape === 'nano-pulse' ? 'w-64 h-64 rounded-full flex items-center justify-center' : ''}
+        ${counterShape === 'banana-slide' ? 'w-64 h-64 flex items-center justify-center' : ''}
+        ${counterShape === 'bro-counter' ? 'w-64 h-64 rounded-full flex items-center justify-center' : ''}
+        ${counterShape === 'isometric-stack' ? 'w-64 h-64 flex items-center justify-center perspective-[1000px]' : ''}
+        ${counterShape === 'animated-ripple' ? 'w-64 h-64 flex items-center justify-center' : ''}
+
         flex items-center justify-center
         cursor-pointer
         select-none
@@ -968,9 +823,9 @@ export function CounterVisuals({
         ${showCompletion && counterShape === 'minimal' ? 'animate-completion' : ''}
         ${!showCompletion && counterShape === 'minimal' ? 'counter-glow' : ''}
         ${counterShape === 'beads' ? 'hover:scale-105 active:scale-95' : ''}
-        ${counterShape === 'orb' ? 'shadow-2xl shadow-primary/20' : ''}
         ${counterShape === 'vintage-wood' ? 'active:scale-[0.98] transition-transform' : ''}
-        ${counterShape === 'tally-clicker' ? 'active:scale-95 transition-transform' : ''}
+        ${counterShape === 'banana-slide' ? 'active:rotate-12 transition-transform' : ''}
+        ${counterShape === 'bro-counter' ? 'active:scale-95 transition-transform' : ''}
       `}
                 whileTap={{ scale: 0.97 }}
                 transition={{ duration: 0.1 }}
@@ -1007,26 +862,28 @@ export function CounterVisuals({
           ${counterShape === 'digital' ? 'hidden' : ''}
           ${counterShape === 'classic' ? 'font-mono text-5xl sm:text-6xl md:text-7xl tracking-widest bg-black/10 px-4 sm:px-6 py-2 rounded-lg inset-shadow mb-4' : 'text-5xl sm:text-6xl md:text-7xl lg:text-8xl'}
           ${counterShape === 'waveform' ? 'drop-shadow-md z-10' : ''}
-          ${counterShape === 'orb' ? 'text-white mix-blend-overlay' : ''}
           ${counterShape === 'modern-ring' ? 'font-sans font-light tracking-tighter drop-shadow-[0_0_15px_rgba(var(--primary),0.6)]' : ''}
           ${counterShape === 'vintage-wood' ? 'font-serif text-[#d7ccc8] drop-shadow-[0_2px_2px_rgba(0,0,0,0.5)]' : ''}
-          ${counterShape === 'neumorph' ? 'text-foreground font-bold drop-shadow-sm' : ''}
           ${counterShape === 'radar' ? 'font-mono text-primary drop-shadow-[0_0_5px_hsl(var(--primary))]' : ''}
           ${counterShape === 'real-beads' ? 'font-serif text-[#5d4037] text-6xl font-bold drop-shadow-md bg-white/80 w-32 h-32 rounded-full flex items-center justify-center border-4 border-[#8d6e63]' : ''}
-          ${counterShape === 'cyber-3d' ? 'font-mono text-primary drop-shadow-[0_0_10px_hsl(var(--primary))]' : ''}
           ${counterShape === 'glass-orb' ? 'text-white/90 drop-shadow-lg font-light' : ''}
-          ${counterShape === 'crystal-iso' ? 'text-white drop-shadow-[0_4px_8px_rgba(0,0,0,0.5)] font-bold' : ''}
           ${counterShape === 'portal-depth' ? 'text-primary-foreground drop-shadow-[0_0_20px_hsl(var(--primary)/0.8)]' : ''}
           ${counterShape === 'luminous-ring' ? 'text-primary drop-shadow-[0_0_15px_hsl(var(--primary)/0.8)] font-light' : ''}
           ${counterShape === 'ring-light' ? 'text-white/90 font-thin tracking-tighter drop-shadow-[0_0_20px_rgba(255,255,255,0.8)]' : ''}
-          ${counterShape === 'galaxy' ? 'text-white font-bold tracking-widest' : ''}
-          ${counterShape === 'tally-clicker' ? 'text-zinc-800 font-mono text-6xl font-bold tracking-wide inset-shadow-sm' : ''}
           ${counterShape === 'steampunk-nixie' ? 'font-mono text-orange-500 font-bold tracking-widest drop-shadow-[0_0_10px_orange] text-6xl' : ''}
           ${counterShape === 'biolum-organic' ? 'font-mono text-primary font-bold tracking-widest drop-shadow-[0_0_15px_hsl(var(--primary))] text-6xl' : ''}
-          ${counterShape === 'quantum-string' ? 'font-sans text-primary drop-shadow-[0_0_10px_rgba(var(--primary),0.5)] font-light' : ''}
           ${counterShape === 'solar-flare' ? 'text-white drop-shadow-[0_0_20px_orange] font-bold' : ''}
-          ${counterShape === 'particle-vortex' ? 'text-primary drop-shadow-[0_0_15px_rgba(var(--primary),0.8)] font-bold' : ''}
-          ${['nebula-cloud', 'infinite-knot', 'holo-fan', 'prism-crystal', 'plasma-coil'].includes(counterShape) ? 'text-primary drop-shadow-[0_0_12px_rgba(var(--primary),0.6)] font-bold' : ''}
+          ${['nebula-cloud', 'infinite-knot', 'holo-fan', 'luminous-beads', 'geometric-mandala'].includes(counterShape) ? 'text-primary drop-shadow-[0_0_12px_rgba(var(--primary),0.6)] font-bold' : ''}
+          ${counterShape === 'halo-ring' ? 'text-emerald-400 font-bold drop-shadow-[0_0_10px_rgba(52,211,153,0.8)]' : ''}
+          
+          ${counterShape === 'nano-pulse' ? 'text-primary font-mono text-6xl font-bold tracking-widest drop-shadow-[0_0_15px_hsl(var(--primary))]' : ''}
+          ${counterShape === 'banana-slide' ? 'text-yellow-600 font-sans text-7xl font-bold drop-shadow-md' : ''}
+          ${counterShape === 'bro-counter' ? 'text-slate-200 font-black text-7xl uppercase tracking-tighter drop-shadow-2xl' : ''}
+          ${counterShape === 'isometric-stack' ? 'text-white font-bold text-6xl drop-shadow-[0_4px_4px_rgba(0,0,0,0.3)]' : ''}
+          ${counterShape === 'animated-ripple' ? 'text-blue-200 font-light text-7xl tracking-widest drop-shadow-[0_0_10px_rgba(59,130,246,0.6)]' : ''}
+
+          ${counterShape === 'vertical-capsules' ? 'hidden' : ''}
+          ${counterShape === 'zen-stones' ? 'hidden' : ''}
         `}
                     style={{
                         fontSize: counterShape === 'digital' ? '0px' : `${(counterShape === 'classic' ? 4.5 : 4.5) * currentSettings.fontScale * countFontSize}rem`

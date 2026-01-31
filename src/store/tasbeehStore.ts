@@ -33,6 +33,16 @@ export type DailyRecord = {
   counts: Record<string, number>;
 };
 
+export type CounterShape = 
+  | 'minimal' | 'classic' | 'beads' | 'flower' | 'waveform' | 'digital' 
+  | 'modern-ring' | 'vintage-wood' | 'geometric-star' | 'fluid' | 'radar' 
+  | 'real-beads' | 'glass-orb' | 'portal-depth' | 'luminous-ring'
+  | 'ring-light' | 'steampunk-nixie' | 'biolum-organic'
+  | 'solar-flare' | 'nebula-cloud' | 'infinite-knot' 
+  | 'holo-fan'
+  | 'halo-ring' | 'zen-stones' | 'vertical-capsules' | 'luminous-beads' | 'geometric-mandala'
+  | 'nano-pulse' | 'banana-slide' | 'bro-counter' | 'isometric-stack' | 'animated-ripple';
+
 interface TasbeehState {
   // Counts
   count: number; // Legacy, keep for migration
@@ -53,7 +63,7 @@ interface TasbeehState {
   themeSettings: Record<string, ThemeSettings>;
 
   // Global preference (not per theme)
-  counterShape: 'minimal' | 'classic' | 'beads' | 'flower' | 'waveform' | 'hexagon' | 'orb' | 'digital' | 'modern-ring' | 'vintage-wood' | 'geometric-star' | 'fluid' | 'neumorph' | 'radar' | 'real-beads' | 'cyber-3d' | 'glass-orb' | 'crystal-iso' | 'portal-depth' | 'luminous-ring' | 'ring-light' | 'galaxy' | 'tally-clicker' | 'steampunk-nixie' | 'biolum-organic' | 'quantum-string' | 'solar-flare' | 'particle-vortex' | 'nebula-cloud' | 'infinite-knot' | 'holo-fan' | 'prism-crystal' | 'plasma-coil' | 'minimal-img' | 'classic-img' | 'beads-img' | 'flower-img' | 'waveform-img' | 'hexagon-img' | 'orb-img' | 'digital-img';
+  counterShape: CounterShape;
   layout: 'default' | 'focus' | 'ergonomic';
   showTransliteration: boolean;
 
@@ -125,7 +135,7 @@ interface TasbeehState {
   syncFromCloud: () => Promise<boolean>;
   
   // New Settings Actions
-  setCounterShape: (shape: 'minimal' | 'classic' | 'beads' | 'flower' | 'waveform' | 'hexagon' | 'orb' | 'digital' | 'modern-ring' | 'vintage-wood' | 'geometric-star' | 'fluid' | 'neumorph' | 'radar' | 'real-beads' | 'cyber-3d' | 'glass-orb' | 'crystal-iso' | 'portal-depth' | 'luminous-ring' | 'quantum-string' | 'solar-flare' | 'particle-vortex' | 'nebula-cloud' | 'infinite-knot' | 'holo-fan' | 'prism-crystal' | 'plasma-coil' | 'minimal-img' | 'classic-img' | 'beads-img' | 'flower-img' | 'waveform-img' | 'hexagon-img' | 'orb-img' | 'digital-img') => void;
+  setCounterShape: (shape: CounterShape) => void;
   setLayout: (layout: 'default' | 'focus' | 'ergonomic') => void;
   setHadithSlideDuration: (duration: number) => void;
   setHadithSlidePosition: (position: 'top-right' | 'top-left' | 'bottom-right' | 'bottom-left' | 'right' | 'bottom' | 'hidden') => void;
@@ -322,7 +332,52 @@ export const defaultDhikrs: Dhikr[] = [
         source: "صحيح مسلم"
       }
     ]
-  },];
+  },
+  {
+    id: 'lahawla',
+    arabic: 'لَا حَوْلَ وَلَا قُوَّةَ إِلَّا بِاللَّهِ',
+    transliteration: 'La hawla wa la quwwata illa billah',
+    meaning: 'There is no power and no strength except with Allah',
+    hadiths: [
+      {
+        text: "يَا عَبْدَ اللَّهِ بْنَ قَيْسٍ، أَلَا أَدُلُّكَ عَلَى كَنْزٍ مِنْ كُنُوزِ الْجَنَّةِ؟ فَقُلْتُ: بَلَى يَا رَسُولَ اللَّهِ، قَالَ: قُلْ: لَا حَوْلَ وَلَا قُوَّةَ إِلَّا بِاللَّهِ",
+        source: "صحيح البخاري"
+      },
+      {
+         text: "أَكْثِرُوا مِنْ قَوْلِ: لَا حَوْلَ وَلَا قُوَّةَ إِلَّا بِاللَّهِ، فَإِنَّهَا كَنْزٌ مِنْ كُنُوزِ الْجَنَّةِ",
+         source: "مسند أحمد"
+      }
+    ]
+  },
+  {
+    id: 'subhanallah_azeem',
+    arabic: 'سُبْحَانَ اللَّهِ وَبِحَمْدِهِ، سُبْحَانَ اللَّهِ الْعَظِيمِ',
+    transliteration: 'SubhanAllahi wa bihamdihi, SubhanAllahil Azeem',
+    meaning: 'Glory be to Allah and His is the praise, Glory be to Allah, the Magnificent',
+    hadiths: [
+      {
+        text: "كَلِمَتَانِ خَفِيفَتَانِ عَلَى اللِّسَانِ، ثَقِيلَتَانِ فِي الْمِيزَانِ، حَبِيبَتَانِ إِلَى الرَّحْمَنِ: سُبْحَانَ اللَّهِ وَبِحَمْدِهِ، سُبْحَانَ اللَّهِ الْعَظِيمِ",
+        source: "صحيح البخاري"
+      }
+    ]
+  },
+  {
+      id: 'salawat',
+      arabic: 'اللَّهُمَّ صَلِّ عَلَى مُحَمَّدٍ وَعَلَى آلِ مُحَمَّدٍ',
+      transliteration: 'Allahumma salli \'ala Muhammad',
+      meaning: 'O Allah, send prayers upon Muhammad',
+      hadiths: [
+          {
+              text: "مَنْ صَلَّى عَلَيَّ وَاحِدَةً صَلَّى اللَّهُ عَلَيْهِ عَشْرًا",
+              source: "صحيح مسلم"
+          },
+          {
+              text: "أَوْلَى النَّاسِ بِي يَوْمَ الْقِيَامَةِ أَكْثَرُهُمْ عَلَيَّ صَلَاةً",
+              source: "سنن الترمذي"
+          }
+      ]
+  }
+];
 
 const getTodayDate = () => new Date().toISOString().split('T')[0];
 
