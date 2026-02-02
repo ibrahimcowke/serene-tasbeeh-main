@@ -25,15 +25,17 @@ export function HadithSlider({ dhikr }: { dhikr: Dhikr }) {
 
     // Fallback content if no specific hadiths are available
     // Arabic fallback: "Keep your tongue wet with the remembrance of Allah" -> "لا يزال لسانك رطباً من ذكر الله"
-    const content = (dhikr.hadiths && dhikr.hadiths.length > 0)
-        ? dhikr.hadiths[index]
-        : {
-            text: "لَا يَزَالُ لِسَانُكَ رَطْبًا مِنْ ذِكْرِ اللَّهِ",
-            source: "حديث شريف"
-        };
+    const defaultHadith = {
+        text: "لَا يَزَالُ لِسَانُكَ رَطْبًا مِنْ ذِكْرِ اللَّهِ",
+        source: "حديث شريف"
+    };
 
-    const hadith = content;
-    const isArabic = /[\u0600-\u06FF]/.test(hadith.text);
+    const content = (dhikr.hadiths && dhikr.hadiths.length > 0 && dhikr.hadiths[index])
+        ? dhikr.hadiths[index]
+        : defaultHadith;
+
+    const hadith = content || defaultHadith;
+    const isArabic = /[\u0600-\u06FF]/.test(hadith?.text || "");
 
     return (
         <div

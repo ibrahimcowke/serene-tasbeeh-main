@@ -497,7 +497,7 @@ export function Counter() {
               initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.9, opacity: 0 }}
-              className="bg-card rounded-3xl p-8 max-w-sm w-full text-center shadow-xl"
+              className="bg-card rounded-3xl p-8 max-w-md w-full text-center shadow-xl max-h-[90vh] overflow-hidden flex flex-col"
               onClick={(e) => e.stopPropagation()}
             >
               <motion.div
@@ -537,6 +537,26 @@ export function Counter() {
                     <p className="text-xs text-muted-foreground mt-2">You have completed 1000 counts.</p>
                   </div>
                 )}
+              </div>
+
+              {/* Dhikr Selector */}
+              <div className="mb-6">
+                <p className="text-sm font-medium text-foreground mb-3">Select next dhikr:</p>
+                <div className="max-h-48 overflow-y-auto custom-scrollbar bg-secondary/20 rounded-xl p-2 space-y-1">
+                  {defaultDhikrs.map((dhikr) => (
+                    <button
+                      key={dhikr.id}
+                      onClick={() => useTasbeehStore.getState().setDhikr(dhikr)}
+                      className={`w-full text-left p-3 rounded-lg transition-all duration-200 ${currentDhikr.id === dhikr.id
+                          ? 'bg-primary text-primary-foreground shadow-md'
+                          : 'bg-background/50 hover:bg-background/80 text-foreground'
+                        }`}
+                    >
+                      <p className="font-arabic text-base mb-1">{dhikr.arabic}</p>
+                      <p className="text-xs opacity-80">{dhikr.transliteration}</p>
+                    </button>
+                  ))}
+                </div>
               </div>
 
               <button
