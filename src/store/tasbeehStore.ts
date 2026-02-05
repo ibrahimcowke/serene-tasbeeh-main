@@ -109,6 +109,7 @@ interface TasbeehState {
   motivationalQuotesEnabled: boolean;
   lastShownQuoteId: string | null;
   lastSeenVersion: string | null;
+  lastSeenDailyDhikrDate: string | null;
   
   // Actions
   increment: () => void;
@@ -174,6 +175,7 @@ interface TasbeehState {
   setMotivationalQuotesEnabled: (enabled: boolean) => void;
   setLastShownQuoteId: (id: string) => void;
   setLastSeenVersion: (version: string) => void;
+  setLastSeenDailyDhikrDate: (date: string) => void;
 }
 
 export type ThemeSettings = {
@@ -492,6 +494,7 @@ export const useTasbeehStore = create<TasbeehState>()(
       motivationalQuotesEnabled: true,
       lastShownQuoteId: null,
       lastSeenVersion: null,
+      lastSeenDailyDhikrDate: null,
       
       // Actions
       increment: () => {
@@ -880,6 +883,7 @@ export const useTasbeehStore = create<TasbeehState>()(
       setMotivationalQuotesEnabled: (enabled) => set({ motivationalQuotesEnabled: enabled }),
       setLastShownQuoteId: (id) => set({ lastShownQuoteId: id }),
       setLastSeenVersion: (version) => set({ lastSeenVersion: version }),
+      setLastSeenDailyDhikrDate: (date) => set({ lastSeenDailyDhikrDate: date }),
 
       syncToCloud: async () => {
         try {
