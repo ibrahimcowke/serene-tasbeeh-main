@@ -33,7 +33,7 @@ export default defineConfig(({ mode }) => ({
         theme_color: "#f7f5f2",
         background_color: "#f7f5f2",
         display: "standalone",
-        display_override: ["window-controls-overlay", "standalone", "minimal-ui"],
+        display_override: ["standalone", "minimal-ui"],
         orientation: "portrait",
         scope: "/",
         start_url: "/",
