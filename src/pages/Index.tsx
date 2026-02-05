@@ -8,6 +8,7 @@ import { toast } from 'sonner';
 import { themes, counterShapes } from '@/lib/constants';
 import { MotivationalQuoteOverlay } from '@/components/MotivationalQuote';
 import { DhikrOfTheDay } from '@/components/DhikrOfTheDay';
+import { WhatsNew } from '@/components/WhatsNew';
 import { getRecommendedTheme } from '@/lib/timeUtils';
 
 const Index = () => {
@@ -61,6 +62,7 @@ const Index = () => {
     <ThemeProvider>
       <div className="h-[100dvh] w-full bg-background flex flex-col overflow-hidden relative">
         <MotivationalQuoteOverlay />
+        <WhatsNew />
         <BreathingGuide />
 
         {/* Status Indicator (Top Right) */}

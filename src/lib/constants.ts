@@ -1,3 +1,5 @@
+export const APP_VERSION = '1.3.0';
+
 export const themes = [
   { id: 'light', label: 'Light', description: 'Warm and calm' },
   { id: 'theme-biolum', label: 'Biolum', description: 'Deep sea bioluminescence' },
