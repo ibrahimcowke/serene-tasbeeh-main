@@ -109,7 +109,6 @@ interface TasbeehState {
   motivationalQuotesEnabled: boolean;
   lastShownQuoteId: string | null;
   lastSeenVersion: string | null;
-  lastSeenDailyDhikrDate: string | null;
   
   // Actions
   increment: () => void;
@@ -175,7 +174,6 @@ interface TasbeehState {
   setMotivationalQuotesEnabled: (enabled: boolean) => void;
   setLastShownQuoteId: (id: string) => void;
   setLastSeenVersion: (version: string) => void;
-  setLastSeenDailyDhikrDate: (date: string) => void;
 }
 
 export type ThemeSettings = {
@@ -494,7 +492,6 @@ export const useTasbeehStore = create<TasbeehState>()(
       motivationalQuotesEnabled: true,
       lastShownQuoteId: null,
       lastSeenVersion: null,
-      lastSeenDailyDhikrDate: null,
       
       // Actions
       increment: () => {
@@ -883,7 +880,6 @@ export const useTasbeehStore = create<TasbeehState>()(
       setMotivationalQuotesEnabled: (enabled) => set({ motivationalQuotesEnabled: enabled }),
       setLastShownQuoteId: (id) => set({ lastShownQuoteId: id }),
       setLastSeenVersion: (version) => set({ lastSeenVersion: version }),
-      setLastSeenDailyDhikrDate: (date) => set({ lastSeenDailyDhikrDate: date }),
 
       syncToCloud: async () => {
         try {
@@ -927,7 +923,6 @@ export const useTasbeehStore = create<TasbeehState>()(
                  shakeToReset: state.shakeToReset,
                  motivationalQuotesEnabled: state.motivationalQuotesEnabled,
                  lastSeenVersion: state.lastSeenVersion,
-                 lastSeenDailyDhikrDate: state.lastSeenDailyDhikrDate,
              }
           };
 
@@ -987,7 +982,6 @@ export const useTasbeehStore = create<TasbeehState>()(
              shakeToReset: parsed.settings?.shakeToReset !== undefined ? parsed.settings.shakeToReset : state.shakeToReset,
              motivationalQuotesEnabled: parsed.settings?.motivationalQuotesEnabled !== undefined ? parsed.settings.motivationalQuotesEnabled : state.motivationalQuotesEnabled,
              lastSeenVersion: parsed.settings?.lastSeenVersion || state.lastSeenVersion,
-             lastSeenDailyDhikrDate: parsed.settings?.lastSeenDailyDhikrDate || state.lastSeenDailyDhikrDate,
          }));
          
          // If theme changed, apply it
@@ -1046,7 +1040,6 @@ export const useTasbeehStore = create<TasbeehState>()(
         dailyGoal: state.dailyGoal,
         favoriteDhikrIds: state.favoriteDhikrIds,
         lastSeenVersion: state.lastSeenVersion,
-        lastSeenDailyDhikrDate: state.lastSeenDailyDhikrDate,
         lastShownQuoteId: state.lastShownQuoteId,
         autoThemeSwitch: state.autoThemeSwitch,
         shakeToReset: state.shakeToReset,

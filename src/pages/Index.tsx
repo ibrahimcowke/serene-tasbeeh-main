@@ -7,7 +7,6 @@ import { useTasbeehStore } from '@/store/tasbeehStore';
 import { toast } from 'sonner';
 import { themes, counterShapes } from '@/lib/constants';
 import { MotivationalQuoteOverlay } from '@/components/MotivationalQuote';
-import { DhikrOfTheDay } from '@/components/DhikrOfTheDay';
 import { WhatsNew } from '@/components/WhatsNew';
 import { getRecommendedTheme } from '@/lib/timeUtils';
 
@@ -78,7 +77,6 @@ const Index = () => {
 
         {/* Main counter area */}
         <div className={`flex-1 min-h-0 w-full flex flex-col overflow-y-auto safe-area-top transition-all duration-500 ${zenMode ? 'justify-center' : ''}`}>
-          {!zenMode && <div className="mt-4"><DhikrOfTheDay /></div>}
           <Counter />
         </div>
 
