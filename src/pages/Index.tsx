@@ -6,12 +6,33 @@ import { BreathingGuide } from '@/components/BreathingGuide';
 import { useTasbeehStore } from '@/store/tasbeehStore';
 import { toast } from 'sonner';
 import { themes, counterShapes } from '@/lib/constants';
+import { MotivationalQuoteOverlay } from '@/components/MotivationalQuote';
+import { DhikrOfTheDay } from '@/components/DhikrOfTheDay';
+import { getRecommendedTheme } from '@/lib/timeUtils';
 
 const Index = () => {
-  const { zenMode, setZenMode, syncToCloud, theme, counterShape } = useTasbeehStore();
+  const { zenMode, setZenMode, syncToCloud, theme, counterShape, autoThemeSwitch, setTheme } = useTasbeehStore();
 
   const currentThemeLabel = themes.find(t => t.id === theme)?.label || 'Unknown';
   const currentShapeLabel = counterShapes.find(s => s.id === counterShape)?.label || 'Unknown';
+
+  // Auto theme switch effect
+  useEffect(() => {
+    if (!autoThemeSwitch) return;
+
+    const checkTime = () => {
+      const recommended = getRecommendedTheme();
+      if (theme !== recommended) {
+        // Only switch if we're not already on the recommended generic theme
+        // This allows users to theoretically pick other themes, but the auto switch will force 'light' or 'midnight' eventually
+        setTheme(recommended);
+      }
+    };
+
+    checkTime();
+    const interval = setInterval(checkTime, 60000); // Check every minute
+    return () => clearInterval(interval);
+  }, [autoThemeSwitch, theme, setTheme]);
 
   useEffect(() => {
     const handleOnline = () => {
@@ -39,6 +60,7 @@ const Index = () => {
   return (
     <ThemeProvider>
       <div className="h-[100dvh] w-full bg-background flex flex-col overflow-hidden relative">
+        <MotivationalQuoteOverlay />
         <BreathingGuide />
 
         {/* Status Indicator (Top Right) */}
@@ -54,6 +76,7 @@ const Index = () => {
 
         {/* Main counter area */}
         <div className={`flex-1 min-h-0 w-full flex flex-col overflow-y-auto safe-area-top transition-all duration-500 ${zenMode ? 'justify-center' : ''}`}>
+          {!zenMode && <div className="mt-4"><DhikrOfTheDay /></div>}
           <Counter />
         </div>
 

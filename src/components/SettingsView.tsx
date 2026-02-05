@@ -83,6 +83,12 @@ export function SettingsView({ children }: SettingsViewProps) {
     setBreathingGuide,
     breathingGuideSpeed,
     setBreathingGuideSpeed,
+    autoThemeSwitch,
+    setAutoThemeSwitch,
+    shakeToReset,
+    setShakeToReset,
+    motivationalQuotesEnabled,
+    setMotivationalQuotesEnabled,
   } = useTasbeehStore();
 
   const [user, setUser] = useState<any>(null);
@@ -699,6 +705,53 @@ export function SettingsView({ children }: SettingsViewProps) {
                         ))}
                       </div>
                     )}
+                  </div>
+                </div>
+
+                {/* Smart Features */}
+                <div className="space-y-1">
+                  <p className="text-xs text-muted-foreground uppercase tracking-wide mb-3">Smart Features</p>
+
+                  <div className="p-4 rounded-2xl bg-card space-y-4">
+                    {/* Shake to Reset */}
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <p className="text-sm font-medium text-foreground">Shake to Reset</p>
+                        <p className="text-xs text-muted-foreground">Shake device to reset counter</p>
+                      </div>
+                      <Switch
+                        checked={shakeToReset}
+                        onCheckedChange={setShakeToReset}
+                      />
+                    </div>
+
+                    <div className="h-px bg-border/50" />
+
+                    {/* Auto Theme Switch */}
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <p className="text-sm font-medium text-foreground">Auto Theme</p>
+                        <p className="text-xs text-muted-foreground">Switch light/dark based on time</p>
+                      </div>
+                      <Switch
+                        checked={autoThemeSwitch}
+                        onCheckedChange={setAutoThemeSwitch}
+                      />
+                    </div>
+
+                    <div className="h-px bg-border/50" />
+
+                    {/* Motivational Quotes */}
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <p className="text-sm font-medium text-foreground">Daily Inspiration</p>
+                        <p className="text-xs text-muted-foreground">Show quotes on app open</p>
+                      </div>
+                      <Switch
+                        checked={motivationalQuotesEnabled}
+                        onCheckedChange={setMotivationalQuotesEnabled}
+                      />
+                    </div>
                   </div>
                 </div>
               </TabsContent>

@@ -100,6 +100,15 @@ interface TasbeehState {
   favoriteDhikrIds: string[];
   dailyGoal: number;
   
+  // Quick Win Features
+  lastCount: number;
+  lastDhikrId: string | null;
+  canUndo: boolean;
+  autoThemeSwitch: boolean;
+  shakeToReset: boolean;
+  motivationalQuotesEnabled: boolean;
+  lastShownQuoteId: string | null;
+  
   // Actions
   increment: () => void;
   decrement: () => void;
@@ -156,6 +165,13 @@ interface TasbeehState {
   // Layout Ordering
   layoutOrder: string[]; 
   setLayoutOrder: (order: string[]) => void;
+  
+  // Quick Win Actions
+  undo: () => void;
+  setAutoThemeSwitch: (enabled: boolean) => void;
+  setShakeToReset: (enabled: boolean) => void;
+  setMotivationalQuotesEnabled: (enabled: boolean) => void;
+  setLastShownQuoteId: (id: string) => void;
 }
 
 export type ThemeSettings = {
@@ -465,10 +481,26 @@ export const useTasbeehStore = create<TasbeehState>()(
       customDhikrs: [],
       dailyGoal: 100,
       
+      // Quick Win Features initial state
+      lastCount: 0,
+      lastDhikrId: null,
+      canUndo: false,
+      autoThemeSwitch: false,
+      shakeToReset: false,
+      motivationalQuotesEnabled: true,
+      lastShownQuoteId: null,
+      
       // Actions
       increment: () => {
         const state = get();
         const today = getTodayDate();
+        
+        // Save state for undo
+        set({
+          lastCount: state.currentCount,
+          lastDhikrId: state.currentDhikr.id,
+          canUndo: true,
+        });
         
         const currentSettings = state.themeSettings[state.theme] || defaultThemeSettings;
         
@@ -816,6 +848,34 @@ export const useTasbeehStore = create<TasbeehState>()(
       setZenMode: (enabled) => set({ zenMode: enabled }),
       setBreathingGuide: (enabled) => set({ breathingGuideEnabled: enabled }),
       setBreathingGuideSpeed: (speed) => set({ breathingGuideSpeed: speed }),
+      
+      // Quick Win Actions
+      undo: () => {
+        const state = get();
+        if (!state.canUndo) return;
+        
+        // Find the dhikr by ID
+        const dhikr = state.dhikrs.find(d => d.id === state.lastDhikrId) || 
+                      state.customDhikrs.find(d => d.id === state.lastDhikrId) ||
+                      state.currentDhikr;
+        
+        set({
+          currentCount: state.lastCount,
+          currentDhikr: dhikr,
+          canUndo: false,
+        });
+        
+        // Haptic feedback
+        const currentSettings = state.themeSettings[state.theme] || defaultThemeSettings;
+        if (currentSettings.hapticEnabled && navigator.vibrate) {
+          navigator.vibrate([20, 50, 20]);
+        }
+      },
+      
+      setAutoThemeSwitch: (enabled) => set({ autoThemeSwitch: enabled }),
+      setShakeToReset: (enabled) => set({ shakeToReset: enabled }),
+      setMotivationalQuotesEnabled: (enabled) => set({ motivationalQuotesEnabled: enabled }),
+      setLastShownQuoteId: (id) => set({ lastShownQuoteId: id }),
 
       syncToCloud: async () => {
         try {
