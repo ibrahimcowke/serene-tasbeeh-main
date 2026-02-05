@@ -10,7 +10,7 @@ import { Sparkles, X } from 'lucide-react';
  * Only shows once per day per user request
  */
 export function DhikrOfTheDay() {
-    const { setDhikr, currentDhikr, lastSeenDailyDhikrDate, setLastSeenDailyDhikrDate } = useTasbeehStore();
+    const { setDhikr, currentDhikr, lastSeenDailyDhikrDate, setLastSeenDailyDhikrDate, currentCount } = useTasbeehStore();
 
     const today = new Date().toISOString().split('T')[0];
 
@@ -22,7 +22,25 @@ export function DhikrOfTheDay() {
         if (isVisible && lastSeenDailyDhikrDate !== today) {
             setLastSeenDailyDhikrDate(today);
         }
-    }, [isVisible]); // Only run based on initial visibility logic
+    }, [isVisible]);
+
+    // Auto-hide after 15 seconds or if user starts counting
+    useEffect(() => {
+        if (!isVisible) return;
+
+        // Hide if user starts counting (dashboard space priority)
+        if (currentCount > 0) {
+            setIsVisible(false);
+            return;
+        }
+
+        // Auto-hide timer (15 seconds)
+        const timer = setTimeout(() => {
+            setIsVisible(false);
+        }, 15000);
+
+        return () => clearTimeout(timer);
+    }, [isVisible, currentCount]);
 
     // Get dhikr of the day (deterministic based on date)
     const dhikrOfDay = useMemo(() => {

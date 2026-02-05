@@ -13,6 +13,9 @@ export const WhatsNew = () => {
     useEffect(() => {
         // Show if version has changed or never seen
         if (lastSeenVersion !== APP_VERSION) {
+            // Mark as seen immediately so it doesn't show again on refresh/crash
+            setLastSeenVersion(APP_VERSION);
+
             // Small delay to let app load first
             const timer = setTimeout(() => setIsOpen(true), 1500);
             return () => clearTimeout(timer);
