@@ -764,233 +764,231 @@ export function SettingsView({ children }: SettingsViewProps) {
                     </div>
                   </div>
                 </div>
-            </div>
-        </div>
 
-        {/* About & Legal */}
-        <div className="space-y-1">
-          <p className="text-xs text-muted-foreground uppercase tracking-wide mb-3">About</p>
+                {/* About & Legal */}
+                <div className="space-y-1">
+                  <p className="text-xs text-muted-foreground uppercase tracking-wide mb-3">About</p>
 
-          <div className="p-4 rounded-2xl bg-card space-y-4">
-            {/* About Developer */}
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
-                  <Zap className="w-5 h-5 text-primary" />
-                </div>
-                <div>
-                  <p className="text-sm font-medium text-foreground">Developed by Ibrahim Cowke</p>
-                  <a
-                    href="https://ibrahimcowke.netlify.app/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-xs text-primary hover:underline flex items-center gap-1"
-                  >
-                    Visit Portfolio
-                    <ExternalLink className="w-3 h-3" />
-                  </a>
-                </div>
-              </div>
-            </div>
-
-            <div className="h-px bg-border/50" />
-
-            {/* Privacy Policy Trigger */}
-            <Dialog>
-              <DialogTrigger asChild>
-                <button className="w-full flex items-center justify-between text-left group">
-                  <div>
-                    <p className="text-sm font-medium text-foreground group-hover:text-primary transition-colors">Privacy Policy</p>
-                    <p className="text-xs text-muted-foreground">Read our terms and data policy</p>
-                  </div>
-                  <ChevronRight className="w-4 h-4 text-muted-foreground group-hover:text-primary transition-colors" />
-                </button>
-              </DialogTrigger>
-              <DialogContent className="max-h-[80vh] overflow-y-auto">
-                <DialogHeader>
-                  <DialogTitle>Privacy Policy</DialogTitle>
-                  <DialogDescription>
-                    Last updated: February 2026
-                  </DialogDescription>
-                </DialogHeader>
-                <div className="space-y-4 text-sm text-foreground/80 mt-4">
-                  <section className="space-y-2">
-                    <h4 className="font-semibold text-foreground">1. Introduction</h4>
-                    <p>Serene Tasbeeh ("we," "our," or "us") is committed to protecting your privacy. This Privacy Policy explains how your information is handled when you use our application.</p>
-                  </section>
-
-                  <section className="space-y-2">
-                    <h4 className="font-semibold text-foreground">2. Data Collection & Storage</h4>
-                    <p><strong>Local Storage:</strong> This application primarily stores data locally on your device. This includes your settings, counter progress, and preferences. We do not automatically collect personal data.</p>
-                    <p><strong>Cloud Sync (Optional):</strong> If you choose to use the Cloud Sync feature, we store your tasbeeh data securely using Supabase authentication. This requires signing in with a Google account. We only store the data necessary to sync your progress across devices.</p>
-                  </section>
-
-                  <section className="space-y-2">
-                    <h4 className="font-semibold text-foreground">3. Third-Party Services</h4>
-                    <p>We use Supabase for authentication and database services. When you sign in with Google, you are subject to Google's Privacy Policy.</p>
-                  </section>
-
-                  <section className="space-y-2">
-                    <h4 className="font-semibold text-foreground">4. Contact</h4>
-                    <p>If you have any questions about this privacy policy, please contact us via the developer portfolio at: <a href="https://ibrahimcowke.netlify.app/" className="text-primary hover:underline">ibrahimcowke.netlify.app</a></p>
-                  </section>
-                </div>
-              </DialogContent>
-            </Dialog>
-
-            <div className="h-px bg-border/50" />
-
-            {/* Version Info */}
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-medium text-foreground">Version</p>
-                <p className="text-xs text-muted-foreground">v{import('@/lib/constants').then(m => m.APP_VERSION).catch(() => '1.3.0')} (Latest)</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </TabsContent>
-
-      <TabsContent value="data" className="space-y-6 mt-0 pb-6 px-1">
-        {/* Cloud Sync Section */}
-        <div className="space-y-1">
-          <p className="text-xs text-muted-foreground uppercase tracking-wide mb-3">Cloud Sync (Beta)</p>
-          <div className="bg-card rounded-2xl p-4 overflow-hidden relative">
-            {!user ? (
-              <div className="flex flex-col items-center justify-center p-2 text-center">
-                <Cloud className="w-10 h-10 text-muted-foreground mb-3 opacity-50" />
-                <h3 className="text-sm font-medium text-foreground mb-1">Backup & Sync</h3>
-                <p className="text-xs text-muted-foreground mb-4 max-w-[200px]">Sign in to save your progress to the cloud and sync across devices.</p>
-                <button
-                  onClick={handleLogin}
-                  className="flex items-center gap-2 bg-primary text-primary-foreground px-4 py-2 rounded-xl text-sm font-medium hover:opacity-90 transition-opacity"
-                >
-                  <LogIn className="w-4 h-4" />
-                  Sign in with Google
-                </button>
-                {!import.meta.env.VITE_SUPABASE_URL && (
-                  <p className="text-[10px] text-destructive mt-3">Missing Supabase Params in .env</p>
-                )}
-              </div>
-            ) : (
-              <div className="space-y-4">
-                <div className="flex items-center justify-between pb-3 border-b border-border/50">
-                  <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
-                      <span className="text-xs font-bold text-primary">{user.email?.charAt(0).toUpperCase()}</span>
+                  <div className="p-4 rounded-2xl bg-card space-y-4">
+                    {/* About Developer */}
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
+                          <Zap className="w-5 h-5 text-primary" />
+                        </div>
+                        <div>
+                          <p className="text-sm font-medium text-foreground">Developed by Ibrahim Cowke</p>
+                          <a
+                            href="https://ibrahimcowke.netlify.app/"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-xs text-primary hover:underline flex items-center gap-1"
+                          >
+                            Visit Portfolio
+                            <ExternalLink className="w-3 h-3" />
+                          </a>
+                        </div>
+                      </div>
                     </div>
+
+                    <div className="h-px bg-border/50" />
+
+                    {/* Privacy Policy Trigger */}
+                    <Dialog>
+                      <DialogTrigger asChild>
+                        <button className="w-full flex items-center justify-between text-left group">
+                          <div>
+                            <p className="text-sm font-medium text-foreground group-hover:text-primary transition-colors">Privacy Policy</p>
+                            <p className="text-xs text-muted-foreground">Read our terms and data policy</p>
+                          </div>
+                          <ChevronRight className="w-4 h-4 text-muted-foreground group-hover:text-primary transition-colors" />
+                        </button>
+                      </DialogTrigger>
+                      <DialogContent className="max-h-[80vh] overflow-y-auto">
+                        <DialogHeader>
+                          <DialogTitle>Privacy Policy</DialogTitle>
+                          <DialogDescription>
+                            Last updated: February 2026
+                          </DialogDescription>
+                        </DialogHeader>
+                        <div className="space-y-4 text-sm text-foreground/80 mt-4">
+                          <section className="space-y-2">
+                            <h4 className="font-semibold text-foreground">1. Introduction</h4>
+                            <p>Serene Tasbeeh ("we," "our," or "us") is committed to protecting your privacy. This Privacy Policy explains how your information is handled when you use our application.</p>
+                          </section>
+
+                          <section className="space-y-2">
+                            <h4 className="font-semibold text-foreground">2. Data Collection & Storage</h4>
+                            <p><strong>Local Storage:</strong> This application primarily stores data locally on your device. This includes your settings, counter progress, and preferences. We do not automatically collect personal data.</p>
+                            <p><strong>Cloud Sync (Optional):</strong> If you choose to use the Cloud Sync feature, we store your tasbeeh data securely using Supabase authentication. This requires signing in with a Google account. We only store the data necessary to sync your progress across devices.</p>
+                          </section>
+
+                          <section className="space-y-2">
+                            <h4 className="font-semibold text-foreground">3. Third-Party Services</h4>
+                            <p>We use Supabase for authentication and database services. When you sign in with Google, you are subject to Google's Privacy Policy.</p>
+                          </section>
+
+                          <section className="space-y-2">
+                            <h4 className="font-semibold text-foreground">4. Contact</h4>
+                            <p>If you have any questions about this privacy policy, please contact us via the developer portfolio at: <a href="https://ibrahimcowke.netlify.app/" className="text-primary hover:underline">ibrahimcowke.netlify.app</a></p>
+                          </section>
+                        </div>
+                      </DialogContent>
+                    </Dialog>
+
+                    <div className="h-px bg-border/50" />
+
+                    {/* Version Info */}
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <p className="text-sm font-medium text-foreground">Version</p>
+                        <p className="text-xs text-muted-foreground">v{import('@/lib/constants').then(m => m.APP_VERSION).catch(() => '1.3.0')} (Latest)</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </TabsContent>
+
+              <TabsContent value="data" className="space-y-6 mt-0 pb-6 px-1">
+                {/* Cloud Sync Section */}
+                <div className="space-y-1">
+                  <p className="text-xs text-muted-foreground uppercase tracking-wide mb-3">Cloud Sync (Beta)</p>
+                  <div className="bg-card rounded-2xl p-4 overflow-hidden relative">
+                    {!user ? (
+                      <div className="flex flex-col items-center justify-center p-2 text-center">
+                        <Cloud className="w-10 h-10 text-muted-foreground mb-3 opacity-50" />
+                        <h3 className="text-sm font-medium text-foreground mb-1">Backup & Sync</h3>
+                        <p className="text-xs text-muted-foreground mb-4 max-w-[200px]">Sign in to save your progress to the cloud and sync across devices.</p>
+                        <button
+                          onClick={handleLogin}
+                          className="flex items-center gap-2 bg-primary text-primary-foreground px-4 py-2 rounded-xl text-sm font-medium hover:opacity-90 transition-opacity"
+                        >
+                          <LogIn className="w-4 h-4" />
+                          Sign in with Google
+                        </button>
+                        {!import.meta.env.VITE_SUPABASE_URL && (
+                          <p className="text-[10px] text-destructive mt-3">Missing Supabase Params in .env</p>
+                        )}
+                      </div>
+                    ) : (
+                      <div className="space-y-4">
+                        <div className="flex items-center justify-between pb-3 border-b border-border/50">
+                          <div className="flex items-center gap-3">
+                            <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
+                              <span className="text-xs font-bold text-primary">{user.email?.charAt(0).toUpperCase()}</span>
+                            </div>
+                            <div>
+                              <p className="text-sm font-medium text-foreground">Logged in</p>
+                              <p className="text-[10px] text-muted-foreground truncate max-w-[150px]">{user.email}</p>
+                            </div>
+                          </div>
+                          <button onClick={handleLogout} className="p-2 hover:bg-secondary rounded-lg">
+                            <LogOut className="w-4 h-4 text-muted-foreground" />
+                          </button>
+                        </div>
+
+                        <div className="grid grid-cols-2 gap-3">
+                          <button
+                            onClick={handleSyncToCloud}
+                            disabled={syncing}
+                            className="flex flex-col items-center justify-center gap-2 p-3 rounded-xl bg-secondary/50 hover:bg-secondary transition-colors border-2 border-transparent hover:border-primary/10"
+                          >
+                            <Upload className={`w-5 h-5 text-primary ${syncing ? 'animate-bounce' : ''}`} />
+                            <span className="text-xs font-medium">Save to Cloud</span>
+                          </button>
+                          <button
+                            onClick={handleSyncFromCloud}
+                            disabled={syncing}
+                            className="flex flex-col items-center justify-center gap-2 p-3 rounded-xl bg-secondary/50 hover:bg-secondary transition-colors border-2 border-transparent hover:border-primary/10"
+                          >
+                            <Download className={`w-5 h-5 text-primary ${syncing ? 'animate-bounce' : ''}`} />
+                            <span className="text-xs font-medium">Load from Cloud</span>
+                          </button>
+                        </div>
+
+                        {syncStatus !== 'idle' && (
+                          <div className={`text-center text-xs p-2 rounded-lg ${syncStatus === 'success' ? 'bg-green-500/10 text-green-500' : 'bg-red-500/10 text-red-500'}`}>
+                            {syncStatus === 'success' ? 'Sync successful!' : 'Sync failed. Check connection.'}
+                          </div>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                {/* Data management */}
+                <div className="space-y-1">
+                  <p className="text-xs text-muted-foreground uppercase tracking-wide mb-3">Data</p>
+
+                  <button
+                    onClick={handleExport}
+                    className="w-full flex items-center gap-3 p-4 rounded-2xl bg-card hover:bg-secondary transition-colors text-left"
+                  >
+                    <Download className="w-5 h-5 text-muted-foreground" />
                     <div>
-                      <p className="text-sm font-medium text-foreground">Logged in</p>
-                      <p className="text-[10px] text-muted-foreground truncate max-w-[150px]">{user.email}</p>
+                      <p className="text-sm font-medium text-foreground">Export backup</p>
+                      <p className="text-xs text-muted-foreground">Save your data to a file</p>
                     </div>
-                  </div>
-                  <button onClick={handleLogout} className="p-2 hover:bg-secondary rounded-lg">
-                    <LogOut className="w-4 h-4 text-muted-foreground" />
                   </button>
-                </div>
 
-                <div className="grid grid-cols-2 gap-3">
                   <button
-                    onClick={handleSyncToCloud}
-                    disabled={syncing}
-                    className="flex flex-col items-center justify-center gap-2 p-3 rounded-xl bg-secondary/50 hover:bg-secondary transition-colors border-2 border-transparent hover:border-primary/10"
+                    onClick={handleImport}
+                    className="w-full flex items-center gap-3 p-4 rounded-2xl bg-card hover:bg-secondary transition-colors text-left"
                   >
-                    <Upload className={`w-5 h-5 text-primary ${syncing ? 'animate-bounce' : ''}`} />
-                    <span className="text-xs font-medium">Save to Cloud</span>
+                    <Upload className="w-5 h-5 text-muted-foreground" />
+                    <div>
+                      <p className="text-sm font-medium text-foreground">Import backup</p>
+                      <p className="text-xs text-muted-foreground">Restore from a backup file</p>
+                    </div>
                   </button>
+
+                  <AlertDialog>
+                    <AlertDialogTrigger asChild>
+                      <button
+                        className="w-full flex items-center gap-3 p-4 rounded-2xl bg-red-500/5 hover:bg-red-500/10 transition-colors text-left border border-red-500/20 mt-4"
+                      >
+                        <Trash2 className="w-5 h-5 text-red-500" />
+                        <div>
+                          <p className="text-sm font-medium text-red-500">Reset Data</p>
+                          <p className="text-xs text-red-500/70">Clear all progress and settings</p>
+                        </div>
+                      </button>
+                    </AlertDialogTrigger>
+                    <AlertDialogContent>
+                      <AlertDialogHeader>
+                        <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                        <AlertDialogDescription>
+                          This action cannot be undone. This will permanently delete your
+                          current session data and reset all settings to default.
+                        </AlertDialogDescription>
+                      </AlertDialogHeader>
+                      <AlertDialogFooter>
+                        <AlertDialogCancel>Cancel</AlertDialogCancel>
+                        <AlertDialogAction
+                          onClick={clearAllData}
+                          className="bg-red-500 hover:bg-red-600 focus:ring-red-500"
+                        >
+                          Reset Everything
+                        </AlertDialogAction>
+                      </AlertDialogFooter>
+                    </AlertDialogContent>
+                  </AlertDialog>
+
                   <button
-                    onClick={handleSyncFromCloud}
-                    disabled={syncing}
-                    className="flex flex-col items-center justify-center gap-2 p-3 rounded-xl bg-secondary/50 hover:bg-secondary transition-colors border-2 border-transparent hover:border-primary/10"
+                    onClick={() => {
+                      if (window.confirm('Reset only settings to default? Progress will be kept.')) {
+                        resetSettings();
+                        window.location.reload();
+                      }
+                    }}
+                    className="w-full flex items-center justify-center gap-2 p-3 mt-2 rounded-xl text-xs text-muted-foreground hover:bg-secondary transition-colors"
                   >
-                    <Download className={`w-5 h-5 text-primary ${syncing ? 'animate-bounce' : ''}`} />
-                    <span className="text-xs font-medium">Load from Cloud</span>
+                    <RotateCcw className="w-3 h-3" />
+                    Reset Settings Only
                   </button>
                 </div>
-
-                {syncStatus !== 'idle' && (
-                  <div className={`text-center text-xs p-2 rounded-lg ${syncStatus === 'success' ? 'bg-green-500/10 text-green-500' : 'bg-red-500/10 text-red-500'}`}>
-                    {syncStatus === 'success' ? 'Sync successful!' : 'Sync failed. Check connection.'}
-                  </div>
-                )}
-              </div>
-            )}
-          </div>
-        </div>
-
-        {/* Data management */}
-        <div className="space-y-1">
-          <p className="text-xs text-muted-foreground uppercase tracking-wide mb-3">Data</p>
-
-          <button
-            onClick={handleExport}
-            className="w-full flex items-center gap-3 p-4 rounded-2xl bg-card hover:bg-secondary transition-colors text-left"
-          >
-            <Download className="w-5 h-5 text-muted-foreground" />
-            <div>
-              <p className="text-sm font-medium text-foreground">Export backup</p>
-              <p className="text-xs text-muted-foreground">Save your data to a file</p>
+              </TabsContent>
             </div>
-          </button>
-
-          <button
-            onClick={handleImport}
-            className="w-full flex items-center gap-3 p-4 rounded-2xl bg-card hover:bg-secondary transition-colors text-left"
-          >
-            <Upload className="w-5 h-5 text-muted-foreground" />
-            <div>
-              <p className="text-sm font-medium text-foreground">Import backup</p>
-              <p className="text-xs text-muted-foreground">Restore from a backup file</p>
-            </div>
-          </button>
-
-          <AlertDialog>
-            <AlertDialogTrigger asChild>
-              <button
-                className="w-full flex items-center gap-3 p-4 rounded-2xl bg-red-500/5 hover:bg-red-500/10 transition-colors text-left border border-red-500/20 mt-4"
-              >
-                <Trash2 className="w-5 h-5 text-red-500" />
-                <div>
-                  <p className="text-sm font-medium text-red-500">Reset Data</p>
-                  <p className="text-xs text-red-500/70">Clear all progress and settings</p>
-                </div>
-              </button>
-            </AlertDialogTrigger>
-            <AlertDialogContent>
-              <AlertDialogHeader>
-                <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-                <AlertDialogDescription>
-                  This action cannot be undone. This will permanently delete your
-                  current session data and reset all settings to default.
-                </AlertDialogDescription>
-              </AlertDialogHeader>
-              <AlertDialogFooter>
-                <AlertDialogCancel>Cancel</AlertDialogCancel>
-                <AlertDialogAction
-                  onClick={clearAllData}
-                  className="bg-red-500 hover:bg-red-600 focus:ring-red-500"
-                >
-                  Reset Everything
-                </AlertDialogAction>
-              </AlertDialogFooter>
-            </AlertDialogContent>
-          </AlertDialog>
-
-          <button
-            onClick={() => {
-              if (window.confirm('Reset only settings to default? Progress will be kept.')) {
-                resetSettings();
-                window.location.reload();
-              }
-            }}
-            className="w-full flex items-center justify-center gap-2 p-3 mt-2 rounded-xl text-xs text-muted-foreground hover:bg-secondary transition-colors"
-          >
-            <RotateCcw className="w-3 h-3" />
-            Reset Settings Only
-          </button>
-        </div>
-      </TabsContent>
-    </div>
           </Tabs >
         </div >
       </SheetContent >

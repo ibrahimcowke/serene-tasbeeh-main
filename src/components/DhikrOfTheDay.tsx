@@ -11,16 +11,18 @@ import { Sparkles, X } from 'lucide-react';
  */
 export function DhikrOfTheDay() {
     const { setDhikr, currentDhikr, lastSeenDailyDhikrDate, setLastSeenDailyDhikrDate } = useTasbeehStore();
-    const [isVisible, setIsVisible] = useState(true);
 
     const today = new Date().toISOString().split('T')[0];
 
-    // Check if duplicate for today on mount
+    // Initialize state strictly based on load state to prevent auto-hiding while viewing
+    const [isVisible, setIsVisible] = useState(() => lastSeenDailyDhikrDate !== today);
+
+    // Auto-mark as seen on mount if it is being shown
     useEffect(() => {
-        if (lastSeenDailyDhikrDate === today) {
-            setIsVisible(false);
+        if (isVisible && lastSeenDailyDhikrDate !== today) {
+            setLastSeenDailyDhikrDate(today);
         }
-    }, [lastSeenDailyDhikrDate, today]);
+    }, [isVisible]); // Only run based on initial visibility logic
 
     // Get dhikr of the day (deterministic based on date)
     const dhikrOfDay = useMemo(() => {
