@@ -57,7 +57,7 @@ interface TasbeehState {
   // Settings
   currentDhikr: Dhikr;
   // hapticEnabled/soundEnabled removed in favor of themeSettings
-  theme: 'light' | 'theme-midnight' | 'theme-neon' | 'theme-green' | 'theme-cyberpunk' | 'theme-glass' | 'theme-sunset' | 'theme-forest' | 'theme-oled' | 'theme-biolum' | 'theme-radar-tactical' | 'theme-steampunk' | 'theme-crystal-depth';
+  theme: 'light' | 'theme-midnight' | 'theme-neon' | 'theme-green' | 'theme-cyberpunk' | 'theme-glass' | 'theme-sunset' | 'theme-forest' | 'theme-oled' | 'theme-biolum' | 'theme-radar-tactical' | 'theme-steampunk' | 'theme-crystal-depth' | 'theme-mecca-night' | 'theme-medina-rose' | 'theme-blue-mosque' | 'theme-desert-starlight' | 'theme-sahara-warmth' | 'theme-andalusia-earth' | 'theme-istanbul-sunset' | 'theme-taj-marble' | 'theme-royal-persian' | 'theme-ramadan-lantern';
   language: 'en' | 'ar';
   
   // Theme-specific settings container
@@ -125,7 +125,7 @@ interface TasbeehState {
   setFontScale: (scale: 0.8 | 1 | 1.2) => void;
   setSoundType: (type: 'click' | 'soft' | 'water') => void;
   
-  setTheme: (theme: 'light' | 'theme-midnight' | 'theme-neon' | 'theme-green' | 'theme-cyberpunk' | 'theme-glass' | 'theme-sunset' | 'theme-forest' | 'theme-oled' | 'theme-biolum' | 'theme-radar-tactical' | 'theme-steampunk' | 'theme-crystal-depth') => void;
+  setTheme: (theme: 'light' | 'theme-midnight' | 'theme-neon' | 'theme-green' | 'theme-cyberpunk' | 'theme-glass' | 'theme-sunset' | 'theme-forest' | 'theme-oled' | 'theme-biolum' | 'theme-radar-tactical' | 'theme-steampunk' | 'theme-crystal-depth' | 'theme-mecca-night' | 'theme-medina-rose' | 'theme-blue-mosque' | 'theme-desert-starlight' | 'theme-sahara-warmth' | 'theme-andalusia-earth' | 'theme-istanbul-sunset' | 'theme-taj-marble' | 'theme-royal-persian' | 'theme-ramadan-lantern') => void;
   setLanguage: (lang: 'ar' | 'en') => void;
   addCustomDhikr: (dhikr: Omit<Dhikr, 'id'>) => void;
   removeCustomDhikr: (id: string) => void;

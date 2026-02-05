@@ -16,8 +16,6 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-  AlertDialogTitle,
-  AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
 import {
   Dialog,
@@ -42,7 +40,7 @@ interface SettingsViewProps {
   children: React.ReactNode;
 }
 
-import { themes, counterShapes } from '@/lib/constants';
+import { themes, counterShapes, APP_VERSION } from '@/lib/constants';
 
 
 
@@ -842,7 +840,7 @@ export function SettingsView({ children }: SettingsViewProps) {
                     <div className="flex items-center justify-between">
                       <div>
                         <p className="text-sm font-medium text-foreground">Version</p>
-                        <p className="text-xs text-muted-foreground">v{import('@/lib/constants').then(m => m.APP_VERSION).catch(() => '1.3.0')} (Latest)</p>
+                        <p className="text-xs text-muted-foreground">v{APP_VERSION} (Latest)</p>
                       </div>
                     </div>
                   </div>
