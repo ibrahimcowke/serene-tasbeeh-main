@@ -923,6 +923,11 @@ export const useTasbeehStore = create<TasbeehState>()(
                  dhikrTextPosition: state.dhikrTextPosition,
                  layoutOrder: state.layoutOrder,
                  theme: state.theme,
+                 autoThemeSwitch: state.autoThemeSwitch,
+                 shakeToReset: state.shakeToReset,
+                 motivationalQuotesEnabled: state.motivationalQuotesEnabled,
+                 lastSeenVersion: state.lastSeenVersion,
+                 lastSeenDailyDhikrDate: state.lastSeenDailyDhikrDate,
              }
           };
 
@@ -978,12 +983,17 @@ export const useTasbeehStore = create<TasbeehState>()(
              countFontSize: parsed.settings?.countFontSize || state.countFontSize,
              dhikrTextPosition: parsed.settings?.dhikrTextPosition || state.dhikrTextPosition,
              showTransliteration: parsed.settings?.showTransliteration !== undefined ? parsed.settings.showTransliteration : state.showTransliteration,
+             autoThemeSwitch: parsed.settings?.autoThemeSwitch !== undefined ? parsed.settings.autoThemeSwitch : state.autoThemeSwitch,
+             shakeToReset: parsed.settings?.shakeToReset !== undefined ? parsed.settings.shakeToReset : state.shakeToReset,
+             motivationalQuotesEnabled: parsed.settings?.motivationalQuotesEnabled !== undefined ? parsed.settings.motivationalQuotesEnabled : state.motivationalQuotesEnabled,
+             lastSeenVersion: parsed.settings?.lastSeenVersion || state.lastSeenVersion,
+             lastSeenDailyDhikrDate: parsed.settings?.lastSeenDailyDhikrDate || state.lastSeenDailyDhikrDate,
          }));
          
          // If theme changed, apply it
          if (parsed.settings?.theme) {
              const root = window.document.documentElement;
-             root.classList.remove('light', 'dark', 'theme-midnight', 'theme-neon', 'theme-green', 'theme-cyberpunk', 'theme-glass');
+             root.classList.remove('light', 'dark', 'theme-midnight', 'theme-neon', 'theme-green', 'theme-cyberpunk', 'theme-glass', 'theme-sunset', 'theme-forest', 'theme-oled', 'theme-biolum', 'theme-radar-tactical', 'theme-steampunk', 'theme-crystal-depth');
              root.classList.add(parsed.settings.theme);
          }
          
@@ -1035,6 +1045,12 @@ export const useTasbeehStore = create<TasbeehState>()(
         sessionMode: state.sessionMode,
         dailyGoal: state.dailyGoal,
         favoriteDhikrIds: state.favoriteDhikrIds,
+        lastSeenVersion: state.lastSeenVersion,
+        lastSeenDailyDhikrDate: state.lastSeenDailyDhikrDate,
+        lastShownQuoteId: state.lastShownQuoteId,
+        autoThemeSwitch: state.autoThemeSwitch,
+        shakeToReset: state.shakeToReset,
+        motivationalQuotesEnabled: state.motivationalQuotesEnabled,
       }),
     }
   )
