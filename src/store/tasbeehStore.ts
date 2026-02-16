@@ -2,6 +2,11 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { supabase, getCurrentUser } from '@/lib/supabase';
 // Types
+import { Routine, RoutineStep, defaultRoutines } from '@/data/routines';
+import { achievements } from '@/data/achievements';
+import { getContext } from '@/lib/hijri';
+import { toast } from 'sonner';
+
 export type Dhikr = {
   id: string;
   arabic: string;
@@ -22,6 +27,13 @@ export type SessionMode =
       type: 'tasbih1000';
       currentPhase: number; // 0-9 (10 sets)
       currentSetCount: number;
+      isComplete: boolean;
+    }
+  | {
+      type: 'routine';
+      routineId: string;
+      currentStepIndex: number;
+      steps: RoutineStep[];
       isComplete: boolean;
     };
 
@@ -88,6 +100,17 @@ interface TasbeehState {
   // Data
   dailyRecords: DailyRecord[];
   totalAllTime: number;
+  unlockedAchievements: string[];
+  
+  // Context
+  dateContext: {
+    hijriDate: string;
+    isJummah: boolean;
+    isWhiteDay: boolean;
+    isRamadan: boolean;
+    specialDayName: string;
+  };
+  updateDateContext: () => void;
   
   // Available dhikrs
   dhikrs: Dhikr[];
@@ -134,6 +157,8 @@ interface TasbeehState {
   // Session mode actions
   startTasbih100: () => void;
   startTasbih1000: () => void;
+  startRoutine: (routineId: string) => void;
+  nextRoutineStep: () => void;
   exitSessionMode: () => void;
   
   updateStreak: () => void;
@@ -474,6 +499,28 @@ export const useTasbeehStore = create<TasbeehState>()(
       
       dailyRecords: [],
       totalAllTime: 0,
+      unlockedAchievements: [],
+      
+      dateContext: {
+        hijriDate: '',
+        isJummah: false,
+        isWhiteDay: false,
+        isRamadan: false,
+        specialDayName: ''
+      },
+      
+      updateDateContext: () => {
+        const ctx = getContext();
+        set({
+            dateContext: {
+                hijriDate: `${ctx.hijri.day} ${ctx.hijri.monthName} ${ctx.hijri.year}`,
+                isJummah: ctx.isJummah,
+                isWhiteDay: ctx.isWhiteDay,
+                isRamadan: ctx.isRamadan,
+                specialDayName: ctx.specialDayName
+            }
+        });
+      },
       
       dhikrs: defaultDhikrs,
       customDhikrs: [],
@@ -557,7 +604,7 @@ export const useTasbeehStore = create<TasbeehState>()(
                 sessionMode.isComplete = true;
               }
             }
-          } else if (sessionMode.type === 'tasbih1000') {
+           } else if (sessionMode.type === 'tasbih1000') {
              sessionMode.currentSetCount = newCount;
              
              if (newCount >= 100) {
@@ -569,15 +616,56 @@ export const useTasbeehStore = create<TasbeehState>()(
                  sessionMode.isComplete = true;
                }
              }
+          } else if (sessionMode.type === 'routine') {
+            const currentStep = sessionMode.steps[sessionMode.currentStepIndex];
+            if (newCount >= currentStep.target) {
+                // Auto-complete step or wait for user? 
+                // Let's mark as complete but wait for user to click "Next" or auto-advance if it's the last step?
+                // For now, let's keep it simple: just track count. UI will show "Next" button.
+                // Or maybe auto-advance if it's a small count? No, user needs to acknowledge.
+                // Actually, let's just mark the step as "done" internally so UI shows completion check
+            }
           }
           
-          return {
+          // Update Total All Time
+          const newTotalAllTime = (state.totalAllTime || 0) + 1;
+
+          // Check Achievements
+          const newlyUnlocked: string[] = [];
+          const currentUnlocked = state.unlockedAchievements || [];
+          
+          // Create a temporary state proxy for condition checking
+          // We need to approximate the state after this update
+          const tempState = {
+            ...state,
             currentCount: newCount,
-            totalAllTime: newTotal,
+            totalCount: newTotalAllTime, // Mapping totalAllTime to totalCount for achievements
+            // We might need to pass other state vars if conditions use them
+             streakDays: state.streakDays,
+             dailyRecords: updatedRecords
+          };
+
+          achievements.forEach(achievement => {
+             if (!currentUnlocked.includes(achievement.id) && !newlyUnlocked.includes(achievement.id)) {
+                 if (achievement.condition(tempState)) {
+                     newlyUnlocked.push(achievement.id);
+                     toast.success(`Achievement Unlocked: ${achievement.title}`, {
+                         description: achievement.description,
+                         duration: 4000,
+                         icon: '🏆'
+                     });
+                 }
+             }
+          });
+
+          return {
+            count: state.count + 1, // Legacy
+            currentCount: newCount,
             dailyRecords: updatedRecords,
-            sessionStartTime: state.sessionStartTime || Date.now(),
-            sessionMode,
-            currentDhikr,
+            totalAllTime: newTotalAllTime,
+            sessionMode: sessionMode,
+            lastActiveDate: today,
+            unlockedAchievements: [...currentUnlocked, ...newlyUnlocked]
           };
         });
         
@@ -801,6 +889,52 @@ export const useTasbeehStore = create<TasbeehState>()(
           targetCount: 100,
           sessionStartTime: null,
         });
+      },
+
+      startRoutine: (routineId) => {
+        const routine = defaultRoutines.find(r => r.id === routineId);
+        if (!routine) return;
+
+        const firstStep = routine.steps[0];
+        // Find the full dhikr object
+        const fullDhikr = get().dhikrs.find(d => d.id === firstStep.dhikrId) || defaultDhikrs[0];
+
+        set({
+            sessionMode: { 
+                type: 'routine', 
+                routineId, 
+                currentStepIndex: 0, 
+                steps: routine.steps, 
+                isComplete: false 
+            },
+            currentDhikr: fullDhikr,
+            currentCount: 0,
+            targetCount: firstStep.target,
+            sessionStartTime: null
+        });
+      },
+
+      nextRoutineStep: () => {
+        const state = get();
+        if (state.sessionMode.type !== 'routine') return;
+
+        const nextIndex = state.sessionMode.currentStepIndex + 1;
+        if (nextIndex < state.sessionMode.steps.length) {
+            const nextStep = state.sessionMode.steps[nextIndex];
+            const fullDhikr = state.dhikrs.find(d => d.id === nextStep.dhikrId) || defaultDhikrs[0];
+            
+            set({
+                sessionMode: { ...state.sessionMode, currentStepIndex: nextIndex },
+                currentDhikr: fullDhikr,
+                currentCount: 0,
+                targetCount: nextStep.target
+            });
+        } else {
+            // Routine Complete
+            set({
+                sessionMode: { ...state.sessionMode, isComplete: true }
+            });
+        }
       },
       
       exitSessionMode: () => {

@@ -42,6 +42,7 @@ export function Counter() {
     setLayoutOrder,
     shakeToReset,
     reset,
+    nextRoutineStep,
   } = useTasbeehStore();
 
   // Ensure we have the latest data (e.g. hadiths) even if state is persisted
@@ -187,6 +188,37 @@ export function Counter() {
             </motion.p>
           </div>
         )}
+
+        {/* Routine Progress */}
+        {sessionMode.type === 'routine' && (
+          <div className="flex flex-col items-center mt-3 sm:mt-4 mb-1">
+            <motion.div
+              initial={{ opacity: 0, y: 5 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="flex flex-col items-center gap-1"
+            >
+              <div className="flex items-center gap-2 text-xs font-medium text-primary">
+                <span>Step {sessionMode.currentStepIndex + 1} of {sessionMode.steps.length}</span>
+                {sessionMode.steps[sessionMode.currentStepIndex].description && (
+                  <>
+                    <span className="opacity-50">•</span>
+                    <span className="text-muted-foreground">{sessionMode.steps[sessionMode.currentStepIndex].description}</span>
+                  </>
+                )}
+              </div>
+
+              {/* Step Progress Bar */}
+              <div className="w-32 xs:w-40 sm:w-48 mx-auto h-1 bg-muted rounded-full overflow-hidden mb-1">
+                <motion.div
+                  className="h-full bg-primary rounded-full"
+                  initial={{ width: 0 }}
+                  animate={{ width: `${Math.min((currentCount / targetCount) * 100, 100)}%` }}
+                  transition={{ type: "spring", stiffness: 100, damping: 20 }}
+                />
+              </div>
+            </motion.div>
+          </div>
+        )}
       </div>
     )
   };
@@ -228,6 +260,13 @@ export function Counter() {
 
     // Check for 1000 session complete
     if (sessionMode.type === 'tasbih1000' && sessionMode.currentPhase === 9 && currentCount + 1 >= 100) {
+      setTimeout(() => {
+        setShowSessionComplete(true);
+      }, 500);
+    }
+
+    // Check for Routine complete logic is handled by nextRoutineStep, but we can detect final step completion here if we want auto-show
+    if (sessionMode.type === 'routine' && sessionMode.isComplete) {
       setTimeout(() => {
         setShowSessionComplete(true);
       }, 500);
@@ -310,6 +349,23 @@ export function Counter() {
                 disabled={sessionMode.type === 'tasbih100' && sessionMode.isComplete}
               />
             </div>
+
+            {/* Routine Next Step Button */}
+            {sessionMode.type === 'routine' && currentCount >= targetCount && !sessionMode.isComplete && (
+              <motion.button
+                initial={{ opacity: 0, y: 10, scale: 0.9 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={(e) => {
+                  e.stopPropagation(); // Prevent counter increment
+                  nextRoutineStep();
+                }}
+                className="mt-6 px-6 py-3 bg-primary text-primary-foreground rounded-full font-medium shadow-lg shadow-primary/20 flex items-center gap-2 animate-in fade-in slide-in-from-bottom-4"
+              >
+                <span>Next Dhikr</span>
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14" /><path d="m12 5 7 7-7 7" /></svg>
+              </motion.button>
+            )}
           </div>
         );
       case 'stats':

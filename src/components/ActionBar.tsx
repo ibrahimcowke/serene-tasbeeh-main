@@ -1,6 +1,6 @@
 import { useState, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { RotateCcw, Minus, BookOpen, Target, History, Settings, BarChart3, Trophy, Bell, LayoutGrid } from 'lucide-react';
+import { RotateCcw, Minus, BookOpen, Target, History, Settings, BarChart3, Trophy, Bell, LayoutGrid, ClipboardList } from 'lucide-react';
 import { useTasbeehStore } from '@/store/tasbeehStore';
 import { DhikrSelector } from './DhikrSelector';
 import { TargetSelector } from './TargetSelector';
@@ -8,6 +8,8 @@ import { HistoryView } from './HistoryView';
 import { SettingsView } from './SettingsView';
 import { ProgressView } from './ProgressView';
 import { RemindersView } from './RemindersView';
+import { RoutinesView } from './RoutinesView';
+import { AchievementsView } from './AchievementsView';
 import { Drawer, DrawerContent, DrawerTrigger } from '@/components/ui/drawer';
 import {
   AlertDialog,
@@ -113,6 +115,24 @@ export function ActionBar() {
                       <span className="text-xs font-medium">History</span>
                     </button>
                   </HistoryView>
+
+                  <RoutinesView>
+                    <button className="flex flex-col items-center gap-2 p-3 rounded-2xl bg-secondary/30 hover:bg-secondary active:scale-95 transition-all">
+                      <div className="w-10 h-10 rounded-full bg-orange-500/10 flex items-center justify-center">
+                        <BookOpen className="w-5 h-5 text-orange-500" />
+                      </div>
+                      <span className="text-xs font-medium">Routines</span>
+                    </button>
+                  </RoutinesView>
+
+                  <AchievementsView>
+                    <button className="flex flex-col items-center gap-2 p-3 rounded-2xl bg-secondary/30 hover:bg-secondary active:scale-95 transition-all">
+                      <div className="w-10 h-10 rounded-full bg-yellow-500/10 flex items-center justify-center">
+                        <Trophy className="w-5 h-5 text-yellow-500" />
+                      </div>
+                      <span className="text-xs font-medium">Awards</span>
+                    </button>
+                  </AchievementsView>
                 </div>
                 <div className="text-center">
                   <p className="text-xs text-muted-foreground/50">More features coming soon</p>
@@ -170,6 +190,26 @@ export function ActionBar() {
               <span className="text-xs text-muted-foreground font-medium">Alerts</span>
             </motion.button>
           </RemindersView>
+
+          <RoutinesView>
+            <motion.button
+              whileTap={{ scale: 0.95 }}
+              className="flex-1 flex flex-col items-center py-3 px-4 rounded-xl hover:bg-secondary transition-colors min-w-[70px] snap-center hover:scale-105"
+            >
+              <ClipboardList className="w-5 h-5 text-muted-foreground mb-1" />
+              <span className="text-xs text-muted-foreground font-medium">Routines</span>
+            </motion.button>
+          </RoutinesView>
+
+          <AchievementsView>
+            <motion.button
+              whileTap={{ scale: 0.95 }}
+              className="flex-1 flex flex-col items-center py-3 px-4 rounded-xl hover:bg-secondary transition-colors min-w-[70px] snap-center hover:scale-105"
+            >
+              <Trophy className="w-5 h-5 text-muted-foreground mb-1" />
+              <span className="text-xs text-muted-foreground font-medium">Awards</span>
+            </motion.button>
+          </AchievementsView>
 
           <HistoryView>
             <motion.button

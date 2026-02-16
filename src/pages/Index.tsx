@@ -9,6 +9,8 @@ import { themes, counterShapes } from '@/lib/constants';
 
 import { WhatsNew } from '@/components/WhatsNew';
 import { StatsWidget } from '@/components/StatsWidget';
+import { DateBanner } from "@/components/DateBanner";
+import { RoutinesView } from "@/components/RoutinesView";
 import { getRecommendedTheme } from '@/lib/timeUtils';
 
 const Index = () => {
@@ -64,7 +66,12 @@ const Index = () => {
 
         <WhatsNew />
         <BreathingGuide />
+        <DateBanner />
         <StatsWidget />
+        <RoutinesView>
+          {/* Trigger is handled by ActionBar or other UI elements, but we need to mount it */}
+          <span />
+        </RoutinesView>
 
         {/* Status Indicator (Top Right) */}
         {!zenMode && (
