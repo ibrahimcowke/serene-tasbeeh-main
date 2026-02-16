@@ -112,6 +112,14 @@ interface TasbeehState {
   };
   updateDateContext: () => void;
   
+  // Community
+  globalCount: number;
+  fetchGlobalCount: () => Promise<void>;
+  
+  // Accessibility
+  screenOffMode: boolean;
+  setScreenOffMode: (enabled: boolean) => void;
+  
   // Available dhikrs
   dhikrs: Dhikr[];
   customDhikrs: Dhikr[];
@@ -522,6 +530,11 @@ export const useTasbeehStore = create<TasbeehState>()(
         });
       },
       
+      globalCount: 0,
+      
+      screenOffMode: false,
+      setScreenOffMode: (enabled) => set({ screenOffMode: enabled }),
+      
       dhikrs: defaultDhikrs,
       customDhikrs: [],
       dailyGoal: 100,
@@ -665,10 +678,17 @@ export const useTasbeehStore = create<TasbeehState>()(
             totalAllTime: newTotalAllTime,
             sessionMode: sessionMode,
             lastActiveDate: today,
-            unlockedAchievements: [...currentUnlocked, ...newlyUnlocked]
+            unlockedAchievements: [...currentUnlocked, ...newlyUnlocked],
+            globalCount: state.globalCount + 1 // Optimistic update
           };
         });
         
+        // Sync to global stats (fire and forget)
+        // In a real app, we'd debounce this or use a queue
+        supabase.rpc('increment_global_count', { amount: 1 }).then(({ error }) => {
+            if (error) console.error('Failed to update global stats:', error);
+        });
+
         get().updateStreak();
       },
       
@@ -676,6 +696,18 @@ export const useTasbeehStore = create<TasbeehState>()(
         set((state) => ({
           currentCount: Math.max(0, state.currentCount - 1),
         }));
+      },
+      
+      fetchGlobalCount: async () => {
+        const { data, error } = await supabase
+            .from('global_stats')
+            .select('total_count')
+            .eq('id', 1)
+            .single();
+            
+        if (data) {
+            set({ globalCount: Number(data.total_count) });
+        }
       },
       
       favoriteDhikrIds: [],

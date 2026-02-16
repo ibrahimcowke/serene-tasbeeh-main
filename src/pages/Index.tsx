@@ -11,6 +11,8 @@ import { WhatsNew } from '@/components/WhatsNew';
 import { StatsWidget } from '@/components/StatsWidget';
 import { DateBanner } from "@/components/DateBanner";
 import { RoutinesView } from "@/components/RoutinesView";
+import { GlobalStats } from "@/components/GlobalStats";
+import { ScreenOffMode } from "@/components/ScreenOffMode";
 import { getRecommendedTheme } from '@/lib/timeUtils';
 
 const Index = () => {
@@ -63,10 +65,12 @@ const Index = () => {
   return (
     <ThemeProvider>
       <div className="h-[100dvh] w-full bg-background flex flex-col overflow-hidden relative">
+        <ScreenOffMode />
 
         <WhatsNew />
         <BreathingGuide />
         <DateBanner />
+        {!zenMode && <GlobalStats />}
         <StatsWidget />
         <RoutinesView>
           {/* Trigger is handled by ActionBar or other UI elements, but we need to mount it */}
