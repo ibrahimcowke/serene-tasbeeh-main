@@ -8,6 +8,7 @@ import { toast } from 'sonner';
 import { themes, counterShapes } from '@/lib/constants';
 
 import { WhatsNew } from '@/components/WhatsNew';
+import { StatsWidget } from '@/components/StatsWidget';
 import { getRecommendedTheme } from '@/lib/timeUtils';
 
 const Index = () => {
@@ -63,6 +64,7 @@ const Index = () => {
 
         <WhatsNew />
         <BreathingGuide />
+        <StatsWidget />
 
         {/* Status Indicator (Top Right) */}
         {!zenMode && (
