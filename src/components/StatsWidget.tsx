@@ -19,9 +19,9 @@ export function StatsWidget() {
 
     return (
         <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="px-4 mb-2 flex flex-row flex-wrap gap-2 z-40"
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            className="absolute left-4 top-1/2 -translate-y-1/2 z-40 flex flex-col gap-3"
         >
             {/* Streak Badge */}
             <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-background/20 backdrop-blur-md border border-white/10 shadow-sm hover:bg-background/30 transition-colors cursor-help group">
