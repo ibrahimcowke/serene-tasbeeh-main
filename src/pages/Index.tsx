@@ -6,7 +6,7 @@ import { BreathingGuide } from '@/components/BreathingGuide';
 import { useTasbeehStore } from '@/store/tasbeehStore';
 import { toast } from 'sonner';
 import { themes, counterShapes } from '@/lib/constants';
-import { MotivationalQuoteOverlay } from '@/components/MotivationalQuote';
+
 import { WhatsNew } from '@/components/WhatsNew';
 import { getRecommendedTheme } from '@/lib/timeUtils';
 
@@ -60,7 +60,7 @@ const Index = () => {
   return (
     <ThemeProvider>
       <div className="h-[100dvh] w-full bg-background flex flex-col overflow-hidden relative">
-        <MotivationalQuoteOverlay />
+
         <WhatsNew />
         <BreathingGuide />
 

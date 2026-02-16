@@ -95,8 +95,6 @@ export function SettingsView({ children }: SettingsViewProps) {
     setAutoThemeSwitch,
     shakeToReset,
     setShakeToReset,
-    motivationalQuotesEnabled,
-    setMotivationalQuotesEnabled,
   } = useTasbeehStore();
 
   const [user, setUser] = useState<any>(null);
@@ -749,17 +747,7 @@ export function SettingsView({ children }: SettingsViewProps) {
 
                     <div className="h-px bg-border/50" />
 
-                    {/* Motivational Quotes */}
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <p className="text-sm font-medium text-foreground">Daily Inspiration</p>
-                        <p className="text-xs text-muted-foreground">Show quotes on app open</p>
-                      </div>
-                      <Switch
-                        checked={motivationalQuotesEnabled}
-                        onCheckedChange={setMotivationalQuotesEnabled}
-                      />
-                    </div>
+
                   </div>
                 </div>
 

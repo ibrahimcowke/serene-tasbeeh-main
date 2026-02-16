@@ -48,12 +48,7 @@ export const WhatsNew = () => {
             icon: <Moon className="w-8 h-8 text-indigo-400" />,
             color: "from-indigo-500/20 to-indigo-500/5"
         },
-        {
-            title: "Daily Inspiration",
-            description: "Start with a motivational Islamic quote.",
-            icon: <Quote className="w-8 h-8 text-emerald-400" />,
-            color: "from-emerald-500/20 to-emerald-500/5"
-        },
+
         {
             title: "Shake to Reset",
             description: "Enable in settings to reset by shaking your device.",

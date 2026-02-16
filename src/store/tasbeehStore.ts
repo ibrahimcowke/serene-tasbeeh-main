@@ -106,8 +106,6 @@ interface TasbeehState {
   canUndo: boolean;
   autoThemeSwitch: boolean;
   shakeToReset: boolean;
-  motivationalQuotesEnabled: boolean;
-  lastShownQuoteId: string | null;
   lastSeenVersion: string | null;
   
   // Actions
@@ -171,8 +169,6 @@ interface TasbeehState {
   undo: () => void;
   setAutoThemeSwitch: (enabled: boolean) => void;
   setShakeToReset: (enabled: boolean) => void;
-  setMotivationalQuotesEnabled: (enabled: boolean) => void;
-  setLastShownQuoteId: (id: string) => void;
   setLastSeenVersion: (version: string) => void;
 }
 
@@ -489,8 +485,6 @@ export const useTasbeehStore = create<TasbeehState>()(
       canUndo: false,
       autoThemeSwitch: false,
       shakeToReset: false,
-      motivationalQuotesEnabled: true,
-      lastShownQuoteId: null,
       lastSeenVersion: null,
       
       // Actions
@@ -877,8 +871,7 @@ export const useTasbeehStore = create<TasbeehState>()(
       
       setAutoThemeSwitch: (enabled) => set({ autoThemeSwitch: enabled }),
       setShakeToReset: (enabled) => set({ shakeToReset: enabled }),
-      setMotivationalQuotesEnabled: (enabled) => set({ motivationalQuotesEnabled: enabled }),
-      setLastShownQuoteId: (id) => set({ lastShownQuoteId: id }),
+
       setLastSeenVersion: (version) => set({ lastSeenVersion: version }),
 
       syncToCloud: async () => {
@@ -921,7 +914,7 @@ export const useTasbeehStore = create<TasbeehState>()(
                  theme: state.theme,
                  autoThemeSwitch: state.autoThemeSwitch,
                  shakeToReset: state.shakeToReset,
-                 motivationalQuotesEnabled: state.motivationalQuotesEnabled,
+
                  lastSeenVersion: state.lastSeenVersion,
              }
           };
@@ -980,7 +973,7 @@ export const useTasbeehStore = create<TasbeehState>()(
              showTransliteration: parsed.settings?.showTransliteration !== undefined ? parsed.settings.showTransliteration : state.showTransliteration,
              autoThemeSwitch: parsed.settings?.autoThemeSwitch !== undefined ? parsed.settings.autoThemeSwitch : state.autoThemeSwitch,
              shakeToReset: parsed.settings?.shakeToReset !== undefined ? parsed.settings.shakeToReset : state.shakeToReset,
-             motivationalQuotesEnabled: parsed.settings?.motivationalQuotesEnabled !== undefined ? parsed.settings.motivationalQuotesEnabled : state.motivationalQuotesEnabled,
+
              lastSeenVersion: parsed.settings?.lastSeenVersion || state.lastSeenVersion,
          }));
          
@@ -1040,10 +1033,8 @@ export const useTasbeehStore = create<TasbeehState>()(
         dailyGoal: state.dailyGoal,
         favoriteDhikrIds: state.favoriteDhikrIds,
         lastSeenVersion: state.lastSeenVersion,
-        lastShownQuoteId: state.lastShownQuoteId,
         autoThemeSwitch: state.autoThemeSwitch,
         shakeToReset: state.shakeToReset,
-        motivationalQuotesEnabled: state.motivationalQuotesEnabled,
       }),
     }
   )
