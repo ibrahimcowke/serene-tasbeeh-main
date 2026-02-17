@@ -82,7 +82,21 @@ export default defineConfig(({ mode }) => ({
             short_name: "100",
             description: "Start a 100-count dhikr session",
             url: "/?session=100",
-            icons: [{ src: "/pwa-192x192.png", sizes: "192x192" }]
+            icons: [{ src: "/pwa-192x192.png", sizes: "192x192", type: "image/png" }]
+          },
+          {
+            name: "Morning Adhkar",
+            short_name: "Morning",
+            description: "Start your Morning Adhkar routine",
+            url: "/?routine=morning",
+            icons: [{ src: "/pwa-192x192.png", sizes: "192x192", type: "image/png" }]
+          },
+          {
+            name: "Evening Adhkar",
+            short_name: "Evening",
+            description: "Start your Evening Adhkar routine",
+            url: "/?routine=evening",
+            icons: [{ src: "/pwa-192x192.png", sizes: "192x192", type: "image/png" }]
           }
         ],
         protocol_handlers: [

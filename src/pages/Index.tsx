@@ -39,6 +39,31 @@ const Index = () => {
     return () => clearInterval(interval);
   }, [autoThemeSwitch, theme, setTheme]);
 
+  // Handle PWA shortcuts / URL params
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const routineId = params.get('routine');
+    const sessionType = params.get('session');
+
+    // Slight delay to ensure store hydration
+    const timer = setTimeout(() => {
+      const { startRoutine, startTasbih100, startTasbih1000 } = useTasbeehStore.getState();
+
+      if (routineId) {
+        startRoutine(routineId);
+        // Clean URL without reload
+        window.history.replaceState({}, '', window.location.pathname);
+        toast.success("Started Routine", { description: `Loaded ${routineId} routine` });
+      } else if (sessionType === '100') {
+        startTasbih100();
+        window.history.replaceState({}, '', window.location.pathname);
+        toast.success("Started Session", { description: "100 Tasbeeh session started" });
+      }
+    }, 500);
+
+    return () => clearTimeout(timer);
+  }, []);
+
   useEffect(() => {
     const handleOnline = () => {
       toast.success("You're back online!", {
