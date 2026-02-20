@@ -102,7 +102,7 @@ export function Counter() {
   const renderDhikrText = () => {
     // if (dhikrTextPosition === 'hidden') return null;
     return (
-      <div className="text-center mt-1 xs:mt-3 sm:mt-6 mb-2 sm:mb-4 px-3 sm:px-0 relative z-20"
+      <div className="text-center mt-0 mb-1 px-3 sm:px-0 relative z-20"
         style={{ transform: `translateY(${dhikrVerticalOffset}px)` }}
       >
         <AnimatePresence mode="wait">
@@ -111,7 +111,7 @@ export function Counter() {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
-            className="font-arabic text-2xl xs:text-3xl sm:text-4xl md:text-5xl text-foreground leading-relaxed mb-1 sm:mb-2"
+            className="font-arabic text-xl xs:text-2xl sm:text-4xl md:text-5xl text-foreground leading-snug mb-0.5"
           >
             {currentDhikr.arabic}
           </motion.p>
@@ -303,9 +303,9 @@ export function Counter() {
         return renderDhikrText();
       case 'counter':
         return (
-          <div className="flex flex-col items-center justify-center w-full relative z-10 my-4 select-none">
+          <div className="flex flex-col items-center justify-center w-full relative z-10 my-1 select-none">
             {/* Mobile controls (Minus & Reset) placed above counter */}
-            <div className={`flex items-center justify-center gap-4 xs:gap-6 sm:gap-8 mb-2 xs:mb-3 sm:mb-4 lg:hidden relative z-20 transition-opacity duration-300 ${isEditingLayout ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
+            <div className={`flex items-center justify-center gap-4 xs:gap-6 sm:gap-8 mb-1 xs:mb-2 sm:mb-3 lg:hidden relative z-20 transition-opacity duration-300 ${isEditingLayout ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
               <motion.button
                 whileTap={{ scale: 0.95 }}
                 onClick={(e) => {
@@ -371,7 +371,7 @@ export function Counter() {
         );
       case 'stats':
         return (
-          <div className={`mt-2 sm:mt-3 text-center transition-opacity duration-300 ${layout === 'focus' ? 'opacity-50 hover:opacity-100' : ''}`}>
+          <div className={`mt-0 sm:mt-1 text-center transition-opacity duration-300 ${layout === 'focus' ? 'opacity-50 hover:opacity-100' : ''}`}>
             <div className="mb-1">
               <SessionTimer />
             </div>
@@ -404,7 +404,7 @@ export function Counter() {
         if (hadithSlidePosition === 'hidden' && !isEditingLayout) return null;
         const isSidePosition = hadithSlidePosition !== 'bottom' && hadithSlidePosition !== 'hidden';
         return (
-          <div className={`w-full max-w-sm mt-1 sm:mt-2 mb-1 sm:mb-2 px-3 sm:px-4 relative z-20 ${isSidePosition ? 'lg:hidden' : ''}`}>
+          <div className={`hidden lg:block w-full max-w-sm mt-1 mb-1 px-3 sm:px-4 relative z-20 ${isSidePosition ? 'lg:flex' : ''}`}>
             <HadithSlider dhikr={currentDhikr} />
           </div>
         );
@@ -415,8 +415,8 @@ export function Counter() {
 
   return (
     <>
-      <div className={`flex flex-col items-center flex-1 px-4 sm:px-6 md:px-8 lg:px-12 relative w-full min-h-full transition-all duration-500 py-6
-      ${layout === 'ergonomic' ? 'justify-end pb-16' : ''}
+      <div className={`flex flex-col items-center flex-1 px-4 sm:px-6 md:px-8 lg:px-12 relative w-full min-h-full transition-all duration-500 py-1
+      ${layout === 'ergonomic' ? 'justify-end pb-8' : ''}
     `}
         style={{ transform: `translateY(${verticalOffset}px)` }}
       >
