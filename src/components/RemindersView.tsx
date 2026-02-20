@@ -38,7 +38,7 @@ export function RemindersView({ children }: RemindersViewProps) {
     );
 }
 
-function RemindersContent() {
+export function RemindersContent() {
     const [reminders, setReminders] = useState<Reminder[]>(() => {
         const saved = localStorage.getItem('tasbeeh-reminders');
         return saved ? JSON.parse(saved) : [
@@ -259,8 +259,8 @@ function RemindersContent() {
                                                 key={index}
                                                 onClick={() => toggleDay(index)}
                                                 className={`px-3 py-2 rounded-lg border text-sm font-medium transition-all ${newReminder.days.includes(index)
-                                                        ? 'bg-primary text-primary-foreground border-primary'
-                                                        : 'bg-card border-border hover:border-primary/50'
+                                                    ? 'bg-primary text-primary-foreground border-primary'
+                                                    : 'bg-card border-border hover:border-primary/50'
                                                     }`}
                                             >
                                                 {day}

@@ -193,46 +193,6 @@ export function ActionBar() {
             </motion.button>
           </ProgressView>
 
-          <ChallengesView>
-            <motion.button
-              whileTap={{ scale: 0.95 }}
-              className="flex-1 flex flex-col items-center py-3 px-4 rounded-xl hover:bg-secondary transition-colors min-w-[70px] snap-center hover:scale-105"
-            >
-              <Target className="w-5 h-5 text-primary mb-1" />
-              <span className="text-xs text-primary font-medium">Global</span>
-            </motion.button>
-          </ChallengesView>
-
-          <RemindersView>
-            <motion.button
-              whileTap={{ scale: 0.95 }}
-              className="flex-1 flex flex-col items-center py-3 px-4 rounded-xl hover:bg-secondary transition-colors min-w-[70px] snap-center hover:scale-105"
-            >
-              <Bell className="w-5 h-5 text-muted-foreground mb-1" />
-              <span className="text-xs text-muted-foreground font-medium">Alerts</span>
-            </motion.button>
-          </RemindersView>
-
-          <RoutinesView>
-            <motion.button
-              whileTap={{ scale: 0.95 }}
-              className="flex-1 flex flex-col items-center py-3 px-4 rounded-xl hover:bg-secondary transition-colors min-w-[70px] snap-center hover:scale-105"
-            >
-              <ClipboardList className="w-5 h-5 text-muted-foreground mb-1" />
-              <span className="text-xs text-muted-foreground font-medium">Routines</span>
-            </motion.button>
-          </RoutinesView>
-
-          <AchievementsView>
-            <motion.button
-              whileTap={{ scale: 0.95 }}
-              className="flex-1 flex flex-col items-center py-3 px-4 rounded-xl hover:bg-secondary transition-colors min-w-[70px] snap-center hover:scale-105"
-            >
-              <Trophy className="w-5 h-5 text-muted-foreground mb-1" />
-              <span className="text-xs text-muted-foreground font-medium">Awards</span>
-            </motion.button>
-          </AchievementsView>
-
 
           <HistoryView>
             <motion.button
