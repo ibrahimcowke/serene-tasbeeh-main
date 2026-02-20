@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Users } from 'lucide-react';
-import { supabase } from '@/lib/supabase';
+import { supabase, isSupabaseConfigured } from '@/lib/supabase';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
 interface PresenceUser {
@@ -15,6 +15,8 @@ export function VisitorCounter() {
     const [onlineUsers, setOnlineUsers] = useState<PresenceUser[]>([]);
     const [liveCount, setLiveCount] = useState(0);
     const [totalUsers, setTotalUsers] = useState(0);
+
+    if (!isSupabaseConfigured) return null;
 
     useEffect(() => {
         // Fetch total registered users

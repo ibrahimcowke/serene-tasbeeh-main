@@ -2,11 +2,13 @@ import { useTasbeehStore } from '@/store/tasbeehStore';
 import { useEffect, useState } from 'react';
 import { Globe, Users } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { supabase } from '@/lib/supabase';
+import { supabase, isSupabaseConfigured } from '@/lib/supabase';
 
 export function GlobalStats() {
     const { globalCount, fetchGlobalCount } = useTasbeehStore();
     const [liveCount, setLiveCount] = useState(globalCount);
+
+    if (!isSupabaseConfigured) return null;
 
     // Initial fetch
     useEffect(() => {

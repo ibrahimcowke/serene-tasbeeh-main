@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { Check, Download, Upload, Trash2, RotateCcw, Layout, Smartphone, Maximize, Cloud, LogIn, LogOut, RefreshCw, Shield, Shapes, Wind, Palette, Waves, Crown, Sunset, Zap, CloudMoon, Infinity, Fan, Diamond, Component, ExternalLink, ChevronRight } from 'lucide-react';
 import { useTasbeehStore } from '@/store/tasbeehStore';
-import { supabase, signInWithGoogle, signOut, getCurrentUser } from '@/lib/supabase';
+import { supabase, signInWithGoogle, signOut, getCurrentUser, isSupabaseConfigured } from '@/lib/supabase';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import { Switch } from '@/components/ui/switch';
 import {
@@ -852,8 +852,8 @@ export function SettingsView({ children }: SettingsViewProps) {
                           <LogIn className="w-4 h-4" />
                           Sign in with Google
                         </button>
-                        {!import.meta.env.VITE_SUPABASE_URL && (
-                          <p className="text-[10px] text-destructive mt-3">Missing Supabase Params in .env</p>
+                        {!isSupabaseConfigured && (
+                          <p className="text-[10px] text-destructive mt-3">Cloud Sync unavailable: Missing Supabase keys in .env</p>
                         )}
                       </div>
                     ) : (

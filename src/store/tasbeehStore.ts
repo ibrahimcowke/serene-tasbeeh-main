@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import { supabase, getCurrentUser } from '@/lib/supabase';
+import { supabase, getCurrentUser, isSupabaseConfigured } from '@/lib/supabase';
 // Types
 import { Routine, RoutineStep, defaultRoutines } from '@/data/routines';
 import { achievements } from '@/data/achievements';
@@ -684,9 +684,11 @@ export const useTasbeehStore = create<TasbeehState>()(
         });
         
         // Sync to Supabase global stats (fire and forget)
-        supabase.rpc('increment_global_count', { amount: 1 }).then(({ error }) => {
-            if (error) console.error('Failed to update global stats:', error);
-        });
+        if (isSupabaseConfigured) {
+          supabase.rpc('increment_global_count', { amount: 1 }).then(({ error }) => {
+              if (error) console.error('Failed to update global stats:', error);
+          });
+        }
 
         // Sync to Firebase Global Challenges (fire and forget)
         const currentDhikrId = get().currentDhikr.id;
@@ -722,14 +724,20 @@ export const useTasbeehStore = create<TasbeehState>()(
       },
       
       fetchGlobalCount: async () => {
-        const { data, error } = await supabase
-            .from('global_stats')
-            .select('total_count')
-            .eq('id', 1)
-            .single();
-            
-        if (data) {
-            set({ globalCount: Number(data.total_count) });
+        if (!isSupabaseConfigured) return;
+        
+        try {
+          const { data, error } = await supabase
+              .from('global_stats')
+              .select('total_count')
+              .eq('id', 1)
+              .single();
+              
+          if (data) {
+              set({ globalCount: Number(data.total_count) });
+          }
+        } catch (e) {
+          console.error('Error fetching global count:', e);
         }
       },
       
