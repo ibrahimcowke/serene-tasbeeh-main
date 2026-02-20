@@ -34,7 +34,7 @@ export default function PrivacyPolicy() {
     ];
 
     return (
-        <div className="min-h-screen bg-background text-foreground selection:bg-primary/30">
+        <div className="min-h-screen min-h-dvh bg-background text-foreground selection:bg-primary/30">
             {/* Header */}
             <header className="sticky top-0 z-50 w-full border-b bg-background/80 backdrop-blur-md">
                 <div className="container flex h-16 items-center px-4 max-w-2xl mx-auto">

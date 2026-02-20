@@ -90,17 +90,17 @@ const Index = () => {
 
   return (
     <ThemeProvider>
-      <div className="h-[100dvh] w-full bg-background flex flex-col overflow-hidden relative">
+      <div className="h-screen h-dvh min-h-svh w-full bg-background flex flex-col overflow-hidden relative">
         <ScreenOffMode />
         <WhatsNew />
         <BreathingGuide />
 
         {/* Header - Minimalist & Pinned */}
-        <div className="shrink-0 z-50 px-4 pt-4 sm:pt-6 flex items-center justify-between pointer-events-none">
-          <div className="pointer-events-auto">
+        <div className="shrink-0 z-50 px-4 pt-4 sm:pt-6 pt-safe flex flex-col xs:flex-row items-center justify-between gap-3 xs:gap-0 pointer-events-none">
+          <div className="pointer-events-auto scale-90 xs:scale-100 origin-left">
             <VisitorCounter />
           </div>
-          <div className="pointer-events-auto">
+          <div className="pointer-events-auto scale-90 xs:scale-100 origin-right">
             <DateBanner />
           </div>
         </div>
@@ -110,7 +110,7 @@ const Index = () => {
         </RoutinesView>
 
         {/* Dashboard Grid Expansion */}
-        <div className={`flex-1 min-h-0 w-full overflow-y-auto px-4 sm:px-6 md:px-8 pb-32 pt-2 custom-scrollbar transition-all duration-500 ${zenMode ? 'flex items-center justify-center pt-0 pb-0' : ''}`}>
+        <div className={`flex-1 min-h-0 w-full overflow-y-auto px-4 sm:px-6 md:px-8 pb-40 pt-2 custom-scrollbar transition-all duration-500 pb-safe ${zenMode ? 'flex items-center justify-center pt-0 pb-0' : ''}`}>
           <div className={`max-w-7xl mx-auto w-full ${zenMode ? 'max-w-4xl' : ''}`}>
             {zenMode ? (
               <Counter />

@@ -111,7 +111,7 @@ export function Counter() {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
-            className="font-arabic text-xl xs:text-2xl sm:text-4xl md:text-5xl text-foreground leading-snug mb-0.5"
+            className="font-arabic text-xl xs:text-2xl sm:text-4xl md:text-5xl lg:text-6xl text-foreground leading-snug mb-0.5 max-w-[90vw] mx-auto overflow-visible"
           >
             {currentDhikr.arabic}
           </motion.p>
@@ -124,7 +124,7 @@ export function Counter() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -5 }}
               transition={{ duration: 0.2 }}
-              className="text-muted-foreground text-xs xs:text-sm sm:text-base tracking-wide"
+              className="text-muted-foreground text-[10px] xs:text-xs sm:text-base tracking-wide px-4"
             >
               {currentDhikr.transliteration}
             </motion.p>
@@ -133,12 +133,12 @@ export function Counter() {
 
         {/* Phase indicator & Progress for 100 session */}
         {sessionMode.type === 'tasbih100' && (
-          <div className="flex flex-col items-center mt-3 sm:mt-4 mb-1">
-            <div className="flex justify-center gap-2 mb-2">
+          <div className="flex flex-col items-center mt-2 sm:mt-4 mb-1">
+            <div className="flex justify-center gap-1.5 mb-2">
               {[0, 1, 2, 3].map((phase) => (
                 <div
                   key={phase}
-                  className={`w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full transition-all duration-300 ${phase < sessionMode.currentPhase
+                  className={`w-1 h-1 sm:w-2 sm:h-2 rounded-full transition-all duration-300 ${phase < sessionMode.currentPhase
                     ? 'bg-primary'
                     : phase === sessionMode.currentPhase
                       ? 'bg-primary animate-pulse scale-125'
@@ -148,7 +148,7 @@ export function Counter() {
               ))}
             </div>
             {totalProgress !== null && (
-              <div className="w-32 xs:w-40 sm:w-48 mx-auto h-1 bg-muted rounded-full overflow-hidden mb-2">
+              <div className="w-24 xs:w-40 sm:w-48 mx-auto h-1 bg-muted rounded-full overflow-hidden mb-2">
                 <motion.div
                   className="h-full bg-primary rounded-full"
                   initial={{ width: 0 }}
@@ -160,9 +160,9 @@ export function Counter() {
             <motion.p
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              className="text-[10px] xs:text-xs text-muted-foreground"
+              className="text-[9px] xs:text-xs text-muted-foreground"
             >
-              Phase {sessionMode.currentPhase + 1} of 4 • {sessionMode.currentPhase === 3 ? '1' : '33'} counts
+              Phase {sessionMode.currentPhase + 1}/4 • {sessionMode.currentPhase === 3 ? '1' : '33'} Dhikr
             </motion.p>
           </div>
         )}

@@ -12,6 +12,7 @@ import { RoutinesView } from './RoutinesView';
 import { AchievementsView } from './AchievementsView';
 import { ChallengesView } from './ChallengesView';
 import { Drawer, DrawerContent, DrawerTrigger } from '@/components/ui/drawer';
+import { toast } from 'sonner';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -65,18 +66,18 @@ export function ActionBar() {
         </div>
 
         {/* Mobile Navigation (Grid) */}
-        <div className="flex sm:hidden items-center justify-between gap-1 bg-card/60 backdrop-blur-xl border border-border/50 rounded-2xl p-2 px-4 shadow-lg shadow-black/5">
+        <div className="flex sm:hidden items-center justify-between gap-1 bg-card/60 backdrop-blur-xl border border-border/50 rounded-2xl p-2 px-4 shadow-lg shadow-black/5 mb-safe">
           <DhikrSelector>
             <motion.button whileTap={{ scale: 0.92 }} className="flex flex-col items-center gap-1 p-2 rounded-xl active:bg-secondary/50">
               <BookOpen className="w-5 h-5 text-primary" />
-              <span className="text-[10px] text-muted-foreground font-medium">Dhikr</span>
+              <span className="text-[11px] text-muted-foreground font-medium">Dhikr</span>
             </motion.button>
           </DhikrSelector>
 
           <TargetSelector>
             <motion.button whileTap={{ scale: 0.92 }} className="flex flex-col items-center gap-1 p-2 rounded-xl active:bg-secondary/50">
               <Target className="w-5 h-5 text-muted-foreground" />
-              <span className="text-[10px] text-muted-foreground font-medium">Target</span>
+              <span className="text-[11px] text-muted-foreground font-medium">Target</span>
             </motion.button>
           </TargetSelector>
 
@@ -84,11 +85,11 @@ export function ActionBar() {
             <DrawerTrigger asChild>
               <motion.button whileTap={{ scale: 0.92 }} className="flex flex-col items-center gap-1 p-2 rounded-xl active:bg-secondary/50">
                 <LayoutGrid className="w-5 h-5 text-muted-foreground" />
-                <span className="text-[10px] text-muted-foreground font-medium">Menu</span>
+                <span className="text-[11px] text-muted-foreground font-medium">Menu</span>
               </motion.button>
             </DrawerTrigger>
-            <DrawerContent className="bg-background/95 backdrop-blur-2xl border-t border-border/50">
-              <div className="w-full max-w-sm mx-auto p-6 pb-12">
+            <DrawerContent className="bg-background/95 backdrop-blur-2xl border-t border-border/50 pb-safe">
+              <div className="w-full max-w-sm mx-auto p-6 pb-8">
                 <div className="flex items-center gap-2 mb-6">
                   <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
                     <LayoutGrid className="w-4 h-4 text-primary" />
