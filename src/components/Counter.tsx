@@ -408,12 +408,6 @@ export function Counter() {
             <HadithSlider dhikr={currentDhikr} />
           </div>
         );
-      case 'global':
-        return (
-          <div className="w-full px-3 sm:px-4 mt-2 mb-2">
-            <GlobalStats />
-          </div>
-        );
       default:
         return null;
     }
@@ -538,8 +532,8 @@ export function Counter() {
 
         <div className={`relative flex flex-col items-center justify-center w-full max-w-7xl mx-auto z-10 ${layout !== 'ergonomic' ? 'my-auto' : ''}`}>
 
-          <Reorder.Group axis="y" values={layoutOrder || ['dhikr', 'counter', 'stats', 'hadith', 'global']} onReorder={setLayoutOrder} className="flex flex-col items-center w-full">
-            {(layoutOrder || ['dhikr', 'counter', 'stats', 'hadith', 'global']).map(item => (
+          <Reorder.Group axis="y" values={layoutOrder || ['dhikr', 'counter', 'stats', 'hadith']} onReorder={setLayoutOrder} className="flex flex-col items-center w-full">
+            {(layoutOrder || ['dhikr', 'counter', 'stats', 'hadith']).map(item => (
               <Reorder.Item key={item} value={item} dragListener={isEditingLayout} className={`w-full flex justify-center touch-none ${isEditingLayout ? 'cursor-grab active:cursor-grabbing border-2 border-dashed border-primary/30 rounded-xl p-4 my-2 hover:bg-primary/5 relative bg-background/50 backdrop-blur-sm' : ''}`}>
                 {isEditingLayout && (
                   <div className="absolute top-2 right-2 text-muted-foreground pointer-events-none">
@@ -550,6 +544,13 @@ export function Counter() {
               </Reorder.Item>
             ))}
           </Reorder.Group>
+
+          {/* Community Pulse — always visible below the layout sections */}
+          {!zenMode && (
+            <div className="w-full px-3 sm:px-4 mt-4 mb-2">
+              <GlobalStats />
+            </div>
+          )}
 
           {/* Hadith Slider - Desktop Positioned */}
           {hadithSlidePosition !== 'hidden' && hadithSlidePosition !== 'bottom' && (
