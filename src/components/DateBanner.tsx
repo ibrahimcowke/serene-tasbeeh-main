@@ -33,54 +33,42 @@ export function DateBanner() {
 
     return (
         <motion.div
-            initial={{ opacity: 0, y: -10 }}
+            initial={{ opacity: 0, y: -8 }}
             animate={{ opacity: 1, y: 0 }}
-            className="w-full px-4 mb-4"
+            className="w-full px-4 mb-1"
         >
             <div className={`
-                relative overflow-hidden rounded-2xl border p-4 flex flex-col sm:flex-row items-center justify-between gap-3 text-center sm:text-left
-                ${isSpecial ? 'bg-primary/5 border-primary/20' : 'bg-card/50 border-border/50'}
+                flex items-center justify-between gap-2 px-3 py-1.5 rounded-xl border text-xs
+                ${isSpecial ? 'bg-primary/5 border-primary/20' : 'bg-card/40 border-border/40'}
             `}>
-                {/* Decorative Background */}
-                {isSpecial && <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 blur-3xl rounded-full -translate-y-1/2 translate-x-1/3 pointer-events-none" />}
-
-                <div className="flex items-center gap-3 z-10">
-                    <div className={`
-                        w-10 h-10 rounded-xl flex items-center justify-center
-                        ${isSpecial ? 'bg-primary/10 text-primary' : 'bg-secondary text-muted-foreground'}
-                    `}>
-                        {dateContext.isRamadan || (dateContext.hijriDate.includes('Ramadan')) ? (
-                            <Moon className="w-5 h-5" />
-                        ) : (
-                            <Calendar className="w-5 h-5" />
-                        )}
-                    </div>
-                    <div>
-                        <h3 className="font-semibold text-sm sm:text-base">{dateContext.hijriDate}</h3>
-                        <p className="text-xs text-muted-foreground">Islamic Date (Umm al-Qura)</p>
-                    </div>
+                {/* Left: date */}
+                <div className="flex items-center gap-1.5 shrink-0">
+                    {dateContext.isRamadan || dateContext.hijriDate.includes('Ramadan') ? (
+                        <Moon className="w-3.5 h-3.5 text-primary" />
+                    ) : (
+                        <Calendar className="w-3.5 h-3.5 text-muted-foreground" />
+                    )}
+                    <span className="font-medium text-foreground/80 text-[11px]">{dateContext.hijriDate}</span>
                 </div>
 
-                {/* Special Badges + Style Indicator */}
-                <div className="flex flex-wrap justify-center sm:justify-end gap-2 z-10">
+                {/* Right: badges + style indicator */}
+                <div className="flex items-center gap-1.5 flex-wrap justify-end">
                     {dateContext.isJummah && (
-                        <span className="px-2 py-1 rounded-md bg-green-500/10 text-green-600 text-xs font-medium border border-green-500/20 flex items-center gap-1">
-                            <Sparkles className="w-3 h-3" /> Jumu'ah Mubarak
+                        <span className="flex items-center gap-1 px-1.5 py-0.5 rounded-md bg-green-500/10 text-green-600 text-[10px] font-medium border border-green-500/20">
+                            <Sparkles className="w-2.5 h-2.5" /> Jumu'ah
                         </span>
                     )}
                     {dateContext.specialDayName && (
-                        <span className="px-2 py-1 rounded-md bg-purple-500/10 text-purple-600 text-xs font-medium border border-purple-500/20">
+                        <span className="px-1.5 py-0.5 rounded-md bg-purple-500/10 text-purple-600 text-[10px] font-medium border border-purple-500/20">
                             {dateContext.specialDayName}
                         </span>
                     )}
                     {dateContext.isWhiteDay && (
-                        <span className="px-2 py-1 rounded-md bg-blue-500/10 text-blue-600 text-xs font-medium border border-blue-500/20">
-                            White Days (Ayyam al-Bid)
+                        <span className="px-1.5 py-0.5 rounded-md bg-blue-500/10 text-blue-600 text-[10px] font-medium border border-blue-500/20">
+                            Ayyam al-Bid
                         </span>
                     )}
-
-                    {/* Theme & Style Indicator */}
-                    <span className="px-2 py-1 rounded-md bg-secondary/60 text-foreground/70 text-[10px] uppercase tracking-widest font-medium border border-border/40">
+                    <span className="px-1.5 py-0.5 rounded-md bg-secondary/60 text-foreground/60 text-[10px] uppercase tracking-widest font-medium border border-border/40">
                         {currentShapeLabel} <span className="opacity-40 mx-0.5">|</span> {currentThemeLabel}
                     </span>
                 </div>
