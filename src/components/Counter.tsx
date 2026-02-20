@@ -402,6 +402,18 @@ export function Counter() {
         );
       case 'hadith':
         return null;
+      case 'stats':
+        return (
+          <div className="lg:hidden w-full mt-2">
+            <StatsWidget />
+          </div>
+        );
+      case 'pulse':
+        return (
+          <div className="lg:hidden w-full mt-2">
+            <GlobalStats />
+          </div>
+        );
       default:
         return null;
     }
@@ -526,8 +538,8 @@ export function Counter() {
 
         <div className={`relative flex flex-col items-center justify-center w-full max-w-7xl mx-auto z-10 ${layout !== 'ergonomic' ? 'my-auto' : ''}`}>
 
-          <Reorder.Group axis="y" values={layoutOrder || ['dhikr', 'counter', 'stats', 'hadith']} onReorder={setLayoutOrder} className="flex flex-col items-center w-full">
-            {(layoutOrder || ['dhikr', 'counter', 'stats', 'hadith']).map(item => (
+          <Reorder.Group axis="y" values={layoutOrder || ['dhikr', 'counter', 'pulse', 'stats']} onReorder={setLayoutOrder} className="flex flex-col items-center w-full">
+            {(layoutOrder || ['dhikr', 'counter', 'pulse', 'stats']).map(item => (
               <Reorder.Item key={item} value={item} dragListener={isEditingLayout} className={`w-full flex justify-center touch-none ${isEditingLayout ? 'cursor-grab active:cursor-grabbing border-2 border-dashed border-primary/30 rounded-xl p-4 my-2 hover:bg-primary/5 relative bg-background/50 backdrop-blur-sm' : ''}`}>
                 {isEditingLayout && (
                   <div className="absolute top-2 right-2 text-muted-foreground pointer-events-none">
@@ -538,8 +550,8 @@ export function Counter() {
               </Reorder.Item>
             ))}
           </Reorder.Group>
-          {/* Community Pulse — bottom-left, shifted slightly up */}
-          <div className="absolute left-4 bottom-20 z-20">
+          {/* Community Pulse — Desktop only (side-positioned) */}
+          <div className="hidden lg:block absolute left-4 bottom-20 z-20">
             <GlobalStats />
           </div>
 

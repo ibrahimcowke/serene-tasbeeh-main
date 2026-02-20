@@ -19,30 +19,30 @@ export function StatsWidget() {
 
     return (
         <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            className="absolute left-4 top-1/2 -translate-y-1/2 z-40 flex flex-col gap-3"
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="flex flex-row lg:flex-col items-center justify-center gap-2 sm:gap-3 px-4 py-1"
         >
             {/* Streak Badge */}
-            <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-background/20 backdrop-blur-md border border-white/10 shadow-sm hover:bg-background/30 transition-colors cursor-help group">
+            <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-background/40 backdrop-blur-md border border-white/10 shadow-sm hover:bg-background/50 transition-colors cursor-help group relative">
                 <Flame className={`w-3.5 h-3.5 ${streakDays > 0 ? 'text-orange-500 fill-orange-500' : 'text-muted-foreground'}`} />
-                <span className="text-xs font-medium text-foreground/90">
+                <span className="text-xs font-medium text-foreground/90 whitespace-nowrap">
                     {streakDays} <span className="text-[10px] opacity-70">Day Streak</span>
                 </span>
 
                 {/* Tooltip */}
-                <div className="absolute top-full left-0 mt-2 p-2 bg-card/90 backdrop-blur-xl border border-border rounded-xl text-xs w-40 opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity">
+                <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 p-2 bg-card/90 backdrop-blur-xl border border-border rounded-xl text-xs w-40 opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity z-50">
                     Keep your streak alive by completing your daily goal!
                 </div>
             </div>
 
             {/* Daily Goal Badge */}
-            <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-background/20 backdrop-blur-md border border-white/10 shadow-sm hover:bg-background/30 transition-colors group">
+            <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-background/40 backdrop-blur-md border border-white/10 shadow-sm hover:bg-background/50 transition-colors group relative">
                 <div className="relative w-3.5 h-3.5 flex items-center justify-center">
                     <Target className="w-3.5 h-3.5 text-blue-500 absolute" />
                     <svg className="w-5 h-5 absolute -rotate-90" viewBox="0 0 24 24">
                         <circle
-                            className="text-blue-500/20"
+                            className="text-blue-500/10"
                             strokeWidth="3"
                             stroke="currentColor"
                             fill="transparent"
@@ -64,7 +64,7 @@ export function StatsWidget() {
                         />
                     </svg>
                 </div>
-                <span className="text-xs font-medium text-foreground/90">
+                <span className="text-xs font-medium text-foreground/90 whitespace-nowrap">
                     {todayCount} <span className="text-[10px] opacity-70">/ {dailyGoal} Today</span>
                 </span>
             </div>
