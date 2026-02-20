@@ -9,6 +9,8 @@ const firebaseConfig = {
   storageBucket: "ifis-850b5.firebasestorage.app",
   messagingSenderId: "1000757744732",
   appId: "1:1000757744732:web:f9c4097aacda7a7b194299",
+  // Note: If databaseURL is missing from your console snippet, ensure you have clicked "Create Database" 
+  // in the Firebase Console under Build > Realtime Database.
   databaseURL: "https://ifis-850b5-default-rtdb.firebaseio.com/"
 };
 
