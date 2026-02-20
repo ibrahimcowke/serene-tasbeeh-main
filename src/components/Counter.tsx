@@ -538,14 +538,10 @@ export function Counter() {
               </Reorder.Item>
             ))}
           </Reorder.Group>
-          {/* Community Pulse — left-middle, next to counter */}
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            className="absolute left-0 top-1/2 -translate-y-1/2 z-20"
-          >
+          {/* Community Pulse — centered below counter */}
+          <div className="flex justify-center mt-3 mb-1">
             <GlobalStats />
-          </motion.div>
+          </div>
 
           {/* Hadith Slider - Desktop Positioned */}
           {hadithSlidePosition !== 'hidden' && hadithSlidePosition !== 'bottom' && (
