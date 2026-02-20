@@ -65,16 +65,16 @@ export function ActionBar() {
         </div>
 
         {/* Mobile Navigation (Grid) */}
-        <div className="flex sm:hidden items-center justify-between gap-1 bg-card rounded-2xl p-2 px-4">
+        <div className="flex sm:hidden items-center justify-between gap-1 bg-card/60 backdrop-blur-xl border border-border/50 rounded-2xl p-2 px-4 shadow-lg shadow-black/5">
           <DhikrSelector>
-            <motion.button whileTap={{ scale: 0.95 }} className="flex flex-col items-center gap-1 p-2 rounded-xl active:bg-secondary/50">
-              <BookOpen className="w-5 h-5 text-muted-foreground" />
+            <motion.button whileTap={{ scale: 0.92 }} className="flex flex-col items-center gap-1 p-2 rounded-xl active:bg-secondary/50">
+              <BookOpen className="w-5 h-5 text-primary" />
               <span className="text-[10px] text-muted-foreground font-medium">Dhikr</span>
             </motion.button>
           </DhikrSelector>
 
           <TargetSelector>
-            <motion.button whileTap={{ scale: 0.95 }} className="flex flex-col items-center gap-1 p-2 rounded-xl active:bg-secondary/50">
+            <motion.button whileTap={{ scale: 0.92 }} className="flex flex-col items-center gap-1 p-2 rounded-xl active:bg-secondary/50">
               <Target className="w-5 h-5 text-muted-foreground" />
               <span className="text-[10px] text-muted-foreground font-medium">Target</span>
             </motion.button>
@@ -82,135 +82,120 @@ export function ActionBar() {
 
           <Drawer>
             <DrawerTrigger asChild>
-              <motion.button whileTap={{ scale: 0.95 }} className="flex flex-col items-center gap-1 p-2 rounded-xl active:bg-secondary/50">
+              <motion.button whileTap={{ scale: 0.92 }} className="flex flex-col items-center gap-1 p-2 rounded-xl active:bg-secondary/50">
                 <LayoutGrid className="w-5 h-5 text-muted-foreground" />
                 <span className="text-[10px] text-muted-foreground font-medium">Menu</span>
               </motion.button>
             </DrawerTrigger>
-            <DrawerContent className="bg-background/95 backdrop-blur-xl">
-              <div className="w-full max-w-sm mx-auto p-6">
-                <div className="grid grid-cols-4 gap-4 mb-4">
+            <DrawerContent className="bg-background/95 backdrop-blur-2xl border-t border-border/50">
+              <div className="w-full max-w-sm mx-auto p-6 pb-12">
+                <div className="flex items-center gap-2 mb-6">
+                  <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
+                    <LayoutGrid className="w-4 h-4 text-primary" />
+                  </div>
+                  <h3 className="font-semibold text-foreground">App Menu</h3>
+                </div>
+
+                <div className="grid grid-cols-3 gap-4">
                   <ProgressView>
-                    <button className="flex flex-col items-center gap-2 p-3 rounded-2xl bg-secondary/30 hover:bg-secondary active:scale-95 transition-all">
-                      <div className="w-10 h-10 rounded-full bg-blue-500/10 flex items-center justify-center">
-                        <BarChart3 className="w-5 h-5 text-blue-500" />
-                      </div>
-                      <span className="text-xs font-medium">Progress</span>
+                    <button className="flex flex-col items-center gap-2 p-4 rounded-2xl bg-secondary/20 hover:bg-secondary transition-all">
+                      <BarChart3 className="w-5 h-5 text-blue-500" />
+                      <span className="text-[10px] font-medium">Stats</span>
                     </button>
                   </ProgressView>
 
-                  <ChallengesView>
-                    <button className="flex flex-col items-center gap-2 p-3 rounded-2xl bg-secondary/30 hover:bg-secondary active:scale-95 transition-all">
-                      <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
-                        <Target className="w-5 h-5 text-primary" />
-                      </div>
-                      <span className="text-xs font-medium">Global</span>
-                    </button>
-                  </ChallengesView>
-
-                  <RemindersView>
-                    <button className="flex flex-col items-center gap-2 p-3 rounded-2xl bg-secondary/30 hover:bg-secondary active:scale-95 transition-all">
-                      <div className="w-10 h-10 rounded-full bg-purple-500/10 flex items-center justify-center">
-                        <Bell className="w-5 h-5 text-purple-500" />
-                      </div>
-                      <span className="text-xs font-medium">Alerts</span>
-                    </button>
-                  </RemindersView>
-
-                  <HistoryView>
-                    <button className="flex flex-col items-center gap-2 p-3 rounded-2xl bg-secondary/30 hover:bg-secondary active:scale-95 transition-all">
-                      <div className="w-10 h-10 rounded-full bg-green-500/10 flex items-center justify-center">
-                        <History className="w-5 h-5 text-green-500" />
-                      </div>
-                      <span className="text-xs font-medium">History</span>
-                    </button>
-                  </HistoryView>
-
                   <RoutinesView>
-                    <button className="flex flex-col items-center gap-2 p-3 rounded-2xl bg-secondary/30 hover:bg-secondary active:scale-95 transition-all">
-                      <div className="w-10 h-10 rounded-full bg-orange-500/10 flex items-center justify-center">
-                        <BookOpen className="w-5 h-5 text-orange-500" />
-                      </div>
-                      <span className="text-xs font-medium">Routines</span>
+                    <button className="flex flex-col items-center gap-2 p-4 rounded-2xl bg-secondary/20 hover:bg-secondary transition-all">
+                      <BookOpen className="w-5 h-5 text-orange-500" />
+                      <span className="text-[10px] font-medium">Routines</span>
                     </button>
                   </RoutinesView>
 
+                  <HistoryView>
+                    <button className="flex flex-col items-center gap-2 p-4 rounded-2xl bg-secondary/20 hover:bg-secondary transition-all">
+                      <History className="w-5 h-5 text-green-500" />
+                      <span className="text-[10px] font-medium">History</span>
+                    </button>
+                  </HistoryView>
+
                   <AchievementsView>
-                    <button className="flex flex-col items-center gap-2 p-3 rounded-2xl bg-secondary/30 hover:bg-secondary active:scale-95 transition-all">
-                      <div className="w-10 h-10 rounded-full bg-yellow-500/10 flex items-center justify-center">
-                        <Trophy className="w-5 h-5 text-yellow-500" />
-                      </div>
-                      <span className="text-xs font-medium">Awards</span>
+                    <button className="flex flex-col items-center gap-2 p-4 rounded-2xl bg-secondary/20 hover:bg-secondary transition-all">
+                      <Trophy className="w-5 h-5 text-yellow-500" />
+                      <span className="text-[10px] font-medium">Awards</span>
                     </button>
                   </AchievementsView>
 
+                  <SettingsView>
+                    <button className="flex flex-col items-center gap-2 p-4 rounded-2xl bg-secondary/20 hover:bg-secondary transition-all">
+                      <Settings className="w-5 h-5 text-muted-foreground" />
+                      <span className="text-[10px] font-medium">Settings</span>
+                    </button>
+                  </SettingsView>
 
-                </div>
-                <div className="text-center">
-                  <p className="text-xs text-muted-foreground/50">More features coming soon</p>
+                  <button
+                    onClick={() => {
+                      useTasbeehStore.getState().setZenMode(true);
+                      toast.info("Zen Mode Active", { description: "Tap the button at the bottom to exit" });
+                    }}
+                    className="flex flex-col items-center gap-2 p-4 rounded-2xl bg-secondary/20 hover:bg-secondary transition-all"
+                  >
+                    <AppWindow className="w-5 h-5 text-purple-500" />
+                    <span className="text-[10px] font-medium">Zen Mode</span>
+                  </button>
                 </div>
               </div>
             </DrawerContent>
           </Drawer>
 
-          <SettingsView>
-            <motion.button whileTap={{ scale: 0.95 }} className="flex flex-col items-center gap-1 p-2 rounded-xl active:bg-secondary/50">
-              <Settings className="w-5 h-5 text-muted-foreground" />
-              <span className="text-[10px] text-muted-foreground font-medium">Settings</span>
+          <HistoryView>
+            <motion.button whileTap={{ scale: 0.92 }} className="flex flex-col items-center gap-1 p-2 rounded-xl active:bg-secondary/50">
+              <History className="w-5 h-5 text-muted-foreground" />
+              <span className="text-[10px] text-muted-foreground font-medium">History</span>
             </motion.button>
-          </SettingsView>
+          </HistoryView>
         </div>
 
-        {/* Desktop Actions (Grid/Wrap) */}
-        <div className="hidden sm:flex flex-wrap items-center justify-center gap-2 bg-card rounded-2xl p-2 w-full">
+        {/* Desktop Navigation */}
+        <div className="hidden sm:flex items-center justify-center gap-2 bg-card/60 backdrop-blur-xl border border-border/50 rounded-2xl p-1.5 w-fit mx-auto px-4 shadow-lg shadow-black/5">
           <DhikrSelector>
             <motion.button
               whileTap={{ scale: 0.95 }}
-              className="flex-1 flex flex-col items-center py-3 px-4 rounded-xl hover:bg-secondary transition-colors min-w-[70px] snap-center hover:scale-105"
+              className="flex items-center gap-2 py-2 px-4 rounded-xl hover:bg-secondary transition-colors group"
             >
-              <BookOpen className="w-5 h-5 text-muted-foreground mb-1" />
-              <span className="text-xs text-muted-foreground font-medium">Dhikr</span>
+              <BookOpen className="w-4 h-4 text-primary group-hover:scale-110 transition-transform" />
+              <span className="text-xs font-semibold text-foreground/80">Select Dhikr</span>
             </motion.button>
           </DhikrSelector>
+
+          <div className="w-px h-4 bg-border/50 mx-1" />
 
           <TargetSelector>
             <motion.button
               whileTap={{ scale: 0.95 }}
-              className="flex-1 flex flex-col items-center py-3 px-4 rounded-xl hover:bg-secondary transition-colors min-w-[70px] snap-center hover:scale-105"
+              className="flex items-center gap-2 py-2 px-4 rounded-xl hover:bg-secondary transition-colors"
             >
-              <Target className="w-5 h-5 text-muted-foreground mb-1" />
-              <span className="text-xs text-muted-foreground font-medium">Target</span>
+              <Target className="w-4 h-4 text-muted-foreground" />
+              <span className="text-xs font-semibold text-foreground/80">Set Target</span>
             </motion.button>
           </TargetSelector>
 
-          <ProgressView>
+          <RoutinesView>
             <motion.button
               whileTap={{ scale: 0.95 }}
-              className="flex-1 flex flex-col items-center py-3 px-4 rounded-xl hover:bg-secondary transition-colors min-w-[70px] snap-center hover:scale-105"
+              className="flex items-center gap-2 py-2 px-4 rounded-xl hover:bg-secondary transition-colors"
             >
-              <BarChart3 className="w-5 h-5 text-muted-foreground mb-1" />
-              <span className="text-xs text-muted-foreground font-medium">Progress</span>
+              <ClipboardList className="w-4 h-4 text-muted-foreground" />
+              <span className="text-xs font-semibold text-foreground/80">Routines</span>
             </motion.button>
-          </ProgressView>
-
-
-          <HistoryView>
-            <motion.button
-              whileTap={{ scale: 0.95 }}
-              className="flex-1 flex flex-col items-center py-3 px-4 rounded-xl hover:bg-secondary transition-colors min-w-[70px] snap-center hover:scale-105"
-            >
-              <History className="w-5 h-5 text-muted-foreground mb-1" />
-              <span className="text-xs text-muted-foreground font-medium">History</span>
-            </motion.button>
-          </HistoryView>
+          </RoutinesView>
 
           <SettingsView>
             <motion.button
               whileTap={{ scale: 0.95 }}
-              className="flex-1 flex flex-col items-center py-3 px-4 rounded-xl hover:bg-secondary transition-colors min-w-[70px] snap-center hover:scale-105"
+              className="flex items-center gap-2 py-2 px-4 rounded-xl hover:bg-secondary transition-colors"
             >
-              <Settings className="w-5 h-5 text-muted-foreground mb-1" />
-              <span className="text-xs text-muted-foreground font-medium">Settings</span>
+              <Settings className="w-4 h-4 text-muted-foreground" />
+              <span className="text-xs font-semibold text-foreground/80">Settings</span>
             </motion.button>
           </SettingsView>
         </div>
