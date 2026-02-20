@@ -97,7 +97,7 @@ const Index = () => {
         <BreathingGuide />
         <DateBanner />
         {!zenMode && <GlobalStats />}
-        <StatsWidget />
+
         <RoutinesView>
           {/* Trigger is handled by ActionBar or other UI elements, but we need to mount it */}
           <span />
@@ -119,7 +119,8 @@ const Index = () => {
         )}
 
         {/* Main counter area */}
-        <div className={`flex-1 min-h-0 w-full flex flex-col overflow-y-auto safe-area-top transition-all duration-500 ${zenMode ? 'justify-center' : ''}`}>
+        <div className={`flex-1 min-h-0 w-full flex flex-col overflow-y-auto safe-area-top transition-all duration-500 relative ${zenMode ? 'justify-center' : ''}`}>
+          <StatsWidget />
           <Counter />
         </div>
 

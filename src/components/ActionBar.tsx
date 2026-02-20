@@ -144,25 +144,7 @@ export function ActionBar() {
                     </button>
                   </AchievementsView>
 
-                  <button
-                    onClick={() => useTasbeehStore.getState().setScreenOffMode(true)}
-                    className="flex flex-col items-center gap-2 p-3 rounded-2xl bg-secondary/30 hover:bg-secondary active:scale-95 transition-all"
-                  >
-                    <div className="w-10 h-10 rounded-full bg-neutral-500/10 flex items-center justify-center">
-                      <Power className="w-5 h-5 text-neutral-500" />
-                    </div>
-                    <span className="text-xs font-medium">OLED Mode</span>
-                  </button>
 
-                  <button
-                    onClick={() => window.open('/mini', 'MiniTasbeeh', 'width=350,height=500,menubar=no,toolbar=no,location=no,status=no')}
-                    className="flex flex-col items-center gap-2 p-3 rounded-2xl bg-secondary/30 hover:bg-secondary active:scale-95 transition-all"
-                  >
-                    <div className="w-10 h-10 rounded-full bg-blue-500/10 flex items-center justify-center">
-                      <AppWindow className="w-5 h-5 text-blue-500" />
-                    </div>
-                    <span className="text-xs font-medium">Mini Mode</span>
-                  </button>
                 </div>
                 <div className="text-center">
                   <p className="text-xs text-muted-foreground/50">More features coming soon</p>
@@ -258,15 +240,6 @@ export function ActionBar() {
           >
             <Power className="w-5 h-5 text-muted-foreground mb-1" />
             <span className="text-xs text-muted-foreground font-medium">OLED</span>
-          </motion.button>
-
-          <motion.button
-            whileTap={{ scale: 0.95 }}
-            onClick={() => window.open('/mini', 'MiniTasbeeh', 'width=350,height=500,menubar=no,toolbar=no,location=no,status=no')}
-            className="flex-1 flex flex-col items-center py-3 px-4 rounded-xl hover:bg-secondary transition-colors min-w-[70px] snap-center hover:scale-105"
-          >
-            <AppWindow className="w-5 h-5 text-muted-foreground mb-1" />
-            <span className="text-xs text-muted-foreground font-medium">Mini</span>
           </motion.button>
 
           <HistoryView>

@@ -420,7 +420,7 @@ export function Counter() {
         style={{ transform: `translateY(${verticalOffset}px)` }}
       >
         {/* NEW THEME CHANGER DROPDOWN */}
-        <div className="absolute top-4 left-4 z-50 flex gap-2">
+        <div className="absolute bottom-4 left-4 z-50 flex gap-2">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <button
@@ -444,7 +444,6 @@ export function Counter() {
                   { id: 'theme-glass', label: 'Glass', icon: '🧊' },
                   { id: 'theme-sunset', label: 'Sunset', icon: '🌅' },
                   { id: 'theme-forest', label: 'Forest', icon: '🌲' },
-                  { id: 'theme-oled', label: 'OLED', icon: '🖤' },
                 ].map((t) => (
                   <DropdownMenuItem
                     key={t.id}
