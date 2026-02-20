@@ -401,13 +401,7 @@ export function Counter() {
           </div>
         );
       case 'hadith':
-        if (hadithSlidePosition === 'hidden' && !isEditingLayout) return null;
-        const isSidePosition = hadithSlidePosition !== 'bottom' && hadithSlidePosition !== 'hidden';
-        return (
-          <div className={`hidden lg:block w-full max-w-sm mt-1 mb-1 px-3 sm:px-4 relative z-20 ${isSidePosition ? 'lg:flex' : ''}`}>
-            <HadithSlider dhikr={currentDhikr} />
-          </div>
-        );
+        return null;
       default:
         return null;
     }
