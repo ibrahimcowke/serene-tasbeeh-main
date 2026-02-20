@@ -14,6 +14,7 @@ import { RoutinesView } from "@/components/RoutinesView";
 import { GlobalStats } from "@/components/GlobalStats";
 import { ScreenOffMode } from "@/components/ScreenOffMode";
 import { getRecommendedTheme } from '@/lib/timeUtils';
+import { VisitorCounter } from '@/components/VisitorCounter';
 
 const Index = () => {
   const { zenMode, setZenMode, syncToCloud, theme, counterShape, autoThemeSwitch, setTheme } = useTasbeehStore();
@@ -102,13 +103,17 @@ const Index = () => {
           <span />
         </RoutinesView>
 
-        {/* Status Indicator (Top Right) */}
+        {/* Status Indicators (Top Area) */}
         {!zenMode && (
-          <div className="absolute top-4 right-4 z-50 pointer-events-none opacity-60 hover:opacity-100 transition-opacity">
-            <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-background/20 backdrop-blur-md border border-white/10 shadow-sm">
-              <span className="text-[10px] uppercase tracking-widest font-medium text-foreground/80">
-                {currentShapeLabel} <span className="text-foreground/40 mx-1">|</span> {currentThemeLabel}
-              </span>
+          <div className="absolute top-4 left-4 right-4 z-50 pointer-events-none flex items-center justify-between">
+            <VisitorCounter />
+
+            <div className="opacity-60 hover:opacity-100 transition-opacity">
+              <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-background/20 backdrop-blur-md border border-white/10 shadow-sm pointer-events-auto">
+                <span className="text-[10px] uppercase tracking-widest font-medium text-foreground/80">
+                  {currentShapeLabel} <span className="text-foreground/40 mx-1">|</span> {currentThemeLabel}
+                </span>
+              </div>
             </div>
           </div>
         )}
