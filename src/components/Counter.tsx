@@ -6,6 +6,7 @@ import { HadithSlider } from './HadithSlider';
 import { SoundManager } from '@/lib/sound';
 import { CounterVisuals } from './CounterVisuals';
 import { Palette, Shapes } from 'lucide-react';
+import { GlobalStats } from './GlobalStats';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -407,6 +408,12 @@ export function Counter() {
             <HadithSlider dhikr={currentDhikr} />
           </div>
         );
+      case 'global':
+        return (
+          <div className="w-full px-3 sm:px-4 mt-2 mb-2">
+            <GlobalStats />
+          </div>
+        );
       default:
         return null;
     }
@@ -531,8 +538,8 @@ export function Counter() {
 
         <div className={`relative flex flex-col items-center justify-center w-full max-w-7xl mx-auto z-10 ${layout !== 'ergonomic' ? 'my-auto' : ''}`}>
 
-          <Reorder.Group axis="y" values={layoutOrder || ['dhikr', 'counter', 'stats', 'hadith']} onReorder={setLayoutOrder} className="flex flex-col items-center w-full">
-            {(layoutOrder || ['dhikr', 'counter', 'stats', 'hadith']).map(item => (
+          <Reorder.Group axis="y" values={layoutOrder || ['dhikr', 'counter', 'stats', 'hadith', 'global']} onReorder={setLayoutOrder} className="flex flex-col items-center w-full">
+            {(layoutOrder || ['dhikr', 'counter', 'stats', 'hadith', 'global']).map(item => (
               <Reorder.Item key={item} value={item} dragListener={isEditingLayout} className={`w-full flex justify-center touch-none ${isEditingLayout ? 'cursor-grab active:cursor-grabbing border-2 border-dashed border-primary/30 rounded-xl p-4 my-2 hover:bg-primary/5 relative bg-background/50 backdrop-blur-sm' : ''}`}>
                 {isEditingLayout && (
                   <div className="absolute top-2 right-2 text-muted-foreground pointer-events-none">
