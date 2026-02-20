@@ -233,14 +233,6 @@ export function ActionBar() {
             </motion.button>
           </AchievementsView>
 
-          <motion.button
-            whileTap={{ scale: 0.95 }}
-            onClick={() => useTasbeehStore.getState().setScreenOffMode(true)}
-            className="flex-1 flex flex-col items-center py-3 px-4 rounded-xl hover:bg-secondary transition-colors min-w-[70px] snap-center hover:scale-105"
-          >
-            <Power className="w-5 h-5 text-muted-foreground mb-1" />
-            <span className="text-xs text-muted-foreground font-medium">OLED</span>
-          </motion.button>
 
           <HistoryView>
             <motion.button
