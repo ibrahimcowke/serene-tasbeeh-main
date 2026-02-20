@@ -538,8 +538,8 @@ export function Counter() {
               </Reorder.Item>
             ))}
           </Reorder.Group>
-          {/* Community Pulse — centered below counter */}
-          <div className="flex justify-center mt-3 mb-1">
+          {/* Community Pulse — bottom-left, avoids overlap with middle-left StatsWidget */}
+          <div className="absolute left-4 bottom-8 z-20">
             <GlobalStats />
           </div>
 
