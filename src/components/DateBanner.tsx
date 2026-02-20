@@ -68,7 +68,7 @@ export function DateBanner() {
                             Ayyam al-Bid
                         </span>
                     )}
-                    <span className="px-1.5 py-0.5 rounded-md bg-secondary/60 text-foreground/60 text-[10px] uppercase tracking-widest font-medium border border-border/40">
+                    <span className="hidden lg:inline-block px-1.5 py-0.5 rounded-md bg-secondary/60 text-foreground/60 text-[10px] uppercase tracking-widest font-medium border border-border/40">
                         {currentShapeLabel} <span className="opacity-40 mx-0.5">|</span> {currentThemeLabel}
                     </span>
                 </div>
