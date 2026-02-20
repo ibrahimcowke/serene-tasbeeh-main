@@ -10,6 +10,7 @@ import { ProgressView } from './ProgressView';
 import { RemindersView } from './RemindersView';
 import { RoutinesView } from './RoutinesView';
 import { AchievementsView } from './AchievementsView';
+import { ChallengesView } from './ChallengesView';
 import { Drawer, DrawerContent, DrawerTrigger } from '@/components/ui/drawer';
 import {
   AlertDialog,
@@ -90,13 +91,22 @@ export function ActionBar() {
               <div className="w-full max-w-sm mx-auto p-6">
                 <div className="grid grid-cols-4 gap-4 mb-4">
                   <ProgressView>
-                    <button className="flex flex-col items-center gap-2 p-3 rounded-2xl bg-secondary/30 hover:bg-secondary active:scale-95 transition-all col-span-2">
+                    <button className="flex flex-col items-center gap-2 p-3 rounded-2xl bg-secondary/30 hover:bg-secondary active:scale-95 transition-all">
                       <div className="w-10 h-10 rounded-full bg-blue-500/10 flex items-center justify-center">
                         <BarChart3 className="w-5 h-5 text-blue-500" />
                       </div>
                       <span className="text-xs font-medium">Progress</span>
                     </button>
                   </ProgressView>
+
+                  <ChallengesView>
+                    <button className="flex flex-col items-center gap-2 p-3 rounded-2xl bg-secondary/30 hover:bg-secondary active:scale-95 transition-all">
+                      <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
+                        <Target className="w-5 h-5 text-primary" />
+                      </div>
+                      <span className="text-xs font-medium">Global</span>
+                    </button>
+                  </ChallengesView>
 
                   <RemindersView>
                     <button className="flex flex-col items-center gap-2 p-3 rounded-2xl bg-secondary/30 hover:bg-secondary active:scale-95 transition-all">
@@ -200,6 +210,16 @@ export function ActionBar() {
               <span className="text-xs text-muted-foreground font-medium">Progress</span>
             </motion.button>
           </ProgressView>
+
+          <ChallengesView>
+            <motion.button
+              whileTap={{ scale: 0.95 }}
+              className="flex-1 flex flex-col items-center py-3 px-4 rounded-xl hover:bg-secondary transition-colors min-w-[70px] snap-center hover:scale-105"
+            >
+              <Target className="w-5 h-5 text-primary mb-1" />
+              <span className="text-xs text-primary font-medium">Global</span>
+            </motion.button>
+          </ChallengesView>
 
           <RemindersView>
             <motion.button

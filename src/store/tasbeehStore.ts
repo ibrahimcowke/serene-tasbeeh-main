@@ -683,10 +683,33 @@ export const useTasbeehStore = create<TasbeehState>()(
           };
         });
         
-        // Sync to global stats (fire and forget)
-        // In a real app, we'd debounce this or use a queue
+        // Sync to Supabase global stats (fire and forget)
         supabase.rpc('increment_global_count', { amount: 1 }).then(({ error }) => {
             if (error) console.error('Failed to update global stats:', error);
+        });
+
+        // Sync to Firebase Global Challenges (fire and forget)
+        const currentDhikrId = get().currentDhikr.id;
+        import('@/lib/firebase').then(({ database }) => {
+          import('firebase/database').then(({ ref, get: getDb, query, orderByChild, equalTo, increment, update }) => {
+             const challengesRef = query(ref(database, 'challenges'), orderByChild('isActive'), equalTo(true));
+             getDb(challengesRef).then((snapshot) => {
+               if (snapshot.exists()) {
+                 const updates: Record<string, any> = {};
+                 snapshot.forEach((childSnapshot) => {
+                   const challenge = childSnapshot.val();
+                   // If the active challenge matches the dhikr the user just did, and it's not expired
+                   if (challenge.dhikrId === currentDhikrId && new Date(challenge.endDate) >= new Date()) {
+                     updates[`challenges/${childSnapshot.key}/currentProgress`] = increment(1);
+                   }
+                 });
+                 
+                 if (Object.keys(updates).length > 0) {
+                   update(ref(database), updates).catch(console.error);
+                 }
+               }
+             }).catch(console.error);
+          });
         });
 
         get().updateStreak();
