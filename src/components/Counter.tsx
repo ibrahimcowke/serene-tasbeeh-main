@@ -546,11 +546,10 @@ export function Counter() {
           </Reorder.Group>
 
           {/* Community Pulse — always visible below the layout sections */}
-          {!zenMode && (
-            <div className="w-full px-3 sm:px-4 mt-4 mb-2">
-              <GlobalStats />
-            </div>
-          )}
+          <div className="w-full px-3 sm:px-4 mt-4 mb-2">
+            <GlobalStats />
+          </div>
+
 
           {/* Hadith Slider - Desktop Positioned */}
           {hadithSlidePosition !== 'hidden' && hadithSlidePosition !== 'bottom' && (
