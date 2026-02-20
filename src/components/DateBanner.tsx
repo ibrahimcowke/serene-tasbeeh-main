@@ -3,9 +3,13 @@ import { useEffect } from 'react';
 import { Moon, Calendar, Sparkles } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { toast } from 'sonner';
+import { themes, counterShapes } from '@/lib/constants';
 
 export function DateBanner() {
-    const { dateContext, updateDateContext, theme } = useTasbeehStore();
+    const { dateContext, updateDateContext, theme, counterShape } = useTasbeehStore();
+
+    const currentThemeLabel = themes.find(t => t.id === theme)?.label || 'Unknown';
+    const currentShapeLabel = counterShapes.find(s => s.id === counterShape)?.label || 'Unknown';
 
     useEffect(() => {
         updateDateContext();
@@ -57,7 +61,7 @@ export function DateBanner() {
                     </div>
                 </div>
 
-                {/* Special Badges */}
+                {/* Special Badges + Style Indicator */}
                 <div className="flex flex-wrap justify-center sm:justify-end gap-2 z-10">
                     {dateContext.isJummah && (
                         <span className="px-2 py-1 rounded-md bg-green-500/10 text-green-600 text-xs font-medium border border-green-500/20 flex items-center gap-1">
@@ -74,6 +78,11 @@ export function DateBanner() {
                             White Days (Ayyam al-Bid)
                         </span>
                     )}
+
+                    {/* Theme & Style Indicator */}
+                    <span className="px-2 py-1 rounded-md bg-secondary/60 text-foreground/70 text-[10px] uppercase tracking-widest font-medium border border-border/40">
+                        {currentShapeLabel} <span className="opacity-40 mx-0.5">|</span> {currentThemeLabel}
+                    </span>
                 </div>
             </div>
         </motion.div>
