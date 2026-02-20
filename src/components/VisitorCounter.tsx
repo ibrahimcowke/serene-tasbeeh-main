@@ -1,14 +1,15 @@
 import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Users } from 'lucide-react';
 import { supabase, isSupabaseConfigured } from '@/lib/supabase';
+import { database } from '@/lib/firebase';
+import { ref, onValue, set, onDisconnect, push, serverTimestamp, query, limitToLast } from 'firebase/database';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
 interface PresenceUser {
     user_id: string;
     email?: string;
     avatar_url?: string;
-    online_at: string;
+    online_at: any;
 }
 
 export function VisitorCounter() {
@@ -16,11 +17,10 @@ export function VisitorCounter() {
     const [liveCount, setLiveCount] = useState(0);
     const [totalUsers, setTotalUsers] = useState(0);
 
-    if (!isSupabaseConfigured) return null;
-
     useEffect(() => {
-        // Fetch total registered users
+        // 1. Fetch total registered users from Supabase
         const fetchTotalUsers = async () => {
+            if (!isSupabaseConfigured) return;
             const { count, error } = await supabase
                 .from('profiles')
                 .select('*', { count: 'exact', head: true });
@@ -32,39 +32,64 @@ export function VisitorCounter() {
 
         fetchTotalUsers();
 
-        const channel = supabase.channel('online-visitors', {
-            config: {
-                presence: {
-                    key: 'visitors',
-                },
-            },
+        // 2. Firebase Presence Logic
+        const connectedRef = ref(database, '.info/connected');
+        const presenceRef = ref(database, 'presence/visitors');
+
+        let myPresenceRef: any = null;
+
+        const unsubscribeConnected = onValue(connectedRef, async (snap) => {
+            if (snap.val() === true) {
+                // We're connected (or reconnected)!
+                const { data: { user } } = await supabase.auth.getUser();
+
+                // Add ourselves to presence list
+                myPresenceRef = push(presenceRef);
+
+                // When I disconnect, remove this device
+                onDisconnect(myPresenceRef).remove();
+
+                // Set initial data
+                set(myPresenceRef, {
+                    user_id: user?.id || 'anonymous',
+                    email: user?.email || '',
+                    avatar_url: user?.user_metadata?.avatar_url || '',
+                    online_at: serverTimestamp(),
+                });
+            }
         });
 
-        channel
-            .on('presence', { event: 'sync' }, () => {
-                const state = channel.presenceState();
-                const visitors = Object.values(state).flat() as unknown as PresenceUser[];
+        // 3. Sync Presence List
+        const presenceQuery = query(presenceRef);
+        const unsubscribePresence = onValue(presenceQuery, (snap) => {
+            const val = snap.val();
+            if (val) {
+                const visitors = Object.values(val) as PresenceUser[];
+                // Filter unique users for the avatar display
+                const uniqueVisitors = visitors.reduce((acc: PresenceUser[], current) => {
+                    const x = acc.find(item => item.user_id === current.user_id);
+                    if (!x && current.user_id !== 'anonymous') {
+                        return acc.concat([current]);
+                    } else {
+                        return acc;
+                    }
+                }, []);
 
-                // Filter unique users or treat anonymous as separate? 
-                // For now, let's just show unique user IDs + count anonymous separately if possible
-                // But Presence usually keys by specific ID.
-                setOnlineUsers(visitors.filter(u => u.user_id !== 'anonymous').slice(0, 5));
+                setOnlineUsers(uniqueVisitors.slice(0, 5));
                 setLiveCount(visitors.length);
-            })
-            .subscribe(async (status) => {
-                if (status === 'SUBSCRIBED') {
-                    const { data: { user } } = await supabase.auth.getUser();
-                    await channel.track({
-                        user_id: user?.id || 'anonymous',
-                        email: user?.email,
-                        avatar_url: user?.user_metadata?.avatar_url,
-                        online_at: new Date().toISOString(),
-                    });
-                }
-            });
+            } else {
+                setOnlineUsers([]);
+                setLiveCount(0);
+            }
+        });
 
         return () => {
-            channel.unsubscribe();
+            unsubscribeConnected();
+            unsubscribePresence();
+            if (myPresenceRef) {
+                // If we're manually unmounting (not a network disconnect), remove our presence
+                set(myPresenceRef, null);
+            }
         };
     }, []);
 
