@@ -684,11 +684,14 @@ export const useTasbeehStore = create<TasbeehState>()(
         });
         
         // Sync to Supabase global stats (fire and forget)
-        if (isSupabaseConfigured) {
-          supabase.rpc('increment_global_count', { amount: 1 }).then(({ error }) => {
-              if (error) console.error('Failed to update global stats:', error);
-          });
-        }
+        import('@/lib/firebase').then(({ database }) => {
+            import('firebase/database').then(({ ref, increment: fbIncrement, update }) => {
+                const globalStatsRef = ref(database, 'stats');
+                update(globalStatsRef, {
+                    global_count: fbIncrement(1)
+                }).catch(console.error);
+            });
+        });
 
         // Sync to Firebase Global Challenges (fire and forget)
         const currentDhikrId = get().currentDhikr.id;
@@ -700,8 +703,8 @@ export const useTasbeehStore = create<TasbeehState>()(
                  const updates: Record<string, any> = {};
                  snapshot.forEach((childSnapshot) => {
                    const challenge = childSnapshot.val();
-                   // If the active challenge matches the dhikr the user just did, and it's not expired
-                   if (challenge.dhikrId === currentDhikrId && new Date(challenge.endDate) >= new Date()) {
+                   // If the active challenge matches the dhikr the user just did
+                   if (challenge.dhikrId === currentDhikrId) {
                      updates[`challenges/${childSnapshot.key}/currentProgress`] = increment(1);
                    }
                  });

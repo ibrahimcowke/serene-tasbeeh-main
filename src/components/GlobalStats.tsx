@@ -1,47 +1,25 @@
-import { useTasbeehStore } from '@/store/tasbeehStore';
 import { useEffect, useState } from 'react';
-import { Globe, Users } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { supabase, isSupabaseConfigured } from '@/lib/supabase';
+import { Globe } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { database } from '@/lib/firebase';
+import { ref, onValue } from 'firebase/database';
 
 export function GlobalStats() {
-    const { globalCount, fetchGlobalCount } = useTasbeehStore();
-    const [liveCount, setLiveCount] = useState(globalCount);
+    const [liveCount, setLiveCount] = useState(0);
 
-    if (!isSupabaseConfigured) return null;
-
-    // Initial fetch
+    // Realtime subscription to Firebase
     useEffect(() => {
-        fetchGlobalCount();
-    }, []);
+        const statsRef = ref(database, 'stats/global_count');
+        const unsubscribe = onValue(statsRef, (snapshot) => {
+            const val = snapshot.val();
+            if (val) {
+                setLiveCount(Number(val));
+            } else {
+                setLiveCount(0);
+            }
+        });
 
-    // Sync local state with store state (which gets optimistic updates)
-    useEffect(() => {
-        setLiveCount(globalCount);
-    }, [globalCount]);
-
-    // Realtime subscription
-    useEffect(() => {
-        const channel = supabase
-            .channel('global_stats')
-            .on(
-                'postgres_changes',
-                {
-                    event: 'UPDATE',
-                    schema: 'public',
-                    table: 'global_stats',
-                    filter: 'id=eq.1'
-                },
-                (payload) => {
-                    const newTotal = payload.new.total_count;
-                    setLiveCount(Number(newTotal));
-                }
-            )
-            .subscribe();
-
-        return () => {
-            supabase.removeChannel(channel);
-        };
+        return () => unsubscribe();
     }, []);
 
     if (!liveCount || liveCount === 0) return null;

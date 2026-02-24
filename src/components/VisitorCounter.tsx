@@ -43,6 +43,12 @@ export function VisitorCounter() {
                 // We're connected (or reconnected)!
                 const { data: { user } } = await supabase.auth.getUser();
 
+                let deviceId = localStorage.getItem('visitor_device_id');
+                if (!deviceId) {
+                    deviceId = 'anon_' + Math.random().toString(36).substring(2, 15);
+                    localStorage.setItem('visitor_device_id', deviceId);
+                }
+
                 // Add ourselves to presence list
                 myPresenceRef = push(presenceRef);
 
@@ -51,7 +57,7 @@ export function VisitorCounter() {
 
                 // Set initial data
                 set(myPresenceRef, {
-                    user_id: user?.id || 'anonymous',
+                    user_id: user?.id || deviceId,
                     email: user?.email || '',
                     avatar_url: user?.user_metadata?.avatar_url || '',
                     online_at: serverTimestamp(),
@@ -65,18 +71,20 @@ export function VisitorCounter() {
             const val = snap.val();
             if (val) {
                 const visitors = Object.values(val) as PresenceUser[];
-                // Filter unique users for the avatar display
+                // Filter all unique physical users
                 const uniqueVisitors = visitors.reduce((acc: PresenceUser[], current) => {
                     const x = acc.find(item => item.user_id === current.user_id);
-                    if (!x && current.user_id !== 'anonymous') {
+                    if (!x) {
                         return acc.concat([current]);
-                    } else {
-                        return acc;
                     }
+                    return acc;
                 }, []);
 
-                setOnlineUsers(uniqueVisitors.slice(0, 5));
-                setLiveCount(visitors.length);
+                // For the avatar display, we might want to prioritize authenticated users
+                const avatarUsers = uniqueVisitors.filter(u => u.user_id && !u.user_id.startsWith('anon_'));
+
+                setOnlineUsers(avatarUsers.slice(0, 5));
+                setLiveCount(uniqueVisitors.length);
             } else {
                 setOnlineUsers([]);
                 setLiveCount(0);

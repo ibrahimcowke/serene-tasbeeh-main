@@ -34,11 +34,7 @@ export function GlobalChallenges() {
                     ...challenge
                 })) as GlobalChallenge[];
 
-                // Filter out expired challenges just in case they are still marked active
-                const now = new Date();
-                const validChallenges = challengesList.filter(c => new Date(c.endDate) >= now);
-
-                setChallenges(validChallenges);
+                setChallenges(challengesList);
             } else {
                 setChallenges([]);
             }
