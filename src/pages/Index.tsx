@@ -20,12 +20,10 @@ import { VisitorCounter } from '@/components/VisitorCounter';
 import { motion, AnimatePresence } from 'framer-motion';
 import { SidebarProvider, SidebarInset, SidebarTrigger } from '@/components/ui/sidebar';
 import { AppSidebar } from '@/components/AppSidebar';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 const Index = () => {
   const { zenMode, setZenMode, syncToCloud, theme, counterShape, autoThemeSwitch, setTheme, currentDhikr } = useTasbeehStore();
-
-  const currentThemeLabel = themes.find(t => t.id === theme)?.label || 'Unknown';
-  const currentShapeLabel = counterShapes.find(s => s.id === counterShape)?.label || 'Unknown';
 
   // Auto theme switch effect
   useEffect(() => {
@@ -99,13 +97,16 @@ const Index = () => {
             <WhatsNew />
             <BreathingGuide />
 
-            {/* Header - Minimalist & Pinned */}
-            <div className="shrink-0 z-50 px-4 pt-4 sm:pt-6 pt-safe flex flex-col xs:flex-row items-center justify-between gap-3 xs:gap-0 pointer-events-none">
-              <div className="pointer-events-auto scale-90 xs:scale-100 origin-left flex items-center gap-2">
-                {!zenMode && <SidebarTrigger />}
-                <VisitorCounter />
+            {/* Header - Optimized for Mobile & Desktop */}
+            <div className={`shrink-0 z-50 px-4 pt-4 sm:pt-6 pt-safe flex items-center justify-between gap-3 pointer-events-none ${zenMode ? 'opacity-0' : 'opacity-100'}`}>
+              <div className="pointer-events-auto flex items-center gap-2">
+                {!zenMode && <SidebarTrigger className="h-9 w-9" />}
+                <div className="scale-90 xs:scale-100 origin-left">
+                  <VisitorCounter />
+                </div>
               </div>
-              <div className="pointer-events-auto scale-90 xs:scale-100 origin-right">
+              <div className="pointer-events-auto scale-90 xs:scale-100 origin-right flex items-center">
+                {/* On very small screens, the DateBanner might be too wide, but we'll trust its internal responsiveness */}
                 <DateBanner />
               </div>
             </div>
@@ -114,15 +115,15 @@ const Index = () => {
               <span />
             </RoutinesView>
 
-            {/* Dashboard Grid Expansion */}
-            <div className={`flex-1 min-h-0 w-full overflow-y-auto px-4 sm:px-6 md:px-8 pb-40 pt-2 custom-scrollbar transition-all duration-500 pb-safe ${zenMode ? 'flex items-center justify-center pt-0 pb-0' : ''}`}>
+            {/* Main Content Area */}
+            <div className={`flex-1 min-h-0 w-full overflow-y-auto px-4 sm:px-6 md:px-8 pb-12 pt-2 custom-scrollbar transition-all duration-500 pb-safe ${zenMode ? 'flex items-center justify-center pt-0 pb-0' : ''}`}>
               <div className={`max-w-7xl mx-auto w-full ${zenMode ? 'max-w-4xl' : ''}`}>
                 {zenMode ? (
                   <Counter />
                 ) : (
                   <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
 
-                    {/* Left Column: Personal Stats & Widgets */}
+                    {/* Left Column: Personal Stats (Desktop Only) */}
                     <motion.div
                       initial={{ opacity: 0, x: -20 }}
                       animate={{ opacity: 1, x: 0 }}
@@ -138,7 +139,7 @@ const Index = () => {
                       </div>
                     </motion.div>
 
-                    {/* Center Column: The Heart (Counter) */}
+                    {/* Center Column: The Counter (Heart of the App) */}
                     <div className="lg:col-span-6 flex flex-col items-center">
                       <div className="w-full max-w-xl">
                         <Counter />
@@ -150,24 +151,41 @@ const Index = () => {
                         </div>
                       )}
 
-                      {/* Mobile-only visible widgets (stacked) */}
-                      <div className="w-full space-y-4 mt-8 lg:hidden">
-                        <div className="bg-card/30 backdrop-blur-xl border border-border/50 rounded-3xl p-4">
-                          <h2 className="text-xs font-bold uppercase tracking-widest text-muted-foreground mb-4">Community Pulse</h2>
-                          <GlobalStats />
-                        </div>
-                        <div className="bg-card/30 backdrop-blur-xl border border-border/50 rounded-3xl p-4">
-                          <h2 className="text-xs font-bold uppercase tracking-widest text-muted-foreground mb-4">Active Challenges</h2>
-                          <GlobalChallenges />
-                        </div>
-                        <div className="bg-card/30 backdrop-blur-xl border border-border/50 rounded-3xl p-4">
-                          <h2 className="text-xs font-bold uppercase tracking-widest text-muted-foreground mb-4">My Stats</h2>
-                          <StatsWidget />
-                        </div>
+                      {/* Mobile-only Optimized Widgets (Tabbed Layout) */}
+                      <div className="w-full mt-8 lg:hidden">
+                        <Tabs defaultValue="stats" className="w-full">
+                          <TabsList className="grid w-full grid-cols-3 bg-card/30 backdrop-blur-xl border border-border/50 rounded-2xl h-11 p-1">
+                            <TabsTrigger value="stats" className="rounded-xl text-xs font-semibold data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">My Growth</TabsTrigger>
+                            <TabsTrigger value="community" className="rounded-xl text-xs font-semibold data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">Live</TabsTrigger>
+                            <TabsTrigger value="challenges" className="rounded-xl text-xs font-semibold data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">Goals</TabsTrigger>
+                          </TabsList>
+
+                          <div className="mt-4">
+                            <TabsContent value="stats" className="animate-in fade-in slide-in-from-bottom-2 duration-300">
+                              <div className="bg-card/30 backdrop-blur-xl border border-border/50 rounded-3xl p-4">
+                                <StatsWidget />
+                              </div>
+                            </TabsContent>
+
+                            <TabsContent value="community" className="animate-in fade-in slide-in-from-bottom-2 duration-300">
+                              <div className="bg-card/30 backdrop-blur-xl border border-border/50 rounded-3xl p-6">
+                                <h2 className="text-xs font-bold uppercase tracking-widest text-muted-foreground mb-4 text-center">Community Pulse</h2>
+                                <GlobalStats />
+                              </div>
+                            </TabsContent>
+
+                            <TabsContent value="challenges" className="animate-in fade-in slide-in-from-bottom-2 duration-300">
+                              <div className="bg-card/30 backdrop-blur-xl border border-border/50 rounded-3xl p-4">
+                                <h2 className="text-xs font-bold uppercase tracking-widest text-muted-foreground mb-4 px-2">Global Challenges</h2>
+                                <GlobalChallenges />
+                              </div>
+                            </TabsContent>
+                          </div>
+                        </Tabs>
                       </div>
                     </div>
 
-                    {/* Right Column: Community & Challenges */}
+                    {/* Right Column: Global Stats (Desktop Only) */}
                     <motion.div
                       initial={{ opacity: 0, x: 20 }}
                       animate={{ opacity: 1, x: 0 }}
@@ -198,7 +216,7 @@ const Index = () => {
             {zenMode && (
               <button
                 onClick={() => setZenMode(false)}
-                className="absolute bottom-8 left-1/2 -translate-x-1/2 bg-foreground/5 hover:bg-foreground/10 backdrop-blur-xl border border-foreground/10 px-8 py-3 rounded-full text-foreground/70 hover:text-foreground transition-all text-sm font-medium z-50 animate-fade-in-up flex items-center gap-2"
+                className="absolute bottom-12 left-1/2 -translate-x-1/2 bg-foreground/5 hover:bg-foreground/10 backdrop-blur-xl border border-foreground/10 px-8 py-3 rounded-full text-foreground/70 hover:text-foreground transition-all text-sm font-medium z-50 animate-fade-in-up flex items-center gap-2"
               >
                 <span>Exit Zen Mode</span>
               </button>

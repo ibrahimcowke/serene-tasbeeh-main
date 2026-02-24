@@ -90,57 +90,55 @@ export function GlobalChallenges() {
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: index * 0.1 }}
-                            className="relative overflow-hidden bg-card border border-border/50 rounded-2xl p-4 sm:p-5 shadow-sm group"
+                            className="relative overflow-hidden bg-card border border-border/50 rounded-2xl p-3 sm:p-5 shadow-sm group"
                         >
                             {/* Decorative background glow based on active state */}
                             {isParticipating && (
                                 <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full blur-3xl -mr-16 -mt-16 pointer-events-none" />
                             )}
 
-                            <div className="flex justify-between items-start mb-2 relative z-10">
-                                <div>
-                                    <h3 className="font-semibold text-foreground text-base sm:text-lg tracking-tight">
+                            <div className="flex justify-between items-start mb-1.5 relative z-10">
+                                <div className="min-w-0">
+                                    <h3 className="font-semibold text-foreground text-sm sm:text-lg tracking-tight truncate">
                                         {challenge.title}
                                     </h3>
-                                    <div className="flex items-center gap-1.5 mt-1 text-xs text-muted-foreground font-medium">
-                                        <Users className="w-3.5 h-3.5 text-primary/70" />
+                                    <div className="flex items-center gap-1 mt-0.5 text-[10px] text-muted-foreground font-medium uppercase tracking-wider">
+                                        <Users className="w-3 h-3 text-primary/70" />
                                         <span>Community Goal</span>
                                     </div>
                                 </div>
 
                                 {isParticipating && (
-                                    <span className="bg-primary/10 text-primary text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider">
-                                        Active Mode
+                                    <span className="shrink-0 bg-primary/10 text-primary text-[9px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider">
+                                        Active
                                     </span>
                                 )}
                             </div>
 
-                            <p className="text-sm text-muted-foreground/80 leading-relaxed mb-4 relative z-10 pr-4">
+                            <p className="text-xs sm:text-sm text-muted-foreground/80 leading-relaxed mb-3 relative z-10 pr-2 line-clamp-2 sm:line-clamp-none">
                                 {challenge.description}
-                                {dhikr && <span className="block mt-1 font-arabic text-right text-lg text-foreground/70">{dhikr.arabic}</span>}
                             </p>
 
                             {/* Progress Bar Area */}
-                            <div className="space-y-2 mb-5 relative z-10">
-                                <div className="flex justify-between text-xs font-medium">
+                            <div className="space-y-1.5 mb-3.5 relative z-10">
+                                <div className="flex justify-between text-[10px] sm:text-xs font-medium">
                                     <span className="text-foreground">{challenge.currentProgress.toLocaleString()}</span>
                                     <span className="text-muted-foreground">/ {challenge.target.toLocaleString()}</span>
                                 </div>
 
-                                <div className="h-2 w-full bg-secondary/50 rounded-full overflow-hidden">
+                                <div className="h-1.5 w-full bg-secondary/50 rounded-full overflow-hidden">
                                     <motion.div
                                         className="h-full bg-gradient-to-r from-primary/80 to-primary rounded-full relative"
                                         initial={{ width: 0 }}
                                         animate={{ width: `${progressPercentage}%` }}
                                         transition={{ duration: 1, ease: 'easeOut' }}
                                     >
-                                        {/* Shimmer effect on progress bar */}
                                         <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full animate-[shimmer_2s_infinite]" />
                                     </motion.div>
                                 </div>
 
-                                <div className="flex justify-end text-[10px] text-muted-foreground font-medium">
-                                    {progressPercentage.toFixed(1)}% Completed
+                                <div className="flex justify-end text-[9px] text-muted-foreground font-medium">
+                                    {progressPercentage.toFixed(1)}%
                                 </div>
                             </div>
 
@@ -148,15 +146,15 @@ export function GlobalChallenges() {
                             <button
                                 onClick={() => handleContribute(challenge)}
                                 disabled={isParticipating}
-                                className={`w-full relative z-10 flex items-center justify-center gap-2 py-2.5 rounded-xl font-medium text-sm transition-all
+                                className={`w-full relative z-10 flex items-center justify-center gap-2 py-2 rounded-lg font-semibold text-xs transition-all
                   ${isParticipating
                                         ? 'bg-secondary/50 text-muted-foreground cursor-default border border-transparent'
                                         : 'bg-primary/10 text-primary hover:bg-primary hover:text-primary-foreground active:scale-[0.98]'
                                     }
                 `}
                             >
-                                {isParticipating ? 'Currently Contributing' : 'Contribute Now'}
-                                {!isParticipating && <ArrowRight className="w-4 h-4 ml-1" />}
+                                {isParticipating ? 'Active Contribution' : 'Contribute Now'}
+                                {!isParticipating && <ArrowRight className="w-3.5 h-3.5 ml-1" />}
                             </button>
                         </motion.div>
                     );
