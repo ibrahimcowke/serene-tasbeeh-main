@@ -685,11 +685,32 @@ export const useTasbeehStore = create<TasbeehState>()(
         
         // Sync to Supabase global stats (fire and forget)
         import('@/lib/firebase').then(({ database }) => {
-            import('firebase/database').then(({ ref, increment: fbIncrement, update }) => {
+            import('firebase/database').then(({ ref, increment: fbIncrement, update, serverTimestamp }) => {
                 const globalStatsRef = ref(database, 'stats');
                 update(globalStatsRef, {
                     global_count: fbIncrement(1)
                 }).catch(console.error);
+
+                // Live Community Sync: Update our specific presence node
+                const deviceId = localStorage.getItem('visitor_device_id');
+                if (deviceId) {
+                    const myPresenceRef = ref(database, `presence/visitors/${deviceId}`);
+                    update(myPresenceRef, {
+                        last_dhikr_id: get().currentDhikr.id,
+                        online_at: serverTimestamp()
+                    }).catch(() => {});
+                }
+
+                // Milestone Pulse: Trigger a global animation on key numbers
+                const currentCount = get().currentCount + 1;
+                if (currentCount > 0 && (currentCount % 33 === 0 || currentCount % 100 === 0)) {
+                    const pulseRef = ref(database, 'events/global/pulse');
+                    update(pulseRef, {
+                        type: 'milestone',
+                        count: currentCount,
+                        timestamp: serverTimestamp()
+                    }).catch(() => {});
+                }
             });
         });
 

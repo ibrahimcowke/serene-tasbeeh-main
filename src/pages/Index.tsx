@@ -15,6 +15,7 @@ import { GlobalStats } from "@/components/GlobalStats";
 import { HadithSlider } from "@/components/HadithSlider";
 import { HubDashboard } from '@/components/HubDashboard';
 import { MinimalDashboard } from '@/components/MinimalDashboard';
+import { DhikrPulse } from "@/components/DhikrPulse";
 
 import { ScreenOffMode } from "@/components/ScreenOffMode";
 import { getRecommendedTheme } from '@/lib/timeUtils';
@@ -196,6 +197,7 @@ const Index = () => {
 
   return (
     <ThemeProvider>
+      <DhikrPulse />
       <SidebarProvider defaultOpen={false}>
         <AppSidebar />
         <SidebarInset>
