@@ -351,30 +351,13 @@ export function Counter() {
               />
             </div>
 
-            {/* Routine Next Step Button */}
-            {sessionMode.type === 'routine' && currentCount >= targetCount && !sessionMode.isComplete && (
-              <motion.button
-                initial={{ opacity: 0, y: 10, scale: 0.9 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                whileTap={{ scale: 0.95 }}
-                onClick={(e) => {
-                  e.stopPropagation(); // Prevent counter increment
-                  nextRoutineStep();
-                }}
-                className="mt-6 px-6 py-3 bg-primary text-primary-foreground rounded-full font-medium shadow-lg shadow-primary/20 flex items-center gap-2 animate-in fade-in slide-in-from-bottom-4"
-              >
-                <span>Next Dhikr</span>
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14" /><path d="m12 5 7 7-7 7" /></svg>
-              </motion.button>
-            )}
+            {/* Routine Next Step Button Removed */}
           </div>
         );
       case 'stats':
         return (
           <div className={`mt-0 sm:mt-1 text-center transition-opacity duration-300 ${layout === 'focus' ? 'opacity-50 hover:opacity-100' : ''}`}>
-            <div className="mb-1">
-              <SessionTimer />
-            </div>
+            {/* SessionTimer removed */}
             <p className="text-xs xs:text-sm text-muted-foreground">
               {currentCount} / {getCurrentTarget() > 0 ? getCurrentTarget() : '∞'}
             </p>
