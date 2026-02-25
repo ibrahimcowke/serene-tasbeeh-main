@@ -16,6 +16,8 @@ import { HadithSlider } from "@/components/HadithSlider";
 import { HubDashboard } from '@/components/HubDashboard';
 import { MinimalDashboard } from '@/components/MinimalDashboard';
 import { DhikrPulse } from "@/components/DhikrPulse";
+import { JoinNotifier } from "@/components/JoinNotifier";
+import { NotificationCenter } from "@/components/NotificationCenter";
 
 import { ScreenOffMode } from "@/components/ScreenOffMode";
 import { getRecommendedTheme } from '@/lib/timeUtils';
@@ -198,6 +200,7 @@ const Index = () => {
   return (
     <ThemeProvider>
       <DhikrPulse />
+      <JoinNotifier />
       <SidebarProvider defaultOpen={false}>
         <AppSidebar />
         <SidebarInset>
@@ -217,6 +220,8 @@ const Index = () => {
                     <div className="scale-75 xs:scale-90 origin-left">
                       <VisitorCounter />
                     </div>
+                    <div className="h-4 w-px bg-white/10" />
+                    <NotificationCenter />
                   </div>
                 </div>
 

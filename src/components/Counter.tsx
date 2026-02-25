@@ -597,25 +597,7 @@ export function Counter() {
                 )}
               </div>
 
-              {/* Dhikr Selector */}
-              <div className="mb-6">
-                <p className="text-sm font-medium text-foreground mb-3">Select next dhikr:</p>
-                <div className="max-h-48 overflow-y-auto custom-scrollbar bg-secondary/20 rounded-xl p-2 space-y-1">
-                  {defaultDhikrs.map((dhikr) => (
-                    <button
-                      key={dhikr.id}
-                      onClick={() => useTasbeehStore.getState().setDhikr(dhikr)}
-                      className={`w-full text-left p-3 rounded-lg transition-all duration-200 ${currentDhikr.id === dhikr.id
-                        ? 'bg-primary text-primary-foreground shadow-md'
-                        : 'bg-background/50 hover:bg-background/80 text-foreground'
-                        }`}
-                    >
-                      <p className="font-arabic text-base mb-1">{dhikr.arabic}</p>
-                      <p className="text-xs opacity-80">{dhikr.transliteration}</p>
-                    </button>
-                  ))}
-                </div>
-              </div>
+              {/* Next Dhikr Selector Removed as per user request */}
 
               <button
                 onClick={handleDismissSessionComplete}

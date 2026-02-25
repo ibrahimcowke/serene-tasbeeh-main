@@ -7,7 +7,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useTasbeehStore } from '@/store/tasbeehStore';
 import { Heart, Users, Activity } from 'lucide-react';
 import { toast } from 'sonner';
-
+import { getMuslimAvatarUrl } from '@/lib/avatarUtils';
 interface PresenceData {
     user_id: string;
     email?: string;
@@ -20,6 +20,7 @@ export function VisitorCounter() {
     const { currentDhikr } = useTasbeehStore();
     const [visitors, setVisitors] = useState<PresenceData[]>([]);
     const [totalUsers, setTotalUsers] = useState(0);
+    const [expanded, setExpanded] = useState(false);
 
     useEffect(() => {
         const fetchTotalUsers = async () => {
@@ -105,7 +106,8 @@ export function VisitorCounter() {
         return null;
     }, [uniqueVisitors, currentDhikr]);
 
-    const avatarUsers = uniqueVisitors.filter(u => u.user_id && !u.user_id.startsWith('anon_'));
+    // Show avatars for ALL users, including anonymous ones, using the new Muslim avatar generator
+    const avatarUsers = uniqueVisitors;
     const liveCount = uniqueVisitors.length;
 
     const sendSalam = () => {
@@ -124,93 +126,121 @@ export function VisitorCounter() {
         <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="flex flex-col gap-2"
+            className="flex flex-col gap-2 cursor-pointer"
+            onClick={() => setExpanded(!expanded)}
         >
-            <div className="flex items-center gap-4 px-4 py-2 rounded-2xl bg-card/30 backdrop-blur-2xl border border-white/10 shadow-xl group transition-all duration-500">
-                <div className="flex -space-x-2.5">
-                    <AnimatePresence mode="popLayout">
-                        {avatarUsers.slice(0, 3).map((user, idx) => (
-                            <motion.div
-                                key={user.user_id}
-                                initial={{ opacity: 0, scale: 0.5 }}
-                                animate={{ opacity: 1, scale: 1 }}
-                                className="relative"
-                            >
-                                <Avatar className="w-7 h-7 border-2 border-background shadow-md">
-                                    {user.avatar_url ? (
-                                        <AvatarImage src={user.avatar_url} />
-                                    ) : (
-                                        <AvatarFallback className="text-[10px] bg-primary/20 text-primary font-bold">
-                                            {user.email?.charAt(0).toUpperCase() || '?'}
-                                        </AvatarFallback>
-                                    )}
-                                </Avatar>
-                                <span className="absolute bottom-0 right-0 w-2 h-2 bg-green-500 border-2 border-background rounded-full"></span>
-                            </motion.div>
-                        ))}
-                    </AnimatePresence>
-
-                    {liveCount > avatarUsers.length && (
-                        <div className="w-7 h-7 rounded-full bg-secondary/80 backdrop-blur-md border-2 border-background flex items-center justify-center text-[9px] font-bold text-muted-foreground z-10">
-                            +{liveCount - Math.min(avatarUsers.length, 3)}
-                        </div>
-                    )}
-                </div>
-
-                <div className="flex items-center gap-4 h-5 divide-x divide-white/15">
-                    <div className="flex items-center gap-2">
-                        <div className="relative flex h-2 w-2">
-                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400/60 opacity-75"></span>
-                            <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
-                        </div>
-                        <div className="flex flex-col -space-y-0.5">
-                            <span className="text-[11px] font-bold text-foreground/90 leading-none">
-                                {liveCount}
+            <div className={`flex items-center rounded-2xl bg-card/30 backdrop-blur-2xl border border-white/10 shadow-xl group transition-all duration-500 overflow-hidden ${expanded ? 'px-4 py-2 gap-4' : 'px-3 py-1.5 gap-2'}`}>
+                {!expanded ? (
+                    // Compact View
+                    <div className="flex items-center gap-2 justify-center">
+                        <Users className="w-3.5 h-3.5 text-primary/80" />
+                        <div className="flex items-center gap-1.5">
+                            <span className="relative flex h-1.5 w-1.5">
+                                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                                <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-green-500"></span>
                             </span>
-                            <span className="text-[8px] uppercase tracking-tighter text-muted-foreground font-semibold">
-                                Live
-                            </span>
+                            <span className="text-[11px] font-bold text-foreground/90">{liveCount}</span>
                         </div>
                     </div>
+                ) : (
+                    // Expanded View
+                    <AnimatePresence mode="popLayout">
+                        <motion.div
+                            initial={{ opacity: 0, width: 0 }}
+                            animate={{ opacity: 1, width: 'auto' }}
+                            exit={{ opacity: 0, width: 0 }}
+                            className="flex items-center gap-4"
+                        >
+                            <div className="flex -space-x-2.5">
+                                <AnimatePresence mode="popLayout">
+                                    {avatarUsers.slice(0, 3).map((user, idx) => (
+                                        <motion.div
+                                            key={user.user_id}
+                                            initial={{ opacity: 0, scale: 0.5 }}
+                                            animate={{ opacity: 1, scale: 1 }}
+                                            className="relative"
+                                        >
+                                            <Avatar className="w-7 h-7 border-2 border-background shadow-md">
+                                                {(user.avatar_url || getMuslimAvatarUrl(user.user_id)) ? (
+                                                    <AvatarImage src={user.avatar_url || getMuslimAvatarUrl(user.user_id)} />
+                                                ) : (
+                                                    <AvatarFallback className="text-[10px] bg-primary/20 text-primary font-bold">
+                                                        {user.email?.charAt(0).toUpperCase() || '?'}
+                                                    </AvatarFallback>
+                                                )}
+                                            </Avatar>
+                                            <span className="absolute bottom-0 right-0 w-2 h-2 bg-green-500 border-2 border-background rounded-full"></span>
+                                        </motion.div>
+                                    ))}
+                                </AnimatePresence>
 
-                    {totalUsers > 0 && (
-                        <div className="pl-4 flex items-center gap-2">
-                            <Users className="w-3 h-3 text-primary/60" />
-                            <div className="flex flex-col -space-y-0.5">
-                                <span className="text-[11px] font-bold text-foreground/80 leading-none">
-                                    {totalUsers > 999 ? `${(totalUsers / 1000).toFixed(1)}k` : totalUsers}
-                                </span>
-                                <span className="text-[8px] uppercase tracking-tighter text-muted-foreground font-semibold">
-                                    Members
-                                </span>
+                                {liveCount > avatarUsers.length && (
+                                    <div className="w-7 h-7 rounded-full bg-secondary/80 backdrop-blur-md border-2 border-background flex items-center justify-center text-[9px] font-bold text-muted-foreground z-10">
+                                        +{liveCount - Math.min(avatarUsers.length, 3)}
+                                    </div>
+                                )}
                             </div>
-                        </div>
-                    )}
-                </div>
 
-                <div className="h-4 w-px bg-white/10 mx-1" />
+                            <div className="flex items-center gap-4 h-5 divide-x divide-white/15">
+                                <div className="flex items-center gap-2">
+                                    <div className="relative flex h-2 w-2">
+                                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400/60 opacity-75"></span>
+                                        <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+                                    </div>
+                                    <div className="flex flex-col -space-y-0.5">
+                                        <span className="text-[11px] font-bold text-foreground/90 leading-none">
+                                            {liveCount}
+                                        </span>
+                                        <span className="text-[8px] uppercase tracking-tighter text-muted-foreground font-semibold">
+                                            Live
+                                        </span>
+                                    </div>
+                                </div>
 
-                <button
-                    onClick={sendSalam}
-                    className="p-1.5 rounded-full hover:bg-primary/10 text-primary/60 hover:text-primary transition-colors group/heart"
-                    title="Send Salam to all online users"
-                >
-                    <Heart className="w-4 h-4 group-hover/heart:fill-primary" />
-                </button>
+                                {totalUsers > 0 && (
+                                    <div className="pl-4 flex items-center gap-2">
+                                        <Users className="w-3 h-3 text-primary/60" />
+                                        <div className="flex flex-col -space-y-0.5">
+                                            <span className="text-[11px] font-bold text-foreground/80 leading-none">
+                                                {totalUsers > 999 ? `${(totalUsers / 1000).toFixed(1)}k` : totalUsers}
+                                            </span>
+                                            <span className="text-[8px] uppercase tracking-tighter text-muted-foreground font-semibold">
+                                                Members
+                                            </span>
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
+
+                            <div className="h-4 w-px bg-white/10 mx-1" />
+
+                            <button
+                                onClick={(e) => { e.stopPropagation(); sendSalam(); }}
+                                className="p-1.5 rounded-full hover:bg-primary/10 text-primary/60 hover:text-primary transition-colors group/heart"
+                                title="Send Salam to all online users"
+                            >
+                                <Heart className="w-4 h-4 group-hover/heart:fill-primary" />
+                            </button>
+                        </motion.div>
+                    </AnimatePresence>
+                )}
             </div>
 
-            {activityInsight && (
-                <motion.div
-                    initial={{ opacity: 0, y: -5 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="flex items-center gap-2 px-3 py-1 rounded-full bg-primary/5 border border-primary/10 self-center"
-                >
-                    <Activity className="w-3 h-3 text-primary/60 animate-pulse" />
-                    <span className="text-[9px] font-medium text-primary/80 uppercase tracking-wider">
-                        {activityInsight}
-                    </span>
-                </motion.div>
-            )}
+            <AnimatePresence>
+                {expanded && activityInsight && (
+                    <motion.div
+                        initial={{ opacity: 0, y: -5, height: 0 }}
+                        animate={{ opacity: 1, y: 0, height: 'auto' }}
+                        exit={{ opacity: 0, y: -5, height: 0 }}
+                        className="flex items-center gap-2 px-3 py-1 rounded-full bg-primary/5 border border-primary/10 self-center overflow-hidden"
+                    >
+                        <Activity className="w-3 h-3 text-primary/60 animate-pulse" />
+                        <span className="text-[9px] font-medium text-primary/80 uppercase tracking-wider">
+                            {activityInsight}
+                        </span>
+                    </motion.div>
+                )}
+            </AnimatePresence>
         </motion.div>
     );
 }

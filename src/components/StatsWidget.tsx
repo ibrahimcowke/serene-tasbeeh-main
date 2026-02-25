@@ -4,7 +4,11 @@ import { Flame, Target, Trophy, TrendingUp, Sparkles } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { getNextLevel } from '@/data/achievements';
 
-export function StatsWidget() {
+interface StatsWidgetProps {
+    mini?: boolean;
+}
+
+export function StatsWidget({ mini }: StatsWidgetProps) {
     const { dailyRecords, dailyGoal, streakDays, zenMode, totalAllTime } = useTasbeehStore();
     const [todayCount, setTodayCount] = useState(0);
 
@@ -19,6 +23,21 @@ export function StatsWidget() {
     const currentTotal = totalAllTime || 0;
     const currentLevel = getNextLevel(currentTotal);
     const progress = Math.min((todayCount / (dailyGoal || 100)) * 100, 100);
+
+    if (mini) {
+        return (
+            <div className="flex flex-col items-center gap-1">
+                <div className="flex items-center gap-1.5">
+                    <Flame className={`w-3 h-3 ${streakDays > 0 ? 'text-orange-500 fill-orange-500' : 'text-muted-foreground'}`} />
+                    <span className="text-[11px] font-bold text-foreground">{streakDays}</span>
+                </div>
+                <div className="flex items-center gap-1.5">
+                    <Target className="w-3 h-3 text-blue-500" />
+                    <span className="text-[11px] font-bold text-foreground">{todayCount}</span>
+                </div>
+            </div>
+        );
+    }
 
     return (
         <motion.div
