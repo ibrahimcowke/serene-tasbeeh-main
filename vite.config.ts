@@ -16,6 +16,7 @@ export default defineConfig(({ mode }) => ({
     VitePWA({
       devOptions: {
         enabled: true,
+        type: "module",
       },
       strategies: "injectManifest",
       srcDir: "src",

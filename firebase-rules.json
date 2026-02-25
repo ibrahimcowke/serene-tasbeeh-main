@@ -1,0 +1,20 @@
+{
+    "rules": {
+        "presence": {
+            ".read": "true",
+            ".write": "true"
+        },
+        "events": {
+            ".read": "true",
+            ".write": "true"
+        },
+        "stats": {
+            ".read": "true",
+            ".write": "true"
+        },
+        "challenges": {
+            ".read": "true",
+            ".write": "true"
+        }
+    }
+}

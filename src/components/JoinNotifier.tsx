@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react';
 import { database } from '@/lib/firebase';
-import { ref, onChildAdded, serverTimestamp, set } from 'firebase/database';
+import { ref, onChildAdded, serverTimestamp, set, onValue } from 'firebase/database';
 import { toast } from 'sonner';
 import { Users, Swords } from 'lucide-react';
 import { useTasbeehStore } from '@/store/tasbeehStore';
@@ -15,13 +15,15 @@ export function JoinNotifier() {
     useEffect(() => {
         const presenceRef = ref(database, 'presence/visitors');
 
-        // Timer to skip initial batch of users
-        const timer = setTimeout(() => {
-            isFirstLoad.current = false;
-        }, 3000);
+        let initialDataLoaded = false;
+
+        // Listen once to establish the initial state and skip legacy notifications
+        onValue(presenceRef, () => {
+            initialDataLoaded = true;
+        }, { onlyOnce: true });
 
         const unsubscribe = onChildAdded(presenceRef, (snapshot) => {
-            if (isFirstLoad.current) return;
+            if (!initialDataLoaded) return;
 
             const user = snapshot.val();
             // Don't notify if it's me
@@ -99,7 +101,6 @@ export function JoinNotifier() {
 
         return () => {
             unsubscribe();
-            clearTimeout(timer);
         };
     }, []);
 

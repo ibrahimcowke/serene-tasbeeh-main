@@ -13,14 +13,14 @@ export function DhikrPulse() {
     useEffect(() => {
         const pulseRef = ref(database, 'events/global/pulse');
 
-        // Timer to skip initial batch of old pulses
-        const timer = setTimeout(() => {
-            isFirstLoad.current = false;
-        }, 2000);
+        let initialDataLoaded = false;
 
         // Listen for new pulses
         const unsubscribe = onValue(pulseRef, (snapshot) => {
-            if (isFirstLoad.current) return;
+            if (!initialDataLoaded) {
+                initialDataLoaded = true;
+                return;
+            }
             const val = snapshot.val();
             if (val) {
                 // Each time the value changes, we trigger a new local pulse animation
@@ -58,7 +58,6 @@ export function DhikrPulse() {
 
         return () => {
             unsubscribe();
-            clearTimeout(timer);
         };
     }, []);
 
