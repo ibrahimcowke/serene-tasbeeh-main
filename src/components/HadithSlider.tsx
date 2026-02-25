@@ -39,14 +39,14 @@ export function HadithSlider({ dhikr }: { dhikr: Dhikr }) {
 
     return (
         <div
-            className="w-full max-w-sm mx-auto md:mx-0 min-h-[140px] sm:min-h-[160px] bg-card/40 hover:bg-card/60 backdrop-blur-md rounded-2xl border border-border/40 p-4 sm:p-5 flex flex-col justify-center relative overflow-hidden transition-colors duration-300 group"
+            className="w-full max-w-sm mx-auto md:mx-0 min-h-[110px] xs:min-h-[130px] sm:min-h-[160px] bg-card/40 hover:bg-card/60 backdrop-blur-md rounded-2xl border border-border/40 p-3 xs:p-4 sm:p-5 flex flex-col justify-center relative overflow-hidden transition-colors duration-300 group"
             onMouseEnter={() => setIsPaused(true)}
             onMouseLeave={() => setIsPaused(false)}
         >
 
             {/* Background Decoration */}
             <div className={`absolute top-0 ${isArabic ? 'left-0' : 'right-0'} p-3 opacity-10 group-hover:opacity-20 transition-opacity`}>
-                <svg width="60" height="60" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="text-primary">
+                <svg width="50" height="50" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="text-primary">
                     <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 17.5228 12 22Z" stroke="currentColor" strokeWidth="1" />
                     <path d="M8 12L11 15L16 9" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                 </svg>
@@ -59,25 +59,25 @@ export function HadithSlider({ dhikr }: { dhikr: Dhikr }) {
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -10 }}
                     transition={{ duration: 0.5 }}
-                    className="flex flex-col gap-3 relative z-10"
+                    className="flex flex-col gap-1.5 xs:gap-2 sm:gap-3 relative z-10"
                     dir={isArabic ? 'rtl' : 'ltr'}
                 >
-                    <div className="flex items-center gap-2 mb-1">
-                        <span className="text-[10px] font-bold text-primary uppercase tracking-widest bg-primary/10 px-2 py-0.5 rounded-full">
+                    <div className="flex items-center gap-2 mb-0.5">
+                        <span className="text-[9px] xs:text-[10px] font-bold text-primary uppercase tracking-widest bg-primary/10 px-2 py-0.5 rounded-full">
                             {isArabic ? 'فضائل الذكر' : 'Guidance'}
                         </span>
                         {isPaused && (
-                            <span className="text-[10px] text-muted-foreground animate-pulse ml-2 bg-background/50 px-2 py-0.5 rounded-full border border-border/50">
+                            <span className="text-[9px] xs:text-[10px] text-muted-foreground animate-pulse ml-2 bg-background/50 px-2 py-0.5 rounded-full border border-border/50">
                                 Paused
                             </span>
                         )}
                     </div>
 
-                    <p className={`text-sm sm:text-base font-medium text-foreground/90 leading-loose break-words ${isArabic ? 'font-arabic' : ''}`}>
+                    <p className={`text-xs xs:text-sm sm:text-base font-medium text-foreground/90 leading-relaxed xs:leading-loose break-words ${isArabic ? 'font-arabic' : ''}`}>
                         "{hadith.text}"
                     </p>
 
-                    <p className={`text-xs text-muted-foreground mt-1 font-medium ${isArabic ? 'font-arabic' : ''}`}>
+                    <p className={`text-[10px] xs:text-xs text-muted-foreground mt-0.5 font-medium ${isArabic ? 'font-arabic' : ''}`}>
                         — {hadith.source}
                     </p>
                 </motion.div>
@@ -85,7 +85,7 @@ export function HadithSlider({ dhikr }: { dhikr: Dhikr }) {
 
             {/* Timer Progress Bar */}
             {dhikr.hadiths && dhikr.hadiths.length > 1 && !isPaused && (
-                <div className="absolute bottom-0 left-0 right-0 h-1 bg-muted/20">
+                <div className="absolute bottom-0 left-0 right-0 h-0.5 sm:h-1 bg-muted/20">
                     <motion.div
                         key={index}
                         initial={{ width: "0%" }}
@@ -98,11 +98,11 @@ export function HadithSlider({ dhikr }: { dhikr: Dhikr }) {
 
             {/* Paginator Dots (Optional, keeping for existing preference) */}
             {dhikr.hadiths && dhikr.hadiths.length > 1 && (
-                <div className={`flex gap-1.5 mt-4 ${isArabic ? 'justify-end' : 'justify-start'}`}>
+                <div className={`flex gap-1.5 mt-2 xs:mt-4 ${isArabic ? 'justify-end' : 'justify-start'}`}>
                     {dhikr.hadiths.map((_, i) => (
                         <div
                             key={i}
-                            className={`h-1 rounded-full transition-all duration-500 ${i === index ? 'w-6 bg-primary' : 'w-1.5 bg-muted/60'}`}
+                            className={`h-0.5 xs:h-1 rounded-full transition-all duration-500 ${i === index ? 'w-4 xs:w-6 bg-primary' : 'w-1 xs:w-1.5 bg-muted/60'}`}
                         />
                     ))}
                 </div>

@@ -111,7 +111,7 @@ export function Counter() {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
-            className="font-arabic text-xl xs:text-2xl sm:text-4xl md:text-5xl lg:text-6xl text-foreground leading-snug mb-0.5 max-w-[90vw] mx-auto overflow-visible"
+            className="font-arabic text-xl xs:text-2xl sm:text-4xl md:text-5xl lg:text-6xl text-foreground leading-snug mb-0 max-w-[90vw] mx-auto overflow-visible"
           >
             {currentDhikr.arabic}
           </motion.p>
@@ -133,8 +133,8 @@ export function Counter() {
 
         {/* Phase indicator & Progress for 100 session */}
         {sessionMode.type === 'tasbih100' && (
-          <div className="flex flex-col items-center mt-2 sm:mt-4 mb-1">
-            <div className="flex justify-center gap-1.5 mb-2">
+          <div className="flex flex-col items-center mt-1.5 sm:mt-4 mb-0.5">
+            <div className="flex justify-center gap-1.5 mb-1.5">
               {[0, 1, 2, 3].map((phase) => (
                 <div
                   key={phase}
@@ -169,7 +169,7 @@ export function Counter() {
 
         {/* Phase indicator & Progress for 1000 session */}
         {sessionMode.type === 'tasbih1000' && (
-          <div className="flex flex-col items-center mt-3 sm:mt-4 mb-1">
+          <div className="flex flex-col items-center mt-1.5 sm:mt-4 mb-0.5">
             {totalProgress !== null && (
               <div className="w-32 xs:w-40 sm:w-48 mx-auto h-1 bg-muted rounded-full overflow-hidden mb-2">
                 <motion.div
@@ -192,7 +192,7 @@ export function Counter() {
 
         {/* Routine Progress */}
         {sessionMode.type === 'routine' && (
-          <div className="flex flex-col items-center mt-3 sm:mt-4 mb-1">
+          <div className="flex flex-col items-center mt-1.5 sm:mt-4 mb-0.5">
             <motion.div
               initial={{ opacity: 0, y: 5 }}
               animate={{ opacity: 1, y: 0 }}
@@ -303,9 +303,9 @@ export function Counter() {
         return renderDhikrText();
       case 'counter':
         return (
-          <div className="flex flex-col items-center justify-center w-full relative z-10 my-1 select-none">
+          <div className="flex flex-col items-center justify-center w-full relative z-10 my-0.5 select-none">
             {/* Mobile controls (Minus & Reset) placed above counter */}
-            <div className={`flex items-center justify-center gap-4 xs:gap-6 sm:gap-8 mb-1 xs:mb-2 sm:mb-3 lg:hidden relative z-20 transition-opacity duration-300 ${isEditingLayout ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
+            <div className={`flex items-center justify-center gap-3 xs:gap-6 sm:gap-8 mb-1 xs:mb-2 sm:mb-3 lg:hidden relative z-20 transition-opacity duration-300 ${isEditingLayout ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
               <motion.button
                 whileTap={{ scale: 0.95 }}
                 onClick={(e) => {

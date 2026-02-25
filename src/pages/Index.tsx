@@ -13,6 +13,8 @@ import { RoutinesView } from "@/components/RoutinesView";
 import { GlobalChallenges } from "@/components/GlobalChallenges";
 import { GlobalStats } from "@/components/GlobalStats";
 import { HadithSlider } from "@/components/HadithSlider";
+import { HubDashboard } from '@/components/HubDashboard';
+import { MinimalDashboard } from '@/components/MinimalDashboard';
 
 import { ScreenOffMode } from "@/components/ScreenOffMode";
 import { getRecommendedTheme } from '@/lib/timeUtils';
@@ -20,10 +22,19 @@ import { VisitorCounter } from '@/components/VisitorCounter';
 import { motion, AnimatePresence } from 'framer-motion';
 import { SidebarProvider, SidebarInset, SidebarTrigger } from '@/components/ui/sidebar';
 import { AppSidebar } from '@/components/AppSidebar';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 const Index = () => {
-  const { zenMode, setZenMode, syncToCloud, theme, counterShape, autoThemeSwitch, setTheme, currentDhikr } = useTasbeehStore();
+  const {
+    zenMode,
+    setZenMode,
+    syncToCloud,
+    theme,
+    autoThemeSwitch,
+    setTheme,
+    currentDhikr,
+    layout,
+    setLayout
+  } = useTasbeehStore();
 
   // Auto theme switch effect
   useEffect(() => {
@@ -87,6 +98,102 @@ const Index = () => {
     };
   }, [syncToCloud]);
 
+  const renderDashboard = () => {
+    if (zenMode) return <Counter />;
+
+    switch (layout) {
+      case 'hub':
+        return <HubDashboard />;
+      case 'zen':
+        return <MinimalDashboard />;
+      default:
+        return (
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+            {/* Desktop: Left Column (Personal Stats) */}
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              className="lg:col-span-3 space-y-6 hidden lg:block sticky top-24"
+            >
+              <div className="bg-card/30 backdrop-blur-xl border border-border/50 rounded-[2.5rem] p-1 overflow-hidden">
+                <div className="p-6 border-b border-border/50">
+                  <h2 className="text-xs font-bold uppercase tracking-[0.2em] text-muted-foreground/60">My Growth</h2>
+                </div>
+                <div className="p-4">
+                  <StatsWidget />
+                </div>
+              </div>
+            </motion.div>
+
+            {/* Center Column: The Counter (Heart of the App) */}
+            <div className="lg:col-span-6 flex flex-col items-center">
+              <div className="w-full max-w-xl">
+                <Counter />
+              </div>
+
+              <div className="w-full max-w-md mt-6">
+                <HadithSlider dhikr={currentDhikr} />
+              </div>
+
+              {/* Premium Mobile Feed (Aesthetic Integrated View) */}
+              <div className="w-full mt-8 xs:mt-12 space-y-6 xs:space-y-8 lg:hidden">
+                {/* Section 1: Community Pulse & My Quick Stats */}
+                <div className="grid grid-cols-2 gap-3 xs:gap-4">
+                  <div className="bg-card/20 backdrop-blur-xl border border-white/5 rounded-3xl p-3 xs:p-4 flex flex-col items-center justify-center text-center">
+                    <h3 className="text-[9px] xs:text-[10px] font-bold uppercase tracking-widest text-muted-foreground mb-1.5 xs:mb-2">Live Activity</h3>
+                    <GlobalStats />
+                  </div>
+                  <div className="bg-card/20 backdrop-blur-xl border border-white/5 rounded-3xl p-3 xs:p-4 flex flex-col items-center justify-center text-center">
+                    <h3 className="text-[9px] xs:text-[10px] font-bold uppercase tracking-widest text-muted-foreground mb-1.5 xs:mb-2">My Best</h3>
+                    <StatsWidget mini />
+                  </div>
+                </div>
+
+                {/* Section 2: Active Challenges (High Density) */}
+                <div className="space-y-3 xs:space-y-4">
+                  <div className="flex items-center justify-between px-2">
+                    <h2 className="text-xs font-bold uppercase tracking-widest text-muted-foreground/80">Active Challenges</h2>
+                    <span className="text-[9px] xs:text-[10px] font-medium text-primary/80 bg-primary/10 px-2 py-0.5 rounded-full">Community</span>
+                  </div>
+                  <div className="relative">
+                    <GlobalChallenges />
+                  </div>
+                </div>
+
+                {/* Section 3: Full Progress Details */}
+                <div className="bg-card/20 backdrop-blur-xl border border-white/5 rounded-[1.5rem] xs:rounded-[2rem] p-4 xs:p-6">
+                  <h2 className="text-xs font-bold uppercase tracking-widest text-muted-foreground mb-4 xs:mb-6">Detailed Progress</h2>
+                  <StatsWidget />
+                </div>
+              </div>
+            </div>
+
+            {/* Desktop: Right Column (Community & Challenges) */}
+            <motion.div
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              className="lg:col-span-3 space-y-6 hidden lg:block sticky top-24"
+            >
+              <div className="bg-card/30 backdrop-blur-xl border border-border/50 rounded-[2.5rem] p-1 overflow-hidden">
+                <div className="p-6 border-b border-border/50 flex justify-between items-center">
+                  <h2 className="text-xs font-bold uppercase tracking-[0.2em] text-muted-foreground/60">Community</h2>
+                  <div className="flex items-center gap-1.5">
+                    <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
+                    <span className="text-[10px] text-muted-foreground font-medium uppercase tracking-tighter">Live</span>
+                  </div>
+                </div>
+                <div className="p-6 space-y-8">
+                  <GlobalStats />
+                  <div className="h-px bg-white/5" />
+                  <GlobalChallenges />
+                </div>
+              </div>
+            </motion.div>
+          </div>
+        );
+    }
+  };
+
   return (
     <ThemeProvider>
       <SidebarProvider defaultOpen={false}>
@@ -97,17 +204,27 @@ const Index = () => {
             <WhatsNew />
             <BreathingGuide />
 
-            {/* Header - Optimized for Mobile & Desktop */}
-            <div className={`shrink-0 z-50 px-4 pt-4 sm:pt-6 pt-safe flex items-center justify-between gap-3 pointer-events-none ${zenMode ? 'opacity-0' : 'opacity-100'}`}>
-              <div className="pointer-events-auto flex items-center gap-2">
-                {!zenMode && <SidebarTrigger className="h-9 w-9" />}
-                <div className="scale-90 xs:scale-100 origin-left">
-                  <VisitorCounter />
+            {/* Premium Floating Header Capsule (Mobile & Desktop) */}
+            <div className={`fixed top-2 xs:top-4 left-1/2 -translate-x-1/2 z-[100] w-[calc(100%-1rem)] xs:w-[calc(100%-2rem)] max-w-5xl transition-all duration-700 pointer-events-none ${(zenMode || layout === 'zen') ? 'opacity-0 -translate-y-20' : 'opacity-100 translate-y-0'}`}>
+              <div className="flex items-center justify-between gap-1 p-1 xs:p-1.5 pl-2 xs:pl-3 pr-1 xs:pr-2 rounded-full bg-card/40 backdrop-blur-2xl border border-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.12)] pointer-events-auto">
+                {/* Left: Sidebar & Visitors */}
+                <div className="flex items-center gap-1.5 xs:gap-3">
+                  <div className="flex items-center gap-1 xs:gap-1.5">
+                    {!(zenMode || layout === 'zen') && <SidebarTrigger className="h-7 w-7 xs:h-8 xs:w-8 hover:bg-black/5" />}
+                    <div className="h-4 w-px bg-white/10 hidden xs:block" />
+                    <div className="scale-75 xs:scale-90 origin-left">
+                      <VisitorCounter />
+                    </div>
+                  </div>
                 </div>
-              </div>
-              <div className="pointer-events-auto scale-90 xs:scale-100 origin-right flex items-center">
-                {/* On very small screens, the DateBanner might be too wide, but we'll trust its internal responsiveness */}
-                <DateBanner />
+
+                {/* Right: Date Capsule */}
+                <div className="flex items-center">
+                  <div className="hidden xs:block border-l border-white/10 h-4 mx-2" />
+                  <div className="scale-[0.85] xs:scale-100 origin-right max-w-[110px] xs:max-w-none overflow-hidden">
+                    <DateBanner />
+                  </div>
+                </div>
               </div>
             </div>
 
@@ -116,109 +233,23 @@ const Index = () => {
             </RoutinesView>
 
             {/* Main Content Area */}
-            <div className={`flex-1 min-h-0 w-full overflow-y-auto px-4 sm:px-6 md:px-8 pb-12 pt-2 custom-scrollbar transition-all duration-500 pb-safe ${zenMode ? 'flex items-center justify-center pt-0 pb-0' : ''}`}>
-              <div className={`max-w-7xl mx-auto w-full ${zenMode ? 'max-w-4xl' : ''}`}>
-                {zenMode ? (
-                  <Counter />
-                ) : (
-                  <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-
-                    {/* Left Column: Personal Stats (Desktop Only) */}
-                    <motion.div
-                      initial={{ opacity: 0, x: -20 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      className="lg:col-span-3 space-y-6 hidden lg:block sticky top-0"
-                    >
-                      <div className="bg-card/30 backdrop-blur-xl border border-border/50 rounded-3xl p-1 overflow-hidden">
-                        <div className="p-4 border-b border-border/50">
-                          <h2 className="text-xs font-bold uppercase tracking-widest text-muted-foreground">My Growth</h2>
-                        </div>
-                        <div className="p-2">
-                          <StatsWidget />
-                        </div>
-                      </div>
-                    </motion.div>
-
-                    {/* Center Column: The Counter (Heart of the App) */}
-                    <div className="lg:col-span-6 flex flex-col items-center">
-                      <div className="w-full max-w-xl">
-                        <Counter />
-                      </div>
-
-                      {!zenMode && (
-                        <div className="w-full max-w-md mt-4 hidden lg:block">
-                          <HadithSlider dhikr={currentDhikr} />
-                        </div>
-                      )}
-
-                      {/* Mobile-only Optimized Widgets (Tabbed Layout) */}
-                      <div className="w-full mt-8 lg:hidden">
-                        <Tabs defaultValue="stats" className="w-full">
-                          <TabsList className="grid w-full grid-cols-3 bg-card/30 backdrop-blur-xl border border-border/50 rounded-2xl h-11 p-1">
-                            <TabsTrigger value="stats" className="rounded-xl text-xs font-semibold data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">My Growth</TabsTrigger>
-                            <TabsTrigger value="community" className="rounded-xl text-xs font-semibold data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">Live</TabsTrigger>
-                            <TabsTrigger value="challenges" className="rounded-xl text-xs font-semibold data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">Goals</TabsTrigger>
-                          </TabsList>
-
-                          <div className="mt-4">
-                            <TabsContent value="stats" className="animate-in fade-in slide-in-from-bottom-2 duration-300">
-                              <div className="bg-card/30 backdrop-blur-xl border border-border/50 rounded-3xl p-4">
-                                <StatsWidget />
-                              </div>
-                            </TabsContent>
-
-                            <TabsContent value="community" className="animate-in fade-in slide-in-from-bottom-2 duration-300">
-                              <div className="bg-card/30 backdrop-blur-xl border border-border/50 rounded-3xl p-6">
-                                <h2 className="text-xs font-bold uppercase tracking-widest text-muted-foreground mb-4 text-center">Community Pulse</h2>
-                                <GlobalStats />
-                              </div>
-                            </TabsContent>
-
-                            <TabsContent value="challenges" className="animate-in fade-in slide-in-from-bottom-2 duration-300">
-                              <div className="bg-card/30 backdrop-blur-xl border border-border/50 rounded-3xl p-4">
-                                <h2 className="text-xs font-bold uppercase tracking-widest text-muted-foreground mb-4 px-2">Global Challenges</h2>
-                                <GlobalChallenges />
-                              </div>
-                            </TabsContent>
-                          </div>
-                        </Tabs>
-                      </div>
-                    </div>
-
-                    {/* Right Column: Global Stats (Desktop Only) */}
-                    <motion.div
-                      initial={{ opacity: 0, x: 20 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      className="lg:col-span-3 space-y-6 hidden lg:block sticky top-0"
-                    >
-                      <div className="bg-card/30 backdrop-blur-xl border border-border/50 rounded-3xl p-1 overflow-hidden">
-                        <div className="p-4 border-b border-border/50 flex justify-between items-center">
-                          <h2 className="text-xs font-bold uppercase tracking-widest text-muted-foreground">Global Goals</h2>
-                          <div className="flex items-center gap-1.5">
-                            <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
-                            <span className="text-[10px] text-muted-foreground font-medium uppercase tracking-tighter">Live</span>
-                          </div>
-                        </div>
-                        <div className="p-4 space-y-6">
-                          <GlobalStats />
-                          <div className="h-px bg-border/50" />
-                          <GlobalChallenges />
-                        </div>
-                      </div>
-                    </motion.div>
-
-                  </div>
-                )}
+            <div className={`flex-1 min-h-0 w-full overflow-y-auto px-4 sm:px-6 md:px-8 pb-12 pt-16 xs:pt-24 custom-scrollbar transition-all duration-500 pb-safe ${zenMode || layout === 'zen' ? 'flex items-center justify-center pt-0 pb-0' : ''}`}>
+              <div className={`max-w-7xl mx-auto w-full ${zenMode || layout === 'zen' ? 'max-w-4xl' : ''}`}>
+                {renderDashboard()}
               </div>
             </div>
 
             {/* Zen Mode Exit Button */}
-            {zenMode && (
+            {(zenMode || layout === 'zen') && (
               <button
-                onClick={() => setZenMode(false)}
-                className="absolute bottom-12 left-1/2 -translate-x-1/2 bg-foreground/5 hover:bg-foreground/10 backdrop-blur-xl border border-foreground/10 px-8 py-3 rounded-full text-foreground/70 hover:text-foreground transition-all text-sm font-medium z-50 animate-fade-in-up flex items-center gap-2"
+                onClick={() => {
+                  setZenMode(false);
+                  if (layout === 'zen') setLayout('default');
+                }}
+                className="absolute bottom-12 left-1/2 -translate-x-1/2 bg-foreground/5 hover:bg-foreground/10 backdrop-blur-xl border border-foreground/10 px-10 py-4 rounded-full text-foreground/70 hover:text-foreground transition-all text-sm font-semibold z-50 animate-fade-in-up flex items-center gap-3 shadow-2xl"
               >
-                <span>Exit Zen Mode</span>
+                <div className="w-2 h-2 rounded-full bg-primary animate-pulse" />
+                <span>Exit {layout === 'zen' ? 'Zen Layout' : 'Zen Mode'}</span>
               </button>
             )}
           </div>

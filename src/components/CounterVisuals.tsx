@@ -19,7 +19,7 @@ import { LanternFanous } from './counter-shapes/LanternFanous';
 
 
 interface CounterVisualsProps {
-    layout: 'default' | 'focus' | 'ergonomic';
+    layout: 'default' | 'focus' | 'ergonomic' | 'hub' | 'zen';
     counterShape: CounterShape;
     counterVerticalOffset: number;
     counterScale: number;

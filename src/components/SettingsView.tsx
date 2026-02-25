@@ -301,27 +301,29 @@ export function SettingsView({ children }: SettingsViewProps) {
                       Reset Defaults
                     </button>
                   </div>
-                  <div className="grid grid-cols-3 gap-2">
+                  <div className="grid grid-cols-5 gap-2">
                     {[
                       { id: 'default', label: 'Classic', icon: Layout },
                       { id: 'focus', label: 'Focus', icon: Maximize },
                       { id: 'ergonomic', label: 'Bottom', icon: Smartphone },
+                      { id: 'hub', label: 'Hub', icon: Component },
+                      { id: 'zen', label: 'Zen', icon: Infinity },
                     ].map((l) => (
                       <button
                         key={l.id}
                         onClick={() => {
-                          setLayout(l.id as 'default' | 'focus' | 'ergonomic');
+                          setLayout(l.id as 'default' | 'focus' | 'ergonomic' | 'hub' | 'zen');
                           setOpen(false);
                         }}
                         className={`
-                          p-3 rounded-xl border text-center transition-all relative overflow-hidden flex flex-col items-center gap-2
+                          p-2 rounded-xl border text-center transition-all relative overflow-hidden flex flex-col items-center gap-1
                           ${layout === l.id
                             ? 'bg-primary/10 border-primary text-primary ring-1 ring-primary'
                             : 'bg-card border-transparent text-muted-foreground hover:bg-secondary'}
                         `}
                       >
-                        <l.icon className="w-6 h-6 opacity-70" />
-                        <p className="text-xs font-medium">{l.label}</p>
+                        <l.icon className="w-5 h-5 opacity-70" />
+                        <p className="text-[10px] font-medium">{l.label}</p>
                       </button>
                     ))}
                   </div>
