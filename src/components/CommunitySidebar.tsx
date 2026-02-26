@@ -38,9 +38,9 @@ export function CommunitySidebar() {
                         transition={{ duration: 0.3, ease: 'easeInOut' }}
                         className="overflow-hidden"
                     >
-                        <div className="p-6 space-y-8">
+                        <div className="pt-2 px-6 pb-6 space-y-6">
                             {/* Make it more real by adding the Live Visitor Counter here visually too */}
-                            <div className="flex flex-col items-center gap-4">
+                            <div className="flex flex-col items-center gap-2">
                                 <VisitorCounter />
                                 <GlobalStats />
                             </div>
