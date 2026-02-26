@@ -40,7 +40,7 @@ export function CommunitySidebar() {
                     >
                         <div className="pt-2 px-6 pb-6 space-y-6">
                             {/* Make it more real by adding the Live Visitor Counter here visually too */}
-                            <div className="flex flex-col items-center gap-2">
+                            <div className="flex flex-col items-center gap-0">
                                 <VisitorCounter />
                                 <GlobalStats />
                             </div>
