@@ -19,6 +19,11 @@ import { LanternFanous } from './counter-shapes/LanternFanous';
 import { DigitalWatch } from './counter-shapes/DigitalWatch';
 import { StarBurst } from './counter-shapes/StarBurst';
 import { CrystalPrism } from './counter-shapes/CrystalPrism';
+import { Galaxy } from './counter-shapes/Galaxy';
+import { TallyClicker } from './counter-shapes/TallyClicker';
+import { Cyber3D } from './counter-shapes/Cyber3D';
+import { CrystalISO } from './counter-shapes/CrystalISO';
+import { Neumorph } from './counter-shapes/Neumorph';
 
 
 interface CounterVisualsProps {
@@ -748,6 +753,11 @@ export function CounterVisuals({
             {counterShape === 'digital-watch' && <DigitalWatch currentCount={currentCount} />}
             {counterShape === 'star-burst' && <StarBurst currentCount={currentCount} />}
             {counterShape === 'crystal-prism' && <CrystalPrism currentCount={currentCount} />}
+            {counterShape === 'galaxy' && <Galaxy currentCount={currentCount} />}
+            {counterShape === 'tally-clicker' && <TallyClicker currentCount={currentCount} />}
+            {counterShape === 'cyber-3d' && <Cyber3D currentCount={currentCount} />}
+            {counterShape === 'crystal-iso' && <CrystalISO currentCount={currentCount} />}
+            {counterShape === 'neumorph' && <Neumorph currentCount={currentCount} />}
 
 
 
@@ -798,7 +808,7 @@ export function CounterVisuals({
 
         ${counterShape === 'animated-ripple' ? 'w-64 h-64 flex items-center justify-center' : ''}
         ${counterShape === 'bead-ring' ? 'w-64 h-64 flex items-center justify-center' : ''}
-        ${['helix-strand', 'cyber-hexagon', 'blooming-lotus', 'constellation', 'glass-pill', 'emerald-loop', 'smart-ring', 'moon-phase', 'water-ripple', 'sand-hourglass', 'lantern-fanous', 'digital-watch', 'star-burst', 'crystal-prism'].includes(counterShape) ? 'w-64 h-64 flex items-center justify-center' : ''}
+        ${['helix-strand', 'cyber-hexagon', 'blooming-lotus', 'constellation', 'glass-pill', 'emerald-loop', 'smart-ring', 'moon-phase', 'water-ripple', 'sand-hourglass', 'lantern-fanous', 'digital-watch', 'star-burst', 'crystal-prism', 'galaxy', 'tally-clicker', 'cyber-3d', 'crystal-iso', 'neumorph'].includes(counterShape) ? 'w-64 h-64 flex items-center justify-center' : ''}
 
         flex items-center justify-center
         cursor-pointer
@@ -843,7 +853,7 @@ export function CounterVisuals({
                     transition={{ duration: 0.15, ease: [0.34, 1.56, 0.64, 1] }}
                     className={`
           counter-number text-counter-text
-          ${counterShape === 'digital' ? 'hidden' : ''}
+          ${['digital', 'vertical-capsules', 'tally-clicker', 'cyber-3d', 'crystal-iso', 'neumorph'].includes(counterShape) ? 'hidden' : ''}
           ${counterShape === 'classic' ? 'font-mono text-5xl sm:text-6xl md:text-7xl tracking-widest bg-black/10 px-4 sm:px-6 py-2 rounded-lg inset-shadow mb-4' : 'text-5xl sm:text-6xl md:text-7xl lg:text-8xl'}
           ${counterShape === 'waveform' ? 'drop-shadow-md z-10' : ''}
           ${counterShape === 'modern-ring' ? 'font-sans font-light tracking-tighter drop-shadow-[0_0_15px_rgba(var(--primary),0.6)]' : ''}
@@ -857,10 +867,9 @@ export function CounterVisuals({
           ${counterShape === 'steampunk-nixie' ? 'font-mono text-orange-500 font-bold tracking-widest drop-shadow-[0_0_10px_orange] text-6xl' : ''}
           ${counterShape === 'biolum-organic' ? 'font-mono text-primary font-bold tracking-widest drop-shadow-[0_0_15px_hsl(var(--primary))] text-6xl' : ''}
           ${counterShape === 'solar-flare' ? 'text-white drop-shadow-[0_0_20px_orange] font-bold' : ''}
-          ${['nebula-cloud', 'infinite-knot', 'holo-fan', 'luminous-beads'].includes(counterShape) ? 'text-primary drop-shadow-[0_0_12px_rgba(var(--primary),0.6)] font-bold' : ''}
+          ${['nebula-cloud', 'infinite-knot', 'holo-fan', 'luminous-beads', 'galaxy'].includes(counterShape) ? 'text-primary drop-shadow-[0_0_12px_rgba(var(--primary),0.6)] font-bold' : ''}
           ${counterShape === 'halo-ring' ? 'text-emerald-400 font-bold drop-shadow-[0_0_10px_rgba(52,211,153,0.8)]' : ''}
           
-
           ${counterShape === 'animated-ripple' ? 'text-blue-200 font-light text-7xl tracking-widest drop-shadow-[0_0_10px_rgba(59,130,246,0.6)]' : ''}
           ${counterShape === 'bead-ring' ? 'text-amber-500 font-mono text-7xl font-bold tracking-wider drop-shadow-[0_0_10px_rgba(245,158,11,0.6)]' : ''}
           ${counterShape === 'helix-strand' ? 'text-cyan-400 font-mono tracking-widest drop-shadow-[0_0_10px_rgba(34,211,238,0.8)]' : ''}
@@ -871,8 +880,6 @@ export function CounterVisuals({
           ${counterShape === 'emerald-loop' ? 'font-serif text-emerald-100 font-bold tracking-widest text-5xl drop-shadow-md' : ''}
           ${counterShape === 'smart-ring' ? 'font-sans font-light text-white tracking-tighter text-6xl drop-shadow-none' : ''}
           ${['moon-phase'].includes(counterShape) ? 'font-sans font-light text-white text-5xl drop-shadow-lg' : ''}
-
-          ${counterShape === 'vertical-capsules' ? 'hidden' : ''}
 
         `}
                     style={{

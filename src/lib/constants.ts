@@ -72,4 +72,9 @@ export const counterShapes = [
   { id: 'digital-watch', label: 'Watch', icon: '⌚' },
   { id: 'star-burst', label: 'Starburst', icon: '💥' },
   { id: 'crystal-prism', label: 'Prism', icon: '💎' },
+  { id: 'galaxy', label: 'Galaxy', icon: '🌌' },
+  { id: 'tally-clicker', label: 'Tally 3D', icon: '🖱️' },
+  { id: 'cyber-3d', label: 'Cyber 3D', icon: '💎' },
+  { id: 'crystal-iso', label: 'Crystal ISO', icon: '🕋' },
+  { id: 'neumorph', label: 'Neumorph', icon: '☁' },
 ] as const;

@@ -55,7 +55,8 @@ export type CounterShape =
   | 'animated-ripple' | 'bead-ring' | 'halo-ring' | 'vertical-capsules' | 'luminous-beads'
   | 'helix-strand' | 'cyber-hexagon' | 'blooming-lotus' | 'constellation' | 'glass-pill' | 'emerald-loop'
   | 'smart-ring' | 'moon-phase' | 'water-ripple' | 'sand-hourglass' | 'lantern-fanous'
-  | 'digital-watch' | 'star-burst' | 'crystal-prism';
+  | 'digital-watch' | 'star-burst' | 'crystal-prism' | 'galaxy' | 'tally-clicker'
+  | 'cyber-3d' | 'crystal-iso' | 'neumorph';
 interface TasbeehState {
   // Counts
   count: number; // Legacy, keep for migration
