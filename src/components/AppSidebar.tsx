@@ -25,7 +25,7 @@ export function AppSidebar() {
 
     return (
         <Sidebar collapsible="icon">
-            <SidebarContent className="lg:pt-20">
+            <SidebarContent className="pt-16 lg:pt-20">
                 {/* Core Actions */}
                 <SidebarGroup>
                     <SidebarGroupLabel>Tools</SidebarGroupLabel>

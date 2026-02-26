@@ -198,7 +198,7 @@ const Index = () => {
             <BreathingGuide />
 
             {/* Premium Floating Header Capsule (Mobile & Desktop) */}
-            <div className={`fixed z-[100] transition-all duration-700 pointer-events-none 
+            <div className={`fixed z-40 transition-all duration-700 pointer-events-none 
               ${(zenMode || layout === 'zen') ? 'opacity-0 -translate-y-20' : 'opacity-100 translate-y-0'}
               top-2 xs:top-4 left-1/2 -translate-x-1/2 w-[calc(100%-1rem)] xs:w-[calc(100%-2rem)] max-w-5xl
               lg:top-0 lg:max-w-none lg:w-full lg:left-0 lg:translate-x-0`}>
