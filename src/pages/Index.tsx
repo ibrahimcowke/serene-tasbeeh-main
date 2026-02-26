@@ -198,8 +198,13 @@ const Index = () => {
             <BreathingGuide />
 
             {/* Premium Floating Header Capsule (Mobile & Desktop) */}
-            <div className={`fixed top-2 xs:top-4 left-1/2 -translate-x-1/2 z-[100] w-[calc(100%-1rem)] xs:w-[calc(100%-2rem)] max-w-5xl transition-all duration-700 pointer-events-none ${(zenMode || layout === 'zen') ? 'opacity-0 -translate-y-20' : 'opacity-100 translate-y-0'}`}>
-              <div className="flex items-center justify-between gap-1 p-1 xs:p-1.5 pl-2 xs:pl-3 pr-1 xs:pr-2 rounded-full bg-card/40 backdrop-blur-2xl border border-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.12)] pointer-events-auto">
+            <div className={`fixed z-[100] transition-all duration-700 pointer-events-none 
+              ${(zenMode || layout === 'zen') ? 'opacity-0 -translate-y-20' : 'opacity-100 translate-y-0'}
+              top-2 xs:top-4 left-1/2 -translate-x-1/2 w-[calc(100%-1rem)] xs:w-[calc(100%-2rem)] max-w-5xl
+              lg:top-0 lg:max-w-none lg:w-full lg:left-0 lg:translate-x-0`}>
+              <div className="flex items-center justify-between gap-1 p-1 xs:p-1.5 pl-2 xs:pl-3 pr-1 xs:pr-2 
+                rounded-full bg-card/40 backdrop-blur-2xl border border-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.12)] pointer-events-auto
+                lg:rounded-none lg:border-t-0 lg:border-x-0 lg:px-8 lg:h-16">
                 {/* Left: Sidebar & Visitors */}
                 <div className="flex items-center gap-1.5 xs:gap-3">
                   <div className="flex items-center gap-1 xs:gap-1.5">

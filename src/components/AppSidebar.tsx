@@ -109,7 +109,7 @@ export function AppSidebar() {
                 </SidebarGroup>
 
                 {/* App Settings */}
-                <SidebarGroup>
+                <SidebarGroup className="pb-10">
                     <SidebarGroupLabel>Application</SidebarGroupLabel>
                     <SidebarGroupContent>
                         <SidebarMenu>
