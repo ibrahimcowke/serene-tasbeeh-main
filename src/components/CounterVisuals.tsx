@@ -27,7 +27,7 @@ import { Neumorph } from './counter-shapes/Neumorph';
 
 
 interface CounterVisualsProps {
-    layout: 'default' | 'focus' | 'ergonomic' | 'hub' | 'zen';
+    layout: 'default' | 'focus' | 'ergonomic' | 'hub' | 'zen' | 'minimal' | 'timeline' | 'classic';
     counterShape: CounterShape;
     counterVerticalOffset: number;
     counterScale: number;
