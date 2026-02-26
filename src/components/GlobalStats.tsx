@@ -30,7 +30,7 @@ export function GlobalStats() {
             animate={{ opacity: 1, y: 0 }}
             className="flex justify-center mb-0"
         >
-            <div className="inline-flex flex-col items-center gap-1 px-4 py-2 rounded-2xl bg-gradient-to-b from-indigo-500/10 via-purple-500/10 to-pink-500/10 border border-indigo-500/20">
+            <div className="inline-flex flex-col items-center gap-1 px-4 py-1.5 rounded-2xl bg-gradient-to-b from-indigo-500/10 via-purple-500/10 to-pink-500/10 border border-indigo-500/20">
                 <div className="flex items-center gap-1.5">
                     <Globe className="w-3.5 h-3.5 text-indigo-400 animate-pulse" />
                     <span className="text-[10px] uppercase tracking-wider text-muted-foreground font-medium">Community Pulse</span>

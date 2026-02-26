@@ -129,7 +129,7 @@ export function VisitorCounter() {
             className="flex flex-col gap-2 cursor-pointer"
             onClick={() => setExpanded(!expanded)}
         >
-            <div className={`flex items-center rounded-2xl bg-card/30 backdrop-blur-2xl border border-white/10 shadow-xl group transition-all duration-500 overflow-hidden ${expanded ? 'px-4 py-2 gap-4' : 'px-3 py-1.5 gap-2'}`}>
+            <div className={`flex items-center rounded-2xl bg-card/30 backdrop-blur-2xl border border-white/10 shadow-xl group transition-all duration-500 overflow-hidden ${expanded ? 'px-4 py-2 gap-4' : 'px-3 py-1 gap-1'}`}>
                 {!expanded ? (
                     // Compact View
                     <div className="flex items-center gap-2 justify-center">
