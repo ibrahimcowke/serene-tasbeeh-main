@@ -304,8 +304,24 @@ export function Counter() {
       case 'counter':
         return (
           <div className="flex flex-col items-center justify-center w-full relative z-10 my-0.5 select-none">
-            {/* Mobile controls (Minus & Reset) placed above counter */}
-            <div className={`flex items-center justify-center gap-3 xs:gap-6 sm:gap-8 mb-1 xs:mb-2 sm:mb-3 lg:hidden relative z-20 transition-opacity duration-300 ${isEditingLayout ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
+            <div className={`transition-opacity duration-300 ${isEditingLayout ? 'pointer-events-none opacity-50' : ''}`}>
+              <CounterVisuals
+                layout={layout}
+                counterShape={counterShape}
+                counterVerticalOffset={counterVerticalOffset}
+                counterScale={counterScale}
+                progress={progress}
+                currentCount={currentCount}
+                currentSettings={currentSettings}
+                countFontSize={countFontSize}
+                handleTap={handleTap}
+                showCompletion={showCompletion}
+                disabled={sessionMode.type === 'tasbih100' && sessionMode.isComplete}
+              />
+            </div>
+
+            {/* Mobile controls (Minus & Reset) moved below counter */}
+            <div className={`flex items-center justify-center gap-3 xs:gap-6 sm:gap-8 mt-4 xs:mt-5 sm:mt-6 lg:hidden relative z-20 transition-opacity duration-300 ${isEditingLayout ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
               <motion.button
                 whileTap={{ scale: 0.95 }}
                 onClick={(e) => {
@@ -333,22 +349,6 @@ export function Counter() {
               </motion.button>
 
               <UndoButton />
-            </div>
-
-            <div className={`transition-opacity duration-300 ${isEditingLayout ? 'pointer-events-none opacity-50' : ''}`}>
-              <CounterVisuals
-                layout={layout}
-                counterShape={counterShape}
-                counterVerticalOffset={counterVerticalOffset}
-                counterScale={counterScale}
-                progress={progress}
-                currentCount={currentCount}
-                currentSettings={currentSettings}
-                countFontSize={countFontSize}
-                handleTap={handleTap}
-                showCompletion={showCompletion}
-                disabled={sessionMode.type === 'tasbih100' && sessionMode.isComplete}
-              />
             </div>
 
             {/* Routine Next Step Button Removed */}
