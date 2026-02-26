@@ -22,7 +22,6 @@ import { HubDashboard } from '@/components/HubDashboard';
 
 const Index = () => {
   const { zenMode, setZenMode, layout, setLayout } = useTasbeehStore();
-  const [activeTab, setActiveTab] = useState<'me' | 'community'>('me');
 
   const renderDashboard = () => {
     switch (layout) {
@@ -39,40 +38,15 @@ const Index = () => {
         return (
           <div className="flex flex-col lg:flex-row gap-6 lg:gap-8 items-start justify-center">
             {/* Main Content Area */}
-            <div className={`w-full transition-all duration-500 ${activeTab === 'community' ? 'hidden lg:block lg:flex-1' : 'flex-1'}`}>
-              <div className="lg:hidden flex items-center justify-center p-1 bg-card/40 backdrop-blur-xl border border-white/10 rounded-2xl mb-6 mt-2">
-                <button
-                  onClick={() => setActiveTab('me')}
-                  className={`flex-1 py-2 text-sm font-medium rounded-xl transition-all ${activeTab === 'me' ? 'bg-primary text-primary-foreground shadow-lg' : 'text-muted-foreground'}`}
-                >
-                  My Journey
-                </button>
-                <button
-                  onClick={() => setActiveTab('community')}
-                  className={`flex-1 py-2 text-sm font-medium rounded-xl transition-all ${activeTab === 'community' ? 'bg-primary text-primary-foreground shadow-lg' : 'text-muted-foreground'}`}
-                >
-                  Community
-                </button>
-              </div>
-
-              <AnimatePresence mode="wait">
-                <motion.div
-                  key={activeTab === 'me' ? 'me' : 'community-mobile'}
-                  initial={{ opacity: 0, x: activeTab === 'me' ? -20 : 20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: activeTab === 'me' ? -20 : 20 }}
-                  className={activeTab === 'community' ? 'lg:hidden' : ''}
-                >
-                  {activeTab === 'me' ? <ClassicDashboard /> : <CommunitySidebar />}
-                </motion.div>
-              </AnimatePresence>
+            <div className="w-full flex-1">
+              <ClassicDashboard />
             </div>
 
             {/* Desktop Community Sidebar */}
             <motion.div
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
-              className={`hidden lg:block w-80 xl:w-96 sticky top-24 h-[calc(100vh-8rem)] ${activeTab === 'community' ? 'block' : ''}`}
+              className="hidden lg:block w-80 xl:w-96 sticky top-24 h-[calc(100vh-8rem)]"
             >
               <CommunitySidebar />
             </motion.div>
