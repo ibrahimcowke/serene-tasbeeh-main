@@ -5,7 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Progress } from '@/components/ui/progress';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger, SheetDescription } from '@/components/ui/sheet';
 
 interface StatsViewProps {
     children: React.ReactNode;
@@ -18,6 +18,9 @@ export function StatsView({ children }: StatsViewProps) {
                 {children}
             </SheetTrigger>
             <SheetContent side="bottom" className="bg-sheet-bg rounded-t-3xl h-[85vh]">
+                <SheetDescription className="sr-only">
+                    Detailed statistics about your dhikr frequency and trends.
+                </SheetDescription>
                 <div className="sheet-handle" />
                 <SheetHeader className="text-left pb-4">
                     <SheetTitle className="text-lg font-medium">Statistics</SheetTitle>

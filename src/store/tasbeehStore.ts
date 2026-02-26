@@ -78,7 +78,7 @@ interface TasbeehState {
 
   // Global preference (not per theme)
   counterShape: CounterShape;
-  layout: 'default' | 'focus' | 'ergonomic' | 'hub' | 'zen';
+  layout: 'default' | 'focus' | 'ergonomic' | 'hub' | 'zen' | 'minimal' | 'timeline' | 'classic';
   showTransliteration: boolean;
 
   // Mindfulness
@@ -179,7 +179,7 @@ interface TasbeehState {
   
   // New Settings Actions
   setCounterShape: (shape: CounterShape) => void;
-  setLayout: (layout: 'default' | 'focus' | 'ergonomic' | 'hub' | 'zen') => void;
+  setLayout: (layout: 'default' | 'focus' | 'ergonomic' | 'hub' | 'zen' | 'minimal' | 'timeline' | 'classic') => void;
   setHadithSlideDuration: (duration: number) => void;
   setHadithSlidePosition: (position: 'top-right' | 'top-left' | 'bottom-right' | 'bottom-left' | 'right' | 'bottom' | 'hidden') => void;
   setDailyGoal: (goal: number) => void;

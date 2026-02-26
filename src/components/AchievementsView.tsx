@@ -1,6 +1,6 @@
 import { useTasbeehStore } from '@/store/tasbeehStore';
 import { achievements, getNextLevel } from '@/data/achievements';
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger, SheetDescription } from '@/components/ui/sheet';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { motion } from 'framer-motion';
 import { Trophy, Lock, Star } from 'lucide-react';
@@ -124,6 +124,9 @@ export function AchievementsView({ children }: AchievementsViewProps) {
                 {children}
             </SheetTrigger>
             <SheetContent side="bottom" className="bg-sheet-bg rounded-t-3xl h-[85vh]">
+                <SheetDescription className="sr-only">
+                    View your earned achievements and current rank.
+                </SheetDescription>
                 <div className="sheet-handle" />
                 <SheetHeader className="text-left pb-4">
                     <SheetTitle className="text-lg font-medium flex items-center gap-2">

@@ -304,15 +304,15 @@ export function SettingsView({ children }: SettingsViewProps) {
                   <div className="grid grid-cols-5 gap-2">
                     {[
                       { id: 'default', label: 'Classic', icon: Layout },
-                      { id: 'focus', label: 'Focus', icon: Maximize },
-                      { id: 'ergonomic', label: 'Bottom', icon: Smartphone },
+                      { id: 'minimal', label: 'Minimal', icon: Maximize },
+                      { id: 'timeline', label: 'Timeline', icon: RefreshCw },
                       { id: 'hub', label: 'Hub', icon: Component },
                       { id: 'zen', label: 'Zen', icon: Infinity },
                     ].map((l) => (
                       <button
                         key={l.id}
                         onClick={() => {
-                          setLayout(l.id as 'default' | 'focus' | 'ergonomic' | 'hub' | 'zen');
+                          setLayout(l.id as any);
                           setOpen(false);
                         }}
                         className={`

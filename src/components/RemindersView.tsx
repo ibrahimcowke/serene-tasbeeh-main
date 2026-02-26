@@ -7,7 +7,7 @@ import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { toast } from 'sonner';
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger, SheetDescription } from '@/components/ui/sheet';
 
 interface Reminder {
     id: string;
@@ -28,6 +28,9 @@ export function RemindersView({ children }: RemindersViewProps) {
                 {children}
             </SheetTrigger>
             <SheetContent side="bottom" className="bg-sheet-bg rounded-t-3xl h-[85vh]">
+                <SheetDescription className="sr-only">
+                    Configure and manage your dhikr reminders.
+                </SheetDescription>
                 <div className="sheet-handle" />
                 <SheetHeader className="text-left pb-4">
                     <SheetTitle className="text-lg font-medium">Reminders</SheetTitle>

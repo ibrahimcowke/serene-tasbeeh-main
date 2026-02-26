@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Check, Plus, Trash2, Search, Heart } from 'lucide-react';
 import { useTasbeehStore, Dhikr } from '@/store/tasbeehStore';
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger, SheetDescription } from '@/components/ui/sheet';
 import { Input } from '@/components/ui/input';
 import { z } from 'zod';
 
@@ -78,6 +78,9 @@ export function DhikrSelector({ children }: DhikrSelectorProps) {
         {children}
       </SheetTrigger>
       <SheetContent side="bottom" className="bg-sheet-bg rounded-t-3xl h-[80vh]">
+        <SheetDescription className="sr-only">
+          Select or search for a specific dhikr to recite. You can also add your own custom dhikr.
+        </SheetDescription>
         <div className="sheet-handle" />
         <SheetHeader className="text-left pb-4">
           <SheetTitle className="text-lg font-medium">Select Dhikr</SheetTitle>
@@ -95,166 +98,144 @@ export function DhikrSelector({ children }: DhikrSelectorProps) {
             />
           </div>
 
-          <div className="flex gap-2 p-1 bg-secondary rounded-xl">
+          <div className="flex gap-2">
             <button
               onClick={() => setFilterMode('all')}
-              className={`flex-1 py-1.5 text-xs font-medium rounded-lg transition-all ${filterMode === 'all' ? 'bg-card shadow-sm text-foreground' : 'text-muted-foreground'}`}
+              className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${filterMode === 'all' ? 'bg-primary text-primary-foreground' : 'bg-secondary text-muted-foreground'}`}
             >
-              All Dhikr
+              All
             </button>
             <button
               onClick={() => setFilterMode('favorites')}
-              className={`flex-1 py-1.5 text-xs font-medium rounded-lg transition-all ${filterMode === 'favorites' ? 'bg-card shadow-sm text-foreground' : 'text-muted-foreground'}`}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${filterMode === 'favorites' ? 'bg-primary text-primary-foreground' : 'bg-secondary text-muted-foreground'}`}
             >
+              <Heart className={`w-3 h-3 ${filterMode === 'favorites' ? 'fill-current' : ''}`} />
               Favorites
             </button>
           </div>
         </div>
 
-        <div className="space-y-2 overflow-y-auto pb-8 max-h-[calc(80vh-180px)]">
-          {/* Dhikr list */}
-          {allDhikrs.map((dhikr, index) => {
-            const isCustom = dhikr.id.startsWith('custom_');
-            const isDisabled = sessionMode.type === 'tasbih100';
-            const isFavorite = favoriteDhikrIds.includes(dhikr.id);
-
-            return (
-              <motion.button
+        <div className="flex-1 overflow-y-auto pb-safe custom-scrollbar pr-1">
+          <div className="grid grid-cols-1 gap-2 mb-6">
+            {allDhikrs.map((dhikr) => (
+              <motion.div
                 key={dhikr.id}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.03 }}
+                whileTap={{ scale: 0.98 }}
                 onClick={() => handleSelect(dhikr)}
-                disabled={isDisabled}
                 className={`
-                  w-full p-4 rounded-2xl text-left relative
-                  transition-colors duration-200
-                  ${currentDhikr.id === dhikr.id
-                    ? 'bg-accent border border-primary/20'
-                    : 'bg-card hover:bg-secondary'
-                  }
-                  ${isDisabled ? 'opacity-50 cursor-not-allowed' : ''}
+                  relative p-4 rounded-2xl flex items-center justify-between group transition-all
+                  ${currentDhikr.id === dhikr.id ? 'bg-primary/10 ring-1 ring-primary/20' : 'bg-card hover:bg-secondary/50'}
                 `}
               >
-                <div className="flex items-center justify-between">
-                  <div className="flex-1 min-w-0 pr-2">
-                    <p className="font-arabic text-xl text-foreground mb-1">
-                      {dhikr.arabic}
-                    </p>
-                    <p className="text-sm text-muted-foreground truncate">
-                      {dhikr.transliteration}
-                    </p>
-                    <p className="text-xs text-muted-foreground/70 mt-0.5">
-                      {dhikr.meaning}
-                    </p>
+                <div className="flex-1">
+                  <div className="flex items-center gap-2 mb-1">
+                    <h3 className="font-semibold text-lg text-foreground">{dhikr.transliteration}</h3>
+                    {favoriteDhikrIds.includes(dhikr.id) && (
+                      <Heart className="w-3 h-3 text-primary fill-current" />
+                    )}
                   </div>
-                  <div className="flex items-center gap-2">
-                    <button
-                      onClick={(e) => handleToggleFavorite(dhikr.id, e)}
-                      className={`p-2 rounded-full hover:bg-muted transition-colors ${isFavorite ? 'text-red-500' : 'text-muted-foreground/50'}`}
-                      aria-label="Toggle favorite"
-                    >
-                      <Heart className={`w-4 h-4 ${isFavorite ? 'fill-current' : ''}`} />
-                    </button>
+                  <p className="text-sm text-muted-foreground leading-snug">{dhikr.meaning}</p>
+                </div>
 
-                    {isCustom && (
+                <div className="flex items-center gap-2 pl-4">
+                  <div className="flex flex-col items-end gap-2">
+                    <span className="text-2xl font-arabic text-primary leading-none">{dhikr.arabic}</span>
+                    <div className="flex items-center gap-1">
                       <button
-                        onClick={(e) => handleDeleteCustom(dhikr.id, e)}
-                        className="p-2 rounded-full hover:bg-destructive/10 transition-colors"
-                        aria-label="Delete custom dhikr"
+                        onClick={(e) => handleToggleFavorite(dhikr.id, e)}
+                        className="p-2 rounded-full hover:bg-primary/5 transition-colors"
                       >
-                        <Trash2 className="w-4 h-4 text-destructive" />
+                        <Heart className={`w-4 h-4 ${favoriteDhikrIds.includes(dhikr.id) ? 'text-primary fill-current' : 'text-muted-foreground'}`} />
                       </button>
-                    )}
-                    {currentDhikr.id === dhikr.id && (
-                      <div className="w-6 h-6 rounded-full bg-primary flex items-center justify-center">
-                        <Check className="w-4 h-4 text-primary-foreground" />
-                      </div>
-                    )}
+                      {'isCustom' in dhikr && (
+                        <button
+                          onClick={(e) => handleDeleteCustom(dhikr.id, e)}
+                          className="p-2 rounded-full hover:bg-destructive/5 text-muted-foreground hover:text-destructive transition-colors"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                      )}
+                      {currentDhikr.id === dhikr.id && (
+                        <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center">
+                          <Check className="w-5 h-5 text-primary-foreground" />
+                        </div>
+                      )}
+                    </div>
                   </div>
                 </div>
-              </motion.button>
-            );
-          })}
+              </motion.div>
+            ))}
 
-          {/* Add custom dhikr */}
-          {!showAddForm ? (
-            <motion.button
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              onClick={() => setShowAddForm(true)}
-              className="w-full p-4 rounded-2xl border-2 border-dashed border-border hover:border-primary/30 transition-colors flex items-center justify-center gap-2 text-muted-foreground hover:text-foreground"
-            >
-              <Plus className="w-5 h-5" />
-              <span>Add custom dhikr</span>
-            </motion.button>
-          ) : (
-            <motion.div
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="p-4 rounded-2xl bg-card space-y-4"
-            >
-              <p className="text-sm font-medium text-foreground">Add Custom Dhikr</p>
+            {!showAddForm && (
+              <button
+                onClick={() => setShowAddForm(true)}
+                className="w-full p-6 rounded-2xl border-2 border-dashed border-primary/20 text-primary flex flex-col items-center gap-2 hover:bg-primary/5 transition-all"
+              >
+                <Plus className="w-6 h-6" />
+                <span className="text-sm font-medium">Add Custom Dhikr</span>
+              </button>
+            )}
 
-              <div className="space-y-3">
-                <div>
-                  <Input
-                    placeholder="Arabic text (e.g., سُبْحَانَ اللهِ)"
-                    value={newDhikr.arabic}
-                    onChange={(e) => setNewDhikr({ ...newDhikr, arabic: e.target.value })}
-                    className="font-arabic text-lg h-12 rounded-xl bg-background"
-                    dir="rtl"
-                  />
-                  {errors.arabic && <p className="text-xs text-destructive mt-1">{errors.arabic}</p>}
+            {showAddForm && (
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="p-5 rounded-2xl bg-card border border-primary/20 space-y-4"
+              >
+                <div className="space-y-3">
+                  <div className="space-y-1.5">
+                    <label className="text-xs font-medium text-muted-foreground uppercase">Arabic</label>
+                    <input
+                      value={newDhikr.arabic}
+                      onChange={(e) => setNewDhikr({ ...newDhikr, arabic: e.target.value })}
+                      placeholder="e.g., سبحان الله"
+                      dir="rtl"
+                      className="w-full px-4 py-2.5 rounded-xl bg-secondary border-none font-arabic text-xl"
+                    />
+                    {errors.arabic && <p className="text-[10px] text-destructive">{errors.arabic}</p>}
+                  </div>
+                  <div className="space-y-1.5">
+                    <label className="text-xs font-medium text-muted-foreground uppercase">Transliteration</label>
+                    <input
+                      value={newDhikr.transliteration}
+                      onChange={(e) => setNewDhikr({ ...newDhikr, transliteration: e.target.value })}
+                      placeholder="e.g., SubhanAllah"
+                      className="w-full px-4 py-2.5 rounded-xl bg-secondary border-none text-sm"
+                    />
+                    {errors.transliteration && <p className="text-[10px] text-destructive">{errors.transliteration}</p>}
+                  </div>
+                  <div className="space-y-1.5">
+                    <label className="text-xs font-medium text-muted-foreground uppercase">Meaning</label>
+                    <input
+                      value={newDhikr.meaning}
+                      onChange={(e) => setNewDhikr({ ...newDhikr, meaning: e.target.value })}
+                      placeholder="e.g., Glory be to Allah"
+                      className="w-full px-4 py-2.5 rounded-xl bg-secondary border-none text-sm"
+                    />
+                    {errors.meaning && <p className="text-[10px] text-destructive">{errors.meaning}</p>}
+                  </div>
                 </div>
 
-                <div>
-                  <Input
-                    placeholder="Transliteration (e.g., SubhanAllah)"
-                    value={newDhikr.transliteration}
-                    onChange={(e) => setNewDhikr({ ...newDhikr, transliteration: e.target.value })}
-                    className="h-12 rounded-xl bg-background"
-                  />
-                  {errors.transliteration && <p className="text-xs text-destructive mt-1">{errors.transliteration}</p>}
+                <div className="flex gap-2 pt-2">
+                  <button
+                    onClick={handleAddCustom}
+                    className="flex-1 py-2.5 bg-primary text-primary-foreground rounded-xl font-medium text-sm"
+                  >
+                    Add
+                  </button>
+                  <button
+                    onClick={() => {
+                      setShowAddForm(false);
+                      setErrors({});
+                    }}
+                    className="flex-1 py-2.5 bg-secondary text-foreground rounded-xl font-medium text-sm"
+                  >
+                    Cancel
+                  </button>
                 </div>
-
-                <div>
-                  <Input
-                    placeholder="Meaning (e.g., Glory be to Allah)"
-                    value={newDhikr.meaning}
-                    onChange={(e) => setNewDhikr({ ...newDhikr, meaning: e.target.value })}
-                    className="h-12 rounded-xl bg-background"
-                  />
-                  {errors.meaning && <p className="text-xs text-destructive mt-1">{errors.meaning}</p>}
-                </div>
-              </div>
-
-              <div className="flex gap-2">
-                <button
-                  onClick={() => {
-                    setShowAddForm(false);
-                    setNewDhikr({ arabic: '', transliteration: '', meaning: '' });
-                    setErrors({});
-                  }}
-                  className="flex-1 py-3 rounded-xl bg-secondary text-secondary-foreground font-medium"
-                >
-                  Cancel
-                </button>
-                <button
-                  onClick={handleAddCustom}
-                  className="flex-1 py-3 rounded-xl bg-primary text-primary-foreground font-medium"
-                >
-                  Add
-                </button>
-              </div>
-            </motion.div>
-          )}
-
-          {sessionMode.type === 'tasbih100' && (
-            <p className="text-xs text-muted-foreground text-center pt-2">
-              Dhikr selection is disabled during 100 session mode
-            </p>
-          )}
+              </motion.div>
+            )}
+          </div>
         </div>
       </SheetContent>
     </Sheet>

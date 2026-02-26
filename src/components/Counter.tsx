@@ -471,6 +471,7 @@ export function Counter() {
                   { id: 'luminous-ring', label: 'Lume', icon: '⭕' },
                   { id: 'ring-light', label: 'Ring Light', icon: '🔆' },
                   { id: 'galaxy', label: 'Galaxy', icon: '🌌' },
+                  { id: 'digital-watch', label: 'Watch', icon: '⌚' },
                   { id: 'tally-clicker', label: 'Tally 3D', icon: '🖱️' },
                   { id: 'steampunk-nixie', label: 'Steampunk', icon: '⚙️' },
                   { id: 'biolum-organic', label: 'Bio-Lum', icon: '🧬' },

@@ -1,6 +1,6 @@
 import { useTasbeehStore } from '@/store/tasbeehStore';
 import { defaultRoutines } from '@/data/routines';
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger, SheetDescription } from '@/components/ui/sheet';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { motion } from 'framer-motion';
 import { Play, ClipboardList, Clock, Sun, Moon, ArrowRight, CheckCircle2 } from 'lucide-react';
@@ -25,6 +25,9 @@ export function RoutinesView({ children }: RoutinesViewProps) {
                 {children}
             </SheetTrigger>
             <SheetContent side="bottom" className="bg-sheet-bg rounded-t-3xl h-[85vh]">
+                <SheetDescription className="sr-only">
+                    View and start guided dhikr routines.
+                </SheetDescription>
                 <div className="sheet-handle" />
                 <SheetHeader className="text-left pb-4">
                     <SheetTitle className="text-lg font-medium flex items-center gap-2">

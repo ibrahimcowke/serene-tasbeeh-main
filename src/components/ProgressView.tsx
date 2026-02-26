@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger, SheetDescription } from '@/components/ui/sheet';
 import { StatsViewContent } from './StatsView';
 import { AchievementsContent } from './AchievementsView';
 import { RemindersContent } from './RemindersView';
@@ -17,6 +17,9 @@ export function ProgressView({ children }: ProgressViewProps) {
                 {children}
             </SheetTrigger>
             <SheetContent side="bottom" className="bg-sheet-bg rounded-t-3xl h-[85vh]">
+                <SheetDescription className="sr-only">
+                    View and start guided dhikr routines.
+                </SheetDescription>
                 <div className="sheet-handle" />
                 <SheetHeader className="text-left pb-4">
                     <SheetTitle className="text-lg font-medium">Progress</SheetTitle>

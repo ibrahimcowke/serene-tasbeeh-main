@@ -1,182 +1,78 @@
-import { useEffect } from 'react';
-import { Counter } from '@/components/Counter';
-import { ThemeProvider } from '@/components/ThemeProvider';
-import { BreathingGuide } from '@/components/BreathingGuide';
-import { useTasbeehStore } from '@/store/tasbeehStore';
-import { toast } from 'sonner';
-import { themes, counterShapes } from '@/lib/constants';
-
-import { WhatsNew } from '@/components/WhatsNew';
-import { StatsWidget } from '@/components/StatsWidget';
-import { DateBanner } from "@/components/DateBanner";
-import { RoutinesView } from "@/components/RoutinesView";
-import { GlobalChallenges } from "@/components/GlobalChallenges";
-import { GlobalStats } from "@/components/GlobalStats";
-import { HadithSlider } from "@/components/HadithSlider";
-import { HubDashboard } from '@/components/HubDashboard';
-import { MinimalDashboard } from '@/components/MinimalDashboard';
-import { DhikrPulse } from "@/components/DhikrPulse";
-import { JoinNotifier } from "@/components/JoinNotifier";
-import { NotificationCenter } from "@/components/NotificationCenter";
-import { CommunitySidebar } from "@/components/CommunitySidebar";
-
-import { ScreenOffMode } from "@/components/ScreenOffMode";
-import { getRecommendedTheme } from '@/lib/timeUtils';
-import { VisitorCounter } from '@/components/VisitorCounter';
+import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useTasbeehStore } from '@/store/tasbeehStore';
+import { ThemeProvider } from '@/components/ThemeProvider';
 import { SidebarProvider, SidebarInset, SidebarTrigger } from '@/components/ui/sidebar';
 import { AppSidebar } from '@/components/AppSidebar';
+import { VisitorCounter } from '@/components/VisitorCounter';
+import { NotificationCenter } from '@/components/NotificationCenter';
+import { DateBanner } from '@/components/DateBanner';
+import { MainFeed } from '@/components/MainFeed';
+import { RoutinesView } from '@/components/RoutinesView';
+import { DhikrPulse } from '@/components/DhikrPulse';
+import { ScreenOffMode } from '@/components/ScreenOffMode';
+import { WhatsNew } from '@/components/WhatsNew';
+import { BreathingGuide } from '@/components/BreathingGuide';
+import { CommunitySidebar } from '@/components/CommunitySidebar';
+import { JoinNotifier } from '@/components/JoinNotifier';
+import ClassicDashboard from '@/components/dashboards/ClassicDashboard';
+import MinimalDashboard from '@/components/dashboards/MinimalDashboard';
+import TimelineDashboard from '@/components/dashboards/TimelineDashboard';
+import { HubDashboard } from '@/components/HubDashboard';
 
 const Index = () => {
-  const {
-    zenMode,
-    setZenMode,
-    syncToCloud,
-    theme,
-    autoThemeSwitch,
-    setTheme,
-    currentDhikr,
-    layout,
-    setLayout
-  } = useTasbeehStore();
-
-  // Auto theme switch effect
-  useEffect(() => {
-    if (!autoThemeSwitch) return;
-
-    const checkTime = () => {
-      const recommended = getRecommendedTheme();
-      if (theme !== recommended) {
-        setTheme(recommended);
-      }
-    };
-
-    checkTime();
-    const interval = setInterval(checkTime, 60000);
-    return () => clearInterval(interval);
-  }, [autoThemeSwitch, theme, setTheme]);
-
-  // Handle PWA shortcuts / URL params
-  useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    const routineId = params.get('routine');
-    const sessionType = params.get('session');
-
-    const timer = setTimeout(() => {
-      const { startRoutine, startTasbih100 } = useTasbeehStore.getState();
-
-      if (routineId) {
-        startRoutine(routineId);
-        window.history.replaceState({}, '', window.location.pathname);
-        toast.success("Started Routine", { description: `Loaded ${routineId} routine` });
-      } else if (sessionType === '100') {
-        startTasbih100();
-        window.history.replaceState({}, '', window.location.pathname);
-        toast.success("Started Session", { description: "100 Tasbeeh session started" });
-      }
-    }, 500);
-
-    return () => clearTimeout(timer);
-  }, []);
-
-  useEffect(() => {
-    const handleOnline = () => {
-      toast.success("You're back online!", {
-        description: "Syncing your data to the cloud..."
-      });
-      syncToCloud();
-    };
-
-    const handleOffline = () => {
-      toast.info("You're offline", {
-        description: "Your progress is saved locally."
-      });
-    };
-
-    window.addEventListener('online', handleOnline);
-    window.addEventListener('offline', handleOffline);
-
-    return () => {
-      window.removeEventListener('online', handleOnline);
-      window.removeEventListener('offline', handleOffline);
-    };
-  }, [syncToCloud]);
+  const { zenMode, setZenMode, layout, setLayout } = useTasbeehStore();
+  const [activeTab, setActiveTab] = useState<'me' | 'community'>('me');
 
   const renderDashboard = () => {
-    if (zenMode) return <Counter />;
-
     switch (layout) {
+      case 'minimal':
+        return <MinimalDashboard />;
+      case 'timeline':
+        return <TimelineDashboard />;
       case 'hub':
         return <HubDashboard />;
       case 'zen':
-        return <MinimalDashboard />;
+        return <ClassicDashboard />;
+      case 'classic':
       default:
         return (
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-            {/* Desktop: Left Column (Personal Stats) */}
-            <motion.div
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              className="lg:col-span-3 space-y-6 hidden lg:block sticky top-24"
-            >
-              <div className="bg-card/30 backdrop-blur-xl border border-border/50 rounded-[2.5rem] p-1 overflow-hidden">
-                <div className="p-6 border-b border-border/50">
-                  <h2 className="text-xs font-bold uppercase tracking-[0.2em] text-muted-foreground/60">My Growth</h2>
-                </div>
-                <div className="p-4">
-                  <StatsWidget />
-                </div>
-              </div>
-            </motion.div>
-
-            {/* Center Column: The Counter (Heart of the App) */}
-            <div className="lg:col-span-6 flex flex-col items-center">
-              <div className="w-full max-w-xl">
-                <Counter />
+          <div className="flex flex-col lg:flex-row gap-6 lg:gap-8 items-start justify-center">
+            {/* Main Content Area */}
+            <div className={`w-full transition-all duration-500 ${activeTab === 'community' ? 'hidden lg:block lg:flex-1' : 'flex-1'}`}>
+              <div className="lg:hidden flex items-center justify-center p-1 bg-card/40 backdrop-blur-xl border border-white/10 rounded-2xl mb-6 mt-2">
+                <button
+                  onClick={() => setActiveTab('me')}
+                  className={`flex-1 py-2 text-sm font-medium rounded-xl transition-all ${activeTab === 'me' ? 'bg-primary text-primary-foreground shadow-lg' : 'text-muted-foreground'}`}
+                >
+                  My Journey
+                </button>
+                <button
+                  onClick={() => setActiveTab('community')}
+                  className={`flex-1 py-2 text-sm font-medium rounded-xl transition-all ${activeTab === 'community' ? 'bg-primary text-primary-foreground shadow-lg' : 'text-muted-foreground'}`}
+                >
+                  Community
+                </button>
               </div>
 
-              <div className="w-full max-w-md mt-6">
-                <HadithSlider dhikr={currentDhikr} />
-              </div>
-
-              {/* Premium Mobile Feed (Aesthetic Integrated View) */}
-              <div className="w-full mt-8 xs:mt-12 space-y-6 xs:space-y-8 lg:hidden">
-                {/* Section 1: Community Pulse & My Quick Stats */}
-                <div className="grid grid-cols-2 gap-3 xs:gap-4">
-                  <div className="bg-card/20 backdrop-blur-xl border border-white/5 rounded-3xl p-3 xs:p-4 flex flex-col items-center justify-center text-center">
-                    <h3 className="text-[9px] xs:text-[10px] font-bold uppercase tracking-widest text-muted-foreground mb-1.5 xs:mb-2">Live Activity</h3>
-                    <GlobalStats />
-                  </div>
-                  <div className="bg-card/20 backdrop-blur-xl border border-white/5 rounded-3xl p-3 xs:p-4 flex flex-col items-center justify-center text-center">
-                    <h3 className="text-[9px] xs:text-[10px] font-bold uppercase tracking-widest text-muted-foreground mb-1.5 xs:mb-2">My Best</h3>
-                    <StatsWidget mini />
-                  </div>
-                </div>
-
-                {/* Section 2: Active Challenges (High Density) */}
-                <div className="space-y-3 xs:space-y-4">
-                  <div className="flex items-center justify-between px-2">
-                    <h2 className="text-xs font-bold uppercase tracking-widest text-muted-foreground/80">Active Challenges</h2>
-                    <span className="text-[9px] xs:text-[10px] font-medium text-primary/80 bg-primary/10 px-2 py-0.5 rounded-full">Community</span>
-                  </div>
-                  <div className="relative">
-                    <GlobalChallenges />
-                  </div>
-                </div>
-
-                {/* Section 3: Full Progress Details */}
-                <div className="bg-card/20 backdrop-blur-xl border border-white/5 rounded-[1.5rem] xs:rounded-[2rem] p-4 xs:p-6">
-                  <h2 className="text-xs font-bold uppercase tracking-widest text-muted-foreground mb-4 xs:mb-6">Detailed Progress</h2>
-                  <StatsWidget />
-                </div>
-              </div>
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={activeTab === 'me' ? 'me' : 'community-mobile'}
+                  initial={{ opacity: 0, x: activeTab === 'me' ? -20 : 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: activeTab === 'me' ? -20 : 20 }}
+                  className={activeTab === 'community' ? 'lg:hidden' : ''}
+                >
+                  {activeTab === 'me' ? <ClassicDashboard /> : <CommunitySidebar />}
+                </motion.div>
+              </AnimatePresence>
             </div>
 
-            {/* Desktop: Right Column (Community & Challenges) */}
+            {/* Desktop Community Sidebar */}
             <motion.div
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
-              className="lg:col-span-3 space-y-6 hidden lg:block sticky top-24"
+              className={`hidden lg:block w-80 xl:w-96 sticky top-24 h-[calc(100vh-8rem)] ${activeTab === 'community' ? 'block' : ''}`}
             >
               <CommunitySidebar />
             </motion.div>
@@ -202,28 +98,31 @@ const Index = () => {
               ${(zenMode || layout === 'zen') ? 'opacity-0 -translate-y-20' : 'opacity-100 translate-y-0'}
               top-2 xs:top-4 left-1/2 -translate-x-1/2 w-[calc(100%-1rem)] xs:w-[calc(100%-2rem)] max-w-5xl
               lg:top-0 lg:max-w-none lg:w-full lg:left-0 lg:translate-x-0`}>
-              <div className="flex items-center justify-between gap-1 p-1 xs:p-1.5 pl-2 xs:pl-3 pr-1 xs:pr-2 
-                rounded-full bg-card/40 backdrop-blur-2xl border border-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.12)] pointer-events-auto
-                lg:rounded-none lg:border-t-0 lg:border-x-0 lg:px-8 lg:h-16">
-                {/* Left: Sidebar & Visitors */}
-                <div className="flex items-center gap-1.5 xs:gap-3">
-                  <div className="flex items-center gap-1 xs:gap-1.5">
-                    {!(zenMode || layout === 'zen') && <SidebarTrigger className="h-7 w-7 xs:h-8 xs:w-8 hover:bg-black/5" />}
-                    <div className="h-4 w-px bg-white/10 hidden xs:block" />
-                    <div className="scale-75 xs:scale-90 origin-left">
+              <div className={`
+                  flex items-center justify-between w-full h-14 sm:h-16 px-2 sm:px-4 md:px-6 
+                  bg-card/40 backdrop-blur-2xl border border-white/10 shadow-2xl rounded-2xl lg:rounded-none pointer-events-auto
+                  transition-all duration-500
+                `}>
+                <div className="flex items-center gap-2 sm:gap-4 md:gap-8">
+                  {/* Left Section: Nav Trigger & Visitor Counter */}
+                  <div className="flex items-center gap-1.5 sm:gap-3">
+                    {!(zenMode || layout === 'zen') && <SidebarTrigger className="h-8 w-8 hover:bg-black/5" />}
+                    <div className="hidden sm:block h-4 w-px bg-white/10" />
+                    <div className="scale-[0.85] sm:scale-100 origin-left">
                       <VisitorCounter />
                     </div>
-                    <div className="h-4 w-px bg-white/10" />
-                    <NotificationCenter />
+                  </div>
+
+                  {/* Center Section: Date Banner - Hidden on mobile/tablet inside capsule */}
+                  <div className="hidden md:block flex-1 max-w-sm">
+                    <DateBanner />
                   </div>
                 </div>
 
-                {/* Right: Date Capsule */}
-                <div className="flex items-center">
-                  <div className="hidden xs:block border-l border-white/10 h-4 mx-2" />
-                  <div className="scale-[0.85] xs:scale-100 origin-right max-w-[110px] xs:max-w-none overflow-hidden">
-                    <DateBanner />
-                  </div>
+                {/* Right Section: Notification Center */}
+                <div className="flex items-center gap-1 sm:gap-2">
+                  <div className="hidden sm:block h-4 w-px bg-white/10 mr-1 sm:mr-2" />
+                  <NotificationCenter />
                 </div>
               </div>
             </div>

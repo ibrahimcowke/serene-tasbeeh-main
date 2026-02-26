@@ -586,8 +586,20 @@ export function CounterVisuals({
                             {/* Tube Highlights */}
                             <div className="absolute inset-0 flex justify-center items-center gap-1 z-0 opacity-30">
                                 <div className="w-12 h-20 rounded-full bg-gradient-to-r from-transparent via-[#c5a059]/20 to-transparent blur-sm" />
-                                <div className="w-12 h-20 rounded-full bg-gradient-to-r from-transparent via-[#c5a059]/20 to-transparent blur-sm" />
-                                <div className="w-12 h-20 rounded-full bg-gradient-to-r from-transparent via-[#c5a059]/20 to-transparent blur-sm" />
+                            </div>
+
+                            {/* Nixie Digits */}
+                            <div className="flex gap-2 z-10">
+                                {currentCount.toString().padStart(4, '0').split('').map((digit, i) => (
+                                    <motion.div
+                                        key={`${i}-${digit}`}
+                                        initial={{ opacity: 0, scale: 0.8 }}
+                                        animate={{ opacity: 1, scale: 1 }}
+                                        className="text-5xl font-mono font-bold text-orange-500 drop-shadow-[0_0_8px_orange]"
+                                    >
+                                        {digit}
+                                    </motion.div>
+                                ))}
                             </div>
                         </div>
 
@@ -794,8 +806,9 @@ export function CounterVisuals({
         ${counterShape === 'glass-orb' ? 'w-64 h-64 rounded-full flex items-center justify-center' : ''}
         ${counterShape === 'portal-depth' ? 'w-64 h-64 rounded-full flex items-center justify-center text-primary-foreground' : ''}
         ${counterShape === 'luminous-ring' ? 'w-64 h-64 rounded-full flex items-center justify-center text-primary' : ''}
-        ${counterShape === 'steampunk-nixie' ? 'w-64 h-64 rounded-full flex items-center justify-center' : ''}
         ${counterShape === 'biolum-organic' ? 'w-64 h-64 rounded-full flex items-center justify-center' : ''}
+        ${counterShape === 'steampunk-nixie' ? 'w-64 h-64 rounded-full flex items-center justify-center' : ''}
+        ${counterShape === 'digital-watch' ? 'w-64 h-64 flex items-center justify-center' : ''}
         ${counterShape === 'solar-flare' ? 'w-64 h-64 rounded-full flex items-center justify-center' : ''}
         ${counterShape === 'nebula-cloud' ? 'w-64 h-64 rounded-full flex items-center justify-center bg-transparent backdrop-blur-sm' : ''}
         ${counterShape === 'infinite-knot' ? 'w-64 h-64 rounded-full flex items-center justify-center' : ''}
@@ -853,7 +866,7 @@ export function CounterVisuals({
                     transition={{ duration: 0.15, ease: [0.34, 1.56, 0.64, 1] }}
                     className={`
           counter-number text-counter-text
-          ${['digital', 'vertical-capsules', 'tally-clicker', 'cyber-3d', 'crystal-iso', 'neumorph'].includes(counterShape) ? 'hidden' : ''}
+          ${['digital', 'vertical-capsules', 'tally-clicker', 'cyber-3d', 'crystal-iso', 'neumorph', 'digital-watch', 'steampunk-nixie'].includes(counterShape) ? 'hidden' : ''}
           ${counterShape === 'classic' ? 'font-mono text-5xl sm:text-6xl md:text-7xl tracking-widest bg-black/10 px-4 sm:px-6 py-2 rounded-lg inset-shadow mb-4' : 'text-5xl sm:text-6xl md:text-7xl lg:text-8xl'}
           ${counterShape === 'waveform' ? 'drop-shadow-md z-10' : ''}
           ${counterShape === 'modern-ring' ? 'font-sans font-light tracking-tighter drop-shadow-[0_0_15px_rgba(var(--primary),0.6)]' : ''}
