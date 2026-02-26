@@ -54,8 +54,8 @@ export type CounterShape =
   | 'holo-fan'
   | 'animated-ripple' | 'bead-ring' | 'halo-ring' | 'vertical-capsules' | 'luminous-beads'
   | 'helix-strand' | 'cyber-hexagon' | 'blooming-lotus' | 'constellation' | 'glass-pill' | 'emerald-loop'
-  | 'smart-ring' | 'moon-phase' | 'water-ripple' | 'sand-hourglass' | 'lantern-fanous';
-
+  | 'smart-ring' | 'moon-phase' | 'water-ripple' | 'sand-hourglass' | 'lantern-fanous'
+  | 'digital-watch' | 'star-burst' | 'crystal-prism';
 interface TasbeehState {
   // Counts
   count: number; // Legacy, keep for migration
@@ -632,11 +632,15 @@ export const useTasbeehStore = create<TasbeehState>()(
           } else if (sessionMode.type === 'routine') {
             const currentStep = sessionMode.steps[sessionMode.currentStepIndex];
             if (newCount >= currentStep.target) {
-                // Auto-complete step or wait for user? 
-                // Let's mark as complete but wait for user to click "Next" or auto-advance if it's the last step?
-                // For now, let's keep it simple: just track count. UI will show "Next" button.
-                // Or maybe auto-advance if it's a small count? No, user needs to acknowledge.
-                // Actually, let's just mark the step as "done" internally so UI shows completion check
+                if (sessionMode.currentStepIndex < sessionMode.steps.length - 1) {
+                    sessionMode.currentStepIndex += 1;
+                    const nextStep = sessionMode.steps[sessionMode.currentStepIndex];
+                    const nextDhikr = state.dhikrs.find(d => d.id === nextStep.dhikrId) || defaultDhikrs[0];
+                    currentDhikr = nextDhikr;
+                    newCount = 0;
+                } else {
+                    sessionMode.isComplete = true;
+                }
             }
           }
           
@@ -674,6 +678,7 @@ export const useTasbeehStore = create<TasbeehState>()(
           return {
             count: state.count + 1, // Legacy
             currentCount: newCount,
+            currentDhikr: currentDhikr,
             dailyRecords: updatedRecords,
             totalAllTime: newTotalAllTime,
             sessionMode: sessionMode,

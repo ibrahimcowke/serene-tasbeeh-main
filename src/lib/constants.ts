@@ -69,4 +69,7 @@ export const counterShapes = [
   { id: 'water-ripple', label: 'Ripple', icon: '💧' },
   { id: 'sand-hourglass', label: 'Hourglass', icon: '⏳' },
   { id: 'lantern-fanous', label: 'Lantern', icon: '🏮' },
+  { id: 'digital-watch', label: 'Watch', icon: '⌚' },
+  { id: 'star-burst', label: 'Starburst', icon: '💥' },
+  { id: 'crystal-prism', label: 'Prism', icon: '💎' },
 ] as const;

@@ -16,6 +16,9 @@ import { MoonPhase } from './counter-shapes/MoonPhase';
 import { WaterRipple } from './counter-shapes/WaterRipple';
 import { SandHourglass } from './counter-shapes/SandHourglass';
 import { LanternFanous } from './counter-shapes/LanternFanous';
+import { DigitalWatch } from './counter-shapes/DigitalWatch';
+import { StarBurst } from './counter-shapes/StarBurst';
+import { CrystalPrism } from './counter-shapes/CrystalPrism';
 
 
 interface CounterVisualsProps {
@@ -742,6 +745,9 @@ export function CounterVisuals({
             {counterShape === 'water-ripple' && <WaterRipple currentCount={currentCount} />}
             {counterShape === 'sand-hourglass' && <SandHourglass currentCount={currentCount} />}
             {counterShape === 'lantern-fanous' && <LanternFanous currentCount={currentCount} />}
+            {counterShape === 'digital-watch' && <DigitalWatch currentCount={currentCount} />}
+            {counterShape === 'star-burst' && <StarBurst currentCount={currentCount} />}
+            {counterShape === 'crystal-prism' && <CrystalPrism currentCount={currentCount} />}
 
 
 
@@ -792,7 +798,7 @@ export function CounterVisuals({
 
         ${counterShape === 'animated-ripple' ? 'w-64 h-64 flex items-center justify-center' : ''}
         ${counterShape === 'bead-ring' ? 'w-64 h-64 flex items-center justify-center' : ''}
-        ${['helix-strand', 'cyber-hexagon', 'blooming-lotus', 'constellation', 'glass-pill', 'emerald-loop', 'smart-ring', 'moon-phase', 'water-ripple', 'sand-hourglass', 'lantern-fanous'].includes(counterShape) ? 'w-64 h-64 flex items-center justify-center' : ''}
+        ${['helix-strand', 'cyber-hexagon', 'blooming-lotus', 'constellation', 'glass-pill', 'emerald-loop', 'smart-ring', 'moon-phase', 'water-ripple', 'sand-hourglass', 'lantern-fanous', 'digital-watch', 'star-burst', 'crystal-prism'].includes(counterShape) ? 'w-64 h-64 flex items-center justify-center' : ''}
 
         flex items-center justify-center
         cursor-pointer
