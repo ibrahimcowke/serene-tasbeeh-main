@@ -7,7 +7,7 @@ import { AppSidebar } from '@/components/AppSidebar';
 import { VisitorCounter } from '@/components/VisitorCounter';
 import { NotificationCenter } from '@/components/NotificationCenter';
 import { DateBanner } from '@/components/DateBanner';
-import { MainFeed } from '@/components/MainFeed';
+import { MainFeed } from '../components/MainFeed';
 import { RoutinesView } from '@/components/RoutinesView';
 import { DhikrPulse } from '@/components/DhikrPulse';
 import { ScreenOffMode } from '@/components/ScreenOffMode';
@@ -15,9 +15,9 @@ import { WhatsNew } from '@/components/WhatsNew';
 import { BreathingGuide } from '@/components/BreathingGuide';
 import { CommunitySidebar } from '@/components/CommunitySidebar';
 import { JoinNotifier } from '@/components/JoinNotifier';
-import ClassicDashboard from '@/components/dashboards/ClassicDashboard';
-import MinimalDashboard from '@/components/dashboards/MinimalDashboard';
-import TimelineDashboard from '@/components/dashboards/TimelineDashboard';
+import ClassicDashboard from '../components/dashboards/ClassicDashboard';
+import MinimalDashboard from '../components/dashboards/MinimalDashboard';
+import TimelineDashboard from '../components/dashboards/TimelineDashboard';
 import { HubDashboard } from '@/components/HubDashboard';
 
 const Index = () => {
