@@ -236,6 +236,16 @@ const initialThemeSettings: Record<string, ThemeSettings> = {
   'theme-radar-tactical': { ...defaultThemeSettings },
   'theme-steampunk': { ...defaultThemeSettings },
   'theme-crystal-depth': { ...defaultThemeSettings },
+  'theme-mecca-night': { ...defaultThemeSettings },
+  'theme-medina-rose': { ...defaultThemeSettings },
+  'theme-blue-mosque': { ...defaultThemeSettings },
+  'theme-desert-starlight': { ...defaultThemeSettings },
+  'theme-sahara-warmth': { ...defaultThemeSettings },
+  'theme-andalusia-earth': { ...defaultThemeSettings },
+  'theme-istanbul-sunset': { ...defaultThemeSettings },
+  'theme-taj-marble': { ...defaultThemeSettings },
+  'theme-royal-persian': { ...defaultThemeSettings },
+  'theme-ramadan-lantern': { ...defaultThemeSettings },
 };
 
 
@@ -781,7 +791,9 @@ export const useTasbeehStore = create<TasbeehState>()(
       
       resetSettings: () => {
          const root = window.document.documentElement;
-         root.classList.remove('light', 'dark', 'theme-midnight', 'theme-neon', 'theme-green', 'theme-cyberpunk', 'theme-glass', 'theme-sunset', 'theme-forest', 'theme-oled', 'theme-biolum', 'theme-radar-tactical', 'theme-steampunk', 'theme-crystal-depth');
+         root.classList.remove('light', 'dark', 'theme-midnight', 'theme-neon', 'theme-green', 'theme-cyberpunk', 'theme-glass', 'theme-sunset', 'theme-forest', 'theme-oled', 'theme-biolum', 'theme-radar-tactical', 'theme-steampunk', 'theme-crystal-depth',
+          'theme-mecca-night', 'theme-medina-rose', 'theme-blue-mosque', 'theme-desert-starlight', 'theme-sahara-warmth', 'theme-andalusia-earth', 'theme-istanbul-sunset', 'theme-taj-marble', 'theme-royal-persian', 'theme-ramadan-lantern'
+         );
          root.classList.add('light');
          
          set({ 

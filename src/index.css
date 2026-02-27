@@ -770,6 +770,165 @@
     --sheet-bg: 35 30% 96%;
   }
 
+  .theme-andalusia-earth {
+    color-scheme: light;
+    /* Terracotta & Emerald */
+    --background: 25 30% 95%;
+    --foreground: 160 40% 15%;
+    --card: 25 30% 98%;
+    --card-foreground: 160 40% 15%;
+    --popover: 25 30% 98%;
+    --popover-foreground: 160 40% 15%;
+    --primary: 160 50% 35%;
+    /* Emerald */
+    --primary-foreground: 0 0% 100%;
+    --secondary: 25 40% 90%;
+    --secondary-foreground: 160 40% 20%;
+    --muted: 25 20% 92%;
+    --muted-foreground: 160 20% 50%;
+    --accent: 25 70% 45%;
+    /* Terracotta */
+    --accent-foreground: 0 0% 100%;
+    --border: 25 30% 85%;
+    --input: 25 30% 85%;
+    --ring: 160 50% 35%;
+    --counter-bg: 0 0% 100%;
+    --counter-ring: 160 50% 35%;
+    --counter-text: 160 60% 20%;
+    --counter-glow: 160 50% 70%;
+    --arabic-text: 160 50% 20%;
+    --progress-track: 25 30% 90%;
+    --progress-fill: 160 50% 35%;
+    --sheet-bg: 25 30% 96%;
+  }
+
+  .theme-istanbul-sunset {
+    color-scheme: dark;
+    /* Purple & Orange */
+    --background: 260 50% 8%;
+    --foreground: 20 100% 95%;
+    --card: 260 50% 12%;
+    --card-foreground: 20 100% 95%;
+    --popover: 260 50% 12%;
+    --popover-foreground: 20 100% 95%;
+    --primary: 20 100% 60%;
+    /* Orange */
+    --primary-foreground: 260 50% 8%;
+    --secondary: 260 40% 18%;
+    --secondary-foreground: 20 100% 90%;
+    --muted: 260 40% 20%;
+    --muted-foreground: 260 20% 60%;
+    --accent: 280 80% 60%;
+    /* Purple */
+    --accent-foreground: 0 0% 100%;
+    --border: 260 40% 20%;
+    --input: 260 40% 20%;
+    --ring: 20 100% 60%;
+    --counter-bg: 260 50% 10%;
+    --counter-ring: 20 100% 60%;
+    --counter-text: 20 100% 90%;
+    --counter-glow: 20 100% 50%;
+    --arabic-text: 20 100% 95%;
+    --progress-track: 260 40% 20%;
+    --progress-fill: 20 100% 60%;
+    --sheet-bg: 260 50% 10%;
+  }
+
+  .theme-taj-marble {
+    color-scheme: light;
+    /* White & Stone */
+    --background: 0 0% 98%;
+    --foreground: 0 0% 20%;
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 20%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 20%;
+    --primary: 0 0% 30%;
+    /* Stone Gray */
+    --primary-foreground: 0 0% 100%;
+    --secondary: 0 0% 94%;
+    --secondary-foreground: 0 0% 30%;
+    --muted: 0 0% 92%;
+    --muted-foreground: 0 0% 50%;
+    --accent: 0 0% 15%;
+    --accent-foreground: 0 0% 100%;
+    --border: 0 0% 90%;
+    --input: 0 0% 90%;
+    --ring: 0 0% 30%;
+    --counter-bg: 0 0% 100%;
+    --counter-ring: 0 0% 30%;
+    --counter-text: 0 0% 15%;
+    --counter-glow: 0 0% 80%;
+    --arabic-text: 0 0% 20%;
+    --progress-track: 0 0% 92%;
+    --progress-fill: 0 0% 30%;
+    --sheet-bg: 0 0% 99%;
+  }
+
+  .theme-royal-persian {
+    color-scheme: light;
+    /* Turquoise & Gold */
+    --background: 180 30% 96%;
+    --foreground: 180 60% 15%;
+    --card: 0 0% 100%;
+    --card-foreground: 180 60% 15%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 180 60% 15%;
+    --primary: 180 80% 40%;
+    /* Turquoise */
+    --primary-foreground: 0 0% 100%;
+    --secondary: 180 30% 90%;
+    --secondary-foreground: 180 60% 25%;
+    --muted: 180 20% 92%;
+    --muted-foreground: 180 30% 50%;
+    --accent: 45 100% 50%;
+    /* Gold */
+    --accent-foreground: 0 0% 0%;
+    --border: 180 30% 85%;
+    --input: 180 30% 85%;
+    --ring: 180 80% 40%;
+    --counter-bg: 0 0% 100%;
+    --counter-ring: 180 80% 40%;
+    --counter-text: 180 90% 30%;
+    --counter-glow: 180 80% 80%;
+    --arabic-text: 180 60% 20%;
+    --progress-track: 180 30% 90%;
+    --progress-fill: 180 80% 40%;
+    --sheet-bg: 180 30% 97%;
+  }
+
+  .theme-ramadan-lantern {
+    color-scheme: dark;
+    /* Dark Amber */
+    --background: 30 50% 4%;
+    --foreground: 35 100% 95%;
+    --card: 30 50% 8%;
+    --card-foreground: 35 100% 95%;
+    --popover: 30 50% 8%;
+    --popover-foreground: 35 100% 95%;
+    --primary: 35 100% 50%;
+    /* Amber */
+    --primary-foreground: 0 0% 0%;
+    --secondary: 30 40% 12%;
+    --secondary-foreground: 35 100% 85%;
+    --muted: 30 40% 15%;
+    --muted-foreground: 35 40% 50%;
+    --accent: 20 100% 45%;
+    /* Deep Orange */
+    --accent-foreground: 0 0% 100%;
+    --border: 30 40% 15%;
+    --input: 30 40% 15%;
+    --ring: 35 100% 50%;
+    --counter-bg: 30 50% 6%;
+    --counter-ring: 35 100% 50%;
+    --counter-text: 35 100% 90%;
+    --counter-glow: 35 100% 40%;
+    --arabic-text: 35 100% 95%;
+    --progress-track: 30 40% 15%;
+    --progress-fill: 35 100% 50%;
+    --sheet-bg: 30 50% 6%;
+  }
+
 }
 
 @layer base {
