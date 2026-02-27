@@ -791,37 +791,37 @@ export function CounterVisuals({
                 onClick={handleTap}
                 disabled={disabled}
                 className={`
-        ${counterShape === 'minimal' ? 'absolute inset-4 rounded-full bg-counter-bg' : ''}
+        ${counterShape === 'minimal' ? 'rounded-full bg-counter-bg w-64 h-64' : ''}
         ${counterShape === 'ring-light' ? 'w-64 h-64 rounded-full bg-transparent flex items-center justify-center' : ''}
         ${counterShape === 'classic' ? 'w-64 h-64 rounded-2xl bg-gradient-to-br from-card to-background shadow-inner flex flex-col items-center justify-center border-2 border-border/50' : ''}
         ${counterShape === 'beads' ? 'w-64 h-64 rounded-full bg-transparent flex items-center justify-center' : ''}
         ${counterShape === 'flower' ? 'w-64 h-64 rounded-full bg-background/50 backdrop-blur-sm border border-primary/20 flex items-center justify-center shadow-lg' : ''}
-        ${counterShape === 'waveform' ? 'w-72 h-72 rounded-full flex items-center justify-center backdrop-blur-sm' : ''}
-        ${counterShape === 'digital' ? 'w-24 h-24 rounded-full bg-gradient-to-b from-[#f3d692] to-[#8b6508] border-[3px] border-[#5c4305] shadow-[0_6px_12px_rgba(0,0,0,0.3),inset_0_2px_4px_rgba(255,255,255,0.4)] mt-24 mb-2' : ''}
+        ${counterShape === 'waveform' ? 'w-64 h-64 rounded-full flex items-center justify-center backdrop-blur-sm' : ''}
+        ${counterShape === 'digital' ? 'absolute inset-0 z-20 opacity-0' : ''}
         ${counterShape === 'modern-ring' ? 'w-64 h-64 rounded-full bg-background/80 backdrop-blur-xl border border-primary/50 shadow-[0_0_30px_rgba(var(--primary),0.2)]' : ''}
-        ${counterShape === 'vintage-wood' ? 'w-60 h-60 rounded-3xl bg-[#5d4037] border-2 border-[#8d6e63] shadow-[inset_0_5px_15px_rgba(0,0,0,0.3)] mt-2' : ''}
+        ${counterShape === 'vintage-wood' ? 'w-64 h-64 bg-transparent shadow-none border-0' : ''}
         ${counterShape === 'geometric-star' ? 'w-64 h-64 flex items-center justify-center bg-background/10 backdrop-blur-sm' : ''}
         ${counterShape === 'fluid' ? 'w-64 h-64 flex items-center justify-center backdrop-blur-sm' : ''}
-        ${counterShape === 'real-beads' ? 'w-full h-full rounded-full flex items-center justify-center' : ''}
-        ${counterShape === 'glass-orb' ? 'w-64 h-64 rounded-full flex items-center justify-center' : ''}
+        ${counterShape === 'real-beads' ? 'w-64 h-64 rounded-full flex items-center justify-center bg-transparent z-10' : ''}
+        ${counterShape === 'glass-orb' ? 'w-64 h-64 rounded-full flex items-center justify-center bg-transparent z-10' : ''}
         ${counterShape === 'portal-depth' ? 'w-64 h-64 rounded-full flex items-center justify-center text-primary-foreground' : ''}
         ${counterShape === 'luminous-ring' ? 'w-64 h-64 rounded-full flex items-center justify-center text-primary' : ''}
-        ${counterShape === 'biolum-organic' ? 'w-64 h-64 rounded-full flex items-center justify-center' : ''}
-        ${counterShape === 'steampunk-nixie' ? 'w-64 h-64 rounded-full flex items-center justify-center' : ''}
-        ${counterShape === 'digital-watch' ? 'w-64 h-64 flex items-center justify-center' : ''}
-        ${counterShape === 'solar-flare' ? 'w-64 h-64 rounded-full flex items-center justify-center' : ''}
-        ${counterShape === 'nebula-cloud' ? 'w-64 h-64 rounded-full flex items-center justify-center bg-transparent backdrop-blur-sm' : ''}
-        ${counterShape === 'infinite-knot' ? 'w-64 h-64 rounded-full flex items-center justify-center' : ''}
-        ${counterShape === 'holo-fan' ? 'w-64 h-64 rounded-full flex items-center justify-center bg-secondary/10' : ''}
-        ${counterShape === 'halo-ring' ? 'w-64 h-64 rounded-full flex items-center justify-center' : ''}
+        ${counterShape === 'biolum-organic' ? 'w-64 h-64 rounded-full flex items-center justify-center bg-transparent z-10' : ''}
+        ${counterShape === 'steampunk-nixie' ? 'w-64 h-64 rounded-full flex items-center justify-center bg-transparent z-10' : ''}
+        ${counterShape === 'digital-watch' ? 'w-64 h-64 flex items-center justify-center bg-transparent z-10' : ''}
+        ${counterShape === 'solar-flare' ? 'w-64 h-64 rounded-full flex items-center justify-center bg-transparent z-10' : ''}
+        ${counterShape === 'nebula-cloud' ? 'w-64 h-64 rounded-full flex items-center justify-center bg-transparent backdrop-blur-sm z-10' : ''}
+        ${counterShape === 'infinite-knot' ? 'w-64 h-64 rounded-full flex items-center justify-center bg-transparent z-10' : ''}
+        ${counterShape === 'holo-fan' ? 'w-64 h-64 rounded-full flex items-center justify-center bg-secondary/10 z-10' : ''}
+        ${counterShape === 'halo-ring' ? 'w-64 h-64 rounded-full flex items-center justify-center bg-transparent z-10' : ''}
 
-        ${counterShape === 'vertical-capsules' ? 'w-64 h-[300px] flex items-center justify-center' : ''}
-        ${counterShape === 'luminous-beads' ? 'w-64 h-64 rounded-full flex items-center justify-center' : ''}
+        ${counterShape === 'vertical-capsules' ? 'w-64 h-64 flex items-center justify-center bg-transparent z-10' : ''}
+        ${counterShape === 'luminous-beads' ? 'w-64 h-64 rounded-full flex items-center justify-center bg-transparent z-10' : ''}
         
 
-        ${counterShape === 'animated-ripple' ? 'w-64 h-64 flex items-center justify-center' : ''}
-        ${counterShape === 'bead-ring' ? 'w-64 h-64 flex items-center justify-center' : ''}
-        ${['helix-strand', 'cyber-hexagon', 'blooming-lotus', 'constellation', 'glass-pill', 'emerald-loop', 'smart-ring', 'moon-phase', 'water-ripple', 'sand-hourglass', 'lantern-fanous', 'digital-watch', 'star-burst', 'crystal-prism', 'galaxy', 'tally-clicker', 'cyber-3d', 'crystal-iso', 'neumorph'].includes(counterShape) ? 'w-64 h-64 flex items-center justify-center' : ''}
+        ${counterShape === 'animated-ripple' ? 'w-64 h-64 flex items-center justify-center bg-transparent z-10' : ''}
+        ${counterShape === 'bead-ring' ? 'w-64 h-64 flex items-center justify-center bg-transparent z-10' : ''}
+        ${['helix-strand', 'cyber-hexagon', 'blooming-lotus', 'constellation', 'glass-pill', 'emerald-loop', 'smart-ring', 'moon-phase', 'water-ripple', 'sand-hourglass', 'lantern-fanous', 'star-burst', 'crystal-prism', 'galaxy', 'tally-clicker', 'cyber-3d', 'crystal-iso', 'neumorph'].includes(counterShape) ? 'w-64 h-64 flex items-center justify-center bg-transparent z-10' : ''}
 
         flex items-center justify-center
         cursor-pointer
