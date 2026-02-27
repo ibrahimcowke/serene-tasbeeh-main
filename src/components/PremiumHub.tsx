@@ -38,7 +38,7 @@ export const PremiumHub = () => {
         <div className="w-full min-h-screen bg-transparent relative overflow-hidden flex flex-col">
 
             {/* Main Hub Content */}
-            <div className="flex-1 w-full grid grid-cols-12 gap-6 p-8 relative z-10">
+            <div className="flex-1 w-full grid grid-cols-12 gap-4 lg:gap-6 p-4 lg:p-6 relative z-10">
 
                 {/* Left Column: Achievement Hub */}
                 <motion.div
@@ -46,17 +46,17 @@ export const PremiumHub = () => {
                     animate={{ opacity: 1, x: 0 }}
                     className="col-span-12 lg:col-span-3 flex flex-col gap-6"
                 >
-                    <div className="skeuo-glass rounded-[2rem] p-8 flex flex-col items-center flex-1">
-                        <h2 className="text-xs font-black uppercase tracking-[0.2em] text-white/40 mb-12">Achievement Hub</h2>
+                    <div className="skeuo-glass rounded-[2rem] p-6 flex flex-col items-center flex-1">
+                        <h2 className="text-xs font-black uppercase tracking-[0.2em] text-white/40 mb-6">Achievement Hub</h2>
 
-                        <div className="flex flex-col items-center gap-2 mb-12">
+                        <div className="flex flex-col items-center gap-1 mb-6">
                             <span className="text-[10px] text-primary/60 font-bold uppercase tracking-widest">Your Rank:</span>
                             <h3 className="text-3xl font-black text-white tracking-tighter text-glow-gold">SEEKER</h3>
                         </div>
 
                         <RadialAchievement progress={1} title="Level Progress" />
 
-                        <div className="grid grid-cols-2 gap-4 w-full mt-12">
+                        <div className="grid grid-cols-2 gap-4 w-full mt-6">
                             <div className="bg-white/5 border border-white/5 rounded-2xl p-4 flex flex-col items-center text-center shadow-inner">
                                 <div className="w-8 h-8 rounded-full bg-orange-500/20 flex items-center justify-center mb-2">
                                     <Activity className="w-4 h-4 text-orange-500" />
@@ -97,7 +97,7 @@ export const PremiumHub = () => {
                 <motion.div
                     initial={{ opacity: 0, y: 30 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className="col-span-12 lg:col-span-5 flex flex-col gap-12 items-center justify-center pt-8"
+                    className="col-span-12 lg:col-span-5 flex flex-col gap-6 items-center justify-center pt-4"
                 >
                     <div className="flex flex-col items-center text-center gap-2">
                         <motion.h1
@@ -138,7 +138,7 @@ export const PremiumHub = () => {
                     className="col-span-12 lg:col-span-4 flex flex-col gap-6"
                 >
                     <div className="bg-green-950/20 backdrop-blur-3xl border border-green-500/10 rounded-[2rem] flex flex-col overflow-hidden h-full">
-                        <div className="p-8 flex items-center justify-between border-b border-white/5">
+                        <div className="p-4 lg:p-6 flex items-center justify-between border-b border-white/5">
                             <div className="flex items-center gap-3">
                                 <h2 className="text-sm font-black uppercase tracking-widest text-white/80">Community</h2>
                                 <ChevronDown className="w-4 h-4 text-white/40" />
@@ -149,7 +149,7 @@ export const PremiumHub = () => {
                             </div>
                         </div>
 
-                        <div className="p-8 space-y-8 overflow-y-auto max-h-[calc(100vh-250px)] scrollbar-hide">
+                        <div className="p-4 lg:p-6 space-y-6 overflow-y-auto max-h-[calc(100vh-250px)] scrollbar-hide">
                             {/* Global Pulse Card */}
                             <div className="bg-black/40 border border-white/5 rounded-3xl p-6 flex flex-col items-center shadow-2xl relative overflow-hidden group">
                                 <div className="absolute inset-0 bg-primary/5 opacity-0 group-hover:opacity-100 transition-opacity" />

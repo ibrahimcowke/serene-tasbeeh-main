@@ -28,7 +28,7 @@ export const SkeuoCounter = ({ count, total, dhikrName, onIncrement, onReset, on
                 onClick={onIncrement}
             >
                 {/* Metal Plate with Screws */}
-                <div className="bg-[#1a1a1a] rounded-lg p-8 relative overflow-hidden flex flex-col items-center border-t border-white/10 border-b border-black shadow-2xl">
+                <div className="bg-[#1a1a1a] rounded-lg p-6 relative overflow-hidden flex flex-col items-center border-t border-white/10 border-b border-black shadow-2xl">
                     {/* Decorative Screws */}
                     <div className="absolute top-2 left-2 w-2 h-2 rounded-full bg-zinc-700 shadow-inner" />
                     <div className="absolute top-2 right-2 w-2 h-2 rounded-full bg-zinc-700 shadow-inner" />
@@ -36,9 +36,9 @@ export const SkeuoCounter = ({ count, total, dhikrName, onIncrement, onReset, on
                     <div className="absolute bottom-2 right-2 w-2 h-2 rounded-full bg-zinc-700 shadow-inner" />
 
                     {/* Digit Display */}
-                    <div className="flex gap-1 bg-black/40 p-4 rounded-md border border-white/5 shadow-inner">
+                    <div className="flex gap-1 bg-black/40 p-3 rounded-md border border-white/5 shadow-inner">
                         {formattedCount.map((digit, i) => (
-                            <div key={i} className="w-12 h-20 bg-gradient-to-b from-[#222] to-[#000] rounded-sm flex items-center justify-center border-x border-white/5 relative overflow-hidden">
+                            <div key={i} className="w-10 h-16 bg-gradient-to-b from-[#222] to-[#000] rounded-sm flex items-center justify-center border-x border-white/5 relative overflow-hidden">
                                 <AnimatePresence mode="popLayout">
                                     <motion.span
                                         key={digit}
@@ -46,7 +46,7 @@ export const SkeuoCounter = ({ count, total, dhikrName, onIncrement, onReset, on
                                         animate={{ y: 0, opacity: 1 }}
                                         exit={{ y: -20, opacity: 0 }}
                                         transition={{ type: "spring", stiffness: 300, damping: 30 }}
-                                        className="text-5xl font-mono font-black text-white/90"
+                                        className="text-4xl font-mono font-black text-white/90"
                                     >
                                         {digit}
                                     </motion.span>
@@ -57,9 +57,9 @@ export const SkeuoCounter = ({ count, total, dhikrName, onIncrement, onReset, on
                         ))}
                     </div>
 
-                    <div className="mt-4 flex flex-col items-center">
+                    <div className="mt-3 flex flex-col items-center">
                         <div className="h-0.5 w-full bg-primary/20 rounded-full mb-1" />
-                        <span className="text-xs font-bold text-white/30 uppercase tracking-tighter">{count} of {total}</span>
+                        <span className="text-[10px] font-bold text-white/30 uppercase tracking-tighter">{count} of {total}</span>
                     </div>
                 </div>
 

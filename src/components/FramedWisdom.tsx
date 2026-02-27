@@ -9,35 +9,35 @@ interface FramedWisdomProps {
 
 export const FramedWisdom = ({ arabic, english, source }: FramedWisdomProps) => {
     return (
-        <div className="wood-frame rounded-sm p-8 flex flex-col items-center justify-center text-center group relative overflow-hidden">
+        <div className="wood-frame rounded-sm p-5 flex flex-col items-center justify-center text-center group relative overflow-hidden max-w-lg mx-auto">
             {/* Decorative inner border */}
             <div className="absolute inset-2 border border-white/5 pointer-events-none" />
 
-            <div className="relative z-10 flex flex-col gap-6 max-w-[85%]">
+            <div className="relative z-10 flex flex-col gap-3 max-w-[90%]">
                 <motion.p
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className="text-3xl font-arabic text-primary/90 leading-relaxed mb-2"
+                    className="text-2xl font-arabic text-primary/90 leading-relaxed"
                     key={arabic}
                 >
                     {arabic}
                 </motion.p>
 
-                <div className="h-px w-24 bg-gradient-to-r from-transparent via-white/20 to-transparent self-center" />
+                <div className="h-px w-20 bg-gradient-to-r from-transparent via-white/10 to-transparent self-center" />
 
                 <motion.p
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ delay: 0.2 }}
-                    className="text-sm italic text-muted-foreground/80 font-serif leading-loose"
+                    className="text-[11px] italic text-muted-foreground/80 font-serif leading-relaxed"
                     key={english}
                 >
                     "{english}"
                 </motion.p>
 
-                <div className="flex justify-between items-center mt-4">
-                    <span className="text-[10px] uppercase tracking-widest text-[#2d1b0d] font-bold bg-primary/20 px-2 py-0.5 rounded">Wisdom</span>
-                    <span className="text-[10px] text-muted-foreground font-serif">— {source}</span>
+                <div className="flex justify-between items-center mt-2">
+                    <span className="text-[9px] uppercase tracking-widest text-[#2d1b0d] font-bold bg-primary/20 px-2 py-0.5 rounded">Wisdom</span>
+                    <span className="text-[9px] text-muted-foreground font-serif">— {source}</span>
                 </div>
             </div>
 
