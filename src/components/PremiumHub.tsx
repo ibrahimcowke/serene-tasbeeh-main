@@ -84,7 +84,7 @@ export const PremiumHub = () => {
             <div className="absolute bottom-1/4 -right-20 w-[500px] h-[500px] bg-green-500/5 rounded-full blur-[120px] pointer-events-none" />
 
             {/* Main Hub Content */}
-            <div className="flex-1 w-full grid grid-cols-12 gap-4 lg:gap-8 p-4 lg:p-8 relative z-10">
+            <div className="flex-1 w-full grid grid-cols-12 gap-4 lg:gap-8 p-4 lg:pt-2 lg:px-8 lg:pb-8 relative z-10">
 
                 {/* Left Column: Achievement Hub */}
                 <motion.div
@@ -138,13 +138,55 @@ export const PremiumHub = () => {
                             </div>
                         </div>
                     </div>
+
+                    {/* Status Card - Restored */}
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.2 }}
+                        className="skeuo-glass rounded-[2.5rem] p-6 border-white/[0.08] shadow-2xl relative overflow-hidden group"
+                    >
+                        <div className="absolute inset-0 bg-gradient-to-br from-primary/[0.02] to-transparent pointer-events-none" />
+                        <div className="flex items-center justify-between mb-4 relative z-10">
+                            <span className="text-[10px] font-black uppercase tracking-[0.2em] text-white/30">Current Status</span>
+                            <div className="flex items-center gap-1.5 px-2 py-0.5 bg-primary/10 rounded-full border border-primary/20">
+                                <Moon className="w-2.5 h-2.5 text-primary" />
+                                <span className="text-[8px] font-black text-primary uppercase tracking-tighter">
+                                    {dateContext?.hijriDay || '8'} {dateContext?.hijriMonth || 'Ramadan'}
+                                </span>
+                            </div>
+                        </div>
+
+                        <div className="space-y-4 relative z-10">
+                            <div className="flex items-center justify-between">
+                                <div className="flex flex-col">
+                                    <span className="text-[8px] font-bold text-white/20 uppercase tracking-widest">Active Occasion</span>
+                                    <span className="text-xs font-black text-white/90">{dateContext?.specialOccasion || 'Ramadan Kareem'}</span>
+                                </div>
+                                <div className="w-8 h-8 rounded-xl bg-primary/10 flex items-center justify-center border border-primary/20">
+                                    <Star className="w-4 h-4 text-primary" />
+                                </div>
+                            </div>
+
+                            <div className="flex flex-col gap-2">
+                                <span className="text-[8px] font-bold text-white/20 uppercase tracking-widest">Active Influence</span>
+                                <div className="p-2.5 rounded-2xl bg-white/[0.03] border border-white/[0.05] flex items-center justify-between">
+                                    <div className="flex items-center gap-2">
+                                        <div className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse shadow-[0_0_8px_rgba(245,158,11,0.5)]" />
+                                        <span className="text-[10px] font-black text-white/70">Taqwa Boost</span>
+                                    </div>
+                                    <span className="text-[9px] font-bold text-primary">+15% Focus</span>
+                                </div>
+                            </div>
+                        </div>
+                    </motion.div>
                 </motion.div>
 
                 {/* Center Column: Spiritual Heart */}
                 <motion.div
                     initial={{ opacity: 0, y: 30 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className="col-span-12 lg:col-span-5 flex flex-col gap-8 lg:gap-12 items-center justify-start pt-12 relative"
+                    className="col-span-12 lg:col-span-5 flex flex-col gap-8 lg:gap-12 items-center justify-start pt-2 relative"
                 >
                     {/* Center plateau effect */}
                     <div className="absolute inset-x-0 top-0 bottom-[-20px] bg-gradient-to-b from-white/[0.03] to-transparent rounded-[3rem] blur-sm -z-10 border border-white/[0.05]" />
