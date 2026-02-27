@@ -25,7 +25,7 @@ import { FramedWisdom } from './FramedWisdom';
 import { GlobalStats } from './GlobalStats';
 import { GlobalChallenges } from './GlobalChallenges';
 import { VisitorCounter } from './VisitorCounter';
-import { CounterVisuals } from './CounterVisuals';
+import { CounterVisuals, CounterNumber } from './CounterVisuals';
 
 export const PremiumHub = () => {
     const {
@@ -249,7 +249,7 @@ export const PremiumHub = () => {
                         </div>
                     </div>
 
-                    <div className="relative z-10 w-full mb-8 flex justify-center pb-12 pr-12 sm:pr-24">
+                    <div className="relative z-10 w-full mb-8 flex justify-center items-center gap-6 sm:gap-10">
                         <CounterVisuals
                             layout="hub"
                             counterShape={counterShape}
@@ -262,6 +262,13 @@ export const PremiumHub = () => {
                             handleTap={increment}
                             showCompletion={false}
                             disabled={false}
+                            hideNumber={true}
+                        />
+                        <CounterNumber
+                            currentCount={count}
+                            counterShape={counterShape}
+                            currentSettings={{ soundEnabled: true, hapticEnabled: true, vibrationIntensity: 'medium', fontScale: 1, soundType: 'click' }}
+                            countFontSize={1}
                         />
                     </div>
                 </motion.div>

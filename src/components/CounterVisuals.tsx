@@ -38,6 +38,63 @@ interface CounterVisualsProps {
     handleTap: () => void;
     showCompletion: boolean;
     disabled: boolean;
+    hideNumber?: boolean;
+}
+
+export function CounterNumber({
+    currentCount,
+    counterShape,
+    currentSettings,
+    countFontSize
+}: {
+    currentCount: number;
+    counterShape: string;
+    currentSettings: ThemeSettings;
+    countFontSize: number;
+}) {
+    return (
+        <motion.span
+            key={currentCount}
+            initial={{ scale: 1.5, opacity: 0.5 }}
+            animate={{ scale: 1, opacity: 1, x: 0 }}
+            transition={{ duration: 0.15, ease: [0.34, 1.56, 0.64, 1] }}
+            className={`
+  counter-number text-counter-text
+  ${['digital', 'vertical-capsules', 'tally-clicker', 'cyber-3d', 'crystal-iso', 'neumorph', 'digital-watch', 'steampunk-nixie'].includes(counterShape) ? 'hidden' : ''}
+  ${counterShape === 'classic' ? 'font-mono text-5xl sm:text-6xl md:text-7xl tracking-widest bg-black/10 px-4 sm:px-6 py-2 rounded-lg inset-shadow mb-4' : 'text-5xl sm:text-6xl md:text-7xl lg:text-8xl'}
+  ${counterShape === 'waveform' ? 'drop-shadow-md z-10' : ''}
+  ${counterShape === 'modern-ring' ? 'font-sans font-light tracking-tighter drop-shadow-[0_0_15px_rgba(var(--primary),0.6)]' : ''}
+  ${counterShape === 'vintage-wood' ? 'font-serif text-[#d7ccc8] drop-shadow-[0_2px_2px_rgba(0,0,0,0.5)]' : ''}
+  ${counterShape === 'radar' ? 'font-mono text-primary drop-shadow-[0_0_5px_hsl(var(--primary))]' : ''}
+  ${counterShape === 'real-beads' ? 'font-serif text-[#5d4037] text-6xl font-bold drop-shadow-md bg-white/80 w-32 h-32 rounded-full flex items-center justify-center border-4 border-[#8d6e63]' : ''}
+  ${counterShape === 'glass-orb' ? 'text-white/90 drop-shadow-lg font-light' : ''}
+  ${counterShape === 'portal-depth' ? 'text-primary-foreground drop-shadow-[0_0_20px_hsl(var(--primary)/0.8)]' : ''}
+  ${counterShape === 'luminous-ring' ? 'text-primary drop-shadow-[0_0_15px_hsl(var(--primary)/0.8)] font-light' : ''}
+  ${counterShape === 'ring-light' ? 'text-white/90 font-thin tracking-tighter drop-shadow-[0_0_20px_rgba(255,255,255,0.8)]' : ''}
+  ${counterShape === 'steampunk-nixie' ? 'font-mono text-orange-500 font-bold tracking-widest drop-shadow-[0_0_10px_orange] text-6xl' : ''}
+  ${counterShape === 'biolum-organic' ? 'font-mono text-primary font-bold tracking-widest drop-shadow-[0_0_15px_hsl(var(--primary))] text-6xl' : ''}
+  ${counterShape === 'solar-flare' ? 'text-white drop-shadow-[0_0_20px_orange] font-bold' : ''}
+  ${['nebula-cloud', 'infinite-knot', 'holo-fan', 'luminous-beads', 'galaxy'].includes(counterShape) ? 'text-primary drop-shadow-[0_0_12px_rgba(var(--primary),0.6)] font-bold' : ''}
+  ${counterShape === 'halo-ring' ? 'text-emerald-400 font-bold drop-shadow-[0_0_10px_rgba(52,211,153,0.8)]' : ''}
+  
+  ${counterShape === 'animated-ripple' ? 'text-blue-200 font-light text-7xl tracking-widest drop-shadow-[0_0_10px_rgba(59,130,246,0.6)]' : ''}
+  ${counterShape === 'bead-ring' ? 'text-amber-500 font-mono text-7xl font-bold tracking-wider drop-shadow-[0_0_10px_rgba(245,158,11,0.6)]' : ''}
+  ${counterShape === 'helix-strand' ? 'text-cyan-400 font-mono tracking-widest drop-shadow-[0_0_10px_rgba(34,211,238,0.8)]' : ''}
+  ${counterShape === 'cyber-hexagon' ? 'font-mono text-primary font-bold tracking-widest drop-shadow-[0_0_10px_rgba(var(--primary),0.8)]' : ''}
+  ${counterShape === 'blooming-lotus' ? 'font-serif text-white/90 drop-shadow-lg font-light' : ''}
+  ${counterShape === 'constellation' ? 'font-thin text-white tracking-widest drop-shadow-[0_0_10px_white]' : ''}
+  ${counterShape === 'glass-pill' ? 'font-sans font-medium text-white tracking-widest text-6xl drop-shadow-md' : ''}
+  ${counterShape === 'emerald-loop' ? 'font-serif text-emerald-100 font-bold tracking-widest text-5xl drop-shadow-md' : ''}
+  ${counterShape === 'smart-ring' ? 'font-sans font-light text-white tracking-tighter text-6xl drop-shadow-none' : ''}
+  ${['moon-phase'].includes(counterShape) ? 'font-sans font-light text-white text-5xl drop-shadow-lg' : ''}
+`}
+            style={{
+                fontSize: counterShape === 'digital' ? '0px' : `${(counterShape === 'classic' ? 4.5 : 4.5) * currentSettings.fontScale * countFontSize}rem`
+            }}
+        >
+            {currentCount}
+        </motion.span>
+    );
 }
 
 export function CounterVisuals({
@@ -859,52 +916,14 @@ export function CounterVisuals({
                     </div>
                 )}
 
-                <motion.span
-                    key={currentCount}
-                    initial={{ scale: 1.5, opacity: 0.5 }}
-                    animate={{
-                        scale: 1,
-                        opacity: 1,
-                        x: layout === 'hub' ? (window.innerWidth < 640 ? 120 : 160) : 0
-                    }}
-                    transition={{ duration: 0.15, ease: [0.34, 1.56, 0.64, 1] }}
-                    className={`
-          counter-number text-counter-text
-          ${['digital', 'vertical-capsules', 'tally-clicker', 'cyber-3d', 'crystal-iso', 'neumorph', 'digital-watch', 'steampunk-nixie'].includes(counterShape) ? 'hidden' : ''}
-          ${counterShape === 'classic' ? 'font-mono text-5xl sm:text-6xl md:text-7xl tracking-widest bg-black/10 px-4 sm:px-6 py-2 rounded-lg inset-shadow mb-4' : 'text-5xl sm:text-6xl md:text-7xl lg:text-8xl'}
-          ${counterShape === 'waveform' ? 'drop-shadow-md z-10' : ''}
-          ${counterShape === 'modern-ring' ? 'font-sans font-light tracking-tighter drop-shadow-[0_0_15px_rgba(var(--primary),0.6)]' : ''}
-          ${counterShape === 'vintage-wood' ? 'font-serif text-[#d7ccc8] drop-shadow-[0_2px_2px_rgba(0,0,0,0.5)]' : ''}
-          ${counterShape === 'radar' ? 'font-mono text-primary drop-shadow-[0_0_5px_hsl(var(--primary))]' : ''}
-          ${counterShape === 'real-beads' ? 'font-serif text-[#5d4037] text-6xl font-bold drop-shadow-md bg-white/80 w-32 h-32 rounded-full flex items-center justify-center border-4 border-[#8d6e63]' : ''}
-          ${counterShape === 'glass-orb' ? 'text-white/90 drop-shadow-lg font-light' : ''}
-          ${counterShape === 'portal-depth' ? 'text-primary-foreground drop-shadow-[0_0_20px_hsl(var(--primary)/0.8)]' : ''}
-          ${counterShape === 'luminous-ring' ? 'text-primary drop-shadow-[0_0_15px_hsl(var(--primary)/0.8)] font-light' : ''}
-          ${counterShape === 'ring-light' ? 'text-white/90 font-thin tracking-tighter drop-shadow-[0_0_20px_rgba(255,255,255,0.8)]' : ''}
-          ${counterShape === 'steampunk-nixie' ? 'font-mono text-orange-500 font-bold tracking-widest drop-shadow-[0_0_10px_orange] text-6xl' : ''}
-          ${counterShape === 'biolum-organic' ? 'font-mono text-primary font-bold tracking-widest drop-shadow-[0_0_15px_hsl(var(--primary))] text-6xl' : ''}
-          ${counterShape === 'solar-flare' ? 'text-white drop-shadow-[0_0_20px_orange] font-bold' : ''}
-          ${['nebula-cloud', 'infinite-knot', 'holo-fan', 'luminous-beads', 'galaxy'].includes(counterShape) ? 'text-primary drop-shadow-[0_0_12px_rgba(var(--primary),0.6)] font-bold' : ''}
-          ${counterShape === 'halo-ring' ? 'text-emerald-400 font-bold drop-shadow-[0_0_10px_rgba(52,211,153,0.8)]' : ''}
-          
-          ${counterShape === 'animated-ripple' ? 'text-blue-200 font-light text-7xl tracking-widest drop-shadow-[0_0_10px_rgba(59,130,246,0.6)]' : ''}
-          ${counterShape === 'bead-ring' ? 'text-amber-500 font-mono text-7xl font-bold tracking-wider drop-shadow-[0_0_10px_rgba(245,158,11,0.6)]' : ''}
-          ${counterShape === 'helix-strand' ? 'text-cyan-400 font-mono tracking-widest drop-shadow-[0_0_10px_rgba(34,211,238,0.8)]' : ''}
-          ${counterShape === 'cyber-hexagon' ? 'font-mono text-primary font-bold tracking-widest drop-shadow-[0_0_10px_rgba(var(--primary),0.8)]' : ''}
-          ${counterShape === 'blooming-lotus' ? 'font-serif text-white/90 drop-shadow-lg font-light' : ''}
-          ${counterShape === 'constellation' ? 'font-thin text-white tracking-widest drop-shadow-[0_0_10px_white]' : ''}
-          ${counterShape === 'glass-pill' ? 'font-sans font-medium text-white tracking-widest text-6xl drop-shadow-md' : ''}
-          ${counterShape === 'emerald-loop' ? 'font-serif text-emerald-100 font-bold tracking-widest text-5xl drop-shadow-md' : ''}
-          ${counterShape === 'smart-ring' ? 'font-sans font-light text-white tracking-tighter text-6xl drop-shadow-none' : ''}
-          ${['moon-phase'].includes(counterShape) ? 'font-sans font-light text-white text-5xl drop-shadow-lg' : ''}
-
-        `}
-                    style={{
-                        fontSize: counterShape === 'digital' ? '0px' : `${(counterShape === 'classic' ? 4.5 : 4.5) * currentSettings.fontScale * countFontSize}rem`
-                    }}
-                >
-                    {currentCount}
-                </motion.span>
+                {!hideNumber && (
+                    <CounterNumber
+                        currentCount={currentCount}
+                        counterShape={counterShape}
+                        currentSettings={currentSettings}
+                        countFontSize={countFontSize}
+                    />
+                )}
             </motion.button>
         </motion.div >
     );
