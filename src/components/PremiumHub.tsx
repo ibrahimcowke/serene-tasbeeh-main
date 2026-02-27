@@ -1,12 +1,19 @@
 import { motion } from 'framer-motion';
-import { useTasbeehStore } from '@/store/tasbeehStore';
+import { useTasbeehStore, CounterShape } from '@/store/tasbeehStore';
 import {
     Settings,
     Bell,
     Calendar,
     ChevronDown,
     Activity,
-    Users
+    Users,
+    Plus,
+    Star,
+    Award,
+    Search,
+    Palette,
+    Shapes,
+    Layout
 } from 'lucide-react';
 import { SkeuoCounter } from './SkeuoCounter';
 import { RadialAchievement } from './RadialAchievement';
@@ -18,14 +25,47 @@ import { VisitorCounter } from './VisitorCounter';
 export const PremiumHub = () => {
     const {
         currentDhikr,
-        currentCount: count,
+        currentCount: count, // Kept original alias for count
         targetCount: total,
         increment,
         reset,
         undo,
         totalAllTime,
-        dailyGoal
+        dailyGoal,
+        theme,
+        setTheme,
+        counterShape,
+        setCounterShape
     } = useTasbeehStore();
+
+    // Available categories for cycling
+    const themes: any[] = [
+        'light', 'theme-midnight', 'theme-neon', 'theme-green', 'theme-cyberpunk', 'theme-glass',
+        'theme-sunset', 'theme-forest', 'theme-oled', 'theme-biolum', 'theme-radar-tactical',
+        'theme-steampunk', 'theme-crystal-depth', 'theme-mecca-night', 'theme-medina-rose',
+        'theme-blue-mosque', 'theme-desert-starlight', 'theme-sahara-warmth', 'theme-andalusia-earth',
+        'theme-istanbul-sunset', 'theme-taj-marble', 'theme-royal-persian', 'theme-ramadan-lantern'
+    ];
+
+    const shapes: CounterShape[] = [
+        'minimal', 'classic', 'beads', 'flower', 'digital', 'bead-ring', 'halo-ring',
+        'luminous-beads', 'helix-strand', 'cyber-hexagon', 'blooming-lotus', 'constellation',
+        'smart-ring', 'moon-phase', 'water-ripple', 'sand-hourglass', 'lantern-fanous',
+        'digital-watch', 'star-burst', 'crystal-prism', 'galaxy', 'tally-clicker',
+        'cyber-3d', 'crystal-iso', 'neumorph'
+    ];
+
+    const cycleTheme = () => {
+        const currentIndex = themes.indexOf(theme);
+        const nextIndex = (currentIndex + 1) % themes.length;
+        setTheme(themes[nextIndex]);
+    };
+
+    const cycleShape = () => {
+        const currentIndex = shapes.indexOf(counterShape);
+        const nextIndex = (currentIndex + 1) % shapes.length;
+        setCounterShape(shapes[nextIndex]);
+    };
 
     // Mock wisdom for display (could be from store/API)
     const wisdom = {
@@ -106,6 +146,30 @@ export const PremiumHub = () => {
                 >
                     {/* Center plateau effect */}
                     <div className="absolute inset-x-0 top-0 bottom-[-20px] bg-gradient-to-b from-white/[0.03] to-transparent rounded-[3rem] blur-sm -z-10 border border-white/[0.05]" />
+
+                    {/* Quick Controls Island */}
+                    <div className="absolute top-4 right-4 flex items-center gap-2 z-20">
+                        <motion.button
+                            whileHover={{ scale: 1.1 }}
+                            whileTap={{ scale: 0.9 }}
+                            onClick={cycleTheme}
+                            className="p-2 rounded-xl bg-white/5 border border-white/10 text-white/40 hover:text-primary transition-colors skeuo-glass shadow-lg group relative"
+                            title="Change Theme"
+                        >
+                            <Palette className="w-4 h-4" />
+                            <div className="absolute -bottom-1 -right-1 w-2 h-2 rounded-full bg-primary/40 blur-[2px] opacity-0 group-hover:opacity-100 transition-opacity" />
+                        </motion.button>
+                        <motion.button
+                            whileHover={{ scale: 1.1 }}
+                            whileTap={{ scale: 0.9 }}
+                            onClick={cycleShape}
+                            className="p-2 rounded-xl bg-white/5 border border-white/10 text-white/40 hover:text-primary transition-colors skeuo-glass shadow-lg group relative"
+                            title="Change Shape"
+                        >
+                            <Shapes className="w-4 h-4" />
+                            <div className="absolute -bottom-1 -right-1 w-2 h-2 rounded-full bg-primary/40 blur-[2px] opacity-0 group-hover:opacity-100 transition-opacity" />
+                        </motion.button>
+                    </div>
 
                     <div className="flex flex-col items-center text-center gap-3 relative z-10">
                         <motion.h1
