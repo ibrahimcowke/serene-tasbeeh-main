@@ -24,7 +24,6 @@ import { DateBanner } from "./DateBanner";
 import { NotificationCenter } from "./NotificationCenter";
 import { toast } from "sonner";
 import { motion } from "framer-motion";
-import { SidebarChallenges } from "./SidebarChallenges";
 
 export function AppSidebar() {
     const { setZenMode } = useTasbeehStore();
@@ -159,13 +158,6 @@ export function AppSidebar() {
                     </SidebarGroupContent>
                 </SidebarGroup>
 
-                {/* Community & Challenges */}
-                <SidebarGroup>
-                    <SidebarGroupLabel>Community</SidebarGroupLabel>
-                    <SidebarGroupContent>
-                        <SidebarChallenges />
-                    </SidebarGroupContent>
-                </SidebarGroup>
             </SidebarContent>
         </Sidebar>
     );
