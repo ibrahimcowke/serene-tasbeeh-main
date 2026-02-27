@@ -249,7 +249,7 @@ export const PremiumHub = () => {
                         </div>
                     </div>
 
-                    <div className="relative z-10 w-full mb-8 flex justify-center">
+                    <div className="relative z-10 w-full mb-8 flex justify-center pb-12 pr-12 sm:pr-24">
                         <CounterVisuals
                             layout="hub"
                             counterShape={counterShape}

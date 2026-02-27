@@ -59,7 +59,7 @@ export function CounterVisuals({
             className={`relative flex items-center justify-center
       ${layout === 'focus' ? 'scale-100 sm:scale-110' : ''}
       ${layout === 'ergonomic' ? 'scale-90 sm:scale-100 translate-y-2 sm:translate-y-4' : ''}
-      ${layout === 'hub' ? 'w-full gap-16 px-8' : 'w-[min(80vw,60vh)] h-[min(80vw,60vh)] sm:w-[300px] sm:h-[300px] max-w-[320px] max-h-[320px]'}
+      ${layout === 'hub' ? 'w-full gap-4' : 'w-[min(80vw,60vh)] h-[min(80vw,60vh)] sm:w-[300px] sm:h-[300px] max-w-[320px] max-h-[320px]'}
     `}
             style={{
                 transform: `translateY(${counterVerticalOffset}px) scale(${counterScale})`
@@ -862,7 +862,11 @@ export function CounterVisuals({
                 <motion.span
                     key={currentCount}
                     initial={{ scale: 1.5, opacity: 0.5 }}
-                    animate={{ scale: 1, opacity: 1 }}
+                    animate={{
+                        scale: 1,
+                        opacity: 1,
+                        x: layout === 'hub' ? (window.innerWidth < 640 ? 120 : 160) : 0
+                    }}
                     transition={{ duration: 0.15, ease: [0.34, 1.56, 0.64, 1] }}
                     className={`
           counter-number text-counter-text
