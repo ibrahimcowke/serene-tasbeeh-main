@@ -211,8 +211,8 @@ export const PremiumHub = () => {
                         </motion.button>
                     </div>
 
-                    {/* Vertical Custom Controls anchored to left side */}
-                    <div className="absolute top-1/4 left-4 flex flex-col gap-2 bg-[#1a1a1a]/80 backdrop-blur-md p-2 rounded-[2rem] border border-white/5 shadow-2xl z-20">
+                    {/* Vertical Custom Controls anchored to far left edge */}
+                    <div className="absolute top-1/4 left-0 flex flex-col gap-2 bg-[#1a1a1a]/80 backdrop-blur-md p-2 rounded-r-[2rem] rounded-l-none border border-white/5 border-l-0 shadow-2xl z-20">
                         <button
                             onClick={(e) => { e.stopPropagation(); undo(); }}
                             className="p-3 hover:bg-white/5 rounded-full text-white/40 hover:text-white transition-colors"
