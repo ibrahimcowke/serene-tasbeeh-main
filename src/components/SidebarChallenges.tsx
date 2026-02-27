@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Users, Swords, Send, Check, X, Zap, Trophy, Shield, Ghost } from 'lucide-react';
+import { Users, Swords, Send, Check, X, Zap, Trophy, Shield, Ghost, Target } from 'lucide-react';
 import { database } from '@/lib/firebase';
 import { ref, onValue, set, push, serverTimestamp, query, limitToLast } from 'firebase/database';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
