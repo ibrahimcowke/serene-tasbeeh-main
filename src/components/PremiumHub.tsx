@@ -249,9 +249,9 @@ export const PremiumHub = () => {
                         </div>
                     </div>
 
-                    <div className="relative z-10 w-full mb-8">
+                    <div className="relative z-10 w-full mb-8 flex justify-center">
                         <CounterVisuals
-                            layout="default"
+                            layout="hub"
                             counterShape={counterShape}
                             counterVerticalOffset={0}
                             counterScale={1}
