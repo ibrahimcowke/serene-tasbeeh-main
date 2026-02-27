@@ -90,54 +90,55 @@ export function GlobalChallenges() {
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: index * 0.1 }}
-                            className="relative overflow-hidden bg-card border border-border/50 rounded-2xl p-3 sm:p-4 shadow-sm group"
+                            whileHover={{ y: -2 }}
+                            className="relative overflow-hidden bg-white/[0.02] border border-white/[0.06] rounded-[1.5rem] p-4 shadow-sm group transition-all hover:bg-white/[0.04] hover:border-primary/20"
                         >
                             {/* Decorative background glow based on active state */}
                             {isParticipating && (
-                                <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full blur-3xl -mr-16 -mt-16 pointer-events-none" />
+                                <div className="absolute top-0 right-0 w-32 h-32 bg-primary/10 rounded-full blur-[60px] -mr-16 -mt-16 pointer-events-none" />
                             )}
 
-                            <div className="flex justify-between items-start mb-1 relative z-10">
+                            <div className="flex justify-between items-start mb-2 relative z-10">
                                 <div className="min-w-0">
-                                    <h3 className="font-bold text-foreground text-sm sm:text-base tracking-tight truncate">
+                                    <h3 className="font-black text-white/90 text-sm sm:text-[15px] tracking-tight truncate">
                                         {challenge.title}
                                     </h3>
-                                    <div className="flex items-center gap-1 mt-0.5 text-[9px] text-muted-foreground font-medium uppercase tracking-wider">
-                                        <Users className="w-2.5 h-2.5 text-primary/70" />
+                                    <div className="flex items-center gap-1.5 mt-1 text-[9px] text-white/30 font-black uppercase tracking-[0.15em]">
+                                        <Users className="w-3 h-3 text-primary/50" />
                                         <span>Community Goal</span>
                                     </div>
                                 </div>
 
                                 {isParticipating && (
-                                    <span className="shrink-0 bg-primary/10 text-primary text-[8px] font-bold px-1.5 py-0.5 rounded-full uppercase tracking-wider">
+                                    <span className="shrink-0 bg-primary text-primary-foreground text-[8px] font-black px-2 py-0.5 rounded-full uppercase tracking-widest shadow-[0_0_15px_rgba(245,158,11,0.3)]">
                                         Active
                                     </span>
                                 )}
                             </div>
 
-                            <p className="text-[11px] sm:text-xs text-muted-foreground/80 leading-relaxed mb-3 relative z-10 pr-2 line-clamp-2">
-                                {challenge.description}
+                            <p className="text-[11px] sm:text-xs text-white/40 leading-relaxed mb-4 relative z-10 pr-2 line-clamp-2 italic">
+                                "{challenge.description}"
                             </p>
 
                             {/* Progress Bar Area */}
-                            <div className="space-y-1 mb-3 relative z-10">
-                                <div className="flex justify-between text-[9px] sm:text-[10px] font-medium">
-                                    <span className="text-foreground">{challenge.currentProgress.toLocaleString()}</span>
-                                    <span className="text-muted-foreground">/ {challenge.target.toLocaleString()}</span>
+                            <div className="space-y-2 mb-4 relative z-10">
+                                <div className="flex justify-between text-[9px] sm:text-[10px] font-black tracking-widest uppercase">
+                                    <span className="text-primary/80">{challenge.currentProgress.toLocaleString()}</span>
+                                    <span className="text-white/20">/ {challenge.target.toLocaleString()}</span>
                                 </div>
 
-                                <div className="h-1 w-full bg-secondary/50 rounded-full overflow-hidden">
+                                <div className="h-1.5 w-full bg-white/[0.05] rounded-full overflow-hidden border border-white/[0.05]">
                                     <motion.div
-                                        className="h-full bg-gradient-to-r from-primary/80 to-primary rounded-full relative"
+                                        className="h-full bg-gradient-to-r from-primary via-orange-400 to-primary rounded-full relative shadow-[0_0_10px_rgba(245,158,11,0.2)]"
                                         initial={{ width: 0 }}
                                         animate={{ width: `${progressPercentage}%` }}
-                                        transition={{ duration: 1, ease: 'easeOut' }}
+                                        transition={{ duration: 1.5, ease: 'easeOut' }}
                                     >
-                                        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full animate-[shimmer_2s_infinite]" />
+                                        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent -translate-x-full animate-[shimmer_2s_infinite]" />
                                     </motion.div>
                                 </div>
 
-                                <div className="flex justify-end text-[8px] text-muted-foreground font-medium">
+                                <div className="flex justify-end text-[9px] text-primary font-black tracking-tighter">
                                     {progressPercentage.toFixed(1)}%
                                 </div>
                             </div>

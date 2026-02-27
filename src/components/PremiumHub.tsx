@@ -37,8 +37,12 @@ export const PremiumHub = () => {
     return (
         <div className="w-full min-h-screen bg-transparent relative overflow-hidden flex flex-col">
 
+            {/* Premium Background Ambient Glows */}
+            <div className="absolute top-1/4 -left-20 w-[500px] h-[500px] bg-primary/5 rounded-full blur-[120px] pointer-events-none" />
+            <div className="absolute bottom-1/4 -right-20 w-[500px] h-[500px] bg-green-500/5 rounded-full blur-[120px] pointer-events-none" />
+
             {/* Main Hub Content */}
-            <div className="flex-1 w-full grid grid-cols-12 gap-4 lg:gap-6 p-4 lg:p-6 relative z-10">
+            <div className="flex-1 w-full grid grid-cols-12 gap-4 lg:gap-8 p-4 lg:p-8 relative z-10">
 
                 {/* Left Column: Achievement Hub */}
                 <motion.div
@@ -46,8 +50,9 @@ export const PremiumHub = () => {
                     animate={{ opacity: 1, x: 0 }}
                     className="col-span-12 lg:col-span-2 flex flex-col gap-4 lg:gap-6"
                 >
-                    <div className="skeuo-glass rounded-[2rem] p-5 flex flex-col items-center">
-                        <h2 className="text-xs font-black uppercase tracking-[0.2em] text-white/40 mb-4">Achievement Hub</h2>
+                    <div className="skeuo-glass rounded-[2.5rem] p-6 flex flex-col items-center border-white/[0.08] shadow-2xl relative overflow-hidden group">
+                        <div className="absolute inset-0 bg-gradient-to-br from-white/[0.02] to-transparent pointer-events-none" />
+                        <h2 className="text-[10px] font-black uppercase tracking-[0.3em] text-white/30 mb-6 relative z-10">Achievement Hub</h2>
 
                         <div className="flex flex-col items-center gap-1 mb-4">
                             <span className="text-[10px] text-primary/60 font-bold uppercase tracking-widest">Your Rank:</span>
@@ -97,21 +102,25 @@ export const PremiumHub = () => {
                 <motion.div
                     initial={{ opacity: 0, y: 30 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className="col-span-12 lg:col-span-6 flex flex-col gap-8 lg:gap-10 items-center justify-start pt-10"
+                    className="col-span-12 lg:col-span-6 flex flex-col gap-8 lg:gap-12 items-center justify-start pt-12 relative"
                 >
-                    <div className="flex flex-col items-center text-center gap-2">
+                    {/* Center plateau effect */}
+                    <div className="absolute inset-x-0 top-0 bottom-[-20px] bg-gradient-to-b from-white/[0.03] to-transparent rounded-[3rem] blur-sm -z-10 border border-white/[0.05]" />
+
+                    <div className="flex flex-col items-center text-center gap-3 relative z-10">
                         <motion.h1
-                            className="text-7xl font-arabic text-primary/90 mb-2"
-                            initial={{ scale: 0.9 }}
-                            animate={{ scale: 1 }}
+                            className="text-8xl font-arabic text-primary mb-2 drop-shadow-[0_0_30px_rgba(245,158,11,0.2)]"
+                            initial={{ scale: 0.9, opacity: 0 }}
+                            animate={{ scale: 1, opacity: 1 }}
+                            transition={{ duration: 0.8, ease: "easeOut" }}
                         >
                             سُبْحَانَ اللهِ
                         </motion.h1>
-                        <span className="text-xl font-black tracking-[0.3em] text-white/80">SUBHANALLAH</span>
-                        <div className="flex items-center gap-2 mt-2">
-                            <span className="text-[10px] font-bold text-white/30 uppercase tracking-widest">Step 1 of 5</span>
-                            <div className="w-1 h-1 rounded-full bg-white/20" />
-                            <span className="text-[10px] font-bold text-white/30 uppercase tracking-widest">Subhanallah x33</span>
+                        <span className="text-2xl font-black tracking-[0.4em] text-white/90 drop-shadow-sm">SUBHANALLAH</span>
+                        <div className="flex items-center gap-3 mt-1">
+                            <span className="text-[10px] font-black text-white/20 uppercase tracking-[0.2em]">Step 1 of 5</span>
+                            <div className="w-1.5 h-1.5 rounded-full bg-primary/30" />
+                            <span className="text-[10px] font-black text-primary/40 uppercase tracking-[0.2em]">Subhanallah x33</span>
                         </div>
                     </div>
 
@@ -137,24 +146,25 @@ export const PremiumHub = () => {
                     animate={{ opacity: 1, x: 0 }}
                     className="col-span-12 lg:col-span-4 flex flex-col gap-4 lg:gap-6"
                 >
-                    <div className="bg-green-950/20 backdrop-blur-3xl border border-green-500/10 rounded-[2rem] flex flex-col overflow-hidden">
-                        <div className="p-3 lg:p-4 flex items-center justify-between border-b border-white/5">
+                    <div className="bg-black/20 backdrop-blur-3xl border border-white/[0.08] rounded-[2.5rem] flex flex-col overflow-hidden shadow-2xl relative">
+                        <div className="absolute inset-0 bg-gradient-to-tr from-primary/[0.03] to-transparent pointer-events-none" />
+                        <div className="p-4 lg:p-6 flex items-center justify-between border-b border-white/5 relative z-10">
                             <div className="flex items-center gap-3">
-                                <h2 className="text-sm font-black uppercase tracking-widest text-white/80">Community</h2>
-                                <ChevronDown className="w-4 h-4 text-white/40" />
+                                <h2 className="text-xs font-black uppercase tracking-[0.2em] text-white/50">Community</h2>
+                                <ChevronDown className="w-4 h-4 text-white/20" />
                             </div>
                             <div className="flex items-center gap-2 px-3 py-1 bg-green-500/10 rounded-full border border-green-500/20">
                                 <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
-                                <span className="text-[10px] text-green-500 font-black uppercase">Live</span>
+                                <span className="text-[10px] text-green-500 font-black uppercase tracking-widest">Live</span>
                             </div>
                         </div>
 
-                        <div className="p-3 lg:p-4 space-y-4 overflow-y-auto max-h-[calc(100vh-350px)] scrollbar-hide">
-                            {/* Global Pulse Card - Simplified */}
-                            <div className="bg-black/40 border border-white/5 rounded-3xl p-3 flex flex-col items-center shadow-2xl relative overflow-hidden group">
-                                <div className="absolute inset-0 bg-primary/5 opacity-0 group-hover:opacity-100 transition-opacity" />
+                        <div className="p-4 lg:p-6 space-y-6 overflow-y-auto max-h-[calc(100vh-350px)] scrollbar-hide relative z-10">
+                            {/* Global Pulse Card - Refined */}
+                            <div className="bg-white/[0.03] border border-white/[0.06] rounded-[2rem] p-4 flex flex-col items-center shadow-inner relative overflow-hidden group transition-all hover:bg-white/[0.05] hover:border-primary/20">
+                                <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
                                 <VisitorCounter />
-                                <span className="text-[10px] font-bold text-primary/60 uppercase mt-2">Dhikrs Worldwide</span>
+                                <span className="text-[10px] font-black text-primary/40 uppercase mt-3 tracking-widest">Dhikrs Worldwide</span>
                             </div>
 
                             {/* Challenges */}
