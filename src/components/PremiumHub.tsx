@@ -249,7 +249,7 @@ export const PremiumHub = () => {
                         </div>
                     </div>
 
-                    <div className="relative z-10 w-full mb-8 flex justify-center items-center gap-6 sm:gap-10">
+                    <div className="relative z-10 w-full mb-8 flex flex-col justify-center items-center pb-4">
                         <CounterVisuals
                             layout="hub"
                             counterShape={counterShape}
@@ -262,13 +262,6 @@ export const PremiumHub = () => {
                             handleTap={increment}
                             showCompletion={false}
                             disabled={false}
-                            hideNumber={true}
-                        />
-                        <CounterNumber
-                            currentCount={count}
-                            counterShape={counterShape}
-                            currentSettings={{ soundEnabled: true, hapticEnabled: true, vibrationIntensity: 'medium', fontScale: 1, soundType: 'click' }}
-                            countFontSize={1}
                         />
                     </div>
                 </motion.div>

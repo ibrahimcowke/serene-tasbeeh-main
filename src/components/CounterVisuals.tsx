@@ -56,7 +56,11 @@ export function CounterNumber({
         <motion.span
             key={currentCount}
             initial={{ scale: 1.5, opacity: 0.5 }}
-            animate={{ scale: 1, opacity: 1, x: 0 }}
+            animate={{
+                scale: 1,
+                opacity: 1,
+                x: 0
+            }}
             transition={{ duration: 0.15, ease: [0.34, 1.56, 0.64, 1] }}
             className={`
   counter-number text-counter-text
@@ -108,7 +112,8 @@ export function CounterVisuals({
     countFontSize,
     handleTap,
     showCompletion,
-    disabled
+    disabled,
+    hideNumber
 }: CounterVisualsProps) {
     return (
         <motion.div
