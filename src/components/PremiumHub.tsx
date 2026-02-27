@@ -35,38 +35,16 @@ export const PremiumHub = () => {
     };
 
     return (
-        <div className="w-full min-h-screen bg-rock-hub relative overflow-hidden flex flex-col">
+        <div className="w-full min-h-screen bg-transparent relative overflow-hidden flex flex-col">
 
-            {/* Top Navigation Bar */}
-            <div className="w-full h-16 flex items-center justify-between px-8 bg-black/40 backdrop-blur-md border-b border-white/5 z-20">
-                <div className="flex items-center gap-6">
-                    <div className="flex items-center gap-2 px-3 py-1 bg-white/5 rounded-full border border-white/10">
-                        <Users className="w-3 h-3 text-primary" />
-                        <span className="text-[10px] font-bold text-white/70 tracking-widest">2</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                        <Calendar className="w-4 h-4 text-primary" />
-                        <span className="text-[10px] font-black uppercase tracking-widest text-primary/80">10 RAMADAN 1447</span>
-                    </div>
-                </div>
-
-                <div className="flex items-center gap-4">
-                    <button className="p-2 hover:bg-white/5 rounded-full text-white/40 transition-colors">
-                        <Bell className="w-5 h-5" />
-                    </button>
-                    <button className="p-2 hover:bg-white/5 rounded-full text-white/40 transition-colors">
-                        <Settings className="w-5 h-5" />
-                    </button>
-                </div>
-            </div>
-
-            <main className="flex-1 max-w-[1600px] mx-auto w-full grid grid-cols-1 lg:grid-cols-12 gap-6 p-8 relative z-10">
+            {/* Main Hub Content */}
+            <div className="flex-1 w-full grid grid-cols-12 gap-6 p-8 relative z-10">
 
                 {/* Left Column: Achievement Hub */}
                 <motion.div
                     initial={{ opacity: 0, x: -50 }}
                     animate={{ opacity: 1, x: 0 }}
-                    className="lg:col-span-3 flex flex-col gap-6"
+                    className="col-span-12 lg:col-span-3 flex flex-col gap-6"
                 >
                     <div className="skeuo-glass rounded-[2rem] p-8 flex flex-col items-center flex-1">
                         <h2 className="text-xs font-black uppercase tracking-[0.2em] text-white/40 mb-12">Achievement Hub</h2>
@@ -119,7 +97,7 @@ export const PremiumHub = () => {
                 <motion.div
                     initial={{ opacity: 0, y: 30 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className="lg:col-span-12 xl:col-span-5 flex flex-col gap-12 items-center justify-center pt-8"
+                    className="col-span-12 lg:col-span-5 flex flex-col gap-12 items-center justify-center pt-8"
                 >
                     <div className="flex flex-col items-center text-center gap-2">
                         <motion.h1
@@ -157,7 +135,7 @@ export const PremiumHub = () => {
                 <motion.div
                     initial={{ opacity: 0, x: 50 }}
                     animate={{ opacity: 1, x: 0 }}
-                    className="lg:col-span-4 flex flex-col gap-6"
+                    className="col-span-12 lg:col-span-4 flex flex-col gap-6"
                 >
                     <div className="bg-green-950/20 backdrop-blur-3xl border border-green-500/10 rounded-[2rem] flex flex-col overflow-hidden h-full">
                         <div className="p-8 flex items-center justify-between border-b border-white/5">
@@ -202,7 +180,7 @@ export const PremiumHub = () => {
                     </div>
                 </motion.div>
 
-            </main>
+            </div>
 
             {/* Bottom Right Decoration */}
             <div className="absolute bottom-8 right-8 z-30 pointer-events-none opacity-50">
