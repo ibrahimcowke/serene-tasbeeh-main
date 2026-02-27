@@ -48,7 +48,7 @@ export const PremiumHub = () => {
                 <motion.div
                     initial={{ opacity: 0, x: -50 }}
                     animate={{ opacity: 1, x: 0 }}
-                    className="col-span-12 lg:col-span-2 flex flex-col gap-4 lg:gap-6"
+                    className="col-span-12 lg:col-span-3 flex flex-col gap-4 lg:gap-6"
                 >
                     <div className="skeuo-glass rounded-[2.5rem] p-6 flex flex-col items-center border-white/[0.08] shadow-2xl relative overflow-hidden group">
                         <div className="absolute inset-0 bg-gradient-to-br from-white/[0.02] to-transparent pointer-events-none" />
@@ -102,7 +102,7 @@ export const PremiumHub = () => {
                 <motion.div
                     initial={{ opacity: 0, y: 30 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className="col-span-12 lg:col-span-6 flex flex-col gap-8 lg:gap-12 items-center justify-start pt-12 relative"
+                    className="col-span-12 lg:col-span-5 flex flex-col gap-8 lg:gap-12 items-center justify-start pt-12 relative"
                 >
                     {/* Center plateau effect */}
                     <div className="absolute inset-x-0 top-0 bottom-[-20px] bg-gradient-to-b from-white/[0.03] to-transparent rounded-[3rem] blur-sm -z-10 border border-white/[0.05]" />
