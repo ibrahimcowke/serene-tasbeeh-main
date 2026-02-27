@@ -46,7 +46,7 @@ export function StatsWidget({ mini }: StatsWidgetProps) {
             className="flex flex-col gap-4 w-full"
         >
             {/* Rank Card */}
-            <div className="bg-secondary/20 border border-border/50 rounded-2xl p-4 relative overflow-hidden group">
+            <div className="bg-white/5 backdrop-blur-2xl border border-white/10 rounded-3xl p-6 relative overflow-hidden group shadow-xl">
                 <div className="flex justify-between items-start relative z-10">
                     <div>
                         <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider mb-0.5">Your Rank</p>
@@ -80,32 +80,32 @@ export function StatsWidget({ mini }: StatsWidgetProps) {
             {/* Badges Grid */}
             <div className="grid grid-cols-2 lg:grid-cols-1 gap-2.5">
                 {/* Streak Badge */}
-                <div className="flex items-center gap-3 px-3 py-2.5 rounded-2xl bg-secondary/20 border border-border/50 shadow-sm hover:bg-secondary/30 transition-all cursor-help group relative">
-                    <div className={`w-8 h-8 rounded-full flex items-center justify-center ${streakDays > 0 ? 'bg-orange-500/10' : 'bg-muted/10'}`}>
-                        <Flame className={`w-4 h-4 ${streakDays > 0 ? 'text-orange-500 fill-orange-500' : 'text-muted-foreground'}`} />
+                <div className="flex items-center gap-3 px-4 py-3.5 rounded-[1.5rem] bg-white/5 backdrop-blur-xl border border-white/10 shadow-lg hover:bg-white/10 transition-all cursor-help group relative">
+                    <div className={`w-9 h-9 rounded-full flex items-center justify-center ${streakDays > 0 ? 'bg-orange-500/10' : 'bg-muted/10'}`}>
+                        <Flame className={`w-5 h-5 ${streakDays > 0 ? 'text-orange-500 fill-orange-500' : 'text-muted-foreground'}`} />
                     </div>
                     <div className="flex flex-col">
-                        <span className="text-xs font-bold text-foreground">{streakDays} Days</span>
-                        <span className="text-[10px] text-muted-foreground uppercase tracking-tighter leading-none">Best Streak</span>
+                        <span className="text-sm font-black text-foreground">{streakDays} Days</span>
+                        <span className="text-[10px] text-muted-foreground uppercase tracking-wider leading-none">Best Streak</span>
                     </div>
 
-                    <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 p-2 bg-card/95 backdrop-blur-xl border border-border rounded-xl text-[10px] w-32 opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity z-50 text-center">
+                    <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 p-3 bg-card/95 backdrop-blur-2xl border border-white/10 rounded-2xl text-[10px] w-40 opacity-0 group-hover:opacity-100 pointer-events-none transition-all duration-300 z-50 text-center shadow-2xl">
                         Keep counter active daily!
                     </div>
                 </div>
 
                 {/* Daily Goal Badge */}
-                <div className="flex items-center gap-3 px-3 py-2.5 rounded-2xl bg-secondary/20 border border-border/50 shadow-sm hover:bg-secondary/30 transition-all group relative">
-                    <div className="w-8 h-8 rounded-full bg-blue-500/10 flex items-center justify-center">
-                        <Target className="w-4 h-4 text-blue-500" />
+                <div className="flex items-center gap-3 px-4 py-3.5 rounded-[1.5rem] bg-white/5 backdrop-blur-xl border border-white/10 shadow-lg hover:bg-white/10 transition-all group relative">
+                    <div className="w-9 h-9 rounded-full bg-blue-500/10 flex items-center justify-center">
+                        <Target className="w-5 h-5 text-blue-500" />
                     </div>
                     <div className="flex flex-col">
-                        <span className="text-xs font-bold text-foreground">{todayCount}/{dailyGoal}</span>
-                        <span className="text-[10px] text-muted-foreground uppercase tracking-tighter leading-none">Daily Goal</span>
+                        <span className="text-sm font-black text-foreground">{todayCount}/{dailyGoal}</span>
+                        <span className="text-[10px] text-muted-foreground uppercase tracking-wider leading-none">Daily Goal</span>
                     </div>
 
                     {/* Progress overlay mini-bar */}
-                    <div className="absolute bottom-0 left-3 right-3 h-[2px] bg-blue-500/10 rounded-full overflow-hidden">
+                    <div className="absolute bottom-0 left-4 right-4 h-[2px] bg-blue-500/10 rounded-full overflow-hidden">
                         <motion.div
                             className="h-full bg-blue-500"
                             initial={{ width: 0 }}

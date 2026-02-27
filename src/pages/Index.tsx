@@ -19,6 +19,7 @@ import ClassicDashboard from '../components/dashboards/ClassicDashboard';
 import MinimalDashboard from '../components/dashboards/MinimalDashboard';
 import TimelineDashboard from '../components/dashboards/TimelineDashboard';
 import { HubDashboard } from '@/components/HubDashboard';
+import { PremiumHub } from '@/components/PremiumHub';
 
 const Index = () => {
   const { zenMode, setZenMode, layout, setLayout } = useTasbeehStore();
@@ -39,14 +40,19 @@ const Index = () => {
           <div className="flex flex-col lg:flex-row gap-6 lg:gap-8 items-start justify-center">
             {/* Main Content Area */}
             <div className="w-full flex-1">
-              <ClassicDashboard />
+              <div className="lg:hidden">
+                <ClassicDashboard />
+              </div>
+              <div className="hidden lg:block">
+                <PremiumHub />
+              </div>
             </div>
 
-            {/* Desktop Community Sidebar */}
+            {/* Desktop Community Sidebar - Only show if not PremiumHub since PremiumHub includes it */}
             <motion.div
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
-              className="hidden lg:block w-80 xl:w-96 sticky top-24 h-[calc(100vh-8rem)]"
+              className="hidden xl:hidden w-80 xl:w-96 sticky top-24 h-[calc(100vh-8rem)]"
             >
               <CommunitySidebar />
             </motion.div>
@@ -107,7 +113,7 @@ const Index = () => {
 
             {/* Main Content Area */}
             <div className={`flex-1 min-h-0 w-full overflow-y-auto px-4 sm:px-6 md:px-8 pb-12 pt-16 xs:pt-24 custom-scrollbar transition-all duration-500 pb-safe ${zenMode || layout === 'zen' ? 'flex items-center justify-center pt-0 pb-0' : ''}`}>
-              <div className={`max-w-7xl mx-auto w-full ${zenMode || layout === 'zen' ? 'max-w-4xl' : ''}`}>
+              <div className={`max-w-[1600px] mx-auto w-full ${zenMode || layout === 'zen' ? 'max-w-4xl' : ''}`}>
                 {renderDashboard()}
               </div>
             </div>
