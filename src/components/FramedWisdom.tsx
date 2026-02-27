@@ -9,11 +9,11 @@ interface FramedWisdomProps {
 
 export const FramedWisdom = ({ arabic, english, source }: FramedWisdomProps) => {
     return (
-        <div className="wood-frame rounded-sm p-8 flex flex-col items-center justify-center text-center group relative overflow-hidden max-w-lg mx-auto">
+        <div className="wood-frame rounded-sm p-5 flex flex-col items-center justify-center text-center group relative overflow-hidden max-w-lg mx-auto">
             {/* Decorative inner border */}
             <div className="absolute inset-2 border border-white/5 pointer-events-none" />
 
-            <div className="relative z-10 flex flex-col gap-5 max-w-[90%]">
+            <div className="relative z-10 flex flex-col gap-4 max-w-[90%]">
                 <motion.p
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}

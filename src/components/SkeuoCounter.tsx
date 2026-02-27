@@ -16,9 +16,9 @@ export const SkeuoCounter = ({ count, total, dhikrName, onIncrement, onReset, on
     const formattedCount = count.toString().padStart(4, '0').split('');
 
     return (
-        <div className="flex flex-col items-center gap-4">
-            <div className="flex flex-col items-center mb-2">
-                <span className="text-[10px] font-black tracking-[.3em] uppercase text-primary/60 mb-1">Current Session</span>
+        <div className="flex flex-col items-center gap-2">
+            <div className="flex flex-col items-center mb-1">
+                <span className="text-[10px] font-black tracking-[.3em] uppercase text-primary/60 mb-0.5">Current Session</span>
                 <h2 className="text-sm font-bold text-white/50 tracking-widest">{dhikrName} ({total} RECITE)</h2>
             </div>
 
@@ -28,7 +28,7 @@ export const SkeuoCounter = ({ count, total, dhikrName, onIncrement, onReset, on
                 onClick={onIncrement}
             >
                 {/* Metal Plate with Screws */}
-                <div className="bg-[#1a1a1a] rounded-lg p-6 relative overflow-hidden flex flex-col items-center border-t border-white/10 border-b border-black shadow-2xl">
+                <div className="bg-[#1a1a1a] rounded-lg p-4 relative overflow-hidden flex flex-col items-center border-t border-white/10 border-b border-black shadow-2xl">
                     {/* Decorative Screws */}
                     <div className="absolute top-2 left-2 w-2 h-2 rounded-full bg-zinc-700 shadow-inner" />
                     <div className="absolute top-2 right-2 w-2 h-2 rounded-full bg-zinc-700 shadow-inner" />
@@ -57,7 +57,7 @@ export const SkeuoCounter = ({ count, total, dhikrName, onIncrement, onReset, on
                         ))}
                     </div>
 
-                    <div className="mt-3 flex flex-col items-center">
+                    <div className="mt-2 flex flex-col items-center">
                         <div className="h-0.5 w-full bg-primary/20 rounded-full mb-1" />
                         <span className="text-[10px] font-bold text-white/30 uppercase tracking-tighter">{count} of {total}</span>
                     </div>

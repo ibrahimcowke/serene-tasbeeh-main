@@ -90,9 +90,9 @@ export const PremiumHub = () => {
                 <motion.div
                     initial={{ opacity: 0, x: -50 }}
                     animate={{ opacity: 1, x: 0 }}
-                    className="col-span-12 lg:col-span-3 flex flex-col gap-4 lg:gap-6"
+                    className="col-span-12 lg:col-span-3 flex flex-col gap-3 lg:gap-4"
                 >
-                    <div className="skeuo-glass rounded-[2.5rem] p-6 flex flex-col items-center border-white/[0.08] shadow-2xl relative overflow-hidden group">
+                    <div className="skeuo-glass rounded-[2.5rem] p-4 flex flex-col items-center border-white/[0.08] shadow-2xl relative overflow-hidden group">
                         <div className="absolute inset-0 bg-gradient-to-br from-white/[0.02] to-transparent pointer-events-none" />
                         <h2 className="text-[10px] font-black uppercase tracking-[0.3em] text-white/30 mb-6 relative z-10">Achievement Hub</h2>
 
@@ -139,12 +139,11 @@ export const PremiumHub = () => {
                         </div>
                     </div>
 
-                    {/* Status Card - Restored */}
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.2 }}
-                        className="skeuo-glass rounded-[2.5rem] p-6 border-white/[0.08] shadow-2xl relative overflow-hidden group"
+                        className="skeuo-glass rounded-[2.5rem] p-4 border-white/[0.08] shadow-2xl relative overflow-hidden group"
                     >
                         <div className="absolute inset-0 bg-gradient-to-br from-primary/[0.02] to-transparent pointer-events-none" />
                         <div className="flex items-center justify-between mb-4 relative z-10">
@@ -186,7 +185,7 @@ export const PremiumHub = () => {
                 <motion.div
                     initial={{ opacity: 0, y: 30 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className="col-span-12 lg:col-span-5 flex flex-col gap-8 lg:gap-12 items-center justify-start pt-2 relative"
+                    className="col-span-12 lg:col-span-5 flex flex-col gap-4 lg:gap-6 items-center justify-start pt-2 relative"
                 >
                     {/* Center plateau effect */}
                     <div className="absolute inset-x-0 top-0 bottom-[-20px] bg-gradient-to-b from-white/[0.03] to-transparent rounded-[3rem] blur-sm -z-10 border border-white/[0.05]" />
@@ -217,7 +216,7 @@ export const PremiumHub = () => {
 
                     <div className="flex flex-col items-center text-center gap-3 relative z-10">
                         <motion.h1
-                            className="text-8xl font-arabic text-primary mb-2 drop-shadow-[0_0_30px_rgba(245,158,11,0.2)]"
+                            className="text-6xl font-arabic text-primary mb-1 drop-shadow-[0_0_30px_rgba(245,158,11,0.2)]"
                             initial={{ scale: 0.9, opacity: 0 }}
                             animate={{ scale: 1, opacity: 1 }}
                             transition={{ duration: 0.8, ease: "easeOut" }}
@@ -256,7 +255,7 @@ export const PremiumHub = () => {
                 >
                     <div className="bg-black/20 backdrop-blur-3xl border border-white/[0.08] rounded-[2.5rem] flex flex-col overflow-hidden shadow-2xl relative">
                         <div className="absolute inset-0 bg-gradient-to-tr from-primary/[0.03] to-transparent pointer-events-none" />
-                        <div className="p-4 lg:p-6 flex items-center justify-between border-b border-white/5 relative z-10">
+                        <div className="p-4 flex items-center justify-between border-b border-white/5 relative z-10">
                             <div className="flex items-center gap-3">
                                 <h2 className="text-xs font-black uppercase tracking-[0.2em] text-white/50">Community</h2>
                                 <ChevronDown className="w-4 h-4 text-white/20" />
@@ -267,7 +266,7 @@ export const PremiumHub = () => {
                             </div>
                         </div>
 
-                        <div className="p-4 lg:p-6 space-y-6 overflow-y-auto max-h-[calc(100vh-350px)] scrollbar-hide relative z-10">
+                        <div className="p-4 space-y-4 overflow-y-auto max-h-[calc(100vh-280px)] scrollbar-hide relative z-10 flex-1">
                             {/* Global Pulse Card - Refined */}
                             <div className="bg-white/[0.03] border border-white/[0.06] rounded-[2rem] p-4 flex flex-col items-center shadow-inner relative overflow-hidden group transition-all hover:bg-white/[0.05] hover:border-primary/20">
                                 <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
