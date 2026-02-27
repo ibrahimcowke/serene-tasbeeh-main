@@ -69,13 +69,6 @@ export const PremiumHub = () => {
         setCounterShape(shapes[nextIndex]);
     };
 
-    // Mock wisdom for display (could be from store/API)
-    const wisdom = {
-        arabic: "سُبْحَانَ اللهِ وَبِحَمْدِهِ ، عَدَدَ خَلْقِهِ ، وَرِضَا نَفْسِهِ ، وَزِنَةَ عَرْشِهِ ، وَمِدَادَ كَلِمَاتِهِ",
-        english: "Glory be to Allah and praise is to Him, according to the number of His creation and according to the pleasure of His Self and according to the weight of His Throne and according to the ink used in recording His words.",
-        source: "Sahih Muslim"
-    };
-
     return (
         <div className="w-full min-h-screen bg-transparent relative overflow-hidden flex flex-col">
 
@@ -240,11 +233,7 @@ export const PremiumHub = () => {
                         onUndo={undo}
                     />
 
-                    <FramedWisdom
-                        arabic={wisdom.arabic}
-                        english={wisdom.english}
-                        source={wisdom.source}
-                    />
+                    <FramedWisdom />
                 </motion.div>
 
                 {/* Right Column: Community */}
