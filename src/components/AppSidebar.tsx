@@ -20,7 +20,6 @@ import { HistoryView } from "./HistoryView";
 import { AchievementsView } from "./AchievementsView";
 import { ProgressView } from "./ProgressView";
 import { VisitorCounter } from "./VisitorCounter";
-import { DateBanner } from "./DateBanner";
 import { NotificationCenter } from "./NotificationCenter";
 import { toast } from "sonner";
 import { motion } from "framer-motion";
@@ -41,7 +40,6 @@ export function AppSidebar() {
                         <VisitorCounter />
                         <NotificationCenter />
                     </div>
-                    <DateBanner />
                 </motion.div>
             </SidebarHeader>
             <SidebarContent>
