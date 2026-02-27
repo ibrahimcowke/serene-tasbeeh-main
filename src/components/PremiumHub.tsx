@@ -97,17 +97,17 @@ export const PremiumHub = () => {
                 <motion.div
                     initial={{ opacity: 0, y: 30 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className="col-span-12 lg:col-span-5 flex flex-col gap-4 lg:gap-6 items-center justify-center pt-2"
+                    className="col-span-12 lg:col-span-5 flex flex-col gap-8 lg:gap-10 items-center justify-center pt-6"
                 >
-                    <div className="flex flex-col items-center text-center gap-1">
+                    <div className="flex flex-col items-center text-center gap-2">
                         <motion.h1
-                            className="text-6xl font-arabic text-primary/90 mb-1"
+                            className="text-7xl font-arabic text-primary/90 mb-2"
                             initial={{ scale: 0.9 }}
                             animate={{ scale: 1 }}
                         >
                             سُبْحَانَ اللهِ
                         </motion.h1>
-                        <span className="text-lg font-black tracking-[0.3em] text-white/80">SUBHANALLAH</span>
+                        <span className="text-xl font-black tracking-[0.3em] text-white/80">SUBHANALLAH</span>
                         <div className="flex items-center gap-2 mt-2">
                             <span className="text-[10px] font-bold text-white/30 uppercase tracking-widest">Step 1 of 5</span>
                             <div className="w-1 h-1 rounded-full bg-white/20" />
