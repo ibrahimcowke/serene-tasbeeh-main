@@ -2,7 +2,7 @@ import { motion } from 'framer-motion';
 
 export function DigitalWatch({ currentCount }: { currentCount: number }) {
     return (
-        <div className="absolute inset-0 flex items-center justify-center -z-10">
+        <div className="flex flex-col items-center justify-center -z-10 w-full h-full relative">
             <div className="w-[200px] h-[260px] bg-neutral-900 rounded-[50px] shadow-[inset_0_2px_10px_rgba(255,255,255,0.2),0_10px_30px_rgba(0,0,0,0.8)] border-[4px] border-neutral-700 flex flex-col items-center justify-center relative overflow-hidden">
                 <div className="absolute -top-[100px] w-[140px] h-[100px] bg-neutral-800 rounded-t-lg border-x-4 border-neutral-900" />
                 <div className="absolute -bottom-[100px] w-[140px] h-[100px] bg-neutral-800 rounded-b-lg border-x-4 border-neutral-900" />

@@ -36,7 +36,7 @@ export const BloomingLotus: React.FC<{ currentCount: number }> = ({ currentCount
             {/* Bloom Pulse on tap */}
             <motion.div
                 key={currentCount}
-                className="absolute inset-0 flex items-center justify-center pointer-events-none"
+                className="relative w-full h-full flex items-center justify-center pointer-events-none"
             >
                 {/* Inner petals popping up */}
                 {[...Array(6)].map((_, i) => (

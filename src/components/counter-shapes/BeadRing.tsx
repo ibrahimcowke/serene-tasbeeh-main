@@ -35,7 +35,7 @@ export function BeadRing({ currentCount }: BeadRingProps) {
     }, [currentCount, rotation]);
 
     return (
-        <div className="absolute inset-0 flex items-center justify-center -z-10 perspective-[1000px]">
+        <div className="relative w-full h-full flex items-center justify-center -z-10 perspective-[1000px]">
             {/* Ambient Glow */}
             <div className="absolute inset-0 bg-amber-500/5 blur-3xl rounded-full" />
 
@@ -151,7 +151,7 @@ export function BeadRing({ currentCount }: BeadRingProps) {
 
             {/* Dynamic central aura */}
             <motion.div
-                className="absolute inset-0 flex items-center justify-center pointer-events-none"
+                className="relative w-full h-full flex items-center justify-center pointer-events-none"
                 animate={{
                     opacity: [0.3, 0.6, 0.3],
                     scale: [0.9, 1.1, 0.9]

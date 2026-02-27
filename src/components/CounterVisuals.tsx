@@ -278,7 +278,7 @@ export function CounterVisuals({
 
 
             {counterShape === 'digital' && (
-                <div className="absolute inset-0 flex items-center justify-center -z-10 pointer-events-none">
+                <div className="flex items-center justify-center -z-10 pointer-events-none w-full h-full relative">
                     {/* Ring of 33 beads */}
                     <svg className="absolute w-[400px] h-[400px] -rotate-90 scale-[1.2] sm:scale-[1.4] opacity-80">
                         {Array.from({ length: 33 }).map((_, i) => {
@@ -340,8 +340,8 @@ export function CounterVisuals({
 
             {
                 counterShape === 'vintage-wood' && (
-                    <div className="absolute inset-0 flex items-center justify-center -z-10">
-                        <div className="w-[260px] h-[300px] bg-[#3e2723] rounded-[40px] border-[6px] border-[#5d4037] shadow-[0_10px_30px_rgba(0,0,0,0.5),inset_0_2px_10px_rgba(255,255,255,0.1)] flex flex-col items-center relative overflow-hidden">
+                    <div className="flex items-center justify-center -z-10 w-full h-full relative">
+                        <div className="w-[260px] h-[300px] bg-[#3e2723] rounded-[40px] border-[6px] border-[#5d4037] shadow-[0_10px_30px_rgba(0,0,0,0.5),inset_0_2px_10px_rgba(255,255,255,0.1)] flex flex-col items-center relative overflow-hidden scale-75 sm:scale-90">
                             {/* Decorative background pattern */}
                             <div className="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-black via-transparent to-transparent" />
 
@@ -859,9 +859,9 @@ export function CounterVisuals({
         ${counterShape === 'beads' ? 'w-64 h-64 rounded-full bg-transparent flex items-center justify-center' : ''}
         ${counterShape === 'flower' ? 'w-64 h-64 rounded-full bg-background/50 backdrop-blur-sm border border-primary/20 flex items-center justify-center shadow-lg' : ''}
         ${counterShape === 'waveform' ? 'w-64 h-64 rounded-full flex items-center justify-center backdrop-blur-sm' : ''}
-        ${counterShape === 'digital' ? 'absolute inset-0 z-20 opacity-0' : ''}
+        ${counterShape === 'digital' ? 'w-64 h-64 flex items-center justify-center bg-transparent z-10' : ''}
         ${counterShape === 'modern-ring' ? 'w-64 h-64 rounded-full bg-background/80 backdrop-blur-xl border border-primary/50 shadow-[0_0_30px_rgba(var(--primary),0.2)]' : ''}
-        ${counterShape === 'vintage-wood' ? 'w-64 h-64 bg-transparent shadow-none border-0' : ''}
+        ${counterShape === 'vintage-wood' ? 'w-64 h-64 bg-transparent shadow-none border-0 flex items-center justify-center' : ''}
         ${counterShape === 'geometric-star' ? 'w-64 h-64 flex items-center justify-center bg-background/10 backdrop-blur-sm' : ''}
         ${counterShape === 'fluid' ? 'w-64 h-64 flex items-center justify-center backdrop-blur-sm' : ''}
         ${counterShape === 'real-beads' ? 'w-64 h-64 rounded-full flex items-center justify-center bg-transparent z-10' : ''}

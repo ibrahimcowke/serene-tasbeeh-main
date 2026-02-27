@@ -11,7 +11,7 @@ export function EmeraldLoop({ currentCount }: EmeraldLoopProps) {
     const centerY = 150;
 
     return (
-        <div className="absolute inset-0 flex items-center justify-center -z-10 bg-emerald-950 rounded-full border border-emerald-800/50 shadow-2xl overflow-hidden">
+        <div className="relative w-full h-full flex items-center justify-center -z-10 bg-emerald-950 rounded-full border border-emerald-800/50 shadow-2xl overflow-hidden">
             {/* Ambient Background Glow */}
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(4,120,87,0.3),transparent_70%)]" />
 

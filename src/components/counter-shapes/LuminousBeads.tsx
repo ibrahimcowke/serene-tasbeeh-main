@@ -8,7 +8,7 @@ export function LuminousBeads({ progress }: LuminousBeadsProps) {
     const NUM_BEADS = 33;
 
     return (
-        <div className="absolute inset-0 flex items-center justify-center -z-10">
+        <div className="relative w-full h-full flex items-center justify-center -z-10">
             <svg className="w-[300px] h-[300px] -rotate-90">
                 {/* Main connected "String" (faint glow) */}
                 <circle cx="150" cy="150" r="140" stroke="currentColor" fill="none" strokeWidth="2" className="text-primary/10" />

@@ -6,7 +6,7 @@ interface NeumorphProps {
 
 export function Neumorph({ currentCount }: NeumorphProps) {
     return (
-        <div className="absolute inset-0 flex items-center justify-center -z-10 bg-[#e0e5ec] rounded-full overflow-hidden">
+        <div className="relative w-full h-full flex items-center justify-center -z-10 bg-[#e0e5ec] rounded-full overflow-hidden">
             {/* Neumorphic Base Base */}
             <div className="relative w-64 h-64 bg-[#e0e5ec] rounded-full shadow-[20px_20px_60px_#bebebe,-20px_-20px_60px_#ffffff] flex items-center justify-center">
 
