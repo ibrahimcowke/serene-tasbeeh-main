@@ -99,6 +99,12 @@ export const PremiumHub = () => {
                     animate={{ opacity: 1, y: 0 }}
                     className="col-span-12 lg:col-span-5 flex flex-col gap-8 lg:gap-10 items-center justify-center pt-6"
                 >
+                    <FramedWisdom
+                        arabic={wisdom.arabic}
+                        english={wisdom.english}
+                        source={wisdom.source}
+                    />
+
                     <div className="flex flex-col items-center text-center gap-2">
                         <motion.h1
                             className="text-7xl font-arabic text-primary/90 mb-2"
@@ -122,12 +128,6 @@ export const PremiumHub = () => {
                         onIncrement={increment}
                         onReset={reset}
                         onUndo={undo}
-                    />
-
-                    <FramedWisdom
-                        arabic={wisdom.arabic}
-                        english={wisdom.english}
-                        source={wisdom.source}
                     />
                 </motion.div>
 
