@@ -99,12 +99,6 @@ export const PremiumHub = () => {
                     animate={{ opacity: 1, y: 0 }}
                     className="col-span-12 lg:col-span-6 flex flex-col gap-8 lg:gap-10 items-center justify-center pt-6"
                 >
-                    <FramedWisdom
-                        arabic={wisdom.arabic}
-                        english={wisdom.english}
-                        source={wisdom.source}
-                    />
-
                     <div className="flex flex-col items-center text-center gap-2">
                         <motion.h1
                             className="text-7xl font-arabic text-primary/90 mb-2"
@@ -120,6 +114,12 @@ export const PremiumHub = () => {
                             <span className="text-[10px] font-bold text-white/30 uppercase tracking-widest">Subhanallah x33</span>
                         </div>
                     </div>
+
+                    <FramedWisdom
+                        arabic={wisdom.arabic}
+                        english={wisdom.english}
+                        source={wisdom.source}
+                    />
 
                     <SkeuoCounter
                         count={count}
