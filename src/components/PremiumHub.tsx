@@ -152,7 +152,7 @@ export const PremiumHub = () => {
                             <div className="flex items-center gap-1.5 px-2 py-0.5 bg-primary/10 rounded-full border border-primary/20">
                                 <Moon className="w-2.5 h-2.5 text-primary" />
                                 <span className="text-[8px] font-black text-primary uppercase tracking-tighter">
-                                    {dateContext?.hijriDay || '8'} {dateContext?.hijriMonth || 'Ramadan'}
+                                    {dateContext?.hijriDate || '8 Ramadan'}
                                 </span>
                             </div>
                         </div>
@@ -161,7 +161,7 @@ export const PremiumHub = () => {
                             <div className="flex items-center justify-between">
                                 <div className="flex flex-col">
                                     <span className="text-[8px] font-bold text-white/20 uppercase tracking-widest">Active Occasion</span>
-                                    <span className="text-xs font-black text-white/90">{dateContext?.specialOccasion || 'Ramadan Kareem'}</span>
+                                    <span className="text-xs font-black text-white/90">{dateContext?.specialDayName || 'Ramadan Kareem'}</span>
                                 </div>
                                 <div className="w-8 h-8 rounded-xl bg-primary/10 flex items-center justify-center border border-primary/20">
                                     <Star className="w-4 h-4 text-primary" />
