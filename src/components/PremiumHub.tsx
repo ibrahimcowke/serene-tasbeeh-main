@@ -14,7 +14,10 @@ import {
     Palette,
     Shapes,
     Layout,
-    Moon
+    Moon,
+    Undo2,
+    RefreshCw,
+    Layers
 } from 'lucide-react';
 import { SkeuoCounter } from './SkeuoCounter';
 import { RadialAchievement } from './RadialAchievement';
@@ -22,6 +25,7 @@ import { FramedWisdom } from './FramedWisdom';
 import { GlobalStats } from './GlobalStats';
 import { GlobalChallenges } from './GlobalChallenges';
 import { VisitorCounter } from './VisitorCounter';
+import { CounterVisuals } from './CounterVisuals';
 
 export const PremiumHub = () => {
     const {
@@ -207,7 +211,7 @@ export const PremiumHub = () => {
                         </motion.button>
                     </div>
 
-                    <div className="flex flex-col items-center text-center gap-3 relative z-10">
+                    <div className="flex flex-col items-center text-center gap-3 relative z-10 w-full max-w-lg mx-auto">
                         <motion.h1
                             className="text-6xl font-arabic text-primary mb-1 drop-shadow-[0_0_30px_rgba(245,158,11,0.2)]"
                             initial={{ scale: 0.9, opacity: 0 }}
@@ -222,18 +226,44 @@ export const PremiumHub = () => {
                             <div className="w-1.5 h-1.5 rounded-full bg-primary/30" />
                             <span className="text-[10px] font-black text-primary/40 uppercase tracking-[0.2em]">Subhanallah x33</span>
                         </div>
+
+                        {/* Vertical Custom Controls */}
+                        <div className="absolute top-1/2 -translate-y-1/2 -left-12 flex flex-col gap-2 bg-[#1a1a1a]/80 backdrop-blur-md p-2 rounded-full border border-white/5 shadow-2xl scale-90 z-20">
+                            <button
+                                onClick={(e) => { e.stopPropagation(); undo(); }}
+                                className="p-2.5 hover:bg-white/5 rounded-full text-white/40 hover:text-white transition-colors"
+                            >
+                                <Undo2 className="w-4 h-4" />
+                            </button>
+                            <div className="w-full h-px bg-white/5" />
+                            <button
+                                onClick={(e) => { e.stopPropagation(); reset(); }}
+                                className="p-2.5 hover:bg-white/5 rounded-full text-white/40 hover:text-white transition-colors relative"
+                            >
+                                <RefreshCw className="w-4 h-4" />
+                            </button>
+                            <div className="w-full h-px bg-white/5" />
+                            <button className="p-2.5 hover:bg-white/5 rounded-full text-white/40 hover:text-white transition-colors">
+                                <Layers className="w-4 h-4" />
+                            </button>
+                        </div>
                     </div>
 
-                    <SkeuoCounter
-                        count={count}
-                        total={total}
-                        dhikrName={currentDhikr.transliteration}
-                        onIncrement={increment}
-                        onReset={reset}
-                        onUndo={undo}
-                    />
-
-                    <FramedWisdom />
+                    <div className="relative z-10 w-full mb-8">
+                        <CounterVisuals
+                            layout="default"
+                            counterShape={counterShape}
+                            counterVerticalOffset={0}
+                            counterScale={1}
+                            progress={total > 0 ? count / total : 0}
+                            currentCount={count}
+                            currentSettings={{ soundEnabled: true, hapticEnabled: true, vibrationIntensity: 'medium', fontScale: 1, soundType: 'click' }}
+                            countFontSize={1}
+                            handleTap={increment}
+                            showCompletion={false}
+                            disabled={false}
+                        />
+                    </div>
                 </motion.div>
 
                 {/* Right Column: Community */}

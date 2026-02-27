@@ -16,7 +16,7 @@ export const SkeuoCounter = ({ count, total, dhikrName, onIncrement, onReset, on
     const formattedCount = count.toString().padStart(4, '0').split('');
 
     return (
-        <div className="flex flex-col items-center gap-2">
+        <div className="flex flex-col items-center gap-6">
             <div className="flex flex-col items-center mb-1">
                 <span className="text-[10px] font-black tracking-[.3em] uppercase text-primary/60 mb-0.5">Current Session</span>
                 <h2 className="text-sm font-bold text-white/50 tracking-widest">{dhikrName} ({total} RECITE)</h2>
@@ -62,26 +62,27 @@ export const SkeuoCounter = ({ count, total, dhikrName, onIncrement, onReset, on
                         <span className="text-[10px] font-bold text-white/30 uppercase tracking-tighter">{count} of {total}</span>
                     </div>
                 </div>
-
-                {/* Small round buttons integrated at the bottom shelf */}
-                <div className="absolute -bottom-6 left-1/2 -translate-x-1/2 flex gap-4 bg-[#222] p-2 rounded-full border border-white/5 shadow-xl scale-90">
-                    <button
-                        onClick={(e) => { e.stopPropagation(); onUndo(); }}
-                        className="p-2 hover:bg-white/5 rounded-full text-white/40 transition-colors"
-                    >
-                        <Undo2 className="w-4 h-4" />
-                    </button>
-                    <button
-                        onClick={(e) => { e.stopPropagation(); onReset(); }}
-                        className="p-2 hover:bg-white/5 rounded-full text-white/40 transition-colors"
-                    >
-                        <RefreshCw className="w-4 h-4" />
-                    </button>
-                    <button className="p-2 hover:bg-white/5 rounded-full text-white/40 transition-colors">
-                        <Layers className="w-4 h-4" />
-                    </button>
-                </div>
             </motion.div>
+
+            {/* Small round buttons */}
+            <div className="flex gap-4 bg-[#222] p-2 rounded-full border border-white/5 shadow-xl scale-90 z-20">
+                <button
+                    onClick={(e) => { e.stopPropagation(); onUndo(); }}
+                    className="p-3 hover:bg-white/5 rounded-full text-white/40 transition-colors"
+                >
+                    <Undo2 className="w-5 h-5" />
+                </button>
+                <button
+                    onClick={(e) => { e.stopPropagation(); onReset(); }}
+                    className="p-3 hover:bg-white/5 rounded-full text-white/40 transition-colors relative"
+                >
+                    <RefreshCw className="w-5 h-5" />
+                    <div className="absolute inset-0 bg-primary/10 rounded-full animate-pulse" />
+                </button>
+                <button className="p-3 hover:bg-white/5 rounded-full text-white/40 transition-colors">
+                    <Layers className="w-5 h-5" />
+                </button>
+            </div>
         </div>
     );
 };
