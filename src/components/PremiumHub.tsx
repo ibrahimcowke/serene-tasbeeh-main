@@ -44,7 +44,7 @@ export const PremiumHub = () => {
                 <motion.div
                     initial={{ opacity: 0, x: -50 }}
                     animate={{ opacity: 1, x: 0 }}
-                    className="col-span-12 lg:col-span-3 flex flex-col gap-4 lg:gap-6"
+                    className="col-span-12 lg:col-span-2 flex flex-col gap-4 lg:gap-6"
                 >
                     <div className="skeuo-glass rounded-[2rem] p-5 flex flex-col items-center">
                         <h2 className="text-xs font-black uppercase tracking-[0.2em] text-white/40 mb-4">Achievement Hub</h2>
@@ -97,7 +97,7 @@ export const PremiumHub = () => {
                 <motion.div
                     initial={{ opacity: 0, y: 30 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className="col-span-12 lg:col-span-5 flex flex-col gap-8 lg:gap-10 items-center justify-center pt-6"
+                    className="col-span-12 lg:col-span-6 flex flex-col gap-8 lg:gap-10 items-center justify-center pt-6"
                 >
                     <FramedWisdom
                         arabic={wisdom.arabic}
