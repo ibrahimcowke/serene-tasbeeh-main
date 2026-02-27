@@ -187,31 +187,52 @@ export const PremiumHub = () => {
                     {/* Center plateau effect */}
                     <div className="absolute inset-x-0 top-0 bottom-[-20px] bg-gradient-to-b from-white/[0.03] to-transparent rounded-[3rem] blur-sm -z-10 border border-white/[0.05]" />
 
-                    {/* Quick Controls Island */}
+                    {/* Top Right Controls (Theme & Shape) */}
                     <div className="absolute top-4 right-4 flex items-center gap-2 z-20">
                         <motion.button
                             whileHover={{ scale: 1.1 }}
                             whileTap={{ scale: 0.9 }}
                             onClick={cycleTheme}
-                            className="p-2 rounded-xl bg-white/5 border border-white/10 text-white/40 hover:text-primary transition-colors skeuo-glass shadow-lg group relative"
+                            className="p-3 rounded-2xl bg-white/5 border border-white/10 text-white/40 hover:text-primary transition-colors skeuo-glass shadow-lg group relative"
                             title="Change Theme"
                         >
-                            <Palette className="w-4 h-4" />
+                            <Palette className="w-5 h-5" />
                             <div className="absolute -bottom-1 -right-1 w-2 h-2 rounded-full bg-primary/40 blur-[2px] opacity-0 group-hover:opacity-100 transition-opacity" />
                         </motion.button>
                         <motion.button
                             whileHover={{ scale: 1.1 }}
                             whileTap={{ scale: 0.9 }}
                             onClick={cycleShape}
-                            className="p-2 rounded-xl bg-white/5 border border-white/10 text-white/40 hover:text-primary transition-colors skeuo-glass shadow-lg group relative"
+                            className="p-3 rounded-2xl bg-white/5 border border-white/10 text-white/40 hover:text-primary transition-colors skeuo-glass shadow-lg group relative"
                             title="Change Shape"
                         >
-                            <Shapes className="w-4 h-4" />
+                            <Shapes className="w-5 h-5" />
                             <div className="absolute -bottom-1 -right-1 w-2 h-2 rounded-full bg-primary/40 blur-[2px] opacity-0 group-hover:opacity-100 transition-opacity" />
                         </motion.button>
                     </div>
 
-                    <div className="flex flex-col items-center text-center gap-3 relative z-10 w-full max-w-lg mx-auto">
+                    {/* Vertical Custom Controls anchored to left side */}
+                    <div className="absolute top-1/4 left-4 flex flex-col gap-2 bg-[#1a1a1a]/80 backdrop-blur-md p-2 rounded-[2rem] border border-white/5 shadow-2xl z-20">
+                        <button
+                            onClick={(e) => { e.stopPropagation(); undo(); }}
+                            className="p-3 hover:bg-white/5 rounded-full text-white/40 hover:text-white transition-colors"
+                        >
+                            <Undo2 className="w-5 h-5" />
+                        </button>
+                        <div className="w-full h-px bg-white/5" />
+                        <button
+                            onClick={(e) => { e.stopPropagation(); reset(); }}
+                            className="p-3 hover:bg-white/5 rounded-full text-white/40 hover:text-white transition-colors relative"
+                        >
+                            <RefreshCw className="w-5 h-5" />
+                        </button>
+                        <div className="w-full h-px bg-white/5" />
+                        <button className="p-3 hover:bg-white/5 rounded-full text-white/40 hover:text-white transition-colors">
+                            <Layers className="w-5 h-5" />
+                        </button>
+                    </div>
+
+                    <div className="flex flex-col items-center text-center gap-3 relative z-10 w-full max-w-lg mx-auto mt-4">
                         <motion.h1
                             className="text-6xl font-arabic text-primary mb-1 drop-shadow-[0_0_30px_rgba(245,158,11,0.2)]"
                             initial={{ scale: 0.9, opacity: 0 }}
@@ -225,27 +246,6 @@ export const PremiumHub = () => {
                             <span className="text-[10px] font-black text-white/20 uppercase tracking-[0.2em]">Step 1 of 5</span>
                             <div className="w-1.5 h-1.5 rounded-full bg-primary/30" />
                             <span className="text-[10px] font-black text-primary/40 uppercase tracking-[0.2em]">Subhanallah x33</span>
-                        </div>
-
-                        {/* Vertical Custom Controls */}
-                        <div className="absolute top-1/2 -translate-y-1/2 -left-12 flex flex-col gap-2 bg-[#1a1a1a]/80 backdrop-blur-md p-2 rounded-full border border-white/5 shadow-2xl scale-90 z-20">
-                            <button
-                                onClick={(e) => { e.stopPropagation(); undo(); }}
-                                className="p-2.5 hover:bg-white/5 rounded-full text-white/40 hover:text-white transition-colors"
-                            >
-                                <Undo2 className="w-4 h-4" />
-                            </button>
-                            <div className="w-full h-px bg-white/5" />
-                            <button
-                                onClick={(e) => { e.stopPropagation(); reset(); }}
-                                className="p-2.5 hover:bg-white/5 rounded-full text-white/40 hover:text-white transition-colors relative"
-                            >
-                                <RefreshCw className="w-4 h-4" />
-                            </button>
-                            <div className="w-full h-px bg-white/5" />
-                            <button className="p-2.5 hover:bg-white/5 rounded-full text-white/40 hover:text-white transition-colors">
-                                <Layers className="w-4 h-4" />
-                            </button>
                         </div>
                     </div>
 
