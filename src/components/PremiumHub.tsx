@@ -115,12 +115,6 @@ export const PremiumHub = () => {
                         </div>
                     </div>
 
-                    <FramedWisdom
-                        arabic={wisdom.arabic}
-                        english={wisdom.english}
-                        source={wisdom.source}
-                    />
-
                     <SkeuoCounter
                         count={count}
                         total={total}
@@ -128,6 +122,12 @@ export const PremiumHub = () => {
                         onIncrement={increment}
                         onReset={reset}
                         onUndo={undo}
+                    />
+
+                    <FramedWisdom
+                        arabic={wisdom.arabic}
+                        english={wisdom.english}
+                        source={wisdom.source}
                     />
                 </motion.div>
 
