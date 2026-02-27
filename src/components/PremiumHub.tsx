@@ -97,7 +97,7 @@ export const PremiumHub = () => {
                 <motion.div
                     initial={{ opacity: 0, y: 30 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className="col-span-12 lg:col-span-6 flex flex-col gap-8 lg:gap-10 items-center justify-center pt-6"
+                    className="col-span-12 lg:col-span-6 flex flex-col gap-8 lg:gap-10 items-center justify-start pt-10"
                 >
                     <div className="flex flex-col items-center text-center gap-2">
                         <motion.h1
