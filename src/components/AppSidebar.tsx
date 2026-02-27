@@ -5,9 +5,11 @@ import {
     SidebarGroup,
     SidebarGroupContent,
     SidebarGroupLabel,
+    SidebarHeader,
     SidebarMenu,
     SidebarMenuButton,
     SidebarMenuItem,
+    useSidebar,
 } from "@/components/ui/sidebar";
 import { useTasbeehStore } from "@/store/tasbeehStore";
 import { DhikrSelector } from "./DhikrSelector";
@@ -17,15 +19,31 @@ import { SettingsView } from "./SettingsView";
 import { HistoryView } from "./HistoryView";
 import { AchievementsView } from "./AchievementsView";
 import { ProgressView } from "./ProgressView";
+import { VisitorCounter } from "./VisitorCounter";
+import { DateBanner } from "./DateBanner";
+import { NotificationCenter } from "./NotificationCenter";
 import { toast } from "sonner";
 import { motion } from "framer-motion";
 
 export function AppSidebar() {
     const { setZenMode } = useTasbeehStore();
+    const { state } = useSidebar();
 
     return (
         <Sidebar collapsible="icon">
-            <SidebarContent className="pt-16 lg:pt-20">
+            <SidebarHeader className="border-b border-border/40 bg-card/20 backdrop-blur-sm p-4">
+                <motion.div
+                    animate={state === "collapsed" ? { opacity: 0, height: 0 } : { opacity: 1, height: "auto" }}
+                    className="flex flex-col gap-4 overflow-hidden"
+                >
+                    <div className="flex items-center justify-between">
+                        <VisitorCounter />
+                        <NotificationCenter />
+                    </div>
+                    <DateBanner />
+                </motion.div>
+            </SidebarHeader>
+            <SidebarContent>
                 {/* Core Actions */}
                 <SidebarGroup>
                     <SidebarGroupLabel>Tools</SidebarGroupLabel>

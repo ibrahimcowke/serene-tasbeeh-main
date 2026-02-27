@@ -4,9 +4,6 @@ import { useTasbeehStore } from '@/store/tasbeehStore';
 import { ThemeProvider } from '@/components/ThemeProvider';
 import { SidebarProvider, SidebarInset, SidebarTrigger } from '@/components/ui/sidebar';
 import { AppSidebar } from '@/components/AppSidebar';
-import { VisitorCounter } from '@/components/VisitorCounter';
-import { NotificationCenter } from '@/components/NotificationCenter';
-import { DateBanner } from '@/components/DateBanner';
 import { MainFeed } from '../components/MainFeed';
 import { RoutinesView } from '@/components/RoutinesView';
 import { DhikrPulse } from '@/components/DhikrPulse';
@@ -73,39 +70,12 @@ const Index = () => {
             <WhatsNew />
             <BreathingGuide />
 
-            {/* Premium Floating Header Capsule (Mobile & Desktop) */}
-            <div className={`fixed z-40 transition-all duration-700 pointer-events-none
-              ${(zenMode || layout === 'zen') ? 'opacity-0 -translate-y-20' : 'opacity-100 translate-y-0'}
-              top-2 xs:top-4 left-1/2 -translate-x-1/2 w-[calc(100%-1rem)] xs:w-[calc(100%-2rem)] max-w-5xl
-              lg:top-0 lg:max-w-none lg:w-full lg:left-0 lg:translate-x-0`}>
-              <div className={`
-                  flex items-center justify-between w-full h-14 sm:h-16 px-2 sm:px-4 md:px-6 
-                  bg-card/40 backdrop-blur-2xl border border-white/10 shadow-2xl rounded-2xl lg:rounded-none pointer-events-auto
-                  transition-all duration-500
-                `}>
-                <div className="flex items-center gap-2 sm:gap-4 md:gap-8">
-                  {/* Left Section: Nav Trigger & Visitor Counter */}
-                  <div className="flex items-center gap-1.5 sm:gap-3">
-                    {!(zenMode || layout === 'zen') && <SidebarTrigger className="h-8 w-8 hover:bg-black/5" />}
-                    <div className="hidden sm:block h-4 w-px bg-white/10" />
-                    <div className="scale-[0.85] sm:scale-100 origin-left">
-                      <VisitorCounter />
-                    </div>
-                  </div>
-
-                  {/* Center Section: Date Banner - Hidden on mobile/tablet inside capsule */}
-                  <div className="hidden md:block flex-1 max-w-sm">
-                    <DateBanner />
-                  </div>
-                </div>
-
-                {/* Right Section: Notification Center */}
-                <div className="flex items-center gap-1 sm:gap-2">
-                  <div className="hidden sm:block h-4 w-px bg-white/10 mr-1 sm:mr-2" />
-                  <NotificationCenter />
-                </div>
+            {/* Sidebar Toggle (Visible when sidebar is collapsed or on mobile) */}
+            {!(zenMode || layout === 'zen') && (
+              <div className="fixed top-4 left-4 z-50 pointer-events-auto">
+                <SidebarTrigger className="h-10 w-10 bg-card/40 backdrop-blur-xl border border-white/10 shadow-lg hover:bg-white/5 transition-all duration-300" />
               </div>
-            </div>
+            )}
 
             <RoutinesView>
               <span />
