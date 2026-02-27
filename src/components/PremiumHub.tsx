@@ -44,28 +44,28 @@ export const PremiumHub = () => {
                 <motion.div
                     initial={{ opacity: 0, x: -50 }}
                     animate={{ opacity: 1, x: 0 }}
-                    className="col-span-12 lg:col-span-3 flex flex-col gap-6"
+                    className="col-span-12 lg:col-span-3 flex flex-col gap-4 lg:gap-6"
                 >
-                    <div className="skeuo-glass rounded-[2rem] p-6 flex flex-col items-center flex-1">
-                        <h2 className="text-xs font-black uppercase tracking-[0.2em] text-white/40 mb-6">Achievement Hub</h2>
+                    <div className="skeuo-glass rounded-[2rem] p-5 flex flex-col items-center flex-1">
+                        <h2 className="text-xs font-black uppercase tracking-[0.2em] text-white/40 mb-4">Achievement Hub</h2>
 
-                        <div className="flex flex-col items-center gap-1 mb-6">
+                        <div className="flex flex-col items-center gap-1 mb-4">
                             <span className="text-[10px] text-primary/60 font-bold uppercase tracking-widest">Your Rank:</span>
                             <h3 className="text-3xl font-black text-white tracking-tighter text-glow-gold">SEEKER</h3>
                         </div>
 
                         <RadialAchievement progress={1} title="Level Progress" />
 
-                        <div className="grid grid-cols-2 gap-4 w-full mt-6">
-                            <div className="bg-white/5 border border-white/5 rounded-2xl p-4 flex flex-col items-center text-center shadow-inner">
-                                <div className="w-8 h-8 rounded-full bg-orange-500/20 flex items-center justify-center mb-2">
+                        <div className="grid grid-cols-2 gap-3 w-full mt-4">
+                            <div className="bg-white/5 border border-white/5 rounded-2xl p-3 flex flex-col items-center text-center shadow-inner">
+                                <div className="w-8 h-8 rounded-full bg-orange-500/20 flex items-center justify-center mb-1">
                                     <Activity className="w-4 h-4 text-orange-500" />
                                 </div>
                                 <span className="text-xl font-black text-white">1</span>
                                 <span className="text-[8px] font-bold text-white/30 uppercase tracking-widest">Day</span>
                             </div>
-                            <div className="bg-white/5 border border-white/5 rounded-2xl p-4 flex flex-col items-center text-center shadow-inner">
-                                <div className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center mb-2">
+                            <div className="bg-white/5 border border-white/5 rounded-2xl p-3 flex flex-col items-center text-center shadow-inner">
+                                <div className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center mb-1">
                                     <div className="w-2 h-2 rounded-full border border-primary" />
                                 </div>
                                 <span className="text-xl font-black text-white">1/100</span>
@@ -74,15 +74,15 @@ export const PremiumHub = () => {
                         </div>
 
                         {/* Additional stats matching screenshot bottom left */}
-                        <div className="mt-auto w-full pt-6 border-t border-white/5 space-y-4">
-                            <div className="bg-black/20 rounded-full px-4 py-2 flex items-center justify-between border border-white/5">
+                        <div className="mt-auto w-full pt-4 border-t border-white/5 space-y-2.5">
+                            <div className="bg-black/20 rounded-full px-4 py-1.5 flex items-center justify-between border border-white/5">
                                 <div className="flex items-center gap-2">
                                     <div className="w-1.5 h-1.5 rounded-sm bg-blue-500" />
                                     <span className="text-[8px] font-bold text-white/40 uppercase">Global Activity</span>
                                 </div>
                                 <span className="text-[8px] font-black text-blue-500">11/100 (Leads 2%)</span>
                             </div>
-                            <div className="bg-black/20 rounded-full px-4 py-2 flex items-center justify-between border border-white/5">
+                            <div className="bg-black/20 rounded-full px-4 py-1.5 flex items-center justify-between border border-white/5">
                                 <div className="flex items-center gap-2">
                                     <Activity className="w-3 h-3 text-white/40" />
                                     <span className="text-[8px] font-bold text-white/40 uppercase">Global Activity</span>
@@ -97,17 +97,17 @@ export const PremiumHub = () => {
                 <motion.div
                     initial={{ opacity: 0, y: 30 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className="col-span-12 lg:col-span-5 flex flex-col gap-6 items-center justify-center pt-4"
+                    className="col-span-12 lg:col-span-5 flex flex-col gap-4 lg:gap-6 items-center justify-center pt-2"
                 >
-                    <div className="flex flex-col items-center text-center gap-2">
+                    <div className="flex flex-col items-center text-center gap-1">
                         <motion.h1
-                            className="text-7xl font-arabic text-primary/90 mb-2"
+                            className="text-6xl font-arabic text-primary/90 mb-1"
                             initial={{ scale: 0.9 }}
                             animate={{ scale: 1 }}
                         >
                             سُبْحَانَ اللهِ
                         </motion.h1>
-                        <span className="text-xl font-black tracking-[0.3em] text-white/80">SUBHANALLAH</span>
+                        <span className="text-lg font-black tracking-[0.3em] text-white/80">SUBHANALLAH</span>
                         <div className="flex items-center gap-2 mt-2">
                             <span className="text-[10px] font-bold text-white/30 uppercase tracking-widest">Step 1 of 5</span>
                             <div className="w-1 h-1 rounded-full bg-white/20" />
@@ -135,10 +135,10 @@ export const PremiumHub = () => {
                 <motion.div
                     initial={{ opacity: 0, x: 50 }}
                     animate={{ opacity: 1, x: 0 }}
-                    className="col-span-12 lg:col-span-4 flex flex-col gap-6"
+                    className="col-span-12 lg:col-span-4 flex flex-col gap-4 lg:gap-6"
                 >
                     <div className="bg-green-950/20 backdrop-blur-3xl border border-green-500/10 rounded-[2rem] flex flex-col overflow-hidden h-full">
-                        <div className="p-4 lg:p-6 flex items-center justify-between border-b border-white/5">
+                        <div className="p-3 lg:p-4 flex items-center justify-between border-b border-white/5">
                             <div className="flex items-center gap-3">
                                 <h2 className="text-sm font-black uppercase tracking-widest text-white/80">Community</h2>
                                 <ChevronDown className="w-4 h-4 text-white/40" />
@@ -149,11 +149,11 @@ export const PremiumHub = () => {
                             </div>
                         </div>
 
-                        <div className="p-4 lg:p-6 space-y-6 overflow-y-auto max-h-[calc(100vh-250px)] scrollbar-hide">
+                        <div className="p-3 lg:p-4 space-y-4 overflow-y-auto max-h-[calc(100vh-250px)] scrollbar-hide">
                             {/* Global Pulse Card */}
-                            <div className="bg-black/40 border border-white/5 rounded-3xl p-6 flex flex-col items-center shadow-2xl relative overflow-hidden group">
+                            <div className="bg-black/40 border border-white/5 rounded-3xl p-4 flex flex-col items-center shadow-2xl relative overflow-hidden group">
                                 <div className="absolute inset-0 bg-primary/5 opacity-0 group-hover:opacity-100 transition-opacity" />
-                                <div className="flex items-center gap-2 mb-4 bg-white/5 px-3 py-1 rounded-full border border-white/5">
+                                <div className="flex items-center gap-2 mb-2 bg-white/5 px-3 py-1 rounded-full border border-white/5">
                                     <Users className="w-3 h-3 text-primary" />
                                     <span className="text-[8px] font-black uppercase tracking-widest text-white/40">Community Pulse</span>
                                 </div>
