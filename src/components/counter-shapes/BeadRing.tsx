@@ -7,7 +7,7 @@ interface BeadRingProps {
 
 export function BeadRing({ currentCount }: BeadRingProps) {
     const totalBeads = 33;
-    const radius = 130;
+    const radius = 110;
     const beadSize = 22; // Larger, more tactile beads
 
     // Physics for rotation
@@ -35,12 +35,12 @@ export function BeadRing({ currentCount }: BeadRingProps) {
     }, [currentCount, rotation]);
 
     return (
-        <div className="relative w-full h-full flex items-center justify-center -z-10 perspective-[1000px]">
+        <div className="relative w-full h-full flex items-center justify-center -z-10 perspective-[1000px] scale-[0.9]">
             {/* Ambient Glow */}
             <div className="absolute inset-0 bg-amber-500/5 blur-3xl rounded-full" />
 
             <motion.div
-                className="relative w-[340px] h-[340px] flex items-center justify-center preserve-3d"
+                className="relative w-[256px] h-[256px] flex items-center justify-center preserve-3d"
                 style={{
                     rotateZ: smoothRotation,
                     rotateX: 10, // Slight 3D tilt
@@ -48,9 +48,9 @@ export function BeadRing({ currentCount }: BeadRingProps) {
                 }}
             >
                 {/* The String */}
-                <svg className="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 340 340">
+                <svg className="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 256 256">
                     <circle
-                        cx="170" cy="170" r={radius}
+                        cx="128" cy="128" r={radius}
                         fill="none"
                         stroke="#78350f"
                         strokeWidth="3"
@@ -59,7 +59,7 @@ export function BeadRing({ currentCount }: BeadRingProps) {
                     />
                     {/* Inner highlight string */}
                     <circle
-                        cx="170" cy="170" r={radius}
+                        cx="128" cy="128" r={radius}
                         fill="none"
                         stroke="#b45309"
                         strokeWidth="1"

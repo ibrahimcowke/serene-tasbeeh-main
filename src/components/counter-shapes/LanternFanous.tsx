@@ -9,7 +9,7 @@ export function LanternFanous({ currentCount }: LanternFanousProps) {
     const brightness = ((currentCount % 33) / 33) + 0.2; // Min 0.2, Max 1.2
 
     return (
-        <div className="relative w-48 h-64 flex flex-col items-center justify-center">
+        <div className="relative w-full h-full flex flex-col items-center justify-center scale-[0.9]">
             {/* Hanging String */}
             <div className="absolute top-0 w-1 h-10 bg-amber-900/50" />
 

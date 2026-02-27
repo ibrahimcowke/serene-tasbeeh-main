@@ -14,7 +14,7 @@ export function MoonPhase({ currentCount }: MoonPhaseProps) {
     const progress = (currentCount % 33) / 33;
 
     return (
-        <div className="relative w-64 h-64 flex items-center justify-center">
+        <div className="relative w-64 h-64 flex items-center justify-center scale-[0.85]">
             {/* Starfield Background */}
             <div className="absolute inset-0 rounded-full bg-slate-950 overflow-hidden shadow-2xl border border-slate-800">
                 {Array.from({ length: 20 }).map((_, i) => (

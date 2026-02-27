@@ -6,9 +6,9 @@ interface SmartRingProps {
 
 export function SmartRing({ currentCount }: SmartRingProps) {
     const totalTicks = 33;
-    const radius = 130;
-    const centerX = 150;
-    const centerY = 150;
+    const radius = 110;
+    const centerX = 128;
+    const centerY = 128;
     const strokeWidth = 3;
     const activeStrokeWidth = 5;
 
@@ -18,12 +18,12 @@ export function SmartRing({ currentCount }: SmartRingProps) {
     const strokeDashoffset = circumference - progress * circumference;
 
     return (
-        <div className="relative w-full h-full flex items-center justify-center -z-10 bg-black rounded-full overflow-hidden">
+        <div className="relative w-full h-full flex items-center justify-center -z-10 bg-black rounded-full overflow-hidden scale-[0.9]">
             {/* OLED Black Background with subtle vignette */}
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,#1a1a1a,black_70%)]" />
 
             {/* Main Graphics Container */}
-            <svg viewBox="0 0 300 300" className="w-full h-full relative z-10">
+            <svg viewBox="0 0 256 256" className="w-full h-full relative z-10">
                 {/* Background Track Ring */}
                 <circle
                     cx={centerX} cy={centerY} r={radius}

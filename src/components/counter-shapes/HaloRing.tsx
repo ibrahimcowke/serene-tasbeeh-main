@@ -7,8 +7,8 @@ interface HaloRingProps {
 
 export function HaloRing({ progress, currentCount }: HaloRingProps) {
     return (
-        <div className="relative w-full h-full flex items-center justify-center -z-10">
-            <div className="w-[300px] h-[300px] relative flex items-center justify-center">
+        <div className="relative w-full h-full flex items-center justify-center -z-10 scale-[0.9]">
+            <div className="w-[256px] h-[256px] relative flex items-center justify-center">
                 {/* Outer Glow Ring */}
                 <motion.div
                     className="absolute inset-0 rounded-full border-[2px] border-emerald-500/20 shadow-[0_0_30px_rgba(16,185,129,0.2)]"

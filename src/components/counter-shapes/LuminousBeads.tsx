@@ -8,17 +8,17 @@ export function LuminousBeads({ progress }: LuminousBeadsProps) {
     const NUM_BEADS = 33;
 
     return (
-        <div className="relative w-full h-full flex items-center justify-center -z-10">
-            <svg className="w-[300px] h-[300px] -rotate-90">
+        <div className="relative w-full h-full flex items-center justify-center -z-10 scale-[0.9]">
+            <svg className="w-[256px] h-[256px] -rotate-90" viewBox="0 0 256 256">
                 {/* Main connected "String" (faint glow) */}
-                <circle cx="150" cy="150" r="140" stroke="currentColor" fill="none" strokeWidth="2" className="text-primary/10" />
+                <circle cx="128" cy="128" r="110" stroke="currentColor" fill="none" strokeWidth="2" className="text-primary/10" />
 
                 {/* Beads */}
                 {Array.from({ length: NUM_BEADS }).map((_, i) => {
                     const angle = (i * 360) / NUM_BEADS;
-                    const radius = 140;
-                    const x = 150 + radius * Math.cos((angle * Math.PI) / 180);
-                    const y = 150 + radius * Math.sin((angle * Math.PI) / 180);
+                    const radius = 110;
+                    const x = 128 + radius * Math.cos((angle * Math.PI) / 180);
+                    const y = 128 + radius * Math.sin((angle * Math.PI) / 180);
 
                     // Calculate if this bead is active based on progress
                     // Assuming progress 0-1 maps to 0-33 beads

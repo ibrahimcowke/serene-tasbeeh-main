@@ -6,7 +6,7 @@ interface GlassPillProps {
 
 export function GlassPill({ currentCount }: GlassPillProps) {
     return (
-        <div className="relative w-full h-full flex items-center justify-center -z-10 overflow-hidden rounded-3xl">
+        <div className="relative w-full h-full flex items-center justify-center -z-10 overflow-hidden rounded-3xl scale-[0.65]">
             {/* Ambient Sunset Background */}
             <div className="absolute inset-0 bg-gradient-to-br from-indigo-900 via-purple-900 to-slate-900" />
 

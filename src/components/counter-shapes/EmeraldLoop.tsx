@@ -6,12 +6,12 @@ interface EmeraldLoopProps {
 
 export function EmeraldLoop({ currentCount }: EmeraldLoopProps) {
     const totalBeads = 33;
-    const radius = 130;
-    const centerX = 150;
-    const centerY = 150;
+    const radius = 110;
+    const centerX = 128;
+    const centerY = 128;
 
     return (
-        <div className="relative w-full h-full flex items-center justify-center -z-10 bg-emerald-950 rounded-full border border-emerald-800/50 shadow-2xl overflow-hidden">
+        <div className="relative w-full h-full flex items-center justify-center -z-10 bg-emerald-950 rounded-full border border-emerald-800/50 shadow-2xl overflow-hidden scale-[0.9]">
             {/* Ambient Background Glow */}
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(4,120,87,0.3),transparent_70%)]" />
 
@@ -24,7 +24,7 @@ export function EmeraldLoop({ currentCount }: EmeraldLoopProps) {
             />
 
             {/* Main SVG Container */}
-            <svg viewBox="0 0 300 300" className="w-full h-full relative z-10">
+            <svg viewBox="0 0 256 256" className="w-full h-full relative z-10">
                 {/* Connection String */}
                 <circle cx={centerX} cy={centerY} r={radius} fill="none" stroke="#065f46" strokeWidth="1.5" opacity="0.6" />
 

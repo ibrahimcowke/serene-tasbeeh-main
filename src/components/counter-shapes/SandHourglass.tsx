@@ -9,7 +9,7 @@ export function SandHourglass({ currentCount }: SandHourglassProps) {
     // progress fills the bottom chamber
 
     return (
-        <div className="relative w-40 h-64 flex flex-col items-center justify-center">
+        <div className="relative w-full h-full flex flex-col items-center justify-center scale-[0.9]">
             {/* Glass Container Shape - SVG */}
             <svg viewBox="0 0 100 160" className="w-full h-full drop-shadow-xl">
                 <defs>

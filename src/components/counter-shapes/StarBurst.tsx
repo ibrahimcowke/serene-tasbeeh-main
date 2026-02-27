@@ -2,7 +2,7 @@ import { motion } from 'framer-motion';
 
 export function StarBurst({ currentCount }: { currentCount: number }) {
     return (
-        <div className="relative w-full h-full flex items-center justify-center -z-10 overflow-hidden rounded-full">
+        <div className="relative w-full h-full flex items-center justify-center -z-10 overflow-hidden rounded-full scale-[0.9]">
             <motion.div
                 className="relative w-full h-full flex items-center justify-center"
                 animate={{ rotate: 360 }}

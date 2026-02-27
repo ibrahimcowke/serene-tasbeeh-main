@@ -4,7 +4,7 @@ import { useTasbeehStore, defaultDhikrs } from '@/store/tasbeehStore';
 import { ProgressRing } from './ProgressRing';
 import { HadithSlider } from './HadithSlider';
 import { SoundManager } from '@/lib/sound';
-import { CounterVisuals, CounterNumber } from './CounterVisuals';
+import { CounterVisuals } from './CounterVisuals';
 import { Palette, Shapes } from 'lucide-react';
 import { GlobalStats } from './GlobalStats';
 import {
@@ -304,7 +304,7 @@ export function Counter() {
       case 'counter':
         return (
           <div className="flex flex-col items-center justify-center w-full relative z-10 my-0.5 select-none">
-            <div className={`relative transition-opacity duration-300 flex items-center justify-center ${isEditingLayout ? 'pointer-events-none opacity-50' : ''}`}>
+            <div className={`transition-opacity duration-300 ${isEditingLayout ? 'pointer-events-none opacity-50' : ''}`}>
               <CounterVisuals
                 layout={layout}
                 counterShape={counterShape}
@@ -317,13 +317,6 @@ export function Counter() {
                 handleTap={handleTap}
                 showCompletion={showCompletion}
                 disabled={sessionMode.type === 'tasbih100' && sessionMode.isComplete}
-                hideNumber={true}
-              />
-              <CounterNumber
-                currentCount={currentCount}
-                counterShape={counterShape}
-                currentSettings={currentSettings}
-                countFontSize={countFontSize}
               />
             </div>
 

@@ -130,16 +130,16 @@ export function CounterVisuals({
             {/* Encircled BrogressBar - Wraps the counter button */}
             <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-0">
                 {counterShape === 'classic' && (
-                    <svg width="100%" height="100%" viewBox="0 0 280 280" className="-rotate-90">
+                    <svg width="100%" height="100%" viewBox="0 0 256 256" className="-rotate-90">
                         <rect
-                            x="10" y="10" width="260" height="260" rx="24"
+                            x="10" y="10" width="236" height="236" rx="24"
                             fill="none"
                             stroke="currentColor"
                             strokeWidth="4"
                             className="text-muted/30"
                         />
                         <motion.rect
-                            x="10" y="10" width="260" height="260" rx="24"
+                            x="10" y="10" width="236" height="236" rx="24"
                             fill="none"
                             stroke="currentColor"
                             strokeWidth="4"
@@ -156,27 +156,27 @@ export function CounterVisuals({
 
 
                 {['minimal', 'beads', 'flower', 'waveform', 'digital', 'modern-ring', 'ring-light'].includes(counterShape) && (
-                    <svg width="100%" height="100%" viewBox="0 0 290 290" className="-rotate-90">
+                    <svg width="100%" height="100%" viewBox="0 0 256 256" className="-rotate-90">
                         <circle
-                            cx="145"
-                            cy="145"
-                            r="140"
+                            cx="128"
+                            cy="128"
+                            r="123"
                             fill="none"
                             stroke="currentColor"
                             strokeWidth="4"
                             className="text-muted/30"
                         />
                         <motion.circle
-                            cx="145"
-                            cy="145"
-                            r="140"
+                            cx="128"
+                            cy="128"
+                            r="123"
                             fill="none"
                             stroke="currentColor"
                             strokeWidth="4"
                             className="text-primary drop-shadow-[0_0_10px_rgba(var(--primary),0.5)]"
-                            strokeDasharray="880"
-                            initial={{ strokeDashoffset: 880 }}
-                            animate={{ strokeDashoffset: 880 - (880 * progress) }}
+                            strokeDasharray="772"
+                            initial={{ strokeDashoffset: 772 }}
+                            animate={{ strokeDashoffset: 772 - (772 * progress) }}
                             strokeLinecap="round"
                             transition={{ type: 'spring', bounce: 0, duration: 0.5 }}
                         />
@@ -189,11 +189,11 @@ export function CounterVisuals({
             )}
 
             {counterShape === 'ring-light' && (
-                <div className="absolute inset-0 flex items-center justify-center -z-10">
-                    <div className="w-[300px] h-[300px] relative flex items-center justify-center">
+                <div className="absolute inset-0 flex items-center justify-center -z-10 scale-[0.85]">
+                    <div className="w-[256px] h-[256px] relative flex items-center justify-center">
                         {/* Main Light Ring */}
                         <motion.div
-                            className="absolute inset-[10px] rounded-full border-[20px] border-white bg-white/20 shadow-[0_0_50px_rgba(255,255,255,0.6),inset_0_0_20px_rgba(255,255,255,0.8)]"
+                            className="absolute inset-[8px] rounded-full border-[18px] border-white bg-white/20 shadow-[0_0_50px_rgba(255,255,255,0.6),inset_0_0_20px_rgba(255,255,255,0.8)]"
                             animate={{
                                 boxShadow: currentCount % 2 === 0
                                     ? ['0 0 50px rgba(255,255,255,0.8), inset 0 0 30px rgba(255,255,255,1)', '0 0 80px rgba(255,255,255,0.9), inset 0 0 40px rgba(255,255,255,1)']
@@ -207,8 +207,8 @@ export function CounterVisuals({
                             />
                         </motion.div>
 
-                        {/* Dark center hole - where the phone usually goes */}
-                        <div className="absolute inset-[30px] rounded-full bg-black/90 shadow-[inset_0_0_20px_rgba(0,0,0,1),0_0_20px_rgba(255,255,255,0.5)] border-4 border-gray-800" />
+                        {/* Center hole */}
+                        <div className="absolute inset-[26px] rounded-full bg-black/90 shadow-[inset_0_0_20px_rgba(0,0,0,1),0_0_20px_rgba(255,255,255,0.5)] border-4 border-gray-800" />
                     </div>
                 </div>
             )}
@@ -278,20 +278,20 @@ export function CounterVisuals({
 
 
             {counterShape === 'digital' && (
-                <div className="flex items-center justify-center -z-10 pointer-events-none w-full h-full relative">
+                <div className="flex items-center justify-center -z-10 pointer-events-none w-full h-full relative scale-[0.9]">
                     {/* Ring of 33 beads */}
-                    <svg className="absolute w-[400px] h-[400px] -rotate-90 scale-[1.2] sm:scale-[1.4] opacity-80">
+                    <svg className="absolute w-[256px] h-[256px] -rotate-90 opacity-80" viewBox="0 0 256 256">
                         {Array.from({ length: 33 }).map((_, i) => {
                             const angle = (i * 360) / 33;
-                            const radius = 145;
-                            const x = 200 + radius * Math.cos((angle * Math.PI) / 180);
-                            const y = 200 + radius * Math.sin((angle * Math.PI) / 180);
+                            const radius = 115;
+                            const x = 128 + radius * Math.cos((angle * Math.PI) / 180);
+                            const y = 128 + radius * Math.sin((angle * Math.PI) / 180);
                             return (
                                 <circle
                                     key={i}
                                     cx={x}
                                     cy={y}
-                                    r="5.5"
+                                    r="4.5"
                                     fill={i < (progress * 33) ? "var(--primary)" : "rgba(255,255,255,0.15)"}
                                     style={{
                                         filter: i < (progress * 33) ? 'drop-shadow(0 0 6px var(--primary))' : 'none',
@@ -303,20 +303,20 @@ export function CounterVisuals({
                     </svg>
 
                     {/* Golden Device Body */}
-                    <div className="relative w-[210px] h-[260px] bg-gradient-to-b from-[#f3d692] via-[#d4af37] to-[#8b6508] rounded-[50px] shadow-[inset_0_2px_8px_rgba(255,255,255,0.6),0_20px_40px_rgba(0,0,0,0.5)] border-b-[6px] border-[#5c4305] flex flex-col items-center pt-5">
+                    <div className="relative w-[180px] h-[220px] bg-gradient-to-b from-[#f3d692] via-[#d4af37] to-[#8b6508] rounded-[50px] shadow-[inset_0_2px_8px_rgba(255,255,255,0.6),0_20px_40px_rgba(0,0,0,0.5)] border-b-[6px] border-[#5c4305] flex flex-col items-center pt-5">
                         {/* Screen Area */}
-                        <div className="w-[88%] h-[90px] bg-[#050505] rounded-2xl border-[3px] border-[#a07d2a] shadow-[inset_0_5px_15px_rgba(0,0,0,1)] flex flex-col items-center justify-center relative overflow-hidden mb-4">
+                        <div className="w-[88%] h-[80px] bg-[#050505] rounded-2xl border-[3px] border-[#a07d2a] shadow-[inset_0_5px_15px_rgba(0,0,0,1)] flex flex-col items-center justify-center relative overflow-hidden mb-4">
                             <div className="absolute top-0 left-0 w-full h-1/2 bg-gradient-to-b from-white/10 to-transparent" />
-                            <span className="text-[#d4af37] font-arabic text-lg mb-0.5 tracking-wider drop-shadow-sm font-medium">تسبيح</span>
-                            <div className="bg-[#142016] px-3 py-1 rounded-sm border border-[#222] shadow-[inset_0_0_8px_rgba(0,0,0,0.8)] min-w-[110px] text-center">
-                                <span className="font-mono text-[#7ea37e] text-3xl tracking-[0.25em] drop-shadow-[0_0_3px_rgba(126,163,126,0.4)]">
+                            <span className="text-[#d4af37] font-arabic text-md mb-0.5 tracking-wider drop-shadow-sm font-medium">تسبيح</span>
+                            <div className="bg-[#142016] px-3 py-1 rounded-sm border border-[#222] shadow-[inset_0_0_8px_rgba(0,0,0,0.8)] min-w-[100px] text-center">
+                                <span className="font-mono text-[#7ea37e] text-2xl tracking-[0.25em] drop-shadow-[0_0_3px_rgba(126,163,126,0.4)]">
                                     {currentCount.toString().padStart(4, '0')}
                                 </span>
                             </div>
                         </div>
 
                         {/* Static Reset Button Decoration */}
-                        <div className="absolute right-7 bottom-[85px] w-6 h-6 rounded-full bg-gradient-to-b from-[#e6c17a] to-[#8b6508] border-2 border-[#5c4305] shadow-md" />
+                        <div className="absolute right-7 bottom-[65px] w-5 h-5 rounded-full bg-gradient-to-b from-[#e6c17a] to-[#8b6508] border-2 border-[#5c4305] shadow-md" />
                     </div>
                 </div>
             )}
@@ -347,7 +347,7 @@ export function CounterVisuals({
 
                             {/* Top Screw */}
                             <div className="absolute top-4 w-4 h-4 rounded-full bg-[#8d6e63] shadow-inner flex items-center justify-center">
-                                <div className="w-full h-0.5 bg-[#5d4037] rotate-45" />
+                                <div className="w-1 h-0.5 bg-[#5d4037] rotate-45" />
                             </div>
                             {/* Bottom Decoration */}
                             <div className="absolute bottom-4 w-16 h-1 bg-[#5d4037] rounded-full opacity-50" />
@@ -357,7 +357,7 @@ export function CounterVisuals({
             }
 
             {counterShape === 'geometric-star' && (
-                <div className="absolute inset-0 flex items-center justify-center -z-10">
+                <div className="absolute inset-0 flex items-center justify-center -z-10 scale-[0.8]">
                     <svg width="100%" height="100%" viewBox="0 0 300 300" className="animate-[spin_60s_linear_infinite]">
                         {/* Outer Ring */}
                         <circle cx="150" cy="150" r="145" stroke="currentColor" strokeWidth="1" className="text-primary/30" />
@@ -593,7 +593,7 @@ export function CounterVisuals({
             )}
 
             {counterShape === 'steampunk-nixie' && (
-                <div className="absolute inset-0 flex items-center justify-center -z-10">
+                <div className="absolute inset-0 flex items-center justify-center -z-10 scale-[0.85]">
                     {/* Main Brass Container */}
                     <div className="w-[280px] h-[280px] rounded-full bg-[#2b1d0e] border-[8px] border-[#c5a059] shadow-[0_10px_30px_rgba(0,0,0,0.8),inset_0_0_40px_rgba(0,0,0,0.9)] flex items-center justify-center relative overflow-hidden">
                         {/* Brass Texture Overlay */}

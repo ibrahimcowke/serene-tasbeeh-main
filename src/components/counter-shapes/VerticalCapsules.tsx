@@ -12,8 +12,8 @@ export function VerticalCapsules({ currentCount }: VerticalCapsulesProps) {
     };
 
     return (
-        <div className="relative w-full h-full flex items-center justify-center -z-10 bg-slate-100/10 rounded-full border border-white/20 backdrop-blur-sm overflow-hidden">
-            <div className="relative h-[300px] w-full flex flex-col items-center justify-center gap-2">
+        <div className="relative w-full h-full flex items-center justify-center -z-10 bg-slate-100/10 rounded-full border border-white/20 backdrop-blur-sm overflow-hidden scale-[0.9]">
+            <div className="relative h-[256px] w-full flex flex-col items-center justify-center gap-2">
 
                 {/* Gradient Overlays for depth */}
                 <div className="absolute top-0 w-full h-20 bg-gradient-to-b from-background to-transparent z-10" />

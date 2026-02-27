@@ -9,7 +9,7 @@ export function Cyber3D({ currentCount }: Cyber3DProps) {
         <div className="relative w-full h-full flex items-center justify-center -z-10 [perspective:1000px]">
             {/* Holographic Base Plate */}
             <motion.div
-                className="relative w-64 h-64 bg-cyan-500/10 border-2 border-cyan-500/30 rounded-[20px] shadow-[0_0_30px_rgba(6,182,212,0.2)] flex flex-col items-center justify-center [transform-style:preserve-3d]"
+                className="relative w-64 h-64 bg-cyan-500/10 border-2 border-cyan-500/30 rounded-[20px] shadow-[0_0_30px_rgba(6,182,212,0.2)] flex flex-col items-center justify-center [transform-style:preserve-3d] scale-[0.85]"
                 animate={{ rotateX: 15, rotateY: [0, 5, -5, 0] }}
                 transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
             >
