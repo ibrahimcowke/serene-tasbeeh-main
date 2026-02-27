@@ -46,7 +46,7 @@ export const PremiumHub = () => {
                     animate={{ opacity: 1, x: 0 }}
                     className="col-span-12 lg:col-span-3 flex flex-col gap-4 lg:gap-6"
                 >
-                    <div className="skeuo-glass rounded-[2rem] p-5 flex flex-col items-center flex-1">
+                    <div className="skeuo-glass rounded-[2rem] p-5 flex flex-col items-center">
                         <h2 className="text-xs font-black uppercase tracking-[0.2em] text-white/40 mb-4">Achievement Hub</h2>
 
                         <div className="flex flex-col items-center gap-1 mb-4">
@@ -137,7 +137,7 @@ export const PremiumHub = () => {
                     animate={{ opacity: 1, x: 0 }}
                     className="col-span-12 lg:col-span-4 flex flex-col gap-4 lg:gap-6"
                 >
-                    <div className="bg-green-950/20 backdrop-blur-3xl border border-green-500/10 rounded-[2rem] flex flex-col overflow-hidden h-full">
+                    <div className="bg-green-950/20 backdrop-blur-3xl border border-green-500/10 rounded-[2rem] flex flex-col overflow-hidden">
                         <div className="p-3 lg:p-4 flex items-center justify-between border-b border-white/5">
                             <div className="flex items-center gap-3">
                                 <h2 className="text-sm font-black uppercase tracking-widest text-white/80">Community</h2>
@@ -149,32 +149,17 @@ export const PremiumHub = () => {
                             </div>
                         </div>
 
-                        <div className="p-3 lg:p-4 space-y-4 overflow-y-auto max-h-[calc(100vh-250px)] scrollbar-hide">
-                            {/* Global Pulse Card */}
-                            <div className="bg-black/40 border border-white/5 rounded-3xl p-4 flex flex-col items-center shadow-2xl relative overflow-hidden group">
+                        <div className="p-3 lg:p-4 space-y-4 overflow-y-auto max-h-[calc(100vh-350px)] scrollbar-hide">
+                            {/* Global Pulse Card - Simplified */}
+                            <div className="bg-black/40 border border-white/5 rounded-3xl p-3 flex flex-col items-center shadow-2xl relative overflow-hidden group">
                                 <div className="absolute inset-0 bg-primary/5 opacity-0 group-hover:opacity-100 transition-opacity" />
-                                <div className="flex items-center gap-2 mb-2 bg-white/5 px-3 py-1 rounded-full border border-white/5">
-                                    <Users className="w-3 h-3 text-primary" />
-                                    <span className="text-[8px] font-black uppercase tracking-widest text-white/40">Community Pulse</span>
-                                </div>
                                 <VisitorCounter />
                                 <span className="text-[10px] font-bold text-primary/60 uppercase mt-2">Dhikrs Worldwide</span>
-                                <div className="flex items-center gap-1.5 mt-4">
-                                    <span className="w-1.5 h-1.5 rounded-full bg-green-500" />
-                                    <span className="text-[8px] font-black text-green-500 uppercase">Live</span>
-                                </div>
                             </div>
 
                             {/* Challenges */}
                             <div className="space-y-4">
                                 <GlobalChallenges />
-                            </div>
-                        </div>
-
-                        {/* Contribution footer simulated card style */}
-                        <div className="mt-auto p-4 px-8 pb-8">
-                            <div className="bg-primary/5 rounded-2xl p-4 border border-white/5 text-center">
-                                <p className="text-[10px] text-white/40 font-medium italic">"The believers in their mutual kindness, compassion and sympathy are just like one body..."</p>
                             </div>
                         </div>
                     </div>
