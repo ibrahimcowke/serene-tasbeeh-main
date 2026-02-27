@@ -13,7 +13,8 @@ import {
     Search,
     Palette,
     Shapes,
-    Layout
+    Layout,
+    Moon
 } from 'lucide-react';
 import { SkeuoCounter } from './SkeuoCounter';
 import { RadialAchievement } from './RadialAchievement';
@@ -35,7 +36,8 @@ export const PremiumHub = () => {
         theme,
         setTheme,
         counterShape,
-        setCounterShape
+        setCounterShape,
+        dateContext
     } = useTasbeehStore();
 
     // Available categories for cycling
