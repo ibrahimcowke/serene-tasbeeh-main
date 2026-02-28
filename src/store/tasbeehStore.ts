@@ -717,16 +717,7 @@ export const useTasbeehStore = create<TasbeehState>()(
                     }).catch(() => {});
                 }
 
-                // Milestone Pulse: Trigger a global animation on key numbers
-                const currentCount = get().currentCount + 1;
-                if (currentCount > 0 && (currentCount % 33 === 0 || currentCount % 100 === 0)) {
-                    const pulseRef = ref(database, 'events/global/pulse');
-                    update(pulseRef, {
-                        type: 'milestone',
-                        count: currentCount,
-                        timestamp: serverTimestamp()
-                    }).catch(() => {});
-                }
+                // Milestone pulse disabled
             });
         });
 

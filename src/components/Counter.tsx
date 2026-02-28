@@ -241,37 +241,19 @@ export function Counter() {
 
       if ((currentCount + 1) % currentTarget === 0 && completionMilestone > lastCompletionRef.current) {
         lastCompletionRef.current = completionMilestone;
-        setShowCompletion(true);
 
         // Play completion sound
         if (currentSettings.soundEnabled) {
           SoundManager.playCompletion();
         }
-
-        setTimeout(() => setShowCompletion(false), 1500);
       }
     }
 
-    // Check for 100 session complete
-    if (sessionMode.type === 'tasbih100' && sessionMode.currentPhase === 3 && currentCount + 1 >= 1) {
-      setTimeout(() => {
-        setShowSessionComplete(true);
-      }, 500);
-    }
+    // Session complete pop-ups disabled
 
-    // Check for 1000 session complete
-    if (sessionMode.type === 'tasbih1000' && sessionMode.currentPhase === 9 && currentCount + 1 >= 100) {
-      setTimeout(() => {
-        setShowSessionComplete(true);
-      }, 500);
-    }
 
-    // Check for Routine complete logic is handled by nextRoutineStep, but we can detect final step completion here if we want auto-show
-    if (sessionMode.type === 'routine' && sessionMode.isComplete) {
-      setTimeout(() => {
-        setShowSessionComplete(true);
-      }, 500);
-    }
+
+
   }, [increment, currentCount, sessionMode, currentSettings]);
 
   // Shake to reset functionality
