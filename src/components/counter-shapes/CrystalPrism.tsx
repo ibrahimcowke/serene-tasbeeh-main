@@ -2,8 +2,8 @@ import { motion } from 'framer-motion';
 
 export function CrystalPrism({ currentCount }: { currentCount: number }) {
     return (
-        <div className="relative w-full h-full flex items-center justify-center -z-10">
-            <div className="relative w-[220px] h-[250px] flex items-center justify-center">
+        <div className="relative w-64 h-64 flex items-center justify-center -z-10">
+            <div className="relative w-[220px] h-[220px] flex items-center justify-center">
                 <motion.div
                     className="absolute w-[180px] h-[220px]"
                     animate={{ rotateY: [0, 360], rotateZ: [0, 10, 0] }}

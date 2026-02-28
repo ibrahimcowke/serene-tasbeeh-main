@@ -18,7 +18,7 @@ export function SmartRing({ currentCount }: SmartRingProps) {
     const strokeDashoffset = circumference - progress * circumference;
 
     return (
-        <div className="relative w-full h-full flex items-center justify-center -z-10 bg-black rounded-full overflow-hidden scale-[0.9]">
+        <div className="relative w-64 h-64 flex items-center justify-center -z-10 bg-black rounded-full overflow-hidden">
             {/* OLED Black Background with subtle vignette */}
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,#1a1a1a,black_70%)]" />
 

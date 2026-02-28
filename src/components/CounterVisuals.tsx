@@ -811,7 +811,7 @@ export function CounterVisuals({
                 </div>
             )}
 
-            <div className="absolute inset-0 flex items-center justify-center pointer-events-none -z-10">
+            <div className="absolute inset-0 flex items-center justify-center pointer-events-none -z-10 scale-90">
                 {counterShape === 'halo-ring' && <HaloRing progress={progress} currentCount={currentCount} />}
                 {counterShape === 'bead-ring' && <BeadRing currentCount={currentCount} />}
                 {counterShape === 'helix-strand' && <HelixStrand currentCount={currentCount} />}

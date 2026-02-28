@@ -7,7 +7,7 @@ interface HaloRingProps {
 
 export function HaloRing({ progress, currentCount }: HaloRingProps) {
     return (
-        <div className="relative w-full h-full flex items-center justify-center -z-10 scale-[0.9]">
+        <div className="relative w-64 h-64 flex items-center justify-center -z-10">
             <div className="w-[256px] h-[256px] relative flex items-center justify-center">
                 {/* Outer Glow Ring */}
                 <motion.div
@@ -31,7 +31,7 @@ export function HaloRing({ progress, currentCount }: HaloRingProps) {
                 />
 
                 {/* Progress Ring */}
-                <svg className="absolute inset-[60px] w-[180px] h-[180px] -rotate-90" viewBox="0 0 100 100">
+                <svg className="absolute inset-[38px] w-[180px] h-[180px] -rotate-90" viewBox="0 0 100 100">
                     <circle
                         cx="50"
                         cy="50"

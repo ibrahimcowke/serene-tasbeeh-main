@@ -35,7 +35,7 @@ export function BeadRing({ currentCount }: BeadRingProps) {
     }, [currentCount, rotation]);
 
     return (
-        <div className="relative w-full h-full flex items-center justify-center -z-10 perspective-[1000px] scale-[0.9]">
+        <div className="relative w-64 h-64 flex items-center justify-center -z-10 [perspective:1000px]">
             {/* Ambient Glow */}
             <div className="absolute inset-0 bg-amber-500/5 blur-3xl rounded-full" />
 

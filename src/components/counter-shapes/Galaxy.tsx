@@ -6,7 +6,7 @@ interface GalaxyProps {
 
 export function Galaxy({ currentCount }: GalaxyProps) {
     return (
-        <div className="relative w-full h-full flex items-center justify-center -z-10 overflow-hidden rounded-full bg-[#050510] scale-[0.85]">
+        <div className="relative w-64 h-64 flex items-center justify-center -z-10 overflow-hidden rounded-full bg-[#050510]">
             {/* Swirling Nebula Background */}
             <motion.div
                 className="absolute inset-[-50%] opacity-40"
