@@ -250,9 +250,7 @@ export const PremiumHub = () => {
                         </div>
 
                         {/* Hadith Slider restored below Adhkar */}
-                        <div className="w-full max-w-[606px] mt-4">
-                            <HadithSlider dhikr={currentDhikr} />
-                        </div>
+                        {/* This HadithSlider was moved below the CounterVisuals */}
                     </div>
 
                     <div className="relative z-10 w-full mb-8 flex flex-col justify-center items-center pb-4">
@@ -269,6 +267,11 @@ export const PremiumHub = () => {
                             showCompletion={false}
                             disabled={false}
                         />
+
+                        {/* Hadith Slider moved below Counter */}
+                        <div className="w-full max-w-[606px] mt-8">
+                            <HadithSlider dhikr={currentDhikr} />
+                        </div>
                     </div>
                 </motion.div>
 
