@@ -811,33 +811,32 @@ export function CounterVisuals({
                 </div>
             )}
 
-            {counterShape === 'halo-ring' && <HaloRing progress={progress} currentCount={currentCount} />}
-            {counterShape === 'bead-ring' && <BeadRing currentCount={currentCount} />}
-            {counterShape === 'helix-strand' && <HelixStrand currentCount={currentCount} />}
-            {counterShape === 'cyber-hexagon' && <CyberHexagon currentCount={currentCount} />}
-            {counterShape === 'blooming-lotus' && <BloomingLotus currentCount={currentCount} />}
-            {counterShape === 'constellation' && <Constellation currentCount={currentCount} />}
-            {counterShape === 'glass-pill' && <GlassPill currentCount={currentCount} />}
-            {counterShape === 'emerald-loop' && <EmeraldLoop currentCount={currentCount} />}
-            {counterShape === 'smart-ring' && <SmartRing currentCount={currentCount} />}
-            {counterShape === 'moon-phase' && <MoonPhase currentCount={currentCount} />}
-            {counterShape === 'water-ripple' && <WaterRipple currentCount={currentCount} />}
-            {counterShape === 'sand-hourglass' && <SandHourglass currentCount={currentCount} />}
-            {counterShape === 'lantern-fanous' && <LanternFanous currentCount={currentCount} />}
-            {counterShape === 'digital-watch' && <DigitalWatch currentCount={currentCount} />}
-            {counterShape === 'star-burst' && <StarBurst currentCount={currentCount} />}
-            {counterShape === 'crystal-prism' && <CrystalPrism currentCount={currentCount} />}
-            {counterShape === 'galaxy' && <Galaxy currentCount={currentCount} />}
-            {counterShape === 'tally-clicker' && <TallyClicker currentCount={currentCount} />}
-            {counterShape === 'cyber-3d' && <Cyber3D currentCount={currentCount} />}
-            {counterShape === 'crystal-iso' && <CrystalISO currentCount={currentCount} />}
-            {counterShape === 'neumorph' && <Neumorph currentCount={currentCount} />}
+            <div className="absolute inset-0 flex items-center justify-center pointer-events-none -z-10">
+                {counterShape === 'halo-ring' && <HaloRing progress={progress} currentCount={currentCount} />}
+                {counterShape === 'bead-ring' && <BeadRing currentCount={currentCount} />}
+                {counterShape === 'helix-strand' && <HelixStrand currentCount={currentCount} />}
+                {counterShape === 'cyber-hexagon' && <CyberHexagon currentCount={currentCount} />}
+                {counterShape === 'blooming-lotus' && <BloomingLotus currentCount={currentCount} />}
+                {counterShape === 'constellation' && <Constellation currentCount={currentCount} />}
+                {counterShape === 'glass-pill' && <GlassPill currentCount={currentCount} />}
+                {counterShape === 'emerald-loop' && <EmeraldLoop currentCount={currentCount} />}
+                {counterShape === 'smart-ring' && <SmartRing currentCount={currentCount} />}
+                {counterShape === 'moon-phase' && <MoonPhase currentCount={currentCount} />}
+                {counterShape === 'water-ripple' && <WaterRipple currentCount={currentCount} />}
+                {counterShape === 'sand-hourglass' && <SandHourglass currentCount={currentCount} />}
+                {counterShape === 'lantern-fanous' && <LanternFanous currentCount={currentCount} />}
+                {counterShape === 'digital-watch' && <DigitalWatch currentCount={currentCount} />}
+                {counterShape === 'star-burst' && <StarBurst currentCount={currentCount} />}
+                {counterShape === 'crystal-prism' && <CrystalPrism currentCount={currentCount} />}
+                {counterShape === 'galaxy' && <Galaxy currentCount={currentCount} />}
+                {counterShape === 'tally-clicker' && <TallyClicker currentCount={currentCount} />}
+                {counterShape === 'cyber-3d' && <Cyber3D currentCount={currentCount} />}
+                {counterShape === 'crystal-iso' && <CrystalISO currentCount={currentCount} />}
+                {counterShape === 'neumorph' && <Neumorph currentCount={currentCount} />}
 
-
-
-
-            {counterShape === 'vertical-capsules' && <VerticalCapsules currentCount={currentCount} />}
-            {counterShape === 'luminous-beads' && <LuminousBeads progress={progress} />}
+                {counterShape === 'vertical-capsules' && <VerticalCapsules currentCount={currentCount} />}
+                {counterShape === 'luminous-beads' && <LuminousBeads progress={progress} />}
+            </div>
 
 
             {/* Global Aura Pulse Effekt - triggers on count change */}
