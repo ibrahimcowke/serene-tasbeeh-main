@@ -151,7 +151,7 @@ export function BeadRing({ currentCount }: BeadRingProps) {
 
             {/* Dynamic central aura */}
             <motion.div
-                className="relative w-full h-full flex items-center justify-center pointer-events-none"
+                className="absolute inset-0 flex items-center justify-center pointer-events-none"
                 animate={{
                     opacity: [0.3, 0.6, 0.3],
                     scale: [0.9, 1.1, 0.9]

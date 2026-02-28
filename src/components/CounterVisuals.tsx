@@ -157,7 +157,7 @@ export function CounterVisuals({
 
 
 
-                    {['minimal', 'beads', 'flower', 'waveform', 'digital', 'modern-ring', 'ring-light'].includes(counterShape) && (
+                    {['minimal', 'beads', 'flower', 'waveform', 'modern-ring', 'ring-light'].includes(counterShape) && (
                         <svg width="100%" height="100%" viewBox="0 0 256 256" className="-rotate-90">
                             <circle
                                 cx="128"
@@ -307,20 +307,22 @@ export function CounterVisuals({
                         </div>
 
                         {/* Golden Device Body */}
-                        <div className="relative w-[180px] h-[220px] bg-gradient-to-b from-[#f3d692] via-[#d4af37] to-[#8b6508] rounded-[50px] shadow-[inset_0_2px_8px_rgba(255,255,255,0.6),0_20px_40px_rgba(0,0,0,0.5)] border-b-[6px] border-[#5c4305] flex flex-col items-center pt-5">
-                            {/* Screen Area */}
-                            <div className="w-[88%] h-[80px] bg-[#050505] rounded-2xl border-[3px] border-[#a07d2a] shadow-[inset_0_5px_15px_rgba(0,0,0,1)] flex flex-col items-center justify-center relative overflow-hidden mb-4">
-                                <div className="absolute top-0 left-0 w-full h-1/2 bg-gradient-to-b from-white/10 to-transparent" />
-                                <span className="text-[#d4af37] font-arabic text-md mb-0.5 tracking-wider drop-shadow-sm font-medium">تسبيح</span>
-                                <div className="bg-[#142016] px-3 py-1 rounded-sm border border-[#222] shadow-[inset_0_0_8px_rgba(0,0,0,0.8)] min-w-[100px] text-center">
-                                    <span className="font-mono text-[#7ea37e] text-2xl tracking-[0.25em] drop-shadow-[0_0_3px_rgba(126,163,126,0.4)]">
-                                        {currentCount.toString().padStart(4, '0')}
-                                    </span>
+                        <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
+                            <div className="relative w-[180px] h-[220px] bg-gradient-to-b from-[#f3d692] via-[#d4af37] to-[#8b6508] rounded-[50px] shadow-[inset_0_2px_8px_rgba(255,255,255,0.6),0_20px_40px_rgba(0,0,0,0.5)] border-b-[6px] border-[#5c4305] flex flex-col items-center pt-5">
+                                {/* Screen Area */}
+                                <div className="w-[88%] h-[80px] bg-[#050505] rounded-2xl border-[3px] border-[#a07d2a] shadow-[inset_0_5px_15px_rgba(0,0,0,1)] flex flex-col items-center justify-center relative overflow-hidden mb-4">
+                                    <div className="absolute top-0 left-0 w-full h-1/2 bg-gradient-to-b from-white/10 to-transparent" />
+                                    <span className="text-[#d4af37] font-arabic text-md mb-0.5 tracking-wider drop-shadow-sm font-medium">تسبيح</span>
+                                    <div className="bg-[#142016] px-3 py-1 rounded-sm border border-[#222] shadow-[inset_0_0_8px_rgba(0,0,0,0.8)] min-w-[100px] text-center">
+                                        <span className="font-mono text-[#7ea37e] text-2xl tracking-[0.25em] drop-shadow-[0_0_3px_rgba(126,163,126,0.4)]">
+                                            {currentCount.toString().padStart(4, '0')}
+                                        </span>
+                                    </div>
                                 </div>
-                            </div>
 
-                            {/* Static Reset Button Decoration */}
-                            <div className="absolute right-7 bottom-[65px] w-5 h-5 rounded-full bg-gradient-to-b from-[#e6c17a] to-[#8b6508] border-2 border-[#5c4305] shadow-md" />
+                                {/* Static Reset Button Decoration */}
+                                <div className="absolute right-7 bottom-[65px] w-5 h-5 rounded-full bg-gradient-to-b from-[#e6c17a] to-[#8b6508] border-2 border-[#5c4305] shadow-md" />
+                            </div>
                         </div>
                     </div>
                 )}
