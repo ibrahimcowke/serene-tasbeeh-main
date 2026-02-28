@@ -509,7 +509,7 @@ export const useTasbeehStore = create<TasbeehState>()(
       hadithSlideDuration: 15, // 15 seconds default
       hadithSlidePosition: 'right', // default position
       dhikrTextPosition: 'below-counter', // Default position
-      layoutOrder: ['dhikr', 'counter', 'stats', 'hadith'], // Default order
+      layoutOrder: ['dhikr', 'hadith', 'counter', 'stats'], // Default order
       verticalOffset: 0,
       dhikrVerticalOffset: 0,
       counterVerticalOffset: 0,

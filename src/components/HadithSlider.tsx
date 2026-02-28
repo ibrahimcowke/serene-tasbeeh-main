@@ -39,7 +39,7 @@ export function HadithSlider({ dhikr }: { dhikr: Dhikr }) {
 
     return (
         <div
-            className="w-full max-w-sm mx-auto md:mx-0 min-h-[110px] xs:min-h-[130px] sm:min-h-[160px] bg-card/40 hover:bg-card/60 backdrop-blur-md rounded-2xl border border-border/40 p-3 xs:p-4 sm:p-5 flex flex-col justify-center relative overflow-hidden transition-colors duration-300 group"
+            className="w-full max-w-[606px] min-h-[140px] md:min-h-[195px] bg-card/40 hover:bg-card/60 backdrop-blur-md rounded-2xl border border-border/40 p-4 sm:p-6 md:p-8 flex flex-col justify-center relative overflow-hidden transition-all duration-300 group shadow-xl mx-auto"
             onMouseEnter={() => setIsPaused(true)}
             onMouseLeave={() => setIsPaused(false)}
         >

@@ -384,7 +384,11 @@ export function Counter() {
           </div>
         );
       case 'hadith':
-        return null;
+        return (
+          <div className="w-full flex justify-center mt-2 mb-6">
+            <HadithSlider dhikr={currentDhikr} />
+          </div>
+        );
       default:
         return null;
     }

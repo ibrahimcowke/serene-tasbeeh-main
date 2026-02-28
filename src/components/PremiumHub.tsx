@@ -26,6 +26,7 @@ import { GlobalStats } from './GlobalStats';
 import { GlobalChallenges } from './GlobalChallenges';
 import { VisitorCounter } from './VisitorCounter';
 import { CounterVisuals, CounterNumber } from './CounterVisuals';
+import { HadithSlider } from './HadithSlider';
 
 export const PremiumHub = () => {
     const {
@@ -246,6 +247,11 @@ export const PremiumHub = () => {
                             <span className="text-[10px] font-black text-white/20 uppercase tracking-[0.2em]">Step 1 of 5</span>
                             <div className="w-1.5 h-1.5 rounded-full bg-primary/30" />
                             <span className="text-[10px] font-black text-primary/40 uppercase tracking-[0.2em]">Subhanallah x33</span>
+                        </div>
+
+                        {/* Hadith Slider restored below Adhkar */}
+                        <div className="w-full max-w-[606px] mt-4">
+                            <HadithSlider dhikr={currentDhikr} />
                         </div>
                     </div>
 
