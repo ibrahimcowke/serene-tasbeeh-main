@@ -6,7 +6,7 @@ interface TallyClickerProps {
 
 export function TallyClicker({ currentCount }: TallyClickerProps) {
     return (
-        <div className="flex items-center justify-center -z-10 w-full h-full relative scale-[0.75]">
+        <div className="flex items-center justify-center -z-10 w-64 h-64 relative">
             {/* Main Metal Body */}
             <div className="relative w-64 h-64 bg-gradient-to-br from-zinc-300 via-zinc-400 to-zinc-600 rounded-[60px] shadow-[0_20px_50px_rgba(0,0,0,0.4),inset_0_2px_5px_rgba(255,255,255,0.8)] flex flex-col items-center justify-center border-b-[8px] border-zinc-800">
 

@@ -121,7 +121,7 @@ export function CounterVisuals({
             className={`relative flex items-center justify-center
       ${layout === 'focus' ? 'scale-100 sm:scale-110' : ''}
       ${layout === 'ergonomic' ? 'scale-90 sm:scale-100 translate-y-2 sm:translate-y-4' : ''}
-      ${layout === 'hub' ? 'w-full gap-4' : 'w-[min(80vw,60vh)] h-[min(80vw,60vh)] sm:w-[300px] sm:h-[300px] max-w-[320px] max-h-[320px]'}
+      ${layout === 'hub' ? 'w-[min(80vw,60vh)] h-[min(80vw,60vh)] sm:w-[300px] sm:h-[300px] max-w-[320px] max-h-[320px] gap-4' : 'w-[min(80vw,60vh)] h-[min(80vw,60vh)] sm:w-[300px] sm:h-[300px] max-w-[320px] max-h-[320px]'}
     `}
             style={{
                 transform: `translateY(${counterVerticalOffset}px) scale(${counterScale})`
@@ -278,7 +278,7 @@ export function CounterVisuals({
 
 
             {counterShape === 'digital' && (
-                <div className="flex items-center justify-center -z-10 pointer-events-none w-full h-full relative scale-[0.9]">
+                <div className="absolute inset-0 flex items-center justify-center -z-10 pointer-events-none scale-[0.9]">
                     {/* Ring of 33 beads */}
                     <svg className="absolute w-[256px] h-[256px] -rotate-90 opacity-80" viewBox="0 0 256 256">
                         {Array.from({ length: 33 }).map((_, i) => {
@@ -340,7 +340,7 @@ export function CounterVisuals({
 
             {
                 counterShape === 'vintage-wood' && (
-                    <div className="flex items-center justify-center -z-10 w-full h-full relative">
+                    <div className="absolute inset-0 flex items-center justify-center -z-10 w-full h-full">
                         <div className="w-[260px] h-[300px] bg-[#3e2723] rounded-[40px] border-[6px] border-[#5d4037] shadow-[0_10px_30px_rgba(0,0,0,0.5),inset_0_2px_10px_rgba(255,255,255,0.1)] flex flex-col items-center relative overflow-hidden scale-75 sm:scale-90">
                             {/* Decorative background pattern */}
                             <div className="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-black via-transparent to-transparent" />
@@ -812,39 +812,41 @@ export function CounterVisuals({
             )}
 
             <div className="absolute inset-0 flex items-center justify-center pointer-events-none -z-10 scale-90">
-                {counterShape === 'halo-ring' && <HaloRing progress={progress} currentCount={currentCount} />}
-                {counterShape === 'bead-ring' && <BeadRing currentCount={currentCount} />}
-                {counterShape === 'helix-strand' && <HelixStrand currentCount={currentCount} />}
-                {counterShape === 'cyber-hexagon' && <CyberHexagon currentCount={currentCount} />}
-                {counterShape === 'blooming-lotus' && <BloomingLotus currentCount={currentCount} />}
-                {counterShape === 'constellation' && <Constellation currentCount={currentCount} />}
-                {counterShape === 'glass-pill' && <GlassPill currentCount={currentCount} />}
-                {counterShape === 'emerald-loop' && <EmeraldLoop currentCount={currentCount} />}
-                {counterShape === 'smart-ring' && <SmartRing currentCount={currentCount} />}
-                {counterShape === 'moon-phase' && <MoonPhase currentCount={currentCount} />}
-                {counterShape === 'water-ripple' && <WaterRipple currentCount={currentCount} />}
-                {counterShape === 'sand-hourglass' && <SandHourglass currentCount={currentCount} />}
-                {counterShape === 'lantern-fanous' && <LanternFanous currentCount={currentCount} />}
-                {counterShape === 'digital-watch' && <DigitalWatch currentCount={currentCount} />}
-                {counterShape === 'star-burst' && <StarBurst currentCount={currentCount} />}
-                {counterShape === 'crystal-prism' && <CrystalPrism currentCount={currentCount} />}
-                {counterShape === 'galaxy' && <Galaxy currentCount={currentCount} />}
-                {counterShape === 'tally-clicker' && <TallyClicker currentCount={currentCount} />}
-                {counterShape === 'cyber-3d' && <Cyber3D currentCount={currentCount} />}
-                {counterShape === 'crystal-iso' && <CrystalISO currentCount={currentCount} />}
-                {counterShape === 'neumorph' && <Neumorph currentCount={currentCount} />}
+                <div className="relative w-64 h-64 flex items-center justify-center">
+                    {counterShape === 'halo-ring' && <HaloRing progress={progress} currentCount={currentCount} />}
+                    {counterShape === 'bead-ring' && <BeadRing currentCount={currentCount} />}
+                    {counterShape === 'helix-strand' && <HelixStrand currentCount={currentCount} />}
+                    {counterShape === 'cyber-hexagon' && <CyberHexagon currentCount={currentCount} />}
+                    {counterShape === 'blooming-lotus' && <BloomingLotus currentCount={currentCount} />}
+                    {counterShape === 'constellation' && <Constellation currentCount={currentCount} />}
+                    {counterShape === 'glass-pill' && <GlassPill currentCount={currentCount} />}
+                    {counterShape === 'emerald-loop' && <EmeraldLoop currentCount={currentCount} />}
+                    {counterShape === 'smart-ring' && <SmartRing currentCount={currentCount} />}
+                    {counterShape === 'moon-phase' && <MoonPhase currentCount={currentCount} />}
+                    {counterShape === 'water-ripple' && <WaterRipple currentCount={currentCount} />}
+                    {counterShape === 'sand-hourglass' && <SandHourglass currentCount={currentCount} />}
+                    {counterShape === 'lantern-fanous' && <LanternFanous currentCount={currentCount} />}
+                    {counterShape === 'digital-watch' && <DigitalWatch currentCount={currentCount} />}
+                    {counterShape === 'star-burst' && <StarBurst currentCount={currentCount} />}
+                    {counterShape === 'crystal-prism' && <CrystalPrism currentCount={currentCount} />}
+                    {counterShape === 'galaxy' && <Galaxy currentCount={currentCount} />}
+                    {counterShape === 'tally-clicker' && <TallyClicker currentCount={currentCount} />}
+                    {counterShape === 'cyber-3d' && <Cyber3D currentCount={currentCount} />}
+                    {counterShape === 'crystal-iso' && <CrystalISO currentCount={currentCount} />}
+                    {counterShape === 'neumorph' && <Neumorph currentCount={currentCount} />}
 
-                {counterShape === 'vertical-capsules' && <VerticalCapsules currentCount={currentCount} />}
-                {counterShape === 'luminous-beads' && <LuminousBeads progress={progress} />}
+                    {counterShape === 'vertical-capsules' && <VerticalCapsules currentCount={currentCount} />}
+                    {counterShape === 'luminous-beads' && <LuminousBeads progress={progress} />}
+                </div>
             </div>
 
 
             {/* Global Aura Pulse Effekt - triggers on count change */}
             <motion.div
                 key={`aura-${currentCount}`}
-                className="absolute inset-[-100px] rounded-full border border-primary/20 pointer-events-none -z-20"
-                initial={{ scale: 0.5, opacity: 0.8 }}
-                animate={{ scale: 2.5, opacity: 0 }}
+                className="absolute inset-0 rounded-full border border-primary/20 pointer-events-none -z-20 scale-150"
+                initial={{ scale: 0.8, opacity: 0.8 }}
+                animate={{ scale: 2, opacity: 0 }}
                 transition={{ duration: 0.8, ease: "easeOut" }}
             />
 
