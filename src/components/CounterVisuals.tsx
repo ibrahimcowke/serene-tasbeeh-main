@@ -121,7 +121,7 @@ export function CounterVisuals({
             className={`relative flex items-center justify-center
       ${layout === 'focus' ? 'scale-100 sm:scale-110' : ''}
       ${layout === 'ergonomic' ? 'scale-90 sm:scale-100 translate-y-2 sm:translate-y-4' : ''}
-      ${layout === 'hub' ? 'w-[min(80vw,60vh)] h-[min(80vw,60vh)] sm:w-[300px] sm:h-[300px] max-w-[320px] max-h-[320px] gap-4' : 'w-[min(80vw,60vh)] h-[min(80vw,60vh)] sm:w-[300px] sm:h-[300px] max-w-[320px] max-h-[320px]'}
+      ${layout === 'hub' ? 'w-[min(80vw,60vh)] h-[min(80vw,60vh)] sm:w-[300px] sm:h-[300px] max-w-[320px] max-h-[320px]' : 'w-[min(80vw,60vh)] h-[min(80vw,60vh)] sm:w-[300px] sm:h-[300px] max-w-[320px] max-h-[320px]'}
     `}
             style={{
                 transform: `translateY(${counterVerticalOffset}px) scale(${counterScale})`
