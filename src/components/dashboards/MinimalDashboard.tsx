@@ -1,7 +1,6 @@
 import { motion } from 'framer-motion';
 import { Counter } from '../Counter';
 import { useTasbeehStore } from '@/store/tasbeehStore';
-import { HadithSlider } from '../HadithSlider';
 import { VisitorCounter } from '../VisitorCounter';
 
 const MinimalDashboard = () => {
@@ -21,15 +20,6 @@ const MinimalDashboard = () => {
                 className="w-full max-w-lg mb-12"
             >
                 <Counter />
-            </motion.div>
-            <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 0.3 }}
-                whileHover={{ opacity: 1, y: 0 }}
-                className="absolute bottom-10 w-full max-w-sm px-4"
-            >
-                <HadithSlider dhikr={currentDhikr} />
-                <p className="text-[10px] text-center mt-2 text-muted-foreground uppercase tracking-widest">Wisdom</p>
             </motion.div>
         </div>
     );

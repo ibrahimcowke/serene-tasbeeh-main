@@ -3,7 +3,6 @@ import { Counter } from './Counter';
 import { StatsWidget } from './StatsWidget';
 import { GlobalStats } from './GlobalStats';
 import { GlobalChallenges } from './GlobalChallenges';
-import { HadithSlider } from './HadithSlider';
 import { useTasbeehStore } from '@/store/tasbeehStore';
 import { Layout, Users, Trophy, TrendingUp } from 'lucide-react';
 
@@ -33,15 +32,7 @@ export const HubDashboard = () => {
                     <Counter />
                 </div>
 
-                <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div className="bg-card/20 backdrop-blur-xl border border-white/5 rounded-3xl p-6">
-                        <div className="flex items-center gap-3 mb-4">
-                            <Layout className="w-5 h-5 text-primary" />
-                            <h2 className="text-xs font-bold uppercase tracking-widest text-muted-foreground">Today's Wisdom</h2>
-                        </div>
-                        <HadithSlider dhikr={currentDhikr} />
-                    </div>
-
+                <div className="w-full grid grid-cols-1 gap-6">
                     <div className="bg-card/20 backdrop-blur-xl border border-white/5 rounded-3xl p-6 flex flex-col items-center justify-center text-center">
                         <Trophy className="w-8 h-8 text-primary mb-3" />
                         <h3 className="text-xl font-bold mb-1">New Milestone?</h3>

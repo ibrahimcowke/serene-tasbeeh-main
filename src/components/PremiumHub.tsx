@@ -17,7 +17,9 @@ import {
     Moon,
     Undo2,
     RefreshCw,
-    Layers
+    Layers,
+    BadgeCheck,
+    Flame
 } from 'lucide-react';
 import { SkeuoCounter } from './SkeuoCounter';
 import { RadialAchievement } from './RadialAchievement';
@@ -42,8 +44,28 @@ export const PremiumHub = () => {
         setTheme,
         counterShape,
         setCounterShape,
-        dateContext
+        dateContext,
+        globalCount,
+        fetchGlobalCount,
+        streakDays,
+        dailyRecords,
+        unlockedAchievements
     } = useTasbeehStore();
+
+    // Calculate Today's Count
+    const todayStr = new Date().toISOString().split('T')[0];
+    const todayRecord = dailyRecords.find(r => r.date === todayStr);
+    const todayCount = (todayRecord?.totalCount || 0) + count;
+
+    // Calculate Rank based on total All Time
+    const getRankInfo = (total: number) => {
+        if (total >= 10000) return { title: 'MASTER', next: 25000, prog: Math.min(100, (total / 25000) * 100) };
+        if (total >= 5000) return { title: 'DEVOTED', next: 10000, prog: (total / 10000) * 100 };
+        if (total >= 1000) return { title: 'APPRENTICE', next: 5000, prog: (total / 5000) * 100 };
+        return { title: 'SEEKER', next: 1000, prog: (total / 1000) * 100 };
+    };
+
+    const rankInfo = getRankInfo(totalAllTime);
 
     // Available categories for cycling
     const themes: any[] = [
@@ -93,46 +115,45 @@ export const PremiumHub = () => {
                     <div className="skeuo-glass rounded-[2.5rem] p-4 flex flex-col items-center border-white/[0.08] shadow-2xl relative overflow-hidden group">
                         <div className="absolute inset-0 bg-gradient-to-br from-white/[0.02] to-transparent pointer-events-none" />
                         <h2 className="text-[10px] font-black uppercase tracking-[0.3em] text-white/30 mb-6 relative z-10">Achievement Hub</h2>
-
                         <div className="flex flex-col items-center gap-1 mb-4">
                             <span className="text-[10px] text-primary/60 font-bold uppercase tracking-widest">Your Rank:</span>
-                            <h3 className="text-3xl font-black text-white tracking-tighter text-glow-gold">SEEKER</h3>
+                            <h3 className="text-3xl font-black text-white tracking-tighter text-glow-gold">{rankInfo.title}</h3>
                         </div>
 
-                        <RadialAchievement progress={1} title="Level Progress" />
+                        <RadialAchievement progress={Math.round(rankInfo.prog)} title="Level Progress" />
 
                         <div className="grid grid-cols-2 gap-3 w-full mt-4">
                             <div className="bg-white/5 border border-white/5 rounded-2xl p-3 flex flex-col items-center text-center shadow-inner">
                                 <div className="w-8 h-8 rounded-full bg-orange-500/20 flex items-center justify-center mb-1">
-                                    <Activity className="w-4 h-4 text-orange-500" />
+                                    <Flame className="w-4 h-4 text-orange-500" />
                                 </div>
-                                <span className="text-xl font-black text-white">1</span>
-                                <span className="text-[8px] font-bold text-white/30 uppercase tracking-widest">Day</span>
+                                <span className="text-xl font-black text-white">{streakDays}</span>
+                                <span className="text-[8px] font-bold text-white/30 uppercase tracking-widest">Day Streak</span>
                             </div>
                             <div className="bg-white/5 border border-white/5 rounded-2xl p-3 flex flex-col items-center text-center shadow-inner">
                                 <div className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center mb-1">
                                     <div className="w-2 h-2 rounded-full border border-primary" />
                                 </div>
-                                <span className="text-xl font-black text-white">1/100</span>
+                                <span className="text-xl font-black text-white">{todayCount}/{dailyGoal || 100}</span>
                                 <span className="text-[8px] font-bold text-white/30 uppercase tracking-widest">Daily Goal</span>
                             </div>
                         </div>
 
-                        {/* Additional stats matching screenshot bottom left */}
+                        {/* Additional dynamic stats */}
                         <div className="mt-auto w-full pt-4 border-t border-white/5 space-y-2.5">
                             <div className="bg-black/20 rounded-full px-4 py-1.5 flex items-center justify-between border border-white/5">
                                 <div className="flex items-center gap-2">
-                                    <div className="w-1.5 h-1.5 rounded-sm bg-blue-500" />
-                                    <span className="text-[8px] font-bold text-white/40 uppercase">Global Activity</span>
+                                    <BadgeCheck className="w-3 h-3 text-blue-500" />
+                                    <span className="text-[8px] font-bold text-white/40 uppercase">Total All-Time</span>
                                 </div>
-                                <span className="text-[8px] font-black text-blue-500">11/100 (Leads 2%)</span>
+                                <span className="text-[8px] font-black text-blue-500">{totalAllTime.toLocaleString()}</span>
                             </div>
                             <div className="bg-black/20 rounded-full px-4 py-1.5 flex items-center justify-between border border-white/5">
                                 <div className="flex items-center gap-2">
-                                    <Activity className="w-3 h-3 text-white/40" />
-                                    <span className="text-[8px] font-bold text-white/40 uppercase">Global Activity</span>
+                                    <Star className="w-3 h-3 text-yellow-500" />
+                                    <span className="text-[8px] font-bold text-white/40 uppercase">Achievements</span>
                                 </div>
-                                <span className="text-[8px] font-black text-green-500 uppercase tracking-tighter">Live</span>
+                                <span className="text-[8px] font-black text-yellow-500">{unlockedAchievements.length} Unlocked</span>
                             </div>
                         </div>
                     </div>
