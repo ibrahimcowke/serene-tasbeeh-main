@@ -654,7 +654,21 @@ export const useTasbeehStore = create<TasbeehState>()(
                 }
             }
           }
-          
+
+          // Auto-cycle adhkar in free mode when target is reached
+          if (sessionMode.type === 'free' && state.targetCount > 0 && newCount >= state.targetCount) {
+            const autoCycleOrder = ['subhanallah', 'alhamdulillah', 'allahuakbar', 'lailaha'];
+            const currentIdx = autoCycleOrder.indexOf(currentDhikr.id);
+            if (currentIdx >= 0 && currentIdx < autoCycleOrder.length - 1) {
+              const nextDhikrId = autoCycleOrder[currentIdx + 1];
+              const nextDhikr = [...defaultDhikrs, ...state.customDhikrs].find(d => d.id === nextDhikrId);
+              if (nextDhikr) {
+                currentDhikr = nextDhikr;
+                newCount = 0;
+              }
+            }
+          }
+
           // Update Total All Time
           const newTotalAllTime = (state.totalAllTime || 0) + 1;
 
