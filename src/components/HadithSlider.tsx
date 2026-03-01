@@ -73,7 +73,7 @@ export function HadithSlider({ dhikr }: { dhikr: Dhikr }) {
                         )}
                     </div>
 
-                    <p className={`text-xs xs:text-sm sm:text-base font-medium text-foreground/90 leading-relaxed xs:leading-loose break-words ${isArabic ? 'font-arabic' : ''}`}>
+                    <p className={`text-xs xs:text-sm sm:text-base font-medium text-foreground/90 leading-[1.4] xs:leading-[1.6] break-words ${isArabic ? 'font-arabic' : ''}`}>
                         "{hadith.text}"
                     </p>
 

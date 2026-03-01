@@ -259,7 +259,7 @@ export const PremiumHub = () => {
                     <div className="flex flex-col items-center text-center gap-3 relative z-10 w-full max-w-lg mx-auto mt-4">
                         <motion.h1
                             key={currentDhikr.id + '-arabic'}
-                            className="text-6xl font-arabic text-primary mb-1 drop-shadow-[0_0_30px_rgba(245,158,11,0.2)]"
+                            className="text-6xl font-arabic text-primary mb-1 drop-shadow-[0_0_30px_rgba(245,158,11,0.2)] leading-[1.15]"
                             initial={{ scale: 0.9, opacity: 0 }}
                             animate={{ scale: 1, opacity: 1 }}
                             transition={{ duration: 0.8, ease: "easeOut" }}
