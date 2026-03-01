@@ -7,39 +7,46 @@ interface ProgressRingProps {
   className?: string;
 }
 
-export function ProgressRing({ 
-  progress, 
-  size = 280, 
+export function ProgressRing({
+  progress,
+  size = 280,
   strokeWidth = 4,
-  className = '' 
+  className = ''
 }: ProgressRingProps) {
-  const radius = (size - strokeWidth) / 2;
+  const safeSize = isNaN(size) || size <= 0 ? 280 : size;
+  const safeStrokeWidth = isNaN(strokeWidth) ? 4 : strokeWidth;
+  const radius = (safeSize - safeStrokeWidth) / 2;
   const circumference = radius * 2 * Math.PI;
-  const offset = circumference - (progress * circumference);
+  const safeProgress = isNaN(progress) ? 0 : Math.max(0, Math.min(1, progress));
+  const offset = circumference - (safeProgress * circumference);
+
+  const cx = safeSize / 2;
+  const cy = safeSize / 2;
+  const safeRadius = isNaN(radius) || radius < 0 ? 0 : radius;
 
   return (
     <svg
-      width={size}
-      height={size}
+      width={safeSize}
+      height={safeSize}
       className={`-rotate-90 ${className}`}
     >
       {/* Background track */}
       <circle
-        cx={size / 2}
-        cy={size / 2}
-        r={radius}
+        cx={cx}
+        cy={cy}
+        r={safeRadius}
         fill="none"
         stroke="hsl(var(--progress-track))"
-        strokeWidth={strokeWidth}
+        strokeWidth={safeStrokeWidth}
       />
       {/* Progress fill */}
       <motion.circle
-        cx={size / 2}
-        cy={size / 2}
-        r={radius}
+        cx={cx}
+        cy={cy}
+        r={safeRadius}
         fill="none"
         stroke="hsl(var(--progress-fill))"
-        strokeWidth={strokeWidth}
+        strokeWidth={safeStrokeWidth}
         strokeLinecap="round"
         strokeDasharray={circumference}
         initial={{ strokeDashoffset: circumference }}

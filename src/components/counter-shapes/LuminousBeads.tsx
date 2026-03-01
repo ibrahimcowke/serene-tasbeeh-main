@@ -17,13 +17,16 @@ export function LuminousBeads({ progress }: LuminousBeadsProps) {
                 {Array.from({ length: NUM_BEADS }).map((_, i) => {
                     const angle = (i * 360) / NUM_BEADS;
                     const radius = 110;
-                    const x = 128 + radius * Math.cos((angle * Math.PI) / 180);
-                    const y = 128 + radius * Math.sin((angle * Math.PI) / 180);
+                    const rawX = 128 + radius * Math.cos((angle * Math.PI) / 180);
+                    const rawY = 128 + radius * Math.sin((angle * Math.PI) / 180);
+                    const x = isNaN(rawX) ? 128 : rawX;
+                    const y = isNaN(rawY) ? 128 : rawY;
 
                     // Calculate if this bead is active based on progress
                     // Assuming progress 0-1 maps to 0-33 beads
-                    const isActive = i < Math.floor(progress * NUM_BEADS);
-                    const isCurrent = i === Math.floor(progress * NUM_BEADS) - 1;
+                    const safeProgress = isNaN(progress) ? 0 : Math.max(0, Math.min(1, progress));
+                    const isActive = i < Math.floor(safeProgress * NUM_BEADS);
+                    const isCurrent = i === Math.floor(safeProgress * NUM_BEADS) - 1;
 
                     return (
                         <g key={i}>

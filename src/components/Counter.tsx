@@ -111,7 +111,7 @@ export function Counter() {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
-            className="font-arabic text-xl xs:text-2xl sm:text-4xl md:text-5xl lg:text-6xl text-foreground leading-snug mb-0 max-w-[90vw] mx-auto overflow-visible"
+            className="font-arabic text-lg xs:text-xl sm:text-2xl md:text-3xl lg:text-4xl text-foreground leading-snug mb-0 max-w-[90vw] mx-auto overflow-visible"
           >
             {currentDhikr.arabic}
           </motion.p>
@@ -124,7 +124,7 @@ export function Counter() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -5 }}
               transition={{ duration: 0.2 }}
-              className="text-muted-foreground text-[10px] xs:text-xs sm:text-base tracking-wide px-4"
+              className="text-muted-foreground text-[9px] xs:text-[10px] sm:text-sm tracking-wide px-4"
             >
               {currentDhikr.transliteration}
             </motion.p>

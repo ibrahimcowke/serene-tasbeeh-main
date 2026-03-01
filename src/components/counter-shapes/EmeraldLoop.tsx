@@ -31,8 +31,10 @@ export function EmeraldLoop({ currentCount }: EmeraldLoopProps) {
                 {/* Beads */}
                 {Array.from({ length: totalBeads }).map((_, i) => {
                     const angle = (i * 360) / totalBeads - 90; // Start from top
-                    const x = centerX + radius * Math.cos((angle * Math.PI) / 180);
-                    const y = centerY + radius * Math.sin((angle * Math.PI) / 180);
+                    const rawX = centerX + radius * Math.cos((angle * Math.PI) / 180);
+                    const rawY = centerY + radius * Math.sin((angle * Math.PI) / 180);
+                    const x = isNaN(rawX) ? centerX : rawX;
+                    const y = isNaN(rawY) ? centerY : rawY;
 
                     const isHighlighted = (currentCount % totalBeads) === i;
                     const isPast = i <= (currentCount % totalBeads);
