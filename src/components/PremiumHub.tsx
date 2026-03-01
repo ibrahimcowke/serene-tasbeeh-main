@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { useTasbeehStore, CounterShape } from '@/store/tasbeehStore';
+import { useTasbeehStore } from '@/store/tasbeehStore';
 import {
     Settings,
     Bell,
@@ -11,8 +11,6 @@ import {
     Star,
     Award,
     Search,
-    Palette,
-    Shapes,
     Layout,
     Moon,
     Undo2,
@@ -40,10 +38,7 @@ export const PremiumHub = () => {
         undo,
         totalAllTime,
         dailyGoal,
-        theme,
-        setTheme,
         counterShape,
-        setCounterShape,
         dateContext,
         globalCount,
         fetchGlobalCount,
@@ -68,35 +63,6 @@ export const PremiumHub = () => {
     };
 
     const rankInfo = getRankInfo(totalAllTime);
-
-    // Available categories for cycling
-    const themes: any[] = [
-        'light', 'theme-midnight', 'theme-neon', 'theme-green', 'theme-cyberpunk', 'theme-glass',
-        'theme-sunset', 'theme-forest', 'theme-oled', 'theme-biolum', 'theme-radar-tactical',
-        'theme-steampunk', 'theme-crystal-depth', 'theme-mecca-night', 'theme-medina-rose',
-        'theme-blue-mosque', 'theme-desert-starlight', 'theme-sahara-warmth', 'theme-andalusia-earth',
-        'theme-istanbul-sunset', 'theme-taj-marble', 'theme-royal-persian', 'theme-ramadan-lantern'
-    ];
-
-    const shapes: CounterShape[] = [
-        'minimal', 'classic', 'beads', 'flower', 'digital', 'bead-ring', 'halo-ring',
-        'luminous-beads', 'helix-strand', 'cyber-hexagon', 'blooming-lotus', 'constellation',
-        'smart-ring', 'moon-phase', 'water-ripple', 'sand-hourglass', 'lantern-fanous',
-        'digital-watch', 'star-burst', 'crystal-prism', 'galaxy', 'tally-clicker',
-        'cyber-3d', 'crystal-iso', 'neumorph'
-    ];
-
-    const cycleTheme = () => {
-        const currentIndex = themes.indexOf(theme);
-        const nextIndex = (currentIndex + 1) % themes.length;
-        setTheme(themes[nextIndex]);
-    };
-
-    const cycleShape = () => {
-        const currentIndex = shapes.indexOf(counterShape);
-        const nextIndex = (currentIndex + 1) % shapes.length;
-        setCounterShape(shapes[nextIndex]);
-    };
 
     return (
         <div className="w-full h-full bg-transparent relative overflow-hidden flex flex-col">
@@ -210,30 +176,6 @@ export const PremiumHub = () => {
                 >
                     {/* Center plateau effect */}
                     <div className="absolute inset-x-0 top-0 bottom-[-20px] bg-gradient-to-b from-foreground/[0.03] to-transparent rounded-[3rem] blur-sm -z-10 border border-foreground/[0.05]" />
-
-                    {/* Top Right Controls (Theme & Shape) */}
-                    <div className="absolute top-4 right-4 flex items-center gap-2 z-20">
-                        <motion.button
-                            whileHover={{ scale: 1.1 }}
-                            whileTap={{ scale: 0.9 }}
-                            onClick={cycleTheme}
-                            className="p-3 rounded-2xl bg-foreground/5 border border-foreground/10 text-foreground/40 hover:text-primary transition-colors skeuo-glass shadow-lg group relative"
-                            title="Change Theme"
-                        >
-                            <Palette className="w-5 h-5" />
-                            <div className="absolute -bottom-1 -right-1 w-2 h-2 rounded-full bg-primary/40 blur-[2px] opacity-0 group-hover:opacity-100 transition-opacity" />
-                        </motion.button>
-                        <motion.button
-                            whileHover={{ scale: 1.1 }}
-                            whileTap={{ scale: 0.9 }}
-                            onClick={cycleShape}
-                            className="p-3 rounded-2xl bg-foreground/5 border border-foreground/10 text-foreground/40 hover:text-primary transition-colors skeuo-glass shadow-lg group relative"
-                            title="Change Shape"
-                        >
-                            <Shapes className="w-5 h-5" />
-                            <div className="absolute -bottom-1 -right-1 w-2 h-2 rounded-full bg-primary/40 blur-[2px] opacity-0 group-hover:opacity-100 transition-opacity" />
-                        </motion.button>
-                    </div>
 
                     {/* Vertical Custom Controls anchored to far left edge */}
                     <div className="absolute top-1/4 left-0 flex flex-col gap-2 bg-card/80 backdrop-blur-md p-2 rounded-r-[2rem] rounded-l-none border border-foreground/5 border-l-0 shadow-2xl z-20">

@@ -1,4 +1,4 @@
-import { BookOpen, Target, ClipboardList, Settings, History, Trophy, BarChart3, AppWindow, Swords } from "lucide-react";
+import { BookOpen, Target, ClipboardList, Settings, History, Trophy, BarChart3, AppWindow, Swords, Palette, Shapes } from "lucide-react";
 import {
     Sidebar,
     SidebarContent,
@@ -24,10 +24,25 @@ import { NotificationCenter } from "./NotificationCenter";
 import { ChallengesView } from "./ChallengesView";
 import { toast } from "sonner";
 import { motion } from "framer-motion";
+import { themes, counterShapes } from "@/lib/constants";
 
 export function AppSidebar() {
-    const { setZenMode } = useTasbeehStore();
+    const { setZenMode, theme, setTheme, counterShape, setCounterShape } = useTasbeehStore();
     const { state } = useSidebar();
+    const themeIds = themes.map((item) => item.id);
+    const shapeIds = counterShapes.map((item) => item.id);
+
+    const cycleTheme = () => {
+        const currentIndex = themeIds.indexOf(theme);
+        const nextTheme = themeIds[(currentIndex + 1) % themeIds.length] ?? themeIds[0];
+        setTheme(nextTheme as Parameters<typeof setTheme>[0]);
+    };
+
+    const cycleCounterShape = () => {
+        const currentIndex = shapeIds.indexOf(counterShape);
+        const nextShape = shapeIds[(currentIndex + 1) % shapeIds.length] ?? shapeIds[0];
+        setCounterShape(nextShape as Parameters<typeof setCounterShape>[0]);
+    };
 
     return (
         <Sidebar collapsible="icon">
@@ -131,6 +146,27 @@ export function AppSidebar() {
                                         </button>
                                     </SidebarMenuButton>
                                 </AchievementsView>
+                            </SidebarMenuItem>
+                        </SidebarMenu>
+                    </SidebarGroupContent>
+                </SidebarGroup>
+
+                <SidebarGroup>
+                    <SidebarGroupLabel>Quick Style</SidebarGroupLabel>
+                    <SidebarGroupContent>
+                        <SidebarMenu>
+                            <SidebarMenuItem>
+                                <SidebarMenuButton onClick={cycleTheme} tooltip="Cycle Theme">
+                                    <Palette className="text-primary" />
+                                    <span>Theme</span>
+                                </SidebarMenuButton>
+                            </SidebarMenuItem>
+
+                            <SidebarMenuItem>
+                                <SidebarMenuButton onClick={cycleCounterShape} tooltip="Cycle Counter Shape">
+                                    <Shapes className="text-muted-foreground" />
+                                    <span>Counter Shape</span>
+                                </SidebarMenuButton>
                             </SidebarMenuItem>
                         </SidebarMenu>
                     </SidebarGroupContent>
