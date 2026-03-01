@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { Check, Download, Upload, Trash2, RotateCcw, Layout, Smartphone, Maximize, Cloud, LogIn, LogOut, RefreshCw, Shield, Shapes, Wind, Palette, Waves, Crown, Sunset, Zap, CloudMoon, Infinity, Fan, Diamond, Component, ExternalLink, ChevronRight } from 'lucide-react';
 import { useTasbeehStore } from '@/store/tasbeehStore';
 import { supabase, signInWithGoogle, signOut, getCurrentUser, isSupabaseConfigured } from '@/lib/supabase';
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger, SheetDescription } from '@/components/ui/sheet';
 import { Switch } from '@/components/ui/switch';
 import {
   AlertDialog,
@@ -189,6 +189,7 @@ export function SettingsView({ children }: SettingsViewProps) {
         <div className="sheet-handle mx-auto mt-3 mb-1 bg-muted shrink-0" />
         <SheetHeader className="text-left px-6 py-4 shrink-0">
           <SheetTitle className="text-lg font-medium">Settings</SheetTitle>
+          <SheetDescription className="sr-only">Configure app appearance, data, and preferences</SheetDescription>
         </SheetHeader>
 
         <div className="flex-1 overflow-hidden flex flex-col">
