@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Users, Swords, Send, Check, X, Zap, Trophy, Shield, Ghost, Target, HandHeart } from 'lucide-react';
 import { database } from '@/lib/firebase';
 import { ref, onValue, set, push, serverTimestamp, query, limitToLast } from 'firebase/database';
+import { publishActivityEvent } from '@/lib/firebase';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useTasbeehStore } from '@/store/tasbeehStore';
 import { getMuslimAvatarUrl } from '@/lib/avatarUtils';
@@ -137,11 +138,23 @@ export function SidebarChallenges() {
 
         if (action === 'accept') {
             set(inviteRef, { ...invite, status: 'accepted' });
-            if (invite.type === 'sprint') startTasbih100();
-            else startTasbih1000();
-            toast.success("Challenge starting! Let's compete.");
+            if (invite.type === 'sprint') {
+                startTasbih100();
+                toast.success("⚡ 100 Dhikr Sprint Started!", {
+                    description: "Complete: SubhanAllah ×33, Alhamdulillah ×33, Allahu Akbar ×33, La ilaha illallah ×1",
+                    duration: 5000,
+                });
+            } else {
+                startTasbih1000();
+                toast.success("🎯 1000 Dhikr Endurance Started!", {
+                    description: "Complete 125× of each dhikr. May Allah accept!",
+                    duration: 5000,
+                });
+            }
+            publishActivityEvent('community_goal', 'A challenge was accepted! Two souls racing to Allah 🏁');
         } else {
             set(inviteRef, { ...invite, status: 'declined' });
+            toast('Challenge declined', { duration: 2000 });
         }
     };
 

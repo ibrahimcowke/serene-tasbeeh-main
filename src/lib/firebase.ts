@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app";
-import { getDatabase } from "firebase/database";
+import { getDatabase, ref as dbRef, push, set, serverTimestamp } from "firebase/database";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -19,3 +19,21 @@ export const app = initializeApp(firebaseConfig);
 
 // Initialize Realtime Database and get a reference to the service
 export const database = getDatabase(app);
+
+// Publish a live activity event to the global feed
+export function publishActivityEvent(
+  type: 'milestone' | 'sprint_complete' | 'new_user' | 'community_goal' | 'streak',
+  message: string
+) {
+  try {
+    const feedRef = dbRef(database, 'events/global/feed');
+    const newEventRef = push(feedRef);
+    set(newEventRef, {
+      type,
+      message,
+      timestamp: Date.now(),
+    });
+  } catch (e) {
+    // Silently fail — non-critical feature
+  }
+}

@@ -636,6 +636,10 @@ export const useTasbeehStore = create<TasbeehState>()(
                   duration: 8000,
                   icon: '🌟'
                 });
+                // Publish to global feed
+                import('@/lib/firebase').then(({ publishActivityEvent }) => {
+                  publishActivityEvent('sprint_complete', 'Someone completed 100 Dhikr Sprint! 🏆');
+                });
               }
             }
            } else if (sessionMode.type === 'tasbih1000') {
@@ -657,6 +661,10 @@ export const useTasbeehStore = create<TasbeehState>()(
                    duration: 10000,
                    icon: '🏆'
                  });
+                  // Publish to global feed
+                  import('@/lib/firebase').then(({ publishActivityEvent }) => {
+                    publishActivityEvent('sprint_complete', 'Someone completed 1000 Dhikr Endurance! 🏅');
+                  });
                }
              }
           } else if (sessionMode.type === 'routine') {
@@ -1016,6 +1024,9 @@ export const useTasbeehStore = create<TasbeehState>()(
           targetCount: 33,
           sessionStartTime: null,
         });
+        import('@/lib/firebase').then(({ publishActivityEvent }) => {
+          publishActivityEvent('community_goal', 'Someone started a 100 Dhikr Sprint! ⚡');
+        });
       },
 
       startTasbih1000: () => {
@@ -1025,6 +1036,9 @@ export const useTasbeehStore = create<TasbeehState>()(
           currentCount: 0,
           targetCount: 125,
           sessionStartTime: null,
+        });
+        import('@/lib/firebase').then(({ publishActivityEvent }) => {
+          publishActivityEvent('community_goal', 'Someone started a 1000 Dhikr Endurance! 🎯');
         });
       },
 
