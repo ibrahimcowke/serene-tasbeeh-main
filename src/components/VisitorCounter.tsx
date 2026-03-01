@@ -2,12 +2,13 @@ import { useEffect, useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { supabase, isSupabaseConfigured } from '@/lib/supabase';
 import { database } from '@/lib/firebase';
-import { ref, onValue, set, onDisconnect, serverTimestamp, query, update } from 'firebase/database';
+import { ref, onValue, set, onDisconnect, serverTimestamp, update } from 'firebase/database';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { useTasbeehStore } from '@/store/tasbeehStore';
-import { Heart, Users, Activity } from 'lucide-react';
+import { useTasbeehStore, defaultDhikrs } from '@/store/tasbeehStore';
+import { Heart, Users, Activity, Globe, Flame, Sparkles } from 'lucide-react';
 import { toast } from 'sonner';
 import { getMuslimAvatarUrl } from '@/lib/avatarUtils';
+
 interface PresenceData {
     user_id: string;
     email?: string;
@@ -21,6 +22,7 @@ export function VisitorCounter() {
     const [visitors, setVisitors] = useState<PresenceData[]>([]);
     const [totalUsers, setTotalUsers] = useState(0);
     const [expanded, setExpanded] = useState(false);
+    const [salamSent, setSalamSent] = useState(false);
 
     useEffect(() => {
         const fetchTotalUsers = async () => {
@@ -48,7 +50,6 @@ export function VisitorCounter() {
                     localStorage.setItem('visitor_device_id', deviceId);
                 }
 
-                // Use deviceId as stable key for presence
                 const myPresenceRef = ref(database, `presence/visitors/${deviceId}`);
                 onDisconnect(myPresenceRef).remove();
 
@@ -97,17 +98,32 @@ export function VisitorCounter() {
         }, []);
     }, [visitors]);
 
-    const activityInsight = useMemo(() => {
-        if (uniqueVisitors.length < 2) return null;
-        const currentDhikrActive = uniqueVisitors.filter(u => u.last_dhikr_id === currentDhikr.id).length;
-        if (currentDhikrActive > 1) {
-            return `${currentDhikrActive} people are reciting ${currentDhikr.transliteration} right now`;
-        }
-        return null;
+    // Group visitors by dhikr
+    const dhikrGroups = useMemo(() => {
+        const groups: Record<string, { count: number; name: string; arabic: string }> = {};
+        uniqueVisitors.forEach(v => {
+            const dhikrId = v.last_dhikr_id || 'unknown';
+            const dhikr = defaultDhikrs.find(d => d.id === dhikrId);
+            if (!groups[dhikrId]) {
+                groups[dhikrId] = {
+                    count: 0,
+                    name: dhikr?.transliteration || 'Dhikr',
+                    arabic: dhikr?.arabic || '',
+                };
+            }
+            groups[dhikrId].count += 1;
+        });
+        // Sort by count descending
+        return Object.entries(groups)
+            .sort(([, a], [, b]) => b.count - a.count)
+            .slice(0, 4);
+    }, [uniqueVisitors]);
+
+    // How many reciting same dhikr as me
+    const sameDhikrCount = useMemo(() => {
+        return uniqueVisitors.filter(u => u.last_dhikr_id === currentDhikr.id).length;
     }, [uniqueVisitors, currentDhikr]);
 
-    // Show avatars for ALL users, including anonymous ones, using the new Muslim avatar generator
-    const avatarUsers = uniqueVisitors;
     const liveCount = uniqueVisitors.length;
 
     const sendSalam = () => {
@@ -117,130 +133,213 @@ export function VisitorCounter() {
             timestamp: serverTimestamp(),
             sender_id: localStorage.getItem('visitor_device_id')
         });
-        toast.success("Salam sent to the community!");
+        setSalamSent(true);
+        toast.success("Assalamu Alaikum! 🤲", {
+            description: `Salam sent to ${liveCount} online users`,
+            duration: 3000,
+        });
+        setTimeout(() => setSalamSent(false), 5000);
     };
 
     if (liveCount === 0 && totalUsers === 0) return null;
 
     return (
-        <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            className="flex flex-col gap-2 cursor-pointer"
-            onClick={() => setExpanded(!expanded)}
-        >
-            <div className={`flex items-center rounded-2xl bg-card/30 backdrop-blur-2xl border border-white/10 shadow-xl group transition-all duration-500 overflow-hidden ${expanded ? 'px-4 py-2 gap-4' : 'px-3 py-1 gap-1'}`}>
-                {!expanded ? (
-                    // Compact View
-                    <div className="flex items-center gap-2 justify-center">
-                        <Users className="w-3.5 h-3.5 text-primary/80" />
-                        <div className="flex items-center gap-1.5">
-                            <span className="relative flex h-1.5 w-1.5">
+        <div className="flex flex-col gap-3 w-full">
+            {/* Main Live Counter Card */}
+            <motion.div
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                className="relative overflow-hidden rounded-2xl border border-foreground/[0.06] bg-foreground/[0.03] shadow-inner cursor-pointer group"
+                onClick={() => setExpanded(!expanded)}
+            >
+                {/* Ambient glow */}
+                <div className="absolute inset-0 bg-gradient-to-br from-green-500/[0.04] to-primary/[0.03] pointer-events-none" />
+
+                {/* Header */}
+                <div className="relative z-10 p-3 flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                        {/* Pulse ring animation */}
+                        <div className="relative">
+                            <div className="w-10 h-10 rounded-full bg-green-500/10 border border-green-500/20 flex items-center justify-center">
+                                <Globe className="w-4 h-4 text-green-400" />
+                            </div>
+                            <span className="absolute -top-0.5 -right-0.5 flex h-3 w-3">
                                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-                                <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-green-500"></span>
+                                <span className="relative inline-flex rounded-full h-3 w-3 bg-green-500 border border-background"></span>
                             </span>
-                            <span className="text-[11px] font-bold text-foreground/90">{liveCount}</span>
+                        </div>
+
+                        <div className="flex flex-col">
+                            <div className="flex items-baseline gap-1.5">
+                                <span className="text-xl font-black text-foreground tabular-nums">{liveCount}</span>
+                                <span className="text-[9px] font-black text-green-400 uppercase tracking-widest">Live</span>
+                            </div>
+                            <span className="text-[8px] font-bold text-muted-foreground uppercase tracking-wider">
+                                Remembering Allah Now
+                            </span>
                         </div>
                     </div>
-                ) : (
-                    // Expanded View
-                    <AnimatePresence mode="popLayout">
+
+                    {/* Avatar stack */}
+                    <div className="flex items-center gap-2">
+                        <div className="flex -space-x-2">
+                            {uniqueVisitors.slice(0, 4).map((user) => (
+                                <Avatar key={user.user_id} className="w-7 h-7 border-2 border-background shadow-md">
+                                    <AvatarImage src={user.avatar_url || getMuslimAvatarUrl(user.user_id)} />
+                                    <AvatarFallback className="text-[8px] bg-primary/20 text-primary font-bold">
+                                        {user.email?.charAt(0).toUpperCase() || '?'}
+                                    </AvatarFallback>
+                                </Avatar>
+                            ))}
+                            {liveCount > 4 && (
+                                <div className="w-7 h-7 rounded-full bg-secondary/80 border-2 border-background flex items-center justify-center text-[8px] font-bold text-muted-foreground z-10">
+                                    +{liveCount - 4}
+                                </div>
+                            )}
+                        </div>
+
                         <motion.div
-                            initial={{ opacity: 0, width: 0 }}
-                            animate={{ opacity: 1, width: 'auto' }}
-                            exit={{ opacity: 0, width: 0 }}
-                            className="flex items-center gap-4"
+                            animate={{ rotate: expanded ? 180 : 0 }}
+                            transition={{ duration: 0.2 }}
+                            className="text-muted-foreground/40"
                         >
-                            <div className="flex -space-x-2.5">
-                                <AnimatePresence mode="popLayout">
-                                    {avatarUsers.slice(0, 3).map((user, idx) => (
-                                        <motion.div
-                                            key={user.user_id}
-                                            initial={{ opacity: 0, scale: 0.5 }}
-                                            animate={{ opacity: 1, scale: 1 }}
-                                            className="relative"
-                                        >
-                                            <Avatar className="w-7 h-7 border-2 border-background shadow-md">
-                                                {(user.avatar_url || getMuslimAvatarUrl(user.user_id)) ? (
-                                                    <AvatarImage src={user.avatar_url || getMuslimAvatarUrl(user.user_id)} />
-                                                ) : (
-                                                    <AvatarFallback className="text-[10px] bg-primary/20 text-primary font-bold">
-                                                        {user.email?.charAt(0).toUpperCase() || '?'}
-                                                    </AvatarFallback>
-                                                )}
-                                            </Avatar>
-                                            <span className="absolute bottom-0 right-0 w-2 h-2 bg-green-500 border-2 border-background rounded-full"></span>
-                                        </motion.div>
-                                    ))}
-                                </AnimatePresence>
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                        </motion.div>
+                    </div>
+                </div>
 
-                                {liveCount > avatarUsers.length && (
-                                    <div className="w-7 h-7 rounded-full bg-secondary/80 backdrop-blur-md border-2 border-background flex items-center justify-center text-[9px] font-bold text-muted-foreground z-10">
-                                        +{liveCount - Math.min(avatarUsers.length, 3)}
-                                    </div>
+                {/* Expanded Details */}
+                <AnimatePresence>
+                    {expanded && (
+                        <motion.div
+                            initial={{ height: 0, opacity: 0 }}
+                            animate={{ height: 'auto', opacity: 1 }}
+                            exit={{ height: 0, opacity: 0 }}
+                            transition={{ duration: 0.3 }}
+                            className="overflow-hidden"
+                        >
+                            <div className="px-3 pb-3 space-y-3">
+                                {/* Divider */}
+                                <div className="h-px bg-foreground/5" />
+
+                                {/* Same dhikr insight */}
+                                {sameDhikrCount > 1 && (
+                                    <motion.div
+                                        initial={{ opacity: 0, y: -5 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        className="flex items-center gap-2 px-3 py-2 rounded-xl bg-primary/5 border border-primary/10"
+                                    >
+                                        <Sparkles className="w-3.5 h-3.5 text-primary animate-pulse" />
+                                        <span className="text-[10px] font-bold text-primary/80">
+                                            {sameDhikrCount} people reciting {currentDhikr.transliteration} with you!
+                                        </span>
+                                    </motion.div>
                                 )}
-                            </div>
 
-                            <div className="flex items-center gap-4 h-5 divide-x divide-white/15">
-                                <div className="flex items-center gap-2">
-                                    <div className="relative flex h-2 w-2">
-                                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400/60 opacity-75"></span>
-                                        <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
-                                    </div>
-                                    <div className="flex flex-col -space-y-0.5">
-                                        <span className="text-[11px] font-bold text-foreground/90 leading-none">
-                                            {liveCount}
-                                        </span>
-                                        <span className="text-[8px] uppercase tracking-tighter text-muted-foreground font-semibold">
-                                            Live
-                                        </span>
+                                {/* Live Dhikr Breakdown */}
+                                <div className="space-y-1.5">
+                                    <span className="text-[8px] font-black text-muted-foreground/50 uppercase tracking-[0.2em] flex items-center gap-1.5 px-1">
+                                        <Activity className="w-2.5 h-2.5" />
+                                        Live Dhikr Activity
+                                    </span>
+                                    <div className="space-y-1">
+                                        {dhikrGroups.map(([dhikrId, group]) => {
+                                            const percentage = liveCount > 0 ? (group.count / liveCount) * 100 : 0;
+                                            const isMyDhikr = dhikrId === currentDhikr.id;
+                                            return (
+                                                <motion.div
+                                                    key={dhikrId}
+                                                    initial={{ opacity: 0, x: -10 }}
+                                                    animate={{ opacity: 1, x: 0 }}
+                                                    className={`relative rounded-lg overflow-hidden p-2 ${isMyDhikr ? 'bg-primary/5 border border-primary/15' : 'bg-foreground/[0.02]'}`}
+                                                >
+                                                    {/* Progress bar background */}
+                                                    <motion.div
+                                                        className={`absolute inset-y-0 left-0 ${isMyDhikr ? 'bg-primary/10' : 'bg-foreground/[0.03]'}`}
+                                                        initial={{ width: 0 }}
+                                                        animate={{ width: `${percentage}%` }}
+                                                        transition={{ duration: 0.5, ease: 'easeOut' }}
+                                                    />
+                                                    <div className="relative z-10 flex items-center justify-between">
+                                                        <div className="flex items-center gap-2 min-w-0">
+                                                            <span className="text-[10px] font-bold text-foreground/70 truncate">
+                                                                {group.name}
+                                                            </span>
+                                                            {isMyDhikr && (
+                                                                <span className="text-[7px] font-black bg-primary/15 text-primary px-1.5 py-0.5 rounded-full uppercase tracking-widest shrink-0">
+                                                                    You
+                                                                </span>
+                                                            )}
+                                                        </div>
+                                                        <div className="flex items-center gap-1.5 shrink-0">
+                                                            <Users className="w-2.5 h-2.5 text-muted-foreground/40" />
+                                                            <span className="text-[10px] font-black text-foreground/60 tabular-nums">
+                                                                {group.count}
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                </motion.div>
+                                            );
+                                        })}
                                     </div>
                                 </div>
 
-                                {totalUsers > 0 && (
-                                    <div className="pl-4 flex items-center gap-2">
-                                        <Users className="w-3 h-3 text-primary/60" />
-                                        <div className="flex flex-col -space-y-0.5">
-                                            <span className="text-[11px] font-bold text-foreground/80 leading-none">
+                                {/* Stats row */}
+                                <div className="grid grid-cols-3 gap-2">
+                                    {totalUsers > 0 && (
+                                        <div className="flex flex-col items-center py-2 px-1 rounded-xl bg-foreground/[0.02] border border-foreground/5">
+                                            <Users className="w-3 h-3 text-blue-400 mb-1" />
+                                            <span className="text-sm font-black text-foreground tabular-nums">
                                                 {totalUsers > 999 ? `${(totalUsers / 1000).toFixed(1)}k` : totalUsers}
                                             </span>
-                                            <span className="text-[8px] uppercase tracking-tighter text-muted-foreground font-semibold">
-                                                Members
-                                            </span>
+                                            <span className="text-[7px] font-bold text-muted-foreground uppercase tracking-widest">Members</span>
                                         </div>
+                                    )}
+
+                                    <div className="flex flex-col items-center py-2 px-1 rounded-xl bg-foreground/[0.02] border border-foreground/5">
+                                        <Flame className="w-3 h-3 text-orange-400 mb-1" />
+                                        <span className="text-sm font-black text-foreground tabular-nums">
+                                            {dhikrGroups.length}
+                                        </span>
+                                        <span className="text-[7px] font-bold text-muted-foreground uppercase tracking-widest">Adhkar</span>
                                     </div>
-                                )}
+
+                                    <div className="flex flex-col items-center py-2 px-1 rounded-xl bg-foreground/[0.02] border border-foreground/5">
+                                        <Globe className="w-3 h-3 text-green-400 mb-1" />
+                                        <span className="text-sm font-black text-foreground tabular-nums">
+                                            {liveCount}
+                                        </span>
+                                        <span className="text-[7px] font-bold text-muted-foreground uppercase tracking-widest">Online</span>
+                                    </div>
+                                </div>
+
+                                {/* Send Salam button */}
+                                <motion.button
+                                    onClick={(e) => { e.stopPropagation(); sendSalam(); }}
+                                    disabled={salamSent}
+                                    className={`w-full py-2.5 rounded-xl text-[10px] font-black uppercase tracking-[0.15em] flex items-center justify-center gap-2 transition-all ${salamSent
+                                            ? 'bg-green-500/10 text-green-400 border border-green-500/20'
+                                            : 'bg-primary/10 text-primary border border-primary/20 hover:bg-primary/20 active:scale-[0.98]'
+                                        }`}
+                                    whileTap={!salamSent ? { scale: 0.97 } : {}}
+                                >
+                                    {salamSent ? (
+                                        <>
+                                            <Heart className="w-3.5 h-3.5 fill-green-400" />
+                                            Salam Sent!
+                                        </>
+                                    ) : (
+                                        <>
+                                            <Heart className="w-3.5 h-3.5" />
+                                            Send Salam to Everyone
+                                        </>
+                                    )}
+                                </motion.button>
                             </div>
-
-                            <div className="h-4 w-px bg-white/10 mx-1" />
-
-                            <button
-                                onClick={(e) => { e.stopPropagation(); sendSalam(); }}
-                                className="p-1.5 rounded-full hover:bg-primary/10 text-primary/60 hover:text-primary transition-colors group/heart"
-                                title="Send Salam to all online users"
-                            >
-                                <Heart className="w-4 h-4 group-hover/heart:fill-primary" />
-                            </button>
                         </motion.div>
-                    </AnimatePresence>
-                )}
-            </div>
-
-            <AnimatePresence>
-                {expanded && activityInsight && (
-                    <motion.div
-                        initial={{ opacity: 0, y: -5, height: 0 }}
-                        animate={{ opacity: 1, y: 0, height: 'auto' }}
-                        exit={{ opacity: 0, y: -5, height: 0 }}
-                        className="flex items-center gap-2 px-3 py-1 rounded-full bg-primary/5 border border-primary/10 self-center overflow-hidden"
-                    >
-                        <Activity className="w-3 h-3 text-primary/60 animate-pulse" />
-                        <span className="text-[9px] font-medium text-primary/80 uppercase tracking-wider">
-                            {activityInsight}
-                        </span>
-                    </motion.div>
-                )}
-            </AnimatePresence>
-        </motion.div>
+                    )}
+                </AnimatePresence>
+            </motion.div>
+        </div>
     );
 }
