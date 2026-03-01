@@ -68,11 +68,6 @@ export function CommunitySidebar() {
                         <ChevronDown className="w-4 h-4 text-muted-foreground/50" />
                     )}
                 </div>
-
-                <div className="flex items-center gap-1.5">
-                    <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
-                    <span className="text-[10px] text-muted-foreground font-medium uppercase tracking-tighter">Live</span>
-                </div>
             </button>
 
             <AnimatePresence initial={false}>
@@ -87,17 +82,6 @@ export function CommunitySidebar() {
                         <div className="px-6 pb-6 space-y-4">
                             {/* Community Streak */}
                             <CommunityStreak />
-
-                            {/* Visitor Counter + Global Stats */}
-                            <div className="flex flex-col items-center gap-0">
-                                <VisitorCounter />
-                                <GlobalStats />
-                            </div>
-
-                            <div className="h-px bg-border/50" />
-
-                            {/* Live Activity Feed */}
-                            <CommunityActivityFeed />
 
                             <div className="h-px bg-border/50" />
 

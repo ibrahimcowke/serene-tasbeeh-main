@@ -29,7 +29,8 @@ export function JoinNotifier() {
             // Don't notify if it's me
             if (user.user_id === myId.current) return;
 
-            // Trigger join notification with challenge suggestion
+            // Trigger join notification logic removed as per user request
+            /*
             addNotification({
                 type: 'join',
                 title: 'New User Joined!',
@@ -90,6 +91,7 @@ export function JoinNotifier() {
                 duration: 8000,
                 position: 'bottom-right'
             });
+            */
 
             // Trigger global "Join" pulse
             const pulseRef = ref(database, 'events/global/pulse');

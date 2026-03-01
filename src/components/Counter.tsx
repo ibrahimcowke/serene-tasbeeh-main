@@ -58,7 +58,6 @@ export function Counter() {
   };
 
   const [showCompletion, setShowCompletion] = useState(false);
-  const [showSessionComplete, setShowSessionComplete] = useState(false);
   const [isEditingLayout, setIsEditingLayout] = useState(false);
   const lastCompletionRef = useRef<number>(0);
 
@@ -271,11 +270,6 @@ export function Counter() {
     return cleanup;
   }, [shakeToReset, currentCount, reset]);
 
-  const handleDismissSessionComplete = () => {
-    setShowSessionComplete(false);
-    exitSessionMode();
-  };
-
   const progress = getProgress();
   const totalProgress = getTotalSessionProgress();
 
@@ -331,6 +325,100 @@ export function Counter() {
               </motion.button>
 
               <UndoButton />
+
+              {/* Theme & Shape selectors moved inline from absolute position */}
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <motion.button
+                    whileTap={{ scale: 0.95 }}
+                    className="w-10 h-10 xs:w-11 xs:h-11 sm:w-12 sm:h-12 rounded-full bg-secondary/50 backdrop-blur-sm flex items-center justify-center hover:bg-secondary transition-colors border border-white/5"
+                    title="Change Theme"
+                  >
+                    <Palette className="w-4 h-4 text-muted-foreground" />
+                  </motion.button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" side="top" className="w-48 bg-card/90 backdrop-blur-xl border-border/50 max-h-[40dvh] overflow-hidden flex flex-col">
+                  <DropdownMenuLabel>Theme</DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  <div className="overflow-y-auto custom-scrollbar p-1">
+                    {[
+                      { id: 'light', label: 'Light', icon: '☀️' },
+                      { id: 'dark', label: 'Dark', icon: '🌙' },
+                      { id: 'theme-midnight', label: 'Midnight', icon: '🌌' },
+                      { id: 'theme-neon', label: 'Neon', icon: '🎆' },
+                      { id: 'theme-green', label: 'Matrix', icon: '💻' },
+                      { id: 'theme-cyberpunk', label: 'Cyberpunk', icon: '🤖' },
+                      { id: 'theme-glass', label: 'Glass', icon: '🧊' },
+                      { id: 'theme-sunset', label: 'Sunset', icon: '🌅' },
+                      { id: 'theme-forest', label: 'Forest', icon: '🌲' },
+                    ].map((t) => (
+                      <DropdownMenuItem
+                        key={t.id}
+                        onClick={() => useTasbeehStore.getState().setTheme(t.id as any)}
+                        className="flex items-center gap-2 cursor-pointer"
+                      >
+                        <span className="text-base">{t.icon}</span>
+                        <span className={`flex-1 ${theme === t.id ? 'font-bold text-primary' : ''}`}>{t.label}</span>
+                        {theme === t.id && <span className="text-primary text-xs">●</span>}
+                      </DropdownMenuItem>
+                    ))}
+                  </div>
+                </DropdownMenuContent>
+              </DropdownMenu>
+
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <motion.button
+                    whileTap={{ scale: 0.95 }}
+                    className="w-10 h-10 xs:w-11 xs:h-11 sm:w-12 sm:h-12 rounded-full bg-secondary/50 backdrop-blur-sm flex items-center justify-center hover:bg-secondary transition-colors border border-white/5"
+                    title="Counter Style"
+                  >
+                    <Shapes className="w-4 h-4 text-muted-foreground" />
+                  </motion.button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" side="top" className="w-48 bg-card/90 backdrop-blur-xl border-border/50 max-h-[40dvh] overflow-hidden flex flex-col">
+                  <DropdownMenuLabel>Counter Style</DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  <div className="overflow-y-auto custom-scrollbar p-1">
+                    {[
+                      { id: 'minimal', label: 'Minimal', icon: '○' },
+                      { id: 'classic', label: 'Classic', icon: '□' },
+                      { id: 'beads', label: 'Beads', icon: 'ooo' },
+                      { id: 'flower', label: 'Flower', icon: '❀' },
+                      { id: 'waveform', label: 'Wave', icon: '〰' },
+                      { id: 'cyber-hexagon', label: 'Hexagon', icon: '⬡' },
+                      { id: 'glass-orb', label: 'Orb', icon: '●' },
+                      { id: 'digital', label: 'Premium', icon: '✨' },
+                      { id: 'modern-ring', label: 'Modern', icon: '◎' },
+                      { id: 'vintage-wood', label: 'Vintage', icon: '📜' },
+                      { id: 'geometric-star', label: 'Star', icon: '۞' },
+                      { id: 'fluid', label: 'Fluid', icon: '💧' },
+                      { id: 'neumorph', label: 'Soft', icon: '☁' },
+                      { id: 'real-beads', label: 'Real', icon: '📿' },
+                      { id: 'cyber-3d', label: 'Cyber', icon: '💎' },
+                      { id: 'crystal-iso', label: 'Crystal', icon: '🕋' },
+                      { id: 'portal-depth', label: 'Portal', icon: '🌀' },
+                      { id: 'luminous-ring', label: 'Lume', icon: '⭕' },
+                      { id: 'ring-light', label: 'Ring Light', icon: '🔆' },
+                      { id: 'galaxy', label: 'Galaxy', icon: '🌌' },
+                      { id: 'digital-watch', label: 'Watch', icon: '⌚' },
+                      { id: 'tally-clicker', label: 'Tally 3D', icon: '🖱️' },
+                      { id: 'steampunk-nixie', label: 'Steampunk', icon: '⚙️' },
+                      { id: 'biolum-organic', label: 'Bio-Lum', icon: '🧬' },
+                    ].map((style) => (
+                      <DropdownMenuItem
+                        key={style.id}
+                        onClick={() => useTasbeehStore.getState().setCounterShape(style.id as any)}
+                        className="flex items-center gap-2 cursor-pointer"
+                      >
+                        <span className="text-base scale-125 inline-block w-5 text-center">{style.icon}</span>
+                        <span className={`flex-1 ${counterShape === style.id ? 'font-bold text-primary' : ''}`}>{style.label}</span>
+                        {counterShape === style.id && <span className="text-primary text-xs">●</span>}
+                      </DropdownMenuItem>
+                    ))}
+                  </div>
+                </DropdownMenuContent>
+              </DropdownMenu>
             </div>
 
             {/* Routine Next Step Button Removed */}
@@ -383,99 +471,6 @@ export function Counter() {
     `}
         style={{ transform: `translateY(${verticalOffset}px)` }}
       >
-        {/* NEW THEME CHANGER DROPDOWN */}
-        <div className="absolute bottom-4 left-4 z-50 flex gap-2">
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <button
-                className="p-2 rounded-full backdrop-blur-md transition-all duration-300 bg-secondary/30 text-muted-foreground hover:bg-secondary/50 hover:text-primary"
-                title="Change Theme"
-              >
-                <Palette className="w-5 h-5" />
-              </button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="start" className="w-48 bg-card/90 backdrop-blur-xl border-border/50 max-h-[50dvh] overflow-hidden flex flex-col">
-              <DropdownMenuLabel>Select Theme</DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              <div className="overflow-y-auto custom-scrollbar p-1">
-                {[
-                  { id: 'light', label: 'Light', icon: '☀️' },
-                  { id: 'dark', label: 'Dark', icon: '🌙' },
-                  { id: 'theme-midnight', label: 'Midnight', icon: '🌌' },
-                  { id: 'theme-neon', label: 'Neon', icon: '🎆' },
-                  { id: 'theme-green', label: 'Matrix', icon: '💻' },
-                  { id: 'theme-cyberpunk', label: 'Cyberpunk', icon: '🤖' },
-                  { id: 'theme-glass', label: 'Glass', icon: '🧊' },
-                  { id: 'theme-sunset', label: 'Sunset', icon: '🌅' },
-                  { id: 'theme-forest', label: 'Forest', icon: '🌲' },
-                ].map((t) => (
-                  <DropdownMenuItem
-                    key={t.id}
-                    onClick={() => useTasbeehStore.getState().setTheme(t.id as any)}
-                    className="flex items-center gap-2 cursor-pointer"
-                  >
-                    <span className="text-base">{t.icon}</span>
-                    <span className={`flex-1 ${theme === t.id ? 'font-bold text-primary' : ''}`}>{t.label}</span>
-                    {theme === t.id && <span className="text-primary text-xs">●</span>}
-                  </DropdownMenuItem>
-                ))}
-              </div>
-            </DropdownMenuContent>
-          </DropdownMenu>
-
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <button
-                className="p-2 rounded-full backdrop-blur-md transition-all duration-300 bg-secondary/30 text-muted-foreground hover:bg-secondary/50 hover:text-primary"
-                title="Change Counter Style"
-              >
-                <Shapes className="w-5 h-5" />
-              </button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="start" className="w-48 bg-card/90 backdrop-blur-xl border-border/50 max-h-[50dvh] overflow-hidden flex flex-col">
-              <DropdownMenuLabel>Counter Style</DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              <div className="overflow-y-auto custom-scrollbar p-1">
-                {[
-                  { id: 'minimal', label: 'Minimal', icon: '○' },
-                  { id: 'classic', label: 'Classic', icon: '□' },
-                  { id: 'beads', label: 'Beads', icon: 'ooo' },
-                  { id: 'flower', label: 'Flower', icon: '❀' },
-                  { id: 'waveform', label: 'Wave', icon: '〰' },
-                  { id: 'cyber-hexagon', label: 'Hexagon', icon: '⬡' },
-                  { id: 'glass-orb', label: 'Orb', icon: '●' },
-                  { id: 'digital', label: 'Premium', icon: '✨' },
-                  { id: 'modern-ring', label: 'Modern', icon: '◎' },
-                  { id: 'vintage-wood', label: 'Vintage', icon: '📜' },
-                  { id: 'geometric-star', label: 'Star', icon: '۞' },
-                  { id: 'fluid', label: 'Fluid', icon: '💧' },
-                  { id: 'neumorph', label: 'Soft', icon: '☁' },
-                  { id: 'real-beads', label: 'Real', icon: '📿' },
-                  { id: 'cyber-3d', label: 'Cyber', icon: '💎' },
-                  { id: 'crystal-iso', label: 'Crystal', icon: '🕋' },
-                  { id: 'portal-depth', label: 'Portal', icon: '🌀' },
-                  { id: 'luminous-ring', label: 'Lume', icon: '⭕' },
-                  { id: 'ring-light', label: 'Ring Light', icon: '🔆' },
-                  { id: 'galaxy', label: 'Galaxy', icon: '🌌' },
-                  { id: 'digital-watch', label: 'Watch', icon: '⌚' },
-                  { id: 'tally-clicker', label: 'Tally 3D', icon: '🖱️' },
-                  { id: 'steampunk-nixie', label: 'Steampunk', icon: '⚙️' },
-                  { id: 'biolum-organic', label: 'Bio-Lum', icon: '🧬' },
-                ].map((style) => (
-                  <DropdownMenuItem
-                    key={style.id}
-                    onClick={() => useTasbeehStore.getState().setCounterShape(style.id as any)}
-                    className="flex items-center gap-2 cursor-pointer"
-                  >
-                    <span className="text-base scale-125 inline-block w-5 text-center">{style.icon}</span>
-                    <span className={`flex-1 ${counterShape === style.id ? 'font-bold text-primary' : ''}`}>{style.label}</span>
-                    {counterShape === style.id && <span className="text-primary text-xs">●</span>}
-                  </DropdownMenuItem>
-                ))}
-              </div>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </div>
 
         <button
           onClick={() => setIsEditingLayout(!isEditingLayout)}
@@ -512,71 +507,6 @@ export function Counter() {
       </div>
 
       <AnimatePresence>
-        {showSessionComplete && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-background/80 backdrop-blur-sm flex items-center justify-center z-50 p-6"
-            onClick={handleDismissSessionComplete}
-          >
-            <motion.div
-              initial={{ scale: 0.9, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.9, opacity: 0 }}
-              className="bg-card rounded-3xl p-8 max-w-md w-full text-center shadow-xl max-h-[90vh] overflow-hidden flex flex-col"
-              onClick={(e) => e.stopPropagation()}
-            >
-              <motion.div
-                initial={{ scale: 0 }}
-                animate={{ scale: 1 }}
-                transition={{ delay: 0.2, type: 'spring' }}
-                className="w-20 h-20 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-6"
-              >
-                <span className="text-4xl">✨</span>
-              </motion.div>
-
-              <h2 className="text-2xl font-medium text-foreground mb-2">
-                ما شاء الله
-              </h2>
-              <p className="text-lg text-foreground mb-1 font-arabic">
-                Session Complete
-              </p>
-              <p className="text-muted-foreground text-sm mb-6">
-                You have completed {sessionMode.type === 'tasbih100' ? '100 dhikr' : '1000 dhikr'}
-                <br />
-                {sessionMode.type === 'tasbih100' && <span className="text-xs">33 + 33 + 33 + 1</span>}
-              </p>
-
-              <div className="grid grid-cols-4 gap-2 mb-6">
-                {sessionMode.type === 'tasbih100' && defaultDhikrs.slice(0, 4).map((d, i) => (
-                  <div key={d.id} className="text-center">
-                    <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-1">
-                      <span className="text-xs text-primary">✓</span>
-                    </div>
-                    <p className="text-xs text-muted-foreground">{i === 3 ? '1' : '33'}</p>
-                  </div>
-                ))}
-
-                {sessionMode.type === 'tasbih1000' && (
-                  <div className="col-span-4 text-center">
-                    <p className="text-sm font-medium text-foreground">GENERAL DHIKR NOT AS 100</p>
-                    <p className="text-xs text-muted-foreground mt-2">You have completed 1000 counts.</p>
-                  </div>
-                )}
-              </div>
-
-              {/* Next Dhikr Selector Removed as per user request */}
-
-              <button
-                onClick={handleDismissSessionComplete}
-                className="w-full py-3 rounded-xl bg-primary text-primary-foreground font-medium"
-              >
-                Alhamdulillah
-              </button>
-            </motion.div>
-          </motion.div>
-        )}
       </AnimatePresence>
     </>
   );

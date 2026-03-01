@@ -51,8 +51,7 @@ export function AppSidebar() {
                     animate={state === "collapsed" ? { opacity: 0, height: 0 } : { opacity: 1, height: "auto" }}
                     className="flex flex-col gap-4 overflow-hidden"
                 >
-                    <div className="flex items-center justify-between">
-                        <VisitorCounter />
+                    <div className="flex items-center justify-end">
                         <NotificationCenter />
                     </div>
                 </motion.div>
