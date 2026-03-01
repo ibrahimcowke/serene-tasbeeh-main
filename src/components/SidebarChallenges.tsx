@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Users, Swords, Send, Check, X, Zap, Trophy, Shield, Ghost, Target } from 'lucide-react';
+import { Users, Swords, Send, Check, X, Zap, Trophy, Shield, Ghost, Target, HandHeart } from 'lucide-react';
 import { database } from '@/lib/firebase';
 import { ref, onValue, set, push, serverTimestamp, query, limitToLast } from 'firebase/database';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -29,6 +29,7 @@ export function SidebarChallenges() {
     const { currentDhikr, dhikrs, setDhikr, startTasbih100, startTasbih1000 } = useTasbeehStore();
     const [onlineUsers, setOnlineUsers] = useState<OnlineUser[]>([]);
     const [invites, setInvites] = useState<ChallengeInvite[]>([]);
+    const [sentDuas, setSentDuas] = useState<Set<string>>(new Set());
     const myDeviceId = localStorage.getItem('visitor_device_id') || 'anon';
 
     useEffect(() => {
@@ -60,9 +61,29 @@ export function SidebarChallenges() {
             }
         });
 
+        // Listen for duas sent to me
+        const duaRef = query(ref(database, `events/duas/${myDeviceId}`), limitToLast(3));
+        const unsubscribeDua = onValue(duaRef, (snap) => {
+            const val = snap.val();
+            if (val) {
+                const duaEvents = Object.values(val) as any[];
+                const recentDua = duaEvents.find(d => {
+                    const age = Date.now() - (d.timestamp || 0);
+                    return age < 30000; // Show only duas from last 30 seconds
+                });
+                if (recentDua) {
+                    toast.success("Someone sent you a Dua! 🤲", {
+                        description: "May Allah bless you both 💚",
+                        duration: 5000,
+                    });
+                }
+            }
+        });
+
         return () => {
             unsubscribePresence();
             unsubscribeInvites();
+            unsubscribeDua();
         };
     }, [myDeviceId]);
 
@@ -82,6 +103,33 @@ export function SidebarChallenges() {
         toast.success("Challenge invitation sent!", {
             icon: <Send className="w-4 h-4 text-primary" />
         });
+    };
+
+    const sendDua = (targetUserId: string) => {
+        const duaRef = ref(database, `events/duas/${targetUserId}`);
+        const newDuaRef = push(duaRef);
+
+        set(newDuaRef, {
+            from_id: myDeviceId,
+            timestamp: Date.now(),
+            message: 'dua'
+        });
+
+        setSentDuas(prev => new Set([...prev, targetUserId]));
+
+        toast.success("Dua sent! 🤲", {
+            description: "May Allah accept your dua",
+            icon: <HandHeart className="w-4 h-4 text-green-400" />
+        });
+
+        // Reset the sent state after 5 seconds
+        setTimeout(() => {
+            setSentDuas(prev => {
+                const next = new Set(prev);
+                next.delete(targetUserId);
+                return next;
+            });
+        }, 5000);
     };
 
     const handleInviteAction = (invite: ChallengeInvite, action: 'accept' | 'decline') => {
@@ -127,6 +175,7 @@ export function SidebarChallenges() {
                         ) : (
                             onlineUsers.map(user => {
                                 const currentDhikrName = dhikrs.find(d => d.id === user.last_dhikr_id)?.transliteration || "Dhikr";
+                                const duaSent = sentDuas.has(user.user_id);
                                 return (
                                     <motion.div
                                         key={user.user_id}
@@ -153,6 +202,25 @@ export function SidebarChallenges() {
                                         </div>
 
                                         <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                                            {/* Send Dua Button */}
+                                            <motion.button
+                                                onClick={() => sendDua(user.user_id)}
+                                                disabled={duaSent}
+                                                className={`p-1.5 rounded-lg transition-colors ${duaSent
+                                                        ? 'bg-green-500/20 text-green-400 cursor-default'
+                                                        : 'bg-green-500/10 text-green-400 hover:bg-green-500 hover:text-white'
+                                                    }`}
+                                                title="Send Dua 🤲"
+                                                whileTap={!duaSent ? { scale: 0.9 } : {}}
+                                            >
+                                                {duaSent ? (
+                                                    <Check className="w-3 h-3" />
+                                                ) : (
+                                                    <HandHeart className="w-3 h-3" />
+                                                )}
+                                            </motion.button>
+
+                                            {/* Challenge Button */}
                                             <button
                                                 onClick={() => sendInvite(user.user_id, 'sprint')}
                                                 className="p-1.5 rounded-lg bg-primary/10 text-primary hover:bg-primary hover:text-white transition-colors"

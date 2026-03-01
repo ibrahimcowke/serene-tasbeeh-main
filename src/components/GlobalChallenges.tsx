@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Target, Users, ArrowRight, Loader2 } from 'lucide-react';
+import { Target, Users, ArrowRight, Loader2, Sparkles, User } from 'lucide-react';
 import { database } from '@/lib/firebase';
 import { ref, onValue, query, orderByChild, equalTo } from 'firebase/database';
 import { useTasbeehStore, Dhikr } from '@/store/tasbeehStore';
@@ -17,10 +17,54 @@ export type GlobalChallenge = {
     isActive: boolean;
 };
 
+// Milestone sparkle effect
+function MilestoneSparkle({ progress }: { progress: number }) {
+    const milestones = [25, 50, 75];
+    const hitMilestone = milestones.find(m => progress >= m && progress < m + 1);
+
+    if (!hitMilestone) return null;
+
+    return (
+        <motion.div
+            className="absolute inset-0 pointer-events-none z-20"
+            initial={{ opacity: 1 }}
+            animate={{ opacity: 0 }}
+            transition={{ duration: 2 }}
+        >
+            {Array.from({ length: 8 }, (_, i) => {
+                const angle = (i / 8) * 360;
+                const x = Math.cos((angle * Math.PI) / 180) * 25;
+                const y = Math.sin((angle * Math.PI) / 180) * 12;
+                return (
+                    <motion.div
+                        key={i}
+                        className="absolute w-1 h-1 rounded-full bg-primary"
+                        style={{ left: `${progress}%`, top: '50%' }}
+                        initial={{ x: 0, y: 0, opacity: 1 }}
+                        animate={{ x, y, opacity: 0 }}
+                        transition={{ duration: 0.6, ease: 'easeOut', delay: i * 0.03 }}
+                    />
+                );
+            })}
+        </motion.div>
+    );
+}
+
 export function GlobalChallenges() {
     const [challenges, setChallenges] = useState<GlobalChallenge[]>([]);
     const [loading, setLoading] = useState(true);
-    const { dhikrs, setDhikr, setTarget, currentDhikr } = useTasbeehStore();
+    const { dhikrs, setDhikr, setTarget, currentDhikr, dailyRecords } = useTasbeehStore();
+
+    // Calculate personal contribution from daily records
+    const getMyContribution = (dhikrId: string) => {
+        let total = 0;
+        dailyRecords?.forEach(record => {
+            if (record.counts && record.counts[dhikrId]) {
+                total += record.counts[dhikrId];
+            }
+        });
+        return total;
+    };
 
     useEffect(() => {
         // Fetch active challenges from Realtime Database
@@ -83,6 +127,7 @@ export function GlobalChallenges() {
                     const progressPercentage = Math.min(100, Math.max(0, (challenge.currentProgress / challenge.target) * 100));
                     const isParticipating = currentDhikr.id === challenge.dhikrId;
                     const dhikr = dhikrs.find(d => d.id === challenge.dhikrId);
+                    const myContribution = getMyContribution(challenge.dhikrId);
 
                     return (
                         <motion.div
@@ -121,13 +166,14 @@ export function GlobalChallenges() {
                             </p>
 
                             {/* Progress Bar Area */}
-                            <div className="space-y-2 mb-4 relative z-10">
+                            <div className="space-y-2 mb-3 relative z-10">
                                 <div className="flex justify-between text-[9px] sm:text-[10px] font-black tracking-widest uppercase">
                                     <span className="text-primary/80">{challenge.currentProgress.toLocaleString()}</span>
                                     <span className="text-white/20">/ {challenge.target.toLocaleString()}</span>
                                 </div>
 
-                                <div className="h-1.5 w-full bg-white/[0.05] rounded-full overflow-hidden border border-white/[0.05]">
+                                <div className="h-1.5 w-full bg-white/[0.05] rounded-full overflow-hidden border border-white/[0.05] relative">
+                                    <MilestoneSparkle progress={progressPercentage} />
                                     <motion.div
                                         className="h-full bg-gradient-to-r from-primary via-orange-400 to-primary rounded-full relative shadow-[0_0_10px_rgba(245,158,11,0.2)]"
                                         initial={{ width: 0 }}
@@ -142,6 +188,40 @@ export function GlobalChallenges() {
                                     {progressPercentage.toFixed(1)}%
                                 </div>
                             </div>
+
+                            {/* Your Contribution Counter */}
+                            <motion.div
+                                className="flex items-center justify-between p-2.5 rounded-xl bg-white/[0.03] border border-white/[0.06] mb-3 relative z-10"
+                                initial={{ opacity: 0, y: 5 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ delay: index * 0.1 + 0.3 }}
+                            >
+                                <div className="flex items-center gap-2">
+                                    <div className="w-5 h-5 rounded-md bg-primary/15 flex items-center justify-center">
+                                        <User className="w-3 h-3 text-primary" />
+                                    </div>
+                                    <span className="text-[10px] font-bold text-white/50 uppercase tracking-wider">Your Contribution</span>
+                                </div>
+                                <div className="flex items-center gap-1.5">
+                                    <motion.span
+                                        key={myContribution}
+                                        initial={{ scale: 1.3, color: 'hsl(var(--primary))' }}
+                                        animate={{ scale: 1, color: 'hsl(var(--foreground))' }}
+                                        className="text-sm font-black font-mono"
+                                    >
+                                        {myContribution.toLocaleString()}
+                                    </motion.span>
+                                    {myContribution > 0 && (
+                                        <motion.div
+                                            initial={{ scale: 0 }}
+                                            animate={{ scale: 1 }}
+                                            transition={{ type: 'spring', delay: 0.5 }}
+                                        >
+                                            <Sparkles className="w-3 h-3 text-primary/60" />
+                                        </motion.div>
+                                    )}
+                                </div>
+                            </motion.div>
 
                             {/* Action Button */}
                             <button

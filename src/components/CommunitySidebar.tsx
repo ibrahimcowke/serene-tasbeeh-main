@@ -1,9 +1,55 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ChevronDown, ChevronUp } from 'lucide-react';
+import { ChevronDown, ChevronUp, Flame } from 'lucide-react';
 import { GlobalStats } from './GlobalStats';
 import { GlobalChallenges } from './GlobalChallenges';
 import { VisitorCounter } from './VisitorCounter';
+import { CommunityActivityFeed } from './CommunityActivityFeed';
+import { CommunityLeaderboard } from './CommunityLeaderboard';
+import { database } from '@/lib/firebase';
+import { ref, onValue } from 'firebase/database';
+
+function CommunityStreak() {
+    const [streakDays, setStreakDays] = useState(0);
+
+    useEffect(() => {
+        const streakRef = ref(database, 'stats/community_streak');
+        const unsubscribe = onValue(streakRef, (snap) => {
+            const val = snap.val();
+            if (val && typeof val === 'number') {
+                setStreakDays(val);
+            } else {
+                // Fallback: show 1 (at least today is active)
+                setStreakDays(1);
+            }
+        });
+
+        return () => unsubscribe();
+    }, []);
+
+    return (
+        <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="flex items-center justify-center gap-2 py-2 px-3 rounded-xl bg-gradient-to-r from-orange-500/10 to-red-500/10 border border-orange-500/20"
+        >
+            <div className="relative">
+                <Flame className="w-4 h-4 text-orange-400" />
+                <motion.div
+                    className="absolute -top-0.5 -right-0.5 w-2 h-2 rounded-full bg-orange-400"
+                    animate={{ scale: [1, 1.3, 1], opacity: [1, 0.6, 1] }}
+                    transition={{ repeat: Infinity, duration: 1.5 }}
+                />
+            </div>
+            <div className="flex items-baseline gap-1">
+                <span className="text-sm font-black text-orange-400">{streakDays}</span>
+                <span className="text-[9px] font-bold text-orange-400/60 uppercase tracking-wider">
+                    day{streakDays !== 1 ? 's' : ''} active
+                </span>
+            </div>
+        </motion.div>
+    );
+}
 
 export function CommunitySidebar() {
     const [isExpanded, setIsExpanded] = useState(true);
@@ -39,7 +85,10 @@ export function CommunitySidebar() {
                         className="overflow-hidden"
                     >
                         <div className="px-6 pb-6 space-y-4">
-                            {/* Make it more real by adding the Live Visitor Counter here visually too */}
+                            {/* Community Streak */}
+                            <CommunityStreak />
+
+                            {/* Visitor Counter + Global Stats */}
                             <div className="flex flex-col items-center gap-0">
                                 <VisitorCounter />
                                 <GlobalStats />
@@ -47,6 +96,17 @@ export function CommunitySidebar() {
 
                             <div className="h-px bg-white/5" />
 
+                            {/* Live Activity Feed */}
+                            <CommunityActivityFeed />
+
+                            <div className="h-px bg-white/5" />
+
+                            {/* Leaderboard */}
+                            <CommunityLeaderboard />
+
+                            <div className="h-px bg-white/5" />
+
+                            {/* Challenges */}
                             <GlobalChallenges />
                         </div>
                     </motion.div>
