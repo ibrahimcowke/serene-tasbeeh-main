@@ -1,4 +1,4 @@
-import { useEffect, useState, useMemo } from 'react';
+import { useEffect, useState, useMemo, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { supabase, isSupabaseConfigured } from '@/lib/supabase';
 import { database } from '@/lib/firebase';
@@ -11,6 +11,7 @@ import { getMuslimAvatarUrl } from '@/lib/avatarUtils';
 
 interface PresenceData {
     user_id: string;
+    visitor_id?: string;
     email?: string;
     avatar_url?: string;
     online_at: any;
@@ -23,6 +24,10 @@ export function VisitorCounter() {
     const [totalUsers, setTotalUsers] = useState(0);
     const [expanded, setExpanded] = useState(false);
     const [salamSent, setSalamSent] = useState(false);
+    const [clientIp, setClientIp] = useState<string>('');
+
+    // Unique ID for this specific tab session
+    const tabId = useMemo(() => Math.random().toString(36).substring(2, 10), []);
 
     useEffect(() => {
         const fetchTotalUsers = async () => {
@@ -36,11 +41,45 @@ export function VisitorCounter() {
             }
         };
 
-        fetchTotalUsers();
+        const fetchClientIp = async () => {
+            try {
+                const response = await fetch('https://api.ipify.org?format=json');
+                const data = await response.json();
+                setClientIp(data.ip);
+            } catch (e) {
+                console.error("Failed to fetch IP", e);
+            }
+        };
 
+        fetchTotalUsers();
+        fetchClientIp();
+
+        const presenceRef = ref(database, 'presence/visitors');
+        const unsubscribePresence = onValue(presenceRef, (snap) => {
+            const val = snap.val();
+            if (val) {
+                const now = Date.now();
+                const fiveMins = 5 * 60 * 1000;
+                setVisitors((Object.values(val) as PresenceData[]).filter(v => {
+                    return v.online_at && (now - (typeof v.online_at === 'number' ? v.online_at : 0) < fiveMins);
+                }));
+            } else {
+                setVisitors([]);
+            }
+        });
+
+        return () => {
+            unsubscribePresence();
+        };
+    }, []);
+
+    const lastPathRef = useRef<string>('');
+
+    // Presence update effect - reacts to IP changes
+    useEffect(() => {
         const connectedRef = ref(database, '.info/connected');
 
-        const unsubscribeConnected = onValue(connectedRef, async (snap) => {
+        let unsubscribeConnected = onValue(connectedRef, async (snap) => {
             if (snap.val() === true) {
                 const { data: { user } } = await supabase.auth.getUser();
 
@@ -50,11 +89,21 @@ export function VisitorCounter() {
                     localStorage.setItem('visitor_device_id', deviceId);
                 }
 
-                const myPresenceRef = ref(database, `presence/visitors/${deviceId}`);
+                const visitorId = clientIp ? clientIp.replace(/\./g, '_') : deviceId;
+                const path = `presence/visitors/${visitorId}_${tabId}`;
+
+                // Clean up old node if the ID changed (e.g. after IP fetched)
+                if (lastPathRef.current && lastPathRef.current !== path) {
+                    set(ref(database, lastPathRef.current), null);
+                }
+                lastPathRef.current = path;
+
+                const myPresenceRef = ref(database, path);
                 onDisconnect(myPresenceRef).remove();
 
                 update(myPresenceRef, {
-                    user_id: user?.id || deviceId,
+                    user_id: user?.id || visitorId,
+                    visitor_id: visitorId,
                     email: user?.email || '',
                     avatar_url: user?.user_metadata?.avatar_url || '',
                     online_at: serverTimestamp(),
@@ -63,44 +112,20 @@ export function VisitorCounter() {
             }
         });
 
-        const presenceRef = ref(database, 'presence/visitors');
-        const unsubscribePresence = onValue(presenceRef, (snap) => {
-            const val = snap.val();
-            if (val) {
-                const now = Date.now();
-                const fiveMins = 5 * 60 * 1000;
-                const allVisitors = (Object.values(val) as PresenceData[]).filter(v => {
-                    return v.online_at && (now - (typeof v.online_at === 'number' ? v.online_at : 0) < fiveMins);
-                });
-                setVisitors(allVisitors);
-            } else {
-                setVisitors([]);
-            }
-        });
-
         return () => {
-            unsubscribeConnected();
-            unsubscribePresence();
+            if (unsubscribeConnected) unsubscribeConnected();
         };
-    }, []);
-
-    // Sync current dhikr to presence node whenever it changes
-    useEffect(() => {
-        const deviceId = localStorage.getItem('visitor_device_id');
-        if (deviceId) {
-            const myPresenceRef = ref(database, `presence/visitors/${deviceId}`);
-            update(myPresenceRef, {
-                last_dhikr_id: currentDhikr.id
-            }).catch(e => console.error("Presence update failed", e));
-        }
-    }, [currentDhikr.id]);
+    }, [clientIp, currentDhikr.id, tabId]);
 
     const uniqueVisitors = useMemo(() => {
-        return visitors.reduce((acc: PresenceData[], current) => {
-            const x = acc.find(item => item.user_id === current.user_id);
-            if (!x) return acc.concat([current]);
-            return acc;
-        }, []);
+        const unique = new Map();
+        visitors.forEach(v => {
+            const vid = v.visitor_id || v.user_id;
+            if (!unique.has(vid)) {
+                unique.set(vid, v);
+            }
+        });
+        return Array.from(unique.values());
     }, [visitors]);
 
     // Group visitors by dhikr

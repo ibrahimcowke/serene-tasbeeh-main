@@ -1,4 +1,4 @@
-import { useEffect, useState, ReactNode } from 'react';
+import { useEffect, useState, useMemo, ReactNode } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Swords, Trophy, Zap, Target, Users, Send, Check, X, Flame, Star, Timer, Crown } from 'lucide-react';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription, SheetTrigger } from '@/components/ui/sheet';
@@ -104,7 +104,23 @@ export function ChallengesViewContent({ isPage = false }: { isPage?: boolean }) 
     const [selectedType, setSelectedType] = useState<'sprint' | 'endurance' | 'daily'>('sprint');
     const [tab, setTab] = useState<'challenges' | 'invite' | 'history'>('challenges');
     const [completedCount, setCompletedCount] = useState(0);
+    const [clientIp, setClientIp] = useState<string>('');
     const myDeviceId = localStorage.getItem('visitor_device_id') || 'anon';
+
+    useEffect(() => {
+        const fetchClientIp = async () => {
+            try {
+                const response = await fetch('https://api.ipify.org?format=json');
+                const data = await response.json();
+                setClientIp(data.ip);
+            } catch (e) {
+                console.error("Failed to fetch IP", e);
+            }
+        };
+        fetchClientIp();
+    }, []);
+
+    const myVisitorId = useMemo(() => clientIp ? clientIp.replace(/\./g, '_') : myDeviceId, [clientIp, myDeviceId]);
 
     useEffect(() => {
         const presenceRef = ref(database, 'presence/visitors');
@@ -113,13 +129,23 @@ export function ChallengesViewContent({ isPage = false }: { isPage?: boolean }) 
             if (val) {
                 const now = Date.now();
                 const fiveMins = 5 * 60 * 1000;
-                const users = (Object.values(val) as OnlineUser[]).filter(u => {
-                    // Filter out self and stale users (older than 5 mins)
-                    const isSelf = u.user_id === myDeviceId;
+
+                // Group by visitor_id to avoid multi-tab duplicates
+                const uniquePeers = new Map<string, OnlineUser>();
+
+                Object.values(val).forEach((u: any) => {
+                    const vid = u.visitor_id || u.user_id;
                     const isOnline = u.online_at && (now - (typeof u.online_at === 'number' ? u.online_at : 0) < fiveMins);
-                    return !isSelf && isOnline;
+                    const isSelf = vid === myVisitorId || u.user_id === myDeviceId;
+
+                    if (isOnline && !isSelf) {
+                        if (!uniquePeers.has(vid)) {
+                            uniquePeers.set(vid, u);
+                        }
+                    }
                 });
-                setOnlineUsers(users);
+
+                setOnlineUsers(Array.from(uniquePeers.values()));
             } else {
                 setOnlineUsers([]);
             }
@@ -153,9 +179,11 @@ export function ChallengesViewContent({ isPage = false }: { isPage?: boolean }) 
     const sendInvite = (targetUserId: string, type: 'sprint' | 'endurance' | 'daily') => {
         const ct = CHALLENGE_TYPES.find(c => c.type === type)!;
         const target = type === 'daily' ? dailyGoal : ct.target;
+        // Invitations should still go to the device ID or user ID for now, 
+        // as challenges are often tied to the browser session.
         const inviteRef = ref(database, `events/invitations/${targetUserId}`);
         set(push(inviteRef), {
-            from_id: myDeviceId, from_name: "A Peer", type, target,
+            from_id: myVisitorId, from_name: "A Peer", type, target,
             timestamp: serverTimestamp(), status: 'pending'
         });
         toast.success(`${ct.label} challenge sent!`, {
