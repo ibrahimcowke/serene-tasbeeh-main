@@ -75,16 +75,25 @@ export function SmartRing({ currentCount }: SmartRingProps) {
                 })}
 
                 {/* Active Indicator Dot (Follows tip) */}
-                <motion.circle
-                    r="4"
-                    fill="white"
-                    filter="url(#glow)"
-                    animate={{
-                        cx: centerX + radius * Math.cos(((currentCount % 33) * 360 / 33 - 90) * Math.PI / 180),
-                        cy: centerY + radius * Math.sin(((currentCount % 33) * 360 / 33 - 90) * Math.PI / 180)
-                    }}
-                    transition={{ type: "spring", stiffness: 100, damping: 20 }}
-                />
+                {(() => {
+                    const safeCount = isNaN(currentCount) ? 0 : currentCount;
+                    const angle = (safeCount % 33) * 360 / 33 - 90;
+                    const targetX = centerX + radius * Math.cos(angle * Math.PI / 180);
+                    const targetY = centerY + radius * Math.sin(angle * Math.PI / 180);
+
+                    return (
+                        <motion.circle
+                            r="4"
+                            fill="white"
+                            filter="url(#glow)"
+                            animate={{
+                                cx: isNaN(targetX) ? centerX : targetX,
+                                cy: isNaN(targetY) ? centerY : targetY
+                            }}
+                            transition={{ type: "spring", stiffness: 100, damping: 20 }}
+                        />
+                    );
+                })()}
 
                 <defs>
                     <linearGradient id="smartGradient" x1="0%" y1="0%" x2="100%" y2="100%">

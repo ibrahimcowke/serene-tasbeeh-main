@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import { motion } from 'framer-motion';
 import { ThemeSettings, CounterShape } from '@/store/tasbeehStore';
 import { HaloRing } from './counter-shapes/HaloRing';
@@ -41,7 +42,7 @@ interface CounterVisualsProps {
     hideNumber?: boolean;
 }
 
-export function CounterNumber({
+export const CounterNumber = memo(({
     currentCount,
     counterShape,
     currentSettings,
@@ -51,7 +52,7 @@ export function CounterNumber({
     counterShape: string;
     currentSettings: ThemeSettings;
     countFontSize: number;
-}) {
+}) => {
     return (
         <motion.span
             key={currentCount}
@@ -99,9 +100,9 @@ export function CounterNumber({
             {currentCount}
         </motion.span>
     );
-}
+});
 
-export function CounterVisuals({
+export const CounterVisuals = memo(({
     layout,
     counterShape,
     counterVerticalOffset,
@@ -114,7 +115,7 @@ export function CounterVisuals({
     showCompletion,
     disabled,
     hideNumber
-}: CounterVisualsProps) {
+}: CounterVisualsProps) => {
     return (
         <motion.div
             layout
@@ -285,6 +286,7 @@ export function CounterVisuals({
                         <div className="absolute inset-0 flex items-center justify-center scale-[0.85] sm:scale-100">
                             <svg className="w-[256px] h-[256px] -rotate-90 opacity-80" viewBox="0 0 256 256">
                                 {Array.from({ length: 33 }).map((_, i) => {
+                                    const safeProgress = isNaN(progress) ? 0 : progress;
                                     const angle = (i * 360) / 33;
                                     const radius = 115;
                                     const x = 128 + radius * Math.cos((angle * Math.PI) / 180);
@@ -292,12 +294,12 @@ export function CounterVisuals({
                                     return (
                                         <circle
                                             key={i}
-                                            cx={x}
-                                            cy={y}
+                                            cx={isNaN(x) ? 128 : x}
+                                            cy={isNaN(y) ? 128 : y}
                                             r="4.5"
-                                            fill={i < (progress * 33) ? "var(--primary)" : "rgba(255,255,255,0.15)"}
+                                            fill={i < (safeProgress * 33) ? "var(--primary)" : "rgba(255,255,255,0.15)"}
                                             style={{
-                                                filter: i < (progress * 33) ? 'drop-shadow(0 0 6px var(--primary))' : 'none',
+                                                filter: i < (safeProgress * 33) ? 'drop-shadow(0 0 6px var(--primary))' : 'none',
                                                 transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)'
                                             }}
                                         />
@@ -427,14 +429,28 @@ export function CounterVisuals({
                                 <circle cx="150" cy="150" r="140" fill="none" stroke="#8d6e63" strokeWidth="2" />
                                 {/* Beads */}
                                 {Array.from({ length: 33 }).map((_, i) => {
+                                    const safeCount = isNaN(currentCount) ? 0 : currentCount;
                                     const angle = (i * 360) / 33 - 90;
                                     const radius = 140;
                                     const x = 150 + radius * Math.cos((angle * Math.PI) / 180);
                                     const y = 150 + radius * Math.sin((angle * Math.PI) / 180);
                                     return (
                                         <g key={i}>
-                                            <circle cx={x} cy={y} r="12" fill="url(#beadGradient)" stroke="#5d4037" strokeWidth="1" />
-                                            <circle cx={x - 3} cy={y - 3} r="4" fill="white" opacity="0.3" />
+                                            <circle
+                                                cx={isNaN(x) ? 150 : x}
+                                                cy={isNaN(y) ? 150 : y}
+                                                r="12"
+                                                fill="url(#beadGradient)"
+                                                stroke="#5d4037"
+                                                strokeWidth="1"
+                                            />
+                                            <circle
+                                                cx={isNaN(x) ? 150 : x - 3}
+                                                cy={isNaN(y) ? 150 : y - 3}
+                                                r="4"
+                                                fill="white"
+                                                opacity="0.3"
+                                            />
                                         </g>
                                     );
                                 })}
@@ -940,4 +956,4 @@ export function CounterVisuals({
             </motion.button>
         </motion.div >
     );
-}
+});

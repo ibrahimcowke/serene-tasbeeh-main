@@ -57,15 +57,25 @@ export const RadialAchievement = ({ progress, title }: RadialAchievementProps) =
                     </defs>
 
                     {/* Glow Handle */}
-                    <motion.circle
-                        cx={96 + radius * Math.cos((1 - progress / 100) * Math.PI)}
-                        cy={96 - radius * Math.sin((1 - progress / 100) * Math.PI)}
-                        r="6"
-                        fill="#4ade80"
-                        filter="url(#glow)"
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                    />
+                    {(() => {
+                        const safeProgress = isNaN(progress) ? 0 : progress;
+                        const centerX = 96;
+                        const centerY = 96;
+                        const targetX = centerX + radius * Math.cos((1 - safeProgress / 100) * Math.PI);
+                        const targetY = centerY - radius * Math.sin((1 - safeProgress / 100) * Math.PI);
+
+                        return (
+                            <motion.circle
+                                cx={isNaN(targetX) ? centerX : targetX}
+                                cy={isNaN(targetY) ? centerY : targetY}
+                                r="6"
+                                fill="#4ade80"
+                                filter="url(#glow)"
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                            />
+                        );
+                    })()}
                 </svg>
 
                 <div className="absolute inset-0 flex items-end justify-center pb-2">

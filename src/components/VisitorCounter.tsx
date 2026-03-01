@@ -161,44 +161,44 @@ export function VisitorCounter() {
                 <div className="absolute inset-0 bg-gradient-to-br from-green-500/[0.04] to-primary/[0.03] pointer-events-none" />
 
                 {/* Header */}
-                <div className="relative z-10 p-3 flex items-center justify-between">
-                    <div className="flex items-center gap-3">
+                <div className="relative z-10 p-2.5 flex items-center justify-between">
+                    <div className="flex items-center gap-2.5">
                         {/* Pulse ring animation */}
                         <div className="relative">
-                            <div className="w-10 h-10 rounded-full bg-green-500/10 border border-green-500/20 flex items-center justify-center">
-                                <Globe className="w-4 h-4 text-green-400" />
+                            <div className="w-8 h-8 rounded-full bg-green-500/10 border border-green-500/20 flex items-center justify-center">
+                                <Globe className="w-3.5 h-3.5 text-green-400" />
                             </div>
-                            <span className="absolute -top-0.5 -right-0.5 flex h-3 w-3">
+                            <span className="absolute -top-0.5 -right-0.5 flex h-2.5 w-2.5">
                                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-                                <span className="relative inline-flex rounded-full h-3 w-3 bg-green-500 border border-background"></span>
+                                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-green-500 border border-background"></span>
                             </span>
                         </div>
 
                         <div className="flex flex-col">
-                            <div className="flex items-baseline gap-1.5">
-                                <span className="text-xl font-black text-foreground tabular-nums">{liveCount}</span>
-                                <span className="text-[9px] font-black text-green-400 uppercase tracking-widest">Live</span>
+                            <div className="flex items-baseline gap-1">
+                                <span className="text-lg font-black text-foreground tabular-nums">{liveCount}</span>
+                                <span className="text-[8px] font-black text-green-400 uppercase tracking-widest">Live</span>
                             </div>
-                            <span className="text-[8px] font-bold text-muted-foreground uppercase tracking-wider">
-                                Remembering Allah Now
+                            <span className="text-[7px] font-bold text-muted-foreground uppercase tracking-wider">
+                                Reciting Now
                             </span>
                         </div>
                     </div>
 
                     {/* Avatar stack */}
                     <div className="flex items-center gap-2">
-                        <div className="flex -space-x-2">
-                            {uniqueVisitors.slice(0, 4).map((user) => (
-                                <Avatar key={user.user_id} className="w-7 h-7 border-2 border-background shadow-md">
+                        <div className="flex -space-x-1.5">
+                            {uniqueVisitors.slice(0, 3).map((user) => (
+                                <Avatar key={user.user_id} className="w-6 h-6 border-2 border-background shadow-md">
                                     <AvatarImage src={user.avatar_url || getMuslimAvatarUrl(user.user_id)} />
-                                    <AvatarFallback className="text-[8px] bg-primary/20 text-primary font-bold">
+                                    <AvatarFallback className="text-[7px] bg-primary/20 text-primary font-bold">
                                         {user.email?.charAt(0).toUpperCase() || '?'}
                                     </AvatarFallback>
                                 </Avatar>
                             ))}
-                            {liveCount > 4 && (
-                                <div className="w-7 h-7 rounded-full bg-secondary/80 border-2 border-background flex items-center justify-center text-[8px] font-bold text-muted-foreground z-10">
-                                    +{liveCount - 4}
+                            {liveCount > 3 && (
+                                <div className="w-6 h-6 rounded-full bg-secondary/80 border-2 border-background flex items-center justify-center text-[7px] font-bold text-muted-foreground z-10">
+                                    +{liveCount - 3}
                                 </div>
                             )}
                         </div>

@@ -82,7 +82,7 @@ const Index = () => {
             </RoutinesView>
 
             {/* Main Content Area */}
-            <div className={`flex-1 min-h-0 w-full overflow-y-auto px-4 sm:px-6 md:px-8 pb-12 pt-16 xs:pt-24 custom-scrollbar transition-all duration-500 pb-safe ${zenMode || layout === 'zen' ? 'flex items-center justify-center pt-0 pb-0' : ''}`}>
+            <div className={`flex-1 min-h-0 w-full overflow-hidden px-4 sm:px-6 md:px-8 pb-4 pt-16 xs:pt-2 transition-all duration-500 pb-safe ${zenMode || layout === 'zen' ? 'flex items-center justify-center pt-0 pb-0' : ''}`}>
               <div className={`max-w-[1600px] mx-auto w-full ${zenMode || layout === 'zen' ? 'max-w-4xl' : ''}`}>
                 {renderDashboard()}
               </div>

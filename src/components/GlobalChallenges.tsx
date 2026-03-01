@@ -136,43 +136,43 @@ export function GlobalChallenges() {
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: index * 0.1 }}
                             whileHover={{ y: -2 }}
-                            className="relative overflow-hidden bg-secondary/30 border border-border/50 rounded-[1.5rem] p-4 shadow-sm group transition-all hover:bg-secondary/50 hover:border-primary/20"
+                            className="relative overflow-hidden bg-secondary/30 border border-border/50 rounded-[1.25rem] p-3 shadow-sm group transition-all hover:bg-secondary/50 hover:border-primary/20"
                         >
                             {/* Decorative background glow based on active state */}
                             {isParticipating && (
-                                <div className="absolute top-0 right-0 w-32 h-32 bg-primary/10 rounded-full blur-[60px] -mr-16 -mt-16 pointer-events-none" />
+                                <div className="absolute top-0 right-0 w-24 h-24 bg-primary/10 rounded-full blur-[40px] -mr-12 -mt-12 pointer-events-none" />
                             )}
 
-                            <div className="flex justify-between items-start mb-2 relative z-10">
+                            <div className="flex justify-between items-start mb-1.5 relative z-10">
                                 <div className="min-w-0">
-                                    <h3 className="font-black text-foreground/90 text-sm sm:text-[15px] tracking-tight truncate">
+                                    <h3 className="font-black text-foreground/90 text-xs sm:text-[13px] tracking-tight truncate">
                                         {challenge.title}
                                     </h3>
-                                    <div className="flex items-center gap-1.5 mt-1 text-[9px] text-muted-foreground font-black uppercase tracking-[0.15em]">
-                                        <Users className="w-3 h-3 text-primary/50" />
+                                    <div className="flex items-center gap-1 mt-0.5 text-[8px] text-muted-foreground font-black uppercase tracking-[0.15em]">
+                                        <Users className="w-2.5 h-2.5 text-primary/50" />
                                         <span>Community Goal</span>
                                     </div>
                                 </div>
 
                                 {isParticipating && (
-                                    <span className="shrink-0 bg-primary text-primary-foreground text-[8px] font-black px-2 py-0.5 rounded-full uppercase tracking-widest shadow-[0_0_15px_rgba(245,158,11,0.3)]">
+                                    <span className="shrink-0 bg-primary text-primary-foreground text-[7px] font-black px-1.5 py-0.5 rounded-full uppercase tracking-widest shadow-[0_0_10px_rgba(245,158,11,0.2)]">
                                         Active
                                     </span>
                                 )}
                             </div>
 
-                            <p className="text-[11px] sm:text-xs text-muted-foreground leading-relaxed mb-4 relative z-10 pr-2 line-clamp-2 italic">
+                            <p className="text-[10px] text-muted-foreground leading-relaxed mb-2 relative z-10 pr-2 line-clamp-1 italic">
                                 "{challenge.description}"
                             </p>
 
                             {/* Progress Bar Area */}
-                            <div className="space-y-2 mb-3 relative z-10">
-                                <div className="flex justify-between text-[9px] sm:text-[10px] font-black tracking-widest uppercase">
+                            <div className="space-y-1.5 mb-2 relative z-10">
+                                <div className="flex justify-between text-[8px] sm:text-[9px] font-black tracking-widest uppercase">
                                     <span className="text-primary/80">{challenge.currentProgress.toLocaleString()}</span>
                                     <span className="text-muted-foreground">/ {challenge.target.toLocaleString()}</span>
                                 </div>
 
-                                <div className="h-1.5 w-full bg-secondary/50 rounded-full overflow-hidden border border-border/30 relative">
+                                <div className="h-1 w-full bg-secondary/50 rounded-full overflow-hidden border border-border/30 relative">
                                     <MilestoneSparkle progress={progressPercentage} />
                                     <motion.div
                                         className="h-full bg-gradient-to-r from-primary via-orange-400 to-primary rounded-full relative shadow-[0_0_10px_rgba(245,158,11,0.2)]"
@@ -183,24 +183,20 @@ export function GlobalChallenges() {
                                         <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent -translate-x-full animate-[shimmer_2s_infinite]" />
                                     </motion.div>
                                 </div>
-
-                                <div className="flex justify-end text-[9px] text-primary font-black tracking-tighter">
-                                    {progressPercentage.toFixed(1)}%
-                                </div>
                             </div>
 
                             {/* Your Contribution Counter */}
                             <motion.div
-                                className="flex items-center justify-between p-2.5 rounded-xl bg-secondary/30 border border-border/50 mb-3 relative z-10"
+                                className="flex items-center justify-between p-2 rounded-xl bg-secondary/30 border border-border/50 mb-2 relative z-10"
                                 initial={{ opacity: 0, y: 5 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ delay: index * 0.1 + 0.3 }}
                             >
                                 <div className="flex items-center gap-2">
-                                    <div className="w-5 h-5 rounded-md bg-primary/15 flex items-center justify-center">
-                                        <User className="w-3 h-3 text-primary" />
+                                    <div className="w-4 h-4 rounded bg-primary/15 flex items-center justify-center">
+                                        <User className="w-2.5 h-2.5 text-primary" />
                                     </div>
-                                    <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">Your Contribution</span>
+                                    <span className="text-[9px] font-bold text-muted-foreground uppercase tracking-wider">Contribution</span>
                                 </div>
                                 <div className="flex items-center gap-1.5">
                                     <motion.span

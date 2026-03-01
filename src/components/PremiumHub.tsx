@@ -59,7 +59,8 @@ export const PremiumHub = () => {
     const todayCount = (todayRecord?.totalCount || 0) + count;
 
     // Calculate Rank based on total All Time
-    const getRankInfo = (total: number) => {
+    const getRankInfo = (totalCount: number) => {
+        const total = totalCount || 0;
         if (total >= 10000) return { title: 'MASTER', next: 25000, prog: Math.min(100, (total / 25000) * 100) };
         if (total >= 5000) return { title: 'DEVOTED', next: 10000, prog: (total / 10000) * 100 };
         if (total >= 1000) return { title: 'APPRENTICE', next: 5000, prog: (total / 5000) * 100 };
@@ -98,25 +99,25 @@ export const PremiumHub = () => {
     };
 
     return (
-        <div className="w-full min-h-screen bg-transparent relative overflow-hidden flex flex-col">
+        <div className="w-full h-full bg-transparent relative overflow-hidden flex flex-col">
 
             {/* Premium Background Ambient Glows */}
             <div className="absolute top-1/4 -left-20 w-[500px] h-[500px] bg-primary/5 rounded-full blur-[120px] pointer-events-none" />
             <div className="absolute bottom-1/4 -right-20 w-[500px] h-[500px] bg-green-500/5 rounded-full blur-[120px] pointer-events-none" />
 
             {/* Main Hub Content */}
-            <div className="flex-1 w-full grid grid-cols-12 gap-4 lg:gap-8 p-4 lg:pt-2 lg:px-8 lg:pb-8 relative z-10">
+            <div className="flex-1 w-full grid grid-cols-12 gap-4 lg:gap-6 p-4 lg:pt-0 lg:px-6 lg:pb-6 relative z-10 overflow-hidden">
 
                 {/* Left Column: Achievement Hub */}
                 <motion.div
                     initial={{ opacity: 0, x: -50 }}
                     animate={{ opacity: 1, x: 0 }}
-                    className="col-span-12 lg:col-span-3 flex flex-col gap-3 lg:gap-4"
+                    className="col-span-12 lg:col-span-3 flex flex-col gap-3 lg:gap-3 overflow-hidden h-full"
                 >
-                    <div className="skeuo-glass rounded-[2.5rem] p-4 flex flex-col items-center border-foreground/[0.08] shadow-2xl relative overflow-hidden group">
+                    <div className="skeuo-glass rounded-[2.5rem] p-4 flex flex-col items-center border-foreground/[0.08] shadow-2xl relative overflow-hidden group flex-1">
                         <div className="absolute inset-0 bg-gradient-to-br from-foreground/[0.02] to-transparent pointer-events-none" />
-                        <h2 className="text-[10px] font-black uppercase tracking-[0.3em] text-muted-foreground mb-6 relative z-10">Achievement Hub</h2>
-                        <div className="flex flex-col items-center gap-1 mb-4">
+                        <h2 className="text-[10px] font-black uppercase tracking-[0.3em] text-muted-foreground mb-4 relative z-10">Achievement Hub</h2>
+                        <div className="flex flex-col items-center gap-0.5 mb-2">
                             <span className="text-[10px] text-primary/60 font-bold uppercase tracking-widest">Your Rank:</span>
                             <h3 className="text-3xl font-black text-foreground tracking-tighter text-glow-gold">{rankInfo.title}</h3>
                         </div>
@@ -205,7 +206,7 @@ export const PremiumHub = () => {
                 <motion.div
                     initial={{ opacity: 0, y: 30 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className="col-span-12 lg:col-span-5 flex flex-col gap-4 lg:gap-6 items-center justify-start pt-2 relative"
+                    className="col-span-12 lg:col-span-5 flex flex-col gap-3 lg:gap-4 items-center justify-start pt-0 relative h-full overflow-hidden"
                 >
                     {/* Center plateau effect */}
                     <div className="absolute inset-x-0 top-0 bottom-[-20px] bg-gradient-to-b from-foreground/[0.03] to-transparent rounded-[3rem] blur-sm -z-10 border border-foreground/[0.05]" />
@@ -325,9 +326,9 @@ export const PremiumHub = () => {
                 <motion.div
                     initial={{ opacity: 0, x: 50 }}
                     animate={{ opacity: 1, x: 0 }}
-                    className="col-span-12 lg:col-span-4 flex flex-col gap-4 lg:gap-6"
+                    className="col-span-12 lg:col-span-4 flex flex-col gap-4 lg:gap-4 h-full overflow-hidden"
                 >
-                    <div className="bg-card/80 backdrop-blur-3xl border border-foreground/[0.08] rounded-[2.5rem] flex flex-col overflow-hidden shadow-2xl relative">
+                    <div className="bg-card/80 backdrop-blur-3xl border border-foreground/[0.08] rounded-[2.5rem] flex flex-col overflow-hidden shadow-2xl relative h-full">
                         <div className="absolute inset-0 bg-gradient-to-tr from-primary/[0.03] to-transparent pointer-events-none" />
                         <div className="p-4 flex items-center justify-between border-b border-foreground/5 relative z-10">
                             <div className="flex items-center gap-3">
@@ -340,7 +341,7 @@ export const PremiumHub = () => {
                             </div>
                         </div>
 
-                        <div className="p-4 space-y-4 overflow-y-auto max-h-[calc(100vh-280px)] scrollbar-hide relative z-10 flex-1">
+                        <div className="p-4 space-y-4 overflow-y-auto custom-scrollbar relative z-10 flex-1">
                             {/* Global Pulse Card - Refined */}
                             <div className="bg-foreground/[0.03] border border-foreground/[0.06] rounded-[2rem] p-4 flex flex-col items-center shadow-inner relative overflow-hidden group transition-all hover:bg-foreground/[0.05] hover:border-primary/20">
                                 <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
