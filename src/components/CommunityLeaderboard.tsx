@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Crown, Medal, Award, TrendingUp, User } from 'lucide-react';
 import { database } from '@/lib/firebase';
-import { ref, onValue, query, orderByChild, limitToLast } from 'firebase/database';
+import { ref, onValue } from 'firebase/database';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { getMuslimAvatarUrl } from '@/lib/avatarUtils';
 
@@ -30,11 +30,8 @@ export function CommunityLeaderboard() {
     const myDeviceId = localStorage.getItem('visitor_device_id') || 'anon';
 
     useEffect(() => {
-        const leaderboardRef = query(
-            ref(database, 'leaderboard/weekly'),
-            orderByChild('count'),
-            limitToLast(5)
-        );
+        // Fetch all entries and sort client-side to avoid needing .indexOn rules
+        const leaderboardRef = ref(database, 'leaderboard/weekly');
 
         const unsubscribe = onValue(leaderboardRef, (snap) => {
             const val = snap.val();
