@@ -49,7 +49,8 @@ export const PremiumHub = () => {
         fetchGlobalCount,
         streakDays,
         dailyRecords,
-        unlockedAchievements
+        unlockedAchievements,
+        sessionMode,
     } = useTasbeehStore();
 
     // Calculate Today's Count
@@ -256,18 +257,42 @@ export const PremiumHub = () => {
 
                     <div className="flex flex-col items-center text-center gap-3 relative z-10 w-full max-w-lg mx-auto mt-4">
                         <motion.h1
+                            key={currentDhikr.id + '-arabic'}
                             className="text-6xl font-arabic text-primary mb-1 drop-shadow-[0_0_30px_rgba(245,158,11,0.2)]"
                             initial={{ scale: 0.9, opacity: 0 }}
                             animate={{ scale: 1, opacity: 1 }}
                             transition={{ duration: 0.8, ease: "easeOut" }}
                         >
-                            سُبْحَانَ اللهِ
+                            {currentDhikr.arabic}
                         </motion.h1>
-                        <span className="text-2xl font-black tracking-[0.4em] text-foreground/90 drop-shadow-sm">SUBHANALLAH</span>
+                        <motion.span
+                            key={currentDhikr.id + '-translit'}
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            className="text-2xl font-black tracking-[0.4em] text-foreground/90 drop-shadow-sm uppercase"
+                        >
+                            {currentDhikr.transliteration}
+                        </motion.span>
                         <div className="flex items-center gap-3 mt-1">
-                            <span className="text-[10px] font-black text-muted-foreground uppercase tracking-[0.2em]">Step 1 of 5</span>
-                            <div className="w-1.5 h-1.5 rounded-full bg-primary/30" />
-                            <span className="text-[10px] font-black text-primary/40 uppercase tracking-[0.2em]">Subhanallah x33</span>
+                            {sessionMode.type === 'tasbih100' && (
+                                <>
+                                    <span className="text-[10px] font-black text-muted-foreground uppercase tracking-[0.2em]">Phase {sessionMode.currentPhase + 1} of 4</span>
+                                    <div className="w-1.5 h-1.5 rounded-full bg-primary/30" />
+                                    <span className="text-[10px] font-black text-primary/40 uppercase tracking-[0.2em]">{currentDhikr.transliteration} ×{[33, 33, 33, 1][sessionMode.currentPhase]}</span>
+                                </>
+                            )}
+                            {sessionMode.type === 'tasbih1000' && (
+                                <>
+                                    <span className="text-[10px] font-black text-muted-foreground uppercase tracking-[0.2em]">Set {sessionMode.currentPhase + 1} of 8</span>
+                                    <div className="w-1.5 h-1.5 rounded-full bg-primary/30" />
+                                    <span className="text-[10px] font-black text-primary/40 uppercase tracking-[0.2em]">{currentDhikr.transliteration} ×125</span>
+                                </>
+                            )}
+                            {sessionMode.type === 'free' && (
+                                <>
+                                    <span className="text-[10px] font-black text-muted-foreground uppercase tracking-[0.2em]">{count} / {total > 0 ? total : '∞'}</span>
+                                </>
+                            )}
                         </div>
 
                         {/* Hadith Slider restored below Adhkar */}

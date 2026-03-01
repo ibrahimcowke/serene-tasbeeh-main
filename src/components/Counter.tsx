@@ -70,7 +70,7 @@ export function Counter() {
       return Math.min(currentCount / currentTarget, 1);
     }
     if (sessionMode.type === 'tasbih1000') {
-      return Math.min(currentCount / 100, 1);
+      return Math.min(currentCount / 125, 1);
     }
     return targetCount > 0 ? Math.min(currentCount / targetCount, 1) : 0;
   };
@@ -80,7 +80,7 @@ export function Counter() {
       return [33, 33, 33, 1][sessionMode.currentPhase];
     }
     if (sessionMode.type === 'tasbih1000') {
-      return 100;
+      return 125;
     }
     return targetCount;
   };
@@ -92,7 +92,7 @@ export function Counter() {
       return ((completed + currentCount) / total) * 100;
     }
     if (sessionMode.type === 'tasbih1000') {
-      const completed = sessionMode.currentPhase * 100;
+      const completed = sessionMode.currentPhase * 125;
       return ((completed + currentCount) / 1000) * 100;
     }
     return null;
@@ -185,7 +185,7 @@ export function Counter() {
               animate={{ opacity: 1 }}
               className="text-[10px] xs:text-xs text-muted-foreground text-center"
             >
-              Set {sessionMode.currentPhase + 1} of 10 • {Math.floor((sessionMode.currentPhase * 100) + currentCount)}/1000
+              Set {sessionMode.currentPhase + 1} of 8 • {Math.floor((sessionMode.currentPhase * 125) + currentCount)}/1000
             </motion.p>
           </div>
         )}
