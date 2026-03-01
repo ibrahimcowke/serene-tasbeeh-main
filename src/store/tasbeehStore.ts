@@ -608,36 +608,55 @@ export const useTasbeehStore = create<TasbeehState>()(
             });
           }
           
-          // Handle 100 session mode
+          // Handle session modes
           let sessionMode = { ...state.sessionMode };
           let currentDhikr = state.currentDhikr;
+          let newTargetCount = state.targetCount;
           
           if (sessionMode.type === 'tasbih100') {
-             // ... existing 100 logic ...
+             // 100 Session: SubhanAllah(33) → Alhamdulillah(33) → Allahu Akbar(33) → La ilaha illallah(1)
              const phaseTargets = [33, 33, 33, 1]; 
              const phaseDhikrs = [defaultDhikrs[0], defaultDhikrs[1], defaultDhikrs[2], defaultDhikrs[3]];
              
+             // Deep clone phaseCounts to avoid mutation
+             sessionMode.phaseCounts = [...sessionMode.phaseCounts];
              sessionMode.phaseCounts[sessionMode.currentPhase] = newCount;
              
              if (newCount >= phaseTargets[sessionMode.currentPhase]) {
               if (sessionMode.currentPhase < 3) {
                 sessionMode.currentPhase += 1;
                 currentDhikr = phaseDhikrs[sessionMode.currentPhase];
+                newTargetCount = phaseTargets[sessionMode.currentPhase];
                 newCount = 0;
               } else {
                 sessionMode.isComplete = true;
+                // Completion celebration
+                toast.success('🎉 MashaAllah! 100 Dhikr Complete!', {
+                  description: 'You recited: SubhanAllah ×33, Alhamdulillah ×33, Allahu Akbar ×33, La ilaha illallah ×1. Estimated reward: sins forgiven even if like the foam of the sea! (Sahih Muslim)',
+                  duration: 8000,
+                  icon: '🌟'
+                });
               }
             }
            } else if (sessionMode.type === 'tasbih1000') {
+             // 1000 Session: All 8 adhkar × 125 each = 1000 total
              sessionMode.currentSetCount = newCount;
              
-             if (newCount >= 100) {
-               if (sessionMode.currentPhase < 9) {
+             if (newCount >= 125) {
+               if (sessionMode.currentPhase < defaultDhikrs.length - 1) {
                  sessionMode.currentPhase += 1;
+                 currentDhikr = defaultDhikrs[sessionMode.currentPhase];
+                 newTargetCount = 125;
                  newCount = 0;
                  sessionMode.currentSetCount = 0;
                } else {
                  sessionMode.isComplete = true;
+                 // Completion celebration
+                 toast.success('🎉 SubhanAllah! 1000 Dhikr Complete!', {
+                   description: `You completed 125× of each dhikr (${defaultDhikrs.length} adhkar). Estimated reward: A palace in Jannah for every 1000 tasbeeh, and hasanat like Mount Uhud! (Sahih Muslim)`,
+                   duration: 10000,
+                   icon: '🏆'
+                 });
                }
              }
           } else if (sessionMode.type === 'routine') {
@@ -648,9 +667,15 @@ export const useTasbeehStore = create<TasbeehState>()(
                     const nextStep = sessionMode.steps[sessionMode.currentStepIndex];
                     const nextDhikr = state.dhikrs.find(d => d.id === nextStep.dhikrId) || defaultDhikrs[0];
                     currentDhikr = nextDhikr;
+                    newTargetCount = nextStep.target;
                     newCount = 0;
                 } else {
                     sessionMode.isComplete = true;
+                    toast.success('🎉 Routine Complete!', {
+                      description: 'MashaAllah, you completed your routine. May Allah accept your dhikr!',
+                      duration: 6000,
+                      icon: '✅'
+                    });
                 }
             }
           }
@@ -704,6 +729,7 @@ export const useTasbeehStore = create<TasbeehState>()(
             count: state.count + 1, // Legacy
             currentCount: newCount,
             currentDhikr: currentDhikr,
+            targetCount: newTargetCount,
             dailyRecords: updatedRecords,
             totalAllTime: newTotalAllTime,
             sessionMode: sessionMode,
@@ -995,8 +1021,9 @@ export const useTasbeehStore = create<TasbeehState>()(
       startTasbih1000: () => {
         set({
           sessionMode: { type: 'tasbih1000', currentPhase: 0, currentSetCount: 0, isComplete: false },
+          currentDhikr: defaultDhikrs[0],
           currentCount: 0,
-          targetCount: 100,
+          targetCount: 125,
           sessionStartTime: null,
         });
       },
