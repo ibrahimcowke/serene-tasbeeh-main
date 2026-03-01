@@ -136,7 +136,7 @@ export function GlobalChallenges() {
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: index * 0.1 }}
                             whileHover={{ y: -2 }}
-                            className="relative overflow-hidden bg-white/[0.02] border border-white/[0.06] rounded-[1.5rem] p-4 shadow-sm group transition-all hover:bg-white/[0.04] hover:border-primary/20"
+                            className="relative overflow-hidden bg-secondary/30 border border-border/50 rounded-[1.5rem] p-4 shadow-sm group transition-all hover:bg-secondary/50 hover:border-primary/20"
                         >
                             {/* Decorative background glow based on active state */}
                             {isParticipating && (
@@ -145,10 +145,10 @@ export function GlobalChallenges() {
 
                             <div className="flex justify-between items-start mb-2 relative z-10">
                                 <div className="min-w-0">
-                                    <h3 className="font-black text-white/90 text-sm sm:text-[15px] tracking-tight truncate">
+                                    <h3 className="font-black text-foreground/90 text-sm sm:text-[15px] tracking-tight truncate">
                                         {challenge.title}
                                     </h3>
-                                    <div className="flex items-center gap-1.5 mt-1 text-[9px] text-white/30 font-black uppercase tracking-[0.15em]">
+                                    <div className="flex items-center gap-1.5 mt-1 text-[9px] text-muted-foreground font-black uppercase tracking-[0.15em]">
                                         <Users className="w-3 h-3 text-primary/50" />
                                         <span>Community Goal</span>
                                     </div>
@@ -161,7 +161,7 @@ export function GlobalChallenges() {
                                 )}
                             </div>
 
-                            <p className="text-[11px] sm:text-xs text-white/40 leading-relaxed mb-4 relative z-10 pr-2 line-clamp-2 italic">
+                            <p className="text-[11px] sm:text-xs text-muted-foreground leading-relaxed mb-4 relative z-10 pr-2 line-clamp-2 italic">
                                 "{challenge.description}"
                             </p>
 
@@ -169,10 +169,10 @@ export function GlobalChallenges() {
                             <div className="space-y-2 mb-3 relative z-10">
                                 <div className="flex justify-between text-[9px] sm:text-[10px] font-black tracking-widest uppercase">
                                     <span className="text-primary/80">{challenge.currentProgress.toLocaleString()}</span>
-                                    <span className="text-white/20">/ {challenge.target.toLocaleString()}</span>
+                                    <span className="text-muted-foreground">/ {challenge.target.toLocaleString()}</span>
                                 </div>
 
-                                <div className="h-1.5 w-full bg-white/[0.05] rounded-full overflow-hidden border border-white/[0.05] relative">
+                                <div className="h-1.5 w-full bg-secondary/50 rounded-full overflow-hidden border border-border/30 relative">
                                     <MilestoneSparkle progress={progressPercentage} />
                                     <motion.div
                                         className="h-full bg-gradient-to-r from-primary via-orange-400 to-primary rounded-full relative shadow-[0_0_10px_rgba(245,158,11,0.2)]"
@@ -191,7 +191,7 @@ export function GlobalChallenges() {
 
                             {/* Your Contribution Counter */}
                             <motion.div
-                                className="flex items-center justify-between p-2.5 rounded-xl bg-white/[0.03] border border-white/[0.06] mb-3 relative z-10"
+                                className="flex items-center justify-between p-2.5 rounded-xl bg-secondary/30 border border-border/50 mb-3 relative z-10"
                                 initial={{ opacity: 0, y: 5 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ delay: index * 0.1 + 0.3 }}
@@ -200,7 +200,7 @@ export function GlobalChallenges() {
                                     <div className="w-5 h-5 rounded-md bg-primary/15 flex items-center justify-center">
                                         <User className="w-3 h-3 text-primary" />
                                     </div>
-                                    <span className="text-[10px] font-bold text-white/50 uppercase tracking-wider">Your Contribution</span>
+                                    <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">Your Contribution</span>
                                 </div>
                                 <div className="flex items-center gap-1.5">
                                     <motion.span

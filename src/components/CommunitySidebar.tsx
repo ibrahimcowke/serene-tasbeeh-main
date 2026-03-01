@@ -58,7 +58,7 @@ export function CommunitySidebar() {
         <div className="bg-card/30 backdrop-blur-xl border border-border/50 rounded-[2.5rem] p-1 overflow-hidden transition-all duration-300">
             <button
                 onClick={() => setIsExpanded(!isExpanded)}
-                className="w-full py-4 px-6 border-b border-border/50 flex justify-between items-center hover:bg-white/5 transition-colors cursor-pointer outline-none"
+                className="w-full py-4 px-6 border-b border-border/50 flex justify-between items-center hover:bg-secondary/50 transition-colors cursor-pointer outline-none"
             >
                 <div className="flex items-center gap-2">
                     <h2 className="text-xs font-bold uppercase tracking-[0.2em] text-muted-foreground/60">Community</h2>
@@ -94,17 +94,17 @@ export function CommunitySidebar() {
                                 <GlobalStats />
                             </div>
 
-                            <div className="h-px bg-white/5" />
+                            <div className="h-px bg-border/50" />
 
                             {/* Live Activity Feed */}
                             <CommunityActivityFeed />
 
-                            <div className="h-px bg-white/5" />
+                            <div className="h-px bg-border/50" />
 
                             {/* Leaderboard */}
                             <CommunityLeaderboard />
 
-                            <div className="h-px bg-white/5" />
+                            <div className="h-px bg-border/50" />
 
                             {/* Challenges */}
                             <GlobalChallenges />

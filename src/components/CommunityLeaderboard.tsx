@@ -106,8 +106,8 @@ export function CommunityLeaderboard() {
                                 animate={{ opacity: 1, x: 0 }}
                                 transition={{ delay: idx * 0.08 }}
                                 className={`flex items-center gap-2.5 p-2 rounded-xl border transition-all ${isMe
-                                        ? 'bg-primary/10 border-primary/30 shadow-[0_0_15px_rgba(var(--primary-rgb),0.1)]'
-                                        : `bg-white/[0.02] border-white/[0.05] hover:bg-white/[0.04]`
+                                    ? 'bg-primary/10 border-primary/30 shadow-[0_0_15px_rgba(var(--primary-rgb),0.1)]'
+                                    : `bg-secondary/20 border-border/50 hover:bg-secondary/40`
                                     }`}
                             >
                                 {/* Rank */}
@@ -140,12 +140,12 @@ export function CommunityLeaderboard() {
                                     <div className="h-1 bg-secondary/30 rounded-full overflow-hidden">
                                         <motion.div
                                             className={`h-full rounded-full ${idx === 0
-                                                    ? 'bg-gradient-to-r from-yellow-500 to-amber-400'
-                                                    : idx === 1
-                                                        ? 'bg-gradient-to-r from-slate-400 to-slate-300'
-                                                        : idx === 2
-                                                            ? 'bg-gradient-to-r from-amber-700 to-amber-500'
-                                                            : 'bg-primary/40'
+                                                ? 'bg-gradient-to-r from-yellow-500 to-amber-400'
+                                                : idx === 1
+                                                    ? 'bg-gradient-to-r from-slate-400 to-slate-300'
+                                                    : idx === 2
+                                                        ? 'bg-gradient-to-r from-amber-700 to-amber-500'
+                                                        : 'bg-primary/40'
                                                 }`}
                                             initial={{ width: 0 }}
                                             animate={{ width: `${barWidth}%` }}
