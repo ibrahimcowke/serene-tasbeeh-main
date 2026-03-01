@@ -844,15 +844,6 @@ export const useTasbeehStore = create<TasbeehState>()(
       })),
       
       resetSettings: () => {
-         const root = window.document.documentElement;
-         // Remove all theme-related classes
-         const themeClasses = Array.from(root.classList).filter(
-           cls => cls.startsWith('theme-') || cls === 'light' || cls === 'dark'
-         );
-         themeClasses.forEach(cls => root.classList.remove(cls));
-         
-         root.classList.add('light');
-         
          set({ 
             themeSettings: initialThemeSettings, 
             theme: 'light', 
@@ -959,18 +950,7 @@ export const useTasbeehStore = create<TasbeehState>()(
         }
       })),
       
-      setTheme: (theme) => {
-        set({ theme });
-        const root = window.document.documentElement;
-        // Remove all current theme-related classes
-        const themeClasses = Array.from(root.classList).filter(
-          cls => cls.startsWith('theme-') || cls === 'light' || cls === 'dark'
-        );
-        themeClasses.forEach(cls => root.classList.remove(cls));
-        
-        // Add the new theme class
-        root.classList.add(theme);
-      },
+      setTheme: (theme) => set({ theme }),
       
       setLanguage: (language) => set({ language }),
       
@@ -1018,14 +998,6 @@ export const useTasbeehStore = create<TasbeehState>()(
       importData: (data) => {
         try {
           const parsed = JSON.parse(data);
-          if (parsed.settings?.theme) {
-             const root = window.document.documentElement;
-             const themeClasses = Array.from(root.classList).filter(
-               cls => cls.startsWith('theme-') || cls === 'light' || cls === 'dark'
-             );
-             themeClasses.forEach(cls => root.classList.remove(cls));
-             root.classList.add(parsed.settings.theme);
-          }
           
           set((state) => ({
              ...state,
@@ -1282,16 +1254,6 @@ export const useTasbeehStore = create<TasbeehState>()(
 
              lastSeenVersion: parsed.settings?.lastSeenVersion || state.lastSeenVersion,
          }));
-         
-         // If theme changed, apply it
-         if (parsed.settings?.theme) {
-             const root = window.document.documentElement;
-             const themeClasses = Array.from(root.classList).filter(
-               cls => cls.startsWith('theme-') || cls === 'light' || cls === 'dark'
-             );
-             themeClasses.forEach(cls => root.classList.remove(cls));
-             root.classList.add(parsed.settings.theme);
-         }
          
          return true;
       },

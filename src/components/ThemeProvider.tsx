@@ -10,12 +10,17 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
 
   useEffect(() => {
     const root = document.documentElement;
-    root.classList.remove('light', 'dark', 'theme-midnight', 'theme-neon', 'theme-green', 'theme-cyberpunk', 'theme-glass', 'theme-sunset', 'theme-forest', 'theme-oled', 'theme-biolum', 'theme-radar-tactical', 'theme-steampunk', 'theme-crystal-depth',
-      'theme-mecca-night', 'theme-medina-rose', 'theme-blue-mosque', 'theme-desert-starlight', 'theme-sahara-warmth', 'theme-andalusia-earth', 'theme-istanbul-sunset', 'theme-taj-marble', 'theme-royal-persian', 'theme-ramadan-lantern'
+    // Remove all theme-related classes dynamically
+    const themeClasses = Array.from(root.classList).filter(
+      cls => cls.startsWith('theme-') || cls === 'light' || cls === 'dark'
     );
+    themeClasses.forEach(cls => root.classList.remove(cls));
 
-    if (theme !== 'light') {
+    // Add current theme
+    if (theme) {
       root.classList.add(theme);
+    } else {
+      root.classList.add('light');
     }
   }, [theme]);
 
