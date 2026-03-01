@@ -1328,3 +1328,119 @@ export const useTasbeehStore = create<TasbeehState>()(
     }
   )
 );
+
+// ─── Firebase Auto-Sync ─────────────────────────────────────────────────
+// Debounced save: writes to Firebase 5 seconds after last state change
+let firebaseSaveTimer: ReturnType<typeof setTimeout> | null = null;
+
+function getFirebaseSaveData() {
+  const state = useTasbeehStore.getState();
+  return {
+    dailyRecords: state.dailyRecords || [],
+    totalAllTime: state.totalAllTime || 0,
+    currentCount: state.currentCount || 0,
+    targetCount: state.targetCount || 33,
+    unlockedAchievements: state.unlockedAchievements || [],
+    customDhikrs: state.customDhikrs || [],
+    streakDays: state.streakDays || 0,
+    lastActiveDate: state.lastActiveDate || null,
+    longestStreak: state.longestStreak || 0,
+    dailyGoal: state.dailyGoal || 100,
+    favoriteDhikrIds: state.favoriteDhikrIds || [],
+    currentDhikrId: state.currentDhikr?.id || 'subhanallah',
+    settings: {
+      theme: state.theme,
+      counterShape: state.counterShape,
+      layout: state.layout,
+      showTransliteration: state.showTransliteration,
+      themeSettings: state.themeSettings,
+      hadithSlideDuration: state.hadithSlideDuration,
+      hadithSlidePosition: state.hadithSlidePosition,
+      dhikrTextPosition: state.dhikrTextPosition,
+      verticalOffset: state.verticalOffset,
+      dhikrVerticalOffset: state.dhikrVerticalOffset,
+      counterVerticalOffset: state.counterVerticalOffset,
+      counterScale: state.counterScale,
+      countFontSize: state.countFontSize,
+      layoutOrder: state.layoutOrder,
+      autoThemeSwitch: state.autoThemeSwitch,
+      shakeToReset: state.shakeToReset,
+      screenOffMode: state.screenOffMode,
+    },
+  };
+}
+
+// Subscribe to state changes and auto-save to Firebase
+useTasbeehStore.subscribe((state, prevState) => {
+  // Only save when important data changes (not on every re-render)
+  const importantChanged =
+    state.totalAllTime !== prevState.totalAllTime ||
+    state.currentCount !== prevState.currentCount ||
+    state.unlockedAchievements !== prevState.unlockedAchievements ||
+    state.streakDays !== prevState.streakDays ||
+    state.dailyRecords !== prevState.dailyRecords ||
+    state.theme !== prevState.theme ||
+    state.counterShape !== prevState.counterShape ||
+    state.customDhikrs !== prevState.customDhikrs ||
+    state.favoriteDhikrIds !== prevState.favoriteDhikrIds ||
+    state.dailyGoal !== prevState.dailyGoal;
+
+  if (!importantChanged) return;
+
+  // Debounce: wait 5 seconds after last change before saving
+  if (firebaseSaveTimer) clearTimeout(firebaseSaveTimer);
+  firebaseSaveTimer = setTimeout(() => {
+    import('@/lib/firebase').then(({ saveUserDataToFirebase }) => {
+      saveUserDataToFirebase(getFirebaseSaveData());
+    });
+  }, 5000);
+});
+
+// Restore from Firebase on app load (after localStorage rehydration)
+setTimeout(() => {
+  import('@/lib/firebase').then(({ loadUserDataFromFirebase }) => {
+    loadUserDataFromFirebase().then((firebaseData) => {
+      if (!firebaseData) return;
+
+      const localState = useTasbeehStore.getState();
+
+      // Only merge if Firebase has more data (higher totalAllTime means more progress)
+      if ((firebaseData.totalAllTime || 0) > (localState.totalAllTime || 0)) {
+        console.log('📥 Restoring from Firebase (more progress found)');
+        useTasbeehStore.setState({
+          dailyRecords: firebaseData.dailyRecords || localState.dailyRecords,
+          totalAllTime: firebaseData.totalAllTime || localState.totalAllTime,
+          unlockedAchievements: firebaseData.unlockedAchievements || localState.unlockedAchievements,
+          customDhikrs: firebaseData.customDhikrs || localState.customDhikrs,
+          streakDays: firebaseData.streakDays ?? localState.streakDays,
+          lastActiveDate: firebaseData.lastActiveDate || localState.lastActiveDate,
+          longestStreak: firebaseData.longestStreak ?? localState.longestStreak,
+          dailyGoal: firebaseData.dailyGoal || localState.dailyGoal,
+          favoriteDhikrIds: firebaseData.favoriteDhikrIds || localState.favoriteDhikrIds,
+          // Restore settings
+          ...(firebaseData.settings ? {
+            theme: firebaseData.settings.theme || localState.theme,
+            counterShape: firebaseData.settings.counterShape || localState.counterShape,
+            layout: firebaseData.settings.layout || localState.layout,
+            showTransliteration: firebaseData.settings.showTransliteration ?? localState.showTransliteration,
+            themeSettings: firebaseData.settings.themeSettings || localState.themeSettings,
+            hadithSlideDuration: firebaseData.settings.hadithSlideDuration || localState.hadithSlideDuration,
+            hadithSlidePosition: firebaseData.settings.hadithSlidePosition || localState.hadithSlidePosition,
+            dhikrTextPosition: firebaseData.settings.dhikrTextPosition || localState.dhikrTextPosition,
+            verticalOffset: firebaseData.settings.verticalOffset ?? localState.verticalOffset,
+            dhikrVerticalOffset: firebaseData.settings.dhikrVerticalOffset ?? localState.dhikrVerticalOffset,
+            counterVerticalOffset: firebaseData.settings.counterVerticalOffset ?? localState.counterVerticalOffset,
+            counterScale: firebaseData.settings.counterScale || localState.counterScale,
+            countFontSize: firebaseData.settings.countFontSize || localState.countFontSize,
+            layoutOrder: firebaseData.settings.layoutOrder || localState.layoutOrder,
+            autoThemeSwitch: firebaseData.settings.autoThemeSwitch ?? localState.autoThemeSwitch,
+            shakeToReset: firebaseData.settings.shakeToReset ?? localState.shakeToReset,
+            screenOffMode: firebaseData.settings.screenOffMode ?? localState.screenOffMode,
+          } : {}),
+        });
+      } else {
+        console.log('✅ Local data is up-to-date');
+      }
+    });
+  });
+}, 2000); // Wait 2s for localStorage to rehydrate first
