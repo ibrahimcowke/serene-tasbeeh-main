@@ -67,7 +67,12 @@ export function VisitorCounter() {
         const unsubscribePresence = onValue(presenceRef, (snap) => {
             const val = snap.val();
             if (val) {
-                setVisitors(Object.values(val) as PresenceData[]);
+                const now = Date.now();
+                const fiveMins = 5 * 60 * 1000;
+                const allVisitors = (Object.values(val) as PresenceData[]).filter(v => {
+                    return v.online_at && (now - (typeof v.online_at === 'number' ? v.online_at : 0) < fiveMins);
+                });
+                setVisitors(allVisitors);
             } else {
                 setVisitors([]);
             }
@@ -318,8 +323,8 @@ export function VisitorCounter() {
                                     onClick={(e) => { e.stopPropagation(); sendSalam(); }}
                                     disabled={salamSent}
                                     className={`w-full py-2.5 rounded-xl text-[10px] font-black uppercase tracking-[0.15em] flex items-center justify-center gap-2 transition-all ${salamSent
-                                            ? 'bg-green-500/10 text-green-400 border border-green-500/20'
-                                            : 'bg-primary/10 text-primary border border-primary/20 hover:bg-primary/20 active:scale-[0.98]'
+                                        ? 'bg-green-500/10 text-green-400 border border-green-500/20'
+                                        : 'bg-primary/10 text-primary border border-primary/20 hover:bg-primary/20 active:scale-[0.98]'
                                         }`}
                                     whileTap={!salamSent ? { scale: 0.97 } : {}}
                                 >

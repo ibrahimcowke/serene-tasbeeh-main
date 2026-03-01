@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ChevronDown, ChevronUp, Flame } from 'lucide-react';
+import { ChevronDown, ChevronUp, Flame, Swords } from 'lucide-react';
 import { GlobalStats } from './GlobalStats';
-import { GlobalChallenges } from './GlobalChallenges';
 import { VisitorCounter } from './VisitorCounter';
+import { ChallengesView } from './ChallengesView';
 import { CommunityActivityFeed } from './CommunityActivityFeed';
 import { CommunityLeaderboard } from './CommunityLeaderboard';
 import { database } from '@/lib/firebase';
@@ -106,8 +106,26 @@ export function CommunitySidebar() {
 
                             <div className="h-px bg-border/50" />
 
-                            {/* Challenges */}
-                            <GlobalChallenges />
+                            {/* Challenges CTA */}
+                            <ChallengesView>
+                                <motion.button
+                                    whileHover={{ scale: 1.02 }}
+                                    whileTap={{ scale: 0.98 }}
+                                    className="w-full py-3 px-4 rounded-2xl bg-gradient-to-br from-orange-500 to-red-600 text-white shadow-lg shadow-orange-500/20 flex items-center justify-between group overflow-hidden relative"
+                                >
+                                    <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity" />
+                                    <div className="flex items-center gap-3 relative z-10">
+                                        <div className="p-2 rounded-xl bg-white/20">
+                                            <Swords className="w-4 h-4" />
+                                        </div>
+                                        <div className="flex flex-col items-start">
+                                            <span className="text-xs font-black uppercase tracking-wider">Challenge a Peer</span>
+                                            <span className="text-[8px] font-bold opacity-80 uppercase tracking-tighter">Race & Earn Hasanat</span>
+                                        </div>
+                                    </div>
+                                    <ChevronUp className="w-4 h-4 rotate-90 opacity-50 group-hover:opacity-100 transition-all group-hover:translate-x-1" />
+                                </motion.button>
+                            </ChallengesView>
                         </div>
                     </motion.div>
                 )}

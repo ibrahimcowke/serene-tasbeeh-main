@@ -22,12 +22,14 @@ export type SessionMode =
       currentPhase: number;
       phaseCounts: number[];
       isComplete: boolean;
+      challengeId?: string;
     }
   | {
       type: 'tasbih1000';
-      currentPhase: number; // 0-9 (10 sets)
+      currentPhase: number; // 0-7 (8 adhkar)
       currentSetCount: number;
       isComplete: boolean;
+      challengeId?: string;
     }
   | {
       type: 'routine';
@@ -164,8 +166,8 @@ interface TasbeehState {
   importData: (data: string) => boolean;
   
   // Session mode actions
-  startTasbih100: () => void;
-  startTasbih1000: () => void;
+  startTasbih100: (challengeId?: string) => void;
+  startTasbih1000: (challengeId?: string) => void;
   startRoutine: (routineId: string) => void;
   nextRoutineStep: () => void;
   exitSessionMode: () => void;
@@ -747,6 +749,19 @@ export const useTasbeehStore = create<TasbeehState>()(
           };
         });
         
+        // Sync challenge progress to Firebase if active
+        const updatedState = get();
+        if (updatedState.sessionMode.type !== 'free' && 'challengeId' in updatedState.sessionMode && updatedState.sessionMode.challengeId) {
+          const { challengeId } = updatedState.sessionMode;
+          import('@/lib/firebase').then(({ database }) => {
+            import('firebase/database').then(({ ref, set }) => {
+              const deviceId = localStorage.getItem('visitor_device_id') || 'anon';
+              // Update my count in the challenge
+              set(ref(database, `challenges/${deviceId}/${challengeId}/myCount`), updatedState.currentCount);
+            });
+          });
+        }
+        
         // Sync to Supabase global stats (fire and forget)
         import('@/lib/firebase').then(({ database }) => {
             import('firebase/database').then(({ ref, increment: fbIncrement, update, serverTimestamp }) => {
@@ -1016,29 +1031,23 @@ export const useTasbeehStore = create<TasbeehState>()(
         }
       },
 
-      startTasbih100: () => {
+      startTasbih100: (challengeId) => {
         set({
-          sessionMode: { type: 'tasbih100', currentPhase: 0, phaseCounts: [0, 0, 0, 0], isComplete: false },
+          sessionMode: { type: 'tasbih100', currentPhase: 0, phaseCounts: [0, 0, 0, 0], isComplete: false, challengeId },
           currentDhikr: defaultDhikrs[0],
           currentCount: 0,
           targetCount: 33,
           sessionStartTime: null,
         });
-        import('@/lib/firebase').then(({ publishActivityEvent }) => {
-          publishActivityEvent('community_goal', 'Someone started a 100 Dhikr Sprint! ⚡');
-        });
       },
 
-      startTasbih1000: () => {
+      startTasbih1000: (challengeId) => {
         set({
-          sessionMode: { type: 'tasbih1000', currentPhase: 0, currentSetCount: 0, isComplete: false },
+          sessionMode: { type: 'tasbih1000', currentPhase: 0, currentSetCount: 0, isComplete: false, challengeId },
           currentDhikr: defaultDhikrs[0],
           currentCount: 0,
           targetCount: 125,
           sessionStartTime: null,
-        });
-        import('@/lib/firebase').then(({ publishActivityEvent }) => {
-          publishActivityEvent('community_goal', 'Someone started a 1000 Dhikr Endurance! 🎯');
         });
       },
 

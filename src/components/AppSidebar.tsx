@@ -1,4 +1,4 @@
-import { BookOpen, Target, ClipboardList, Settings, History, Trophy, BarChart3, AppWindow } from "lucide-react";
+import { BookOpen, Target, ClipboardList, Settings, History, Trophy, BarChart3, AppWindow, Swords } from "lucide-react";
 import {
     Sidebar,
     SidebarContent,
@@ -21,6 +21,7 @@ import { AchievementsView } from "./AchievementsView";
 import { ProgressView } from "./ProgressView";
 import { VisitorCounter } from "./VisitorCounter";
 import { NotificationCenter } from "./NotificationCenter";
+import { ChallengesView } from "./ChallengesView";
 import { toast } from "sonner";
 import { motion } from "framer-motion";
 
@@ -78,6 +79,17 @@ export function AppSidebar() {
                                         </button>
                                     </SidebarMenuButton>
                                 </RoutinesView>
+                            </SidebarMenuItem>
+
+                            <SidebarMenuItem>
+                                <ChallengesView>
+                                    <SidebarMenuButton asChild tooltip="Challenges">
+                                        <button className="w-full justify-start cursor-pointer hover:bg-secondary/50">
+                                            <Swords className="text-orange-500" />
+                                            <span>Challenges</span>
+                                        </button>
+                                    </SidebarMenuButton>
+                                </ChallengesView>
                             </SidebarMenuItem>
                         </SidebarMenu>
                     </SidebarGroupContent>
