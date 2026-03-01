@@ -845,9 +845,12 @@ export const useTasbeehStore = create<TasbeehState>()(
       
       resetSettings: () => {
          const root = window.document.documentElement;
-         root.classList.remove('light', 'dark', 'theme-midnight', 'theme-neon', 'theme-green', 'theme-cyberpunk', 'theme-glass', 'theme-sunset', 'theme-forest', 'theme-oled', 'theme-biolum', 'theme-radar-tactical', 'theme-steampunk', 'theme-crystal-depth',
-          'theme-mecca-night', 'theme-medina-rose', 'theme-blue-mosque', 'theme-desert-starlight', 'theme-sahara-warmth', 'theme-andalusia-earth', 'theme-istanbul-sunset', 'theme-taj-marble', 'theme-royal-persian', 'theme-ramadan-lantern'
+         // Remove all theme-related classes
+         const themeClasses = Array.from(root.classList).filter(
+           cls => cls.startsWith('theme-') || cls === 'light' || cls === 'dark'
          );
+         themeClasses.forEach(cls => root.classList.remove(cls));
+         
          root.classList.add('light');
          
          set({ 
@@ -959,7 +962,13 @@ export const useTasbeehStore = create<TasbeehState>()(
       setTheme: (theme) => {
         set({ theme });
         const root = window.document.documentElement;
-        root.classList.remove('light', 'dark', 'theme-midnight', 'theme-neon', 'theme-green', 'theme-cyberpunk', 'theme-glass', 'theme-sunset', 'theme-forest', 'theme-oled', 'theme-biolum', 'theme-radar-tactical', 'theme-steampunk', 'theme-crystal-depth');
+        // Remove all current theme-related classes
+        const themeClasses = Array.from(root.classList).filter(
+          cls => cls.startsWith('theme-') || cls === 'light' || cls === 'dark'
+        );
+        themeClasses.forEach(cls => root.classList.remove(cls));
+        
+        // Add the new theme class
         root.classList.add(theme);
       },
       
@@ -1011,7 +1020,10 @@ export const useTasbeehStore = create<TasbeehState>()(
           const parsed = JSON.parse(data);
           if (parsed.settings?.theme) {
              const root = window.document.documentElement;
-             root.classList.remove('light', 'dark', 'theme-midnight', 'theme-neon', 'theme-green', 'theme-cyberpunk', 'theme-glass', 'theme-sunset', 'theme-forest', 'theme-oled', 'theme-biolum', 'theme-radar-tactical', 'theme-steampunk', 'theme-crystal-depth');
+             const themeClasses = Array.from(root.classList).filter(
+               cls => cls.startsWith('theme-') || cls === 'light' || cls === 'dark'
+             );
+             themeClasses.forEach(cls => root.classList.remove(cls));
              root.classList.add(parsed.settings.theme);
           }
           
@@ -1274,7 +1286,10 @@ export const useTasbeehStore = create<TasbeehState>()(
          // If theme changed, apply it
          if (parsed.settings?.theme) {
              const root = window.document.documentElement;
-             root.classList.remove('light', 'dark', 'theme-midnight', 'theme-neon', 'theme-green', 'theme-cyberpunk', 'theme-glass', 'theme-sunset', 'theme-forest', 'theme-oled', 'theme-biolum', 'theme-radar-tactical', 'theme-steampunk', 'theme-crystal-depth');
+             const themeClasses = Array.from(root.classList).filter(
+               cls => cls.startsWith('theme-') || cls === 'light' || cls === 'dark'
+             );
+             themeClasses.forEach(cls => root.classList.remove(cls));
              root.classList.add(parsed.settings.theme);
          }
          
