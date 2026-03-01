@@ -1320,6 +1320,10 @@ export const useTasbeehStore = create<TasbeehState>()(
         lastSeenVersion: state.lastSeenVersion,
         autoThemeSwitch: state.autoThemeSwitch,
         shakeToReset: state.shakeToReset,
+        // Previously missing — now persisted:
+        unlockedAchievements: state.unlockedAchievements,
+        layoutOrder: state.layoutOrder,
+        screenOffMode: state.screenOffMode,
       }),
     }
   )
