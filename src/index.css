@@ -978,8 +978,8 @@
   /* Subtle glow effect for counter - refined */
   .counter-glow {
     box-shadow:
-      0 0 40px -10px hsl(var(--counter-glow) / 0.1),
-      0 0 80px -20px hsl(var(--counter-glow) / 0.05);
+      0 0 40px -10px rgba(255, 255, 255, 0.15),
+      0 0 80px -20px rgba(255, 255, 255, 0.1);
   }
 
   /* Soft press effect */
@@ -1069,11 +1069,11 @@
 
     0%,
     100% {
-      box-shadow: 0 0 40px -10px hsl(var(--counter-glow) / 0.1);
+      box-shadow: 0 0 40px -10px rgba(255, 255, 255, 0.15);
     }
 
     50% {
-      box-shadow: 0 0 70px -10px hsl(var(--counter-glow) / 0.25);
+      box-shadow: 0 0 70px -10px rgba(255, 255, 255, 0.3);
     }
   }
 

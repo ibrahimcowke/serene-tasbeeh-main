@@ -866,7 +866,7 @@ export const CounterVisuals = memo(({
                 {/* Global Aura Pulse Effekt - triggers on count change */}
                 <motion.div
                     key={`aura-${currentCount}`}
-                    className="absolute inset-0 rounded-full border border-primary/20 pointer-events-none -z-20 scale-150"
+                    className="absolute inset-0 rounded-full border border-white/20 pointer-events-none -z-20 scale-150"
                     initial={{ scale: 0.8, opacity: 0.8 }}
                     animate={{ scale: 2, opacity: 0 }}
                     transition={{ duration: 0.8, ease: "easeOut" }}
