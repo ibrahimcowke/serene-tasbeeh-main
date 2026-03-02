@@ -877,6 +877,7 @@ export const CounterVisuals = memo(({
                 onClick={handleTap}
                 disabled={disabled}
                 className={`
+        ${counterShape === 'plain' ? 'w-64 h-64 bg-transparent' : ''}
         ${counterShape === 'minimal' ? 'rounded-full bg-counter-bg w-64 h-64' : ''}
         ${counterShape === 'ring-light' ? 'w-64 h-64 rounded-full bg-transparent flex items-center justify-center' : ''}
         ${counterShape === 'classic' ? 'w-64 h-64 rounded-2xl bg-gradient-to-br from-card to-background shadow-inner flex flex-col items-center justify-center border-2 border-border/50' : ''}
@@ -915,8 +916,8 @@ export const CounterVisuals = memo(({
         touch-manipulation
         transition-shadow duration-300
         disabled:opacity-50
-        ${showCompletion && counterShape === 'minimal' ? 'animate-completion' : ''}
-        ${!showCompletion && counterShape === 'minimal' ? 'counter-glow' : ''}
+        ${showCompletion && (counterShape === 'minimal' || counterShape === 'plain') ? 'animate-completion' : ''}
+        ${!showCompletion && (counterShape === 'minimal' || counterShape === 'plain') ? 'counter-glow' : ''}
         ${counterShape === 'beads' ? 'hover:scale-105 active:scale-95' : ''}
         ${counterShape === 'vintage-wood' ? 'active:scale-[0.98] transition-transform' : ''}
       `}

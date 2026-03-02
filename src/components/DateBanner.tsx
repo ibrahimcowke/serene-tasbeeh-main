@@ -3,13 +3,12 @@ import { useEffect } from 'react';
 import { Moon, Calendar, Sparkles } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { toast } from 'sonner';
-import { themes, counterShapes } from '@/lib/constants';
+import { themes } from '@/lib/constants';
 
 export function DateBanner() {
-    const { dateContext, updateDateContext, theme, counterShape } = useTasbeehStore();
+    const { dateContext, updateDateContext, theme } = useTasbeehStore();
 
     const currentThemeLabel = themes.find(t => t.id === theme)?.label || 'Unknown';
-    const currentShapeLabel = counterShapes.find(s => s.id === counterShape)?.label || 'Unknown';
 
     useEffect(() => {
         updateDateContext();
@@ -69,7 +68,7 @@ export function DateBanner() {
                         </span>
                     )}
                     <span className="hidden lg:inline-block px-1.5 py-0.5 rounded-md bg-secondary/60 text-foreground/60 text-[10px] uppercase tracking-widest font-medium border border-border/40">
-                        {currentShapeLabel} <span className="opacity-40 mx-0.5">|</span> {currentThemeLabel}
+                        {currentThemeLabel}
                     </span>
                 </div>
             </div>

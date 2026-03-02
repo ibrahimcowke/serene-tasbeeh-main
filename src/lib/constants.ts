@@ -29,6 +29,7 @@ export const themes = [
 ] as const;
 
 export const counterShapes = [
+  { id: 'plain', label: 'Plain', icon: '◌' },
   { id: 'minimal', label: 'Minimal', icon: '○' },
   { id: 'classic', label: 'Classic', icon: '□' },
   { id: 'beads', label: 'Beads', icon: '◎' },

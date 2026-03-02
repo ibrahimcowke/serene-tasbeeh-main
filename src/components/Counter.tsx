@@ -5,7 +5,7 @@ import { ProgressRing } from './ProgressRing';
 import { HadithSlider } from './HadithSlider';
 import { SoundManager } from '@/lib/sound';
 import { CounterVisuals } from './CounterVisuals';
-import { Palette, Shapes } from 'lucide-react';
+import { Palette } from 'lucide-react';
 import { GlobalStats } from './GlobalStats';
 import {
   DropdownMenu,
@@ -31,7 +31,7 @@ export function Counter() {
     theme,
     themeSettings,
     layout = 'default',
-    counterShape = 'minimal', // Default to minimal if undefined in persisted state
+    counterShape = 'plain', // Default to plain if undefined in persisted state
     hadithSlidePosition = 'right',
     verticalOffset = 0,
     dhikrVerticalOffset = 0,
@@ -366,59 +366,6 @@ export function Counter() {
                 </DropdownMenuContent>
               </DropdownMenu>
 
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <motion.button
-                    whileTap={{ scale: 0.95 }}
-                    className="w-10 h-10 xs:w-11 xs:h-11 sm:w-12 sm:h-12 rounded-full bg-secondary/50 backdrop-blur-sm flex items-center justify-center hover:bg-secondary transition-colors border border-white/5"
-                    title="Counter Style"
-                  >
-                    <Shapes className="w-4 h-4 text-muted-foreground" />
-                  </motion.button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" side="top" className="w-48 bg-card/90 backdrop-blur-xl border-border/50 max-h-[40dvh] overflow-hidden flex flex-col">
-                  <DropdownMenuLabel>Counter Style</DropdownMenuLabel>
-                  <DropdownMenuSeparator />
-                  <div className="overflow-y-auto custom-scrollbar p-1">
-                    {[
-                      { id: 'minimal', label: 'Minimal', icon: '○' },
-                      { id: 'classic', label: 'Classic', icon: '□' },
-                      { id: 'beads', label: 'Beads', icon: 'ooo' },
-                      { id: 'flower', label: 'Flower', icon: '❀' },
-                      { id: 'waveform', label: 'Wave', icon: '〰' },
-                      { id: 'cyber-hexagon', label: 'Hexagon', icon: '⬡' },
-                      { id: 'glass-orb', label: 'Orb', icon: '●' },
-                      { id: 'digital', label: 'Premium', icon: '✨' },
-                      { id: 'modern-ring', label: 'Modern', icon: '◎' },
-                      { id: 'vintage-wood', label: 'Vintage', icon: '📜' },
-                      { id: 'geometric-star', label: 'Star', icon: '۞' },
-                      { id: 'fluid', label: 'Fluid', icon: '💧' },
-                      { id: 'neumorph', label: 'Soft', icon: '☁' },
-                      { id: 'real-beads', label: 'Real', icon: '📿' },
-                      { id: 'cyber-3d', label: 'Cyber', icon: '💎' },
-                      { id: 'crystal-iso', label: 'Crystal', icon: '🕋' },
-                      { id: 'portal-depth', label: 'Portal', icon: '🌀' },
-                      { id: 'luminous-ring', label: 'Lume', icon: '⭕' },
-                      { id: 'ring-light', label: 'Ring Light', icon: '🔆' },
-                      { id: 'galaxy', label: 'Galaxy', icon: '🌌' },
-                      { id: 'digital-watch', label: 'Watch', icon: '⌚' },
-                      { id: 'tally-clicker', label: 'Tally 3D', icon: '🖱️' },
-                      { id: 'steampunk-nixie', label: 'Steampunk', icon: '⚙️' },
-                      { id: 'biolum-organic', label: 'Bio-Lum', icon: '🧬' },
-                    ].map((style) => (
-                      <DropdownMenuItem
-                        key={style.id}
-                        onClick={() => useTasbeehStore.getState().setCounterShape(style.id as any)}
-                        className="flex items-center gap-2 cursor-pointer"
-                      >
-                        <span className="text-base scale-125 inline-block w-5 text-center">{style.icon}</span>
-                        <span className={`flex-1 ${counterShape === style.id ? 'font-bold text-primary' : ''}`}>{style.label}</span>
-                        {counterShape === style.id && <span className="text-primary text-xs">●</span>}
-                      </DropdownMenuItem>
-                    ))}
-                  </div>
-                </DropdownMenuContent>
-              </DropdownMenu>
             </div>
 
             {/* Routine Next Step Button Removed */}

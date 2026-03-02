@@ -48,7 +48,7 @@ export type DailyRecord = {
 };
 
 export type CounterShape = 
-  | 'minimal' | 'classic' | 'beads' | 'flower' | 'waveform' | 'digital' 
+  | 'plain' | 'minimal' | 'classic' | 'beads' | 'flower' | 'waveform' | 'digital' 
   | 'modern-ring' | 'vintage-wood' | 'geometric-star' | 'fluid' | 'radar' 
   | 'real-beads' | 'glass-orb' | 'portal-depth' | 'luminous-ring'
   | 'ring-light' | 'steampunk-nixie' | 'biolum-organic'
@@ -504,7 +504,7 @@ export const useTasbeehStore = create<TasbeehState>()(
       theme: 'light',
       language: 'en', // Keeping language for now
       zenMode: false,
-      counterShape: 'minimal', // New
+      counterShape: 'plain', // New default
       breathingGuideEnabled: false,
       breathingGuideSpeed: 4, // seconds per breath cycle
       layout: 'default',

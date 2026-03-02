@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
-import { Check, Download, Upload, Trash2, RotateCcw, Layout, Smartphone, Maximize, Cloud, LogIn, LogOut, RefreshCw, Shield, Shapes, Wind, Palette, Waves, Crown, Sunset, Zap, CloudMoon, Infinity, Fan, Diamond, Component, ExternalLink, ChevronRight } from 'lucide-react';
+import { Check, Download, Upload, Trash2, RotateCcw, Layout, Smartphone, Maximize, Cloud, LogIn, LogOut, RefreshCw, Shield, Wind, Palette, Waves, Crown, Sunset, Zap, CloudMoon, Infinity, Fan, Diamond, Component, ExternalLink, ChevronRight } from 'lucide-react';
 import { useTasbeehStore } from '@/store/tasbeehStore';
 import { supabase, signInWithGoogle, signOut, getCurrentUser, isSupabaseConfigured } from '@/lib/supabase';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger, SheetDescription } from '@/components/ui/sheet';
@@ -60,7 +60,6 @@ export function SettingsView({ children }: SettingsViewProps) {
     setFontScale,
     setSoundType,
     setTheme,
-    setCounterShape,
     layout,
     setLayout,
     hadithSlideDuration,
@@ -242,30 +241,7 @@ export function SettingsView({ children }: SettingsViewProps) {
                   </div>
                 </div>
 
-                {/* Counter Design Config */}
-                <div className="space-y-1">
-                  <p className="text-xs text-muted-foreground uppercase tracking-wide mb-3">Counter Design</p>
-                  <div className="grid grid-cols-3 sm:grid-cols-4 gap-2">
-                    {counterShapes.map((shape) => (
-                      <button
-                        key={shape.id}
-                        onClick={() => {
-                          setCounterShape(shape.id as any);
-                          setOpen(false);
-                        }}
-                        className={`
-                          p-3 rounded-xl border text-center transition-all relative overflow-hidden flex flex-col items-center gap-2
-                          ${counterShape === shape.id
-                            ? 'bg-primary/10 border-primary text-primary ring-1 ring-primary'
-                            : 'bg-card border-transparent text-muted-foreground hover:bg-secondary'}
-                        `}
-                      >
-                        <span className="text-xl opacity-70">{shape.icon}</span>
-                        <p className="text-[10px] font-medium truncate w-full">{shape.label}</p>
-                      </button>
-                    ))}
-                  </div>
-                </div>
+
 
                 {/* Zen Mode Toggle */}
                 <div className="space-y-1">

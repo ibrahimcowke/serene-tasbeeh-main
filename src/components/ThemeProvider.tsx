@@ -17,9 +17,10 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
     themeClasses.forEach(cls => root.classList.remove(cls));
 
     // Add current theme
-    if (theme) {
+    if (theme && theme !== 'light') {
       root.classList.add(theme);
     } else {
+      // Default or explicitly 'light'
       root.classList.add('light');
     }
   }, [theme]);

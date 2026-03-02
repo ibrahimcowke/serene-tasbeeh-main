@@ -1,7 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTasbeehStore } from '@/store/tasbeehStore';
-import { ThemeProvider } from '@/components/ThemeProvider';
 import { SidebarProvider, SidebarInset, SidebarTrigger } from '@/components/ui/sidebar';
 import { AppSidebar } from '@/components/AppSidebar';
 import { MainFeed } from '../components/MainFeed';
@@ -59,7 +58,7 @@ const Index = () => {
   };
 
   return (
-    <ThemeProvider>
+    <>
       <DhikrPulse />
       <JoinNotifier />
       <SidebarProvider defaultOpen={false}>
@@ -104,7 +103,7 @@ const Index = () => {
           </div>
         </SidebarInset>
       </SidebarProvider>
-    </ThemeProvider>
+    </>
   );
 };
 
