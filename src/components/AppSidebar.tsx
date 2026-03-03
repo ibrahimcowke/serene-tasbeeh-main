@@ -1,4 +1,4 @@
-import { BookOpen, Target, ClipboardList, Settings, History, Trophy, BarChart3, AppWindow, Swords, Palette } from "lucide-react";
+import { BookOpen, Target, ClipboardList, Settings, History, Trophy, BarChart3, AppWindow, Swords } from "lucide-react";
 import {
     Sidebar,
     SidebarContent,
@@ -24,20 +24,10 @@ import { NotificationCenter } from "./NotificationCenter";
 import { ChallengesView } from "./ChallengesView";
 import { toast } from "sonner";
 import { motion } from "framer-motion";
-import { themes } from "@/lib/constants";
 
 export function AppSidebar() {
-    const { setZenMode, theme, setTheme } = useTasbeehStore();
+    const { setZenMode } = useTasbeehStore();
     const { state } = useSidebar();
-    const themeIds = themes.map((item) => item.id);
-
-    const cycleTheme = () => {
-        const currentIndex = themeIds.indexOf(theme);
-        const nextTheme = themeIds[(currentIndex + 1) % themeIds.length] ?? themeIds[0];
-        setTheme(nextTheme as Parameters<typeof setTheme>[0]);
-    };
-
-
 
     return (
         <Sidebar collapsible="icon">
@@ -140,22 +130,6 @@ export function AppSidebar() {
                                         </button>
                                     </SidebarMenuButton>
                                 </AchievementsView>
-                            </SidebarMenuItem>
-                        </SidebarMenu>
-                    </SidebarGroupContent>
-                </SidebarGroup>
-
-                <SidebarGroup>
-                    <SidebarGroupLabel>Quick Style</SidebarGroupLabel>
-                    <SidebarGroupContent>
-                        <SidebarMenu>
-                            <SidebarMenuItem>
-                                <SidebarMenuButton asChild tooltip="Cycle Theme">
-                                    <button onClick={cycleTheme} className="w-full flex items-center gap-2">
-                                        <Palette className="text-primary" />
-                                        <span>Theme</span>
-                                    </button>
-                                </SidebarMenuButton>
                             </SidebarMenuItem>
                         </SidebarMenu>
                     </SidebarGroupContent>
