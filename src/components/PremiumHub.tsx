@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { useTasbeehStore } from '@/store/tasbeehStore';
 import {
@@ -17,7 +18,8 @@ import {
     RefreshCw,
     Layers,
     BadgeCheck,
-    Flame
+    Flame,
+    Palette
 } from 'lucide-react';
 import { SkeuoCounter } from './SkeuoCounter';
 import { RadialAchievement } from './RadialAchievement';
@@ -27,8 +29,10 @@ import { GlobalChallenges } from './GlobalChallenges';
 import { VisitorCounter } from './VisitorCounter';
 import { CounterVisuals, CounterNumber } from './CounterVisuals';
 import { HadithSlider } from './HadithSlider';
+import { StyleCenter } from './StyleCenter';
 
 export const PremiumHub = () => {
+    const [isStyleCenterOpen, setIsStyleCenterOpen] = useState(false);
     const {
         currentDhikr,
         currentCount: count, // Kept original alias for count
@@ -192,9 +196,13 @@ export const PremiumHub = () => {
                         >
                             <RefreshCw className="w-5 h-5" />
                         </button>
-                        <div className="w-full h-px bg-foreground/5" />
-                        <button className="p-3 hover:bg-foreground/5 rounded-full text-muted-foreground hover:text-foreground transition-colors">
-                            <Layers className="w-5 h-5" />
+                        <div className="w-full h-full bg-foreground/10 px-3 py-px rounded-full" />
+                        <button
+                            onClick={(e) => { e.stopPropagation(); setIsStyleCenterOpen(true); }}
+                            className="p-3 bg-primary/10 hover:bg-primary/20 rounded-full text-primary hover:text-primary transition-all shadow-[0_0_15px_rgba(var(--primary),0.2)] group"
+                            title="Design Studio"
+                        >
+                            <Palette className="w-5 h-5 group-hover:rotate-12 transition-transform" />
                         </button>
                     </div>
 
@@ -301,6 +309,7 @@ export const PremiumHub = () => {
 
             </div>
 
+            <StyleCenter isOpen={isStyleCenterOpen} onClose={() => setIsStyleCenterOpen(false)} />
         </div>
     );
 };
