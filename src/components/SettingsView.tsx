@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
-import { Check, Download, Upload, Trash2, RotateCcw, Layout, Smartphone, Maximize, Cloud, LogIn, LogOut, RefreshCw, Shield, Wind, Palette, Waves, Crown, Sunset, Zap, CloudMoon, Infinity, Fan, Diamond, Component, ExternalLink, ChevronRight } from 'lucide-react';
+import { Check, Download, Upload, Trash2, RotateCcw, Layout, Smartphone, Maximize, Cloud, LogIn, LogOut, RefreshCw, Shield, Wind, Palette, Waves, Crown, Sunset, Zap, CloudMoon, Infinity, Fan, Diamond, Component, ExternalLink, ChevronRight, LayoutDashboard, Minimize, GitCommit, Boxes, Sparkles, Leaf, Cpu, Mountain, Droplet, Layers, Box, Hand, Hexagon, Circle, Triangle, Scissors, Moon, Cuboid } from 'lucide-react';
 import { useTasbeehStore } from '@/store/tasbeehStore';
 import { supabase, signInWithGoogle, signOut, getCurrentUser, isSupabaseConfigured } from '@/lib/supabase';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger, SheetDescription } from '@/components/ui/sheet';
@@ -40,7 +40,7 @@ interface SettingsViewProps {
   children: React.ReactNode;
 }
 
-import { themes, counterShapes, APP_VERSION } from '@/lib/constants';
+import { themes, counterShapes, APP_VERSION, dashboardLayouts } from '@/lib/constants';
 
 
 
@@ -278,31 +278,54 @@ export function SettingsView({ children }: SettingsViewProps) {
                       Reset Defaults
                     </button>
                   </div>
-                  <div className="grid grid-cols-5 gap-2">
-                    {[
-                      { id: 'default', label: 'Classic', icon: Layout },
-                      { id: 'minimal', label: 'Minimal', icon: Maximize },
-                      { id: 'timeline', label: 'Timeline', icon: RefreshCw },
-                      { id: 'hub', label: 'Hub', icon: Component },
-                      { id: 'zen', label: 'Zen', icon: Infinity },
-                    ].map((l) => (
-                      <button
-                        key={l.id}
-                        onClick={() => {
-                          setLayout(l.id as any);
-                          setOpen(false);
-                        }}
-                        className={`
-                          p-2 rounded-xl border text-center transition-all relative overflow-hidden flex flex-col items-center gap-1
-                          ${layout === l.id
-                            ? 'bg-primary/10 border-primary text-primary ring-1 ring-primary'
-                            : 'bg-card border-transparent text-muted-foreground hover:bg-secondary'}
-                        `}
-                      >
-                        <l.icon className="w-5 h-5 opacity-70" />
-                        <p className="text-[10px] font-medium">{l.label}</p>
-                      </button>
-                    ))}
+                  <div className="grid grid-cols-4 gap-2 max-h-[160px] overflow-y-auto px-1 snap-y custom-scrollbar">
+                    {dashboardLayouts.map((l) => {
+                      // Map string icon names from constants to Lucide React components
+                      const iconMap: Record<string, any> = {
+                        'layout-dashboard': LayoutDashboard,
+                        'minimize': Minimize,
+                        'git-commit': GitCommit,
+                        'boxes': Boxes,
+                        'wind': Wind,
+                        'sparkles': Sparkles,
+                        'leaf': Leaf,
+                        'cpu': Cpu,
+                        'mountain': Mountain,
+                        'droplet': Droplet,
+                        'layers': Layers,
+                        'box': Box,
+                        'hand': Hand,
+                        'hexagon': Hexagon,
+                        'circle': Circle,
+                        'cloud': Cloud,
+                        'triangle': Triangle,
+                        'palette': Palette,
+                        'zap': Zap,
+                        'scissors': Scissors,
+                        'moon': Moon,
+                        'cuboid': Cuboid
+                      };
+                      const IconComponent = iconMap[l.icon] || LayoutDashboard;
+
+                      return (
+                        <button
+                          key={l.id}
+                          onClick={() => {
+                            setLayout(l.id as any);
+                            setOpen(false);
+                          }}
+                          className={`
+                            p-2 rounded-xl border text-center transition-all relative overflow-hidden flex flex-col items-center gap-1 snap-start
+                            ${layout === l.id
+                              ? 'bg-primary/10 border-primary text-primary ring-1 ring-primary'
+                              : 'bg-card border-transparent text-muted-foreground hover:bg-secondary'}
+                          `}
+                        >
+                          <IconComponent className="w-5 h-5 opacity-70" />
+                          <p className="text-[10px] font-medium truncate w-full">{l.label}</p>
+                        </button>
+                      );
+                    })}
                   </div>
 
                   {/* Advanced Layout Accordion */}

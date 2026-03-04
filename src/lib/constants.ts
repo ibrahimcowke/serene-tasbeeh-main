@@ -14,7 +14,7 @@ export const themes = [
   { id: 'theme-sunset', label: 'Sunset', description: 'Warm gradients' },
   { id: 'theme-forest', label: 'Forest', description: 'Deep nature greens' },
   { id: 'theme-oled', label: 'OLED', description: 'True black power saver' },
-  
+
   // New Themes
   { id: 'theme-mecca-night', label: 'Mecca Night', description: 'Black & Gold spiritual focus' },
   { id: 'theme-medina-rose', label: 'Medina Rose', description: 'Soft pink & green serenity' },
@@ -78,4 +78,29 @@ export const counterShapes = [
   { id: 'cyber-3d', label: 'Cyber 3D', icon: '💎' },
   { id: 'crystal-iso', label: 'Crystal ISO', icon: '🕋' },
   { id: 'neumorph', label: 'Neumorph', icon: '☁' },
+] as const;
+
+export const dashboardLayouts = [
+  { id: 'default', label: 'Default', icon: 'layout-dashboard' },
+  { id: 'minimal', label: 'Minimal', icon: 'minimize' },
+  { id: 'timeline', label: 'Timeline', icon: 'git-commit' },
+  { id: 'hub', label: 'Hub', icon: 'boxes' },
+  { id: 'zen', label: 'Zen', icon: 'wind' },
+  { id: 'cosmic', label: 'Cosmic Space', icon: 'sparkles' },
+  { id: 'nature', label: 'Nature', icon: 'leaf' },
+  { id: 'futuristic', label: 'Futuristic', icon: 'cpu' },
+  { id: 'rugged', label: 'Rugged', icon: 'mountain' },
+  { id: 'liquid', label: 'Liquid', icon: 'droplet' },
+  { id: 'glassmorphic', label: 'Glassmorphic', icon: 'layers' },
+  { id: 'skeuomorphic', label: 'Skeuomorphic', icon: 'box' },
+  { id: 'tactile', label: 'Tactile', icon: 'hand' },
+  { id: 'origami', label: 'Origami', icon: 'hexagon' },
+  { id: 'claymorphic', label: 'Claymorphic', icon: 'circle' },
+  { id: 'neumorphic', label: 'Neumorphic', icon: 'cloud' },
+  { id: 'geometric', label: 'Geometric', icon: 'triangle' },
+  { id: 'pop-art', label: 'Pop Art', icon: 'palette' },
+  { id: 'cyberpunk', label: 'Cyberpunk', icon: 'zap' },
+  { id: 'embroidery', label: 'Embroidery', icon: 'scissors' },
+  { id: 'dreamy', label: 'Dreamy', icon: 'moon' },
+  { id: 'isometric', label: 'Isometric', icon: 'cuboid' },
 ] as const;
