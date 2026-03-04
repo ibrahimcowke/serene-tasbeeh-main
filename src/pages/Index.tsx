@@ -12,83 +12,38 @@ import { BreathingGuide } from '@/components/BreathingGuide';
 import { CommunitySidebar } from '@/components/CommunitySidebar';
 import { JoinNotifier } from '@/components/JoinNotifier';
 import ClassicDashboard from '../components/dashboards/ClassicDashboard';
-import MinimalDashboard from '../components/dashboards/MinimalDashboard';
-import TimelineDashboard from '../components/dashboards/TimelineDashboard';
-import CosmicDashboard from '../components/dashboards/CosmicDashboard';
-import NatureDashboard from '../components/dashboards/NatureDashboard';
-import FuturisticDashboard from '../components/dashboards/FuturisticDashboard';
-import RuggedDashboard from '../components/dashboards/RuggedDashboard';
-import LiquidDashboard from '../components/dashboards/LiquidDashboard';
-import GlassmorphicDashboard from '../components/dashboards/GlassmorphicDashboard';
-import SkeuomorphicDashboard from '../components/dashboards/SkeuomorphicDashboard';
-import TactileDashboard from '../components/dashboards/TactileDashboard';
-import OrigamiDashboard from '../components/dashboards/OrigamiDashboard';
-import ClaymorphicDashboard from '../components/dashboards/ClaymorphicDashboard';
-import NeumorphicDashboard from '../components/dashboards/NeumorphicDashboard';
-import GeometricDashboard from '../components/dashboards/GeometricDashboard';
-import PopArtDashboard from '../components/dashboards/PopArtDashboard';
-import CyberpunkDashboard from '../components/dashboards/CyberpunkDashboard';
-import EmbroideryDashboard from '../components/dashboards/EmbroideryDashboard';
-import DreamyDashboard from '../components/dashboards/DreamyDashboard';
-import IsometricDashboard from '../components/dashboards/IsometricDashboard';
-import { HubDashboard } from '@/components/HubDashboard';
 import { PremiumHub } from '@/components/PremiumHub';
 
 const Index = () => {
   const { zenMode, setZenMode, layout, setLayout } = useTasbeehStore();
 
   const renderDashboard = () => {
-    switch (layout) {
-      case 'minimal':
-        return <MinimalDashboard />;
-      case 'timeline':
-        return <TimelineDashboard />;
-      case 'hub':
-        return <HubDashboard />;
-      case 'cosmic': return <CosmicDashboard />;
-      case 'nature': return <NatureDashboard />;
-      case 'futuristic': return <FuturisticDashboard />;
-      case 'rugged': return <RuggedDashboard />;
-      case 'liquid': return <LiquidDashboard />;
-      case 'glassmorphic': return <GlassmorphicDashboard />;
-      case 'skeuomorphic': return <SkeuomorphicDashboard />;
-      case 'tactile': return <TactileDashboard />;
-      case 'origami': return <OrigamiDashboard />;
-      case 'claymorphic': return <ClaymorphicDashboard />;
-      case 'neumorphic': return <NeumorphicDashboard />;
-      case 'geometric': return <GeometricDashboard />;
-      case 'pop-art': return <PopArtDashboard />;
-      case 'cyberpunk': return <CyberpunkDashboard />;
-      case 'embroidery': return <EmbroideryDashboard />;
-      case 'dreamy': return <DreamyDashboard />;
-      case 'isometric': return <IsometricDashboard />;
-      case 'zen':
-        return <ClassicDashboard />;
-      case 'classic':
-      default:
-        return (
-          <div className="flex flex-col lg:flex-row gap-6 lg:gap-8 items-start justify-center">
-            {/* Main Content Area */}
-            <div className="w-full flex-1">
-              <div className="lg:hidden">
-                <ClassicDashboard />
-              </div>
-              <div className="hidden lg:block">
-                <PremiumHub />
-              </div>
-            </div>
-
-            {/* Desktop Community Sidebar - Only show if not PremiumHub since PremiumHub includes it */}
-            <motion.div
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              className="hidden xl:hidden w-80 xl:w-96 sticky top-24 h-[calc(100vh-8rem)]"
-            >
-              <CommunitySidebar />
-            </motion.div>
-          </div>
-        );
+    if (layout === 'zen') {
+      return <ClassicDashboard />;
     }
+
+    return (
+      <div className="flex flex-col lg:flex-row gap-6 lg:gap-8 items-start justify-center">
+        {/* Main Content Area */}
+        <div className="w-full flex-1">
+          <div className="lg:hidden">
+            <ClassicDashboard />
+          </div>
+          <div className="hidden lg:block">
+            <PremiumHub />
+          </div>
+        </div>
+
+        {/* Desktop Community Sidebar - Only show if not PremiumHub since PremiumHub includes it */}
+        <motion.div
+          initial={{ opacity: 0, x: 20 }}
+          animate={{ opacity: 1, x: 0 }}
+          className="hidden xl:hidden w-80 xl:w-96 sticky top-24 h-[calc(100vh-8rem)]"
+        >
+          <CommunitySidebar />
+        </motion.div>
+      </div>
+    );
   };
 
   return (

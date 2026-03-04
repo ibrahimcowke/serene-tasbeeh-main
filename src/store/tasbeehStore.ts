@@ -80,7 +80,7 @@ interface TasbeehState {
 
   // Global preference (not per theme)
   counterShape: CounterShape;
-  layout: 'default' | 'focus' | 'ergonomic' | 'hub' | 'zen' | 'minimal' | 'timeline' | 'classic' | 'cosmic' | 'nature' | 'futuristic' | 'rugged' | 'liquid' | 'glassmorphic' | 'skeuomorphic' | 'tactile' | 'origami' | 'claymorphic' | 'neumorphic' | 'geometric' | 'pop-art' | 'cyberpunk' | 'embroidery' | 'dreamy' | 'isometric';
+  layout: 'default' | 'zen';
   showTransliteration: boolean;
 
   // Mindfulness
@@ -181,7 +181,7 @@ interface TasbeehState {
 
   // New Settings Actions
   setCounterShape: (shape: CounterShape) => void;
-  setLayout: (layout: 'default' | 'focus' | 'ergonomic' | 'hub' | 'zen' | 'minimal' | 'timeline' | 'classic') => void;
+  setLayout: (layout: 'default' | 'zen') => void;
   setHadithSlideDuration: (duration: number) => void;
   setHadithSlidePosition: (position: 'top-right' | 'top-left' | 'bottom-right' | 'bottom-left' | 'right' | 'bottom' | 'hidden') => void;
   setDailyGoal: (goal: number) => void;
