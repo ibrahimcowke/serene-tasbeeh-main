@@ -23,6 +23,17 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
       // Default or explicitly 'light'
       root.classList.add('light');
     }
+
+    // Automatically apply Tailwind `.dark` for dark themes so Shadcn UI picks it up properly
+    const darkThemes = [
+      'theme-midnight', 'theme-neon', 'theme-green', 'theme-cyberpunk', 'theme-glass',
+      'theme-sunset', 'theme-forest', 'theme-oled', 'theme-biolum', 'theme-radar-tactical',
+      'theme-steampunk', 'theme-crystal-depth', 'theme-mecca-night', 'theme-desert-starlight',
+      'theme-istanbul-sunset', 'theme-ramadan-lantern'
+    ];
+    if (darkThemes.includes(theme)) {
+      root.classList.add('dark');
+    }
   }, [theme]);
 
   return <>{children}</>;
