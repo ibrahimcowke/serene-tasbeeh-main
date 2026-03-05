@@ -33,7 +33,7 @@ export const HelixStrand: React.FC<{ currentCount: number }> = ({ currentCount }
                         <div key={i} className="absolute w-full flex justify-center items-center" style={{ top: `${progress * 100}%` }}>
                             {/* Connector Line */}
                             <motion.div
-                                className="absolute h-[2px] bg-primary/30"
+                                className="absolute h-[2px] bg-original-primary/30"
                                 style={{
                                     width: Math.abs(x1 - x2),
                                     left: `calc(50% + ${Math.min(x1, x2)}px)`,

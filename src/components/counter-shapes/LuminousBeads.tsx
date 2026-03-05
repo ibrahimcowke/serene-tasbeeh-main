@@ -11,7 +11,7 @@ export function LuminousBeads({ progress }: LuminousBeadsProps) {
         <div className="relative w-64 h-64 flex items-center justify-center -z-10">
             <svg className="w-[256px] h-[256px] -rotate-90" viewBox="0 0 256 256">
                 {/* Main connected "String" (faint glow) */}
-                <circle cx="128" cy="128" r="110" stroke="currentColor" fill="none" strokeWidth="2" className="text-primary/10" />
+                <circle cx="128" cy="128" r="110" stroke="currentColor" fill="none" strokeWidth="2" className="text-original-primary/10" />
 
                 {/* Beads */}
                 {Array.from({ length: NUM_BEADS }).map((_, i) => {
@@ -34,8 +34,8 @@ export function LuminousBeads({ progress }: LuminousBeadsProps) {
                                 cx={x}
                                 cy={y}
                                 r={isActive ? 8 : 4}
-                                fill={isActive ? "var(--primary)" : "currentColor"}
-                                className={isActive ? "text-primary drop-shadow-[0_0_8px_rgba(var(--primary),0.8)]" : "text-muted/20"}
+                                fill={isActive ? "hsl(var(--original-primary))" : "currentColor"}
+                                className={isActive ? "text-original-primary drop-shadow-[0_0_8px_hsl(var(--original-primary)/0.8)]" : "text-original-muted/20"}
                                 animate={{
                                     scale: isCurrent ? [1, 1.4, 1] : 1,
                                     opacity: isActive ? 1 : 0.3
@@ -53,7 +53,7 @@ export function LuminousBeads({ progress }: LuminousBeadsProps) {
                                     fill="none"
                                     stroke="currentColor"
                                     strokeWidth="2"
-                                    className="text-primary/50"
+                                    className="text-original-primary/50"
                                     initial={{ scale: 0.5, opacity: 1 }}
                                     animate={{ scale: 1.5, opacity: 0 }}
                                     transition={{ duration: 1, repeat: Infinity }}

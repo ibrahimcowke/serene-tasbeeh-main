@@ -26,7 +26,7 @@ export const Constellation: React.FC<{ currentCount: number }> = ({ currentCount
                             y2={`${nextStar.y}%`}
                             stroke="currentColor"
                             strokeWidth="1"
-                            className="text-primary/30"
+                            className="text-original-primary/30"
                             initial={{ pathLength: 0 }}
                             animate={{ pathLength: [0, 1, 1, 0] }}
                             transition={{ duration: 5, repeat: Infinity, delay: i * 0.5, ease: "linear" }}
@@ -57,7 +57,7 @@ export const Constellation: React.FC<{ currentCount: number }> = ({ currentCount
                 className="absolute w-full h-full pointer-events-none"
             >
                 <motion.div
-                    className="absolute bg-primary/50 blur-xl rounded-full"
+                    className="absolute bg-original-primary/50 blur-xl rounded-full"
                     style={{
                         left: `${stars[currentCount % stars.length].x}%`,
                         top: `${stars[currentCount % stars.length].y}%`,

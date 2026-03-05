@@ -68,6 +68,13 @@ export default {
         sheet: {
           bg: "hsl(var(--sheet-bg) / <alpha-value>)",
         },
+        original: {
+          primary: "hsl(var(--original-primary) / <alpha-value>)",
+          glow: "hsl(var(--original-primary-glow) / <alpha-value>)",
+          secondary: "hsl(var(--original-secondary) / <alpha-value>)",
+          muted: "hsl(var(--original-muted) / <alpha-value>)",
+          border: "hsl(var(--original-border) / <alpha-value>)",
+        },
       },
       borderRadius: {
         lg: "var(--radius)",

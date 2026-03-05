@@ -28,9 +28,9 @@ export function VerticalCapsules({ currentCount }: VerticalCapsulesProps) {
                         animate={{ y: 0, opacity: 1, scale: 1 }}
                         exit={{ y: 50, opacity: 0, scale: 0.8 }}
                         transition={{ type: "spring", stiffness: 300, damping: 25 }}
-                        className="w-24 h-12 rounded-full border border-primary/20 bg-primary/10 shadow-[0_0_15px_rgba(var(--primary),0.3)] flex items-center justify-center mb-2 z-20"
+                        className="w-24 h-12 rounded-full border border-original-primary/20 bg-original-primary/10 shadow-[0_0_15px_hsl(var(--original-primary)/0.3)] flex items-center justify-center mb-2 z-20"
                     >
-                        <span className="text-xl font-bold text-primary">{currentCount}</span>
+                        <span className="text-xl font-bold text-original-primary">{currentCount}</span>
                     </motion.div>
 
                     {/* Previous Capsules (Trailing) */}

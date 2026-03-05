@@ -5,7 +5,7 @@ export const BloomingLotus: React.FC<{ currentCount: number }> = ({ currentCount
     return (
         <div className="relative w-64 h-64 flex items-center justify-center">
             {/* Central glow */}
-            <div className="absolute inset-0 bg-primary/20 blur-3xl rounded-full" />
+            <div className="absolute inset-0 bg-original-primary/20 blur-3xl rounded-full" />
 
             {/* Rotating container */}
             <motion.div
@@ -17,7 +17,7 @@ export const BloomingLotus: React.FC<{ currentCount: number }> = ({ currentCount
                 {[...Array(8)].map((_, i) => (
                     <motion.div
                         key={i}
-                        className="absolute w-12 h-24 bg-gradient-to-t from-primary/80 to-primary/10 rounded-[100%] origin-bottom"
+                        className="absolute w-12 h-24 bg-gradient-to-t from-original-primary/80 to-original-primary/10 rounded-[100%] origin-bottom"
                         style={{
                             rotate: i * 45,
                             bottom: '50%',

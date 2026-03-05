@@ -243,13 +243,32 @@ export function SettingsView({ children }: SettingsViewProps) {
 
 
 
-                {/* Zen Mode Toggle */}
+                {/* Dashboard Layout */}
                 <div className="space-y-1">
-                  <p className="text-xs text-muted-foreground uppercase tracking-wide mb-3">Focus</p>
+                  <p className="text-xs text-muted-foreground uppercase tracking-wide mb-3">Dashboard</p>
+                  <div className="grid grid-cols-2 gap-3 mb-4">
+                    {dashboardLayouts.map((l) => (
+                      <button
+                        key={l.id}
+                        onClick={() => setLayout(l.id as any)}
+                        className={`
+                          flex flex-col items-center justify-center p-4 rounded-2xl border transition-all
+                          ${layout === l.id
+                            ? 'bg-primary/10 border-primary text-primary shadow-sm'
+                            : 'bg-card border-border hover:bg-secondary text-muted-foreground'}
+                        `}
+                      >
+                        <LayoutDashboard className={`w-6 h-6 mb-2 ${layout === l.id ? 'text-primary' : 'text-muted-foreground'}`} />
+                        <span className="text-xs font-medium">{l.label}</span>
+                      </button>
+                    ))}
+                  </div>
+
+                  {/* Zen Mode Toggle */}
                   <div className="flex items-center justify-between p-4 rounded-xl bg-card border border-border/50">
                     <div className="space-y-0.5">
-                      <label className="text-sm font-medium">Zen Mode</label>
-                      <p className="text-xs text-muted-foreground">Hide minimal UI for complete focus</p>
+                      <label className="text-sm font-medium">Zen Mode focus</label>
+                      <p className="text-xs text-muted-foreground">Hide sidebars for complete focus</p>
                     </div>
                     <Switch
                       checked={zenMode}

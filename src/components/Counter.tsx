@@ -297,7 +297,7 @@ export function Counter() {
             </div>
 
             {/* Mobile controls (Minus & Reset) moved below counter */}
-            <div className={`flex items-center justify-center gap-3 xs:gap-6 sm:gap-8 mt-4 xs:mt-5 sm:mt-6 lg:hidden relative z-20 transition-opacity duration-300 ${isEditingLayout ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
+            <div className={`flex items-center justify-center gap-3 xs:gap-6 sm:gap-8 mt-4 xs:mt-5 sm:mt-6 lg:hidden relative z-20 transition-opacity duration-300 ${isEditingLayout || zenMode ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
               <motion.button
                 whileTap={{ scale: 0.95 }}
                 onClick={(e) => {
@@ -419,17 +419,19 @@ export function Counter() {
         style={{ transform: `translateY(${verticalOffset}px)` }}
       >
 
-        <button
-          onClick={() => setIsEditingLayout(!isEditingLayout)}
-          className={`absolute top-4 right-4 z-50 p-2 rounded-full backdrop-blur-md transition-all duration-300 ${isEditingLayout ? 'bg-primary text-primary-foreground shadow-lg scale-110' : 'bg-secondary/30 text-muted-foreground hover:bg-secondary/50'}`}
-          title="Edit Layout"
-        >
-          {isEditingLayout ? (
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z" /><polyline points="17 21 17 13 7 13 7 21" /><polyline points="7 3 7 8 15 8" /></svg>
-          ) : (
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" /><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" /></svg>
-          )}
-        </button>
+        {!zenMode && (
+          <button
+            onClick={() => setIsEditingLayout(!isEditingLayout)}
+            className={`absolute top-4 right-4 z-50 p-2 rounded-full backdrop-blur-md transition-all duration-300 ${isEditingLayout ? 'bg-primary text-primary-foreground shadow-lg scale-110' : 'bg-secondary/30 text-muted-foreground hover:bg-secondary/50'}`}
+            title="Edit Layout"
+          >
+            {isEditingLayout ? (
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z" /><polyline points="17 21 17 13 7 13 7 21" /><polyline points="7 3 7 8 15 8" /></svg>
+            ) : (
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" /><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" /></svg>
+            )}
+          </button>
+        )}
 
         <AnimatePresence>
           {/* Session mode indicators moved to renderDhikrText to be grouped with Dhikr text */}

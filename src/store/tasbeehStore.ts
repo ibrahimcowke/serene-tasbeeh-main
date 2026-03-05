@@ -1109,7 +1109,7 @@ export const useTasbeehStore = create<TasbeehState>()(
       },
 
       setCounterShape: (shape) => set({ counterShape: shape }),
-      setLayout: (layout) => set({ layout }),
+      setLayout: (layout) => set({ layout, zenMode: layout === 'zen' }),
       setHadithSlideDuration: (duration) => set({ hadithSlideDuration: duration }),
       setHadithSlidePosition: (position) => set({ hadithSlidePosition: position }),
       setDailyGoal: (goal) => set({ dailyGoal: goal }),
@@ -1120,7 +1120,7 @@ export const useTasbeehStore = create<TasbeehState>()(
       setCountFontSize: (scale) => set({ countFontSize: scale }),
       setDhikrTextPosition: (position) => set({ dhikrTextPosition: position }),
       setLayoutOrder: (order) => set({ layoutOrder: order }),
-      setZenMode: (enabled) => set({ zenMode: enabled }),
+      setZenMode: (enabled) => set({ zenMode: enabled, layout: enabled ? 'zen' : 'default' }),
       setBreathingGuide: (enabled) => set({ breathingGuideEnabled: enabled }),
       setBreathingGuideSpeed: (speed) => set({ breathingGuideSpeed: speed }),
 

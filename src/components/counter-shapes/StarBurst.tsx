@@ -11,7 +11,7 @@ export function StarBurst({ currentCount }: { currentCount: number }) {
                 {[...Array(24)].map((_, i) => (
                     <motion.div
                         key={i}
-                        className="absolute w-1 rounded-full bg-primary/60"
+                        className="absolute w-1 rounded-full bg-original-primary/60"
                         style={{
                             height: i % 2 === 0 ? '120px' : '80px',
                             transformOrigin: 'bottom center',
@@ -33,11 +33,11 @@ export function StarBurst({ currentCount }: { currentCount: number }) {
             </motion.div>
 
             <motion.div
-                className="absolute w-32 h-32 rounded-full bg-primary/20 backdrop-blur-md shadow-[0_0_40px_hsl(var(--primary)/0.6)] flex items-center justify-center"
+                className="absolute w-32 h-32 rounded-full bg-original-primary/20 backdrop-blur-md shadow-[0_0_40px_hsl(var(--original-primary)/0.6)] flex items-center justify-center"
                 animate={{ scale: [1, 1.05, 1] }}
                 transition={{ duration: 1, repeat: Infinity }}
             >
-                <div className="w-24 h-24 rounded-full bg-primary/40 blur-sm" />
+                <div className="w-24 h-24 rounded-full bg-original-primary/40 blur-sm" />
             </motion.div>
         </div>
     );

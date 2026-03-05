@@ -68,24 +68,24 @@ export const CounterNumber = memo(({
   ${['digital', 'vertical-capsules', 'tally-clicker', 'cyber-3d', 'crystal-iso', 'neumorph', 'digital-watch', 'steampunk-nixie'].includes(counterShape) ? 'hidden' : ''}
   ${counterShape === 'classic' ? 'font-mono text-5xl sm:text-6xl md:text-7xl tracking-widest bg-black/10 px-4 sm:px-6 py-2 rounded-lg inset-shadow mb-4' : 'text-5xl sm:text-6xl md:text-7xl lg:text-8xl'}
   ${counterShape === 'waveform' ? 'drop-shadow-md z-10' : ''}
-  ${counterShape === 'modern-ring' ? 'font-sans font-light tracking-tighter drop-shadow-[0_0_15px_rgba(var(--primary),0.6)]' : ''}
+  ${counterShape === 'modern-ring' ? 'font-sans font-light tracking-tighter drop-shadow-[0_0_15px_hsl(var(--original-primary)/0.6)]' : ''}
   ${counterShape === 'vintage-wood' ? 'font-serif text-[#d7ccc8] drop-shadow-[0_2px_2px_rgba(0,0,0,0.5)]' : ''}
-  ${counterShape === 'radar' ? 'font-mono text-primary drop-shadow-[0_0_5px_hsl(var(--primary))]' : ''}
+  ${counterShape === 'radar' ? 'font-mono text-original-primary drop-shadow-[0_0_5px_hsl(var(--original-primary))]' : ''}
   ${counterShape === 'real-beads' ? 'font-serif text-[#5d4037] text-6xl font-bold drop-shadow-md bg-white/80 w-32 h-32 rounded-full flex items-center justify-center border-4 border-[#8d6e63]' : ''}
   ${counterShape === 'glass-orb' ? 'text-white/90 drop-shadow-lg font-light' : ''}
-  ${counterShape === 'portal-depth' ? 'text-primary-foreground drop-shadow-[0_0_20px_hsl(var(--primary)/0.8)]' : ''}
-  ${counterShape === 'luminous-ring' ? 'text-primary drop-shadow-[0_0_15px_hsl(var(--primary)/0.8)] font-light' : ''}
+  ${counterShape === 'portal-depth' ? 'text-primary-foreground drop-shadow-[0_0_20px_hsl(var(--original-primary)/0.8)]' : ''}
+  ${counterShape === 'luminous-ring' ? 'text-original-primary drop-shadow-[0_0_15px_hsl(var(--original-primary)/0.8)] font-light' : ''}
   ${counterShape === 'ring-light' ? 'text-white/90 font-thin tracking-tighter drop-shadow-[0_0_20px_rgba(255,255,255,0.8)]' : ''}
   ${counterShape === 'steampunk-nixie' ? 'font-mono text-orange-500 font-bold tracking-widest drop-shadow-[0_0_10px_orange] text-6xl' : ''}
-  ${counterShape === 'biolum-organic' ? 'font-mono text-primary font-bold tracking-widest drop-shadow-[0_0_15px_hsl(var(--primary))] text-6xl' : ''}
+  ${counterShape === 'biolum-organic' ? 'font-mono text-original-primary font-bold tracking-widest drop-shadow-[0_0_15px_hsl(var(--original-primary))] text-6xl' : ''}
   ${counterShape === 'solar-flare' ? 'text-white drop-shadow-[0_0_20px_orange] font-bold' : ''}
-  ${['nebula-cloud', 'infinite-knot', 'holo-fan', 'luminous-beads', 'galaxy'].includes(counterShape) ? 'text-primary drop-shadow-[0_0_12px_rgba(var(--primary),0.6)] font-bold' : ''}
+  ${['nebula-cloud', 'infinite-knot', 'holo-fan', 'luminous-beads', 'galaxy'].includes(counterShape) ? 'text-original-primary drop-shadow-[0_0_12px_hsl(var(--original-primary)/0.6)] font-bold' : ''}
   ${counterShape === 'halo-ring' ? 'text-emerald-400 font-bold drop-shadow-[0_0_10px_rgba(52,211,153,0.8)]' : ''}
   
   ${counterShape === 'animated-ripple' ? 'text-blue-200 font-light text-7xl tracking-widest drop-shadow-[0_0_10px_rgba(59,130,246,0.6)]' : ''}
   ${counterShape === 'bead-ring' ? 'text-amber-500 font-mono text-7xl font-bold tracking-wider drop-shadow-[0_0_10px_rgba(245,158,11,0.6)]' : ''}
   ${counterShape === 'helix-strand' ? 'text-cyan-400 font-mono tracking-widest drop-shadow-[0_0_10px_rgba(34,211,238,0.8)]' : ''}
-  ${counterShape === 'cyber-hexagon' ? 'font-mono text-primary font-bold tracking-widest drop-shadow-[0_0_10px_rgba(var(--primary),0.8)]' : ''}
+  ${counterShape === 'cyber-hexagon' ? 'font-mono text-original-primary font-bold tracking-widest drop-shadow-[0_0_10px_hsl(var(--original-primary)/0.8)]' : ''}
   ${counterShape === 'blooming-lotus' ? 'font-serif text-white/90 drop-shadow-lg font-light' : ''}
   ${counterShape === 'constellation' ? 'font-thin text-white tracking-widest drop-shadow-[0_0_10px_white]' : ''}
   ${counterShape === 'glass-pill' ? 'font-sans font-medium text-white tracking-widest text-6xl drop-shadow-md' : ''}
@@ -139,14 +139,14 @@ export const CounterVisuals = memo(({
                                 fill="none"
                                 stroke="currentColor"
                                 strokeWidth="4"
-                                className="text-muted/30"
+                                className="text-original-muted/30"
                             />
                             <motion.rect
                                 x="10" y="10" width="236" height="236" rx="24"
                                 fill="none"
                                 stroke="currentColor"
                                 strokeWidth="4"
-                                className="text-primary drop-shadow-[0_0_10px_rgba(var(--primary),0.5)]"
+                                className="text-original-primary drop-shadow-[0_0_10px_hsl(var(--original-primary)/0.5)]"
                                 pathLength="1"
                                 strokeDasharray="1"
                                 initial={{ strokeDashoffset: 1 }}
@@ -167,7 +167,7 @@ export const CounterVisuals = memo(({
                                 fill="none"
                                 stroke="currentColor"
                                 strokeWidth="4"
-                                className="text-muted/30"
+                                className="text-original-muted/30"
                             />
                             <motion.circle
                                 cx="128"
@@ -176,7 +176,7 @@ export const CounterVisuals = memo(({
                                 fill="none"
                                 stroke="currentColor"
                                 strokeWidth="4"
-                                className="text-primary drop-shadow-[0_0_10px_rgba(var(--primary),0.5)]"
+                                className="text-original-primary drop-shadow-[0_0_10px_hsl(var(--original-primary)/0.5)]"
                                 strokeDasharray="772"
                                 initial={{ strokeDashoffset: 772 }}
                                 animate={{ strokeDashoffset: 772 - (772 * progress) }}
@@ -219,12 +219,12 @@ export const CounterVisuals = memo(({
 
 
                 {counterShape === 'classic' && (
-                    <div className="absolute inset-x-0 -top-4 bottom-0 bg-secondary/30 rounded-3xl border-4 border-muted flex items-center justify-center -z-10 flex-col">
+                    <div className="absolute inset-x-0 -top-4 bottom-0 bg-original-secondary/30 rounded-3xl border-4 border-original-muted flex items-center justify-center -z-10 flex-col">
                         {/* Decorative screws */}
-                        <div className="absolute top-3 left-3 w-3 h-3 rounded-full bg-muted-foreground/30" />
-                        <div className="absolute top-3 right-3 w-3 h-3 rounded-full bg-muted-foreground/30" />
-                        <div className="absolute bottom-3 left-3 w-3 h-3 rounded-full bg-muted-foreground/30" />
-                        <div className="absolute bottom-3 right-3 w-3 h-3 rounded-full bg-muted-foreground/30" />
+                        <div className="absolute top-3 left-3 w-3 h-3 rounded-full bg-original-muted/30" />
+                        <div className="absolute top-3 right-3 w-3 h-3 rounded-full bg-original-muted/30" />
+                        <div className="absolute bottom-3 left-3 w-3 h-3 rounded-full bg-original-muted/30" />
+                        <div className="absolute bottom-3 right-3 w-3 h-3 rounded-full bg-original-muted/30" />
                     </div>
                 )}
 
@@ -234,7 +234,7 @@ export const CounterVisuals = memo(({
                     <div className="absolute inset-0 flex items-center justify-center -z-10 pointer-events-none">
                         <svg className="w-[300px] h-[300px] -rotate-90">
                             {/* Track Dots - subtle guide only */}
-                            <circle cx="150" cy="150" r="140" stroke="currentColor" fill="none" strokeWidth="2" className="text-muted/10" strokeDasharray="1 30" />
+                            <circle cx="150" cy="150" r="140" stroke="currentColor" fill="none" strokeWidth="2" className="text-original-muted/10" strokeDasharray="1 30" />
                         </svg>
                     </div>
                 )}
@@ -249,7 +249,7 @@ export const CounterVisuals = memo(({
                             {[...Array(8)].map((_, i) => (
                                 <div
                                     key={i}
-                                    className="absolute top-1/2 left-1/2 w-24 h-24 bg-primary rounded-full origin-bottom-right"
+                                    className="absolute top-1/2 left-1/2 w-24 h-24 bg-original-primary rounded-full origin-bottom-right"
                                     style={{ transform: `rotate(${i * 45}deg) translate(-50%, -100%)` }}
                                 />
                             ))}
@@ -258,23 +258,23 @@ export const CounterVisuals = memo(({
                 )}
 
                 {counterShape === 'waveform' && (
-                    <div className="absolute inset-0 rounded-full overflow-hidden -z-10 border-4 border-muted/50">
-                        <div className="absolute inset-0 bg-secondary/30" />
+                    <div className="absolute inset-0 rounded-full overflow-hidden -z-10 border-4 border-original-muted/50">
+                        <div className="absolute inset-0 bg-original-secondary/30" />
                         {/* Distinct Background Level */}
-                        <div className="absolute bottom-0 left-0 right-0 h-full bg-muted/20" />
+                        <div className="absolute bottom-0 left-0 right-0 h-full bg-original-muted/20" />
 
                         <motion.div
-                            className="absolute bottom-0 left-0 right-0 bg-primary/40 text-primary"
+                            className="absolute bottom-0 left-0 right-0 bg-original-primary/40 text-original-primary"
                             initial={{ height: 0 }}
                             animate={{ height: `${Math.max(progress * 100, 5)}%` }}
                             transition={{ type: 'spring', bounce: 0, duration: 0.5 }}
                         >
                             {/* Glowing Top Edge */}
-                            <div className="absolute top-0 left-0 right-0 h-1 bg-primary shadow-[0_0_15px_currentColor]" />
-                            <div className="absolute top-0 left-0 right-0 h-6 bg-primary/40 blur-md transform -translate-y-1/2" />
+                            <div className="absolute top-0 left-0 right-0 h-1 bg-original-primary shadow-[0_0_15px_currentColor]" />
+                            <div className="absolute top-0 left-0 right-0 h-6 bg-original-primary/40 blur-md transform -translate-y-1/2" />
                         </motion.div>
                         {/* Crisp outline */}
-                        <div className="absolute inset-0 rounded-full border-2 border-primary/30 pointer-events-none" />
+                        <div className="absolute inset-0 rounded-full border-2 border-original-primary/30 pointer-events-none" />
                     </div>
                 )}
 
@@ -335,12 +335,12 @@ export const CounterVisuals = memo(({
                             <motion.div
                                 animate={{ rotate: 360 }}
                                 transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-                                className="absolute w-[280px] h-[280px] rounded-full border border-primary/10 border-t-primary/50 border-r-transparent"
+                                className="absolute w-[280px] h-[280px] rounded-full border border-original-primary/10 border-t-original-primary/50 border-r-transparent"
                             />
                             <motion.div
                                 animate={{ rotate: -360 }}
                                 transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
-                                className="absolute w-[250px] h-[250px] rounded-full border border-secondary/20 border-b-secondary/50 border-l-transparent dashed-circle"
+                                className="absolute w-[250px] h-[250px] rounded-full border border-original-secondary/20 border-b-original-secondary/50 border-l-transparent dashed-circle"
                             />
                         </div>
                     )
@@ -368,7 +368,7 @@ export const CounterVisuals = memo(({
                     <div className="absolute inset-0 flex items-center justify-center -z-10 scale-[0.8]">
                         <svg width="100%" height="100%" viewBox="0 0 300 300" className="animate-[spin_60s_linear_infinite]">
                             {/* Outer Ring */}
-                            <circle cx="150" cy="150" r="145" stroke="currentColor" strokeWidth="1" className="text-primary/30" />
+                            <circle cx="150" cy="150" r="145" stroke="currentColor" strokeWidth="1" className="text-original-primary/30" />
 
                             {/* 8-pointed Islamic Star */}
                             <path
@@ -376,22 +376,22 @@ export const CounterVisuals = memo(({
                                 fill="none"
                                 stroke="currentColor"
                                 strokeWidth="2"
-                                className="text-primary/20"
+                                className="text-original-primary/20"
                             />
                             {/* Inner dashed circle */}
-                            <circle cx="150" cy="150" r="130" stroke="currentColor" strokeWidth="1" className="text-muted/10" strokeDasharray="4 4" />
+                            <circle cx="150" cy="150" r="130" stroke="currentColor" strokeWidth="1" className="text-original-muted/10" strokeDasharray="4 4" />
 
                             {/* Central Ring */}
-                            <circle cx="150" cy="150" r="40" stroke="currentColor" strokeWidth="1" className="text-primary/20" />
+                            <circle cx="150" cy="150" r="40" stroke="currentColor" strokeWidth="1" className="text-original-primary/20" />
                         </svg>
                     </div>
                 )}
 
                 {counterShape === 'fluid' && (
                     <div className="absolute inset-0 flex items-center justify-center -z-10 overflow-hidden rounded-full">
-                        <div className="absolute inset-0 bg-primary/5 opacity-50 blur-3xl" />
+                        <div className="absolute inset-0 bg-original-primary/5 opacity-50 blur-3xl" />
                         <motion.div
-                            className="absolute inset-0 bg-gradient-to-tr from-primary/30 to-secondary/30"
+                            className="absolute inset-0 bg-gradient-to-tr from-original-primary/30 to-original-secondary/30"
                             animate={{
                                 borderRadius: [
                                     "60% 40% 30% 70% / 60% 30% 70% 40%",
@@ -472,15 +472,15 @@ export const CounterVisuals = memo(({
 
 
                 {counterShape === 'radar' && (
-                    <div className="absolute inset-0 flex items-center justify-center -z-10 bg-black/80 rounded-full border-2 border-primary/30 overflow-hidden">
+                    <div className="absolute inset-0 flex items-center justify-center -z-10 bg-black/80 rounded-full border-2 border-original-primary/30 overflow-hidden">
                         {/* Grid */}
-                        <div className="absolute inset-0" style={{ backgroundImage: 'radial-gradient(circle, hsl(var(--primary)/0.2) 1px, transparent 1px)', backgroundSize: '30px 30px' }} />
-                        <div className="absolute inset-0 border border-primary/20 rounded-full scale-50" />
-                        <div className="absolute inset-0 border border-primary/20 rounded-full scale-75" />
+                        <div className="absolute inset-0" style={{ backgroundImage: 'radial-gradient(circle, hsl(var(--original-primary)/0.2) 1px, transparent 1px)', backgroundSize: '30px 30px' }} />
+                        <div className="absolute inset-0 border border-original-primary/20 rounded-full scale-50" />
+                        <div className="absolute inset-0 border border-original-primary/20 rounded-full scale-75" />
 
                         {/* Scanner */}
                         <motion.div
-                            className="absolute inset-0 bg-[conic-gradient(from_0deg,transparent_0deg,hsl(var(--primary)/0.5)_360deg)]"
+                            className="absolute inset-0 bg-[conic-gradient(from_0deg,transparent_0deg,hsl(var(--original-primary)/0.5)_360deg)]"
                             animate={{ rotate: 360 }}
                             transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
                             style={{ clipPath: 'polygon(50% 50%, 100% 50%, 100% 0, 50% 0)' }}
@@ -504,7 +504,7 @@ export const CounterVisuals = memo(({
                         {Array.from({ length: 5 }).map((_, i) => (
                             <motion.div
                                 key={i}
-                                className="absolute inset-0 rounded-full border-2 border-primary/50 shadow-[0_0_20px_hsl(var(--primary)/0.5)]"
+                                className="absolute inset-0 rounded-full border-2 border-original-primary/50 shadow-[0_0_20px_hsl(var(--original-primary)/0.5)]"
                                 initial={{ scale: 0.1, opacity: 0 }}
                                 animate={{ scale: 2, opacity: [0, 1, 0] }}
                                 transition={{ duration: 4, repeat: Infinity, delay: i * 0.8, ease: "linear" }}
@@ -516,9 +516,9 @@ export const CounterVisuals = memo(({
 
                 {counterShape === 'luminous-ring' && (
                     <div className="absolute inset-0 flex items-center justify-center -z-10">
-                        <div className="w-[280px] h-[280px] rounded-full bg-black flex items-center justify-center shadow-[0_0_60px_hsl(var(--primary)/0.3)] border border-primary/20">
-                            <div className="w-[90%] h-[90%] rounded-full border-[6px] border-primary shadow-[0_0_20px_hsl(var(--primary)/0.8),inset_0_0_20px_hsl(var(--primary)/0.5)]" />
-                            <div className="absolute inset-0 bg-gradient-to-b from-primary/20 to-transparent rounded-full mix-blend-overlay" />
+                        <div className="w-[280px] h-[280px] rounded-full bg-black flex items-center justify-center shadow-[0_0_60px_hsl(var(--original-primary)/0.3)] border border-original-primary/20">
+                            <div className="w-[90%] h-[90%] rounded-full border-[6px] border-original-primary shadow-[0_0_20px_hsl(var(--original-primary)/0.8),inset_0_0_20px_hsl(var(--original-primary)/0.5)]" />
+                            <div className="absolute inset-0 bg-gradient-to-b from-original-primary/20 to-transparent rounded-full mix-blend-overlay" />
                         </div>
                     </div>
                 )}
@@ -541,8 +541,8 @@ export const CounterVisuals = memo(({
                                         </feMerge>
                                     </filter>
                                     <radialGradient id="bio-pool-grad" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">
-                                        <stop offset="0%" stopColor="hsl(var(--primary))" stopOpacity="0.9" />
-                                        <stop offset="60%" stopColor="hsl(var(--primary))" stopOpacity="0.4" />
+                                        <stop offset="0%" stopColor="hsl(var(--original-primary))" stopOpacity="0.9" />
+                                        <stop offset="60%" stopColor="hsl(var(--original-primary))" stopOpacity="0.4" />
                                         <stop offset="100%" stopColor="#000000" stopOpacity="0" />
                                     </radialGradient>
                                     <filter id="glow-cells">
@@ -592,11 +592,11 @@ export const CounterVisuals = memo(({
                             </svg>
 
                             {/* Central Cellular Display Pool */}
-                            <div className="absolute w-[140px] h-[140px] rounded-full bg-[#050a0a] shadow-[inset_0_0_30px_hsl(var(--primary)/0.4)] flex items-center justify-center overflow-hidden border-4 border-[#dcd8d0] z-20">
+                            <div className="absolute w-[140px] h-[140px] rounded-full bg-[#050a0a] shadow-[inset_0_0_30px_hsl(var(--original-primary)/0.4)] flex items-center justify-center overflow-hidden border-4 border-[#dcd8d0] z-20">
                                 {/* Moving Cells Background */}
                                 <div className="absolute inset-[-50%]"
                                     style={{
-                                        backgroundImage: 'radial-gradient(circle, hsl(var(--primary)/0.15) 2px, transparent 3px)',
+                                        backgroundImage: 'radial-gradient(circle, hsl(var(--original-primary)/0.15) 2px, transparent 3px)',
                                         backgroundSize: '20px 20px',
                                     }}
                                 >
@@ -608,7 +608,7 @@ export const CounterVisuals = memo(({
                                 </div>
 
                                 {/* Main Glow Source behind numbers */}
-                                <div className="absolute w-[80%] h-[80%] bg-primary opacity-10 blur-xl rounded-full animate-pulse-slow" />
+                                <div className="absolute w-[80%] h-[80%] bg-original-primary opacity-10 blur-xl rounded-full animate-pulse-slow" />
                             </div>
                         </div>
                     </div>
@@ -734,7 +734,7 @@ export const CounterVisuals = memo(({
                 {counterShape === 'nebula-cloud' && (
                     <div className="absolute inset-0 flex items-center justify-center -z-10">
                         <motion.div
-                            className="w-full h-full rounded-full bg-gradient-to-tr from-primary/20 via-transparent to-accent/20 blur-2xl"
+                            className="w-full h-full rounded-full bg-gradient-to-tr from-original-primary/20 via-transparent to-accent/20 blur-2xl"
                             animate={{
                                 rotate: 360,
                                 scale: [1, 1.2, 1],
@@ -744,7 +744,7 @@ export const CounterVisuals = memo(({
                         {Array.from({ length: 12 }).map((_, i) => (
                             <motion.div
                                 key={i}
-                                className="absolute w-24 h-24 bg-primary/10 rounded-full blur-xl"
+                                className="absolute w-24 h-24 bg-original-primary/10 rounded-full blur-xl"
                                 animate={{
                                     x: [0, Math.cos(i) * 100, 0],
                                     y: [0, Math.sin(i) * 100, 0],
@@ -764,7 +764,7 @@ export const CounterVisuals = memo(({
                                 fill="none"
                                 stroke="currentColor"
                                 strokeWidth="2"
-                                className="text-primary"
+                                className="text-original-primary"
                                 initial={{ pathLength: 0 }}
                                 animate={{ pathLength: 1, rotate: [0, 360] }}
                                 transition={{
@@ -777,7 +777,7 @@ export const CounterVisuals = memo(({
                                 fill="none"
                                 stroke="currentColor"
                                 strokeWidth="2"
-                                className="text-primary/50"
+                                className="text-original-primary/50"
                                 initial={{ pathLength: 0 }}
                                 animate={{ pathLength: 1, rotate: [0, -360] }}
                                 transition={{
@@ -794,7 +794,7 @@ export const CounterVisuals = memo(({
                         {[0, 120, 240].map((deg) => (
                             <motion.div
                                 key={deg}
-                                className="absolute w-1 h-32 bg-gradient-to-t from-primary/80 to-transparent"
+                                className="absolute w-1 h-32 bg-gradient-to-t from-original-primary/80 to-transparent"
                                 style={{ transformOrigin: 'bottom center', rotate: deg }}
                                 animate={{ rotate: [deg, deg + 360] }}
                                 transition={{ duration: 2, repeat: Infinity, ease: "linear" }}

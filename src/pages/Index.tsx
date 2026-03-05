@@ -59,7 +59,7 @@ const Index = () => {
             <BreathingGuide />
 
             {/* Sidebar Toggle (Visible when sidebar is collapsed or on mobile) */}
-            {!(zenMode || layout === 'zen') && (
+            {!zenMode && (
               <div className="fixed top-4 left-4 z-50 pointer-events-auto">
                 <SidebarTrigger className="h-10 w-10 bg-card/40 backdrop-blur-xl border border-white/10 shadow-lg hover:bg-white/5 transition-all duration-300" />
               </div>
@@ -70,23 +70,20 @@ const Index = () => {
             </RoutinesView>
 
             {/* Main Content Area */}
-            <div className={`flex-1 min-h-0 w-full overflow-hidden px-4 sm:px-6 md:px-8 pb-4 pt-16 xs:pt-2 transition-all duration-500 pb-safe ${zenMode || layout === 'zen' ? 'flex items-center justify-center pt-0 pb-0' : ''}`}>
-              <div className={`max-w-[1600px] mx-auto w-full ${zenMode || layout === 'zen' ? 'max-w-4xl' : ''}`}>
+            <div className={`flex-1 min-h-0 w-full overflow-hidden px-4 sm:px-6 md:px-8 pb-4 pt-16 xs:pt-2 transition-all duration-500 pb-safe ${zenMode ? 'flex items-center justify-center pt-0 pb-0' : ''}`}>
+              <div className={`max-w-[1600px] mx-auto w-full ${zenMode ? 'max-w-4xl' : ''}`}>
                 {renderDashboard()}
               </div>
             </div>
 
             {/* Zen Mode Exit Button */}
-            {(zenMode || layout === 'zen') && (
+            {zenMode && (
               <button
-                onClick={() => {
-                  setZenMode(false);
-                  if (layout === 'zen') setLayout('default');
-                }}
+                onClick={() => setZenMode(false)}
                 className="absolute bottom-12 left-1/2 -translate-x-1/2 bg-foreground/5 hover:bg-foreground/10 backdrop-blur-xl border border-foreground/10 px-10 py-4 rounded-full text-foreground/70 hover:text-foreground transition-all text-sm font-semibold z-50 animate-fade-in-up flex items-center gap-3 shadow-2xl"
               >
                 <div className="w-2 h-2 rounded-full bg-primary animate-pulse" />
-                <span>Exit {layout === 'zen' ? 'Zen Layout' : 'Zen Mode'}</span>
+                <span>Exit Zen Mode</span>
               </button>
             )}
           </div>
