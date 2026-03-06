@@ -20,7 +20,6 @@ import {
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { CounterVisuals } from '@/components/CounterVisuals';
-import { DateBanner } from '@/components/DateBanner';
 import { VisitorCounter } from '@/components/VisitorCounter';
 import { SessionTimer } from '@/components/SessionTimer';
 import { GlobalChallenges } from '@/components/GlobalChallenges';
@@ -79,10 +78,6 @@ export const ChocoDashboard: React.FC = () => {
 
     return (
         <div className="w-full h-screen choco-dashboard p-4 lg:p-6 flex flex-col font-outfit overflow-hidden select-none pb-20 lg:pb-0">
-            {/* TOP DATE BANNER */}
-            <div className="w-full max-w-7xl mx-auto mb-4 scale-90 lg:scale-100 origin-top">
-                <DateBanner />
-            </div>
 
             <div className="flex flex-col lg:flex-row gap-6 lg:gap-8 flex-1 h-full min-h-0 relative z-10">
 
