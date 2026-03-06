@@ -9,6 +9,7 @@ import PrivacyPolicy from "./pages/PrivacyPolicy";
 import MiniCounter from "./pages/MiniCounter";
 import Challenges from "./pages/Challenges";
 import { ThemeProvider } from "./components/ThemeProvider";
+import { CongratsPopup } from "./components/CongratsPopup";
 
 const queryClient = new QueryClient();
 
@@ -18,6 +19,7 @@ const App = () => (
       <ThemeProvider>
         <Toaster />
         <Sonner />
+        <CongratsPopup />
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<Index />} />
