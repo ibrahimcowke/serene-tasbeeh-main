@@ -23,6 +23,7 @@ export function Counter() {
   const {
     currentCount,
     targetCount,
+    zenMode,
     currentDhikr: stateCurrentDhikr,
     showTransliteration,
     sessionMode,
