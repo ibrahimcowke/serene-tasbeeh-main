@@ -78,7 +78,7 @@ export const ChocoDashboard: React.FC = () => {
     const dailyProgress = Math.min(((totalAllTime % dailyGoal) / dailyGoal) * 100, 100);
 
     return (
-        <div className="w-full h-screen choco-dashboard p-4 lg:p-8 flex flex-col font-outfit overflow-x-hidden overflow-y-auto lg:overflow-hidden select-none pb-20 lg:pb-0">
+        <div className="w-full h-screen choco-dashboard p-4 lg:p-6 flex flex-col font-outfit overflow-hidden select-none pb-20 lg:pb-0">
             {/* TOP DATE BANNER */}
             <div className="w-full max-w-7xl mx-auto mb-4 scale-90 lg:scale-100 origin-top">
                 <DateBanner />
@@ -87,8 +87,8 @@ export const ChocoDashboard: React.FC = () => {
             <div className="flex flex-col lg:flex-row gap-6 lg:gap-8 flex-1 h-full min-h-0 relative z-10">
 
                 {/* LEFT PANEL: MY PROGRESS */}
-                <div className="flex-1 max-w-sm w-full mx-auto flex flex-col gap-6 lg:h-full lg:overflow-y-auto pr-2 scrollbar-hide order-2 lg:order-1">
-                    <div className="choco-clay p-8 flex flex-col gap-6 shrink-0">
+                <div className="flex-1 max-w-sm w-full mx-auto flex flex-col gap-6 lg:h-full lg:overflow-y-auto pr-2 scrollbar-hide order-2 lg:order-1 custom-scrollbar">
+                    <div className="choco-clay p-6 flex flex-col gap-5 shrink-0">
                         <div className="flex items-center justify-between">
                             <h2 className="text-xl font-bold tracking-tight opacity-70">MY PROGRESS</h2>
                         </div>
@@ -203,8 +203,8 @@ export const ChocoDashboard: React.FC = () => {
                 </div>
 
                 {/* CENTER PANEL: THE COUNTER */}
-                <div className="flex-[2] flex flex-col items-center justify-center relative py-4 lg:py-12 lg:h-full lg:overflow-y-auto scrollbar-hide order-1 lg:order-2 z-10">
-                    <div className="flex flex-col items-center gap-1 mb-6 lg:mb-12">
+                <div className="flex-[2] flex flex-col items-center justify-center relative py-4 lg:py-8 lg:h-full lg:overflow-y-auto lg:overflow-x-hidden scrollbar-hide order-1 lg:order-2 z-10 scale-90 lg:scale-[0.85] xl:scale-95 2xl:scale-100 origin-center">
+                    <div className="flex flex-col items-center gap-1 mb-4 lg:mb-8">
                         <span className="text-3xl lg:text-4xl arabic font-amiri text-glow-gold">{currentDhikr.arabic}</span>
                         <AnimatePresence mode="wait">
                             {showTransliteration && (
@@ -332,9 +332,9 @@ export const ChocoDashboard: React.FC = () => {
                         />
                     </div>
 
-                    {/* WISDOM CARD */}
+                    {/* WISDOM CARD - Reduced Margin */}
                     <div
-                        className="mt-8 lg:mt-16 w-full max-w-lg hidden sm:block"
+                        className="mt-6 lg:mt-8 w-full max-w-lg hidden sm:block"
                         onMouseEnter={() => setIsPaused(true)}
                         onMouseLeave={() => setIsPaused(false)}
                     >
@@ -400,8 +400,8 @@ export const ChocoDashboard: React.FC = () => {
                 </div>
 
                 {/* RIGHT PANEL: GLOBAL COMMUNITY */}
-                <div className="flex-1 max-w-sm w-full mx-auto flex flex-col gap-6 lg:h-full lg:overflow-y-auto pl-2 scrollbar-hide order-3">
-                    <div className="choco-clay p-8 flex flex-col gap-6 shrink-0">
+                <div className="flex-1 max-w-sm w-full mx-auto flex flex-col gap-6 lg:h-full lg:overflow-y-auto pl-2 scrollbar-hide order-3 custom-scrollbar">
+                    <div className="choco-clay p-6 flex flex-col gap-5 shrink-0">
                         <div className="flex items-center justify-between">
                             <h2 className="text-xl font-bold tracking-tight opacity-70">GLOBAL COMMUNITY</h2>
                             <div className="flex items-center gap-2 bg-[#1c130f] px-3 py-1 rounded-full border border-white/5">
