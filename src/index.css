@@ -1102,6 +1102,77 @@
   *::-webkit-scrollbar {
     display: none;
   }
+
+  /* Choco Dashboard Skeuomorphic Styles */
+  .choco-dashboard {
+    background-color: #31211b;
+    color: #e9d5a3;
+  }
+
+  .choco-clay {
+    background: #463128;
+    border-radius: 2.5rem;
+    box-shadow:
+      12px 12px 24px #1c130f,
+      -12px -12px 24px #704f41,
+      inset 0 0 0 1px rgba(255, 255, 255, 0.03);
+  }
+
+  .choco-inner {
+    background: #31211b;
+    border-radius: 2rem;
+    box-shadow:
+      inset 10px 10px 20px #1c130f,
+      inset -10px -10px 20px #463128;
+  }
+
+  .choco-card-elevated {
+    background: #463128;
+    border-radius: 1.5rem;
+    box-shadow:
+      8px 8px 16px #1c130f,
+      -8px -8px 16px #704f41;
+  }
+
+  .choco-button {
+    background: #463128;
+    border-radius: 1rem;
+    box-shadow:
+      5px 5px 10px #1c130f,
+      -5px -5px 10px #704f41;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .choco-button:active {
+    box-shadow:
+      inset 3px 3px 6px #1c130f,
+      inset -3px -3px 6px #704f41;
+    transform: scale(0.97);
+  }
+
+  .choco-text-gold {
+    color: #c5a059;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+  }
+
+  .choco-gradient-gold {
+    background: linear-gradient(135deg, #e9d5a3 0%, #c5a059 50%, #8b6e37 100%);
+  }
+
+  .choco-border-gold {
+    border: 2px solid #c5a059;
+    box-shadow: 0 0 15px rgba(197, 160, 89, 0.2);
+  }
+
+  .choco-rim-3d {
+    background: #463128;
+    border: 6px solid #463128;
+    box-shadow:
+      10px 10px 20px #1c130f,
+      -12px -12px 24px #704f41,
+      inset 4px 4px 8px #704f41,
+      inset -4px -4px 8px #1c130f;
+  }
 }
 
 @layer utilities {
