@@ -164,10 +164,13 @@ export function VisitorCounter() {
             sender_id: localStorage.getItem('visitor_device_id')
         });
         setSalamSent(true);
+        /*
         toast.success("Assalamu Alaikum! 🤲", {
-            description: `Salam sent to ${liveCount} online users`,
-            duration: 3000,
+            description: "A brother/sister just joined the live session.",
+            icon: "🕌",
+            duration: 5000
         });
+        */
         setTimeout(() => setSalamSent(false), 5000);
     };
 

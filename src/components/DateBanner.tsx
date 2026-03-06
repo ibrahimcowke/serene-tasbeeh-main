@@ -18,11 +18,13 @@ export function DateBanner() {
         if (dateContext.specialDayName) {
             //Simple check to avoid spamming? For now rely on component mount
             //In a real app we'd track 'lastShown' in store
+            /*
             toast.success(dateContext.specialDayName, {
-                description: "Don't forget your special Adhkar today!",
-                duration: 5000,
-                icon: '🌙'
+                description: "Today is a blessed day! May Allah accept your dhikr.",
+                icon: "✨",
+                duration: 5000
             });
+            */
         }
     }, [dateContext.specialDayName]);
 

@@ -632,12 +632,13 @@ export const useTasbeehStore = create<TasbeehState>()(
                 newCount = 0;
               } else {
                 sessionMode.isComplete = true;
-                // Completion celebration
+                /*
                 toast.success('🎉 MashaAllah! 100 Dhikr Complete!', {
                   description: 'You recited: SubhanAllah ×33, Alhamdulillah ×33, Allahu Akbar ×33, La ilaha illallah ×1. Estimated reward: sins forgiven even if like the foam of the sea! (Sahih Muslim)',
                   duration: 8000,
                   icon: '🌟'
                 });
+                */
                 // Publish to global feed
                 import('@/lib/firebase').then(({ publishActivityEvent }) => {
                   publishActivityEvent('sprint_complete', 'Someone completed 100 Dhikr Sprint! 🏆');
@@ -657,12 +658,13 @@ export const useTasbeehStore = create<TasbeehState>()(
                 sessionMode.currentSetCount = 0;
               } else {
                 sessionMode.isComplete = true;
-                // Completion celebration
+                /*
                 toast.success('🎉 SubhanAllah! 1000 Dhikr Complete!', {
                   description: `You completed 125× of each dhikr (${defaultDhikrs.length} adhkar). Estimated reward: A palace in Jannah for every 1000 tasbeeh, and hasanat like Mount Uhud! (Sahih Muslim)`,
                   duration: 10000,
                   icon: '🏆'
                 });
+                */
                 // Publish to global feed
                 import('@/lib/firebase').then(({ publishActivityEvent }) => {
                   publishActivityEvent('sprint_complete', 'Someone completed 1000 Dhikr Endurance! 🏅');
@@ -681,11 +683,13 @@ export const useTasbeehStore = create<TasbeehState>()(
                 newCount = 0;
               } else {
                 sessionMode.isComplete = true;
+                /*
                 toast.success('🎉 Routine Complete!', {
                   description: 'MashaAllah, you completed your routine. May Allah accept your dhikr!',
                   duration: 6000,
                   icon: '✅'
                 });
+                */
               }
             }
           }
@@ -726,11 +730,13 @@ export const useTasbeehStore = create<TasbeehState>()(
             if (!currentUnlocked.includes(achievement.id) && !newlyUnlocked.includes(achievement.id)) {
               if (achievement.condition(tempState)) {
                 newlyUnlocked.push(achievement.id);
+                /*
                 toast.success(`Achievement Unlocked: ${achievement.title}`, {
                   description: achievement.description,
                   duration: 4000,
                   icon: '🏆'
                 });
+                */
               }
             }
           });

@@ -41,7 +41,9 @@ export function NotificationCenter() {
         });
 
         markAsRead(notification.id);
+        /*
         toast.success("Challenge accepted! Go for +100 dhikrs.");
+        */
     };
 
     return (

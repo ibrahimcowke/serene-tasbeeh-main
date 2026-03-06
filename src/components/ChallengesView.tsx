@@ -186,10 +186,12 @@ export function ChallengesViewContent({ isPage = false }: { isPage?: boolean }) 
             from_id: myVisitorId, from_name: "A Peer", type, target,
             timestamp: serverTimestamp(), status: 'pending'
         });
+        /*
         toast.success(`${ct.label} challenge sent!`, {
             icon: <Send className="w-4 h-4 text-primary" />,
             description: `Target: ${target} dhikr`,
         });
+        */
     };
 
     const handleInviteAction = (invite: ChallengeInvite, action: 'accept' | 'decline') => {
@@ -208,12 +210,16 @@ export function ChallengesViewContent({ isPage = false }: { isPage?: boolean }) 
             if (invite.type === 'sprint') startTasbih100(challengeId || undefined);
             else if (invite.type === 'endurance') startTasbih1000(challengeId || undefined);
             publishActivityEvent('community_goal', 'A challenge was accepted! Two souls racing to Allah 🏁');
+            /*
             toast.success(`${invite.type === 'sprint' ? '⚡ Sprint' : invite.type === 'endurance' ? '🎯 Endurance' : '📊 Daily'} Challenge Started!`, {
                 description: `Target: ${invite.target} dhikr`, duration: 5000,
             });
+            */
         } else {
             set(inviteRef, { ...invite, status: 'declined' });
+            /*
             toast('Challenge declined', { duration: 2000 });
+            */
         }
     };
 
@@ -448,7 +454,7 @@ export function ChallengesViewContent({ isPage = false }: { isPage?: boolean }) 
                         <div className="space-y-2">
                             <span className="text-[9px] font-black text-muted-foreground/50 uppercase tracking-[0.2em] px-1">Solo Practice</span>
                             <div className="grid grid-cols-2 gap-2">
-                                <button onClick={() => { startTasbih100(undefined); toast.success('⚡ 100 Sprint started!'); }}
+                                <button onClick={() => { startTasbih100(undefined); /* toast.success('⚡ 100 Sprint started!'); */ }}
                                     className="flex items-center gap-2 p-3 rounded-xl bg-yellow-500/5 border border-yellow-500/15 hover:bg-yellow-500/10 transition-all group">
                                     <Zap className="w-4 h-4 text-yellow-400 group-hover:scale-110 transition-transform" />
                                     <div className="flex flex-col items-start">
@@ -456,7 +462,7 @@ export function ChallengesViewContent({ isPage = false }: { isPage?: boolean }) 
                                         <span className="text-[7px] text-muted-foreground font-bold">Solo mode</span>
                                     </div>
                                 </button>
-                                <button onClick={() => { startTasbih1000(undefined); toast.success('🎯 1000 Endurance started!'); }}
+                                <button onClick={() => { startTasbih1000(undefined); /* toast.success('🎯 1000 Endurance started!'); */ }}
                                     className="flex items-center gap-2 p-3 rounded-xl bg-blue-500/5 border border-blue-500/15 hover:bg-blue-500/10 transition-all group">
                                     <Trophy className="w-4 h-4 text-blue-400 group-hover:scale-110 transition-transform" />
                                     <div className="flex flex-col items-start">

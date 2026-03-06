@@ -73,10 +73,12 @@ export function SidebarChallenges() {
                     return age < 30000; // Show only duas from last 30 seconds
                 });
                 if (recentDua) {
+                    /*
                     toast.success("Someone sent you a Dua! 🤲", {
                         description: "May Allah bless you both 💚",
                         duration: 5000,
                     });
+                    */
                 }
             }
         });
@@ -101,9 +103,11 @@ export function SidebarChallenges() {
             status: 'pending'
         });
 
+        /*
         toast.success("Challenge invitation sent!", {
             icon: <Send className="w-4 h-4 text-primary" />
         });
+        */
     };
 
     const sendDua = (targetUserId: string) => {
@@ -118,10 +122,12 @@ export function SidebarChallenges() {
 
         setSentDuas(prev => new Set([...prev, targetUserId]));
 
+        /*
         toast.success("Dua sent! 🤲", {
             description: "May Allah accept your dua",
             icon: <HandHeart className="w-4 h-4 text-green-400" />
         });
+        */
 
         // Reset the sent state after 5 seconds
         setTimeout(() => {
@@ -139,17 +145,21 @@ export function SidebarChallenges() {
         if (action === 'accept') {
             set(inviteRef, { ...invite, status: 'accepted' });
             if (invite.type === 'sprint') {
-                startTasbih100();
+                startTasbih100(undefined);
+                /*
                 toast.success("⚡ 100 Dhikr Sprint Started!", {
                     description: "Complete: SubhanAllah ×33, Alhamdulillah ×33, Allahu Akbar ×33, La ilaha illallah ×1",
                     duration: 5000,
                 });
+                */
             } else {
-                startTasbih1000();
+                startTasbih1000(undefined);
+                /*
                 toast.success("🎯 1000 Dhikr Endurance Started!", {
                     description: "Complete 125× of each dhikr. May Allah accept!",
                     duration: 5000,
                 });
+                */
             }
             publishActivityEvent('community_goal', 'A challenge was accepted! Two souls racing to Allah 🏁');
         } else {
