@@ -79,6 +79,16 @@
     --original-secondary: 40 20% 96%;
     --original-muted: 40 10% 94%;
     --original-border: 40 10% 92%;
+
+    /* Choco Theme Variables - Default (Cocoa) */
+    --choco-bg: #31211b;
+    --choco-clay: #463128;
+    --choco-inner: #1c130f;
+    --choco-gold: #c5a059;
+    --choco-gold-light: #e9d5a3;
+    --choco-gold-dark: #8b6e37;
+    --choco-highlight: #704f41;
+    --choco-shadow: #1c130f;
   }
 
   .theme-biolum {
@@ -252,6 +262,16 @@
     --progress-track: 224 50% 15%;
     --progress-fill: 43 100% 64%;
     --sheet-bg: 224 71% 6%;
+
+    /* Choco Midnight */
+    --choco-bg: #0a0f1d;
+    --choco-clay: #161e31;
+    --choco-inner: #05070a;
+    --choco-gold: #f59e0b;
+    --choco-gold-light: #fbbf24;
+    --choco-gold-dark: #b45309;
+    --choco-highlight: #232f4a;
+    --choco-shadow: #05070a;
   }
 
   .theme-neon {
@@ -338,6 +358,16 @@
     --progress-track: 140 30% 12%;
     --progress-fill: 140 100% 55%;
     --sheet-bg: 140 30% 5%;
+
+    /* Choco Emerald/Green */
+    --choco-bg: #050a06;
+    --choco-clay: #0d1a0f;
+    --choco-inner: #020503;
+    --choco-gold: #10b981;
+    --choco-gold-light: #6ee7b7;
+    --choco-gold-dark: #065f46;
+    --choco-highlight: #1a331e;
+    --choco-shadow: #020503;
   }
 
   .theme-cyberpunk {
@@ -425,6 +455,17 @@
     --progress-track: 200 20% 90%;
     --progress-fill: 200 90% 45%;
     --sheet-bg: 200 40% 98%;
+
+    /* Choco Glass (Light Skeuo) */
+    --choco-bg: #f8fafc;
+    --choco-clay: #ffffff;
+    --choco-inner: #f1f5f9;
+    --choco-gold: #0ea5e9;
+    --choco-gold-light: #7dd3fc;
+    --choco-gold-dark: #0369a1;
+    --choco-highlight: #ffffff;
+    /* Use white for top highlights in light mode */
+    --choco-shadow: #cbd5e1;
   }
 
   .theme-sunset {
@@ -1105,73 +1146,73 @@
 
   /* Choco Dashboard Skeuomorphic Styles */
   .choco-dashboard {
-    background-color: #31211b;
-    color: #e9d5a3;
+    background-color: var(--choco-bg);
+    color: var(--choco-gold-light);
   }
 
   .choco-clay {
-    background: #463128;
+    background: var(--choco-clay);
     border-radius: 2.5rem;
     box-shadow:
-      12px 12px 24px #1c130f,
-      -12px -12px 24px #704f41,
+      12px 12px 24px var(--choco-shadow),
+      -12px -12px 24px var(--choco-highlight),
       inset 0 0 0 1px rgba(255, 255, 255, 0.03);
   }
 
   .choco-inner {
-    background: #31211b;
+    background: var(--choco-bg);
     border-radius: 2rem;
     box-shadow:
-      inset 10px 10px 20px #1c130f,
-      inset -10px -10px 20px #463128;
+      inset 10px 10px 20px var(--choco-shadow),
+      inset -10px -10px 20px var(--choco-clay);
   }
 
   .choco-card-elevated {
-    background: #463128;
+    background: var(--choco-clay);
     border-radius: 1.5rem;
     box-shadow:
-      8px 8px 16px #1c130f,
-      -8px -8px 16px #704f41;
+      8px 8px 16px var(--choco-shadow),
+      -8px -8px 16px var(--choco-highlight);
   }
 
   .choco-button {
-    background: #463128;
+    background: var(--choco-clay);
     border-radius: 1rem;
     box-shadow:
-      5px 5px 10px #1c130f,
-      -5px -5px 10px #704f41;
+      5px 5px 10px var(--choco-shadow),
+      -5px -5px 10px var(--choco-highlight);
     transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
   .choco-button:active {
     box-shadow:
-      inset 3px 3px 6px #1c130f,
-      inset -3px -3px 6px #704f41;
+      inset 3px 3px 6px var(--choco-shadow),
+      inset -3px -3px 6px var(--choco-highlight);
     transform: scale(0.97);
   }
 
   .choco-text-gold {
-    color: #c5a059;
+    color: var(--choco-gold);
     text-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
   }
 
   .choco-gradient-gold {
-    background: linear-gradient(135deg, #e9d5a3 0%, #c5a059 50%, #8b6e37 100%);
+    background: linear-gradient(135deg, var(--choco-gold-light) 0%, var(--choco-gold) 50%, var(--choco-gold-dark) 100%);
   }
 
   .choco-border-gold {
-    border: 2px solid #c5a059;
+    border: 2px solid var(--choco-gold);
     box-shadow: 0 0 15px rgba(197, 160, 89, 0.2);
   }
 
   .choco-rim-3d {
-    background: #463128;
-    border: 6px solid #463128;
+    background: var(--choco-clay);
+    border: 6px solid var(--choco-clay);
     box-shadow:
-      10px 10px 20px #1c130f,
-      -12px -12px 24px #704f41,
-      inset 4px 4px 8px #704f41,
-      inset -4px -4px 8px #1c130f;
+      10px 10px 20px var(--choco-shadow),
+      -12px -12px 24px var(--choco-highlight),
+      inset 4px 4px 8px var(--choco-highlight),
+      inset -4px -4px 8px var(--choco-shadow);
   }
 }
 
