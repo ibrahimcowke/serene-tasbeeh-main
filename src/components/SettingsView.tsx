@@ -94,8 +94,6 @@ export function SettingsView({ children }: SettingsViewProps) {
     setAutoThemeSwitch,
     shakeToReset,
     setShakeToReset,
-    dashboardType,
-    setDashboardType,
   } = useTasbeehStore();
 
   const [user, setUser] = useState<any>(null);
@@ -281,34 +279,6 @@ export function SettingsView({ children }: SettingsViewProps) {
                     />
                   </div>
 
-                  {/* Dashboard Type Selection (Premium) */}
-                  <p className="text-xs text-muted-foreground uppercase tracking-wide mb-3">Premium Dashboard</p>
-                  <div className="grid grid-cols-2 gap-3">
-                    <button
-                      onClick={() => setDashboardType('classic')}
-                      className={`
-                        flex flex-col items-center justify-center p-4 rounded-2xl border transition-all
-                        ${dashboardType === 'classic'
-                          ? 'bg-primary/10 border-primary text-primary shadow-sm'
-                          : 'bg-card border-border hover:bg-secondary text-muted-foreground'}
-                      `}
-                    >
-                      <LayoutDashboard className={`w-6 h-6 mb-2 ${dashboardType === 'classic' ? 'text-primary' : 'text-muted-foreground'}`} />
-                      <span className="text-xs font-medium">Classic</span>
-                    </button>
-                    <button
-                      onClick={() => setDashboardType('choco')}
-                      className={`
-                        flex flex-col items-center justify-center p-4 rounded-2xl border transition-all
-                        ${dashboardType === 'choco'
-                          ? 'bg-primary/10 border-primary text-primary shadow-sm'
-                          : 'bg-card border-border hover:bg-secondary text-muted-foreground'}
-                      `}
-                    >
-                      <Crown className={`w-6 h-6 mb-2 ${dashboardType === 'choco' ? 'text-primary' : 'text-muted-foreground'}`} />
-                      <span className="text-xs font-medium">Choco (3D)</span>
-                    </button>
-                  </div>
                 </div>
 
                 {/* Advanced Positioning & Scale */}

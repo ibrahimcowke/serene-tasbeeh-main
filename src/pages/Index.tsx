@@ -12,17 +12,12 @@ import { BreathingGuide } from '@/components/BreathingGuide';
 import { CommunitySidebar } from '@/components/CommunitySidebar';
 import { JoinNotifier } from '@/components/JoinNotifier';
 import ClassicDashboard from '../components/dashboards/ClassicDashboard';
-import { ChocoDashboard } from '../components/dashboards/ChocoDashboard';
 import { PremiumHub } from '@/components/PremiumHub';
 
 const Index = () => {
-  const { zenMode, setZenMode, layout, setLayout, dashboardType } = useTasbeehStore();
+  const { zenMode, setZenMode, layout, setLayout } = useTasbeehStore();
 
   const renderDashboard = () => {
-    if (dashboardType === 'choco') {
-      return <ChocoDashboard />;
-    }
-
     if (layout === 'zen') {
       return <ClassicDashboard />;
     }

@@ -100,9 +100,6 @@ interface TasbeehState {
   // Dhikr Text Position
   dhikrTextPosition: 'top' | 'above-counter' | 'below-counter' | 'bottom' | 'hidden';
 
-  // Dashboard Type
-  dashboardType: 'classic' | 'choco';
-  setDashboardType: (type: 'classic' | 'choco') => void;
 
   // Data
   dailyRecords: DailyRecord[];
@@ -530,8 +527,6 @@ export const useTasbeehStore = create<TasbeehState>()(
       counterVerticalOffset: 0,
       counterScale: 1,
       countFontSize: 1,
-      dashboardType: 'classic',
-      setDashboardType: (type) => set({ dashboardType: type }),
 
       dailyRecords: [],
       totalAllTime: 0,
