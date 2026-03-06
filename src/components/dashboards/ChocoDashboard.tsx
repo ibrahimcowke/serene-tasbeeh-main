@@ -1,5 +1,5 @@
-import React from 'react';
-import { motion } from 'framer-motion';
+import React, { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useTasbeehStore } from '@/store/tasbeehStore';
 import {
     Trophy,
@@ -39,7 +39,23 @@ export const ChocoDashboard: React.FC = () => {
         theme,
         themeSettings,
         countFontSize,
+        hadithSlideDuration,
     } = useTasbeehStore();
+
+    const [hadithIndex, setHadithIndex] = useState(0);
+    const [isPaused, setIsPaused] = useState(false);
+
+    useEffect(() => {
+        setHadithIndex(0);
+    }, [currentDhikr.id]);
+
+    useEffect(() => {
+        if (!currentDhikr.hadiths || currentDhikr.hadiths.length <= 1 || isPaused) return;
+        const timer = setInterval(() => {
+            setHadithIndex((prev) => (prev + 1) % currentDhikr.hadiths!.length);
+        }, hadithSlideDuration * 1000);
+        return () => clearInterval(timer);
+    }, [currentDhikr.hadiths, hadithSlideDuration, isPaused]);
 
     const progress = Math.min((currentCount / targetCount) * 100, 100);
     const dailyProgress = Math.min(((totalAllTime % dailyGoal) / dailyGoal) * 100, 100);
@@ -222,29 +238,68 @@ export const ChocoDashboard: React.FC = () => {
                 </div>
 
                 {/* WISDOM CARD */}
-                <div className="mt-8 lg:mt-16 w-full max-w-lg hidden sm:block">
+                <div
+                    className="mt-8 lg:mt-16 w-full max-w-lg hidden sm:block"
+                    onMouseEnter={() => setIsPaused(true)}
+                    onMouseLeave={() => setIsPaused(false)}
+                >
                     <div className="choco-clay p-6 lg:p-8 relative overflow-hidden">
+                        {/* Progress Bar for Hadith */}
+                        {currentDhikr.hadiths && currentDhikr.hadiths.length > 1 && !isPaused && (
+                            <div className="absolute top-0 left-0 right-0 h-1 bg-white/5">
+                                <motion.div
+                                    key={hadithIndex}
+                                    initial={{ width: "0%" }}
+                                    animate={{ width: "100%" }}
+                                    transition={{ duration: hadithSlideDuration, ease: "linear" }}
+                                    className="h-full bg-[#c5a059]/40"
+                                />
+                            </div>
+                        )}
+
                         <div className="absolute top-4 left-4 p-1.5 choco-inner rounded-full">
                             <CheckCircle2 className="w-3 h-3 text-[#c5a059]" />
                         </div>
-                        <span className="absolute top-4 right-8 font-amiri text-xs opacity-40 italic">فضائل الذكر</span>
 
-                        <div className="space-y-4 lg:space-y-6 pt-2">
-                            <p className="arabic text-lg lg:text-xl leading-loose text-center opacity-90 px-4">
-                                {currentDhikr.hadiths?.[0]?.text || '"كَلِمَتَانِ خَفِيفَتَانِ عَلَى اللِّسَانِ، ثَقِيلَتَانِ فِي الْمِيزَانِ..."'}
-                            </p>
-                            <div className="space-y-3 lg:space-y-4">
-                                <p className="text-xs lg:text-sm italic opacity-60 text-center leading-relaxed">
-                                    {currentDhikr.hadiths?.[0]?.source || 'A light word on the tongue, heavy on the scale, and beloved to the Merciful.'}
-                                </p>
-                                <div className="flex items-center justify-between border-t border-white/5 pt-4">
-                                    <span className="text-[10px] font-black opacity-30 uppercase tracking-widest">- Bukhari/Muslim</span>
-                                    <Button variant="ghost" size="sm" className="h-6 lg:h-8 text-[8px] lg:text-[10px] items-center gap-2 opacity-40 hover:opacity-100">
-                                        View More <ExternalLink className="w-3 h-3" />
-                                    </Button>
-                                </div>
-                            </div>
+                        <div className="absolute top-4 right-8 flex items-center gap-3">
+                            {isPaused && (
+                                <span className="text-[8px] font-black tracking-widest opacity-20 uppercase animate-pulse">Paused</span>
+                            )}
+                            <span className="font-amiri text-xs opacity-40 italic">فضائل الذكر</span>
                         </div>
+
+                        <AnimatePresence mode="wait">
+                            <motion.div
+                                key={`${currentDhikr.id}-${hadithIndex}`}
+                                initial={{ opacity: 0, y: 10 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                exit={{ opacity: 0, y: -10 }}
+                                transition={{ duration: 0.4 }}
+                                className="space-y-4 lg:space-y-6 pt-2"
+                            >
+                                <p className="arabic text-lg lg:text-xl leading-loose text-center opacity-90 px-4 min-h-[4rem] flex items-center justify-center">
+                                    {currentDhikr.hadiths?.[hadithIndex]?.text || '"كَلِمَتَانِ خَفِيفَتَانِ عَلَى اللِّسَانِ، ثَقِيلَتَانِ فِي الْمِيزَانِ..."'}
+                                </p>
+                                <div className="space-y-3 lg:space-y-4">
+                                    <p className="text-xs lg:text-sm italic opacity-60 text-center leading-relaxed min-h-[2.5rem] flex items-center justify-center">
+                                        {currentDhikr.hadiths?.[hadithIndex]?.source || 'A light word on the tongue, heavy on the scale, and beloved to the Merciful.'}
+                                    </p>
+                                    <div className="flex items-center justify-between border-t border-white/5 pt-4">
+                                        <div className="flex gap-1">
+                                            {currentDhikr.hadiths && currentDhikr.hadiths.length > 1 && currentDhikr.hadiths.map((_, i) => (
+                                                <div
+                                                    key={i}
+                                                    className={`h-1 rounded-full transition-all duration-300 ${i === hadithIndex ? 'w-4 bg-[#c5a059]' : 'w-1 bg-[#c5a059]/20'}`}
+                                                />
+                                            ))}
+                                        </div>
+                                        <Button variant="ghost" size="sm" className="h-6 lg:h-8 text-[8px] lg:text-[10px] items-center gap-2 opacity-40 hover:opacity-100">
+                                            View More <ExternalLink className="w-3 h-3" />
+                                        </Button>
+                                    </div>
+                                </div>
+                            </motion.div>
+                        </AnimatePresence>
                     </div>
                 </div>
             </div>
