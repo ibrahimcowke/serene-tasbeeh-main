@@ -141,6 +141,10 @@ interface TasbeehState {
   canUndo: boolean;
   autoThemeSwitch: boolean;
   shakeToReset: boolean;
+  wakeLockEnabled: boolean;
+  volumeButtonCounting: boolean;
+  communityVisibility: boolean;
+  dashboardType: 'classic' | 'choco';
   lastSeenVersion: string | null;
 
   // Congratulations State
@@ -215,6 +219,10 @@ interface TasbeehState {
   undo: () => void;
   setAutoThemeSwitch: (enabled: boolean) => void;
   setShakeToReset: (enabled: boolean) => void;
+  setWakeLockEnabled: (enabled: boolean) => void;
+  setVolumeButtonCounting: (enabled: boolean) => void;
+  setCommunityVisibility: (enabled: boolean) => void;
+  setDashboardType: (type: 'classic' | 'choco') => void;
   setLastSeenVersion: (version: string) => void;
 }
 
@@ -568,6 +576,10 @@ export const useTasbeehStore = create<TasbeehState>()(
       canUndo: false,
       autoThemeSwitch: false,
       shakeToReset: false,
+      wakeLockEnabled: false,
+      volumeButtonCounting: false,
+      communityVisibility: true,
+      dashboardType: 'classic',
       lastSeenVersion: null,
 
       // Congrats State
@@ -1174,6 +1186,10 @@ export const useTasbeehStore = create<TasbeehState>()(
 
       setAutoThemeSwitch: (enabled) => set({ autoThemeSwitch: enabled }),
       setShakeToReset: (enabled) => set({ shakeToReset: enabled }),
+      setWakeLockEnabled: (enabled) => set({ wakeLockEnabled: enabled }),
+      setVolumeButtonCounting: (enabled) => set({ volumeButtonCounting: enabled }),
+      setCommunityVisibility: (enabled) => set({ communityVisibility: enabled }),
+      setDashboardType: (type) => set({ dashboardType: type }),
 
       setLastSeenVersion: (version) => set({ lastSeenVersion: version }),
 
@@ -1217,6 +1233,9 @@ export const useTasbeehStore = create<TasbeehState>()(
               theme: state.theme,
               autoThemeSwitch: state.autoThemeSwitch,
               shakeToReset: state.shakeToReset,
+              wakeLockEnabled: state.wakeLockEnabled,
+              volumeButtonCounting: state.volumeButtonCounting,
+              dashboardType: state.dashboardType,
 
               lastSeenVersion: state.lastSeenVersion,
             }
@@ -1276,6 +1295,10 @@ export const useTasbeehStore = create<TasbeehState>()(
           showTransliteration: parsed.settings?.showTransliteration !== undefined ? parsed.settings.showTransliteration : state.showTransliteration,
           autoThemeSwitch: parsed.settings?.autoThemeSwitch !== undefined ? parsed.settings.autoThemeSwitch : state.autoThemeSwitch,
           shakeToReset: parsed.settings?.shakeToReset !== undefined ? parsed.settings.shakeToReset : state.shakeToReset,
+          wakeLockEnabled: parsed.settings?.wakeLockEnabled !== undefined ? parsed.settings.wakeLockEnabled : state.wakeLockEnabled,
+          volumeButtonCounting: parsed.settings?.volumeButtonCounting !== undefined ? parsed.settings.volumeButtonCounting : state.volumeButtonCounting,
+          dashboardType: parsed.settings?.dashboardType || state.dashboardType,
+          communityVisibility: parsed.settings?.communityVisibility !== undefined ? parsed.settings.communityVisibility : state.communityVisibility,
 
           lastSeenVersion: parsed.settings?.lastSeenVersion || state.lastSeenVersion,
         }));
@@ -1331,11 +1354,14 @@ export const useTasbeehStore = create<TasbeehState>()(
         lastSeenVersion: state.lastSeenVersion,
         autoThemeSwitch: state.autoThemeSwitch,
         shakeToReset: state.shakeToReset,
+        wakeLockEnabled: state.wakeLockEnabled,
+        volumeButtonCounting: state.volumeButtonCounting,
         // Previously missing — now persisted:
         unlockedAchievements: state.unlockedAchievements,
         layoutOrder: state.layoutOrder,
         screenOffMode: state.screenOffMode,
         dashboardType: state.dashboardType,
+        communityVisibility: state.communityVisibility,
       }),
     }
   )
@@ -1377,6 +1403,9 @@ function getFirebaseSaveData() {
       layoutOrder: state.layoutOrder,
       autoThemeSwitch: state.autoThemeSwitch,
       shakeToReset: state.shakeToReset,
+      wakeLockEnabled: state.wakeLockEnabled,
+      volumeButtonCounting: state.volumeButtonCounting,
+      communityVisibility: state.communityVisibility,
       screenOffMode: state.screenOffMode,
     },
   };
@@ -1447,6 +1476,9 @@ setTimeout(() => {
             layoutOrder: firebaseData.settings.layoutOrder || localState.layoutOrder,
             autoThemeSwitch: firebaseData.settings.autoThemeSwitch ?? localState.autoThemeSwitch,
             shakeToReset: firebaseData.settings.shakeToReset ?? localState.shakeToReset,
+            wakeLockEnabled: firebaseData.settings.wakeLockEnabled ?? localState.wakeLockEnabled,
+            volumeButtonCounting: firebaseData.settings.volumeButtonCounting ?? localState.volumeButtonCounting,
+            dashboardType: firebaseData.settings.dashboardType || localState.dashboardType,
             screenOffMode: firebaseData.settings.screenOffMode ?? localState.screenOffMode,
           } : {}),
         });

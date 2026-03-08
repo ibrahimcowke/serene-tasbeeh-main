@@ -18,6 +18,9 @@ import {
 import { SessionTimer } from './SessionTimer';
 import { UndoButton } from './UndoButton';
 import { initShakeDetection, isShakeDetectionSupported } from '@/lib/shakeDetection';
+import { requestWakeLock, releaseWakeLock, isWakeLockSupported } from '@/lib/wakeLock';
+import { initVolumeButtonListener } from '@/lib/volumeButtons';
+import { toast } from 'sonner';
 
 export function Counter() {
   const {
@@ -27,8 +30,6 @@ export function Counter() {
     currentDhikr: stateCurrentDhikr,
     showTransliteration,
     sessionMode,
-    increment,
-    exitSessionMode,
     theme,
     themeSettings,
     layout = 'default',
@@ -43,8 +44,13 @@ export function Counter() {
     layoutOrder,
     setLayoutOrder,
     shakeToReset,
+    wakeLockEnabled,
+    volumeButtonCounting,
     reset,
     nextRoutineStep,
+    increment,
+    decrement,
+    exitSessionMode,
   } = useTasbeehStore();
 
   // Ensure we have the latest data (e.g. hadiths) even if state is persisted
@@ -271,6 +277,45 @@ export function Counter() {
     return cleanup;
   }, [shakeToReset, currentCount, reset]);
 
+  // Screen Wake Lock
+  useEffect(() => {
+    if (!wakeLockEnabled || !isWakeLockSupported()) {
+      releaseWakeLock();
+      return;
+    }
+
+    // Request wake lock when session is active (count > 0 or in specific mode)
+    const shouldHaveWakeLock = currentCount > 0 || sessionMode.type !== 'free';
+    
+    if (shouldHaveWakeLock) {
+      requestWakeLock();
+    } else {
+      releaseWakeLock();
+    }
+
+    return () => {
+      releaseWakeLock();
+    };
+  }, [wakeLockEnabled, currentCount, sessionMode.type]);
+
+  // Volume Button Counting
+  useEffect(() => {
+    if (!volumeButtonCounting) return;
+
+    const cleanup = initVolumeButtonListener((direction) => {
+      if (direction === 'up') {
+        increment();
+      } else if (direction === 'down') {
+        decrement();
+      }
+    });
+
+    return cleanup;
+  }, [volumeButtonCounting, increment, decrement]);
+
+  const [pullProgress, setPullProgress] = useState(0);
+  const resetThreshold = 100; // pixels to pull down for reset
+
   const progress = getProgress();
   const totalProgress = getTotalSessionProgress();
 
@@ -281,21 +326,71 @@ export function Counter() {
       case 'counter':
         return (
           <div className="flex flex-col items-center justify-center w-full relative z-10 my-0.5 select-none">
-            <div className={`transition-opacity duration-300 ${isEditingLayout ? 'pointer-events-none opacity-50' : ''}`}>
-              <CounterVisuals
-                layout={layout}
-                counterShape={counterShape}
-                counterVerticalOffset={counterVerticalOffset}
-                counterScale={counterScale}
-                progress={progress}
-                currentCount={currentCount}
-                currentSettings={currentSettings}
-                countFontSize={countFontSize}
-                handleTap={handleTap}
-                showCompletion={showCompletion}
-                disabled={sessionMode.type === 'tasbih100' && sessionMode.isComplete}
-              />
-            </div>
+            {/* Pull-to-Reset Wrapper */}
+            <motion.div 
+              drag="y"
+              dragConstraints={{ top: 0, bottom: resetThreshold + 50 }}
+              dragElastic={0.2}
+              onDrag={(e, info) => {
+                const progress = Math.min(info.offset.y / resetThreshold, 1);
+                setPullProgress(progress);
+              }}
+              onDragEnd={(e, info) => {
+                if (info.offset.y > resetThreshold && currentCount > 0) {
+                  if (window.confirm('Reset counter?')) {
+                    reset();
+                    toast.success('Counter reset', { icon: '🔄' });
+                  }
+                }
+                setPullProgress(0);
+              }}
+              className="relative w-full flex flex-col items-center"
+            >
+              {/* Pull Indicator */}
+              <AnimatePresence>
+                {pullProgress > 0.1 && (
+                  <motion.div
+                    initial={{ opacity: 0, y: -20 }}
+                    animate={{ opacity: pullProgress, y: 10 + (pullProgress * 10) }}
+                    exit={{ opacity: 0, y: -20 }}
+                    className="absolute -top-12 flex flex-col items-center gap-1 z-0"
+                  >
+                    <div className="w-8 h-8 rounded-full bg-primary/20 backdrop-blur-md flex items-center justify-center border border-primary/30">
+                      <motion.svg 
+                        animate={{ rotate: pullProgress * 360 }}
+                        xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="text-primary"
+                      >
+                        <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 12" /><path d="M3 3v9h9" />
+                      </motion.svg>
+                    </div>
+                    <span className="text-[10px] font-bold uppercase tracking-tighter text-primary/60">
+                      {pullProgress >= 1 ? 'Release to Reset' : 'Pull to Reset'}
+                    </span>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+
+              <div className={`transition-all duration-300 ${isEditingLayout ? 'pointer-events-none opacity-50' : ''}`}
+                style={{ 
+                  filter: pullProgress > 0 ? `blur(${pullProgress * 4}px)` : 'none',
+                  opacity: 1 - (pullProgress * 0.3)
+                }}
+              >
+                <CounterVisuals
+                  layout={layout}
+                  counterShape={counterShape}
+                  counterVerticalOffset={counterVerticalOffset}
+                  counterScale={counterScale}
+                  progress={progress}
+                  currentCount={currentCount}
+                  currentSettings={currentSettings}
+                  handleTap={handleTap}
+                  showCompletion={showCompletion}
+                  countFontSize={countFontSize}
+                  disabled={sessionMode.type === 'tasbih100' && sessionMode.isComplete}
+                />
+              </div>
+            </motion.div>
 
             {/* Mobile controls (Minus & Reset) moved below counter */}
             <div className={`flex items-center justify-center gap-3 xs:gap-6 sm:gap-8 mt-4 xs:mt-5 sm:mt-6 lg:hidden relative z-20 transition-opacity duration-300 ${isEditingLayout || zenMode ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useTasbeehStore } from '@/store/tasbeehStore';
 import {
     Settings,
@@ -46,10 +46,11 @@ export const PremiumHub = () => {
         dateContext,
         globalCount,
         fetchGlobalCount,
-        streakDays,
+         streakDays,
         dailyRecords,
         unlockedAchievements,
         sessionMode,
+        communityVisibility,
     } = useTasbeehStore();
 
     // Calculate Today's Count
@@ -273,39 +274,44 @@ export const PremiumHub = () => {
                 </motion.div>
 
                 {/* Right Column: Community */}
-                <motion.div
-                    initial={{ opacity: 0, x: 50 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    className="col-span-12 lg:col-span-4 flex flex-col gap-4 lg:gap-4 h-full overflow-hidden"
-                >
-                    <div className="bg-card/80 backdrop-blur-3xl border border-foreground/[0.08] rounded-[2.5rem] flex flex-col overflow-hidden shadow-2xl relative h-full">
-                        <div className="absolute inset-0 bg-gradient-to-tr from-primary/[0.03] to-transparent pointer-events-none" />
-                        <div className="p-4 flex items-center justify-between border-b border-foreground/5 relative z-10">
-                            <div className="flex items-center gap-3">
-                                <h2 className="text-xs font-black uppercase tracking-[0.2em] text-muted-foreground">Community</h2>
-                                <ChevronDown className="w-4 h-4 text-muted-foreground" />
-                            </div>
-                            <div className="flex items-center gap-2 px-3 py-1 bg-green-500/10 rounded-full border border-green-500/20">
-                                <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
-                                <span className="text-[10px] text-green-500 font-black uppercase tracking-widest">Live</span>
-                            </div>
-                        </div>
+                <AnimatePresence>
+                    {communityVisibility && (
+                        <motion.div
+                            initial={{ opacity: 0, x: 50 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            exit={{ opacity: 0, x: 50 }}
+                            className="col-span-12 lg:col-span-4 flex flex-col gap-4 lg:gap-4 h-full overflow-hidden"
+                        >
+                            <div className="bg-card/80 backdrop-blur-3xl border border-foreground/[0.08] rounded-[2.5rem] flex flex-col overflow-hidden shadow-2xl relative h-full">
+                                <div className="absolute inset-0 bg-gradient-to-tr from-primary/[0.03] to-transparent pointer-events-none" />
+                                <div className="p-4 flex items-center justify-between border-b border-foreground/5 relative z-10">
+                                    <div className="flex items-center gap-3">
+                                        <h2 className="text-xs font-black uppercase tracking-[0.2em] text-muted-foreground">Community</h2>
+                                        <ChevronDown className="w-4 h-4 text-muted-foreground" />
+                                    </div>
+                                    <div className="flex items-center gap-2 px-3 py-1 bg-green-500/10 rounded-full border border-green-500/20">
+                                        <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
+                                        <span className="text-[10px] text-green-500 font-black uppercase tracking-widest">Live</span>
+                                    </div>
+                                </div>
 
-                        <div className="p-4 space-y-4 overflow-y-auto custom-scrollbar relative z-10 flex-1">
-                            {/* Global Pulse Card - Refined */}
-                            <div className="bg-foreground/[0.03] border border-foreground/[0.06] rounded-[2rem] p-4 flex flex-col items-center shadow-inner relative overflow-hidden group transition-all hover:bg-foreground/[0.05] hover:border-primary/20">
-                                <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-                                <VisitorCounter />
-                                <span className="text-[10px] font-black text-primary/40 uppercase mt-3 tracking-widest">Dhikrs Worldwide</span>
-                            </div>
+                                <div className="p-4 space-y-4 overflow-y-auto custom-scrollbar relative z-10 flex-1">
+                                    {/* Global Pulse Card - Refined */}
+                                    <div className="bg-foreground/[0.03] border border-foreground/[0.06] rounded-[2rem] p-4 flex flex-col items-center shadow-inner relative overflow-hidden group transition-all hover:bg-foreground/[0.05] hover:border-primary/20">
+                                        <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                                        <VisitorCounter />
+                                        <span className="text-[10px] font-black text-primary/40 uppercase mt-3 tracking-widest">Dhikrs Worldwide</span>
+                                    </div>
 
-                            {/* Challenges */}
-                            <div className="space-y-4">
-                                <GlobalChallenges />
+                                    {/* Challenges */}
+                                    <div className="space-y-4">
+                                        <GlobalChallenges />
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                    </div>
-                </motion.div>
+                        </motion.div>
+                    )}
+                </AnimatePresence>
 
             </div>
 

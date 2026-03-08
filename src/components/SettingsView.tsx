@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
-import { Check, Download, Upload, Trash2, RotateCcw, Layout, Smartphone, Maximize, Cloud, LogIn, LogOut, RefreshCw, Shield, Wind, Palette, Waves, Crown, Sunset, Zap, CloudMoon, Infinity, Fan, Diamond, Component, ExternalLink, ChevronRight, LayoutDashboard } from 'lucide-react';
+import { Check, Download, Upload, Trash2, RotateCcw, Layout, Smartphone, Maximize, Cloud, LogIn, LogOut, RefreshCw, Shield, Wind, Palette, Waves, Crown, Sunset, Zap, CloudMoon, Infinity, Fan, Diamond, Component, ExternalLink, ChevronRight, LayoutDashboard, Share2, Globe } from 'lucide-react';
 import { useTasbeehStore } from '@/store/tasbeehStore';
 import { supabase, signInWithGoogle, signOut, getCurrentUser, isSupabaseConfigured } from '@/lib/supabase';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger, SheetDescription } from '@/components/ui/sheet';
@@ -35,6 +35,7 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Label } from '@/components/ui/label';
 import { StatisticsView } from './StatisticsView';
+import { toast } from 'sonner';
 
 interface SettingsViewProps {
   children: React.ReactNode;
@@ -94,6 +95,12 @@ export function SettingsView({ children }: SettingsViewProps) {
     setAutoThemeSwitch,
     shakeToReset,
     setShakeToReset,
+    wakeLockEnabled,
+    setWakeLockEnabled,
+    volumeButtonCounting,
+    setVolumeButtonCounting,
+    communityVisibility,
+    setCommunityVisibility,
   } = useTasbeehStore();
 
   const [user, setUser] = useState<any>(null);
@@ -718,9 +725,91 @@ export function SettingsView({ children }: SettingsViewProps) {
                       />
                     </div>
 
+                    {/* Screen Wake Lock */}
+                    <div className="flex items-center justify-between">
+                      <div className="space-y-0.5">
+                        <div className="flex items-center gap-2">
+                          <Smartphone className="w-4 h-4 text-primary" />
+                          <p className="text-sm font-medium text-foreground">Stay Awake</p>
+                        </div>
+                        <p className="text-xs text-muted-foreground">Keep screen on during sessions</p>
+                      </div>
+                      <Switch
+                        checked={wakeLockEnabled}
+                        onCheckedChange={setWakeLockEnabled}
+                      />
+                    </div>
+
                     <div className="h-px bg-border/50" />
 
+                    {/* Volume Button Counting */}
+                    <div className="flex items-center justify-between">
+                      <div className="space-y-0.5">
+                        <div className="flex items-center gap-2">
+                          <Maximize className="w-4 h-4 text-primary" />
+                          <p className="text-sm font-medium text-foreground">Volume Buttons</p>
+                        </div>
+                        <p className="text-xs text-muted-foreground">Use physical keys to count</p>
+                      </div>
+                      <Switch
+                        checked={volumeButtonCounting}
+                        onCheckedChange={setVolumeButtonCounting}
+                      />
+                    </div>
 
+
+                  </div>
+                </div>
+
+                {/* Community & Social */}
+                <div className="space-y-1">
+                  <p className="text-xs text-muted-foreground uppercase tracking-wide mb-3">Community & Social</p>
+
+                  <div className="p-4 rounded-2xl bg-card space-y-4">
+                    {/* Share Serene */}
+                    <div className="flex items-center justify-between">
+                      <div className="space-y-0.5">
+                        <div className="flex items-center gap-2">
+                          <Share2 className="w-4 h-4 text-primary" />
+                          <p className="text-sm font-medium text-foreground">Share Serene</p>
+                        </div>
+                        <p className="text-xs text-muted-foreground">Spread the barakah with friends</p>
+                      </div>
+                      <button
+                        onClick={() => {
+                          if (navigator.share) {
+                            navigator.share({
+                              title: 'Serene Tasbeeh',
+                              text: 'Join me in dhikr with Serene Tasbeeh - A beautiful, spiritual experience.',
+                              url: window.location.href,
+                            }).catch(() => {});
+                          } else {
+                            navigator.clipboard.writeText(window.location.href);
+                            toast.success('Link copied to clipboard');
+                          }
+                        }}
+                        className="p-2 rounded-xl bg-primary/10 hover:bg-primary/20 text-primary transition-colors"
+                      >
+                        <Share2 className="w-4 h-4" />
+                      </button>
+                    </div>
+
+                    <div className="h-px bg-border/50" />
+
+                    {/* Global Pulse visibility */}
+                    <div className="flex items-center justify-between">
+                      <div className="space-y-0.5">
+                        <div className="flex items-center gap-2">
+                          <Globe className="w-4 h-4 text-primary" />
+                          <p className="text-sm font-medium text-foreground">Global Pulse</p>
+                        </div>
+                        <p className="text-xs text-muted-foreground">Show worldwide dhikr activity</p>
+                      </div>
+                      <Switch
+                        checked={communityVisibility}
+                        onCheckedChange={setCommunityVisibility}
+                      />
+                    </div>
                   </div>
                 </div>
 
