@@ -19,7 +19,7 @@ interface PresenceData {
 }
 
 export function VisitorCounter() {
-    const { currentDhikr } = useTasbeehStore();
+    const { currentDhikr, deviceId } = useTasbeehStore();
     const [visitors, setVisitors] = useState<PresenceData[]>([]);
     const [totalUsers, setTotalUsers] = useState(0);
     const [expanded, setExpanded] = useState(false);
@@ -83,16 +83,10 @@ export function VisitorCounter() {
             if (snap.val() === true) {
                 const { data: { user } } = await supabase.auth.getUser();
 
-                let deviceId = localStorage.getItem('visitor_device_id');
-                if (!deviceId) {
-                    deviceId = 'anon_' + Math.random().toString(36).substring(2, 15);
-                    localStorage.setItem('visitor_device_id', deviceId);
-                }
-
-                const visitorId = clientIp ? clientIp.replace(/\./g, '_') : deviceId;
+                const visitorId = deviceId;
                 const path = `presence/visitors/${visitorId}_${tabId}`;
 
-                // Clean up old node if the ID changed (e.g. after IP fetched)
+                // Clean up old node if the ID changed
                 if (lastPathRef.current && lastPathRef.current !== path) {
                     set(ref(database, lastPathRef.current), null);
                 }
@@ -104,6 +98,7 @@ export function VisitorCounter() {
                 update(myPresenceRef, {
                     user_id: user?.id || visitorId,
                     visitor_id: visitorId,
+                    tab_id: tabId,
                     email: user?.email || '',
                     avatar_url: user?.user_metadata?.avatar_url || '',
                     online_at: serverTimestamp(),

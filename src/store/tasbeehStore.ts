@@ -146,6 +146,7 @@ interface TasbeehState {
   communityVisibility: boolean;
   dashboardType: 'classic' | 'choco';
   lastSeenVersion: string | null;
+  deviceId: string;
 
   // Congratulations State
   showCongrats: boolean;
@@ -581,6 +582,14 @@ export const useTasbeehStore = create<TasbeehState>()(
       communityVisibility: true,
       dashboardType: 'classic',
       lastSeenVersion: null,
+      deviceId: (() => {
+        let id = localStorage.getItem('visitor_device_id');
+        if (!id) {
+          id = `anon_${Math.random().toString(36).substring(2, 15)}`;
+          localStorage.setItem('visitor_device_id', id);
+        }
+        return id;
+      })(),
 
       // Congrats State
       showCongrats: false,

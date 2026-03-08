@@ -27,11 +27,10 @@ interface ChallengeInvite {
 }
 
 export function SidebarChallenges() {
-    const { currentDhikr, dhikrs, setDhikr, startTasbih100, startTasbih1000 } = useTasbeehStore();
+    const { currentDhikr, dhikrs, setDhikr, startTasbih100, startTasbih1000, deviceId } = useTasbeehStore();
     const [onlineUsers, setOnlineUsers] = useState<OnlineUser[]>([]);
     const [invites, setInvites] = useState<ChallengeInvite[]>([]);
     const [sentDuas, setSentDuas] = useState<Set<string>>(new Set());
-    const myDeviceId = localStorage.getItem('visitor_device_id') || 'anon';
 
     useEffect(() => {
         // Listen for online users
@@ -41,14 +40,14 @@ export function SidebarChallenges() {
             if (val) {
                 const users = Object.values(val) as OnlineUser[];
                 // Filter out self
-                setOnlineUsers(users.filter(u => u.user_id !== myDeviceId));
+                setOnlineUsers(users.filter(u => (u as any).visitor_id !== deviceId && u.user_id !== deviceId));
             } else {
                 setOnlineUsers([]);
             }
         });
 
         // Listen for invites sent to me
-        const invitesRef = query(ref(database, `events/invitations/${myDeviceId}`), limitToLast(5));
+        const invitesRef = query(ref(database, `events/invitations/${deviceId}`), limitToLast(5));
         const unsubscribeInvites = onValue(invitesRef, (snap) => {
             const val = snap.val();
             if (val) {
@@ -63,7 +62,7 @@ export function SidebarChallenges() {
         });
 
         // Listen for duas sent to me
-        const duaRef = query(ref(database, `events/duas/${myDeviceId}`), limitToLast(3));
+        const duaRef = query(ref(database, `events/duas/${deviceId}`), limitToLast(3));
         const unsubscribeDua = onValue(duaRef, (snap) => {
             const val = snap.val();
             if (val) {
@@ -88,14 +87,14 @@ export function SidebarChallenges() {
             unsubscribeInvites();
             unsubscribeDua();
         };
-    }, [myDeviceId]);
+    }, [deviceId]);
 
     const sendInvite = (targetUserId: string, type: 'sprint' | 'endurance') => {
         const inviteRef = ref(database, `events/invitations/${targetUserId}`);
         const newInviteRef = push(inviteRef);
 
         set(newInviteRef, {
-            from_id: myDeviceId,
+            from_id: deviceId,
             from_name: "A Peer", // Simplified for now
             type,
             target: type === 'sprint' ? 100 : 1000,
@@ -115,7 +114,7 @@ export function SidebarChallenges() {
         const newDuaRef = push(duaRef);
 
         set(newDuaRef, {
-            from_id: myDeviceId,
+            from_id: deviceId,
             timestamp: Date.now(),
             message: 'dua'
         });
@@ -140,7 +139,7 @@ export function SidebarChallenges() {
     };
 
     const handleInviteAction = (invite: ChallengeInvite, action: 'accept' | 'decline') => {
-        const inviteRef = ref(database, `events/invitations/${myDeviceId}/${invite.id}`);
+        const inviteRef = ref(database, `events/invitations/${deviceId}/${invite.id}`);
 
         if (action === 'accept') {
             set(inviteRef, { ...invite, status: 'accepted' });

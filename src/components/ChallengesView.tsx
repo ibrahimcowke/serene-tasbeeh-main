@@ -12,6 +12,8 @@ import { toast } from 'sonner';
 
 interface OnlineUser {
     user_id: string;
+    visitor_id?: string;
+    tab_id?: string;
     email?: string;
     avatar_url?: string;
     last_dhikr_id?: string;
@@ -97,30 +99,13 @@ export function ChallengesView({ children }: { children: ReactNode }) {
 }
 
 export function ChallengesViewContent({ isPage = false }: { isPage?: boolean }) {
-    const { startTasbih100, startTasbih1000, dhikrs, totalAllTime, dailyGoal } = useTasbeehStore();
+    const { startTasbih100, startTasbih1000, dhikrs, totalAllTime, dailyGoal, deviceId } = useTasbeehStore();
     const [onlineUsers, setOnlineUsers] = useState<OnlineUser[]>([]);
     const [invites, setInvites] = useState<ChallengeInvite[]>([]);
     const [activeChallenges, setActiveChallenges] = useState<ActiveChallenge[]>([]);
     const [selectedType, setSelectedType] = useState<'sprint' | 'endurance' | 'daily'>('sprint');
     const [tab, setTab] = useState<'challenges' | 'invite' | 'history'>('challenges');
     const [completedCount, setCompletedCount] = useState(0);
-    const [clientIp, setClientIp] = useState<string>('');
-    const myDeviceId = localStorage.getItem('visitor_device_id') || 'anon';
-
-    useEffect(() => {
-        const fetchClientIp = async () => {
-            try {
-                const response = await fetch('https://api.ipify.org?format=json');
-                const data = await response.json();
-                setClientIp(data.ip);
-            } catch (e) {
-                console.error("Failed to fetch IP", e);
-            }
-        };
-        fetchClientIp();
-    }, []);
-
-    const myVisitorId = useMemo(() => clientIp ? clientIp.replace(/\./g, '_') : myDeviceId, [clientIp, myDeviceId]);
 
     useEffect(() => {
         const presenceRef = ref(database, 'presence/visitors');
@@ -136,7 +121,9 @@ export function ChallengesViewContent({ isPage = false }: { isPage?: boolean }) 
                 Object.values(val).forEach((u: any) => {
                     const vid = u.visitor_id || u.user_id;
                     const isOnline = u.online_at && (now - (typeof u.online_at === 'number' ? u.online_at : 0) < fiveMins);
-                    const isSelf = vid === myVisitorId || u.user_id === myDeviceId;
+                    
+                    // A session is "self" if it has my deviceId
+                    const isSelf = vid === deviceId;
 
                     if (isOnline && !isSelf) {
                         if (!uniquePeers.has(vid)) {
@@ -151,7 +138,7 @@ export function ChallengesViewContent({ isPage = false }: { isPage?: boolean }) 
             }
         });
 
-        const invitesRef = query(ref(database, `events/invitations/${myDeviceId}`), limitToLast(10));
+        const invitesRef = query(ref(database, `events/invitations/${deviceId}`), limitToLast(10));
         const unsubscribeInvites = onValue(invitesRef, (snap) => {
             const val = snap.val();
             if (val) {
@@ -161,7 +148,7 @@ export function ChallengesViewContent({ isPage = false }: { isPage?: boolean }) 
             }
         });
 
-        const challengesRef = ref(database, `challenges/${myDeviceId}`);
+        const challengesRef = ref(database, `challenges/${deviceId}`);
         const unsubscribeChallenges = onValue(challengesRef, (snap) => {
             const val = snap.val();
             if (val) {
@@ -174,7 +161,7 @@ export function ChallengesViewContent({ isPage = false }: { isPage?: boolean }) 
         });
 
         return () => { unsubscribePresence(); unsubscribeInvites(); unsubscribeChallenges(); };
-    }, [myDeviceId]);
+    }, [deviceId]);
 
     const sendInvite = (targetUserId: string, type: 'sprint' | 'endurance' | 'daily') => {
         const ct = CHALLENGE_TYPES.find(c => c.type === type)!;
@@ -183,7 +170,7 @@ export function ChallengesViewContent({ isPage = false }: { isPage?: boolean }) 
         // as challenges are often tied to the browser session.
         const inviteRef = ref(database, `events/invitations/${targetUserId}`);
         set(push(inviteRef), {
-            from_id: myVisitorId, from_name: "A Peer", type, target,
+            from_id: deviceId, from_name: "A Peer", type, target,
             timestamp: serverTimestamp(), status: 'pending'
         });
         /*
@@ -195,17 +182,17 @@ export function ChallengesViewContent({ isPage = false }: { isPage?: boolean }) 
     };
 
     const handleInviteAction = (invite: ChallengeInvite, action: 'accept' | 'decline') => {
-        const inviteRef = ref(database, `events/invitations/${myDeviceId}/${invite.id}`);
+        const inviteRef = ref(database, `events/invitations/${deviceId}/${invite.id}`);
         if (action === 'accept') {
             set(inviteRef, { ...invite, status: 'accepted' });
             const myChallenge = {
                 type: invite.type, target: invite.target, startedAt: Date.now(),
                 myCount: 0, opponentId: invite.from_id, opponentCount: 0, status: 'active',
             };
-            const challengeId = push(ref(database, `challenges/${myDeviceId}`)).key;
+            const challengeId = push(ref(database, `challenges/${deviceId}`)).key;
             if (challengeId) {
-                set(ref(database, `challenges/${myDeviceId}/${challengeId}`), myChallenge);
-                set(ref(database, `challenges/${invite.from_id}/${challengeId}`), { ...myChallenge, opponentId: myDeviceId });
+                set(ref(database, `challenges/${deviceId}/${challengeId}`), myChallenge);
+                set(ref(database, `challenges/${invite.from_id}/${challengeId}`), { ...myChallenge, opponentId: deviceId });
             }
             if (invite.type === 'sprint') startTasbih100(challengeId || undefined);
             else if (invite.type === 'endurance') startTasbih1000(challengeId || undefined);
