@@ -781,6 +781,20 @@ export const useTasbeehStore = create<TasbeehState>()(
             }
           });
 
+          // Compute streak update inline so it always runs on first tap of the day
+          let newStreak = state.streakDays;
+          if (state.lastActiveDate !== today) {
+            const yesterday = new Date();
+            yesterday.setDate(yesterday.getDate() - 1);
+            const yesterdayStr = yesterday.toISOString().split('T')[0];
+            if (state.lastActiveDate === yesterdayStr) {
+              newStreak = state.streakDays + 1;
+            } else {
+              newStreak = 1;
+            }
+          }
+          const newLongestStreak = Math.max(state.longestStreak || 0, newStreak);
+
           return {
             count: state.count + 1, // Legacy
             currentCount: newCount,
@@ -790,6 +804,8 @@ export const useTasbeehStore = create<TasbeehState>()(
             totalAllTime: newTotalAllTime,
             sessionMode: sessionMode,
             lastActiveDate: today,
+            streakDays: newStreak,
+            longestStreak: newLongestStreak,
             unlockedAchievements: [...currentUnlocked, ...newlyUnlocked],
             globalCount: state.globalCount + 1 // Optimistic update
           };
