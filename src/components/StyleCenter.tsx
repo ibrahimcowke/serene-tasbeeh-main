@@ -7,11 +7,18 @@ import { themes, counterShapes } from '@/lib/constants';
 interface StyleCenterProps {
     isOpen: boolean;
     onClose: () => void;
+    initialTab?: 'themes' | 'shapes';
 }
 
-export const StyleCenter: React.FC<StyleCenterProps> = ({ isOpen, onClose }) => {
+export const StyleCenter: React.FC<StyleCenterProps> = ({ isOpen, onClose, initialTab = 'themes' }) => {
     const { theme, setTheme, counterShape, setCounterShape } = useTasbeehStore();
-    const [activeTab, setActiveTab] = React.useState<'themes' | 'shapes'>('themes');
+    const [activeTab, setActiveTab] = React.useState<'themes' | 'shapes'>(initialTab);
+
+    React.useEffect(() => {
+        if (isOpen) {
+            setActiveTab(initialTab);
+        }
+    }, [isOpen, initialTab]);
 
     return (
         <AnimatePresence>
@@ -55,8 +62,8 @@ export const StyleCenter: React.FC<StyleCenterProps> = ({ isOpen, onClose }) => 
                             <button
                                 onClick={() => setActiveTab('themes')}
                                 className={`flex-1 flex items-center justify-center gap-2 py-3 rounded-2xl text-sm font-bold transition-all ${activeTab === 'themes'
-                                        ? 'bg-primary text-primary-foreground shadow-lg shadow-primary/20 scale-100'
-                                        : 'bg-foreground/5 text-muted-foreground hover:bg-foreground/10 hover:text-foreground scale-[0.98]'
+                                    ? 'bg-primary text-primary-foreground shadow-lg shadow-primary/20 scale-100'
+                                    : 'bg-foreground/5 text-muted-foreground hover:bg-foreground/10 hover:text-foreground scale-[0.98]'
                                     }`}
                             >
                                 <Palette className="w-4 h-4" />
@@ -65,8 +72,8 @@ export const StyleCenter: React.FC<StyleCenterProps> = ({ isOpen, onClose }) => 
                             <button
                                 onClick={() => setActiveTab('shapes')}
                                 className={`flex-1 flex items-center justify-center gap-2 py-3 rounded-2xl text-sm font-bold transition-all ${activeTab === 'shapes'
-                                        ? 'bg-primary text-primary-foreground shadow-lg shadow-primary/20 scale-100'
-                                        : 'bg-foreground/5 text-muted-foreground hover:bg-foreground/10 hover:text-foreground scale-[0.98]'
+                                    ? 'bg-primary text-primary-foreground shadow-lg shadow-primary/20 scale-100'
+                                    : 'bg-foreground/5 text-muted-foreground hover:bg-foreground/10 hover:text-foreground scale-[0.98]'
                                     }`}
                             >
                                 <Shapes className="w-4 h-4" />
@@ -85,8 +92,8 @@ export const StyleCenter: React.FC<StyleCenterProps> = ({ isOpen, onClose }) => 
                                             key={t.id}
                                             onClick={() => setTheme(t.id)}
                                             className={`group relative p-4 rounded-[2rem] border text-left transition-all overflow-hidden ${theme === t.id
-                                                    ? 'border-primary bg-primary/10 shadow-md ring-1 ring-primary/20'
-                                                    : 'border-border/40 bg-card/50 hover:border-primary/50 hover:bg-primary/5'
+                                                ? 'border-primary bg-primary/10 shadow-md ring-1 ring-primary/20'
+                                                : 'border-border/40 bg-card/50 hover:border-primary/50 hover:bg-primary/5'
                                                 }`}
                                         >
                                             {theme === t.id && (
@@ -110,8 +117,8 @@ export const StyleCenter: React.FC<StyleCenterProps> = ({ isOpen, onClose }) => 
                                             key={s.id}
                                             onClick={() => setCounterShape(s.id as any)}
                                             className={`group relative aspect-square rounded-[2rem] border flex flex-col items-center justify-center gap-3 transition-all ${counterShape === s.id
-                                                    ? 'border-primary bg-primary/10 shadow-md ring-1 ring-primary/20'
-                                                    : 'border-border/40 bg-card/50 hover:border-primary/50 hover:bg-primary/5'
+                                                ? 'border-primary bg-primary/10 shadow-md ring-1 ring-primary/20'
+                                                : 'border-border/40 bg-card/50 hover:border-primary/50 hover:bg-primary/5'
                                                 }`}
                                         >
                                             {counterShape === s.id && (

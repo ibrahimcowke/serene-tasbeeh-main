@@ -5,6 +5,8 @@ import { Flame, Star, Globe, Shield, ChevronLeft, ChevronRight, RotateCcw, Badge
 import { VisitorCounter } from '@/components/VisitorCounter';
 import { GlobalChallenges } from '@/components/GlobalChallenges';
 import { CounterVisuals } from '@/components/CounterVisuals';
+import { StyleCenter } from '@/components/StyleCenter';
+import { Shapes, Settings as LucideSettings } from 'lucide-react';
 
 // ─── Circular Gauge ─────────────────────────────────────────────
 const CircularGauge = ({ value, color }: { value: number; color: string }) => {
@@ -43,6 +45,8 @@ export const RoseGoldDashboard: React.FC = () => {
         counterShape, counterScale, counterVerticalOffset, countFontSize
     } = useTasbeehStore();
 
+    const [isStyleCenterOpen, setIsStyleCenterOpen] = useState(false);
+
     const [hadithIndex, setHadithIndex] = useState(0);
     useEffect(() => { setHadithIndex(0); }, [currentDhikr.id]);
     useEffect(() => {
@@ -65,6 +69,18 @@ export const RoseGoldDashboard: React.FC = () => {
         >
             {/* Ambient glows */}
             <div className="absolute top-0 left-0 w-full h-1/2 pointer-events-none" style={{ background: 'linear-gradient(180deg, rgba(183,110,80,0.05) 0%, transparent 100%)' }} />
+
+            <div className="absolute top-6 right-6 z-20 flex gap-3">
+                <button
+                    onClick={() => setIsStyleCenterOpen(true)}
+                    className="w-10 h-10 rounded-full flex items-center justify-center text-white/40 hover:text-[#b76e50] transition-all"
+                    style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.05)' }}
+                >
+                    <Shapes size={20} />
+                </button>
+            </div>
+
+            <StyleCenter isOpen={isStyleCenterOpen} onClose={() => setIsStyleCenterOpen(false)} initialTab="shapes" />
 
             {/* ── LEFT PANEL ── */}
             <motion.div initial={{ opacity: 0, x: -30 }} animate={{ opacity: 1, x: 0 }}
@@ -194,10 +210,9 @@ export const RoseGoldDashboard: React.FC = () => {
                             counterScale={counterScale}
                             progress={progress / 100}
                             currentCount={currentCount}
-                            currentSettings={{ ...themeSettings[theme], borderColor: '#b76e50' }}
-                            countFontSize={countFontSize}
-                            handleTap={increment}
-                            showCompletion={false}
+                            currentSettings={themeSettings[theme] || themeSettings['light']}
+                            countFontSize={countFontSize} handleTap={increment} showCompletion={false}
+                            disabled={false}
                         />
                     </div>
                 </div>

@@ -5,6 +5,8 @@ import { Flame, Star, Globe, ChevronLeft, ChevronRight, RotateCcw, BadgeCheck, T
 import { VisitorCounter } from '@/components/VisitorCounter';
 import { GlobalChallenges } from '@/components/GlobalChallenges';
 import { CounterVisuals } from '@/components/CounterVisuals';
+import { StyleCenter } from '@/components/StyleCenter';
+import { Shapes } from 'lucide-react';
 
 // ─── Flip Digit ────────────────────────────────────────────────
 const FlipDigit = ({ digit }: { digit: string }) => (
@@ -100,6 +102,8 @@ export const ObsidianDashboard: React.FC = () => {
         theme, themeSettings, countFontSize
     } = useTasbeehStore();
 
+    const [isStyleCenterOpen, setIsStyleCenterOpen] = useState(false);
+
     const [hadithIndex, setHadithIndex] = useState(0);
     useEffect(() => { setHadithIndex(0); }, [currentDhikr.id]);
     useEffect(() => {
@@ -123,8 +127,20 @@ export const ObsidianDashboard: React.FC = () => {
         <div className="w-full h-screen flex font-outfit select-none overflow-hidden"
             style={{ background: 'linear-gradient(135deg, #0b0b0e 0%, #111115 100%)' }}
         >
-            {/* ambient glows */}
-            <div className="absolute top-20 left-1/3 w-80 h-80 rounded-full pointer-events-none" style={{ background: 'radial-gradient(circle, rgba(197,160,85,0.04) 0%, transparent 70%)', filter: 'blur(60px)' }} />
+            {/* Ambient glows */}
+            <div className="absolute top-0 left-0 w-full h-1/2 pointer-events-none opacity-40" style={{ background: 'radial-gradient(circle at 50% 0%, rgba(183,110,80,0.1) 0%, transparent 70%)' }} />
+
+            <div className="absolute top-6 right-6 z-20 flex gap-3">
+                <button
+                    onClick={() => setIsStyleCenterOpen(true)}
+                    className="w-10 h-10 rounded-full flex items-center justify-center text-white/40 hover:text-white/80 transition-all"
+                    style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.05)' }}
+                >
+                    <Shapes size={20} />
+                </button>
+            </div>
+
+            <StyleCenter isOpen={isStyleCenterOpen} onClose={() => setIsStyleCenterOpen(false)} initialTab="shapes" />
             <div className="absolute bottom-20 right-1/3 w-80 h-80 rounded-full pointer-events-none" style={{ background: 'radial-gradient(circle, rgba(100,80,200,0.04) 0%, transparent 70%)', filter: 'blur(60px)' }} />
 
             {/* ── LEFT PANEL ── */}

@@ -5,6 +5,8 @@ import { Flame, Globe2, ChevronLeft, ChevronRight, RotateCcw, Star } from 'lucid
 import { VisitorCounter } from '@/components/VisitorCounter';
 import { GlobalChallenges } from '@/components/GlobalChallenges';
 import { CounterVisuals } from '@/components/CounterVisuals';
+import { StyleCenter } from '@/components/StyleCenter';
+import { Shapes } from 'lucide-react';
 
 // ─── Flip Digit (Military style) ────────────────────────────────
 const FlipDigit = ({ digit }: { digit: string }) => (
@@ -83,6 +85,8 @@ export const EmeraldDashboard: React.FC = () => {
         theme, themeSettings, countFontSize
     } = useTasbeehStore();
 
+    const [isStyleCenterOpen, setIsStyleCenterOpen] = useState(false);
+
     const [hadithIndex, setHadithIndex] = useState(0);
     useEffect(() => { setHadithIndex(0); }, [currentDhikr.id]);
     useEffect(() => {
@@ -92,6 +96,7 @@ export const EmeraldDashboard: React.FC = () => {
     }, [currentDhikr.hadiths, hadithSlideDuration]);
 
     const digits = currentCount.toString().padStart(4, '0').split('');
+    const progress = Math.min((currentCount / targetCount) * 100, 100);
     const dailyCount = currentCount;
     const totalRank = totalAllTime >= 10000 ? 'MASTER' : totalAllTime >= 5000 ? 'DEVOTED' : totalAllTime >= 1000 ? 'APPRENTICE' : 'SEEKER';
     const prevMax = totalAllTime >= 10000 ? 10000 : totalAllTime >= 5000 ? 5000 : totalAllTime >= 1000 ? 1000 : 0;
@@ -126,14 +131,20 @@ export const EmeraldDashboard: React.FC = () => {
                 </div>
                 <div className="text-[12px] font-black text-emerald-300/30 uppercase tracking-[0.3em]">سُبْحَانَهُ</div>
                 <div className="flex gap-2">
+                    <button
+                        onClick={() => setIsStyleCenterOpen(true)}
+                        className="w-8 h-8 rounded-full flex items-center justify-center text-emerald-300/40 hover:text-emerald-300 transition-all"
+                        style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.06)' }}
+                    >
+                        <Shapes size={14} />
+                    </button>
                     <div className="w-8 h-8 rounded-full flex items-center justify-center" style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.06)' }}>
                         <span className="text-[12px]">🔔</span>
                     </div>
-                    <div className="w-8 h-8 rounded-full flex items-center justify-center" style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.06)' }}>
-                        <span className="text-[12px]">⚙️</span>
-                    </div>
                 </div>
             </div>
+
+            <StyleCenter isOpen={isStyleCenterOpen} onClose={() => setIsStyleCenterOpen(false)} initialTab="shapes" />
 
             {/* ── MAIN ROW ── */}
             <div className="flex flex-1 min-h-0 relative z-10">

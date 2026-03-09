@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTasbeehStore } from '@/store/tasbeehStore';
-import { Flame, Undo2, RotateCcw, Trophy, Globe, Star, Minus } from 'lucide-react';
+import { Flame, Undo2, RotateCcw, Trophy, Globe, Star, Minus, Shapes } from 'lucide-react';
 import { CounterVisuals } from '@/components/CounterVisuals';
 import { VisitorCounter } from '@/components/VisitorCounter';
 import { SessionTimer } from '@/components/SessionTimer';
 import { GlobalChallenges } from '@/components/GlobalChallenges';
+import { StyleCenter } from '@/components/StyleCenter';
 
 // ─── Carved stone stat pill ─────────────────────────────────────
 const StonePill = ({ label, value }: { label: string; value: string | number }) => (
@@ -62,6 +63,8 @@ export const DesertDashboard: React.FC = () => {
         counterVerticalOffset, theme, themeSettings, countFontSize, hadithSlideDuration,
     } = useTasbeehStore();
 
+    const [isStyleCenterOpen, setIsStyleCenterOpen] = useState(false);
+
     const [hadithIndex, setHadithIndex] = useState(0);
     useEffect(() => { setHadithIndex(0); }, [currentDhikr.id]);
     useEffect(() => {
@@ -85,6 +88,20 @@ export const DesertDashboard: React.FC = () => {
                     backgroundSize: '200px 200px',
                 }}
             />
+            {/* Textured background overlay */}
+            <div className="absolute inset-0 opacity-[0.03] pointer-events-none" style={{ backgroundImage: 'url("https://www.transparenttextures.com/patterns/papyros.png")' }} />
+
+            <div className="absolute top-6 right-6 z-20 flex gap-3">
+                <button
+                    onClick={() => setIsStyleCenterOpen(true)}
+                    className="w-10 h-10 rounded-full flex items-center justify-center text-[#5d4037]/40 hover:text-[#5d4037] transition-all"
+                    style={{ background: 'rgba(0,0,0,0.03)', border: '1px solid rgba(0,0,0,0.05)' }}
+                >
+                    <Shapes size={20} />
+                </button>
+            </div>
+
+            <StyleCenter isOpen={isStyleCenterOpen} onClose={() => setIsStyleCenterOpen(false)} initialTab="shapes" />
             {/* Vignette */}
             <div className="absolute inset-0 pointer-events-none" style={{ background: 'radial-gradient(ellipse at center, transparent 50%, rgba(60,35,15,0.5) 100%)' }} />
 
@@ -116,7 +133,7 @@ export const DesertDashboard: React.FC = () => {
                             <Trophy className="w-7 h-7 text-[#f0d080]" />
                         </div>
                         <div className="flex-1 flex items-end gap-1 h-12">
-                            {[40, 60, 45, 80, 70, 90, (progress || 20)].map((h, i) => (
+                            {[40, 60, 45, 80, 70, 90, (progress || 10)].map((h, i) => (
                                 <div key={i} className="flex-1 rounded-sm"
                                     style={{
                                         height: `${h}%`,
@@ -190,7 +207,7 @@ export const DesertDashboard: React.FC = () => {
                         <span className="text-[9px] font-black uppercase tracking-[0.25em] text-[#5a3c22]/60">Current Status</span>
                         <div className="flex items-center gap-1.5 px-2 py-1 rounded-full" style={{ background: 'rgba(90,60,34,0.15)', border: '1px solid rgba(90,60,34,0.25)' }}>
                             <div className="w-1.5 h-1.5 rounded-full" style={{ background: '#b8924e' }} />
-                            <span className="text-[7px] font-black text-[#5a3c22]/60 uppercase tracking-widest">Bramadan</span>
+                            <span className="text-[7px] font-black text-[#5a3c22]/60 uppercase tracking-widest">Ramadan</span>
                         </div>
                     </div>
                     <div>

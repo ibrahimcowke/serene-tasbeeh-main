@@ -6,8 +6,9 @@ import { CounterVisuals } from '@/components/CounterVisuals';
 import { VisitorCounter } from '@/components/VisitorCounter';
 import { SessionTimer } from '@/components/SessionTimer';
 import { GlobalChallenges } from '@/components/GlobalChallenges';
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { themes } from '@/lib/constants';
+import { StyleCenter } from '@/components/StyleCenter';
+import { Shapes } from 'lucide-react';
 
 // ─── Circular Gauge (Clay style) ────────────────────────────────
 const ClayGauge = ({ value, color }: { value: number; color: string }) => {
@@ -36,6 +37,8 @@ export const ChocoDashboard: React.FC = () => {
         counterVerticalOffset, theme, themeSettings, countFontSize, hadithSlideDuration,
     } = useTasbeehStore();
 
+    const [isStyleCenterOpen, setIsStyleCenterOpen] = useState(false);
+
     const [hadithIndex, setHadithIndex] = useState(0);
     useEffect(() => { setHadithIndex(0); }, [currentDhikr.id]);
     useEffect(() => {
@@ -55,6 +58,18 @@ export const ChocoDashboard: React.FC = () => {
             <div className="absolute top-0 left-0 w-full h-full pointer-events-none opacity-20"
                 style={{ background: 'radial-gradient(circle at 30% 20%, #c5a059 0%, transparent 40%), radial-gradient(circle at 70% 80%, #8b6e37 0%, transparent 40%)' }}
             />
+
+            {/* ── TOP ACTION BAR ── */}
+            <div className="absolute top-6 right-6 z-20 flex gap-3">
+                <button
+                    onClick={() => setIsStyleCenterOpen(true)}
+                    className="choco-button p-3 rounded-full flex items-center justify-center text-white/40 hover:text-[#c5a059] transition-all"
+                >
+                    <Shapes size={20} />
+                </button>
+            </div>
+
+            <StyleCenter isOpen={isStyleCenterOpen} onClose={() => setIsStyleCenterOpen(false)} initialTab="shapes" />
 
             {/* ── CONTENT ROW ── */}
             <div className="flex flex-col lg:flex-row gap-6 p-4 lg:p-6 w-full h-full relative z-10">
@@ -167,6 +182,7 @@ export const ChocoDashboard: React.FC = () => {
                             counterScale={counterScale} progress={progress / 100} currentCount={currentCount}
                             currentSettings={themeSettings[theme] || themeSettings['light']}
                             countFontSize={countFontSize} handleTap={increment} showCompletion={false}
+                            disabled={false}
                         />
                     </div>
 
