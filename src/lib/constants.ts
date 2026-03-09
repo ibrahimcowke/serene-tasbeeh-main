@@ -83,4 +83,9 @@ export const counterShapes = [
 export const dashboardLayouts = [
   { id: 'default', label: 'Default', icon: 'layout-dashboard' },
   { id: 'zen', label: 'Zen', icon: 'wind' },
+  { id: 'choco', label: 'Choco', icon: 'palette' },
+  { id: 'rose-gold', label: 'Rose Gold', icon: 'palette' },
+  { id: 'obsidian', label: 'Obsidian', icon: 'palette' },
+  { id: 'emerald', label: 'Emerald', icon: 'palette' },
+  { id: 'desert', label: 'Desert', icon: 'palette' },
 ] as const;

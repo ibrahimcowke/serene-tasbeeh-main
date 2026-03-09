@@ -12,15 +12,23 @@ import { BreathingGuide } from '@/components/BreathingGuide';
 import { CommunitySidebar } from '@/components/CommunitySidebar';
 import { JoinNotifier } from '@/components/JoinNotifier';
 import ClassicDashboard from '../components/dashboards/ClassicDashboard';
+import { ChocoDashboard } from '../components/dashboards/ChocoDashboard';
 import { PremiumHub } from '@/components/PremiumHub';
+import { RoseGoldDashboard } from '../components/dashboards/RoseGoldDashboard';
+import { ObsidianDashboard } from '../components/dashboards/ObsidianDashboard';
+import { EmeraldDashboard } from '../components/dashboards/EmeraldDashboard';
+import { DesertDashboard } from '../components/dashboards/DesertDashboard';
 
 const Index = () => {
   const { zenMode, setZenMode, layout, setLayout } = useTasbeehStore();
 
   const renderDashboard = () => {
-    if (layout === 'zen') {
-      return <ClassicDashboard />;
-    }
+    if (layout === 'zen') return <ClassicDashboard />;
+    if (layout === 'choco') return <ChocoDashboard />;
+    if (layout === 'rose-gold') return <RoseGoldDashboard />;
+    if (layout === 'obsidian') return <ObsidianDashboard />;
+    if (layout === 'emerald') return <EmeraldDashboard />;
+    if (layout === 'desert') return <DesertDashboard />;
 
     return (
       <div className="flex flex-col lg:flex-row gap-6 lg:gap-8 items-start justify-center">
