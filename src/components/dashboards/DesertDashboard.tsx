@@ -1,12 +1,59 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTasbeehStore } from '@/store/tasbeehStore';
-import { Flame, Undo2, RotateCcw, Star, Trophy, Target, Minus } from 'lucide-react';
+import { Flame, Undo2, RotateCcw, Trophy, Globe, Star, Minus } from 'lucide-react';
 import { CounterVisuals } from '@/components/CounterVisuals';
 import { VisitorCounter } from '@/components/VisitorCounter';
 import { SessionTimer } from '@/components/SessionTimer';
 import { GlobalChallenges } from '@/components/GlobalChallenges';
 
+// ─── Carved stone stat pill ─────────────────────────────────────
+const StonePill = ({ label, value }: { label: string; value: string | number }) => (
+    <div className="flex items-center justify-between px-4 py-2 rounded-lg"
+        style={{
+            background: 'linear-gradient(135deg, #c9b899 0%, #b8a37d 100%)',
+            boxShadow: 'inset 2px 2px 4px rgba(255,255,255,0.5), inset -2px -2px 4px rgba(0,0,0,0.2), 0 2px 4px rgba(0,0,0,0.3)',
+            border: '1px solid rgba(255,255,255,0.4)',
+        }}
+    >
+        <span className="text-[9px] font-black uppercase tracking-widest text-[#4a3322]/60">{label}</span>
+        <span className="text-[10px] font-black text-[#4a3322]">{value}</span>
+    </div>
+);
+
+// ─── Neumorphic counter card ────────────────────────────────────
+const StoneCard = ({ children, onClick }: { children: React.ReactNode; onClick?: () => void }) => (
+    <motion.div
+        onClick={onClick}
+        whileTap={{ scale: 0.99 }}
+        className="cursor-pointer"
+        style={{
+            background: 'linear-gradient(135deg, #c8b08a 0%, #b89a6a 100%)',
+            borderRadius: '1rem',
+            padding: '10px',
+            boxShadow: '6px 6px 14px rgba(80,50,20,0.4), -4px -4px 10px rgba(255,230,180,0.6), inset 0 0 0 1px rgba(255,255,255,0.3)',
+        }}
+    >
+        {children}
+    </motion.div>
+);
+
+// ─── Carved button ─────────────────────────────────────────────
+const CarvedBtn = ({ onClick, children }: { onClick?: () => void; children: React.ReactNode }) => (
+    <motion.button
+        onClick={onClick}
+        whileTap={{ scale: 0.93 }}
+        className="flex items-center justify-center w-12 h-12 rounded-xl"
+        style={{
+            background: 'linear-gradient(145deg, #c9b899 0%, #a8906a 100%)',
+            boxShadow: '3px 3px 8px rgba(80,50,20,0.5), -2px -2px 6px rgba(255,235,180,0.7), inset 0 1px 1px rgba(255,255,255,0.4)',
+            border: '1px solid rgba(255,255,255,0.3)',
+            color: '#5a3c22',
+        }}
+    >{children}</motion.button>
+);
+
+// ─── Main Component ─────────────────────────────────────────────
 export const DesertDashboard: React.FC = () => {
     const {
         currentCount, targetCount, increment, undo, reset, currentDhikr,
@@ -16,131 +63,197 @@ export const DesertDashboard: React.FC = () => {
     } = useTasbeehStore();
 
     const [hadithIndex, setHadithIndex] = useState(0);
-
     useEffect(() => { setHadithIndex(0); }, [currentDhikr.id]);
     useEffect(() => {
         if (!currentDhikr.hadiths || currentDhikr.hadiths.length <= 1) return;
-        const timer = setInterval(() => setHadithIndex(p => (p + 1) % currentDhikr.hadiths!.length), hadithSlideDuration * 1000);
-        return () => clearInterval(timer);
+        const t = setInterval(() => setHadithIndex(p => (p + 1) % currentDhikr.hadiths!.length), hadithSlideDuration * 1000);
+        return () => clearInterval(t);
     }, [currentDhikr.hadiths, hadithSlideDuration]);
 
     const progress = Math.min((currentCount / targetCount) * 100, 100);
-    const dailyProgress = Math.min(((totalAllTime % dailyGoal) / dailyGoal) * 100, 100);
+    const dailyProgress = Math.min(((currentCount % dailyGoal) / dailyGoal) * 100, 100);
     const totalRank = totalAllTime >= 10000 ? 'MASTER' : totalAllTime >= 5000 ? 'DEVOTED' : totalAllTime >= 1000 ? 'APPRENTICE' : 'SEEKER';
 
     return (
-        <div className="desert-dashboard w-full h-screen p-4 lg:p-6 flex flex-col font-outfit overflow-hidden select-none pb-20 lg:pb-0">
-            {/* Sand grain overlay */}
+        <div className="w-full h-screen flex font-outfit select-none overflow-hidden relative"
+            style={{ background: 'linear-gradient(160deg, #c4a87a 0%, #b39468 30%, #a5855a 60%, #9c7a4e 100%)' }}
+        >
+            {/* Stone texture overlay */}
             <div className="absolute inset-0 pointer-events-none opacity-20"
                 style={{
-                    backgroundImage: `radial-gradient(ellipse at 20% 50%, rgba(218,204,168,0.3) 0%, transparent 60%), radial-gradient(ellipse at 80% 20%, rgba(138,112,82,0.2) 0%, transparent 50%)`,
+                    backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E")`,
+                    backgroundSize: '200px 200px',
                 }}
             />
+            {/* Vignette */}
+            <div className="absolute inset-0 pointer-events-none" style={{ background: 'radial-gradient(ellipse at center, transparent 50%, rgba(60,35,15,0.5) 100%)' }} />
 
-            <div className="flex flex-col lg:flex-row gap-6 lg:gap-8 flex-1 h-full min-h-0 relative z-10">
-                {/* LEFT PANEL */}
-                <motion.div initial={{ opacity: 0, x: -40 }} animate={{ opacity: 1, x: 0 }}
-                    className="flex-1 max-w-sm w-full mx-auto flex flex-col gap-4 lg:h-full lg:overflow-y-auto scrollbar-hide order-2 lg:order-1"
+            {/* ── LEFT PANEL ── */}
+            <motion.div initial={{ opacity: 0, x: -30 }} animate={{ opacity: 1, x: 0 }}
+                className="w-[270px] shrink-0 flex flex-col gap-3 p-4 h-full overflow-y-auto scrollbar-hide"
+            >
+                {/* MY PROGRESS card */}
+                <div className="rounded-[1.25rem] p-5 flex flex-col gap-4 flex-1"
+                    style={{
+                        background: 'linear-gradient(145deg, #d4bb8a 0%, #c2a47a 100%)',
+                        boxShadow: '8px 8px 20px rgba(60,35,15,0.5), -4px -4px 12px rgba(255,240,195,0.6), inset 0 1px 1px rgba(255,255,255,0.4)',
+                        border: '1px solid rgba(255,255,255,0.35)',
+                    }}
                 >
-                    <div className="desert-clay rounded-[1.5rem] p-5 flex flex-col gap-4 border border-white/10">
-                        <h2 className="text-[10px] font-black uppercase tracking-[0.35em] text-[#4a3b2c]/70">MY PROGRESS</h2>
+                    <div className="flex items-center justify-between">
+                        <h2 className="text-[10px] font-black uppercase tracking-[0.3em] text-[#5a3c22]/70">My Progress</h2>
+                    </div>
 
-                        <div className="flex items-center gap-3">
-                            <div className="desert-inner rounded-xl p-4 w-20 h-20 flex flex-col items-center justify-center">
-                                <Trophy className="w-8 h-8 text-[#6b4c2a]" />
-                                <span className="text-[8px] font-black uppercase tracking-widest text-[#4a3b2c]/60 mt-1">{totalRank}</span>
-                            </div>
-                            <div className="flex-1 space-y-2">
-                                <div className="flex justify-between text-[9px] font-black text-[#4a3b2c]/60 uppercase">
-                                    <span>Progress</span><span>{Math.floor(progress)}%</span>
-                                </div>
-                                <div className="h-3 desert-inner rounded-full overflow-hidden p-[2px]">
-                                    <motion.div initial={{ width: 0 }} animate={{ width: `${progress}%` }}
-                                        className="h-full rounded-full"
-                                        style={{ background: 'linear-gradient(90deg, #8a7052, #dacca8)' }}
-                                    />
-                                </div>
-                            </div>
+                    {/* Scarab badge + bars */}
+                    <div className="flex items-center gap-3">
+                        <div className="w-16 h-16 rounded-xl flex items-center justify-center shrink-0"
+                            style={{
+                                background: 'linear-gradient(145deg, #b8924e 0%, #8a6832 100%)',
+                                boxShadow: 'inset 2px 2px 5px rgba(0,0,0,0.4), inset -1px -1px 3px rgba(255,200,100,0.3)',
+                                border: '1px solid rgba(255,200,100,0.3)',
+                            }}
+                        >
+                            <Trophy className="w-7 h-7 text-[#f0d080]" />
                         </div>
-
-                        <div className="grid grid-cols-2 gap-3">
-                            <div className="desert-inner rounded-xl p-4 flex flex-col items-center gap-2">
-                                <span className="text-[8px] font-black uppercase tracking-[0.2em] text-[#4a3b2c]/50">STREAK</span>
-                                <div className="flex items-center gap-1">
-                                    <Flame className="w-5 h-5 text-amber-700" />
-                                    <span className="text-2xl font-black text-[#4a3b2c]">{streakDays}</span>
-                                </div>
-                                <span className="text-[7px] font-bold text-[#4a3b2c]/40 uppercase">Days</span>
-                            </div>
-                            <div className="desert-inner rounded-xl p-4 flex flex-col items-center gap-2">
-                                <span className="text-[8px] font-black uppercase tracking-[0.2em] text-[#4a3b2c]/50">GOAL</span>
-                                <span className="text-xl font-black text-[#4a3b2c]">{totalAllTime % dailyGoal}/{dailyGoal}</span>
-                                <div className="w-full h-1 rounded-full overflow-hidden" style={{ background: 'rgba(74,59,44,0.1)' }}>
-                                    <div className="h-full rounded-full" style={{ width: `${dailyProgress}%`, background: '#8a7052' }} />
-                                </div>
-                            </div>
+                        <div className="flex-1 flex items-end gap-1 h-12">
+                            {[40, 60, 45, 80, 70, 90, (progress || 20)].map((h, i) => (
+                                <div key={i} className="flex-1 rounded-sm"
+                                    style={{
+                                        height: `${h}%`,
+                                        background: i < 6 ? 'linear-gradient(180deg, rgba(90,60,34,0.4) 0%, rgba(90,60,34,0.2) 100%)' : 'linear-gradient(180deg, #8a6832 0%, #b8924e 100%)',
+                                        boxShadow: 'inset 0 1px 2px rgba(255,255,255,0.2)',
+                                    }}
+                                />
+                            ))}
                         </div>
+                    </div>
 
-                        <div className="space-y-2">
-                            <div className="desert-inner rounded-xl px-4 py-2.5 flex items-center justify-between">
-                                <span className="text-[9px] font-bold uppercase text-[#4a3b2c]/50">All-Time</span>
-                                <span className="text-[9px] font-black text-[#6b4c2a]">{totalAllTime.toLocaleString()}</span>
-                            </div>
-                            <div className="desert-inner rounded-xl px-4 py-2.5 flex items-center justify-between">
-                                <span className="text-[9px] font-bold uppercase text-[#4a3b2c]/50">Achievements</span>
-                                <span className="text-[9px] font-black text-[#6b4c2a]">{unlockedAchievements.length}</span>
+                    {/* Level progress */}
+                    <div className="space-y-1.5">
+                        <div className="flex justify-between text-[9px] font-black text-[#5a3c22]/60 uppercase tracking-widest">
+                            <span>Level Progress</span><span>{Math.floor(progress)}%</span>
+                        </div>
+                        <div className="h-3 rounded-full overflow-hidden p-[2px]"
+                            style={{ background: 'inset 2px 2px 4px rgba(0,0,0,0.3)', boxShadow: 'inset 2px 2px 4px rgba(0,0,0,0.3)' }}
+                        >
+                            <div className="w-full h-full rounded-full overflow-hidden" style={{ background: 'rgba(90,60,34,0.2)' }}>
+                                <motion.div initial={{ width: 0 }} animate={{ width: `${progress}%` }} className="h-full rounded-full" style={{ background: 'linear-gradient(90deg, #8a6832, #d4a040)' }} />
                             </div>
                         </div>
                     </div>
 
-                    <div className="desert-clay rounded-[1.5rem] p-5 flex flex-col gap-3 border border-white/10">
-                        <span className="text-[10px] font-black uppercase tracking-[0.3em] text-[#4a3b2c]/60">STATUS</span>
-                        <div className="desert-inner rounded-xl px-4 py-3 flex items-center justify-between">
-                            <span className="text-[10px] font-bold uppercase text-[#4a3b2c]/60">Occasion</span>
-                            <span className="text-[9px] font-black text-[#6b4c2a]">Ramadan</span>
-                        </div>
-                        <div className="desert-inner rounded-xl px-4 py-3 flex items-center justify-between">
-                            <span className="text-[10px] font-bold uppercase text-[#4a3b2c]/60">Boost</span>
-                            <span className="text-[9px] font-black text-[#8a7052]">+15% Focus</span>
+                    {/* Streak & Daily goal */}
+                    <div className="grid grid-cols-2 gap-3">
+                        {[
+                            { icon: Flame, iconColor: '#c0620a', label: 'STREAK', value: streakDays, sub: 'PROGRESS', prog: (streakDays / 30) * 100 },
+                            { icon: Star, iconColor: '#8a6832', label: 'DAILY GOAL', value: `${currentCount % dailyGoal}/${dailyGoal}`, sub: 'DAILY GOAL', prog: dailyProgress },
+                        ].map(({ icon: Icon, iconColor, label, value, sub, prog }) => (
+                            <div key={label} className="rounded-xl p-3 flex flex-col items-center gap-2 text-center"
+                                style={{
+                                    background: 'linear-gradient(145deg, #cdb98a 0%, #b8a06a 100%)',
+                                    boxShadow: '3px 3px 8px rgba(60,35,15,0.4), -2px -2px 6px rgba(255,235,180,0.5), inset 0 1px 1px rgba(255,255,255,0.35)',
+                                    border: '1px solid rgba(255,255,255,0.3)',
+                                }}
+                            >
+                                <span className="text-[8px] font-black uppercase tracking-widest text-[#5a3c22]/60">{label}</span>
+                                <div className="relative">
+                                    <div className="w-12 h-12 rounded-full flex items-center justify-center"
+                                        style={{ background: 'rgba(90,60,34,0.15)', boxShadow: 'inset 2px 2px 4px rgba(0,0,0,0.25)' }}
+                                    >
+                                        <Icon className="w-5 h-5" style={{ color: iconColor }} />
+                                    </div>
+                                </div>
+                                <span className="text-base font-black text-[#4a3020]">{value}</span>
+                                <div className="w-full h-1 rounded-full overflow-hidden" style={{ background: 'rgba(90,60,34,0.2)' }}>
+                                    <div className="h-full rounded-full" style={{ width: `${prog}%`, background: 'linear-gradient(90deg, #8a6832, #d4a040)' }} />
+                                </div>
+                                <span className="text-[7px] font-bold text-[#5a3c22]/50 uppercase">{sub}</span>
+                            </div>
+                        ))}
+                    </div>
+
+                    <div className="space-y-2 mt-auto">
+                        <StonePill label="Total All-Time" value={totalAllTime.toLocaleString()} />
+                        <StonePill label="Achievements" value={`${unlockedAchievements.length} Unlocked`} />
+                    </div>
+                </div>
+
+                {/* CURRENT STATUS */}
+                <div className="rounded-[1.25rem] p-4 space-y-3"
+                    style={{
+                        background: 'linear-gradient(145deg, #d4bb8a 0%, #c2a47a 100%)',
+                        boxShadow: '6px 6px 16px rgba(60,35,15,0.4), -3px -3px 10px rgba(255,240,195,0.5), inset 0 1px 1px rgba(255,255,255,0.4)',
+                        border: '1px solid rgba(255,255,255,0.35)',
+                    }}
+                >
+                    <div className="flex items-center justify-between">
+                        <span className="text-[9px] font-black uppercase tracking-[0.25em] text-[#5a3c22]/60">Current Status</span>
+                        <div className="flex items-center gap-1.5 px-2 py-1 rounded-full" style={{ background: 'rgba(90,60,34,0.15)', border: '1px solid rgba(90,60,34,0.25)' }}>
+                            <div className="w-1.5 h-1.5 rounded-full" style={{ background: '#b8924e' }} />
+                            <span className="text-[7px] font-black text-[#5a3c22]/60 uppercase tracking-widest">Bramadan</span>
                         </div>
                     </div>
-                </motion.div>
-
-                {/* CENTER */}
-                <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
-                    className="flex-[2] flex flex-col items-center justify-center relative lg:h-full scrollbar-hide order-1 lg:order-2 z-10"
-                >
-                    <div className="flex flex-col items-center gap-1 mb-6">
-                        <motion.span key={currentDhikr.id} initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }}
-                            className="text-5xl lg:text-6xl font-amiri leading-[1.2] text-[#4a3b2c]"
-                            style={{ textShadow: '2px 2px 4px rgba(74,59,44,0.2)' }}
-                        >{currentDhikr.arabic}</motion.span>
-                        {showTransliteration && (
-                            <motion.h1 key={currentDhikr.id + '-t'} initial={{ opacity: 0 }} animate={{ opacity: 1 }}
-                                className="text-xl font-black tracking-[0.35em] uppercase mt-2 text-[#6b4c2a]/80"
-                            >{currentDhikr.transliteration}</motion.h1>
-                        )}
-                        <SessionTimer />
-                        {sessionMode.type === 'tasbih100' && (
-                            <div className="flex gap-2 mt-2">
-                                {[0, 1, 2, 3].map(p => (
-                                    <div key={p} className={`w-2 h-2 rounded-sm transition-all ${p < sessionMode.currentPhase ? 'bg-[#8a7052]' : p === sessionMode.currentPhase ? 'bg-[#6b4c2a] scale-150' : 'bg-[#4a3b2c]/20'}`} />
+                    <div>
+                        <span className="text-[7px] text-[#5a3c22]/50 uppercase tracking-widest block mb-0.5">Active Occasion</span>
+                        <div className="flex items-center justify-between">
+                            <span className="text-sm font-black text-[#4a3020]">Ramadan Kareem</span>
+                            <div className="flex gap-1.5">
+                                {['←', '→', '★'].map(s => (
+                                    <div key={s} className="w-7 h-7 rounded-full flex items-center justify-center text-xs"
+                                        style={{ background: 'rgba(90,60,34,0.15)', boxShadow: 'inset 1px 1px 3px rgba(0,0,0,0.3)' }}
+                                    >{s}</div>
                                 ))}
                             </div>
-                        )}
+                        </div>
+                    </div>
+                    <StonePill label="🔥 Taqwa Boost" value="+15% Focus" />
+                </div>
+            </motion.div>
+
+            {/* ── CENTER ── */}
+            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
+                className="flex-1 flex flex-col items-center justify-center gap-5 px-4 h-full overflow-y-auto scrollbar-hide"
+            >
+                {/* Dhikr title board */}
+                <div className="flex flex-col items-center gap-2 text-center">
+                    <div className="px-8 py-3 rounded-xl"
+                        style={{ background: 'linear-gradient(145deg, #cdb98a, #b8a06a)', boxShadow: '4px 4px 10px rgba(60,35,15,0.4), -2px -2px 8px rgba(255,235,180,0.5), inset 0 1px 1px rgba(255,255,255,0.4)', border: '1px solid rgba(255,255,255,0.3)' }}
+                    >
+                        <motion.p key={currentDhikr.id} initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }}
+                            className="font-amiri text-4xl text-[#4a3020]" style={{ textShadow: '1px 1px 2px rgba(255,255,255,0.4)' }}
+                        >{currentDhikr.arabic}</motion.p>
+                    </div>
+                    {showTransliteration && (
+                        <p className="font-black tracking-[0.3em] uppercase text-xl text-[#5a3c22]/80">{currentDhikr.transliteration}</p>
+                    )}
+                    <p className="text-[10px] text-[#5a3c22]/50 uppercase tracking-widest font-bold">
+                        {sessionMode.type === 'tasbih100' ? `Phase ${sessionMode.currentPhase + 1} of 4` : `Phase 1 of 4`}
+                    </p>
+                    <SessionTimer />
+                </div>
+
+                {/* Undo/Reset buttons floating left of counter */}
+                <div className="relative w-full max-w-md">
+                    <div className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 flex flex-col gap-3 z-20">
+                        <CarvedBtn onClick={undo}><Undo2 className="w-5 h-5" /></CarvedBtn>
+                        <CarvedBtn onClick={decrement}><Minus className="w-5 h-5" /></CarvedBtn>
+                        <CarvedBtn onClick={reset}><RotateCcw className="w-5 h-5" /></CarvedBtn>
                     </div>
 
-                    {/* Vertical controls */}
-                    <div className="absolute left-0 top-1/3 flex flex-col gap-3 desert-clay p-2 rounded-r-[1.5rem] rounded-l-none border border-l-0 border-white/10">
-                        <button onClick={undo} className="p-3 rounded-lg text-[#4a3b2c]/40 hover:text-[#4a3b2c] hover:bg-black/5 transition-colors"><Undo2 className="w-5 h-5" /></button>
-                        <div className="w-px h-3 bg-[#4a3b2c]/10 mx-auto" />
-                        <button onClick={decrement} disabled={currentCount === 0} className="p-3 rounded-lg text-[#4a3b2c]/40 hover:text-[#4a3b2c] hover:bg-black/5 transition-colors disabled:opacity-20"><Minus className="w-5 h-5" /></button>
-                        <div className="w-px h-3 bg-[#4a3b2c]/10 mx-auto" />
-                        <button onClick={reset} className="p-3 rounded-lg text-[#4a3b2c]/40 hover:text-[#4a3b2c] hover:bg-black/5 transition-colors"><RotateCcw className="w-5 h-5" /></button>
-                    </div>
-
-                    <div className="relative w-full max-w-[280px] sm:max-w-md aspect-square flex items-center justify-center">
-                        <div className="absolute inset-0 rounded-2xl opacity-20 -z-10 desert-clay" style={{ borderRadius: '2rem' }} />
+                    {/* The iron-bordered ring counter */}
+                    <div className="relative w-full aspect-square max-w-[280px] mx-auto flex items-center justify-center">
+                        {/* outer wrought iron ring */}
+                        <div className="absolute inset-0 rounded-full"
+                            style={{
+                                background: 'conic-gradient(from 0deg, #555, #777, #444, #888, #555)',
+                                boxShadow: '0 8px 24px rgba(0,0,0,0.6), inset 0 2px 6px rgba(255,255,255,0.1)',
+                                padding: '12px',
+                            }}
+                        >
+                            <div className="w-full h-full rounded-full"
+                                style={{ background: 'linear-gradient(145deg, #b89a6a 0%, #a08050 100%)', boxShadow: 'inset 4px 4px 10px rgba(60,35,15,0.4), inset -2px -2px 6px rgba(255,220,150,0.3)' }}
+                            />
+                        </div>
                         <CounterVisuals
                             layout="default" counterShape={counterShape} counterVerticalOffset={counterVerticalOffset}
                             counterScale={counterScale} progress={progress / 100} currentCount={currentCount}
@@ -148,41 +261,74 @@ export const DesertDashboard: React.FC = () => {
                             countFontSize={countFontSize} handleTap={increment} showCompletion={false} disabled={false}
                         />
                     </div>
+                </div>
 
-                    <div className="mt-6 w-full max-w-lg hidden sm:block">
-                        <div className="desert-clay rounded-[1.5rem] p-6 border border-white/10">
+                {/* Parchment Wisdom Card */}
+                <div className="w-full max-w-lg hidden sm:block">
+                    <div className="rounded-xl overflow-hidden"
+                        style={{
+                            background: 'linear-gradient(145deg, #e8d5a8 0%, #d4bc88 100%)',
+                            boxShadow: '4px 6px 16px rgba(60,35,15,0.4), -2px -2px 8px rgba(255,235,180,0.5), inset 0 0 30px rgba(180,130,50,0.15)',
+                            border: '2px solid rgba(120,80,30,0.4)',
+                        }}
+                    >
+                        {/* top leather strip */}
+                        <div className="h-2" style={{ background: 'linear-gradient(90deg, #8a6030, #7a5020, #8a6030)' }} />
+                        <div className="p-5">
+                            <div className="flex items-center justify-between mb-3">
+                                <span className="text-[8px] font-black uppercase tracking-widest text-[#5a3c22]/50">فضائل الذكر</span>
+                                <span className="text-[8px] italic text-[#5a3c22]/40">Bukhari</span>
+                            </div>
                             <AnimatePresence mode="wait">
-                                <motion.div key={`${currentDhikr.id}-${hadithIndex}`} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}>
-                                    <p className="arabic text-lg text-center leading-loose text-[#4a3b2c]">{currentDhikr.hadiths?.[hadithIndex]?.text || '"سُبْحَانَ اللَّهِ وَبِحَمْدِهِ"'}</p>
-                                    <p className="text-[10px] italic text-[#6b4c2a]/50 text-center uppercase tracking-widest mt-2">{currentDhikr.hadiths?.[hadithIndex]?.source || 'Hadith'}</p>
+                                <motion.div key={`${currentDhikr.id}-${hadithIndex}`} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+                                    <p className="arabic text-lg text-center text-[#4a3020] leading-loose">{currentDhikr.hadiths?.[hadithIndex]?.text?.slice(0, 120) || 'سُبْحَانَ اللَّهِ وَبِحَمْدِهِ'}</p>
+                                    <p className="text-[10px] text-center text-[#5a3c22]/60 mt-2 italic">A light word on the tongue, heavy on the scale.</p>
+                                    <p className="text-[9px] italic text-[#5a3c22]/40 text-right mt-1">— {currentDhikr.hadiths?.[hadithIndex]?.source || 'Bukhari'}</p>
                                 </motion.div>
                             </AnimatePresence>
                         </div>
+                        <div className="h-2" style={{ background: 'linear-gradient(90deg, #8a6030, #7a5020, #8a6030)' }} />
                     </div>
-                </motion.div>
+                </div>
+            </motion.div>
 
-                {/* RIGHT: Community */}
-                <motion.div initial={{ opacity: 0, x: 40 }} animate={{ opacity: 1, x: 0 }}
-                    className="flex-1 max-w-sm w-full mx-auto flex flex-col gap-4 lg:h-full scrollbar-hide order-3"
+            {/* ── RIGHT PANEL: GLOBAL COMMUNITY ── */}
+            <motion.div initial={{ opacity: 0, x: 30 }} animate={{ opacity: 1, x: 0 }}
+                className="w-[270px] shrink-0 flex flex-col gap-3 p-4 h-full overflow-y-auto scrollbar-hide"
+            >
+                <div className="rounded-[1.25rem] flex flex-col overflow-hidden h-full"
+                    style={{
+                        background: 'linear-gradient(145deg, #d4bb8a 0%, #c2a47a 100%)',
+                        boxShadow: '8px 8px 20px rgba(60,35,15,0.5), -4px -4px 12px rgba(255,240,195,0.6), inset 0 1px 1px rgba(255,255,255,0.4)',
+                        border: '1px solid rgba(255,255,255,0.35)',
+                    }}
                 >
-                    <div className="desert-clay rounded-[1.5rem] flex flex-col overflow-hidden h-full border border-white/10">
-                        <div className="p-4 flex items-center justify-between border-b border-[#4a3b2c]/10">
-                            <h2 className="text-xs font-black uppercase tracking-[0.2em] text-[#4a3b2c]/60">Community</h2>
-                            <div className="flex items-center gap-2 px-3 py-1 bg-[#4a3b2c]/10 rounded-full">
-                                <span className="w-1.5 h-1.5 rounded-full bg-amber-700 animate-pulse" />
-                                <span className="text-[10px] text-[#6b4c2a] font-black uppercase">Live</span>
-                            </div>
-                        </div>
-                        <div className="p-4 space-y-4 overflow-y-auto flex-1 scrollbar-hide">
-                            <div className="desert-inner rounded-xl p-4 flex flex-col items-center">
-                                <VisitorCounter />
-                                <span className="text-[9px] font-black text-[#4a3b2c]/40 uppercase mt-2 tracking-widest">Worldwide</span>
-                            </div>
-                            <GlobalChallenges />
+                    <div className="p-4 flex items-center justify-between border-b border-[#5a3c22]/15">
+                        <h2 className="text-xs font-black uppercase tracking-[0.25em] text-[#5a3c22]/60">Global Community</h2>
+                        <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full" style={{ background: 'rgba(90,60,34,0.15)', border: '1px solid rgba(90,60,34,0.25)' }}>
+                            <span className="w-1.5 h-1.5 rounded-full bg-green-700 animate-pulse" />
+                            <span className="text-[8px] font-black text-[#5a3c22]/60 uppercase tracking-widest">Live</span>
                         </div>
                     </div>
-                </motion.div>
-            </div>
+
+                    {/* Carved world map placeholder */}
+                    <div className="mx-4 mt-3 rounded-xl flex items-center justify-center"
+                        style={{ background: 'rgba(90,60,34,0.1)', boxShadow: 'inset 2px 2px 5px rgba(0,0,0,0.2)', height: '90px', border: '1px solid rgba(255,255,255,0.2)' }}
+                    >
+                        <Globe className="w-12 h-12 text-[#5a3c22]/20" />
+                    </div>
+
+                    <div className="p-4 flex flex-col gap-3 overflow-y-auto scrollbar-hide flex-1">
+                        <div className="rounded-xl p-3 text-center"
+                            style={{ background: 'rgba(90,60,34,0.1)', boxShadow: 'inset 2px 2px 4px rgba(0,0,0,0.15)', border: '1px solid rgba(255,255,255,0.2)' }}
+                        >
+                            <VisitorCounter />
+                            <span className="text-[8px] text-[#5a3c22]/50 uppercase tracking-widest font-bold block mt-1">Dhikrs Worldwide</span>
+                        </div>
+                        <GlobalChallenges />
+                    </div>
+                </div>
+            </motion.div>
         </div>
     );
 };

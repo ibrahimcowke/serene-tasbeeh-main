@@ -1,262 +1,192 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTasbeehStore } from '@/store/tasbeehStore';
-import {
-    Trophy,
-    Flame,
-    Target,
-    ChevronLeft,
-    ChevronRight,
-    Undo2,
-    RotateCcw,
-    Palette,
-    Globe,
-    CheckCircle2,
-    Clock,
-    ExternalLink,
-    Star,
-    Minus
-} from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { CounterVisuals } from '@/components/CounterVisuals';
+import { Flame, Star, Globe, Shield, ChevronLeft, ChevronRight, RotateCcw, BadgeCheck, Trophy } from 'lucide-react';
 import { VisitorCounter } from '@/components/VisitorCounter';
-import { SessionTimer } from '@/components/SessionTimer';
 import { GlobalChallenges } from '@/components/GlobalChallenges';
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuLabel,
-    DropdownMenuSeparator,
-    DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { themes } from '@/lib/constants';
+import { CounterVisuals } from '@/components/CounterVisuals';
 
+// ─── Circular Gauge ─────────────────────────────────────────────
+const CircularGauge = ({ value, color }: { value: number; color: string }) => {
+    const r = 18;
+    const circ = 2 * Math.PI * r;
+    const offset = circ - (value / 100) * circ;
+    return (
+        <div className="relative w-12 h-12 flex items-center justify-center">
+            <svg className="w-full h-full transform -rotate-90">
+                <circle cx="24" cy="24" r={r} fill="transparent" stroke="rgba(255,255,255,0.05)" strokeWidth="3" />
+                <circle cx="24" cy="24" r={r} fill="transparent" stroke={color} strokeWidth="3" strokeDasharray={circ} strokeDashoffset={offset} strokeLinecap="round" style={{ transition: 'stroke-dashoffset 1s ease-out' }} />
+            </svg>
+            <div className="absolute inset-0 flex items-center justify-center">
+                <span className="text-[10px] font-black" style={{ color }}>{Math.round(value)}%</span>
+            </div>
+        </div>
+    );
+};
+
+// ─── Stat Pill ──────────────────────────────────────────────────
+const StatPill = ({ label, value }: { label: string; value: string | number }) => (
+    <div className="flex items-center justify-between px-4 py-2 rounded-full"
+        style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.05)' }}
+    >
+        <span className="text-[9px] font-bold text-white/30 uppercase tracking-widest">{label}</span>
+        <span className="text-[10px] font-black text-white/80">{value}</span>
+    </div>
+);
+
+// ─── Main Component ─────────────────────────────────────────────
 export const RoseGoldDashboard: React.FC = () => {
     const {
-        currentCount,
-        targetCount,
-        increment,
-        undo,
-        reset,
-        currentDhikr,
-        streakDays,
-        dailyGoal,
-        totalAllTime,
-        unlockedAchievements,
-        sessionMode,
-        decrement,
-        setTheme,
-        showTransliteration,
-        counterShape,
-        counterScale,
-        counterVerticalOffset,
-        theme,
-        themeSettings,
-        countFontSize,
-        hadithSlideDuration,
+        currentCount, targetCount, increment, undo, reset, currentDhikr,
+        streakDays, dailyGoal, totalAllTime, unlockedAchievements, sessionMode,
+        showTransliteration, hadithSlideDuration, theme, themeSettings,
+        counterShape, counterScale, counterVerticalOffset, countFontSize
     } = useTasbeehStore();
 
     const [hadithIndex, setHadithIndex] = useState(0);
-    const [isPaused, setIsPaused] = useState(false);
-
+    useEffect(() => { setHadithIndex(0); }, [currentDhikr.id]);
     useEffect(() => {
-        setHadithIndex(0);
-    }, [currentDhikr.id]);
-
-    useEffect(() => {
-        if (!currentDhikr.hadiths || currentDhikr.hadiths.length <= 1 || isPaused) return;
-        const timer = setInterval(() => {
-            setHadithIndex((prev) => (prev + 1) % currentDhikr.hadiths!.length);
-        }, hadithSlideDuration * 1000);
-        return () => clearInterval(timer);
-    }, [currentDhikr.hadiths, hadithSlideDuration, isPaused]);
+        if (!currentDhikr.hadiths || currentDhikr.hadiths.length <= 1) return;
+        const t = setInterval(() => setHadithIndex(p => (p + 1) % currentDhikr.hadiths!.length), hadithSlideDuration * 1000);
+        return () => clearInterval(t);
+    }, [currentDhikr.hadiths, hadithSlideDuration]);
 
     const progress = Math.min((currentCount / targetCount) * 100, 100);
-    const dailyProgress = Math.min(((totalAllTime % dailyGoal) / dailyGoal) * 100, 100);
+    const dailyProg = Math.min(((currentCount % dailyGoal) / dailyGoal) * 100, 100);
+    const streakProg = Math.min((streakDays / 30) * 100, 100);
+
+    const sessionLabel = sessionMode.type === 'tasbih100'
+        ? `Phase ${sessionMode.currentPhase + 1} of 4`
+        : `Phase 1 of 4`;
 
     return (
-        <div className="w-full h-screen rose-gold-dashboard p-4 lg:p-6 flex flex-col font-outfit overflow-hidden select-none pb-20 lg:pb-0">
-            <div className="flex flex-col lg:flex-row gap-6 lg:gap-8 flex-1 h-full min-h-0 relative z-10">
-                {/* LEFT PANEL: MY PROGRESS */}
-                <div className="flex-1 max-w-sm w-full mx-auto flex flex-col gap-6 lg:h-full lg:overflow-y-auto pr-2 scrollbar-hide order-2 lg:order-1 custom-scrollbar">
-                    <div className="rose-gold-clay p-6 flex flex-col gap-5 shrink-0">
-                        <div className="flex items-center justify-between text-glow-gold">
-                            <h2 className="text-xl font-bold tracking-tight opacity-70">MY PROGRESS</h2>
+        <div className="w-full h-screen flex font-outfit select-none overflow-hidden"
+            style={{ background: '#16181b' }}
+        >
+            {/* Ambient glows */}
+            <div className="absolute top-0 left-0 w-full h-1/2 pointer-events-none" style={{ background: 'linear-gradient(180deg, rgba(183,110,80,0.05) 0%, transparent 100%)' }} />
+
+            {/* ── LEFT PANEL ── */}
+            <motion.div initial={{ opacity: 0, x: -30 }} animate={{ opacity: 1, x: 0 }}
+                className="w-[300px] shrink-0 flex flex-col gap-4 p-5 h-full overflow-y-auto scrollbar-hide"
+            >
+                {/* Achievement Hub */}
+                <div className="rounded-[2rem] p-6 flex flex-col gap-5 flex-1"
+                    style={{ background: '#1c1e22', border: '1px solid rgba(255,255,255,0.05)', boxShadow: '0 20px 40px rgba(0,0,0,0.4)' }}
+                >
+                    <div className="flex items-center justify-between">
+                        <h2 className="text-[10px] font-black uppercase tracking-[0.3em] text-white/20">Achievement Hub</h2>
+                        <Star className="w-3 h-3 text-orange-400/40" />
+                    </div>
+
+                    {/* Rank Card */}
+                    <div className="flex items-center gap-4">
+                        <div className="w-16 h-16 rounded-2xl flex items-center justify-center shrink-0"
+                            style={{ background: 'linear-gradient(135deg, #3a2a22 0%, #1c1e22 100%)', border: '1px solid rgba(183,110,80,0.2)' }}
+                        >
+                            <Shield className="w-8 h-8 text-[#b76e50]" />
                         </div>
-
-                        <div className="flex items-center gap-4">
-                            <div className="relative">
-                                <div className="rose-gold-inner p-4 w-20 h-24 flex flex-col items-center justify-center gap-1">
-                                    <span className="text-[10px] font-bold opacity-40 leading-none">YOUR</span>
-                                    <span className="text-[10px] font-bold opacity-70 leading-none">RANK</span>
-                                    <Trophy className="w-8 h-8 text-[#e6a88b] mt-1" />
-                                </div>
-                            </div>
-
-                            <div className="flex-1 h-24 flex items-end gap-1 px-2">
-                                {[40, 60, 45, 80, 70, 90, 100].map((h, i) => (
-                                    <div
-                                        key={i}
-                                        className="flex-1 bg-gradient-to-t from-[#ba765b] to-[#f5cfc4] rounded-sm opacity-80"
-                                        style={{ height: `${h}%` }}
-                                    />
-                                ))}
-                            </div>
+                        <div className="flex flex-col gap-1">
+                            <span className="text-[9px] font-black text-white/20 uppercase tracking-widest">Your:</span>
+                            <h3 className="text-2xl font-black text-white tracking-tight">SEEKER</h3>
                         </div>
+                    </div>
 
-                        <div className="space-y-2">
-                            <div className="flex justify-between text-xs font-bold tracking-wider opacity-60">
-                                <span>Level Progress</span>
-                                <span>{Math.floor(progress)}%</span>
-                            </div>
-                            <div className="h-3 rose-gold-inner overflow-hidden p-[2px]">
-                                <motion.div
-                                    className="h-full rose-gold-gradient-gold rounded-full"
-                                    initial={{ width: 0 }}
-                                    animate={{ width: `${progress}%` }}
+                    {/* Level Chart */}
+                    <div className="space-y-2">
+                        <div className="flex justify-between items-end">
+                            <span className="text-[9px] font-black text-white/25 uppercase tracking-widest">Level Progress</span>
+                            <span className="text-[9px] font-black text-[#b76e50]">3%</span>
+                        </div>
+                        <div className="flex items-end gap-1 h-12">
+                            {[20, 35, 25, 50, 40, 60, 45, 80, 70, 90, 30].map((h, i) => (
+                                <div key={i} className="flex-1 rounded-[2px]"
+                                    style={{
+                                        height: `${h}%`,
+                                        background: i === 10 ? 'linear-gradient(180deg, #b76e50, #e8a880)' : 'rgba(255,255,255,0.05)',
+                                    }}
                                 />
+                            ))}
+                        </div>
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-3">
+                        <div className="rounded-2xl p-4 flex flex-col items-center gap-3 text-center" style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.03)' }}>
+                            <span className="text-[8px] font-black text-white/20 uppercase tracking-widest">Streak</span>
+                            <CircularGauge value={streakProg} color="#f97316" />
+                            <div>
+                                <span className="text-xl font-black text-white">{streakDays}</span>
+                                <p className="text-[8px] text-white/20 font-bold uppercase tracking-widest mt-1">Progress</p>
                             </div>
                         </div>
-
-                        <div className="grid grid-cols-2 gap-4">
-                            <div className="rose-gold-inner p-5 flex flex-col items-center gap-3">
-                                <span className="text-[10px] font-black tracking-widest opacity-40 uppercase">STREAK</span>
-                                <div className="relative flex items-center justify-center">
-                                    <Flame className="w-10 h-10 text-[#e6a88b] fill-[#e6a88b]/20" />
-                                    <span className="absolute text-lg font-black mt-1 ml-0">{streakDays}</span>
-                                </div>
-                                <div className="w-full h-1 bg-[#0f1013] rounded-full overflow-hidden mt-1">
-                                    <div className="h-full bg-[#e6a88b] w-3/4 opacity-50" />
-                                </div>
-                                <span className="text-[8px] font-bold opacity-40 uppercase">DAYS</span>
-                            </div>
-
-                            <div className="rose-gold-inner p-5 flex flex-col items-center gap-3">
-                                <span className="text-[10px] font-black tracking-widest opacity-40 uppercase">GOAL</span>
-                                <div className="relative w-14 h-14 rounded-full border-4 border-[#0f1013] flex items-center justify-center">
-                                    <span className="text-xs font-black">{totalAllTime % dailyGoal}/{dailyGoal}</span>
-                                </div>
-                                <div className="w-full h-1 bg-[#0f1013] rounded-full overflow-hidden mt-1">
-                                    <div className="h-full bg-[#e6a88b]" style={{ width: `${dailyProgress}%` }} />
-                                </div>
-                                <span className="text-[8px] font-bold opacity-40 uppercase">TARGET</span>
+                        <div className="rounded-2xl p-4 flex flex-col items-center gap-3 text-center" style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.03)' }}>
+                            <span className="text-[8px] font-black text-white/20 uppercase tracking-widest">Daily Goal</span>
+                            <CircularGauge value={dailyProg} color="#b76e50" />
+                            <div>
+                                <span className="text-xl font-black text-white">{currentCount % dailyGoal}/{dailyGoal}</span>
+                                <p className="text-[8px] text-white/20 font-bold uppercase tracking-widest mt-1">Today</p>
                             </div>
                         </div>
                     </div>
 
-                    <div className="rose-gold-clay p-6 flex flex-col gap-4 shrink-0">
-                        <div className="flex items-center justify-between">
-                            <span className="text-[10px] font-black tracking-widest opacity-40 uppercase">STATUS</span>
-                            <div className="flex items-center gap-2 bg-[#0f1013] px-3 py-1 rounded-full border border-white/5">
-                                <div className="w-2 h-2 rounded-full bg-[#e6a88b] animate-pulse" />
-                                <span className="text-[8px] font-bold opacity-60">ACTIVE</span>
-                            </div>
-                        </div>
-
-                        <div className="space-y-2">
-                            <div className="flex items-center justify-between">
-                                <div className="space-y-1">
-                                    <span className="text-[8px] font-bold opacity-40 block uppercase">OCCASION</span>
-                                    <span className="text-xs font-bold uppercase">Ramadan Kareem</span>
-                                </div>
-                            </div>
-                            <div className="rose-gold-inner px-4 py-2 flex items-center justify-between">
-                                <div className="flex items-center gap-2">
-                                    <Flame className="w-3 h-3 text-[#e6a88b]" />
-                                    <span className="text-[10px] font-bold uppercase">Taqwa Boost</span>
-                                </div>
-                                <span className="text-[10px] font-bold text-[#e6a88b]">+15% Focus</span>
-                            </div>
-                        </div>
+                    <div className="space-y-2 mt-auto">
+                        <StatPill label="Total All Time" value={totalAllTime.toLocaleString()} />
+                        <StatPill label="Achievements" value={`${unlockedAchievements.length} Unlocked`} />
                     </div>
                 </div>
 
-                {/* CENTER PANEL: THE COUNTER */}
-                <div className="flex-[2] flex flex-col items-center justify-center relative py-4 lg:py-8 lg:h-full lg:overflow-y-auto lg:overflow-x-hidden scrollbar-hide order-1 lg:order-2 z-10 scale-90 lg:scale-[0.85] xl:scale-95 2xl:scale-100 origin-center">
-                    <div className="flex flex-col items-center gap-1 mb-4 lg:mb-8">
-                        <motion.span
-                            key={currentDhikr.id}
-                            initial={{ scale: 0.9, opacity: 0 }}
-                            animate={{ scale: 1, opacity: 1 }}
-                            className="text-4xl lg:text-5xl font-amiri text-[#e6a88b] drop-shadow-[0_0_15px_rgba(230,168,139,0.3)]"
-                        >
-                            {currentDhikr.arabic}
-                        </motion.span>
-                        <AnimatePresence mode="wait">
-                            {showTransliteration && (
-                                <motion.h1
-                                    initial={{ opacity: 0, y: 5 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    exit={{ opacity: 0, y: -5 }}
-                                    className="text-lg lg:text-2xl font-black tracking-[0.2em] opacity-80 uppercase text-center mt-2 text-[#e6a88b]"
-                                >
-                                    {currentDhikr.transliteration}
-                                </motion.h1>
-                            )}
-                        </AnimatePresence>
-
-                        <div className="mt-2 scale-110 lg:scale-125">
-                            <SessionTimer />
+                {/* Current Status */}
+                <div className="rounded-[1.5rem] p-5 shrink-0" style={{ background: '#1c1e22', border: '1px solid rgba(255,255,255,0.05)' }}>
+                    <div className="flex items-center justify-between mb-4">
+                        <h2 className="text-[10px] font-black uppercase tracking-[0.3em] text-white/20">Current Status</h2>
+                        <div className="px-2 py-0.5 rounded-full text-[8px] font-black uppercase text-green-400/60" style={{ background: 'rgba(34,197,94,0.1)', border: '1px solid rgba(34,197,94,0.1)' }}>Live</div>
+                    </div>
+                    <div className="space-y-4">
+                        <div className="flex items-center justify-between">
+                            <div className="flex flex-col">
+                                <span className="text-[8px] font-bold text-white/30 uppercase tracking-widest">Active Dhikr</span>
+                                <span className="text-xs font-black text-white/80">{currentDhikr.transliteration}</span>
+                            </div>
+                            <div className="flex gap-1.5">
+                                <MetalIconButton icon={RotateCcw} onClick={reset} size="sm" />
+                                <MetalIconButton icon={Settings} onClick={() => { }} size="sm" />
+                            </div>
+                        </div>
+                        <div className="flex items-center justify-between px-4 py-2 rounded-lg" style={{ background: 'rgba(183,110,80,0.1)', border: '1px solid rgba(183,110,80,0.15)' }}>
+                            <span className="text-[9px] font-black text-[#b76e50] uppercase tracking-widest">Ramadan Kareem</span>
+                            <Star className="w-3 h-3 text-[#b76e50]" />
                         </div>
                     </div>
+                </div>
+            </motion.div>
 
-                    <div className="absolute left-4 lg:left-0 top-1/2 -translate-y-1/2 flex flex-col gap-6 z-20">
-                        <motion.button
-                            whileHover={{ scale: 1.1 }}
-                            whileTap={{ scale: 0.9 }}
-                            onClick={undo}
-                            className="rose-gold-button w-10 h-10 lg:w-12 lg:h-12 flex items-center justify-center group"
-                        >
-                            <Undo2 className="w-5 h-5 opacity-60 group-hover:opacity-100" />
-                        </motion.button>
-                        <motion.button
-                            whileHover={{ scale: 1.1 }}
-                            whileTap={{ scale: 0.9 }}
-                            onClick={decrement}
-                            disabled={currentCount === 0}
-                            className="rose-gold-button w-10 h-10 lg:w-12 lg:h-12 flex items-center justify-center group disabled:opacity-20"
-                        >
-                            <Minus className="w-5 h-5 opacity-60 group-hover:opacity-100" />
-                        </motion.button>
-                        <motion.button
-                            whileHover={{ scale: 1.1 }}
-                            whileTap={{ scale: 0.9 }}
-                            onClick={reset}
-                            className="rose-gold-button w-10 h-10 lg:w-12 lg:h-12 flex items-center justify-center group"
-                        >
-                            <RotateCcw className="w-5 h-5 opacity-60 group-hover:opacity-100" />
-                        </motion.button>
+            {/* ── CENTER ── */}
+            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
+                className="flex-1 flex flex-col items-center justify-center gap-6 px-4"
+            >
+                {/* Arabic text */}
+                <div className="text-center space-y-2">
+                    <motion.p key={currentDhikr.id}
+                        className="font-amiri text-5xl lg:text-6xl text-[#b76e50]"
+                        style={{ textShadow: '0 0 30px rgba(183,110,80,0.3)' }}
+                    >{currentDhikr.arabic}</motion.p>
+                    {showTransliteration && (
+                        <p className="text-2xl font-black tracking-[0.4em] uppercase text-white/40">{currentDhikr.transliteration}</p>
+                    )}
+                    <p className="text-[11px] font-bold text-white/20 uppercase tracking-[0.3em]">{sessionLabel}</p>
+                </div>
 
-                        <DropdownMenu>
-                            <DropdownMenuTrigger asChild>
-                                <motion.button
-                                    whileHover={{ scale: 1.1 }}
-                                    whileTap={{ scale: 0.9 }}
-                                    className="rose-gold-button w-10 h-10 lg:w-12 lg:h-12 flex items-center justify-center group"
-                                >
-                                    <Palette className="w-5 h-5 opacity-60 group-hover:opacity-100" />
-                                </motion.button>
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent align="start" side="right" className="bg-[#0f1013]/95 backdrop-blur-xl border-white/5 rose-gold-clay text-white">
-                                <DropdownMenuLabel className="text-[10px] font-black tracking-widest opacity-40">SELECT THEME</DropdownMenuLabel>
-                                <div className="max-h-64 overflow-y-auto scrollbar-hide p-1">
-                                    {themes.map((t) => (
-                                        <DropdownMenuItem
-                                            key={t.id}
-                                            onClick={() => setTheme(t.id as any)}
-                                            className={`flex items-center justify-between gap-2 cursor-pointer text-xs font-bold hover:bg-white/5 ${theme === t.id ? 'text-[#e6a88b]' : 'opacity-60'}`}
-                                        >
-                                            <span>{t.label}</span>
-                                        </DropdownMenuItem>
-                                    ))}
-                                </div>
-                            </DropdownMenuContent>
-                        </DropdownMenu>
-                    </div>
-
-                    <div className="relative w-full max-w-[280px] sm:max-w-md aspect-square flex items-center justify-center">
-                        <div className="absolute inset-0 rose-gold-rim-3d rounded-full scale-105 opacity-10 blur-sm -z-10" />
+                {/* Ring Counter */}
+                <div className="relative group cursor-pointer" onClick={increment}>
+                    {/* Ring Rim */}
+                    <div className="absolute -inset-4 rounded-full"
+                        style={{
+                            background: 'linear-gradient(135deg, #b76e50 0%, #3a2a22 50%, #e8a880 100%)',
+                            boxShadow: '0 10px 40px rgba(0,0,0,0.5), inset 0 2px 5px rgba(255,255,255,0.2)',
+                            opacity: 0.15,
+                        }}
+                    />
+                    <div className="relative z-10 scale-110">
                         <CounterVisuals
                             layout="default"
                             counterShape={counterShape}
@@ -264,76 +194,76 @@ export const RoseGoldDashboard: React.FC = () => {
                             counterScale={counterScale}
                             progress={progress / 100}
                             currentCount={currentCount}
-                            currentSettings={themeSettings[theme] || themeSettings['light']}
+                            currentSettings={{ ...themeSettings[theme], borderColor: '#b76e50' }}
                             countFontSize={countFontSize}
                             handleTap={increment}
                             showCompletion={false}
-                            disabled={false}
                         />
                     </div>
-
-                    <div className="mt-6 lg:mt-8 w-full max-w-lg hidden sm:block">
-                        <div className="rose-gold-clay p-6 lg:p-8 relative overflow-hidden">
-                            <AnimatePresence mode="wait">
-                                <motion.div
-                                    key={`${currentDhikr.id}-${hadithIndex}`}
-                                    initial={{ opacity: 0, y: 10 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    exit={{ opacity: 0, y: -10 }}
-                                    className="space-y-4"
-                                >
-                                    <p className="arabic text-lg lg:text-xl text-center opacity-90 px-4 min-h-[4rem] flex items-center justify-center text-[#e6a88b]">
-                                        {currentDhikr.hadiths?.[hadithIndex]?.text || '"سُبْحَانَ اللَّهِ وَبِحَمْدِهِ"'}
-                                    </p>
-                                    <p className="text-xs italic opacity-40 text-center uppercase tracking-widest">
-                                        {currentDhikr.hadiths?.[hadithIndex]?.source || 'Hadith Source'}
-                                    </p>
-                                </motion.div>
-                            </AnimatePresence>
-                        </div>
-                    </div>
                 </div>
 
-                {/* RIGHT PANEL: GLOBAL COMMUNITY */}
-                <div className="flex-1 max-w-sm w-full mx-auto flex flex-col gap-6 lg:h-full lg:overflow-y-auto pl-2 scrollbar-hide order-3 custom-scrollbar">
-                    <div className="rose-gold-clay p-6 flex flex-col gap-5 shrink-0">
-                        <div className="flex items-center justify-between">
-                            <h2 className="text-xl font-bold tracking-tight opacity-70 uppercase">World Feed</h2>
-                            <div className="flex items-center gap-2 bg-[#0f1013] px-3 py-1 rounded-full border border-white/5">
-                                <div className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
-                                <span className="text-[8px] font-bold opacity-60">LIVE</span>
-                            </div>
+                {/* Wisdom Card */}
+                <div className="w-full max-w-lg hidden sm:block">
+                    <div className="rounded-[2rem] p-6 text-center relative overflow-hidden"
+                        style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.04)', backdropFilter: 'blur(10px)' }}
+                    >
+                        <div className="flex items-center justify-between mb-4">
+                            <span className="text-[10px] font-black uppercase tracking-[0.3em] text-white/10">فضائل الذكر</span>
+                            <div className="w-1.5 h-1.5 rounded-full bg-[#b76e50]/40" />
                         </div>
-
-                        <div className="rose-gold-inner aspect-video flex items-center justify-center relative sm:hidden lg:flex overflow-hidden">
-                            <Globe className="w-20 h-20 opacity-10" />
-                            <div className="absolute inset-0 bg-gradient-to-t from-[#0f1013] to-transparent" />
-                        </div>
-
-                        <VisitorCounter />
-
-                        <div className="space-y-4">
-                            <div className="rose-gold-inner p-5 space-y-4">
-                                <span className="text-[10px] font-black uppercase tracking-widest opacity-40 block">Global Event</span>
-                                <GlobalChallenges />
-                            </div>
-
-                            <div className="rose-gold-inner p-5 space-y-4">
-                                <div className="flex items-start justify-between">
-                                    <h3 className="text-xs font-black uppercase">Community Pool</h3>
-                                    <Star className="w-4 h-4 text-[#e6a88b] opacity-40" />
-                                </div>
-                                <div className="h-2 rose-gold-inner overflow-hidden">
-                                    <div className="h-full rose-gold-gradient-gold w-[35%] rounded-full opacity-60" />
-                                </div>
-                                <Button className="w-full rose-gold-button h-10 text-[#e6a88b] font-black text-[9px] uppercase tracking-widest border-none">
-                                    Contribute
-                                </Button>
-                            </div>
-                        </div>
+                        <AnimatePresence mode="wait">
+                            <motion.div key={`${currentDhikr.id}-${hadithIndex}`} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+                                <p className="arabic text-xl text-white/60 leading-relaxed">{currentDhikr.hadiths?.[hadithIndex]?.text || 'سُبْحَانَ اللَّهِ وَبِحَمْدِهِ'}</p>
+                                <p className="text-[10px] text-white/20 mt-3 italic">— {currentDhikr.hadiths?.[hadithIndex]?.source || 'Sahih Muslim'}</p>
+                            </motion.div>
+                        </AnimatePresence>
                     </div>
                 </div>
-            </div>
+            </motion.div>
+
+            {/* ── RIGHT PANEL ── */}
+            <motion.div initial={{ opacity: 0, x: 30 }} animate={{ opacity: 1, x: 0 }}
+                className="w-[300px] shrink-0 flex flex-col gap-4 p-5 h-full overflow-y-auto scrollbar-hide"
+            >
+                <div className="rounded-[2rem] flex flex-col overflow-hidden h-full"
+                    style={{ background: '#1c1e22', border: '1px solid rgba(255,255,255,0.05)', boxShadow: '0 20px 40px rgba(0,0,0,0.4)' }}
+                >
+                    <div className="p-5 border-b border-white/5 flex items-center justify-between">
+                        <h2 className="text-[10px] font-black uppercase tracking-[0.3em] text-white/20">Global Community</h2>
+                        <div className="flex items-center gap-2">
+                            <span className="text-[10px] font-black text-green-400/60 uppercase">1 Live</span>
+                            <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
+                        </div>
+                    </div>
+
+                    <div className="p-5 flex-1 overflow-y-auto scrollbar-hide space-y-6">
+                        {/* Map placeholder */}
+                        <div className="rounded-2xl h-32 flex items-center justify-center relative overflow-hidden" style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.05)' }}>
+                            <Globe className="w-16 h-16 text-white/5" />
+                            <div className="absolute inset-0 flex items-center justify-center">
+                                <VisitorCounter />
+                            </div>
+                        </div>
+
+                        <GlobalChallenges />
+                    </div>
+                </div>
+            </motion.div>
         </div>
     );
 };
+
+const MetalIconButton = ({ icon: Icon, onClick, size = 'md' }: any) => (
+    <motion.button
+        onClick={(e) => { e.stopPropagation(); onClick?.(); }}
+        whileTap={{ scale: 0.9 }}
+        className={`rounded-lg flex items-center justify-center text-white/40 hover:text-white/80 transition-colors ${size === 'sm' ? 'w-8 h-8' : 'w-10 h-10'}`}
+        style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.05)' }}
+    >
+        <Icon className={size === 'sm' ? 'w-3.5 h-3.5' : 'w-5 h-5'} />
+    </motion.button>
+);
+
+const Settings = (props: any) => (
+    <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z" /><circle cx="12" cy="12" r="3" /></svg>
+);

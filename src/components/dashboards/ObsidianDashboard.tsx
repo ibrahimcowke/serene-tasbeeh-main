@@ -1,239 +1,289 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTasbeehStore } from '@/store/tasbeehStore';
-import {
-    Trophy, Flame, Undo2, RotateCcw, Globe, Star, Minus, BadgeCheck
-} from 'lucide-react';
-import { CounterVisuals } from '@/components/CounterVisuals';
+import { Flame, Star, Globe, ChevronLeft, ChevronRight, RotateCcw, BadgeCheck, Trophy } from 'lucide-react';
 import { VisitorCounter } from '@/components/VisitorCounter';
-import { SessionTimer } from '@/components/SessionTimer';
 import { GlobalChallenges } from '@/components/GlobalChallenges';
-import { RadialAchievement } from '@/components/RadialAchievement';
 
+// ─── Flip Digit ────────────────────────────────────────────────
+const FlipDigit = ({ digit }: { digit: string }) => (
+    <div className="relative w-[52px] h-[72px] flex items-center justify-center overflow-hidden"
+        style={{
+            background: 'linear-gradient(180deg, #1c1c1f 0%, #111113 50%, #0a0a0c 100%)',
+            borderRadius: '6px',
+            boxShadow: 'inset 0 2px 4px rgba(0,0,0,0.9), inset 0 -1px 2px rgba(255,255,255,0.04)',
+            border: '1px solid rgba(255,255,255,0.06)',
+        }}
+    >
+        {/* center crease */}
+        <div className="absolute inset-x-0 top-1/2 h-px bg-black/80 z-10" />
+        <div className="absolute inset-x-0 top-1/2 h-px bg-white/5 z-10 translate-y-px" />
+        <AnimatePresence mode="popLayout">
+            <motion.span
+                key={digit}
+                initial={{ rotateX: -90, opacity: 0 }}
+                animate={{ rotateX: 0, opacity: 1 }}
+                exit={{ rotateX: 90, opacity: 0 }}
+                transition={{ duration: 0.25, ease: 'easeOut' }}
+                className="text-5xl font-mono font-black select-none"
+                style={{ color: '#e8e8e8', textShadow: '0 2px 8px rgba(0,0,0,0.8)', lineHeight: 1 }}
+            >
+                {digit}
+            </motion.span>
+        </AnimatePresence>
+        {/* gloss overlay */}
+        <div className="absolute inset-0 pointer-events-none" style={{ background: 'linear-gradient(180deg, rgba(255,255,255,0.07) 0%, transparent 50%, rgba(0,0,0,0.3) 100%)' }} />
+    </div>
+);
+
+// ─── Gold Pill Button ───────────────────────────────────────────
+const GoldPillBtn = ({ onClick, children, wide }: { onClick?: () => void; children: React.ReactNode; wide?: boolean }) => (
+    <motion.button
+        onClick={onClick}
+        whileTap={{ scale: 0.93 }}
+        whileHover={{ brightness: 1.1 } as any}
+        className={`flex items-center justify-center gap-2 h-11 font-bold text-[11px] tracking-widest uppercase cursor-pointer ${wide ? 'px-8' : 'w-11'}`}
+        style={{
+            background: 'linear-gradient(135deg, #c5a055 0%, #e8c87a 40%, #b8912c 100%)',
+            borderRadius: '100px',
+            boxShadow: '0 4px 12px rgba(197,160,85,0.35), inset 0 1px 1px rgba(255,255,255,0.4), inset 0 -2px 4px rgba(0,0,0,0.3)',
+            color: '#3a2a00',
+        }}
+    >
+        {children}
+    </motion.button>
+);
+
+// ─── Rank progress bar (linear) ────────────────────────────────
+const RankBar = ({ total }: { total: number }) => {
+    const milestones = [
+        { label: 'SEEKER', max: 1000 },
+        { label: 'APPRENTICE', max: 5000 },
+        { label: 'DEVOTED', max: 10000 },
+        { label: 'MASTER', max: 25000 },
+    ];
+    const current = milestones.find(m => total < m.max) || milestones[milestones.length - 1];
+    const prevMax = milestones[milestones.findIndex(m => m.label === current.label) - 1]?.max || 0;
+    const prog = Math.min(((total - prevMax) / (current.max - prevMax)) * 100, 100);
+
+    return (
+        <div className="space-y-2 w-full">
+            <div className="flex items-center justify-between">
+                <span className="text-[10px] font-black uppercase tracking-[0.25em] text-white/30">Your Rank:</span>
+                <span className="text-[10px] font-black uppercase tracking-[0.15em] text-white/30">Level Progress</span>
+            </div>
+            <h3 className="text-3xl font-black tracking-tighter text-white" style={{ textShadow: '0 0 20px rgba(197,160,85,0.5)' }}>{current.label}</h3>
+            <div className="relative h-2 w-full rounded-full overflow-hidden" style={{ background: 'rgba(255,255,255,0.06)', boxShadow: 'inset 0 1px 3px rgba(0,0,0,0.6)' }}>
+                <motion.div
+                    initial={{ width: 0 }}
+                    animate={{ width: `${prog}%` }}
+                    transition={{ duration: 1, ease: 'easeOut' }}
+                    className="h-full rounded-full"
+                    style={{ background: 'linear-gradient(90deg, #c5a055, #e8c87a)' }}
+                />
+                <div className="absolute right-1 top-1/2 -translate-y-1/2">
+                    <Star className="w-3 h-3 text-yellow-400" />
+                </div>
+            </div>
+        </div>
+    );
+};
+
+// ─── Main Component ─────────────────────────────────────────────
 export const ObsidianDashboard: React.FC = () => {
     const {
-        currentCount,
-        targetCount,
-        increment,
-        undo,
-        reset,
-        currentDhikr,
-        streakDays,
-        dailyGoal,
-        totalAllTime,
-        unlockedAchievements,
-        sessionMode,
-        decrement,
-        showTransliteration,
-        counterShape,
-        counterScale,
-        counterVerticalOffset,
-        theme,
-        themeSettings,
-        countFontSize,
-        hadithSlideDuration,
+        currentCount, targetCount, increment, undo, reset, currentDhikr,
+        streakDays, dailyGoal, totalAllTime, unlockedAchievements, sessionMode,
+        showTransliteration, hadithSlideDuration,
+        dateContext,
     } = useTasbeehStore();
 
     const [hadithIndex, setHadithIndex] = useState(0);
-
     useEffect(() => { setHadithIndex(0); }, [currentDhikr.id]);
-
     useEffect(() => {
         if (!currentDhikr.hadiths || currentDhikr.hadiths.length <= 1) return;
-        const timer = setInterval(() => {
-            setHadithIndex((prev) => (prev + 1) % currentDhikr.hadiths!.length);
-        }, hadithSlideDuration * 1000);
-        return () => clearInterval(timer);
+        const t = setInterval(() => setHadithIndex(p => (p + 1) % currentDhikr.hadiths!.length), hadithSlideDuration * 1000);
+        return () => clearInterval(t);
     }, [currentDhikr.hadiths, hadithSlideDuration]);
 
+    const digits = currentCount.toString().padStart(4, '0').split('');
     const progress = Math.min((currentCount / targetCount) * 100, 100);
     const todayStr = new Date().toISOString().split('T')[0];
-    const totalRank = totalAllTime >= 10000 ? 'MASTER' : totalAllTime >= 5000 ? 'DEVOTED' : totalAllTime >= 1000 ? 'APPRENTICE' : 'SEEKER';
-    const rankProg = totalAllTime >= 10000 ? Math.min(100, (totalAllTime / 25000) * 100) : totalAllTime >= 5000 ? (totalAllTime / 10000) * 100 : totalAllTime >= 1000 ? (totalAllTime / 5000) * 100 : (totalAllTime / 1000) * 100;
+    const dailyCount = (useTasbeehStore.getState().dailyRecords.find(r => r.date === todayStr)?.totalCount || 0) + currentCount;
+
+    const sessionLabel = sessionMode.type === 'tasbih100'
+        ? `Step ${sessionMode.currentPhase + 1} of 5 · ${currentDhikr.transliteration?.toUpperCase()} ×33`
+        : sessionMode.type === 'tasbih1000'
+            ? `Set ${sessionMode.currentPhase + 1} of 8 · ${currentDhikr.transliteration?.toUpperCase()} ×125`
+            : `${currentCount} / ${targetCount > 0 ? targetCount : '∞'}`;
 
     return (
-        <div
-            className="w-full h-screen p-4 lg:p-6 flex flex-col font-outfit overflow-hidden select-none pb-20 lg:pb-0"
-            style={{ background: 'linear-gradient(135deg, #0a0a0c 0%, #111116 50%, #0a0a0c 100%)' }}
+        <div className="w-full h-screen flex font-outfit select-none overflow-hidden"
+            style={{ background: 'linear-gradient(135deg, #0b0b0e 0%, #111115 100%)' }}
         >
-            {/* Ambient glows */}
-            <div className="absolute top-1/4 left-1/4 w-96 h-96 rounded-full pointer-events-none" style={{ background: 'radial-gradient(circle, rgba(120,80,200,0.08) 0%, transparent 70%)', filter: 'blur(60px)' }} />
-            <div className="absolute bottom-1/4 right-1/4 w-96 h-96 rounded-full pointer-events-none" style={{ background: 'radial-gradient(circle, rgba(60,120,200,0.06) 0%, transparent 70%)', filter: 'blur(60px)' }} />
+            {/* ambient glows */}
+            <div className="absolute top-20 left-1/3 w-80 h-80 rounded-full pointer-events-none" style={{ background: 'radial-gradient(circle, rgba(197,160,85,0.04) 0%, transparent 70%)', filter: 'blur(60px)' }} />
+            <div className="absolute bottom-20 right-1/3 w-80 h-80 rounded-full pointer-events-none" style={{ background: 'radial-gradient(circle, rgba(100,80,200,0.04) 0%, transparent 70%)', filter: 'blur(60px)' }} />
 
-            <div className="flex flex-col lg:flex-row gap-6 lg:gap-8 flex-1 h-full min-h-0 relative z-10">
-
-                {/* LEFT PANEL: Achievement Hub */}
-                <motion.div
-                    initial={{ opacity: 0, x: -40 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    className="flex-1 max-w-sm w-full mx-auto flex flex-col gap-4 lg:h-full lg:overflow-y-auto scrollbar-hide order-2 lg:order-1"
+            {/* ── LEFT PANEL ── */}
+            <motion.div initial={{ opacity: 0, x: -30 }} animate={{ opacity: 1, x: 0 }}
+                className="w-[300px] shrink-0 flex flex-col gap-4 p-5 h-full overflow-y-auto scrollbar-hide"
+            >
+                {/* Achievement Hub */}
+                <div className="rounded-[1.5rem] p-5 flex flex-col gap-5 flex-1"
+                    style={{ background: 'rgba(255,255,255,0.025)', border: '1px solid rgba(255,255,255,0.06)', backdropFilter: 'blur(20px)', boxShadow: 'inset 0 1px 1px rgba(255,255,255,0.05), 0 20px 40px rgba(0,0,0,0.5)' }}
                 >
-                    <div className="obsidian-glass rounded-[2rem] p-5 flex flex-col gap-4">
-                        <h2 className="text-[10px] font-black uppercase tracking-[0.3em] text-white/30">Achievement Hub</h2>
+                    <h2 className="text-[10px] font-black uppercase tracking-[0.3em] text-white/25">Achievement Hub</h2>
 
-                        <div className="flex flex-col items-center gap-1">
-                            <span className="text-[9px] text-white/30 font-bold uppercase tracking-widest">Your Rank</span>
-                            <h3 className="text-3xl font-black text-white tracking-tighter" style={{ textShadow: '0 0 20px rgba(180,140,255,0.4)' }}>{totalRank}</h3>
+                    <RankBar total={totalAllTime} />
+
+                    <div className="grid grid-cols-2 gap-3">
+                        <div className="rounded-2xl p-4 flex flex-col items-center gap-2" style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.05)' }}>
+                            <div className="w-8 h-8 rounded-full flex items-center justify-center" style={{ background: 'rgba(251,146,60,0.15)' }}>
+                                <Flame className="w-4 h-4 text-orange-400" />
+                            </div>
+                            <span className="text-xl font-black text-white">{streakDays}</span>
+                            <span className="text-[8px] text-white/25 uppercase tracking-widest font-bold">Day</span>
                         </div>
-
-                        <RadialAchievement progress={Math.round(rankProg)} title="Level Progress" />
-
-                        <div className="grid grid-cols-2 gap-3">
-                            <div className="bg-white/[0.03] border border-white/5 rounded-2xl p-3 flex flex-col items-center text-center">
-                                <div className="w-8 h-8 rounded-full bg-orange-500/20 flex items-center justify-center mb-1">
-                                    <Flame className="w-4 h-4 text-orange-400" />
-                                </div>
-                                <span className="text-xl font-black text-white">{streakDays}</span>
-                                <span className="text-[8px] font-bold text-white/30 uppercase tracking-wider">Day Streak</span>
+                        <div className="rounded-2xl p-4 flex flex-col items-center gap-2" style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.05)' }}>
+                            <div className="w-8 h-8 rounded-full flex items-center justify-center" style={{ background: 'rgba(197,160,85,0.15)' }}>
+                                <Trophy className="w-4 h-4 text-yellow-400" />
                             </div>
-                            <div className="bg-white/[0.03] border border-white/5 rounded-2xl p-3 flex flex-col items-center text-center">
-                                <div className="w-8 h-8 rounded-full bg-purple-500/20 flex items-center justify-center mb-1">
-                                    <Trophy className="w-4 h-4 text-purple-400" />
-                                </div>
-                                <span className="text-xl font-black text-white">{unlockedAchievements.length}</span>
-                                <span className="text-[8px] font-bold text-white/30 uppercase tracking-wider">Unlocked</span>
-                            </div>
-                        </div>
-
-                        <div className="mt-auto space-y-2 pt-2 border-t border-white/5">
-                            <div className="bg-white/[0.03] rounded-full px-4 py-1.5 flex items-center justify-between border border-white/5">
-                                <div className="flex items-center gap-2">
-                                    <BadgeCheck className="w-3 h-3 text-blue-400" />
-                                    <span className="text-[8px] font-bold text-white/40 uppercase">Total All-Time</span>
-                                </div>
-                                <span className="text-[8px] font-black text-blue-400">{totalAllTime.toLocaleString()}</span>
-                            </div>
-                            <div className="bg-white/[0.03] rounded-full px-4 py-1.5 flex items-center justify-between border border-white/5">
-                                <div className="flex items-center gap-2">
-                                    <Star className="w-3 h-3 text-yellow-400" />
-                                    <span className="text-[8px] font-bold text-white/40 uppercase">Achievements</span>
-                                </div>
-                                <span className="text-[8px] font-black text-yellow-400">{unlockedAchievements.length} Unlocked</span>
-                            </div>
+                            <span className="text-xl font-black text-white">{dailyCount}/{dailyGoal}</span>
+                            <span className="text-[8px] text-white/25 uppercase tracking-widest font-bold">Daily Goal</span>
                         </div>
                     </div>
 
-                    <div className="obsidian-glass rounded-[2rem] p-5 flex flex-col gap-3">
-                        <span className="text-[10px] font-black uppercase tracking-[0.2em] text-white/30">Current Status</span>
-                        <div className="space-y-2">
-                            <span className="text-[8px] font-bold text-white/30 uppercase block">Occasion</span>
-                            <div className="bg-white/[0.03] border border-white/5 rounded-2xl px-4 py-2 flex items-center justify-between">
-                                <span className="text-xs font-black text-white/70">Ramadan Kareem</span>
-                                <div className="w-2 h-2 rounded-full bg-purple-400 animate-pulse" />
+                    <div className="space-y-2 pt-2 border-t border-white/5 mt-auto">
+                        {[
+                            { icon: BadgeCheck, color: 'text-blue-400', label: 'Global Activity', val: `${(totalAllTime || 0).toLocaleString()} Leads (3%)` },
+                            { icon: Globe, color: 'text-green-400', label: 'Global Activity', val: 'LIVE' },
+                        ].map(({ icon: Icon, color, label, val }) => (
+                            <div key={label + val} className="rounded-full px-4 py-2 flex items-center justify-between" style={{ background: 'rgba(255,255,255,0.025)', border: '1px solid rgba(255,255,255,0.05)' }}>
+                                <div className="flex items-center gap-2">
+                                    <Icon className={`w-3 h-3 ${color}`} />
+                                    <span className="text-[8px] font-bold text-white/30 uppercase">{label}</span>
+                                </div>
+                                <span className={`text-[8px] font-black ${color}`}>{val}</span>
                             </div>
-                            <div className="bg-white/[0.03] border border-white/5 rounded-2xl px-4 py-2 flex items-center justify-between">
-                                <span className="text-[10px] font-bold text-white/50">Taqwa Boost</span>
-                                <span className="text-[9px] font-black text-purple-400">+15%</span>
-                            </div>
-                        </div>
+                        ))}
                     </div>
-                </motion.div>
+                </div>
 
-                {/* CENTER PANEL */}
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="flex-[2] flex flex-col items-center justify-center relative lg:h-full scrollbar-hide order-1 lg:order-2 z-10"
+                {/* Wisdom Card */}
+                <div className="rounded-[1.5rem] p-5 shrink-0"
+                    style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.05)', backdropFilter: 'blur(20px)' }}
                 >
-                    <div className="flex flex-col items-center gap-1 mb-6">
-                        <motion.span
-                            key={currentDhikr.id}
-                            initial={{ scale: 0.9, opacity: 0 }}
-                            animate={{ scale: 1, opacity: 1 }}
-                            className="text-5xl lg:text-6xl font-amiri text-white/90 drop-shadow-[0_0_30px_rgba(180,140,255,0.3)] leading-[1.2]"
+                    <div className="flex items-center justify-between mb-3">
+                        <span className="text-[8px] font-black uppercase tracking-widest text-white/20">فضائل الذكر</span>
+                        <span className="text-[8px] px-2 py-0.5 rounded-full font-black uppercase tracking-wider" style={{ background: 'rgba(197,160,85,0.15)', color: '#c5a055', border: '1px solid rgba(197,160,85,0.2)' }}>Wisdom</span>
+                    </div>
+                    <AnimatePresence mode="wait">
+                        <motion.div key={`${currentDhikr.id}-${hadithIndex}`} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+                            <p className="arabic text-base text-white/60 text-center leading-loose">
+                                {currentDhikr.hadiths?.[hadithIndex]?.text?.slice(0, 100) || 'سُبْحَانَ اللَّهِ وَبِحَمْدِهِ'}
+                            </p>
+                            <p className="text-[10px] text-white/25 text-center mt-2 italic">
+                                — {currentDhikr.hadiths?.[hadithIndex]?.source || 'Sahih Muslim'}
+                            </p>
+                        </motion.div>
+                    </AnimatePresence>
+                    <div className="flex gap-1 justify-center mt-3">
+                        {currentDhikr.hadiths?.map((_, i) => (
+                            <div key={i} className={`h-1 rounded-full transition-all ${i === hadithIndex ? 'w-4 bg-yellow-500' : 'w-1 bg-white/10'}`} />
+                        ))}
+                    </div>
+                </div>
+            </motion.div>
+
+            {/* ── CENTER ── */}
+            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
+                className="flex-1 flex flex-col items-center justify-center gap-6 px-4 h-full"
+            >
+                {/* Arabic + transliteration */}
+                <div className="flex flex-col items-center gap-2 text-center">
+                    <motion.p key={currentDhikr.id} initial={{ scale: 0.92, opacity: 0 }} animate={{ scale: 1, opacity: 1 }}
+                        className="font-amiri text-5xl lg:text-6xl leading-[1.3]"
+                        style={{ color: '#c5a055', textShadow: '0 0 30px rgba(197,160,85,0.4)' }}
+                    >{currentDhikr.arabic}</motion.p>
+                    {showTransliteration && (
+                        <p className="text-2xl font-black tracking-[0.35em] uppercase text-white/60">{currentDhikr.transliteration}</p>
+                    )}
+                    <p className="text-[11px] font-bold text-white/25 uppercase tracking-widest">{sessionLabel}</p>
+                </div>
+
+                {/* Mechanical Counter Frame */}
+                <div className="flex flex-col items-center gap-4">
+                    <div className="relative p-4 rounded-2xl"
+                        style={{
+                            background: 'linear-gradient(180deg, #888 0%, #444 50%, #222 50%, #555 100%)',
+                            border: '2px solid #111',
+                            boxShadow: 'inset 0 2px 5px rgba(0,0,0,0.6), 0 10px 30px rgba(0,0,0,0.8)',
+                        }}
+                    >
+                        {/* inner plate */}
+                        <motion.div
+                            className="cursor-pointer rounded-xl p-4 relative"
+                            style={{
+                                background: '#1a1a1a',
+                                border: '1px solid rgba(255,255,255,0.08)',
+                                boxShadow: 'inset 0 2px 6px rgba(0,0,0,0.9), 0 2px 4px rgba(255,255,255,0.03)',
+                            }}
+                            whileTap={{ y: 2, scale: 0.99 }}
+                            onClick={increment}
                         >
-                            {currentDhikr.arabic}
-                        </motion.span>
-                        {showTransliteration && (
-                            <motion.h1
-                                key={currentDhikr.id + '-t'}
-                                initial={{ opacity: 0 }}
-                                animate={{ opacity: 1 }}
-                                className="text-2xl font-black tracking-[0.4em] text-white/60 uppercase mt-2"
-                            >
-                                {currentDhikr.transliteration}
-                            </motion.h1>
-                        )}
-                        <SessionTimer />
-                        {sessionMode.type === 'tasbih100' && (
-                            <div className="flex gap-1 mt-2">
-                                {[0, 1, 2, 3].map(p => (
-                                    <div key={p} className={`w-2 h-2 rounded-full transition-all ${p < sessionMode.currentPhase ? 'bg-purple-400' : p === sessionMode.currentPhase ? 'bg-purple-400 scale-150 animate-pulse' : 'bg-white/10'}`} />
-                                ))}
+                            {/* corner screws */}
+                            {[[2, 2], [2, 'auto'], [2, 'auto'], [2, 2]].map((_, i) => (
+                                <div key={i} className={`absolute w-2.5 h-2.5 rounded-full ${i === 0 ? 'top-2 left-2' : i === 1 ? 'top-2 right-2' : i === 2 ? 'bottom-2 left-2' : 'bottom-2 right-2'}`}
+                                    style={{ background: 'radial-gradient(circle at 35% 35%, #777, #333)', boxShadow: 'inset 0 1px 2px rgba(0,0,0,0.8)' }}
+                                />
+                            ))}
+                            <div className="flex gap-2 px-2">
+                                {digits.map((d, i) => <FlipDigit key={i} digit={d} />)}
                             </div>
-                        )}
+                            <div className="text-center mt-3 border-t border-white/5 pt-2">
+                                <span className="text-[10px] font-bold text-white/25 uppercase tracking-widest">{currentCount} of {targetCount}</span>
+                            </div>
+                        </motion.div>
                     </div>
 
-                    {/* Vertical controls anchored left */}
-                    <div className="absolute left-0 top-1/3 flex flex-col gap-3 obsidian-glass p-2 rounded-r-[2rem] rounded-l-none">
-                        <button onClick={undo} className="p-3 rounded-full text-white/30 hover:text-white hover:bg-white/5 transition-colors">
-                            <Undo2 className="w-5 h-5" />
-                        </button>
-                        <div className="w-px h-4 bg-white/10 mx-auto" />
-                        <button onClick={decrement} disabled={currentCount === 0} className="p-3 rounded-full text-white/30 hover:text-white hover:bg-white/5 transition-colors disabled:opacity-20">
-                            <Minus className="w-5 h-5" />
-                        </button>
-                        <div className="w-px h-4 bg-white/10 mx-auto" />
-                        <button onClick={reset} className="p-3 rounded-full text-white/30 hover:text-white hover:bg-white/5 transition-colors">
-                            <RotateCcw className="w-5 h-5" />
-                        </button>
+                    {/* Gold pill buttons */}
+                    <div className="flex items-center gap-3">
+                        <GoldPillBtn onClick={undo}><ChevronLeft className="w-5 h-5" /></GoldPillBtn>
+                        <GoldPillBtn onClick={increment} wide><span className="text-sm">TAP</span></GoldPillBtn>
+                        <GoldPillBtn onClick={reset}><RotateCcw className="w-4 h-4" /></GoldPillBtn>
                     </div>
 
-                    <div className="relative w-full max-w-[280px] sm:max-w-md aspect-square flex items-center justify-center">
-                        <div className="absolute inset-0 rounded-full opacity-20 blur-2xl -z-10" style={{ background: 'radial-gradient(circle, rgba(180,140,255,0.3) 0%, transparent 70%)' }} />
-                        <CounterVisuals
-                            layout="default"
-                            counterShape={counterShape}
-                            counterVerticalOffset={counterVerticalOffset}
-                            counterScale={counterScale}
-                            progress={progress / 100}
-                            currentCount={currentCount}
-                            currentSettings={themeSettings[theme] || themeSettings['light']}
-                            countFontSize={countFontSize}
-                            handleTap={increment}
-                            showCompletion={false}
-                            disabled={false}
-                        />
+                    <div className="text-center">
+                        <span className="text-[10px] font-black uppercase tracking-[0.3em] text-white/25">Current Session</span>
+                        <p className="text-sm font-bold text-white/50 mt-0.5">{currentDhikr.transliteration} ({targetCount} RECITE)</p>
                     </div>
+                </div>
+            </motion.div>
 
-                    <div className="mt-6 w-full max-w-lg hidden sm:block">
-                        <div className="obsidian-glass rounded-[2rem] p-6">
-                            <AnimatePresence mode="wait">
-                                <motion.div key={`${currentDhikr.id}-${hadithIndex}`} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }} className="space-y-3">
-                                    <p className="arabic text-lg text-center text-white/70 leading-loose">{currentDhikr.hadiths?.[hadithIndex]?.text || '"سُبْحَانَ اللَّهِ وَبِحَمْدِهِ"'}</p>
-                                    <p className="text-[10px] italic text-white/30 text-center uppercase tracking-widest">{currentDhikr.hadiths?.[hadithIndex]?.source || 'Hadith'}</p>
-                                </motion.div>
-                            </AnimatePresence>
-                        </div>
-                    </div>
-                </motion.div>
-
-                {/* RIGHT PANEL: Global Community */}
-                <motion.div
-                    initial={{ opacity: 0, x: 40 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    className="flex-1 max-w-sm w-full mx-auto flex flex-col gap-4 lg:h-full lg:overflow-y-auto scrollbar-hide order-3"
+            {/* ── RIGHT PANEL: COMMUNITY ── */}
+            <motion.div initial={{ opacity: 0, x: 30 }} animate={{ opacity: 1, x: 0 }}
+                className="w-[300px] shrink-0 flex flex-col gap-4 p-5 h-full overflow-y-auto scrollbar-hide"
+            >
+                <div className="rounded-[1.5rem] flex flex-col overflow-hidden h-full"
+                    style={{ background: 'rgba(255,255,255,0.025)', border: '1px solid rgba(255,255,255,0.06)', backdropFilter: 'blur(20px)', boxShadow: 'inset 0 1px 1px rgba(255,255,255,0.05), 0 20px 40px rgba(0,0,0,0.5)' }}
                 >
-                    <div className="obsidian-glass rounded-[2rem] flex flex-col overflow-hidden h-full">
-                        <div className="p-4 flex items-center justify-between border-b border-white/5">
-                            <h2 className="text-xs font-black uppercase tracking-[0.2em] text-white/30">Community</h2>
-                            <div className="flex items-center gap-2 px-3 py-1 bg-green-500/10 rounded-full border border-green-500/20">
-                                <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
-                                <span className="text-[10px] text-green-400 font-black uppercase tracking-widest">Live</span>
-                            </div>
-                        </div>
-
-                        <div className="p-4 space-y-4 overflow-y-auto flex-1 scrollbar-hide">
-                            <div className="bg-white/[0.03] border border-white/5 rounded-[2rem] p-4 flex flex-col items-center">
-                                <VisitorCounter />
-                                <span className="text-[10px] font-black text-white/20 uppercase mt-2 tracking-widest">Dhikrs Worldwide</span>
-                            </div>
-                            <GlobalChallenges />
+                    <div className="p-4 flex items-center justify-between border-b border-white/5">
+                        <h2 className="text-xs font-black uppercase tracking-[0.25em] text-white/25">Community</h2>
+                        <div className="flex items-center gap-2 px-3 py-1 rounded-full" style={{ background: 'rgba(34,197,94,0.1)', border: '1px solid rgba(34,197,94,0.2)' }}>
+                            <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
+                            <span className="text-[10px] font-black text-green-400 uppercase tracking-widest">Live</span>
                         </div>
                     </div>
-                </motion.div>
-
-            </div>
+                    <div className="p-4 flex-1 overflow-y-auto scrollbar-hide space-y-4">
+                        <div className="rounded-2xl p-4 flex flex-col items-center text-center" style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.05)' }}>
+                            <VisitorCounter />
+                            <span className="text-[9px] font-black text-white/20 uppercase tracking-widest mt-2">Dhikrs Worldwide</span>
+                        </div>
+                        <GlobalChallenges />
+                    </div>
+                </div>
+            </motion.div>
         </div>
     );
 };
