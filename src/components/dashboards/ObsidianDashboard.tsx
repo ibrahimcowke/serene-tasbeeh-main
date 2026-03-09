@@ -4,6 +4,7 @@ import { useTasbeehStore } from '@/store/tasbeehStore';
 import { Flame, Star, Globe, ChevronLeft, ChevronRight, RotateCcw, BadgeCheck, Trophy } from 'lucide-react';
 import { VisitorCounter } from '@/components/VisitorCounter';
 import { GlobalChallenges } from '@/components/GlobalChallenges';
+import { CounterVisuals } from '@/components/CounterVisuals';
 
 // ─── Flip Digit ────────────────────────────────────────────────
 const FlipDigit = ({ digit }: { digit: string }) => (
@@ -94,8 +95,9 @@ export const ObsidianDashboard: React.FC = () => {
     const {
         currentCount, targetCount, increment, undo, reset, currentDhikr,
         streakDays, dailyGoal, totalAllTime, unlockedAchievements, sessionMode,
-        showTransliteration, hadithSlideDuration,
-        dateContext,
+        showTransliteration, hadithSlideDuration, dateContext,
+        counterShape, counterScale, counterVerticalOffset,
+        theme, themeSettings, countFontSize
     } = useTasbeehStore();
 
     const [hadithIndex, setHadithIndex] = useState(0);
@@ -214,38 +216,49 @@ export const ObsidianDashboard: React.FC = () => {
 
                 {/* Mechanical Counter Frame */}
                 <div className="flex flex-col items-center gap-4">
-                    <div className="relative p-4 rounded-2xl"
-                        style={{
-                            background: 'linear-gradient(180deg, #888 0%, #444 50%, #222 50%, #555 100%)',
-                            border: '2px solid #111',
-                            boxShadow: 'inset 0 2px 5px rgba(0,0,0,0.6), 0 10px 30px rgba(0,0,0,0.8)',
-                        }}
-                    >
-                        {/* inner plate */}
-                        <motion.div
-                            className="cursor-pointer rounded-xl p-4 relative"
+                    {(counterShape === 'plain' || counterShape === 'minimal' || counterShape === 'classic') ? (
+                        <div className="relative p-4 rounded-2xl"
                             style={{
-                                background: '#1a1a1a',
-                                border: '1px solid rgba(255,255,255,0.08)',
-                                boxShadow: 'inset 0 2px 6px rgba(0,0,0,0.9), 0 2px 4px rgba(255,255,255,0.03)',
+                                background: 'linear-gradient(180deg, #888 0%, #444 50%, #222 50%, #555 100%)',
+                                border: '2px solid #111',
+                                boxShadow: 'inset 0 2px 5px rgba(0,0,0,0.6), 0 10px 30px rgba(0,0,0,0.8)',
                             }}
-                            whileTap={{ y: 2, scale: 0.99 }}
-                            onClick={increment}
                         >
-                            {/* corner screws */}
-                            {[[2, 2], [2, 'auto'], [2, 'auto'], [2, 2]].map((_, i) => (
-                                <div key={i} className={`absolute w-2.5 h-2.5 rounded-full ${i === 0 ? 'top-2 left-2' : i === 1 ? 'top-2 right-2' : i === 2 ? 'bottom-2 left-2' : 'bottom-2 right-2'}`}
-                                    style={{ background: 'radial-gradient(circle at 35% 35%, #777, #333)', boxShadow: 'inset 0 1px 2px rgba(0,0,0,0.8)' }}
-                                />
-                            ))}
-                            <div className="flex gap-2 px-2">
-                                {digits.map((d, i) => <FlipDigit key={i} digit={d} />)}
-                            </div>
-                            <div className="text-center mt-3 border-t border-white/5 pt-2">
-                                <span className="text-[10px] font-bold text-white/25 uppercase tracking-widest">{currentCount} of {targetCount}</span>
-                            </div>
-                        </motion.div>
-                    </div>
+                            {/* inner plate */}
+                            <motion.div
+                                className="cursor-pointer rounded-xl p-4 relative"
+                                style={{
+                                    background: '#1a1a1a',
+                                    border: '1px solid rgba(255,255,255,0.08)',
+                                    boxShadow: 'inset 0 2px 6px rgba(0,0,0,0.9), 0 2px 4px rgba(255,255,255,0.03)',
+                                }}
+                                whileTap={{ y: 2, scale: 0.99 }}
+                                onClick={increment}
+                            >
+                                {/* corner screws */}
+                                {[[2, 2], [2, 'auto'], [2, 'auto'], [2, 2]].map((_, i) => (
+                                    <div key={i} className={`absolute w-2.5 h-2.5 rounded-full ${i === 0 ? 'top-2 left-2' : i === 1 ? 'top-2 right-2' : i === 2 ? 'bottom-2 left-2' : 'bottom-2 right-2'}`}
+                                        style={{ background: 'radial-gradient(circle at 35% 35%, #777, #333)', boxShadow: 'inset 0 1px 2px rgba(0,0,0,0.8)' }}
+                                    />
+                                ))}
+                                <div className="flex gap-2 px-2">
+                                    {digits.map((d, i) => <FlipDigit key={i} digit={d} />)}
+                                </div>
+                                <div className="text-center mt-3 border-t border-white/5 pt-2">
+                                    <span className="text-[10px] font-bold text-white/25 uppercase tracking-widest">{currentCount} of {targetCount}</span>
+                                </div>
+                            </motion.div>
+                        </div>
+                    ) : (
+                        <div className="relative flex items-center justify-center w-full max-w-[280px] lg:max-w-md aspect-square my-2">
+                            <CounterVisuals
+                                layout="default" counterShape={counterShape} counterVerticalOffset={counterVerticalOffset}
+                                counterScale={counterScale} progress={progress / 100} currentCount={currentCount}
+                                currentSettings={themeSettings[theme] || themeSettings['light']}
+                                countFontSize={countFontSize} handleTap={increment} showCompletion={false} disabled={false}
+                            />
+                        </div>
+                    )}
 
                     {/* Gold pill buttons */}
                     <div className="flex items-center gap-3">

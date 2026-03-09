@@ -4,6 +4,7 @@ import { useTasbeehStore } from '@/store/tasbeehStore';
 import { Flame, Globe2, ChevronLeft, ChevronRight, RotateCcw, Star } from 'lucide-react';
 import { VisitorCounter } from '@/components/VisitorCounter';
 import { GlobalChallenges } from '@/components/GlobalChallenges';
+import { CounterVisuals } from '@/components/CounterVisuals';
 
 // ─── Flip Digit (Military style) ────────────────────────────────
 const FlipDigit = ({ digit }: { digit: string }) => (
@@ -78,6 +79,8 @@ export const EmeraldDashboard: React.FC = () => {
         currentCount, targetCount, increment, undo, reset, currentDhikr,
         streakDays, dailyGoal, totalAllTime, unlockedAchievements, sessionMode,
         showTransliteration, hadithSlideDuration, dateContext,
+        counterShape, counterScale, counterVerticalOffset,
+        theme, themeSettings, countFontSize
     } = useTasbeehStore();
 
     const [hadithIndex, setHadithIndex] = useState(0);
@@ -193,33 +196,44 @@ export const EmeraldDashboard: React.FC = () => {
 
                     {/* Counter Frame (military/metal) */}
                     <div className="flex flex-col items-center gap-4">
-                        <div className="relative p-3 rounded-xl"
-                            style={{
-                                background: 'linear-gradient(180deg, #888 0%, #444 50%, #222 50%, #555 100%)',
-                                border: '2px solid #111',
-                                boxShadow: '0 8px 24px rgba(0,0,0,0.9), inset 0 2px 4px rgba(255,255,255,0.1)',
-                            }}
-                        >
-                            <motion.div
-                                className="rounded-lg p-3 cursor-pointer relative"
-                                style={{ background: '#1a1a1f', border: '1px solid rgba(16,185,129,0.1)', boxShadow: 'inset 0 2px 6px rgba(0,0,0,0.8)' }}
-                                whileTap={{ y: 2 }}
-                                onClick={increment}
+                        {(counterShape === 'plain' || counterShape === 'minimal' || counterShape === 'classic') ? (
+                            <div className="relative p-3 rounded-xl"
+                                style={{
+                                    background: 'linear-gradient(180deg, #888 0%, #444 50%, #222 50%, #555 100%)',
+                                    border: '2px solid #111',
+                                    boxShadow: '0 8px 24px rgba(0,0,0,0.9), inset 0 2px 4px rgba(255,255,255,0.1)',
+                                }}
                             >
-                                {/* corner screws */}
-                                {['top-1.5 left-1.5', 'top-1.5 right-1.5', 'bottom-1.5 left-1.5', 'bottom-1.5 right-1.5'].map((pos, i) => (
-                                    <div key={i} className={`absolute ${pos} w-2 h-2 rounded-full`}
-                                        style={{ background: 'radial-gradient(circle at 35% 35%, #666, #222)', boxShadow: 'inset 0 1px 2px rgba(0,0,0,0.8)' }}
-                                    />
-                                ))}
-                                <div className="flex gap-1.5 px-2">
-                                    {digits.map((d, i) => <FlipDigit key={i} digit={d} />)}
-                                </div>
-                                <div className="text-center mt-2 border-t border-white/5 pt-1.5">
-                                    <span className="text-[9px] text-white/20 uppercase tracking-widest font-bold">{currentCount} of {targetCount}</span>
-                                </div>
-                            </motion.div>
-                        </div>
+                                <motion.div
+                                    className="rounded-lg p-3 cursor-pointer relative"
+                                    style={{ background: '#1a1a1f', border: '1px solid rgba(16,185,129,0.1)', boxShadow: 'inset 0 2px 6px rgba(0,0,0,0.8)' }}
+                                    whileTap={{ y: 2 }}
+                                    onClick={increment}
+                                >
+                                    {/* corner screws */}
+                                    {['top-1.5 left-1.5', 'top-1.5 right-1.5', 'bottom-1.5 left-1.5', 'bottom-1.5 right-1.5'].map((pos, i) => (
+                                        <div key={i} className={`absolute ${pos} w-2 h-2 rounded-full`}
+                                            style={{ background: 'radial-gradient(circle at 35% 35%, #666, #222)', boxShadow: 'inset 0 1px 2px rgba(0,0,0,0.8)' }}
+                                        />
+                                    ))}
+                                    <div className="flex gap-1.5 px-2">
+                                        {digits.map((d, i) => <FlipDigit key={i} digit={d} />)}
+                                    </div>
+                                    <div className="text-center mt-2 border-t border-white/5 pt-1.5">
+                                        <span className="text-[9px] text-white/20 uppercase tracking-widest font-bold">{currentCount} of {targetCount}</span>
+                                    </div>
+                                </motion.div>
+                            </div>
+                        ) : (
+                            <div className="relative flex items-center justify-center w-full max-w-[280px] lg:max-w-md aspect-square my-2">
+                                <CounterVisuals
+                                    layout="default" counterShape={counterShape} counterVerticalOffset={counterVerticalOffset}
+                                    counterScale={counterScale} progress={progress / 100} currentCount={currentCount}
+                                    currentSettings={themeSettings[theme] || themeSettings['light']}
+                                    countFontSize={countFontSize} handleTap={increment} showCompletion={false} disabled={false}
+                                />
+                            </div>
+                        )}
 
                         {/* Metal icon buttons */}
                         <div className="flex items-center gap-3">
