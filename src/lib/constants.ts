@@ -78,6 +78,16 @@ export const counterShapes = [
   { id: 'cyber-3d', label: 'Cyber 3D', icon: '💎' },
   { id: 'crystal-iso', label: 'Crystal ISO', icon: '🕋' },
   { id: 'neumorph', label: 'Neumorph', icon: '☁' },
+  { id: 'lava-lamp', label: 'Lava Lamp', icon: '💧' },
+  { id: 'matrix-code', label: 'Matrix', icon: '📟' },
+  { id: 'sunset-horizon', label: 'Sunset', icon: '🌅' },
+  { id: 'mechanical-lock', label: 'Vault', icon: '🔒' },
+  { id: 'geometric-mandala', label: 'Mandala', icon: '☸️' },
+  { id: 'plasma-ball', label: 'Plasma', icon: '⚡' },
+  { id: 'origami-crane', label: 'Origami', icon: '🦢' },
+  { id: 'retro-lcd', label: 'LCD', icon: '📟' },
+  { id: 'zen-garden', label: 'Zen', icon: '🎋' },
+  { id: 'fire-embers', label: 'Embers', icon: '🔥' },
 ] as const;
 
 export const dashboardLayouts = [

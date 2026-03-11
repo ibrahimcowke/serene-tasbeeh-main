@@ -78,7 +78,7 @@ export const DesertDashboard: React.FC = () => {
     const totalRank = totalAllTime >= 10000 ? 'MASTER' : totalAllTime >= 5000 ? 'DEVOTED' : totalAllTime >= 1000 ? 'APPRENTICE' : 'SEEKER';
 
     return (
-        <div className="w-full h-screen flex font-outfit select-none overflow-hidden relative"
+        <div className="w-full min-h-[100dvh] lg:h-screen flex flex-col lg:flex-row font-outfit select-none lg:overflow-hidden relative"
             style={{ background: 'linear-gradient(160deg, #c4a87a 0%, #b39468 30%, #a5855a 60%, #9c7a4e 100%)' }}
         >
             {/* Stone texture overlay */}
@@ -107,7 +107,7 @@ export const DesertDashboard: React.FC = () => {
 
             {/* ── LEFT PANEL ── */}
             <motion.div initial={{ opacity: 0, x: -30 }} animate={{ opacity: 1, x: 0 }}
-                className="w-[270px] shrink-0 flex flex-col gap-3 p-4 h-full overflow-y-auto scrollbar-hide"
+                className="w-full lg:w-[270px] shrink-0 flex flex-col gap-3 p-4 lg:h-full lg:overflow-y-auto scrollbar-hide order-2 lg:order-1"
             >
                 {/* MY PROGRESS card */}
                 <div className="rounded-[1.25rem] p-5 flex flex-col gap-4 flex-1"
@@ -229,7 +229,7 @@ export const DesertDashboard: React.FC = () => {
 
             {/* ── CENTER ── */}
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
-                className="flex-1 flex flex-col items-center justify-center gap-5 px-4 h-full overflow-y-auto scrollbar-hide"
+                className="w-full lg:flex-1 py-8 lg:py-0 flex flex-col items-center justify-center gap-5 px-4 lg:h-full lg:overflow-y-auto scrollbar-hide order-1 lg:order-2"
             >
                 {/* Dhikr title board */}
                 <div className="flex flex-col items-center gap-2 text-center">
@@ -311,9 +311,9 @@ export const DesertDashboard: React.FC = () => {
 
             {/* ── RIGHT PANEL: GLOBAL COMMUNITY ── */}
             <motion.div initial={{ opacity: 0, x: 30 }} animate={{ opacity: 1, x: 0 }}
-                className="w-[270px] shrink-0 flex flex-col gap-3 p-4 h-full overflow-y-auto scrollbar-hide"
+                className="w-full lg:w-[270px] shrink-0 flex flex-col gap-3 p-4 lg:h-full lg:overflow-y-auto scrollbar-hide order-3"
             >
-                <div className="rounded-[1.25rem] flex flex-col overflow-hidden h-full"
+                <div className="rounded-[1.25rem] flex flex-col overflow-hidden lg:h-full"
                     style={{
                         background: 'linear-gradient(145deg, #d4bb8a 0%, #c2a47a 100%)',
                         boxShadow: '8px 8px 20px rgba(60,35,15,0.5), -4px -4px 12px rgba(255,240,195,0.6), inset 0 1px 1px rgba(255,255,255,0.4)',

@@ -51,7 +51,7 @@ export const ChocoDashboard: React.FC = () => {
     const dailyProg = Math.min(((currentCount % dailyGoal) / dailyGoal) * 100, 100);
 
     return (
-        <div className="w-full h-screen choco-dashboard flex font-outfit select-none overflow-hidden"
+        <div className="w-full min-h-[100dvh] lg:h-screen choco-dashboard flex flex-col font-outfit select-none lg:overflow-hidden relative"
             style={{ background: 'linear-gradient(135deg, #2d1b14 0%, #1c130f 100%)' }}
         >
             {/* Ambient clay glows */}
@@ -72,11 +72,11 @@ export const ChocoDashboard: React.FC = () => {
             <StyleCenter isOpen={isStyleCenterOpen} onClose={() => setIsStyleCenterOpen(false)} initialTab="shapes" />
 
             {/* ── CONTENT ROW ── */}
-            <div className="flex flex-col lg:flex-row gap-6 p-4 lg:p-6 w-full h-full relative z-10">
+            <div className="flex flex-col lg:flex-row gap-6 p-4 lg:p-6 w-full lg:h-full relative z-10 overflow-y-auto lg:overflow-y-hidden">
 
                 {/* LEFT: MY PROGRESS */}
                 <motion.div initial={{ opacity: 0, x: -30 }} animate={{ opacity: 1, x: 0 }}
-                    className="flex-1 max-w-sm w-full mx-auto flex flex-col gap-5 lg:h-full lg:overflow-y-auto scrollbar-hide order-2 lg:order-1"
+                    className="flex-1 w-full lg:max-w-sm mx-auto flex flex-col gap-5 lg:h-full lg:overflow-y-auto scrollbar-hide order-2 lg:order-1"
                 >
                     <div className="choco-clay p-6 flex flex-col gap-5 shrink-0">
                         <h2 className="text-[10px] font-black uppercase tracking-[0.3em] text-white/20">My Progress</h2>
@@ -164,7 +164,7 @@ export const ChocoDashboard: React.FC = () => {
 
                 {/* CENTER: COUNTER */}
                 <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
-                    className="flex-[2] flex flex-col items-center justify-center gap-6 px-4 order-1 lg:order-2"
+                    className="flex-[2] w-full py-8 lg:py-0 flex flex-col items-center justify-center gap-6 px-4 order-1 lg:order-2 lg:h-full lg:overflow-y-auto"
                 >
                     <div className="text-center space-y-1">
                         <motion.p key={currentDhikr.id} className="font-amiri text-5xl lg:text-6xl text-[#c5a059]" style={{ textShadow: '0 0 30px rgba(197,160,89,0.3)' }}>{currentDhikr.arabic}</motion.p>
@@ -211,9 +211,9 @@ export const ChocoDashboard: React.FC = () => {
 
                 {/* RIGHT: COMMUNITY */}
                 <motion.div initial={{ opacity: 0, x: 30 }} animate={{ opacity: 1, x: 0 }}
-                    className="flex-1 max-w-sm w-full mx-auto flex flex-col gap-5 lg:h-full lg:overflow-y-auto scrollbar-hide order-3"
+                    className="flex-1 w-full lg:max-w-sm mx-auto flex flex-col gap-5 lg:h-full lg:overflow-y-auto scrollbar-hide order-3"
                 >
-                    <div className="choco-clay flex flex-col overflow-hidden h-full">
+                    <div className="choco-clay flex flex-col overflow-hidden lg:h-full">
                         <div className="p-5 border-b border-white/5 flex items-center justify-between">
                             <h2 className="text-[10px] font-black uppercase tracking-[0.3em] text-white/20">Community</h2>
                             <div className="flex items-center gap-2">

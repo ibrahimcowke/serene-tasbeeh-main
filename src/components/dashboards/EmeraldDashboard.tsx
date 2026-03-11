@@ -108,7 +108,7 @@ export const EmeraldDashboard: React.FC = () => {
         : `${currentCount} / ${targetCount > 0 ? targetCount : '∞'}`;
 
     return (
-        <div className="w-full h-screen flex flex-col font-outfit select-none overflow-hidden relative"
+        <div className="w-full min-h-[100dvh] lg:h-screen flex flex-col lg:flex-row font-outfit select-none lg:overflow-hidden relative"
             style={{ background: '#141614' }}
         >
             {/* Stone texture overlay */}
@@ -147,10 +147,10 @@ export const EmeraldDashboard: React.FC = () => {
             <StyleCenter isOpen={isStyleCenterOpen} onClose={() => setIsStyleCenterOpen(false)} initialTab="shapes" />
 
             {/* ── MAIN ROW ── */}
-            <div className="flex flex-1 min-h-0 relative z-10">
+            <div className="flex flex-col lg:flex-row flex-1 min-h-0 relative z-10 overflow-y-auto lg:overflow-y-hidden">
                 {/* LEFT */}
                 <motion.div initial={{ opacity: 0, x: -30 }} animate={{ opacity: 1, x: 0 }}
-                    className="w-[270px] shrink-0 flex flex-col gap-3 p-4 overflow-y-auto scrollbar-hide"
+                    className="w-full lg:w-[270px] shrink-0 flex flex-col gap-3 p-4 lg:overflow-y-auto scrollbar-hide order-2 lg:order-1"
                 >
                     <div className="rounded-[1.5rem] p-5 flex flex-col gap-4"
                         style={{ background: 'rgba(16,185,129,0.04)', border: '1px solid rgba(16,185,129,0.12)', backdropFilter: 'blur(20px)', boxShadow: 'inset 0 1px 1px rgba(16,185,129,0.05), 0 15px 35px rgba(0,0,0,0.6)' }}
@@ -191,7 +191,7 @@ export const EmeraldDashboard: React.FC = () => {
 
                 {/* CENTER */}
                 <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
-                    className="flex-1 flex flex-col items-center justify-center gap-5 px-4 overflow-y-auto scrollbar-hide"
+                    className="w-full lg:flex-1 py-8 lg:py-0 flex flex-col items-center justify-center gap-5 px-4 lg:overflow-y-auto scrollbar-hide order-1 lg:order-2"
                 >
                     {/* Arabic dhikr */}
                     <div className="flex flex-col items-center gap-1 text-center">
@@ -290,9 +290,9 @@ export const EmeraldDashboard: React.FC = () => {
 
                 {/* RIGHT: Community */}
                 <motion.div initial={{ opacity: 0, x: 30 }} animate={{ opacity: 1, x: 0 }}
-                    className="w-[270px] shrink-0 flex flex-col gap-3 p-4 overflow-y-auto scrollbar-hide"
+                    className="w-full lg:w-[270px] shrink-0 flex flex-col gap-3 p-4 lg:overflow-y-auto scrollbar-hide order-3"
                 >
-                    <div className="rounded-[1.5rem] flex flex-col overflow-hidden h-full"
+                    <div className="rounded-[1.5rem] flex flex-col overflow-hidden lg:h-full"
                         style={{ background: 'rgba(16,185,129,0.03)', border: '1px solid rgba(16,185,129,0.1)', backdropFilter: 'blur(20px)', boxShadow: '0 15px 35px rgba(0,0,0,0.6)' }}
                     >
                         <div className="p-4 flex items-center justify-between border-b border-emerald-500/10">

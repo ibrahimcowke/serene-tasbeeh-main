@@ -64,7 +64,7 @@ export const RoseGoldDashboard: React.FC = () => {
         : `Phase 1 of 4`;
 
     return (
-        <div className="w-full h-screen flex font-outfit select-none overflow-hidden"
+        <div className="w-full min-h-[100dvh] lg:h-screen flex flex-col lg:flex-row font-outfit select-none lg:overflow-hidden relative"
             style={{ background: '#16181b' }}
         >
             {/* Ambient glows */}
@@ -84,7 +84,7 @@ export const RoseGoldDashboard: React.FC = () => {
 
             {/* ── LEFT PANEL ── */}
             <motion.div initial={{ opacity: 0, x: -30 }} animate={{ opacity: 1, x: 0 }}
-                className="w-[300px] shrink-0 flex flex-col gap-4 p-5 h-full overflow-y-auto scrollbar-hide"
+                className="w-full lg:w-[300px] shrink-0 flex flex-col gap-4 p-5 lg:h-full lg:overflow-y-auto scrollbar-hide order-2 lg:order-1"
             >
                 {/* Achievement Hub */}
                 <div className="rounded-[2rem] p-6 flex flex-col gap-5 flex-1"
@@ -178,7 +178,7 @@ export const RoseGoldDashboard: React.FC = () => {
 
             {/* ── CENTER ── */}
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
-                className="flex-1 flex flex-col items-center justify-center gap-6 px-4"
+                className="w-full lg:flex-1 py-8 lg:py-0 flex flex-col items-center justify-center gap-6 px-4 lg:h-full lg:overflow-y-auto order-1 lg:order-2"
             >
                 {/* Arabic text */}
                 <div className="text-center space-y-2">
@@ -238,9 +238,9 @@ export const RoseGoldDashboard: React.FC = () => {
 
             {/* ── RIGHT PANEL ── */}
             <motion.div initial={{ opacity: 0, x: 30 }} animate={{ opacity: 1, x: 0 }}
-                className="w-[300px] shrink-0 flex flex-col gap-4 p-5 h-full overflow-y-auto scrollbar-hide"
+                className="w-full lg:w-[300px] shrink-0 flex flex-col gap-4 p-5 lg:h-full lg:overflow-y-auto scrollbar-hide order-3"
             >
-                <div className="rounded-[2rem] flex flex-col overflow-hidden h-full"
+                <div className="rounded-[2rem] flex flex-col overflow-hidden lg:h-full"
                     style={{ background: '#1c1e22', border: '1px solid rgba(255,255,255,0.05)', boxShadow: '0 20px 40px rgba(0,0,0,0.4)' }}
                 >
                     <div className="p-5 border-b border-white/5 flex items-center justify-between">

@@ -25,6 +25,16 @@ import { TallyClicker } from './counter-shapes/TallyClicker';
 import { Cyber3D } from './counter-shapes/Cyber3D';
 import { CrystalISO } from './counter-shapes/CrystalISO';
 import { Neumorph } from './counter-shapes/Neumorph';
+import { LavaLamp } from './counter-shapes/LavaLamp';
+import { MatrixCode } from './counter-shapes/MatrixCode';
+import { SunsetHorizon } from './counter-shapes/SunsetHorizon';
+import { MechanicalLock } from './counter-shapes/MechanicalLock';
+import { GeometricMandala } from './counter-shapes/GeometricMandala';
+import { PlasmaBall } from './counter-shapes/PlasmaBall';
+import { OrigamiCrane } from './counter-shapes/OrigamiCrane';
+import { RetroLCD } from './counter-shapes/RetroLCD';
+import { ZenGarden } from './counter-shapes/ZenGarden';
+import { FireEmbers } from './counter-shapes/FireEmbers';
 
 
 interface CounterVisualsProps {
@@ -65,7 +75,7 @@ export const CounterNumber = memo(({
             transition={{ duration: 0.15, ease: [0.34, 1.56, 0.64, 1] }}
             className={`
   counter-number text-counter-text
-  ${['digital', 'vertical-capsules', 'tally-clicker', 'cyber-3d', 'crystal-iso', 'neumorph', 'digital-watch', 'steampunk-nixie'].includes(counterShape) ? 'hidden' : ''}
+  ${['digital', 'vertical-capsules', 'tally-clicker', 'cyber-3d', 'crystal-iso', 'neumorph', 'digital-watch', 'steampunk-nixie', 'matrix-code', 'retro-lcd'].includes(counterShape) ? 'hidden' : ''}
   ${counterShape === 'classic' ? 'font-mono text-5xl sm:text-6xl md:text-7xl tracking-widest bg-black/10 px-4 sm:px-6 py-2 rounded-lg inset-shadow mb-4' : 'text-5xl sm:text-6xl md:text-7xl lg:text-8xl'}
   ${counterShape === 'waveform' ? 'drop-shadow-md z-10' : ''}
   ${counterShape === 'modern-ring' ? 'font-sans font-light tracking-tighter drop-shadow-[0_0_15px_hsl(var(--original-primary)/0.6)]' : ''}
@@ -856,6 +866,16 @@ export const CounterVisuals = memo(({
                         {counterShape === 'cyber-3d' && <Cyber3D currentCount={currentCount} />}
                         {counterShape === 'crystal-iso' && <CrystalISO currentCount={currentCount} />}
                         {counterShape === 'neumorph' && <Neumorph currentCount={currentCount} />}
+                        {counterShape === 'lava-lamp' && <LavaLamp progress={progress} currentCount={currentCount} />}
+                        {counterShape === 'matrix-code' && <MatrixCode progress={progress} currentCount={currentCount} />}
+                        {counterShape === 'sunset-horizon' && <SunsetHorizon progress={progress} currentCount={currentCount} />}
+                        {counterShape === 'mechanical-lock' && <MechanicalLock progress={progress} currentCount={currentCount} />}
+                        {counterShape === 'geometric-mandala' && <GeometricMandala progress={progress} currentCount={currentCount} />}
+                        {counterShape === 'plasma-ball' && <PlasmaBall progress={progress} currentCount={currentCount} />}
+                        {counterShape === 'origami-crane' && <OrigamiCrane progress={progress} currentCount={currentCount} />}
+                        {counterShape === 'retro-lcd' && <RetroLCD progress={progress} currentCount={currentCount} />}
+                        {counterShape === 'zen-garden' && <ZenGarden progress={progress} currentCount={currentCount} />}
+                        {counterShape === 'fire-embers' && <FireEmbers progress={progress} currentCount={currentCount} />}
 
                         {counterShape === 'vertical-capsules' && <VerticalCapsules currentCount={currentCount} />}
                         {counterShape === 'luminous-beads' && <LuminousBeads progress={progress} />}
@@ -908,7 +928,7 @@ export const CounterVisuals = memo(({
 
         ${counterShape === 'animated-ripple' ? 'w-64 h-64 flex items-center justify-center bg-transparent z-10' : ''}
         ${counterShape === 'bead-ring' ? 'w-64 h-64 flex items-center justify-center bg-transparent z-10' : ''}
-        ${['helix-strand', 'cyber-hexagon', 'blooming-lotus', 'constellation', 'glass-pill', 'emerald-loop', 'smart-ring', 'moon-phase', 'water-ripple', 'sand-hourglass', 'lantern-fanous', 'star-burst', 'crystal-prism', 'galaxy', 'tally-clicker', 'cyber-3d', 'crystal-iso', 'neumorph'].includes(counterShape) ? 'w-64 h-64 flex items-center justify-center bg-transparent z-10' : ''}
+        ${['helix-strand', 'cyber-hexagon', 'blooming-lotus', 'constellation', 'glass-pill', 'emerald-loop', 'smart-ring', 'moon-phase', 'water-ripple', 'sand-hourglass', 'lantern-fanous', 'star-burst', 'crystal-prism', 'galaxy', 'tally-clicker', 'cyber-3d', 'crystal-iso', 'neumorph', 'lava-lamp', 'matrix-code', 'sunset-horizon', 'mechanical-lock', 'geometric-mandala', 'plasma-ball', 'origami-crane', 'retro-lcd', 'zen-garden', 'fire-embers'].includes(counterShape) ? 'w-64 h-64 flex items-center justify-center bg-transparent z-10' : ''}
 
         flex items-center justify-center
         cursor-pointer

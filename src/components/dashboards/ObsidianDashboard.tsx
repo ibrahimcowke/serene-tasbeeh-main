@@ -124,7 +124,7 @@ export const ObsidianDashboard: React.FC = () => {
             : `${currentCount} / ${targetCount > 0 ? targetCount : '∞'}`;
 
     return (
-        <div className="w-full h-screen flex font-outfit select-none overflow-hidden"
+        <div className="w-full min-h-[100dvh] lg:h-screen flex flex-col lg:flex-row font-outfit select-none lg:overflow-hidden relative"
             style={{ background: 'linear-gradient(135deg, #0b0b0e 0%, #111115 100%)' }}
         >
             {/* Ambient glows */}
@@ -145,7 +145,7 @@ export const ObsidianDashboard: React.FC = () => {
 
             {/* ── LEFT PANEL ── */}
             <motion.div initial={{ opacity: 0, x: -30 }} animate={{ opacity: 1, x: 0 }}
-                className="w-[300px] shrink-0 flex flex-col gap-4 p-5 h-full overflow-y-auto scrollbar-hide"
+                className="w-full lg:w-[300px] shrink-0 flex flex-col gap-4 p-5 lg:h-full lg:overflow-y-auto scrollbar-hide order-2 lg:order-1"
             >
                 {/* Achievement Hub */}
                 <div className="rounded-[1.5rem] p-5 flex flex-col gap-5 flex-1"
@@ -216,7 +216,7 @@ export const ObsidianDashboard: React.FC = () => {
 
             {/* ── CENTER ── */}
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
-                className="flex-1 flex flex-col items-center justify-center gap-6 px-4 h-full"
+                className="w-full lg:flex-1 py-8 lg:py-0 flex flex-col items-center justify-center gap-6 px-4 lg:h-full lg:overflow-y-auto order-1 lg:order-2"
             >
                 {/* Arabic + transliteration */}
                 <div className="flex flex-col items-center gap-2 text-center">
@@ -292,9 +292,9 @@ export const ObsidianDashboard: React.FC = () => {
 
             {/* ── RIGHT PANEL: COMMUNITY ── */}
             <motion.div initial={{ opacity: 0, x: 30 }} animate={{ opacity: 1, x: 0 }}
-                className="w-[300px] shrink-0 flex flex-col gap-4 p-5 h-full overflow-y-auto scrollbar-hide"
+                className="w-full lg:w-[300px] shrink-0 flex flex-col gap-4 p-5 lg:h-full lg:overflow-y-auto scrollbar-hide order-3"
             >
-                <div className="rounded-[1.5rem] flex flex-col overflow-hidden h-full"
+                <div className="rounded-[1.5rem] flex flex-col overflow-hidden lg:h-full"
                     style={{ background: 'rgba(255,255,255,0.025)', border: '1px solid rgba(255,255,255,0.06)', backdropFilter: 'blur(20px)', boxShadow: 'inset 0 1px 1px rgba(255,255,255,0.05), 0 20px 40px rgba(0,0,0,0.5)' }}
                 >
                     <div className="p-4 flex items-center justify-between border-b border-white/5">
