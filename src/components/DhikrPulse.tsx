@@ -4,6 +4,7 @@ import { database } from '@/lib/firebase';
 import { ref, onValue, serverTimestamp } from 'firebase/database';
 import { Heart, Users, Swords, Trophy } from 'lucide-react';
 import { useNotificationStore } from '@/store/notificationStore';
+import { toast } from 'sonner';
 
 export function DhikrPulse() {
     const [pulses, setPulses] = useState<{ id: string; type: string; count?: number }[]>([]);
@@ -26,9 +27,6 @@ export function DhikrPulse() {
                 // Each time the value changes, we trigger a new local pulse animation
                 const pulseId = Math.random().toString(36).substring(2, 9);
                 const pulseType = val.type || 'salam';
-                setPulses(prev => [...prev, { id: pulseId, type: pulseType, count: val.count }]);
-
-                // Record in Notification Center History (excluding joins which are handled locally)
                 if (pulseType === 'salam') {
                     addNotification({
                         type: 'salam',
@@ -47,12 +45,24 @@ export function DhikrPulse() {
                         title: 'Challenge Accepted!',
                         message: 'Two community members started a 100-dhikr sprint. Join them!'
                     });
+                } else if (pulseType === 'user_joined') {
+                    addNotification({
+                        type: 'join',
+                        title: 'New Member Joined',
+                        message: 'A new brother/sister just joined the community.'
+                    });
+                    toast.success('A new brother/sister just joined!');
                 }
 
-                // Remove pulse after animation duration
-                setTimeout(() => {
-                    setPulses(prev => prev.filter(p => p.id !== pulseId));
-                }, 4000);
+                // Only add to center pulses if NOT a join event
+                if (pulseType !== 'user_joined') {
+                    setPulses(prev => [...prev, { id: pulseId, type: pulseType, count: val.count }]);
+                    
+                    // Remove pulse after animation duration
+                    setTimeout(() => {
+                        setPulses(prev => prev.filter(p => p.id !== pulseId));
+                    }, 4000);
+                }
             }
         });
 

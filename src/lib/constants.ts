@@ -82,7 +82,6 @@ export const counterShapes = [
   { id: 'matrix-code', label: 'Matrix', icon: '📟' },
   { id: 'sunset-horizon', label: 'Sunset', icon: '🌅' },
   { id: 'mechanical-lock', label: 'Vault', icon: '🔒' },
-  { id: 'geometric-mandala', label: 'Mandala', icon: '☸️' },
   { id: 'plasma-ball', label: 'Plasma', icon: '⚡' },
   { id: 'origami-crane', label: 'Origami', icon: '🦢' },
   { id: 'retro-lcd', label: 'LCD', icon: '📟' },

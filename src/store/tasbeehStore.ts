@@ -59,7 +59,7 @@ export type CounterShape =
   | 'smart-ring' | 'moon-phase' | 'water-ripple' | 'sand-hourglass' | 'lantern-fanous'
   | 'digital-watch' | 'star-burst' | 'crystal-prism' | 'galaxy' | 'tally-clicker'
   | 'cyber-3d' | 'crystal-iso' | 'neumorph'
-  | 'lava-lamp' | 'matrix-code' | 'sunset-horizon' | 'mechanical-lock' | 'geometric-mandala'
+  | 'lava-lamp' | 'matrix-code' | 'sunset-horizon' | 'mechanical-lock'
   | 'plasma-ball' | 'origami-crane' | 'retro-lcd' | 'zen-garden' | 'fire-embers';
 interface TasbeehState {
   // Counts
