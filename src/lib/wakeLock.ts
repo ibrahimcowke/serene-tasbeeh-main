@@ -15,6 +15,10 @@ export const requestWakeLock = async (): Promise<boolean> => {
     return false;
   }
 
+  if (document.visibilityState !== 'visible') {
+    return false;
+  }
+
   try {
     wakeLock = await navigator.wakeLock.request('screen');
     console.log('✅ Screen Wake Lock is active');

@@ -9,28 +9,13 @@ import { ScreenOffMode } from '@/components/ScreenOffMode';
 import { WhatsNew } from '@/components/WhatsNew';
 import { BreathingGuide } from '@/components/BreathingGuide';
 import ClassicDashboard from '../components/dashboards/ClassicDashboard';
-import { PremiumHub } from '@/components/PremiumHub';
 import { MobileNavBar } from '@/components/MobileNavBar';
 
 const Index = () => {
   const { zenMode, setZenMode, layout, setLayout } = useTasbeehStore();
 
   const renderDashboard = () => {
-    if (layout === 'zen') return <ClassicDashboard />;
-    return (
-      <div className="flex flex-col lg:flex-row gap-6 lg:gap-8 items-start justify-center">
-        {/* Main Content Area */}
-        <div className="w-full flex-1">
-          <div className="lg:hidden">
-            <ClassicDashboard />
-          </div>
-          <div className="hidden lg:block">
-            <PremiumHub />
-          </div>
-        </div>
-
-      </div>
-    );
+    return <ClassicDashboard />;
   };
 
   return (

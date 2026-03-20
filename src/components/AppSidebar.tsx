@@ -1,4 +1,5 @@
-import { BookOpen, Target, ClipboardList, Settings, History, Trophy, BarChart3, AppWindow, Swords } from "lucide-react";
+import { useState } from 'react';
+import { BookOpen, Target, ClipboardList, Settings, History, Trophy, BarChart3, AppWindow, Swords, Palette } from "lucide-react";
 import {
     Sidebar,
     SidebarContent,
@@ -22,10 +23,12 @@ import { ProgressView } from "./ProgressView";
 import { ChallengesView } from "./ChallengesView";
 import { toast } from "sonner";
 import { motion } from "framer-motion";
+import { StyleCenter } from "./StyleCenter";
 
 export function AppSidebar() {
     const { setZenMode } = useTasbeehStore();
-    const { state } = useSidebar();
+    const { state, setOpenMobile } = useSidebar();
+    const [isStyleCenterOpen, setIsStyleCenterOpen] = useState(false);
 
     return (
         <Sidebar collapsible="icon">
@@ -121,7 +124,19 @@ export function AppSidebar() {
                     <SidebarGroupLabel>Application</SidebarGroupLabel>
                     <SidebarGroupContent>
                         <SidebarMenu>
-
+                            <SidebarMenuItem>
+                                <button
+                                    onClick={() => {
+                                        setIsStyleCenterOpen(true);
+                                        setOpenMobile(false);
+                                    }}
+                                    className="w-full flex items-center justify-start gap-2 h-8 px-2 text-sm text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground rounded-md transition-colors"
+                                >
+                                    <Palette className="w-4 h-4 text-purple-500" />
+                                    <span>Appearance</span>
+                                </button>
+                                <StyleCenter isOpen={isStyleCenterOpen} onClose={() => setIsStyleCenterOpen(false)} />
+                            </SidebarMenuItem>
 
                             <SidebarMenuItem>
                                 <SettingsView>
