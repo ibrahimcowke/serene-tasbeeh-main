@@ -37,7 +37,7 @@ import { FireEmbers } from './counter-shapes/FireEmbers';
 
 
 interface CounterVisualsProps {
-    layout: 'default' | 'focus' | 'ergonomic' | 'hub' | 'zen' | 'minimal' | 'timeline' | 'classic';
+    layout: 'default' | 'focus' | 'ergonomic' | 'hub' | 'zen' | 'minimal' | 'timeline' | 'classic' | 'choco' | 'rose-gold' | 'obsidian' | 'emerald' | 'desert';
     counterShape: CounterShape;
     counterVerticalOffset: number;
     counterScale: number;
@@ -325,14 +325,22 @@ export const CounterVisuals = memo(({
                                     <div className="absolute top-0 left-0 w-full h-1/2 bg-gradient-to-b from-white/10 to-transparent" />
                                     <span className="text-[#d4af37] font-arabic text-md mb-0.5 tracking-wider drop-shadow-sm font-medium">تسبيح</span>
                                     <div className="bg-[#142016] px-3 py-1 rounded-sm border border-[#222] shadow-[inset_0_0_8px_rgba(0,0,0,0.8)] min-w-[100px] text-center">
-                                        <span className="font-mono text-[#7ea37e] text-2xl tracking-[0.25em] drop-shadow-[0_0_3px_rgba(126,163,126,0.4)]">
+                                        <span className="font-mono text-[#7ea37e] text-3xl tracking-[0.25em] drop-shadow-[0_0_5px_rgba(126,163,126,0.6)]">
                                             {currentCount.toString().padStart(4, '0')}
                                         </span>
                                     </div>
                                 </div>
 
+                                {/* Main Thumb Button */}
+                                <motion.div 
+                                    className="w-[80px] h-[80px] rounded-full bg-gradient-to-br from-[#dfb958] via-[#d4af37] to-[#8b6508] border-2 border-[#a07d2a] shadow-[0_10px_20px_rgba(0,0,0,0.4),inset_0_2px_4px_rgba(255,255,255,0.6)] flex items-center justify-center z-10"
+                                    whileTap={{ scale: 0.95, boxShadow: "0 5px 10px rgba(0,0,0,0.6), inset 0 2px 8px rgba(0,0,0,0.8)" }}
+                                />
+
                                 {/* Static Reset Button Decoration */}
-                                <div className="absolute right-7 bottom-[65px] w-5 h-5 rounded-full bg-gradient-to-b from-[#e6c17a] to-[#8b6508] border-2 border-[#5c4305] shadow-md" />
+                                <div className="absolute right-7 bottom-[65px] w-6 h-6 rounded-full bg-gradient-to-b from-[#e6c17a] to-[#8b6508] border-[1.5px] border-[#5c4305] shadow-md flex items-center justify-center">
+                                    <div className="w-2 h-2 rounded-full bg-[#5c4305]/50" />
+                                </div>
                             </div>
                         </div>
                     </div>

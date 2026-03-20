@@ -6,7 +6,6 @@ import { HadithSlider } from './HadithSlider';
 import { SoundManager } from '@/lib/sound';
 import { CounterVisuals } from './CounterVisuals';
 import { Palette } from 'lucide-react';
-import { GlobalStats } from './GlobalStats';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -370,12 +369,42 @@ export function Counter() {
                 )}
               </AnimatePresence>
 
-              <div className={`transition-all duration-300 ${isEditingLayout ? 'pointer-events-none opacity-50' : ''}`}
+              <div className={`relative transition-all duration-300 ${isEditingLayout ? 'pointer-events-none opacity-50' : ''}`}
                 style={{ 
                   filter: pullProgress > 0 ? `blur(${pullProgress * 4}px)` : 'none',
                   opacity: 1 - (pullProgress * 0.3)
                 }}
               >
+                {/* Classic Mobile Controls above the counter */}
+                {!zenMode && (counterShape === 'digital' || counterShape === 'classic') && (
+                  <div className="absolute top-2 left-1/2 -translate-x-1/2 flex items-center justify-center gap-8 z-20 pointer-events-auto">
+                    <motion.button
+                      whileTap={{ scale: 0.95 }}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        useTasbeehStore.getState().decrement();
+                      }}
+                      disabled={currentCount === 0}
+                      className="w-10 h-10 rounded-full bg-secondary/10 backdrop-blur-sm flex items-center justify-center disabled:opacity-30 hover:bg-secondary/30 transition-colors border border-white/5 shadow-sm"
+                    >
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14" /></svg>
+                    </motion.button>
+                    <motion.button
+                      whileTap={{ scale: 0.95 }}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        if (window.confirm('Reset counter?')) {
+                          useTasbeehStore.getState().reset();
+                        }
+                      }}
+                      disabled={currentCount === 0}
+                      className="w-10 h-10 rounded-full bg-secondary/10 backdrop-blur-sm flex items-center justify-center disabled:opacity-30 hover:bg-secondary/30 transition-colors border border-white/5 shadow-sm"
+                    >
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 12" /><path d="M3 3v9h9" /></svg>
+                    </motion.button>
+                  </div>
+                )}
+
                 <CounterVisuals
                   layout={layout}
                   counterShape={counterShape}
@@ -392,77 +421,78 @@ export function Counter() {
               </div>
             </motion.div>
 
-            {/* Mobile controls (Minus & Reset) moved below counter */}
-            <div className={`flex items-center justify-center gap-3 xs:gap-6 sm:gap-8 mt-4 xs:mt-5 sm:mt-6 lg:hidden relative z-20 transition-opacity duration-300 ${isEditingLayout || zenMode ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
-              <motion.button
-                whileTap={{ scale: 0.95 }}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  useTasbeehStore.getState().decrement();
-                }}
-                disabled={currentCount === 0}
-                className="w-10 h-10 xs:w-11 xs:h-11 sm:w-12 sm:h-12 rounded-full bg-secondary/50 backdrop-blur-sm flex items-center justify-center disabled:opacity-30 hover:bg-secondary transition-colors border border-white/5"
-              >
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14" /></svg>
-              </motion.button>
+            {/* Mobile controls (Minus & Reset) removed below counter for classic layouts as they are moved above */}
+            {!(counterShape === 'digital' || counterShape === 'classic') && (
+              <div className={`flex items-center justify-center gap-3 xs:gap-6 sm:gap-8 mt-4 xs:mt-5 sm:mt-6 lg:hidden relative z-20 transition-opacity duration-300 ${isEditingLayout || zenMode ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
+                <motion.button
+                  whileTap={{ scale: 0.95 }}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    useTasbeehStore.getState().decrement();
+                  }}
+                  disabled={currentCount === 0}
+                  className="w-10 h-10 xs:w-11 xs:h-11 sm:w-12 sm:h-12 rounded-full bg-secondary/50 backdrop-blur-sm flex items-center justify-center disabled:opacity-30 hover:bg-secondary transition-colors border border-white/5"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14" /></svg>
+                </motion.button>
 
-              <motion.button
-                whileTap={{ scale: 0.95 }}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  if (window.confirm('Reset counter?')) {
-                    useTasbeehStore.getState().reset();
-                  }
-                }}
-                disabled={currentCount === 0}
-                className="w-10 h-10 xs:w-11 xs:h-11 sm:w-12 sm:h-12 rounded-full bg-secondary/50 backdrop-blur-sm flex items-center justify-center disabled:opacity-30 hover:bg-secondary transition-colors border border-white/5"
-              >
-                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 12" /><path d="M3 3v9h9" /></svg>
-              </motion.button>
+                <motion.button
+                  whileTap={{ scale: 0.95 }}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    if (window.confirm('Reset counter?')) {
+                      useTasbeehStore.getState().reset();
+                    }
+                  }}
+                  disabled={currentCount === 0}
+                  className="w-10 h-10 xs:w-11 xs:h-11 sm:w-12 sm:h-12 rounded-full bg-secondary/50 backdrop-blur-sm flex items-center justify-center disabled:opacity-30 hover:bg-secondary transition-colors border border-white/5"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 12" /><path d="M3 3v9h9" /></svg>
+                </motion.button>
 
-              <UndoButton />
+                <UndoButton />
 
-              {/* Theme & Shape selectors moved inline from absolute position */}
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <motion.button
-                    whileTap={{ scale: 0.95 }}
-                    className="w-10 h-10 xs:w-11 xs:h-11 sm:w-12 sm:h-12 rounded-full bg-secondary/50 backdrop-blur-sm flex items-center justify-center hover:bg-secondary transition-colors border border-white/5"
-                    title="Change Theme"
-                  >
-                    <Palette className="w-4 h-4 text-muted-foreground" />
-                  </motion.button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" side="top" className="w-48 bg-card/90 backdrop-blur-xl border-border/50 max-h-[40dvh] overflow-hidden flex flex-col">
-                  <DropdownMenuLabel>Theme</DropdownMenuLabel>
-                  <DropdownMenuSeparator />
-                  <div className="overflow-y-auto custom-scrollbar p-1">
-                    {[
-                      { id: 'light', label: 'Light', icon: '☀️' },
-                      { id: 'dark', label: 'Dark', icon: '🌙' },
-                      { id: 'theme-midnight', label: 'Midnight', icon: '🌌' },
-                      { id: 'theme-neon', label: 'Neon', icon: '🎆' },
-                      { id: 'theme-green', label: 'Matrix', icon: '💻' },
-                      { id: 'theme-cyberpunk', label: 'Cyberpunk', icon: '🤖' },
-                      { id: 'theme-glass', label: 'Glass', icon: '🧊' },
-                      { id: 'theme-sunset', label: 'Sunset', icon: '🌅' },
-                      { id: 'theme-forest', label: 'Forest', icon: '🌲' },
-                    ].map((t) => (
-                      <DropdownMenuItem
-                        key={t.id}
-                        onClick={() => useTasbeehStore.getState().setTheme(t.id as any)}
-                        className="flex items-center gap-2 cursor-pointer"
-                      >
-                        <span className="text-base">{t.icon}</span>
-                        <span className={`flex-1 ${theme === t.id ? 'font-bold text-primary' : ''}`}>{t.label}</span>
-                        {theme === t.id && <span className="text-primary text-xs">●</span>}
-                      </DropdownMenuItem>
-                    ))}
-                  </div>
-                </DropdownMenuContent>
-              </DropdownMenu>
-
-            </div>
+                {/* Theme & Shape selectors moved inline from absolute position */}
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <motion.button
+                      whileTap={{ scale: 0.95 }}
+                      className="w-10 h-10 xs:w-11 xs:h-11 sm:w-12 sm:h-12 rounded-full bg-secondary/50 backdrop-blur-sm flex items-center justify-center hover:bg-secondary transition-colors border border-white/5"
+                      title="Change Theme"
+                    >
+                      <Palette className="w-4 h-4 text-muted-foreground" />
+                    </motion.button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end" side="top" className="w-48 bg-card/90 backdrop-blur-xl border-border/50 max-h-[40dvh] overflow-hidden flex flex-col">
+                    <DropdownMenuLabel>Theme</DropdownMenuLabel>
+                    <DropdownMenuSeparator />
+                    <div className="overflow-y-auto custom-scrollbar p-1">
+                      {[
+                        { id: 'light', label: 'Light', icon: '☀️' },
+                        { id: 'dark', label: 'Dark', icon: '🌙' },
+                        { id: 'theme-midnight', label: 'Midnight', icon: '🌌' },
+                        { id: 'theme-neon', label: 'Neon', icon: '🎆' },
+                        { id: 'theme-green', label: 'Matrix', icon: '💻' },
+                        { id: 'theme-cyberpunk', label: 'Cyberpunk', icon: '🤖' },
+                        { id: 'theme-glass', label: 'Glass', icon: '🧊' },
+                        { id: 'theme-sunset', label: 'Sunset', icon: '🌅' },
+                        { id: 'theme-forest', label: 'Forest', icon: '🌲' },
+                      ].map((t) => (
+                        <DropdownMenuItem
+                          key={t.id}
+                          onClick={() => useTasbeehStore.getState().setTheme(t.id as any)}
+                          className="flex items-center gap-2 cursor-pointer"
+                        >
+                          <span className="text-base">{t.icon}</span>
+                          <span className={`flex-1 ${theme === t.id ? 'font-bold text-primary' : ''}`}>{t.label}</span>
+                          {theme === t.id && <span className="text-primary text-xs">●</span>}
+                        </DropdownMenuItem>
+                      ))}
+                    </div>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </div>
+            )}
 
             {/* Routine Next Step Button Removed */}
           </div>

@@ -81,7 +81,7 @@ interface TasbeehState {
 
   // Global preference (not per theme)
   counterShape: CounterShape;
-  layout: 'default' | 'zen' | 'choco' | 'rose-gold' | 'obsidian' | 'emerald' | 'desert';
+  layout: 'default' | 'focus' | 'ergonomic' | 'hub' | 'zen' | 'minimal' | 'timeline' | 'classic' | 'choco' | 'rose-gold' | 'obsidian' | 'emerald' | 'desert';
   showTransliteration: boolean;
 
   // Mindfulness
@@ -188,7 +188,7 @@ interface TasbeehState {
 
   // New Settings Actions
   setCounterShape: (shape: CounterShape) => void;
-  setLayout: (layout: 'default' | 'zen' | 'choco' | 'rose-gold' | 'obsidian' | 'emerald' | 'desert') => void;
+  setLayout: (layout: 'default' | 'focus' | 'ergonomic' | 'hub' | 'zen' | 'minimal' | 'timeline' | 'classic' | 'choco' | 'rose-gold' | 'obsidian' | 'emerald' | 'desert') => void;
   setHadithSlideDuration: (duration: number) => void;
   setHadithSlidePosition: (position: 'top-right' | 'top-left' | 'bottom-right' | 'bottom-left' | 'right' | 'bottom' | 'hidden') => void;
   setDailyGoal: (goal: number) => void;
@@ -511,13 +511,13 @@ export const useTasbeehStore = create<TasbeehState>()(
       // Removed top-level haptic/sound/vib in favor of themeSettings, but keeping them accessing current theme would be ideal or we just migrate
       // We will access them via getters or helpers in the components.
 
-      theme: 'light',
+      theme: 'theme-midnight',
       language: 'en', // Keeping language for now
       zenMode: false,
-      counterShape: 'plain', // New default
+      counterShape: 'digital', // New default
       breathingGuideEnabled: false,
       breathingGuideSpeed: 4, // seconds per breath cycle
-      layout: 'default',
+      layout: 'classic',
       hadithSlideDuration: 15, // 15 seconds default
       hadithSlidePosition: 'right', // default position
       dhikrTextPosition: 'below-counter', // Default position

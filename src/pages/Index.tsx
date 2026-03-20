@@ -11,6 +11,7 @@ import { BreathingGuide } from '@/components/BreathingGuide';
 import ClassicDashboard from '../components/dashboards/ClassicDashboard';
 import { ChocoDashboard } from '../components/dashboards/ChocoDashboard';
 import { PremiumHub } from '@/components/PremiumHub';
+import { MobileNavBar } from '@/components/MobileNavBar';
 import { RoseGoldDashboard } from '../components/dashboards/RoseGoldDashboard';
 import { ObsidianDashboard } from '../components/dashboards/ObsidianDashboard';
 import { EmeraldDashboard } from '../components/dashboards/EmeraldDashboard';
@@ -66,11 +67,14 @@ const Index = () => {
             </RoutinesView>
 
             {/* Main Content Area */}
-            <div className={`flex-1 min-h-0 w-full overflow-y-auto lg:overflow-hidden px-4 sm:px-6 md:px-8 pb-4 pt-16 xs:pt-2 transition-all duration-500 pb-safe ${zenMode ? 'flex items-center justify-center pt-0 pb-0' : ''}`}>
+            <div className={`flex-1 min-h-0 w-full overflow-y-auto lg:overflow-hidden px-4 sm:px-6 md:px-8 pb-24 pt-16 xs:pt-2 transition-all duration-500 pb-safe ${zenMode ? 'flex items-center justify-center pt-0 pb-0' : ''}`}>
               <div className={`max-w-[1600px] mx-auto w-full h-full ${zenMode ? 'max-w-4xl' : ''}`}>
                 {renderDashboard()}
               </div>
             </div>
+
+            {/* Mobile Bottom Navigation */}
+            {!zenMode && <MobileNavBar />}
 
             {/* Zen Mode Exit Button */}
             {zenMode && (
