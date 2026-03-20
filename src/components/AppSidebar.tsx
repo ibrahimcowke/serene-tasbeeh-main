@@ -70,16 +70,7 @@ export function AppSidebar() {
                                 </RoutinesView>
                             </SidebarMenuItem>
 
-                            <SidebarMenuItem>
-                                <ChallengesView>
-                                    <SidebarMenuButton asChild tooltip="Practice">
-                                        <button className="w-full justify-start cursor-pointer hover:bg-secondary/50">
-                                            <Swords className="text-orange-500" />
-                                            <span>Practice</span>
-                                        </button>
-                                    </SidebarMenuButton>
-                                </ChallengesView>
-                            </SidebarMenuItem>
+
                         </SidebarMenu>
                     </SidebarGroupContent>
                 </SidebarGroup>
@@ -130,18 +121,7 @@ export function AppSidebar() {
                     <SidebarGroupLabel>Application</SidebarGroupLabel>
                     <SidebarGroupContent>
                         <SidebarMenu>
-                            <SidebarMenuItem>
-                                <SidebarMenuButton
-                                    onClick={() => {
-                                        setZenMode(true);
-                                        toast.info("Zen Mode Active", { description: "Tap the button at the bottom to exit" });
-                                    }}
-                                    tooltip="Zen Mode"
-                                >
-                                    <AppWindow className="text-purple-500" />
-                                    <span>Zen Mode</span>
-                                </SidebarMenuButton>
-                            </SidebarMenuItem>
+
 
                             <SidebarMenuItem>
                                 <SettingsView>

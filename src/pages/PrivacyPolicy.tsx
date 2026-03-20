@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { ArrowLeft, Shield, Lock, Eye, Database, Globe } from 'lucide-react';
+import { ArrowLeft, Shield, Lock, Eye, Database, Globe, Baby, FileText } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 export default function PrivacyPolicy() {
@@ -9,27 +9,37 @@ export default function PrivacyPolicy() {
         {
             icon: Shield,
             title: "Our Commitment",
-            content: "Tasbeeh is designed with a 'privacy-first' philosophy. We believe your spiritual practice is personal, and your data should remain so. This policy explains how we treat your information with the respect it deserves."
+            content: "Tasbeeh is designed with a 'privacy-first' philosophy. We believe your spiritual practice is personal. This policy complies with Google Play Store standards and explains how we treat your information."
         },
         {
             icon: Database,
-            title: "Data We Collect",
-            content: "We collect only the data necessary for the app's functionality: your counts, streaks, and custom dhikrs. This data remains exclusively on your local device and is never sent to any external servers."
+            title: "Data Collection and Use",
+            content: "We collect only data necessary for app functionality: your counts, streaks, and custom dhikrs. This data remains exclusively on your local device. We do not collect or request Personally Identifiable Information (PII) such as names, emails, or phone numbers."
         },
         {
             icon: Lock,
             title: "How Data is Protected",
-            content: "All data remains exclusively on your local device storage. We do not use any cloud synchronization, ensuring your spiritual practice is entirely private and offline."
+            content: "All data is stored locally on your device using standardized web storage mechanisms. We do not use cloud synchronization or remote servers, ensuring your data cannot be intercepted or breached remotely."
         },
         {
             icon: Eye,
-            title: "No Third-Party Sharing",
-            content: "We do not sell, trade, or share your personal data with any third parties, advertisers, or analytics companies. Your dhikr history is for your eyes only."
+            title: "Third-Party Services",
+            content: "We do not sell, trade, or share data with advertisers, analytics companies, or third parties. The app operates completely offline without external tracking SDKs."
         },
         {
             icon: Globe,
-            title: "Cookies & PWA",
-            content: "As a Progressive Web App, we use local storage and service workers to ensure the app works offline. These are functional tools and are not used for tracking your behavior across other websites."
+            title: "Log Data, Cookies & PWA",
+            content: "As a Progressive Web App, we use local storage and service workers to ensure offline functionality. We do not collect Log Data or use tracking cookies across websites."
+        },
+        {
+            icon: Baby,
+            title: "Children's Privacy",
+            content: "Our services are safe for all ages, but do not explicitly target anyone under 13. Since we do not collect any personal data, we therefore do not knowingly collect personal information from children under 13."
+        },
+        {
+            icon: FileText,
+            title: "Changes to This Policy",
+            content: "We may update our Privacy Policy periodically. We advise you to review this page for changes. Any updates will be effective immediately upon posting to this page."
         }
     ];
 

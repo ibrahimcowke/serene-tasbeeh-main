@@ -74,95 +74,11 @@ export const PremiumHub = () => {
             {/* Main Hub Content */}
             <div className="flex-1 w-full grid grid-cols-12 gap-4 lg:gap-6 p-4 lg:pt-0 lg:px-6 lg:pb-6 relative z-10 overflow-hidden">
 
-                {/* Left Column: Achievement Hub */}
-                <motion.div
-                    initial={{ opacity: 0, x: -50 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    className="col-span-12 lg:col-span-4 flex flex-col gap-3 lg:gap-3 overflow-hidden h-full"
-                >
-                    {/* Achievement Hub Content (Shortened for brevity but keeping same structure) */}
-                    <div className="skeuo-glass rounded-[2.5rem] p-4 flex flex-col items-center border-foreground/[0.08] shadow-2xl relative overflow-hidden group flex-1">
-                        {/* ... (keep existing content but adjust width) ... */}
-                        <div className="absolute inset-0 bg-gradient-to-br from-foreground/[0.02] to-transparent pointer-events-none" />
-                        <h2 className="text-[10px] font-black uppercase tracking-[0.3em] text-muted-foreground mb-4 relative z-10">Achievement Hub</h2>
-                        <div className="flex flex-col items-center gap-0.5 mb-2">
-                            <span className="text-[10px] text-primary/60 font-bold uppercase tracking-widest">Your Rank:</span>
-                            <h3 className="text-3xl font-black text-foreground tracking-tighter text-glow-gold">{rankInfo.title}</h3>
-                        </div>
-
-                        <RadialAchievement progress={Math.round(rankInfo.prog)} title="Level Progress" />
-
-                        <div className="grid grid-cols-2 gap-3 w-full mt-4">
-                            <div className="bg-foreground/5 border border-foreground/5 rounded-2xl p-3 flex flex-col items-center text-center shadow-inner">
-                                <div className="w-8 h-8 rounded-full bg-orange-500/20 flex items-center justify-center mb-1">
-                                    <Flame className="w-4 h-4 text-orange-500" />
-                                </div>
-                                <span className="text-xl font-black text-foreground">{streakDays}</span>
-                                <span className="text-[8px] font-bold text-muted-foreground uppercase tracking-widest">Day Streak</span>
-                            </div>
-                            <div className="bg-foreground/5 border border-foreground/5 rounded-2xl p-3 flex flex-col items-center text-center shadow-inner">
-                                <div className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center mb-1">
-                                    <div className="w-2 h-2 rounded-full border border-primary" />
-                                </div>
-                                <span className="text-xl font-black text-foreground">{todayCount}/{dailyGoal || 100}</span>
-                                <span className="text-[8px] font-bold text-muted-foreground uppercase tracking-widest">Daily Goal</span>
-                            </div>
-                        </div>
-
-                        <div className="mt-auto w-full pt-4 border-t border-foreground/5 space-y-2.5">
-                            <div className="bg-card/80 rounded-full px-4 py-1.5 flex items-center justify-between border border-foreground/5">
-                                <div className="flex items-center gap-2">
-                                    <BadgeCheck className="w-3 h-3 text-blue-500" />
-                                    <span className="text-[8px] font-bold text-muted-foreground uppercase">Total All-Time</span>
-                                </div>
-                                <span className="text-[8px] font-black text-blue-500">{totalAllTime.toLocaleString()}</span>
-                            </div>
-                            <div className="bg-card/80 rounded-full px-4 py-1.5 flex items-center justify-between border border-foreground/5">
-                                <div className="flex items-center gap-2">
-                                    <Star className="w-3 h-3 text-yellow-500" />
-                                    <span className="text-[8px] font-bold text-muted-foreground uppercase">Achievements</span>
-                                </div>
-                                <span className="text-[8px] font-black text-yellow-500">{unlockedAchievements.length} Unlocked</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.2 }}
-                        className="skeuo-glass rounded-[2.5rem] p-4 border-foreground/[0.08] shadow-2xl relative overflow-hidden group"
-                    >
-                        <div className="absolute inset-0 bg-gradient-to-br from-primary/[0.02] to-transparent pointer-events-none" />
-                        <div className="flex items-center justify-between mb-4 relative z-10">
-                            <span className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground">Current Status</span>
-                            <div className="flex items-center gap-1.5 px-2 py-0.5 bg-primary/10 rounded-full border border-primary/20">
-                                <Moon className="w-2.5 h-2.5 text-primary" />
-                                <span className="text-[8px] font-black text-primary uppercase tracking-tighter">
-                                    {dateContext?.hijriDate || '8 Ramadan'}
-                                </span>
-                            </div>
-                        </div>
-
-                        <div className="space-y-4 relative z-10">
-                            <div className="flex items-center justify-between">
-                                <div className="flex flex-col">
-                                    <span className="text-[8px] font-bold text-muted-foreground uppercase tracking-widest">Active Occasion</span>
-                                    <span className="text-xs font-black text-foreground/90">{dateContext?.specialDayName || 'Ramadan Kareem'}</span>
-                                </div>
-                                <div className="w-8 h-8 rounded-xl bg-primary/10 flex items-center justify-center border border-primary/20">
-                                    <Star className="w-4 h-4 text-primary" />
-                                </div>
-                            </div>
-                        </div>
-                    </motion.div>
-                </motion.div>
-
-                {/* Right Column: Spiritual Heart (Expanding to fill more space) */}
+                {/* Main Counter Area (Full Width) */}
                 <motion.div
                     initial={{ opacity: 0, y: 30 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className="col-span-12 lg:col-span-8 flex flex-col gap-3 lg:gap-4 items-center justify-start pt-0 relative h-full overflow-hidden"
+                    className="col-span-12 flex flex-col gap-3 lg:gap-4 items-center justify-start pt-0 relative h-full overflow-hidden"
                 >
                     {/* Center plateau effect */}
                     <div className="absolute inset-x-0 top-0 bottom-[-20px] bg-gradient-to-b from-foreground/[0.03] to-transparent rounded-[3rem] blur-sm -z-10 border border-foreground/[0.05]" />
@@ -192,6 +108,8 @@ export const PremiumHub = () => {
                             currentSettings={{ soundEnabled: true, hapticEnabled: true, vibrationIntensity: 'medium', fontScale: 1, soundType: 'click' }}
                             handleTap={increment}
                             showCompletion={false}
+                            countFontSize={1}
+                            disabled={false}
                         />
                         <div className="w-full max-w-[606px] mt-8">
                             <HadithSlider dhikr={currentDhikr} />

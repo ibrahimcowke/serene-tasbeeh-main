@@ -107,7 +107,7 @@ export function Counter() {
   const renderDhikrText = () => {
     // if (dhikrTextPosition === 'hidden') return null;
     return (
-      <div className="text-center mt-0 mb-1 px-3 sm:px-0 relative z-20"
+      <div className="text-center mt-6 mb-4 px-3 sm:px-0 relative z-20"
         style={{ transform: `translateY(${dhikrVerticalOffset}px)` }}
       >
         <AnimatePresence mode="wait">
