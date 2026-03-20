@@ -101,12 +101,26 @@ export function RemindersContent() {
                     reminder.time === currentTime &&
                     reminder.days.includes(currentDay)
                 ) {
-                    new Notification('Tasbeeh Reminder', {
-                        body: reminder.label || 'Time for dhikr',
-                        icon: '/icon-192.png',
-                        badge: '/icon-192.png',
-                        tag: reminder.id,
-                    });
+                    if ('serviceWorker' in navigator) {
+                        navigator.serviceWorker.ready.then(registration => {
+                            registration.showNotification('Tasbeeh Reminder', {
+                                body: reminder.label || 'Time for dhikr',
+                                icon: '/pwa-192x192.png',
+                                badge: '/pwa-192x192.png',
+                                vibrate: [200, 100, 200, 100, 200],
+                                tag: reminder.id,
+                                requireInteraction: true
+                            } as any);
+                        });
+                    } else {
+                        new Notification('Tasbeeh Reminder', {
+                            body: reminder.label || 'Time for dhikr',
+                            icon: '/pwa-192x192.png',
+                            badge: '/pwa-192x192.png',
+                            tag: reminder.id,
+                            requireInteraction: true
+                        });
+                    }
                 }
             });
         };
