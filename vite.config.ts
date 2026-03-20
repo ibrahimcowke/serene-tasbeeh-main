@@ -38,6 +38,18 @@ export default defineConfig(({ mode }) => ({
         orientation: "portrait",
         scope: "/",
         start_url: "/",
+        prefer_related_applications: true,
+        related_applications: [
+          {
+            platform: "play",
+            url: "https://play.google.com/store/apps/details?id=com.serene.tasbeeh",
+            id: "com.serene.tasbeeh"
+          }
+        ],
+        iarc_rating_id: "e84b072d-71b3-4d3e-86ae-31a8ce4e53b7",
+        scope_extensions: [
+          { origin: "*.tasbeehdikr.com" }
+        ],
         launch_handler: {
           client_mode: "navigate-existing"
         },

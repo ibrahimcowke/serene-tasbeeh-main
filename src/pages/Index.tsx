@@ -9,25 +9,14 @@ import { ScreenOffMode } from '@/components/ScreenOffMode';
 import { WhatsNew } from '@/components/WhatsNew';
 import { BreathingGuide } from '@/components/BreathingGuide';
 import ClassicDashboard from '../components/dashboards/ClassicDashboard';
-import { ChocoDashboard } from '../components/dashboards/ChocoDashboard';
 import { PremiumHub } from '@/components/PremiumHub';
 import { MobileNavBar } from '@/components/MobileNavBar';
-import { RoseGoldDashboard } from '../components/dashboards/RoseGoldDashboard';
-import { ObsidianDashboard } from '../components/dashboards/ObsidianDashboard';
-import { EmeraldDashboard } from '../components/dashboards/EmeraldDashboard';
-import { DesertDashboard } from '../components/dashboards/DesertDashboard';
 
 const Index = () => {
   const { zenMode, setZenMode, layout, setLayout } = useTasbeehStore();
 
   const renderDashboard = () => {
     if (layout === 'zen') return <ClassicDashboard />;
-    if (layout === 'choco') return <ChocoDashboard />;
-    if (layout === 'rose-gold') return <RoseGoldDashboard />;
-    if (layout === 'obsidian') return <ObsidianDashboard />;
-    if (layout === 'emerald') return <EmeraldDashboard />;
-    if (layout === 'desert') return <DesertDashboard />;
-
     return (
       <div className="flex flex-col lg:flex-row gap-6 lg:gap-8 items-start justify-center">
         {/* Main Content Area */}
