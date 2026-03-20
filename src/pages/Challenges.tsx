@@ -17,7 +17,7 @@ const ChallengesPage = () => {
                         >
                             <div className="mb-8">
                                 <h1 className="text-3xl font-black text-foreground tracking-tight">Challenges Center</h1>
-                                <p className="text-muted-foreground font-medium">Compete with friends and the community to earn rewards and stay consistent.</p>
+                                <p className="text-muted-foreground font-medium">Complete solo sprints and endurance sessions to stay consistent and earn rewards.</p>
                             </div>
 
                             <div className="bg-card/30 backdrop-blur-xl border border-border/50 rounded-[2.5rem] overflow-hidden p-1 shadow-2xl shadow-primary/5">

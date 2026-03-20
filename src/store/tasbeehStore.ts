@@ -789,7 +789,6 @@ export const useTasbeehStore = create<TasbeehState>()(
             streakDays: newStreak,
             longestStreak: newLongestStreak,
             unlockedAchievements: [...currentUnlocked, ...newlyUnlocked],
-            unlockedAchievements: [...currentUnlocked, ...newlyUnlocked],
           };
         });
 
@@ -1122,7 +1121,6 @@ export const useTasbeehStore = create<TasbeehState>()(
 
       setLastSeenVersion: (version) => set({ lastSeenVersion: version }),
 
-      },
     }),
     {
       name: 'tasbeeh-storage',

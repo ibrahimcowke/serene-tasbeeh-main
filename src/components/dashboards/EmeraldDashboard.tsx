@@ -3,7 +3,6 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useTasbeehStore } from '@/store/tasbeehStore';
 import { Flame, Globe2, ChevronLeft, ChevronRight, RotateCcw, Star } from 'lucide-react';
 
-import { GlobalChallenges } from '@/components/GlobalChallenges';
 import { CounterVisuals } from '@/components/CounterVisuals';
 import { StyleCenter } from '@/components/StyleCenter';
 import { Shapes } from 'lucide-react';
@@ -104,11 +103,11 @@ export const EmeraldDashboard: React.FC = () => {
     const rankProg = Math.min(((totalAllTime - prevMax) / (nextMax - prevMax)) * 100, 100);
 
     const sessionLabel = sessionMode.type === 'tasbih100'
-        ? `Step ${sessionMode.currentPhase + 1} of 5 · ${currentDhikr.transliteration?.toUpperCase()} ×33`
+        ? `Step ${sessionMode.currentPhase + 1} of 4 · ${currentDhikr.transliteration?.toUpperCase()} ×33`
         : `${currentCount} / ${targetCount > 0 ? targetCount : '∞'}`;
 
     return (
-        <div className="w-full min-h-[100dvh] lg:h-screen flex flex-col lg:flex-row font-outfit select-none lg:overflow-hidden relative"
+        <div className="w-full min-h-[100dvh] lg:h-screen flex flex-col font-outfit select-none lg:overflow-hidden relative"
             style={{ background: '#141614' }}
         >
             {/* Stone texture overlay */}
@@ -146,53 +145,9 @@ export const EmeraldDashboard: React.FC = () => {
 
             <StyleCenter isOpen={isStyleCenterOpen} onClose={() => setIsStyleCenterOpen(false)} initialTab="shapes" />
 
-            {/* ── MAIN ROW ── */}
-            <div className="flex flex-col lg:flex-row flex-1 min-h-0 relative z-10 overflow-y-auto lg:overflow-y-hidden">
-                {/* LEFT */}
-                <motion.div initial={{ opacity: 0, x: -30 }} animate={{ opacity: 1, x: 0 }}
-                    className="w-full lg:w-[270px] shrink-0 flex flex-col gap-3 p-4 lg:overflow-y-auto scrollbar-hide order-2 lg:order-1"
-                >
-                    <div className="rounded-[1.5rem] p-5 flex flex-col gap-4"
-                        style={{ background: 'rgba(16,185,129,0.04)', border: '1px solid rgba(16,185,129,0.12)', backdropFilter: 'blur(20px)', boxShadow: 'inset 0 1px 1px rgba(16,185,129,0.05), 0 15px 35px rgba(0,0,0,0.6)' }}
-                    >
-                        <h2 className="text-[10px] font-black uppercase tracking-[0.3em] text-emerald-400/40">Achievement Hub</h2>
-                        <div className="flex flex-col items-center gap-0.5">
-                            <span className="text-[9px] text-emerald-400/30 font-bold uppercase tracking-widest">Your Rank:</span>
-                            <h3 className="text-3xl font-black text-white tracking-tight" style={{ textShadow: '0 0 20px rgba(52,211,153,0.5)' }}>{totalRank}</h3>
-                        </div>
+            {/* ── MAIN CONTENT ── */}
+            <div className="flex-1 flex flex-col items-center justify-center relative z-10 overflow-y-auto">
 
-                        <ArcProgress progress={rankProg} rank={totalRank} />
-
-                        <div className="grid grid-cols-2 gap-3">
-                            <div className="rounded-2xl p-3 flex flex-col items-center gap-1.5" style={{ background: 'rgba(16,185,129,0.05)', border: '1px solid rgba(16,185,129,0.1)' }}>
-                                <Flame className="w-5 h-5 text-orange-400" />
-                                <span className="text-2xl font-black text-white">{streakDays}</span>
-                                <span className="text-[8px] text-emerald-400/40 uppercase tracking-wider font-bold">Day</span>
-                            </div>
-                            <div className="rounded-2xl p-3 flex flex-col items-center gap-1.5" style={{ background: 'rgba(16,185,129,0.05)', border: '1px solid rgba(16,185,129,0.1)' }}>
-                                <div className="w-5 h-5 rounded-full border-2 border-emerald-400/40 flex items-center justify-center" />
-                                <span className="text-2xl font-black text-white">{dailyCount}/{dailyGoal}</span>
-                                <span className="text-[8px] text-emerald-400/40 uppercase tracking-wider font-bold">Daily Goal</span>
-                            </div>
-                        </div>
-
-                        <div className="space-y-2 border-t border-emerald-500/10 pt-3">
-                            <div className="flex items-center justify-between">
-                                <span className="text-[8px] font-bold text-emerald-400/30 uppercase">Global Activity</span>
-                                <span className="text-[8px] font-black text-emerald-300/60">{totalAllTime.toLocaleString()} Leads (3%)</span>
-                            </div>
-                            <div className="flex items-center gap-1.5">
-                                <div className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
-                                <span className="text-[8px] text-emerald-400/30 font-black uppercase tracking-widest">Global Activity Live</span>
-                            </div>
-                        </div>
-                    </div>
-                </motion.div>
-
-                {/* CENTER */}
-                <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
-                    className="w-full lg:flex-1 py-8 lg:py-0 flex flex-col items-center justify-center gap-5 px-4 lg:overflow-y-auto scrollbar-hide order-1 lg:order-2"
-                >
                     {/* Arabic dhikr */}
                     <div className="flex flex-col items-center gap-1 text-center">
                         <motion.p key={currentDhikr.id} initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }}
@@ -286,31 +241,6 @@ export const EmeraldDashboard: React.FC = () => {
                             </div>
                         </div>
                     </div>
-                </motion.div>
-
-                {/* RIGHT: Community */}
-                <motion.div initial={{ opacity: 0, x: 30 }} animate={{ opacity: 1, x: 0 }}
-                    className="w-full lg:w-[270px] shrink-0 flex flex-col gap-3 p-4 lg:overflow-y-auto scrollbar-hide order-3"
-                >
-                    <div className="rounded-[1.5rem] flex flex-col overflow-hidden lg:h-full"
-                        style={{ background: 'rgba(16,185,129,0.03)', border: '1px solid rgba(16,185,129,0.1)', backdropFilter: 'blur(20px)', boxShadow: '0 15px 35px rgba(0,0,0,0.6)' }}
-                    >
-                        <div className="p-4 flex items-center justify-between border-b border-emerald-500/10">
-                            <h2 className="text-xs font-black uppercase tracking-[0.25em] text-emerald-400/40">Community</h2>
-                            <div className="flex items-center gap-2 px-3 py-1 rounded-full" style={{ background: 'rgba(34,197,94,0.1)', border: '1px solid rgba(34,197,94,0.2)' }}>
-                                <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
-                                <span className="text-[10px] font-black text-green-400 uppercase">Live</span>
-                            </div>
-                        </div>
-                        <div className="p-4 flex-1 overflow-y-auto scrollbar-hide space-y-4">
-                            <div className="rounded-2xl p-4 flex flex-col items-center" style={{ background: 'rgba(16,185,129,0.04)', border: '1px solid rgba(16,185,129,0.08)' }}>
-                                {/* VisitorCounter removed */}
-                                <span className="text-[9px] text-emerald-400/30 uppercase tracking-widest mt-2 font-bold">Dhikrs Worldwide</span>
-                            </div>
-                            <GlobalChallenges />
-                        </div>
-                    </div>
-                </motion.div>
             </div>
         </div>
     );

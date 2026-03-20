@@ -3,7 +3,6 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useTasbeehStore } from '@/store/tasbeehStore';
 import { Flame, Star, Globe, ChevronLeft, ChevronRight, RotateCcw, BadgeCheck, Trophy } from 'lucide-react';
 
-import { GlobalChallenges } from '@/components/GlobalChallenges';
 import { CounterVisuals } from '@/components/CounterVisuals';
 import { StyleCenter } from '@/components/StyleCenter';
 import { Shapes } from 'lucide-react';
@@ -118,13 +117,13 @@ export const ObsidianDashboard: React.FC = () => {
     const dailyCount = (useTasbeehStore.getState().dailyRecords.find(r => r.date === todayStr)?.totalCount || 0) + currentCount;
 
     const sessionLabel = sessionMode.type === 'tasbih100'
-        ? `Step ${sessionMode.currentPhase + 1} of 5 · ${currentDhikr.transliteration?.toUpperCase()} ×33`
+        ? `Step ${sessionMode.currentPhase + 1} of 4 · ${currentDhikr.transliteration?.toUpperCase()} ×33`
         : sessionMode.type === 'tasbih1000'
             ? `Set ${sessionMode.currentPhase + 1} of 8 · ${currentDhikr.transliteration?.toUpperCase()} ×125`
             : `${currentCount} / ${targetCount > 0 ? targetCount : '∞'}`;
 
     return (
-        <div className="w-full min-h-[100dvh] lg:h-screen flex flex-col lg:flex-row font-outfit select-none lg:overflow-hidden relative"
+        <div className="w-full min-h-[100dvh] lg:h-screen flex flex-col font-outfit select-none lg:overflow-hidden relative"
             style={{ background: 'linear-gradient(135deg, #0b0b0e 0%, #111115 100%)' }}
         >
             {/* Ambient glows */}
@@ -143,81 +142,9 @@ export const ObsidianDashboard: React.FC = () => {
             <StyleCenter isOpen={isStyleCenterOpen} onClose={() => setIsStyleCenterOpen(false)} initialTab="shapes" />
             <div className="absolute bottom-20 right-1/3 w-80 h-80 rounded-full pointer-events-none" style={{ background: 'radial-gradient(circle, rgba(100,80,200,0.04) 0%, transparent 70%)', filter: 'blur(60px)' }} />
 
-            {/* ── LEFT PANEL ── */}
-            <motion.div initial={{ opacity: 0, x: -30 }} animate={{ opacity: 1, x: 0 }}
-                className="w-full lg:w-[300px] shrink-0 flex flex-col gap-4 p-5 lg:h-full lg:overflow-y-auto scrollbar-hide order-2 lg:order-1"
-            >
-                {/* Achievement Hub */}
-                <div className="rounded-[1.5rem] p-5 flex flex-col gap-5 flex-1"
-                    style={{ background: 'rgba(255,255,255,0.025)', border: '1px solid rgba(255,255,255,0.06)', backdropFilter: 'blur(20px)', boxShadow: 'inset 0 1px 1px rgba(255,255,255,0.05), 0 20px 40px rgba(0,0,0,0.5)' }}
-                >
-                    <h2 className="text-[10px] font-black uppercase tracking-[0.3em] text-white/25">Achievement Hub</h2>
+            {/* ── MAIN CONTENT ── */}
+            <div className="flex-1 flex flex-col items-center justify-center relative z-10 overflow-y-auto">
 
-                    <RankBar total={totalAllTime} />
-
-                    <div className="grid grid-cols-2 gap-3">
-                        <div className="rounded-2xl p-4 flex flex-col items-center gap-2" style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.05)' }}>
-                            <div className="w-8 h-8 rounded-full flex items-center justify-center" style={{ background: 'rgba(251,146,60,0.15)' }}>
-                                <Flame className="w-4 h-4 text-orange-400" />
-                            </div>
-                            <span className="text-xl font-black text-white">{streakDays}</span>
-                            <span className="text-[8px] text-white/25 uppercase tracking-widest font-bold">Day</span>
-                        </div>
-                        <div className="rounded-2xl p-4 flex flex-col items-center gap-2" style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.05)' }}>
-                            <div className="w-8 h-8 rounded-full flex items-center justify-center" style={{ background: 'rgba(197,160,85,0.15)' }}>
-                                <Trophy className="w-4 h-4 text-yellow-400" />
-                            </div>
-                            <span className="text-xl font-black text-white">{dailyCount}/{dailyGoal}</span>
-                            <span className="text-[8px] text-white/25 uppercase tracking-widest font-bold">Daily Goal</span>
-                        </div>
-                    </div>
-
-                    <div className="space-y-2 pt-2 border-t border-white/5 mt-auto">
-                        {[
-                            { icon: BadgeCheck, color: 'text-blue-400', label: 'Global Activity', val: `${(totalAllTime || 0).toLocaleString()} Leads (3%)` },
-                            { icon: Globe, color: 'text-green-400', label: 'Global Activity', val: 'LIVE' },
-                        ].map(({ icon: Icon, color, label, val }) => (
-                            <div key={label + val} className="rounded-full px-4 py-2 flex items-center justify-between" style={{ background: 'rgba(255,255,255,0.025)', border: '1px solid rgba(255,255,255,0.05)' }}>
-                                <div className="flex items-center gap-2">
-                                    <Icon className={`w-3 h-3 ${color}`} />
-                                    <span className="text-[8px] font-bold text-white/30 uppercase">{label}</span>
-                                </div>
-                                <span className={`text-[8px] font-black ${color}`}>{val}</span>
-                            </div>
-                        ))}
-                    </div>
-                </div>
-
-                {/* Wisdom Card */}
-                <div className="rounded-[1.5rem] p-5 shrink-0"
-                    style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.05)', backdropFilter: 'blur(20px)' }}
-                >
-                    <div className="flex items-center justify-between mb-3">
-                        <span className="text-[8px] font-black uppercase tracking-widest text-white/20">فضائل الذكر</span>
-                        <span className="text-[8px] px-2 py-0.5 rounded-full font-black uppercase tracking-wider" style={{ background: 'rgba(197,160,85,0.15)', color: '#c5a055', border: '1px solid rgba(197,160,85,0.2)' }}>Wisdom</span>
-                    </div>
-                    <AnimatePresence mode="wait">
-                        <motion.div key={`${currentDhikr.id}-${hadithIndex}`} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
-                            <p className="arabic text-base text-white/60 text-center leading-loose">
-                                {currentDhikr.hadiths?.[hadithIndex]?.text?.slice(0, 100) || 'سُبْحَانَ اللَّهِ وَبِحَمْدِهِ'}
-                            </p>
-                            <p className="text-[10px] text-white/25 text-center mt-2 italic">
-                                — {currentDhikr.hadiths?.[hadithIndex]?.source || 'Sahih Muslim'}
-                            </p>
-                        </motion.div>
-                    </AnimatePresence>
-                    <div className="flex gap-1 justify-center mt-3">
-                        {currentDhikr.hadiths?.map((_, i) => (
-                            <div key={i} className={`h-1 rounded-full transition-all ${i === hadithIndex ? 'w-4 bg-yellow-500' : 'w-1 bg-white/10'}`} />
-                        ))}
-                    </div>
-                </div>
-            </motion.div>
-
-            {/* ── CENTER ── */}
-            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
-                className="w-full lg:flex-1 py-8 lg:py-0 flex flex-col items-center justify-center gap-6 px-4 lg:h-full lg:overflow-y-auto order-1 lg:order-2"
-            >
                 {/* Arabic + transliteration */}
                 <div className="flex flex-col items-center gap-2 text-center">
                     <motion.p key={currentDhikr.id} initial={{ scale: 0.92, opacity: 0 }} animate={{ scale: 1, opacity: 1 }}
@@ -288,31 +215,7 @@ export const ObsidianDashboard: React.FC = () => {
                         <p className="text-sm font-bold text-white/50 mt-0.5">{currentDhikr.transliteration} ({targetCount} RECITE)</p>
                     </div>
                 </div>
-            </motion.div>
-
-            {/* ── RIGHT PANEL: COMMUNITY ── */}
-            <motion.div initial={{ opacity: 0, x: 30 }} animate={{ opacity: 1, x: 0 }}
-                className="w-full lg:w-[300px] shrink-0 flex flex-col gap-4 p-5 lg:h-full lg:overflow-y-auto scrollbar-hide order-3"
-            >
-                <div className="rounded-[1.5rem] flex flex-col overflow-hidden lg:h-full"
-                    style={{ background: 'rgba(255,255,255,0.025)', border: '1px solid rgba(255,255,255,0.06)', backdropFilter: 'blur(20px)', boxShadow: 'inset 0 1px 1px rgba(255,255,255,0.05), 0 20px 40px rgba(0,0,0,0.5)' }}
-                >
-                    <div className="p-4 flex items-center justify-between border-b border-white/5">
-                        <h2 className="text-xs font-black uppercase tracking-[0.25em] text-white/25">Community</h2>
-                        <div className="flex items-center gap-2 px-3 py-1 rounded-full" style={{ background: 'rgba(34,197,94,0.1)', border: '1px solid rgba(34,197,94,0.2)' }}>
-                            <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
-                            <span className="text-[10px] font-black text-green-400 uppercase tracking-widest">Live</span>
-                        </div>
-                    </div>
-                    <div className="p-4 flex-1 overflow-y-auto scrollbar-hide space-y-4">
-                        <div className="rounded-2xl p-4 flex flex-col items-center text-center" style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.05)' }}>
-                            {/* VisitorCounter removed */}
-                            <span className="text-[9px] font-black text-white/20 uppercase tracking-widest mt-2">Dhikrs Worldwide</span>
-                        </div>
-                        <GlobalChallenges />
-                    </div>
-                </div>
-            </motion.div>
+            </div>
         </div>
     );
 };

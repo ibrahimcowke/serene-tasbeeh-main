@@ -72,10 +72,10 @@ export function AppSidebar() {
 
                             <SidebarMenuItem>
                                 <ChallengesView>
-                                    <SidebarMenuButton asChild tooltip="Challenges">
+                                    <SidebarMenuButton asChild tooltip="Practice">
                                         <button className="w-full justify-start cursor-pointer hover:bg-secondary/50">
                                             <Swords className="text-orange-500" />
-                                            <span>Challenges</span>
+                                            <span>Practice</span>
                                         </button>
                                     </SidebarMenuButton>
                                 </ChallengesView>

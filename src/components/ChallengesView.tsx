@@ -7,34 +7,12 @@ import { useTasbeehStore } from '@/store/tasbeehStore';
 import { getMuslimAvatarUrl } from '@/lib/avatarUtils';
 import { toast } from 'sonner';
 
-interface OnlineUser {
-    user_id: string;
-    visitor_id?: string;
-    tab_id?: string;
-    email?: string;
-    avatar_url?: string;
-    last_dhikr_id?: string;
-    online_at?: any;
-}
-
-interface ChallengeInvite {
-    id: string;
-    from_id: string;
-    from_name: string;
-    type: 'sprint' | 'endurance' | 'daily';
-    target: number;
-    timestamp: any;
-    status: 'pending' | 'accepted' | 'declined';
-}
-
 interface ActiveChallenge {
     id: string;
     type: 'sprint' | 'endurance' | 'daily';
     target: number;
     startedAt: number;
     myCount: number;
-    opponentId: string;
-    opponentCount: number;
     status: 'active' | 'completed' | 'expired';
 }
 
@@ -82,11 +60,11 @@ export function ChallengesView({ children }: { children: ReactNode }) {
                             <Swords className="w-5 h-5 text-orange-400" />
                         </div>
                         <div>
-                            <span className="text-lg font-black">Challenges</span>
-                            <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Compete & Earn Hasanat</p>
+                            <span className="text-lg font-black">Practice</span>
+                            <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Master focus & Earn Hasanat</p>
                         </div>
                     </SheetTitle>
-                    <SheetDescription className="sr-only">Challenge other users to dhikr competitions</SheetDescription>
+                    <SheetDescription className="sr-only">Start solo dhikr challenges</SheetDescription>
                 </SheetHeader>
 
                 <ChallengesViewContent />
