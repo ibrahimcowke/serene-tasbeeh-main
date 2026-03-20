@@ -1,9 +1,8 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
-import { Check, Download, Upload, Trash2, RotateCcw, Layout, Smartphone, Maximize, Cloud, LogIn, LogOut, RefreshCw, Shield, Wind, Palette, Waves, Crown, Sunset, Zap, CloudMoon, Infinity, Fan, Diamond, Component, ExternalLink, ChevronRight, LayoutDashboard, Share2, Globe } from 'lucide-react';
+import { Check, Download, Upload, Trash2, RotateCcw, Smartphone, Maximize, Wind, Zap, ExternalLink, ChevronRight, LayoutDashboard, Share2 } from 'lucide-react';
 import { useTasbeehStore } from '@/store/tasbeehStore';
-import { supabase, signInWithGoogle, signOut, getCurrentUser, isSupabaseConfigured } from '@/lib/supabase';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger, SheetDescription } from '@/components/ui/sheet';
 import { Switch } from '@/components/ui/switch';
 import {
@@ -73,8 +72,6 @@ export function SettingsView({ children }: SettingsViewProps) {
     importData,
     clearAllData,
     resetSettings,
-    syncToCloud,
-    syncFromCloud,
     verticalOffset,
     setVerticalOffset,
     dhikrVerticalOffset,
@@ -99,57 +96,7 @@ export function SettingsView({ children }: SettingsViewProps) {
     setWakeLockEnabled,
     volumeButtonCounting,
     setVolumeButtonCounting,
-    communityVisibility,
-    setCommunityVisibility,
   } = useTasbeehStore();
-
-  const [user, setUser] = useState<any>(null);
-  const [syncing, setSyncing] = useState(false);
-  const [syncStatus, setSyncStatus] = useState<'idle' | 'success' | 'error'>('idle');
-
-  useEffect(() => {
-    getCurrentUser().then(setUser);
-
-    // Listen for auth changes
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-      setUser(session?.user ?? null);
-    });
-
-    return () => subscription.unsubscribe();
-  }, []);
-
-  const handleSyncToCloud = async () => {
-    setSyncing(true);
-    const success = await syncToCloud();
-    setSyncing(false);
-    setSyncStatus(success ? 'success' : 'error');
-    setTimeout(() => setSyncStatus('idle'), 3000);
-  };
-
-  const handleSyncFromCloud = async () => {
-    setSyncing(true);
-    const success = await syncFromCloud();
-    setSyncing(false);
-    setSyncStatus(success ? 'success' : 'error');
-    setTimeout(() => setSyncStatus('idle'), 3000);
-  };
-
-  const handleLogin = async () => {
-    await signInWithGoogle();
-  };
-
-  const handleLogout = async () => {
-    await signOut();
-    setUser(null);
-  };
-
-  const currentSettings = themeSettings?.[theme] || {
-    hapticEnabled: true,
-    soundEnabled: false,
-    vibrationIntensity: 'medium',
-    fontScale: 1,
-    soundType: 'click'
-  };
 
   const [importStatus, setImportStatus] = useState<'idle' | 'success' | 'error'>('idle');
 
@@ -184,6 +131,14 @@ export function SettingsView({ children }: SettingsViewProps) {
       }
     };
     input.click();
+  };
+
+  const currentSettings = themeSettings?.[theme] || {
+    hapticEnabled: true,
+    soundEnabled: false,
+    vibrationIntensity: 'medium',
+    fontScale: 1,
+    soundType: 'click'
   };
 
   return (
@@ -793,23 +748,6 @@ export function SettingsView({ children }: SettingsViewProps) {
                         <Share2 className="w-4 h-4" />
                       </button>
                     </div>
-
-                    <div className="h-px bg-border/50" />
-
-                    {/* Global Pulse visibility */}
-                    <div className="flex items-center justify-between">
-                      <div className="space-y-0.5">
-                        <div className="flex items-center gap-2">
-                          <Globe className="w-4 h-4 text-primary" />
-                          <p className="text-sm font-medium text-foreground">Global Pulse</p>
-                        </div>
-                        <p className="text-xs text-muted-foreground">Show worldwide dhikr activity</p>
-                      </div>
-                      <Switch
-                        checked={communityVisibility}
-                        onCheckedChange={setCommunityVisibility}
-                      />
-                    </div>
                   </div>
                 </div>
 
@@ -867,13 +805,12 @@ export function SettingsView({ children }: SettingsViewProps) {
 
                           <section className="space-y-2">
                             <h4 className="font-semibold text-foreground">2. Data Collection & Storage</h4>
-                            <p><strong>Local Storage:</strong> This application primarily stores data locally on your device. This includes your settings, counter progress, and preferences. We do not automatically collect personal data.</p>
-                            <p><strong>Cloud Sync (Optional):</strong> If you choose to use the Cloud Sync feature, we store your tasbeeh data securely using Supabase authentication. This requires signing in with a Google account. We only store the data necessary to sync your progress across devices.</p>
+                            <p><strong>Local Storage:</strong> This application stores data strictly on your device. This includes your settings, counter progress, and preferences. We do not collect personal data or transmit it to any servers.</p>
                           </section>
 
                           <section className="space-y-2">
                             <h4 className="font-semibold text-foreground">3. Third-Party Services</h4>
-                            <p>We use Supabase for authentication and database services. When you sign in with Google, you are subject to Google's Privacy Policy.</p>
+                            <p>This application is 100% offline and does not use any third-party cloud services for data storage or tracking.</p>
                           </section>
 
                           <section className="space-y-2">
@@ -898,71 +835,7 @@ export function SettingsView({ children }: SettingsViewProps) {
               </TabsContent>
 
               <TabsContent value="data" className="space-y-6 mt-0 pb-6 px-1">
-                {/* Cloud Sync Section */}
-                <div className="space-y-1">
-                  <p className="text-xs text-muted-foreground uppercase tracking-wide mb-3">Cloud Sync (Beta)</p>
-                  <div className="bg-card rounded-2xl p-4 overflow-hidden relative">
-                    {!user ? (
-                      <div className="flex flex-col items-center justify-center p-2 text-center">
-                        <Cloud className="w-10 h-10 text-muted-foreground mb-3 opacity-50" />
-                        <h3 className="text-sm font-medium text-foreground mb-1">Backup & Sync</h3>
-                        <p className="text-xs text-muted-foreground mb-4 max-w-[200px]">Sign in to save your progress to the cloud and sync across devices.</p>
-                        <button
-                          onClick={handleLogin}
-                          className="flex items-center gap-2 bg-primary text-primary-foreground px-4 py-2 rounded-xl text-sm font-medium hover:opacity-90 transition-opacity"
-                        >
-                          <LogIn className="w-4 h-4" />
-                          Sign in with Google
-                        </button>
-                        {!isSupabaseConfigured && (
-                          <p className="text-[10px] text-destructive mt-3">Cloud Sync unavailable: Missing Supabase keys in .env</p>
-                        )}
-                      </div>
-                    ) : (
-                      <div className="space-y-4">
-                        <div className="flex items-center justify-between pb-3 border-b border-border/50">
-                          <div className="flex items-center gap-3">
-                            <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
-                              <span className="text-xs font-bold text-primary">{user.email?.charAt(0).toUpperCase()}</span>
-                            </div>
-                            <div>
-                              <p className="text-sm font-medium text-foreground">Logged in</p>
-                              <p className="text-[10px] text-muted-foreground truncate max-w-[150px]">{user.email}</p>
-                            </div>
-                          </div>
-                          <button onClick={handleLogout} className="p-2 hover:bg-secondary rounded-lg">
-                            <LogOut className="w-4 h-4 text-muted-foreground" />
-                          </button>
-                        </div>
-
-                        <div className="grid grid-cols-2 gap-3">
-                          <button
-                            onClick={handleSyncToCloud}
-                            disabled={syncing}
-                            className="flex flex-col items-center justify-center gap-2 p-3 rounded-xl bg-secondary/50 hover:bg-secondary transition-colors border-2 border-transparent hover:border-primary/10"
-                          >
-                            <Upload className={`w-5 h-5 text-primary ${syncing ? 'animate-bounce' : ''}`} />
-                            <span className="text-xs font-medium">Save to Cloud</span>
-                          </button>
-                          <button
-                            onClick={handleSyncFromCloud}
-                            disabled={syncing}
-                            className="flex flex-col items-center justify-center gap-2 p-3 rounded-xl bg-secondary/50 hover:bg-secondary transition-colors border-2 border-transparent hover:border-primary/10"
-                          >
-                            <Download className={`w-5 h-5 text-primary ${syncing ? 'animate-bounce' : ''}`} />
-                            <span className="text-xs font-medium">Load from Cloud</span>
-                          </button>
-                        </div>
-
-                        {syncStatus !== 'idle' && (
-                          <div className={`text-center text-xs p-2 rounded-lg ${syncStatus === 'success' ? 'bg-green-500/10 text-green-500' : 'bg-red-500/10 text-red-500'}`}>
-                            {syncStatus === 'success' ? 'Sync successful!' : 'Sync failed. Check connection.'}
-                          </div>
-                        )}
-                      </div>
-                    )}
-                  </div>
-                </div>
+                {/* No Cloud Sync available in Offline mode */}
 
                 {/* Data management */}
                 <div className="space-y-1">

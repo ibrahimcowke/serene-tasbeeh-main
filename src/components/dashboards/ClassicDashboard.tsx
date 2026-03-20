@@ -1,8 +1,8 @@
 import { Counter } from '../Counter';
 import { StatsWidget } from '../StatsWidget';
 import { DateBanner } from '../DateBanner';
-import { VisitorCounter } from '../VisitorCounter';
-import { GlobalChallenges } from '../GlobalChallenges';
+
+
 import { motion } from 'framer-motion';
 
 const ClassicDashboard = () => {
@@ -35,13 +35,13 @@ const ClassicDashboard = () => {
                         <div className="h-px bg-foreground/5 w-12" />
                     </div>
 
-                    <VisitorCounter />
+                    {/* VisitorCounter removed */}
 
                     <div className="space-y-3">
                         <div className="flex items-center justify-between px-1">
                             <span className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground">Active Challenges</span>
                         </div>
-                        <GlobalChallenges />
+                        {/* GlobalChallenges removed */}
                     </div>
                 </div>
             </motion.div>

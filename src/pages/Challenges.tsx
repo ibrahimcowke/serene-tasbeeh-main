@@ -1,7 +1,6 @@
 import { ChallengesViewContent } from "@/components/ChallengesView";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/AppSidebar";
-import { CommunitySidebar } from "@/components/CommunitySidebar";
 import { motion } from "framer-motion";
 
 const ChallengesPage = () => {
@@ -29,9 +28,6 @@ const ChallengesPage = () => {
                         </motion.div>
                     </div>
                 </main>
-                <aside className="hidden xl:block w-80 p-4 border-l border-border/50 bg-card/20 overflow-y-auto">
-                    <CommunitySidebar />
-                </aside>
             </div>
         </SidebarProvider>
     );

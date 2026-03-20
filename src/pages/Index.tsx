@@ -3,14 +3,11 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useTasbeehStore } from '@/store/tasbeehStore';
 import { SidebarProvider, SidebarInset, SidebarTrigger } from '@/components/ui/sidebar';
 import { AppSidebar } from '@/components/AppSidebar';
-import { MainFeed } from '../components/MainFeed';
 import { RoutinesView } from '@/components/RoutinesView';
-import { DhikrPulse } from '@/components/DhikrPulse';
+
 import { ScreenOffMode } from '@/components/ScreenOffMode';
 import { WhatsNew } from '@/components/WhatsNew';
 import { BreathingGuide } from '@/components/BreathingGuide';
-import { CommunitySidebar } from '@/components/CommunitySidebar';
-import { JoinNotifier } from '@/components/JoinNotifier';
 import ClassicDashboard from '../components/dashboards/ClassicDashboard';
 import { ChocoDashboard } from '../components/dashboards/ChocoDashboard';
 import { PremiumHub } from '@/components/PremiumHub';
@@ -42,22 +39,13 @@ const Index = () => {
           </div>
         </div>
 
-        {/* Desktop Community Sidebar - Only show if not PremiumHub since PremiumHub includes it */}
-        <motion.div
-          initial={{ opacity: 0, x: 20 }}
-          animate={{ opacity: 1, x: 0 }}
-          className="hidden xl:hidden w-80 xl:w-96 sticky top-24 h-[calc(100vh-8rem)]"
-        >
-          <CommunitySidebar />
-        </motion.div>
       </div>
     );
   };
 
   return (
     <>
-      <DhikrPulse />
-      <JoinNotifier />
+
       <SidebarProvider defaultOpen={false}>
         <AppSidebar />
         <SidebarInset>

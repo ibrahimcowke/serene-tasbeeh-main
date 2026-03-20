@@ -3,9 +3,9 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useTasbeehStore } from '@/store/tasbeehStore';
 import { Trophy, Flame, Target, ChevronLeft, ChevronRight, Undo2, RotateCcw, Palette, Globe, CheckCircle2, Star, Minus } from 'lucide-react';
 import { CounterVisuals } from '@/components/CounterVisuals';
-import { VisitorCounter } from '@/components/VisitorCounter';
+
 import { SessionTimer } from '@/components/SessionTimer';
-import { GlobalChallenges } from '@/components/GlobalChallenges';
+
 import { themes } from '@/lib/constants';
 import { StyleCenter } from '@/components/StyleCenter';
 import { Shapes } from 'lucide-react';
@@ -224,9 +224,9 @@ export const ChocoDashboard: React.FC = () => {
                         <div className="p-5 flex-1 overflow-y-auto scrollbar-hide space-y-6">
                             <div className="choco-inner h-32 flex items-center justify-center">
                                 <Globe className="w-16 h-16 text-white/5" />
-                                <div className="absolute"><VisitorCounter /></div>
+                                <div className="absolute">{/* VisitorCounter removed */}</div>
                             </div>
-                            <GlobalChallenges />
+                            {/* GlobalChallenges removed */}
                         </div>
                     </div>
                 </motion.div>

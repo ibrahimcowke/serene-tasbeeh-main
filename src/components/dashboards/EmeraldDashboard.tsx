@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTasbeehStore } from '@/store/tasbeehStore';
 import { Flame, Globe2, ChevronLeft, ChevronRight, RotateCcw, Star } from 'lucide-react';
-import { VisitorCounter } from '@/components/VisitorCounter';
+
 import { GlobalChallenges } from '@/components/GlobalChallenges';
 import { CounterVisuals } from '@/components/CounterVisuals';
 import { StyleCenter } from '@/components/StyleCenter';
@@ -304,7 +304,7 @@ export const EmeraldDashboard: React.FC = () => {
                         </div>
                         <div className="p-4 flex-1 overflow-y-auto scrollbar-hide space-y-4">
                             <div className="rounded-2xl p-4 flex flex-col items-center" style={{ background: 'rgba(16,185,129,0.04)', border: '1px solid rgba(16,185,129,0.08)' }}>
-                                <VisitorCounter />
+                                {/* VisitorCounter removed */}
                                 <span className="text-[9px] text-emerald-400/30 uppercase tracking-widest mt-2 font-bold">Dhikrs Worldwide</span>
                             </div>
                             <GlobalChallenges />

@@ -3,9 +3,9 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useTasbeehStore } from '@/store/tasbeehStore';
 import { Flame, Undo2, RotateCcw, Trophy, Globe, Star, Minus, Shapes } from 'lucide-react';
 import { CounterVisuals } from '@/components/CounterVisuals';
-import { VisitorCounter } from '@/components/VisitorCounter';
+
 import { SessionTimer } from '@/components/SessionTimer';
-import { GlobalChallenges } from '@/components/GlobalChallenges';
+
 import { StyleCenter } from '@/components/StyleCenter';
 
 // ─── Carved stone stat pill ─────────────────────────────────────
@@ -339,10 +339,8 @@ export const DesertDashboard: React.FC = () => {
                         <div className="rounded-xl p-3 text-center"
                             style={{ background: 'rgba(90,60,34,0.1)', boxShadow: 'inset 2px 2px 4px rgba(0,0,0,0.15)', border: '1px solid rgba(255,255,255,0.2)' }}
                         >
-                            <VisitorCounter />
                             <span className="text-[8px] text-[#5a3c22]/50 uppercase tracking-widest font-bold block mt-1">Dhikrs Worldwide</span>
                         </div>
-                        <GlobalChallenges />
                     </div>
                 </div>
             </motion.div>

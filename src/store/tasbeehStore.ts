@@ -1,6 +1,5 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import { supabase, getCurrentUser, isSupabaseConfigured } from '@/lib/supabase';
 // Types
 import { Routine, RoutineStep, defaultRoutines } from '@/data/routines';
 import { achievements } from '@/data/achievements';
@@ -118,10 +117,6 @@ interface TasbeehState {
   };
   updateDateContext: () => void;
 
-  // Community
-  globalCount: number;
-  fetchGlobalCount: () => Promise<void>;
-
   // Accessibility
   screenOffMode: boolean;
   setScreenOffMode: (enabled: boolean) => void;
@@ -145,7 +140,6 @@ interface TasbeehState {
   shakeToReset: boolean;
   wakeLockEnabled: boolean;
   volumeButtonCounting: boolean;
-  communityVisibility: boolean;
   dashboardType: 'classic' | 'choco';
   lastSeenVersion: string | null;
   deviceId: string;
@@ -192,10 +186,6 @@ interface TasbeehState {
   updateStreak: () => void;
   toggleFavorite: (id: string) => void;
 
-  // Sync
-  syncToCloud: () => Promise<boolean>;
-  syncFromCloud: () => Promise<boolean>;
-
   // New Settings Actions
   setCounterShape: (shape: CounterShape) => void;
   setLayout: (layout: 'default' | 'zen' | 'choco' | 'rose-gold' | 'obsidian' | 'emerald' | 'desert') => void;
@@ -224,7 +214,6 @@ interface TasbeehState {
   setShakeToReset: (enabled: boolean) => void;
   setWakeLockEnabled: (enabled: boolean) => void;
   setVolumeButtonCounting: (enabled: boolean) => void;
-  setCommunityVisibility: (enabled: boolean) => void;
   setDashboardType: (type: 'classic' | 'choco') => void;
   setLastSeenVersion: (version: string) => void;
 }
@@ -564,8 +553,6 @@ export const useTasbeehStore = create<TasbeehState>()(
         });
       },
 
-      globalCount: 0,
-
       screenOffMode: false,
       setScreenOffMode: (enabled) => set({ screenOffMode: enabled }),
 
@@ -581,7 +568,6 @@ export const useTasbeehStore = create<TasbeehState>()(
       shakeToReset: false,
       wakeLockEnabled: false,
       volumeButtonCounting: false,
-      communityVisibility: true,
       dashboardType: 'classic',
       lastSeenVersion: null,
       deviceId: (() => {
@@ -680,10 +666,7 @@ export const useTasbeehStore = create<TasbeehState>()(
                   description: '🎉 MashaAllah! 100 Dhikr Sprint Complete! Sins forgiven even if like the foam of the sea! (Sahih Muslim)'
                 };
 
-                // Publish to global feed
-                import('@/lib/firebase').then(({ publishActivityEvent }) => {
-                  publishActivityEvent('sprint_complete', 'Someone completed 100 Dhikr Sprint! 🏆');
-                });
+                // Milestone pulse disabled
               }
             }
           } else if (sessionMode.type === 'tasbih1000') {
@@ -707,10 +690,7 @@ export const useTasbeehStore = create<TasbeehState>()(
                   description: '🎉 SubhanAllah! 1000 Dhikr Endurance Complete! A palace in Jannah for every 1000 tasbeeh! (Sahih Muslim)'
                 };
 
-                // Publish to global feed
-                import('@/lib/firebase').then(({ publishActivityEvent }) => {
-                  publishActivityEvent('sprint_complete', 'Someone completed 1000 Dhikr Endurance! 🏅');
-                });
+                // Milestone pulse disabled
               }
             }
           } else if (sessionMode.type === 'routine') {
@@ -809,67 +789,8 @@ export const useTasbeehStore = create<TasbeehState>()(
             streakDays: newStreak,
             longestStreak: newLongestStreak,
             unlockedAchievements: [...currentUnlocked, ...newlyUnlocked],
-            globalCount: state.globalCount + 1 // Optimistic update
+            unlockedAchievements: [...currentUnlocked, ...newlyUnlocked],
           };
-        });
-
-        // Sync challenge progress to Firebase if active
-        const updatedState = get();
-        if (updatedState.sessionMode.type !== 'free' && 'challengeId' in updatedState.sessionMode && updatedState.sessionMode.challengeId) {
-          const { challengeId } = updatedState.sessionMode;
-          import('@/lib/firebase').then(({ database }) => {
-            import('firebase/database').then(({ ref, set }) => {
-              const deviceId = localStorage.getItem('visitor_device_id') || 'anon';
-              // Update my count in the challenge
-              set(ref(database, `challenges/${deviceId}/${challengeId}/myCount`), updatedState.currentCount);
-            });
-          });
-        }
-
-        // Sync to Supabase global stats (fire and forget)
-        import('@/lib/firebase').then(({ database }) => {
-          import('firebase/database').then(({ ref, increment: fbIncrement, update, serverTimestamp }) => {
-            const globalStatsRef = ref(database, 'stats');
-            update(globalStatsRef, {
-              global_count: fbIncrement(1)
-            }).catch(console.error);
-
-            // Live Community Sync: Update our specific presence node
-            const deviceId = localStorage.getItem('visitor_device_id');
-            if (deviceId) {
-              const myPresenceRef = ref(database, `presence/visitors/${deviceId}`);
-              update(myPresenceRef, {
-                last_dhikr_id: get().currentDhikr.id,
-                online_at: serverTimestamp()
-              }).catch(() => { });
-            }
-
-            // Milestone pulse disabled
-          });
-        });
-
-        // Sync to Firebase Global Challenges (fire and forget)
-        const currentDhikrId = get().currentDhikr.id;
-        import('@/lib/firebase').then(({ database }) => {
-          import('firebase/database').then(({ ref, get: getDb, query, orderByChild, equalTo, increment, update }) => {
-            const challengesRef = query(ref(database, 'challenges'), orderByChild('isActive'), equalTo(true));
-            getDb(challengesRef).then((snapshot) => {
-              if (snapshot.exists()) {
-                const updates: Record<string, any> = {};
-                snapshot.forEach((childSnapshot) => {
-                  const challenge = childSnapshot.val();
-                  // If the active challenge matches the dhikr the user just did
-                  if (challenge.dhikrId === currentDhikrId) {
-                    updates[`challenges/${childSnapshot.key}/currentProgress`] = increment(1);
-                  }
-                });
-
-                if (Object.keys(updates).length > 0) {
-                  update(ref(database), updates).catch(console.error);
-                }
-              }
-            }).catch(console.error);
-          });
         });
 
         get().updateStreak();
@@ -879,24 +800,6 @@ export const useTasbeehStore = create<TasbeehState>()(
         set((state) => ({
           currentCount: Math.max(0, state.currentCount - 1),
         }));
-      },
-
-      fetchGlobalCount: async () => {
-        if (!isSupabaseConfigured) return;
-
-        try {
-          const { data, error } = await supabase
-            .from('global_stats')
-            .select('total_count')
-            .eq('id', 1)
-            .single();
-
-          if (data) {
-            set({ globalCount: Number(data.total_count) });
-          }
-        } catch (e) {
-          console.error('Error fetching global count:', e);
-        }
       },
 
       favoriteDhikrIds: [],
@@ -1215,122 +1118,10 @@ export const useTasbeehStore = create<TasbeehState>()(
       setShakeToReset: (enabled) => set({ shakeToReset: enabled }),
       setWakeLockEnabled: (enabled) => set({ wakeLockEnabled: enabled }),
       setVolumeButtonCounting: (enabled) => set({ volumeButtonCounting: enabled }),
-      setCommunityVisibility: (enabled) => set({ communityVisibility: enabled }),
       setDashboardType: (type) => set({ dashboardType: type }),
 
       setLastSeenVersion: (version) => set({ lastSeenVersion: version }),
 
-      syncToCloud: async () => {
-        try {
-          const user = await getCurrentUser();
-          if (!user) {
-            console.warn('Cannot sync: No user logged in');
-            return false;
-          }
-
-          // Validate user ID is a proper UUID
-          const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
-          if (!uuidRegex.test(user.id)) {
-            console.error('Invalid user ID format:', user.id);
-            return false;
-          }
-
-          const state = get();
-          const dataToSave = {
-            dailyRecords: state.dailyRecords,
-            totalAllTime: state.totalAllTime,
-            customDhikrs: state.customDhikrs,
-            streakDays: state.streakDays,
-            lastActiveDate: state.lastActiveDate,
-            longestStreak: state.longestStreak,
-            settings: {
-              counterShape: state.counterShape,
-              target: state.targetCount,
-              themeSettings: state.themeSettings,
-              showTransliteration: state.showTransliteration,
-              hadithSlideDuration: state.hadithSlideDuration,
-              hadithSlidePosition: state.hadithSlidePosition,
-              verticalOffset: state.verticalOffset,
-              dhikrVerticalOffset: state.dhikrVerticalOffset,
-              counterVerticalOffset: state.counterVerticalOffset,
-              counterScale: state.counterScale,
-              countFontSize: state.countFontSize,
-              dhikrTextPosition: state.dhikrTextPosition,
-              layoutOrder: state.layoutOrder,
-              theme: state.theme,
-              autoThemeSwitch: state.autoThemeSwitch,
-              shakeToReset: state.shakeToReset,
-              wakeLockEnabled: state.wakeLockEnabled,
-              volumeButtonCounting: state.volumeButtonCounting,
-              dashboardType: state.dashboardType,
-
-              lastSeenVersion: state.lastSeenVersion,
-            }
-          };
-
-          const { error } = await supabase
-            .from('profiles')
-            .upsert({
-              id: user.id,
-              tasbeeh_data: dataToSave,
-              updated_at: new Date().toISOString()
-            });
-
-          if (error) {
-            console.error('Sync to cloud failed:', error);
-            return false;
-          }
-
-          console.log('✅ Successfully synced to cloud');
-          return true;
-        } catch (err) {
-          console.error('❌ Sync error:', err);
-          return false;
-        }
-      },
-
-      syncFromCloud: async () => {
-        const user = await getCurrentUser();
-        if (!user) return false;
-
-        const { data, error } = await supabase
-          .from('profiles')
-          .select('tasbeeh_data')
-          .eq('id', user.id)
-          .single();
-
-        if (error || !data?.tasbeeh_data) return false;
-
-        const parsed = data.tasbeeh_data; // It's likely already JSON if using supabase-js
-
-        set((state) => ({
-          ...state,
-          ...parsed,
-          // Ensure nested objects are merged or overwritten correctly
-          theme: parsed.settings?.theme || state.theme,
-          counterShape: parsed.settings?.counterShape || state.counterShape,
-          layout: parsed.settings?.layout || state.layout,
-          themeSettings: parsed.settings?.themeSettings || state.themeSettings,
-          hadithSlideDuration: parsed.settings?.hadithSlideDuration || state.hadithSlideDuration,
-          hadithSlidePosition: parsed.settings?.hadithSlidePosition || state.hadithSlidePosition,
-          verticalOffset: parsed.settings?.verticalOffset || state.verticalOffset,
-          dhikrVerticalOffset: parsed.settings?.dhikrVerticalOffset || state.dhikrVerticalOffset,
-          counterVerticalOffset: parsed.settings?.counterVerticalOffset || state.counterVerticalOffset,
-          counterScale: parsed.settings?.counterScale || state.counterScale,
-          countFontSize: parsed.settings?.countFontSize || state.countFontSize,
-          dhikrTextPosition: parsed.settings?.dhikrTextPosition || state.dhikrTextPosition,
-          showTransliteration: parsed.settings?.showTransliteration !== undefined ? parsed.settings.showTransliteration : state.showTransliteration,
-          autoThemeSwitch: parsed.settings?.autoThemeSwitch !== undefined ? parsed.settings.autoThemeSwitch : state.autoThemeSwitch,
-          shakeToReset: parsed.settings?.shakeToReset !== undefined ? parsed.settings.shakeToReset : state.shakeToReset,
-          wakeLockEnabled: parsed.settings?.wakeLockEnabled !== undefined ? parsed.settings.wakeLockEnabled : state.wakeLockEnabled,
-          volumeButtonCounting: parsed.settings?.volumeButtonCounting !== undefined ? parsed.settings.volumeButtonCounting : state.volumeButtonCounting,
-          dashboardType: parsed.settings?.dashboardType || state.dashboardType,
-          communityVisibility: parsed.settings?.communityVisibility !== undefined ? parsed.settings.communityVisibility : state.communityVisibility,
-
-          lastSeenVersion: parsed.settings?.lastSeenVersion || state.lastSeenVersion,
-        }));
-
-        return true;
       },
     }),
     {
@@ -1388,130 +1179,9 @@ export const useTasbeehStore = create<TasbeehState>()(
         layoutOrder: state.layoutOrder,
         screenOffMode: state.screenOffMode,
         dashboardType: state.dashboardType,
-        communityVisibility: state.communityVisibility,
       }),
     }
   )
 );
 
-// ─── Firebase Auto-Sync ─────────────────────────────────────────────────
-// Debounced save: writes to Firebase 5 seconds after last state change
-let firebaseSaveTimer: ReturnType<typeof setTimeout> | null = null;
-
-function getFirebaseSaveData() {
-  const state = useTasbeehStore.getState();
-  return {
-    dailyRecords: state.dailyRecords || [],
-    totalAllTime: state.totalAllTime || 0,
-    currentCount: state.currentCount || 0,
-    targetCount: state.targetCount || 33,
-    unlockedAchievements: state.unlockedAchievements || [],
-    customDhikrs: state.customDhikrs || [],
-    streakDays: state.streakDays || 0,
-    lastActiveDate: state.lastActiveDate || null,
-    longestStreak: state.longestStreak || 0,
-    dailyGoal: state.dailyGoal || 100,
-    favoriteDhikrIds: state.favoriteDhikrIds || [],
-    currentDhikrId: state.currentDhikr?.id || 'subhanallah',
-    settings: {
-      theme: state.theme,
-      counterShape: state.counterShape,
-      layout: state.layout,
-      showTransliteration: state.showTransliteration,
-      themeSettings: state.themeSettings,
-      hadithSlideDuration: state.hadithSlideDuration,
-      hadithSlidePosition: state.hadithSlidePosition,
-      dhikrTextPosition: state.dhikrTextPosition,
-      verticalOffset: state.verticalOffset,
-      dhikrVerticalOffset: state.dhikrVerticalOffset,
-      counterVerticalOffset: state.counterVerticalOffset,
-      counterScale: state.counterScale,
-      countFontSize: state.countFontSize,
-      layoutOrder: state.layoutOrder,
-      autoThemeSwitch: state.autoThemeSwitch,
-      shakeToReset: state.shakeToReset,
-      wakeLockEnabled: state.wakeLockEnabled,
-      volumeButtonCounting: state.volumeButtonCounting,
-      communityVisibility: state.communityVisibility,
-      screenOffMode: state.screenOffMode,
-    },
-  };
-}
-
-// Subscribe to state changes and auto-save to Firebase
-useTasbeehStore.subscribe((state, prevState) => {
-  // Only save when important data changes (not on every re-render)
-  const importantChanged =
-    state.totalAllTime !== prevState.totalAllTime ||
-    state.currentCount !== prevState.currentCount ||
-    state.unlockedAchievements !== prevState.unlockedAchievements ||
-    state.streakDays !== prevState.streakDays ||
-    state.dailyRecords !== prevState.dailyRecords ||
-    state.theme !== prevState.theme ||
-    state.counterShape !== prevState.counterShape ||
-    state.customDhikrs !== prevState.customDhikrs ||
-    state.favoriteDhikrIds !== prevState.favoriteDhikrIds ||
-    state.dailyGoal !== prevState.dailyGoal;
-
-  if (!importantChanged) return;
-
-  // Debounce: wait 5 seconds after last change before saving
-  if (firebaseSaveTimer) clearTimeout(firebaseSaveTimer);
-  firebaseSaveTimer = setTimeout(() => {
-    import('@/lib/firebase').then(({ saveUserDataToFirebase }) => {
-      saveUserDataToFirebase(getFirebaseSaveData());
-    });
-  }, 5000);
-});
-
-// Restore from Firebase on app load (after localStorage rehydration)
-setTimeout(() => {
-  import('@/lib/firebase').then(({ loadUserDataFromFirebase }) => {
-    loadUserDataFromFirebase().then((firebaseData) => {
-      if (!firebaseData) return;
-
-      const localState = useTasbeehStore.getState();
-
-      // Only merge if Firebase has more data (higher totalAllTime means more progress)
-      if ((firebaseData.totalAllTime || 0) > (localState.totalAllTime || 0)) {
-        console.log('📥 Restoring from Firebase (more progress found)');
-        useTasbeehStore.setState({
-          dailyRecords: firebaseData.dailyRecords || localState.dailyRecords,
-          totalAllTime: firebaseData.totalAllTime || localState.totalAllTime,
-          unlockedAchievements: firebaseData.unlockedAchievements || localState.unlockedAchievements,
-          customDhikrs: firebaseData.customDhikrs || localState.customDhikrs,
-          streakDays: firebaseData.streakDays ?? localState.streakDays,
-          lastActiveDate: firebaseData.lastActiveDate || localState.lastActiveDate,
-          longestStreak: firebaseData.longestStreak ?? localState.longestStreak,
-          dailyGoal: firebaseData.dailyGoal || localState.dailyGoal,
-          favoriteDhikrIds: firebaseData.favoriteDhikrIds || localState.favoriteDhikrIds,
-          // Restore settings
-          ...(firebaseData.settings ? {
-            theme: firebaseData.settings.theme || localState.theme,
-            counterShape: firebaseData.settings.counterShape || localState.counterShape,
-            layout: firebaseData.settings.layout || localState.layout,
-            showTransliteration: firebaseData.settings.showTransliteration ?? localState.showTransliteration,
-            themeSettings: firebaseData.settings.themeSettings || localState.themeSettings,
-            hadithSlideDuration: firebaseData.settings.hadithSlideDuration || localState.hadithSlideDuration,
-            hadithSlidePosition: firebaseData.settings.hadithSlidePosition || localState.hadithSlidePosition,
-            dhikrTextPosition: firebaseData.settings.dhikrTextPosition || localState.dhikrTextPosition,
-            verticalOffset: firebaseData.settings.verticalOffset ?? localState.verticalOffset,
-            dhikrVerticalOffset: firebaseData.settings.dhikrVerticalOffset ?? localState.dhikrVerticalOffset,
-            counterVerticalOffset: firebaseData.settings.counterVerticalOffset ?? localState.counterVerticalOffset,
-            counterScale: firebaseData.settings.counterScale || localState.counterScale,
-            countFontSize: firebaseData.settings.countFontSize || localState.countFontSize,
-            layoutOrder: firebaseData.settings.layoutOrder || localState.layoutOrder,
-            autoThemeSwitch: firebaseData.settings.autoThemeSwitch ?? localState.autoThemeSwitch,
-            shakeToReset: firebaseData.settings.shakeToReset ?? localState.shakeToReset,
-            wakeLockEnabled: firebaseData.settings.wakeLockEnabled ?? localState.wakeLockEnabled,
-            volumeButtonCounting: firebaseData.settings.volumeButtonCounting ?? localState.volumeButtonCounting,
-            dashboardType: firebaseData.settings.dashboardType || localState.dashboardType,
-            screenOffMode: firebaseData.settings.screenOffMode ?? localState.screenOffMode,
-          } : {}),
-        });
-      } else {
-        console.log('✅ Local data is up-to-date');
-      }
-    });
-  });
-}, 2000); // Wait 2s for localStorage to rehydrate first
+// End of store

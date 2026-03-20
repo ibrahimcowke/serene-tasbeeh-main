@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTasbeehStore } from '@/store/tasbeehStore';
 import { Flame, Star, Globe, ChevronLeft, ChevronRight, RotateCcw, BadgeCheck, Trophy } from 'lucide-react';
-import { VisitorCounter } from '@/components/VisitorCounter';
+
 import { GlobalChallenges } from '@/components/GlobalChallenges';
 import { CounterVisuals } from '@/components/CounterVisuals';
 import { StyleCenter } from '@/components/StyleCenter';
@@ -306,7 +306,7 @@ export const ObsidianDashboard: React.FC = () => {
                     </div>
                     <div className="p-4 flex-1 overflow-y-auto scrollbar-hide space-y-4">
                         <div className="rounded-2xl p-4 flex flex-col items-center text-center" style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.05)' }}>
-                            <VisitorCounter />
+                            {/* VisitorCounter removed */}
                             <span className="text-[9px] font-black text-white/20 uppercase tracking-widest mt-2">Dhikrs Worldwide</span>
                         </div>
                         <GlobalChallenges />

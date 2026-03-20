@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTasbeehStore } from '@/store/tasbeehStore';
 import { Flame, Star, Globe, Shield, ChevronLeft, ChevronRight, RotateCcw, BadgeCheck, Trophy } from 'lucide-react';
-import { VisitorCounter } from '@/components/VisitorCounter';
+
 import { GlobalChallenges } from '@/components/GlobalChallenges';
 import { CounterVisuals } from '@/components/CounterVisuals';
 import { StyleCenter } from '@/components/StyleCenter';
@@ -256,7 +256,7 @@ export const RoseGoldDashboard: React.FC = () => {
                         <div className="rounded-2xl h-32 flex items-center justify-center relative overflow-hidden" style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.05)' }}>
                             <Globe className="w-16 h-16 text-white/5" />
                             <div className="absolute inset-0 flex items-center justify-center">
-                                <VisitorCounter />
+                                {/* VisitorCounter removed */}
                             </div>
                         </div>
 

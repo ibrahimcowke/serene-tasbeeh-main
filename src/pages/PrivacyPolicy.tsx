@@ -14,12 +14,12 @@ export default function PrivacyPolicy() {
         {
             icon: Database,
             title: "Data We Collect",
-            content: "We collect minimal data necessary for the app's functionality: your counts, streaks, and custom dhikrs. If you choose to use our Cloud Sync feature, this data is securely stored in our encrypted database associated with your authenticated account."
+            content: "We collect only the data necessary for the app's functionality: your counts, streaks, and custom dhikrs. This data remains exclusively on your local device and is never sent to any external servers."
         },
         {
             icon: Lock,
             title: "How Data is Protected",
-            content: "All cloud-synced data is encrypted in transit and at rest using industry-standard protocols. For users who do not use Cloud Sync, all data remains exclusively on your local device storage and never touches our servers."
+            content: "All data remains exclusively on your local device storage. We do not use any cloud synchronization, ensuring your spiritual practice is entirely private and offline."
         },
         {
             icon: Eye,

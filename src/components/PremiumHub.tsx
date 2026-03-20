@@ -24,9 +24,7 @@ import {
 import { SkeuoCounter } from './SkeuoCounter';
 import { RadialAchievement } from './RadialAchievement';
 import { FramedWisdom } from './FramedWisdom';
-import { GlobalStats } from './GlobalStats';
-import { GlobalChallenges } from './GlobalChallenges';
-import { VisitorCounter } from './VisitorCounter';
+
 import { CounterVisuals, CounterNumber } from './CounterVisuals';
 import { HadithSlider } from './HadithSlider';
 import { StyleCenter } from './StyleCenter';
@@ -44,13 +42,10 @@ export const PremiumHub = () => {
         dailyGoal,
         counterShape,
         dateContext,
-        globalCount,
-        fetchGlobalCount,
          streakDays,
         dailyRecords,
         unlockedAchievements,
         sessionMode,
-        communityVisibility,
     } = useTasbeehStore();
 
     // Calculate Today's Count
@@ -83,9 +78,11 @@ export const PremiumHub = () => {
                 <motion.div
                     initial={{ opacity: 0, x: -50 }}
                     animate={{ opacity: 1, x: 0 }}
-                    className="col-span-12 lg:col-span-3 flex flex-col gap-3 lg:gap-3 overflow-hidden h-full"
+                    className="col-span-12 lg:col-span-4 flex flex-col gap-3 lg:gap-3 overflow-hidden h-full"
                 >
+                    {/* Achievement Hub Content (Shortened for brevity but keeping same structure) */}
                     <div className="skeuo-glass rounded-[2.5rem] p-4 flex flex-col items-center border-foreground/[0.08] shadow-2xl relative overflow-hidden group flex-1">
+                        {/* ... (keep existing content but adjust width) ... */}
                         <div className="absolute inset-0 bg-gradient-to-br from-foreground/[0.02] to-transparent pointer-events-none" />
                         <h2 className="text-[10px] font-black uppercase tracking-[0.3em] text-muted-foreground mb-4 relative z-10">Achievement Hub</h2>
                         <div className="flex flex-col items-center gap-0.5 mb-2">
@@ -112,7 +109,6 @@ export const PremiumHub = () => {
                             </div>
                         </div>
 
-                        {/* Additional dynamic stats */}
                         <div className="mt-auto w-full pt-4 border-t border-foreground/5 space-y-2.5">
                             <div className="bg-card/80 rounded-full px-4 py-1.5 flex items-center justify-between border border-foreground/5">
                                 <div className="flex items-center gap-2">
@@ -158,97 +154,31 @@ export const PremiumHub = () => {
                                     <Star className="w-4 h-4 text-primary" />
                                 </div>
                             </div>
-
-                            <div className="flex flex-col gap-2">
-                                <span className="text-[8px] font-bold text-muted-foreground uppercase tracking-widest">Active Influence</span>
-                                <div className="p-2.5 rounded-2xl bg-foreground/[0.03] border border-foreground/[0.05] flex items-center justify-between">
-                                    <div className="flex items-center gap-2">
-                                        <div className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse shadow-[0_0_8px_rgba(245,158,11,0.5)]" />
-                                        <span className="text-[10px] font-black text-foreground/70">Taqwa Boost</span>
-                                    </div>
-                                    <span className="text-[9px] font-bold text-primary">+15% Focus</span>
-                                </div>
-                            </div>
                         </div>
                     </motion.div>
                 </motion.div>
 
-                {/* Center Column: Spiritual Heart */}
+                {/* Right Column: Spiritual Heart (Expanding to fill more space) */}
                 <motion.div
                     initial={{ opacity: 0, y: 30 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className="col-span-12 lg:col-span-5 flex flex-col gap-3 lg:gap-4 items-center justify-start pt-0 relative h-full overflow-hidden"
+                    className="col-span-12 lg:col-span-8 flex flex-col gap-3 lg:gap-4 items-center justify-start pt-0 relative h-full overflow-hidden"
                 >
                     {/* Center plateau effect */}
                     <div className="absolute inset-x-0 top-0 bottom-[-20px] bg-gradient-to-b from-foreground/[0.03] to-transparent rounded-[3rem] blur-sm -z-10 border border-foreground/[0.05]" />
 
-                    {/* Vertical Custom Controls anchored to far left edge */}
-                    <div className="absolute top-1/4 left-0 flex flex-col gap-2 bg-card/80 backdrop-blur-md p-2 rounded-r-[2rem] rounded-l-none border border-foreground/5 border-l-0 shadow-2xl z-20">
-                        <button
-                            onClick={(e) => { e.stopPropagation(); undo(); }}
-                            className="p-3 hover:bg-foreground/5 rounded-full text-muted-foreground hover:text-foreground transition-colors"
-                        >
-                            <Undo2 className="w-5 h-5" />
-                        </button>
+                    {/* Controls */}
+                    <div className="absolute top-1/4 left-0 flex flex-col gap-2 bg-card/80 backdrop-blur-md p-2 rounded-r-[2rem] border border-foreground/5 border-l-0 shadow-2xl z-20">
+                        <button onClick={(e) => { e.stopPropagation(); undo(); }} className="p-3 hover:bg-foreground/5 rounded-full text-muted-foreground hover:text-foreground transition-colors"><Undo2 className="w-5 h-5" /></button>
                         <div className="w-full h-px bg-foreground/5" />
-                        <button
-                            onClick={(e) => { e.stopPropagation(); reset(); }}
-                            className="p-3 hover:bg-foreground/5 rounded-full text-muted-foreground hover:text-foreground transition-colors relative"
-                        >
-                            <RefreshCw className="w-5 h-5" />
-                        </button>
-                        <div className="w-full h-full bg-foreground/10 px-3 py-px rounded-full" />
-                        <button
-                            onClick={(e) => { e.stopPropagation(); setIsStyleCenterOpen(true); }}
-                            className="p-3 bg-primary/10 hover:bg-primary/20 rounded-full text-primary hover:text-primary transition-all shadow-[0_0_15px_rgba(var(--primary),0.2)] group"
-                            title="Design Studio"
-                        >
-                            <Palette className="w-5 h-5 group-hover:rotate-12 transition-transform" />
-                        </button>
+                        <button onClick={(e) => { e.stopPropagation(); reset(); }} className="p-3 hover:bg-foreground/5 rounded-full text-muted-foreground hover:text-foreground transition-colors"><RefreshCw className="w-5 h-5" /></button>
+                        <div className="w-full h-px bg-foreground/5" />
+                        <button onClick={(e) => { e.stopPropagation(); setIsStyleCenterOpen(true); }} className="p-3 bg-primary/10 hover:bg-primary/20 rounded-full text-primary shadow-[0_0_15px_rgba(var(--primary),0.2)] group"><Palette className="w-5 h-5 group-hover:rotate-12 transition-transform" /></button>
                     </div>
 
                     <div className="flex flex-col items-center text-center gap-3 relative z-10 w-full max-w-lg mx-auto mt-4">
-                        <motion.h1
-                            key={currentDhikr.id + '-arabic'}
-                            className="text-6xl font-arabic text-primary mb-1 drop-shadow-[0_0_30px_rgba(245,158,11,0.2)] leading-[1.15]"
-                            initial={{ scale: 0.9, opacity: 0 }}
-                            animate={{ scale: 1, opacity: 1 }}
-                            transition={{ duration: 0.8, ease: "easeOut" }}
-                        >
-                            {currentDhikr.arabic}
-                        </motion.h1>
-                        <motion.span
-                            key={currentDhikr.id + '-translit'}
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            className="text-2xl font-black tracking-[0.4em] text-foreground/90 drop-shadow-sm uppercase"
-                        >
-                            {currentDhikr.transliteration}
-                        </motion.span>
-                        <div className="flex items-center gap-3 mt-1">
-                            {sessionMode.type === 'tasbih100' && (
-                                <>
-                                    <span className="text-[10px] font-black text-muted-foreground uppercase tracking-[0.2em]">Phase {sessionMode.currentPhase + 1} of 4</span>
-                                    <div className="w-1.5 h-1.5 rounded-full bg-primary/30" />
-                                    <span className="text-[10px] font-black text-primary/40 uppercase tracking-[0.2em]">{currentDhikr.transliteration} ×{[33, 33, 33, 1][sessionMode.currentPhase]}</span>
-                                </>
-                            )}
-                            {sessionMode.type === 'tasbih1000' && (
-                                <>
-                                    <span className="text-[10px] font-black text-muted-foreground uppercase tracking-[0.2em]">Set {sessionMode.currentPhase + 1} of 8</span>
-                                    <div className="w-1.5 h-1.5 rounded-full bg-primary/30" />
-                                    <span className="text-[10px] font-black text-primary/40 uppercase tracking-[0.2em]">{currentDhikr.transliteration} ×125</span>
-                                </>
-                            )}
-                            {sessionMode.type === 'free' && (
-                                <>
-                                    <span className="text-[10px] font-black text-muted-foreground uppercase tracking-[0.2em]">{count} / {total > 0 ? total : '∞'}</span>
-                                </>
-                            )}
-                        </div>
-
-                        {/* Hadith Slider restored below Adhkar */}
-                        {/* This HadithSlider was moved below the CounterVisuals */}
+                        <motion.h1 key={currentDhikr.id + '-arabic'} className="text-7xl font-arabic text-primary mb-1 drop-shadow-[0_0_30px_rgba(245,158,11,0.2)] leading-[1.15]" initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} transition={{ duration: 0.8 }}>{currentDhikr.arabic}</motion.h1>
+                        <motion.span key={currentDhikr.id + '-translit'} initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-2xl font-black tracking-[0.4em] text-foreground/90 uppercase">{currentDhikr.transliteration}</motion.span>
                     </div>
 
                     <div className="relative z-10 w-full mb-8 flex flex-col justify-center items-center pb-4">
@@ -256,62 +186,18 @@ export const PremiumHub = () => {
                             layout="hub"
                             counterShape={counterShape}
                             counterVerticalOffset={0}
-                            counterScale={1}
+                            counterScale={1.2}
                             progress={total > 0 ? count / total : 0}
                             currentCount={count}
                             currentSettings={{ soundEnabled: true, hapticEnabled: true, vibrationIntensity: 'medium', fontScale: 1, soundType: 'click' }}
-                            countFontSize={1}
                             handleTap={increment}
                             showCompletion={false}
-                            disabled={false}
                         />
-
-                        {/* Hadith Slider moved below Counter */}
                         <div className="w-full max-w-[606px] mt-8">
                             <HadithSlider dhikr={currentDhikr} />
                         </div>
                     </div>
                 </motion.div>
-
-                {/* Right Column: Community */}
-                <AnimatePresence>
-                    {communityVisibility && (
-                        <motion.div
-                            initial={{ opacity: 0, x: 50 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            exit={{ opacity: 0, x: 50 }}
-                            className="col-span-12 lg:col-span-4 flex flex-col gap-4 lg:gap-4 h-full overflow-hidden"
-                        >
-                            <div className="bg-card/80 backdrop-blur-3xl border border-foreground/[0.08] rounded-[2.5rem] flex flex-col overflow-hidden shadow-2xl relative h-full">
-                                <div className="absolute inset-0 bg-gradient-to-tr from-primary/[0.03] to-transparent pointer-events-none" />
-                                <div className="p-4 flex items-center justify-between border-b border-foreground/5 relative z-10">
-                                    <div className="flex items-center gap-3">
-                                        <h2 className="text-xs font-black uppercase tracking-[0.2em] text-muted-foreground">Community</h2>
-                                        <ChevronDown className="w-4 h-4 text-muted-foreground" />
-                                    </div>
-                                    <div className="flex items-center gap-2 px-3 py-1 bg-green-500/10 rounded-full border border-green-500/20">
-                                        <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
-                                        <span className="text-[10px] text-green-500 font-black uppercase tracking-widest">Live</span>
-                                    </div>
-                                </div>
-
-                                <div className="p-4 space-y-4 overflow-y-auto custom-scrollbar relative z-10 flex-1">
-                                    {/* Global Pulse Card - Refined */}
-                                    <div className="bg-foreground/[0.03] border border-foreground/[0.06] rounded-[2rem] p-4 flex flex-col items-center shadow-inner relative overflow-hidden group transition-all hover:bg-foreground/[0.05] hover:border-primary/20">
-                                        <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-                                        <VisitorCounter />
-                                        <span className="text-[10px] font-black text-primary/40 uppercase mt-3 tracking-widest">Dhikrs Worldwide</span>
-                                    </div>
-
-                                    {/* Challenges */}
-                                    <div className="space-y-4">
-                                        <GlobalChallenges />
-                                    </div>
-                                </div>
-                            </div>
-                        </motion.div>
-                    )}
-                </AnimatePresence>
 
             </div>
 
