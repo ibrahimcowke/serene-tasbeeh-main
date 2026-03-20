@@ -103,7 +103,7 @@ export function RemindersContent() {
                 ) {
                     if ('serviceWorker' in navigator) {
                         navigator.serviceWorker.ready.then(registration => {
-                            registration.showNotification('Tasbeeh Reminder', {
+                            registration.showNotification('tasbeehdikr Reminder', {
                                 body: reminder.label || 'Time for dhikr',
                                 icon: '/pwa-192x192.png',
                                 badge: '/pwa-192x192.png',
@@ -113,7 +113,7 @@ export function RemindersContent() {
                             } as any);
                         });
                     } else {
-                        new Notification('Tasbeeh Reminder', {
+                        new Notification('tasbeehdikr Reminder', {
                             body: reminder.label || 'Time for dhikr',
                             icon: '/pwa-192x192.png',
                             badge: '/pwa-192x192.png',

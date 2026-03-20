@@ -25,9 +25,9 @@ export default defineConfig(({ mode }) => ({
       includeAssets: ["favicon.ico", "robots.txt", "screenshot-mobile.png", "screenshot-desktop.png"],
       manifest: {
         id: "/",
-        name: "Tasbeeh - Digital Dhikr Counter",
-        short_name: "Tasbeeh",
-        description: "A peaceful digital Tasbeeh counter for your daily dhikr practice",
+        name: "tasbeehdikr",
+        short_name: "tasbeehdikr",
+        description: "A peaceful digital tasbeehdikr counter for your daily dhikr practice",
         lang: "en",
         dir: "ltr",
         categories: ["lifestyle", "utilities", "productivity"],
@@ -67,14 +67,14 @@ export default defineConfig(({ mode }) => ({
             sizes: "1024x1024",
             type: "image/jpeg",
             form_factor: "narrow",
-            label: "Tasbeeh Counter - Mobile View"
+            label: "tasbeehdikr - Mobile View"
           },
           {
             src: "/screenshot-desktop.png",
             sizes: "1024x1024",
             type: "image/jpeg",
             form_factor: "wide",
-            label: "Tasbeeh Counter - Desktop View"
+            label: "tasbeehdikr - Desktop View"
           }
         ],
         shortcuts: [

@@ -731,11 +731,11 @@ export function SettingsView({ children }: SettingsViewProps) {
                         <p className="text-xs text-muted-foreground">Spread the barakah with friends</p>
                       </div>
                       <button
-                        onClick={() => {
+                        onClick={async () => {
                           if (navigator.share) {
-                            navigator.share({
-                              title: 'Serene Tasbeeh',
-                              text: 'Join me in dhikr with Serene Tasbeeh - A beautiful, spiritual experience.',
+                            await navigator.share({
+                              title: 'tasbeehdikr',
+                              text: 'Join me in dhikr with tasbeehdikr - A beautiful, spiritual experience.',
                               url: window.location.href,
                             }).catch(() => {});
                           } else {
@@ -799,11 +799,9 @@ export function SettingsView({ children }: SettingsViewProps) {
                         </DialogHeader>
                         <div className="space-y-4 text-sm text-foreground/80 mt-4">
                           <section className="space-y-2">
-                            <h4 className="font-semibold text-foreground">1. Introduction</h4>
-                            <p>Serene Tasbeeh ("we," "our," or "us") is committed to protecting your privacy. This Privacy Policy explains how your information is handled when you use our application.</p>
-                          </section>
-
-                          <section className="space-y-2">
+                            <h2 className="text-xl font-bold mt-6 mb-4">Privacy Policy</h2>
+                            <p>tasbeehdikr ("we," "our," or "us") is committed to protecting your privacy. This Privacy Policy explains how your information is handled when you use our application.</p>
+                            <h3 className="text-lg font-semibold mt-4 mb-2">1. Data Collection</h3>
                             <h4 className="font-semibold text-foreground">2. Data Collection & Storage</h4>
                             <p><strong>Local Storage:</strong> This application stores data strictly on your device. This includes your settings, counter progress, and preferences. We do not collect personal data or transmit it to any servers.</p>
                           </section>

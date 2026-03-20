@@ -50,6 +50,9 @@ export default function MiniCounter() {
                     </div>
                 </div>
 
+                <div className="flex items-center gap-1 opacity-50 justify-center pb-2">
+                    <span className="text-[10px] uppercase tracking-widest font-bold">tasbeehdikr</span>
+                </div>
                 {/* Dhikr Text */}
                 <div className="relative z-10 text-center mb-6 mt-8">
                     <h2 className="text-xl font-bold text-foreground mb-1 leading-relaxed" dir="auto">
