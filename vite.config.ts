@@ -112,6 +112,26 @@ export default defineConfig(({ mode }) => ({
             icons: [{ src: "/pwa-192x192.png", sizes: "192x192", type: "image/png" }]
           }
         ],
+        // @ts-ignore - Experimental W3C Widgets API not yet typed in vite-plugin-pwa
+        widgets: [
+          {
+            name: "tasbeehdikr Quick Action",
+            description: "Access your Tasbeeh directly from the home screen",
+            tag: "tasbeeh",
+            template: "widget_template.json",
+            data: "widget_data.json",
+            type: "application/json",
+            auth: false,
+            update: 86400,
+            icons: [
+              {
+                src: "/pwa-192x192.png",
+                sizes: "192x192",
+                type: "image/png"
+              }
+            ]
+          }
+        ],
         protocol_handlers: [
           {
             protocol: "web+tasbeeh",

@@ -1,0 +1,23 @@
+{
+  "type": "AdaptiveCard",
+  "version": "1.4",
+  "body": [
+    {
+      "type": "TextBlock",
+      "text": "Time for Dhikr 📿",
+      "size": "Medium",
+      "weight": "Bolder"
+    },
+    {
+      "type": "TextBlock",
+      "text": "Tap to open tasbeehdikr",
+      "isSubtle": true
+    }
+  ],
+  "actions": [
+    {
+      "type": "Action.Submit",
+      "title": "Open App"
+    }
+  ]
+}
