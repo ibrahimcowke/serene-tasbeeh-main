@@ -101,7 +101,7 @@ export function Counter() {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
-            className="font-arabic text-lg xs:text-xl sm:text-2xl md:text-3xl lg:text-4xl text-foreground leading-snug mb-0 max-w-[90vw] mx-auto overflow-visible"
+            className="font-arabic text-lg xs:text-xl sm:text-2xl md:text-3xl lg:text-4xl text-foreground leading-snug mb-0 max-w-[95vw] mx-auto overflow-visible select-none"
           >
             {currentDhikr.arabic}
           </motion.p>
@@ -314,7 +314,7 @@ export function Counter() {
       case 'counter':
         return (
           <div 
-            className="flex flex-col items-center justify-center w-full relative z-10 my-0.5 select-none rounded-[40px] transition-all duration-700 p-8"
+            className="flex flex-col items-center justify-center w-full relative z-10 my-0.5 select-none rounded-[40px] transition-all duration-700 p-4 xs:p-8"
             style={{ backgroundColor: shapeBg }}
           >
             {/* Pull-to-Reset Wrapper */}
@@ -384,7 +384,7 @@ export function Counter() {
  
             {/* Main Controls - Unified below the counter */}
             {!zenMode && (
-              <div className={`flex items-center justify-center gap-3 xs:gap-6 sm:gap-8 mt-4 xs:mt-5 sm:mt-6 relative z-20 transition-opacity duration-300`}>
+              <div className={`flex items-center justify-center gap-2 xs:gap-6 sm:gap-8 mt-2 xs:mt-5 sm:mt-6 relative z-20 transition-opacity duration-300`}>
                 <motion.button
                   whileTap={{ scale: 0.95 }}
                   onClick={(e) => {

@@ -41,8 +41,8 @@ const Index = () => {
             </RoutinesView>
 
             {/* Main Content Area */}
-            <div className={`flex-1 min-h-0 w-full overflow-y-auto lg:overflow-hidden px-4 sm:px-6 md:px-8 pb-24 pt-16 xs:pt-2 transition-all duration-500 pb-safe ${zenMode ? 'flex items-center justify-center pt-0 pb-0' : ''}`}>
-              <div className={`max-w-[1600px] mx-auto w-full h-full ${zenMode ? 'max-w-4xl' : ''}`}>
+            <div className={`flex-1 min-h-0 w-full overflow-hidden flex flex-col transition-all duration-500 pb-safe ${zenMode ? 'items-center justify-center' : 'pt-16 pb-20 xs:pt-4 xs:pb-16'}`}>
+              <div className={`max-w-[1600px] mx-auto w-full h-full flex flex-col justify-center px-4 sm:px-6 md:px-8 ${zenMode ? 'max-w-4xl' : ''}`}>
                 {renderDashboard()}
               </div>
             </div>
