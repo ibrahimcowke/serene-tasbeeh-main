@@ -286,7 +286,7 @@ export function AchievementsContent() {
     };
 
     const handleShare = useCallback((achievement: Achievement) => {
-        const text = `I earned the '${achievement.title}' badge on Serene Tasbeeh! 🏆\n${achievement.description}`;
+        const text = `I earned the '${achievement.title}' badge on tasbeehdikr! 🏆\n${achievement.description}`;
         if (navigator.clipboard) {
             navigator.clipboard.writeText(text).then(() => {
                 toast.success('Copied to clipboard!', {

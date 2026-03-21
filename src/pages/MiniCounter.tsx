@@ -93,7 +93,7 @@ export default function MiniCounter() {
                 </div>
 
                 <p className="text-[10px] text-muted-foreground/50 absolute bottom-2 font-mono">
-                    Serene Tasbeeh
+                    tasbeehdikr
                 </p>
             </div>
         </ThemeProvider>

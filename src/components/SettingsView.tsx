@@ -753,12 +753,12 @@ export function SettingsView({ children }: SettingsViewProps) {
                   <p className="text-xs text-muted-foreground uppercase tracking-wide mb-3">Community & Social</p>
 
                   <div className="p-4 rounded-2xl bg-card space-y-4">
-                    {/* Share Serene */}
+                    {/* Share tasbeehdikr */}
                     <div className="flex items-center justify-between">
                       <div className="space-y-0.5">
                         <div className="flex items-center gap-2">
                           <Share2 className="w-4 h-4 text-primary" />
-                          <p className="text-sm font-medium text-foreground">Share Serene</p>
+                          <p className="text-sm font-medium text-foreground">Share tasbeehdikr</p>
                         </div>
                         <p className="text-xs text-muted-foreground">Spread the barakah with friends</p>
                       </div>
