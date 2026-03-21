@@ -59,7 +59,7 @@ self.addEventListener('sync', (event) => {
 // Push Notification Event
 self.addEventListener('push', (event) => {
   console.log('Push received', event)
-  const data = event.data?.json() ?? { title: 'Tasbeeh', body: 'Time for Dhikr' }
+  const data = event.data?.json() ?? { title: 'tasbeehdikr', body: 'Time for Dhikr' }
   
   event.waitUntil(
     self.registration.showNotification(data.title, {

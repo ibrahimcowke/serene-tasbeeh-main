@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
-import { Check, Download, Upload, Trash2, RotateCcw, Smartphone, Maximize, Wind, Zap, ExternalLink, ChevronRight, LayoutDashboard, Share2 } from 'lucide-react';
+import { Check, Download, Upload, Trash2, RotateCcw, Smartphone, Maximize, Wind, Zap, ExternalLink, ChevronRight, LayoutDashboard, Share2, Bell, Clock } from 'lucide-react';
 import { useTasbeehStore } from '@/store/tasbeehStore';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger, SheetDescription } from '@/components/ui/sheet';
 import { Switch } from '@/components/ui/switch';
@@ -35,6 +35,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Label } from '@/components/ui/label';
 import { StatisticsView } from './StatisticsView';
 import { toast } from 'sonner';
+import { requestNotificationPermission, sendLocalNotification } from '@/lib/notifications';
 
 interface SettingsViewProps {
   children: React.ReactNode;
@@ -96,6 +97,12 @@ export function SettingsView({ children }: SettingsViewProps) {
     setWakeLockEnabled,
     volumeButtonCounting,
     setVolumeButtonCounting,
+    notificationPermission,
+    reminderEnabled,
+    reminderTime,
+    setNotificationPermission,
+    setReminderEnabled,
+    setReminderTime,
   } = useTasbeehStore();
 
   const [importStatus, setImportStatus] = useState<'idle' | 'success' | 'error'>('idle');

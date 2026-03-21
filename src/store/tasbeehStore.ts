@@ -144,6 +144,11 @@ interface TasbeehState {
   lastSeenVersion: string | null;
   deviceId: string;
 
+  // Notifications
+  notificationPermission: NotificationPermission | 'default';
+  reminderEnabled: boolean;
+  reminderTime: string;
+
   // Congratulations State
   showCongrats: boolean;
   congratsData: {
@@ -216,6 +221,11 @@ interface TasbeehState {
   setVolumeButtonCounting: (enabled: boolean) => void;
   setDashboardType: (type: 'classic' | 'choco') => void;
   setLastSeenVersion: (version: string) => void;
+
+  // Notification Actions
+  setNotificationPermission: (permission: NotificationPermission | 'default') => void;
+  setReminderEnabled: (enabled: boolean) => void;
+  setReminderTime: (time: string) => void;
 }
 
 export type ThemeSettings = {
@@ -578,6 +588,11 @@ export const useTasbeehStore = create<TasbeehState>()(
         }
         return id;
       })(),
+
+      // Notifications
+      notificationPermission: 'default',
+      reminderEnabled: false,
+      reminderTime: '08:00',
 
       // Congrats State
       showCongrats: false,
@@ -1121,6 +1136,11 @@ export const useTasbeehStore = create<TasbeehState>()(
 
       setLastSeenVersion: (version) => set({ lastSeenVersion: version }),
 
+      // Notification Actions
+      setNotificationPermission: (permission) => set({ notificationPermission: permission }),
+      setReminderEnabled: (enabled) => set({ reminderEnabled: enabled }),
+      setReminderTime: (time) => set({ reminderTime: time }),
+
     }),
     {
       name: 'tasbeeh-storage',
@@ -1177,6 +1197,9 @@ export const useTasbeehStore = create<TasbeehState>()(
         layoutOrder: state.layoutOrder,
         screenOffMode: state.screenOffMode,
         dashboardType: state.dashboardType,
+        notificationPermission: state.notificationPermission,
+        reminderEnabled: state.reminderEnabled,
+        reminderTime: state.reminderTime,
       }),
     }
   )
