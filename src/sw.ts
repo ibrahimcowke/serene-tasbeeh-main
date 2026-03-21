@@ -42,6 +42,20 @@ registerRoute(
 self.skipWaiting()
 clientsClaim()
 
+// Cache Images
+registerRoute(
+  ({ request }) => request.destination === 'image',
+  new CacheFirst({
+    cacheName: 'images',
+    plugins: [
+      new ExpirationPlugin({
+        maxEntries: 60,
+        maxAgeSeconds: 30 * 24 * 60 * 60, // 30 Days
+      }),
+    ],
+  })
+)
+
 // Periodic Sync Event
 // @ts-ignore
 self.addEventListener('periodicsync', (event) => {
