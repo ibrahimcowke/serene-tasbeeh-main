@@ -10,11 +10,18 @@ import MiniCounter from "./pages/MiniCounter";
 import Challenges from "./pages/Challenges";
 import { ThemeProvider } from "./components/ThemeProvider";
 import { CongratsPopup } from "./components/CongratsPopup";
+import { useEffect } from "react";
+import { registerPeriodicSync } from "./lib/notifications";
 
 const queryClient = new QueryClient();
 
-const App = () => (
-  <QueryClientProvider client={queryClient}>
+const App = () => {
+  useEffect(() => {
+    registerPeriodicSync();
+  }, []);
+
+  return (
+    <QueryClientProvider client={queryClient}>
     <TooltipProvider>
       <ThemeProvider>
         <Toaster />
@@ -33,6 +40,7 @@ const App = () => (
       </ThemeProvider>
     </TooltipProvider>
   </QueryClientProvider>
-);
+  );
+};
 
 export default App;

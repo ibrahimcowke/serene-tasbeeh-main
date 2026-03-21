@@ -35,10 +35,21 @@ export async function sendLocalNotification(title: string, options?: Notificatio
   }
 }
 
-export function scheduleDailyReminder(hour: number, minute: number) {
-  // Note: True background scheduling in PWAs without a server is limited.
-  // This function demonstrates how we might store the preference and 
-  // trigger a notification if the app is active or via Periodic Sync if available.
-  localStorage.setItem('reminder_time', `${hour}:${minute}`);
-  console.log(`Reminder scheduled for ${hour}:${minute} (Local simulated)`);
+export async function registerPeriodicSync() {
+  if ('serviceWorker' in navigator && 'periodicSync' in (await navigator.serviceWorker.ready)) {
+    const registration = await navigator.serviceWorker.ready;
+    try {
+      // @ts-ignore
+      const status = await navigator.permissions.query({ name: 'periodic-background-sync' });
+      if (status.state === 'granted') {
+        // @ts-ignore
+        await registration.periodicSync.register('daily-reminder', {
+          minInterval: 12 * 60 * 60 * 1000, // 12 hours
+        });
+        console.log('Periodic Sync registered');
+      }
+    } catch (error) {
+      console.error('Periodic Sync registration failed:', error);
+    }
+  }
 }

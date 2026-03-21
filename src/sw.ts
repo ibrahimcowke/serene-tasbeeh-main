@@ -46,7 +46,18 @@ clientsClaim()
 // @ts-ignore
 self.addEventListener('periodicsync', (event) => {
   console.log('Periodic Sync fired', event)
-  // Logic to update data in background
+  if (event.tag === 'daily-reminder') {
+    event.waitUntil(
+      self.registration.showNotification('tasbeehdikr', {
+        body: 'Time for your daily dhikr practice. 📿',
+        icon: '/pwa-192x192.png',
+        badge: '/pwa-192x192.png',
+        tag: 'daily-reminder',
+        // @ts-ignore
+        renotify: true
+      })
+    )
+  }
 })
 
 // Background Sync Event
