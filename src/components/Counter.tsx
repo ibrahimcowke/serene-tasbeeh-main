@@ -5,7 +5,7 @@ import { ProgressRing } from './ProgressRing';
 import { HadithSlider } from './HadithSlider';
 import { SoundManager } from '@/lib/sound';
 import { CounterVisuals } from './CounterVisuals';
-import { Settings } from 'lucide-react';
+import { Settings, Palette } from 'lucide-react';
 import { SettingsView } from './SettingsView';
 import { SessionTimer } from './SessionTimer';
 import { UndoButton } from './UndoButton';
@@ -452,7 +452,7 @@ export function Counter() {
                     className="w-10 h-10 xs:w-11 xs:h-11 sm:w-12 sm:h-12 rounded-full bg-secondary/50 backdrop-blur-sm flex items-center justify-center hover:bg-secondary transition-colors border border-white/5"
                     title="Settings"
                   >
-                    <Settings className="w-4 h-4 text-muted-foreground" />
+                    <Palette className="w-4 h-4 text-muted-foreground" />
                   </motion.button>
                 </SettingsView>
               </div>

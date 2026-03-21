@@ -32,12 +32,7 @@ export function MobileNavBar() {
                     <span className="text-[10px] font-medium">Menu</span>
                 </button>
 
-                <SettingsView>
-                    <button className="flex flex-col items-center justify-center w-full h-full gap-1 text-muted-foreground hover:text-white transition-colors">
-                        <Settings className="w-5 h-5" />
-                        <span className="text-[10px] font-medium">Settings</span>
-                    </button>
-                </SettingsView>
+
             </div>
         </div>
     );
