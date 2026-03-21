@@ -1,4 +1,4 @@
-# How to Run Serene Tasbeeh on iPhone (Without Xcode)
+# How to Run tasbeehdikr on iPhone (Without Xcode)
 
 You can convert this web application into a native-like iPhone app using **Progressive Web App (PWA)** technology. This allows you to install it on your home screen, run it offline, and have it look and feel like a standard iOS app.
 

@@ -42,8 +42,8 @@ export default defineConfig(({ mode }) => ({
         related_applications: [
           {
             platform: "play",
-            url: "https://play.google.com/store/apps/details?id=com.serene.tasbeeh",
-            id: "com.serene.tasbeeh"
+            url: "https://play.google.com/store/apps/details?id=app.netlify.tasbeehdikr.twa",
+            id: "app.netlify.tasbeehdikr.twa"
           }
         ],
         iarc_rating_id: "e84b072d-71b3-4d3e-86ae-31a8ce4e53b7",
