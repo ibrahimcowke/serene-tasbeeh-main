@@ -5,15 +5,8 @@ import { ProgressRing } from './ProgressRing';
 import { HadithSlider } from './HadithSlider';
 import { SoundManager } from '@/lib/sound';
 import { CounterVisuals } from './CounterVisuals';
-import { Palette } from 'lucide-react';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+import { Settings } from 'lucide-react';
+import { SettingsView } from './SettingsView';
 import { SessionTimer } from './SessionTimer';
 import { UndoButton } from './UndoButton';
 import { initShakeDetection, isShakeDetectionSupported } from '@/lib/shakeDetection';
@@ -453,44 +446,15 @@ export function Counter() {
                 <UndoButton />
 
                 {/* Theme & Shape selectors moved inline from absolute position */}
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <motion.button
-                      whileTap={{ scale: 0.95 }}
-                      className="w-10 h-10 xs:w-11 xs:h-11 sm:w-12 sm:h-12 rounded-full bg-secondary/50 backdrop-blur-sm flex items-center justify-center hover:bg-secondary transition-colors border border-white/5"
-                      title="Change Theme"
-                    >
-                      <Palette className="w-4 h-4 text-muted-foreground" />
-                    </motion.button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end" side="top" className="w-48 bg-card/90 backdrop-blur-xl border-border/50 max-h-[40dvh] overflow-hidden flex flex-col">
-                    <DropdownMenuLabel>Theme</DropdownMenuLabel>
-                    <DropdownMenuSeparator />
-                    <div className="overflow-y-auto custom-scrollbar p-1">
-                      {[
-                        { id: 'light', label: 'Light', icon: '☀️' },
-                        { id: 'dark', label: 'Dark', icon: '🌙' },
-                        { id: 'theme-midnight', label: 'Midnight', icon: '🌌' },
-                        { id: 'theme-neon', label: 'Neon', icon: '🎆' },
-                        { id: 'theme-green', label: 'Matrix', icon: '💻' },
-                        { id: 'theme-cyberpunk', label: 'Cyberpunk', icon: '🤖' },
-                        { id: 'theme-glass', label: 'Glass', icon: '🧊' },
-                        { id: 'theme-sunset', label: 'Sunset', icon: '🌅' },
-                        { id: 'theme-forest', label: 'Forest', icon: '🌲' },
-                      ].map((t) => (
-                        <DropdownMenuItem
-                          key={t.id}
-                          onClick={() => useTasbeehStore.getState().setTheme(t.id as any)}
-                          className="flex items-center gap-2 cursor-pointer"
-                        >
-                          <span className="text-base">{t.icon}</span>
-                          <span className={`flex-1 ${theme === t.id ? 'font-bold text-primary' : ''}`}>{t.label}</span>
-                          {theme === t.id && <span className="text-primary text-xs">●</span>}
-                        </DropdownMenuItem>
-                      ))}
-                    </div>
-                  </DropdownMenuContent>
-                </DropdownMenu>
+                <SettingsView>
+                  <motion.button
+                    whileTap={{ scale: 0.95 }}
+                    className="w-10 h-10 xs:w-11 xs:h-11 sm:w-12 sm:h-12 rounded-full bg-secondary/50 backdrop-blur-sm flex items-center justify-center hover:bg-secondary transition-colors border border-white/5"
+                    title="Settings"
+                  >
+                    <Settings className="w-4 h-4 text-muted-foreground" />
+                  </motion.button>
+                </SettingsView>
               </div>
             )}
 

@@ -41,7 +41,7 @@ interface SettingsViewProps {
   children: React.ReactNode;
 }
 
-import { themes, counterShapes, APP_VERSION, dashboardLayouts } from '@/lib/constants';
+import { themes, counterShapes, APP_VERSION } from '@/lib/constants';
 
 
 
@@ -102,7 +102,11 @@ export function SettingsView({ children }: SettingsViewProps) {
     reminderTime,
     setNotificationPermission,
     setReminderEnabled,
-    setReminderTime,
+    setTheme,
+    counterShape,
+    setCounterShape,
+    layout,
+    setLayout,
   } = useTasbeehStore();
 
   const [importStatus, setImportStatus] = useState<'idle' | 'success' | 'error'>('idle');
@@ -173,36 +177,32 @@ export function SettingsView({ children }: SettingsViewProps) {
               <TabsContent value="appearance" className="space-y-6 mt-0 pb-6 px-1">
                 {/* Theme Customization */}
                 <div className="space-y-1">
-                  <p className="text-xs text-muted-foreground uppercase tracking-wide mb-3">Theme</p>
-                  <div className="space-y-2">
+                  <p className="text-xs text-muted-foreground uppercase tracking-wide mb-3 px-1">Theme</p>
+                  <div className="grid grid-cols-2 gap-2 pb-2">
                     {themes.map((t, index) => (
                       <motion.button
                         key={t.id}
-                        initial={{ opacity: 0, y: 5 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: index * 0.05 }}
-                        onClick={() => {
-                          setTheme(t.id);
-                          setOpen(false);
-                        }}
+                        initial={{ opacity: 0, scale: 0.95 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        transition={{ delay: index * 0.02 }}
+                        onClick={() => setTheme(t.id)}
                         className={`
-                          w-full p-4 rounded-2xl text-left
-                          transition-colors duration-200
+                          p-3 rounded-2xl text-left border transition-all
                           ${theme === t.id
-                            ? 'bg-accent border border-primary/20'
-                            : 'bg-card hover:bg-secondary'
+                            ? 'bg-primary/10 border-primary shadow-sm'
+                            : 'bg-card border-border hover:bg-secondary'
                           }
                         `}
                       >
-                        <div className="flex items-center justify-between">
-                          <div>
-                            <p className="text-sm font-medium text-foreground">{t.label}</p>
-                            <p className="text-xs text-muted-foreground">{t.description}</p>
+                        <div className="flex items-center justify-between gap-1">
+                          <div className="overflow-hidden">
+                            <p className={`text-[13px] font-medium truncate ${theme === t.id ? 'text-primary' : 'text-foreground'}`}>
+                              {t.label}
+                            </p>
+                            <p className="text-[10px] text-muted-foreground truncate">{t.description}</p>
                           </div>
                           {theme === t.id && (
-                            <div className="w-5 h-5 rounded-full bg-primary flex items-center justify-center">
-                              <Check className="w-3 h-3 text-primary-foreground" />
-                            </div>
+                            <Check className="w-3 h-3 text-primary shrink-0" />
                           )}
                         </div>
                       </motion.button>
@@ -210,31 +210,41 @@ export function SettingsView({ children }: SettingsViewProps) {
                   </div>
                 </div>
 
-
-
-                {/* Dashboard Layout */}
+                {/* Counter Shape Customization */}
                 <div className="space-y-1">
-                  <p className="text-xs text-muted-foreground uppercase tracking-wide mb-3">Dashboard</p>
-                  <div className="grid grid-cols-2 gap-3 mb-4">
-                    {dashboardLayouts.map((l) => (
-                      <button
-                        key={l.id}
-                        onClick={() => setLayout(l.id as any)}
+                  <p className="text-xs text-muted-foreground uppercase tracking-wide mb-3 px-1">Counter Shape</p>
+                  <div className="grid grid-cols-3 gap-2 pb-2">
+                    {counterShapes.map((shape, index) => (
+                      <motion.button
+                        key={shape.id}
+                        initial={{ opacity: 0, scale: 0.95 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        transition={{ delay: index * 0.01 }}
+                        onClick={() => setCounterShape(shape.id)}
                         className={`
-                          flex flex-col items-center justify-center p-4 rounded-2xl border transition-all
-                          ${layout === l.id
-                            ? 'bg-primary/10 border-primary text-primary shadow-sm'
-                            : 'bg-card border-border hover:bg-secondary text-muted-foreground'}
+                          flex flex-col items-center justify-center p-3 rounded-2xl border transition-all
+                          ${counterShape === shape.id
+                            ? 'bg-primary/10 border-primary shadow-sm'
+                            : 'bg-card border-border hover:bg-secondary'
+                          }
                         `}
                       >
-                        <LayoutDashboard className={`w-6 h-6 mb-2 ${layout === l.id ? 'text-primary' : 'text-muted-foreground'}`} />
-                        <span className="text-xs font-medium">{l.label}</span>
-                      </button>
+                        <span className={`text-xl mb-1 ${counterShape === shape.id ? 'text-primary' : 'text-muted-foreground'}`}>
+                          {shape.icon}
+                        </span>
+                        <span className={`text-[10px] font-medium text-center truncate w-full ${counterShape === shape.id ? 'text-primary' : 'text-muted-foreground'}`}>
+                          {shape.label}
+                        </span>
+                      </motion.button>
                     ))}
                   </div>
+                </div>
 
-                  {/* Zen Mode Toggle */}
-                  <div className="flex items-center justify-between p-4 rounded-xl bg-card border border-border/50 mb-4">
+
+
+                {/* Zen Mode Toggle */}
+                <div className="space-y-1">
+                  <div className="flex items-center justify-between p-4 rounded-2xl bg-card border border-border/50">
                     <div className="space-y-0.5">
                       <label className="text-sm font-medium">Zen Mode focus</label>
                       <p className="text-xs text-muted-foreground">Hide sidebars for complete focus</p>
@@ -243,11 +253,10 @@ export function SettingsView({ children }: SettingsViewProps) {
                       checked={zenMode}
                       onCheckedChange={(checked) => {
                         setZenMode(checked);
-                        if (checked) setOpen(false); // Close settings to show effect immediately
+                        if (checked) setOpen(false);
                       }}
                     />
                   </div>
-
                 </div>
 
                 {/* Advanced Positioning & Scale */}
