@@ -13,6 +13,38 @@
   <link rel="apple-touch-icon" href="/pwa-192x192.png" />
   <link rel="icon" type="image/png" href="/pwa-192x192.png" />
 
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Inter:wght@300;400;500;600&family=Outfit:wght@300;400;500;600&family=Noto+Sans+Arabic:wght@400;700&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Inter:wght@300;400;500;600&family=Outfit:wght@300;400;500;600&family=Noto+Sans+Arabic:wght@400;700&display=swap">
+
+  <style>
+    /* Critical CSS for LCP */
+    :root {
+      --background: 40 30% 98%;
+      --foreground: 30 10% 15%;
+    }
+
+    body {
+      background-color: hsl(40 30% 98%);
+      color: hsl(30 10% 15%);
+      margin: 0;
+      padding: 0;
+      font-family: 'Outfit', sans-serif;
+    }
+
+    .min-h-screen {
+      min-height: 100vh;
+    }
+
+    /* Prevent large layout shifts for the counter area */
+    #root {
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+  </style>
+
   <title>tasbeehdikr</title>
   <meta name="description"
     content="A peaceful digital tasbeehdikr counter for your daily dhikr practice. Track your remembrance with a calm, distraction-free experience." />
