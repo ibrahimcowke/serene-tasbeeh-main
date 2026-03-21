@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { ThemeSettings, CounterShape } from '@/store/tasbeehStore';
 import { HaloRing } from './counter-shapes/HaloRing';
 import { BeadRing } from './counter-shapes/BeadRing';
+import { counterShapes } from '@/lib/constants';
 
 import { VerticalCapsules } from './counter-shapes/VerticalCapsules';
 import { LuminousBeads } from './counter-shapes/LuminousBeads';
@@ -60,6 +61,9 @@ export const CounterNumber = memo(({
     currentSettings: ThemeSettings;
     countFontSize: number;
 }) => {
+    const shapeData = counterShapes.find(s => s.id === counterShape);
+    const shapeColor = shapeData?.color || 'currentColor';
+
     return (
         <motion.span
             key={currentCount}
@@ -75,24 +79,24 @@ export const CounterNumber = memo(({
   ${['digital', 'vertical-capsules', 'tally-clicker', 'cyber-3d', 'crystal-iso', 'neumorph', 'digital-watch', 'steampunk-nixie', 'matrix-code', 'retro-lcd'].includes(counterShape) ? 'hidden' : ''}
   ${counterShape === 'classic' ? 'font-mono text-5xl sm:text-6xl md:text-7xl tracking-widest bg-black/10 px-4 sm:px-6 py-2 rounded-lg inset-shadow mb-4' : 'text-5xl sm:text-6xl md:text-7xl lg:text-8xl'}
   ${counterShape === 'waveform' ? 'drop-shadow-md z-10' : ''}
-  ${counterShape === 'modern-ring' ? 'font-sans font-light tracking-tighter drop-shadow-[0_0_15px_hsl(var(--original-primary)/0.6)]' : ''}
+  ${counterShape === 'modern-ring' ? 'font-sans font-light tracking-tighter drop-shadow-[0_0_15px_currentColor]' : ''}
   ${counterShape === 'vintage-wood' ? 'font-serif text-[#d7ccc8] drop-shadow-[0_2px_2px_rgba(0,0,0,0.5)]' : ''}
-  ${counterShape === 'radar' ? 'font-mono text-original-primary drop-shadow-[0_0_5px_hsl(var(--original-primary))]' : ''}
+  ${counterShape === 'radar' ? 'font-mono text-current drop-shadow-[0_0_5px_currentColor]' : ''}
   ${counterShape === 'real-beads' ? 'font-serif text-[#5d4037] text-6xl font-bold drop-shadow-md bg-white/80 w-32 h-32 rounded-full flex items-center justify-center border-4 border-[#8d6e63]' : ''}
   ${counterShape === 'glass-orb' ? 'text-white/90 drop-shadow-lg font-light' : ''}
-  ${counterShape === 'portal-depth' ? 'text-primary-foreground drop-shadow-[0_0_20px_hsl(var(--original-primary)/0.8)]' : ''}
-  ${counterShape === 'luminous-ring' ? 'text-original-primary drop-shadow-[0_0_15px_hsl(var(--original-primary)/0.8)] font-light' : ''}
+  ${counterShape === 'portal-depth' ? 'text-primary-foreground drop-shadow-[0_0_20px_currentColor]' : ''}
+  ${counterShape === 'luminous-ring' ? 'text-current drop-shadow-[0_0_15px_currentColor] font-light' : ''}
   ${counterShape === 'ring-light' ? 'text-white/90 font-thin tracking-tighter drop-shadow-[0_0_20px_rgba(255,255,255,0.8)]' : ''}
   ${counterShape === 'steampunk-nixie' ? 'font-mono text-orange-500 font-bold tracking-widest drop-shadow-[0_0_10px_orange] text-6xl' : ''}
-  ${counterShape === 'biolum-organic' ? 'font-mono text-original-primary font-bold tracking-widest drop-shadow-[0_0_15px_hsl(var(--original-primary))] text-6xl' : ''}
+  ${counterShape === 'biolum-organic' ? 'font-mono text-current font-bold tracking-widest drop-shadow-[0_0_15px_currentColor] text-6xl' : ''}
   ${counterShape === 'solar-flare' ? 'text-white drop-shadow-[0_0_20px_orange] font-bold' : ''}
-  ${['nebula-cloud', 'infinite-knot', 'holo-fan', 'luminous-beads', 'galaxy'].includes(counterShape) ? 'text-original-primary drop-shadow-[0_0_12px_hsl(var(--original-primary)/0.6)] font-bold' : ''}
+  ${['nebula-cloud', 'infinite-knot', 'holo-fan', 'luminous-beads', 'galaxy'].includes(counterShape) ? 'text-current drop-shadow-[0_0_12px_currentColor] font-bold' : ''}
   ${counterShape === 'halo-ring' ? 'text-emerald-400 font-bold drop-shadow-[0_0_10px_rgba(52,211,153,0.8)]' : ''}
   
   ${counterShape === 'animated-ripple' ? 'text-blue-200 font-light text-7xl tracking-widest drop-shadow-[0_0_10px_rgba(59,130,246,0.6)]' : ''}
   ${counterShape === 'bead-ring' ? 'text-amber-500 font-mono text-7xl font-bold tracking-wider drop-shadow-[0_0_10px_rgba(245,158,11,0.6)]' : ''}
   ${counterShape === 'helix-strand' ? 'text-cyan-400 font-mono tracking-widest drop-shadow-[0_0_10px_rgba(34,211,238,0.8)]' : ''}
-  ${counterShape === 'cyber-hexagon' ? 'font-mono text-original-primary font-bold tracking-widest drop-shadow-[0_0_10px_hsl(var(--original-primary)/0.8)]' : ''}
+  ${counterShape === 'cyber-hexagon' ? 'font-mono text-current font-bold tracking-widest drop-shadow-[0_0_10px_currentColor]' : ''}
   ${counterShape === 'blooming-lotus' ? 'font-serif text-white/90 drop-shadow-lg font-light' : ''}
   ${counterShape === 'constellation' ? 'font-thin text-white tracking-widest drop-shadow-[0_0_10px_white]' : ''}
   ${counterShape === 'glass-pill' ? 'font-sans font-medium text-white tracking-widest text-6xl drop-shadow-md' : ''}
@@ -101,7 +105,8 @@ export const CounterNumber = memo(({
   ${['moon-phase'].includes(counterShape) ? 'font-sans font-light text-white text-5xl drop-shadow-lg' : ''}
 `}
             style={{
-                fontSize: counterShape === 'digital' ? '0px' : `${(counterShape === 'classic' ? 4.5 : 4.5) * currentSettings.fontScale * countFontSize}rem`
+                fontSize: counterShape === 'digital' ? '0px' : `${(counterShape === 'classic' ? 4.5 : 4.5) * currentSettings.fontScale * countFontSize}rem`,
+                color: shapeColor
             }}
         >
             {currentCount}
@@ -122,11 +127,15 @@ export const CounterVisuals = memo(({
     disabled,
     hideNumber
 }: CounterVisualsProps) => {
+    const shapeData = counterShapes.find(s => s.id === counterShape);
+    const shapeColor = shapeData?.color || 'hsl(var(--original-primary))';
+
     return (
         <motion.div
             className="relative flex items-center justify-center w-[min(80vw,60vh)] h-[min(80vw,60vh)] sm:w-[300px] sm:h-[300px] max-w-[320px] max-h-[320px]"
             style={{
-                transform: `translateY(${counterVerticalOffset}px) scale(${counterScale})`
+                transform: `translateY(${counterVerticalOffset}px) scale(${counterScale})`,
+                color: shapeColor
             }}
         >
             {/* Unified Visual Layers Wrapper - Prevents flex-shift by isolating all absolute elements */}
@@ -147,7 +156,7 @@ export const CounterVisuals = memo(({
                                 fill="none"
                                 stroke="currentColor"
                                 strokeWidth="4"
-                                className="text-original-primary drop-shadow-[0_0_10px_hsl(var(--original-primary)/0.5)]"
+                                className="text-current drop-shadow-[0_0_10px_currentColor]"
                                 pathLength="1"
                                 strokeDasharray="1"
                                 initial={{ strokeDashoffset: 1 }}
@@ -177,7 +186,7 @@ export const CounterVisuals = memo(({
                                 fill="none"
                                 stroke="currentColor"
                                 strokeWidth="4"
-                                className="text-original-primary drop-shadow-[0_0_10px_hsl(var(--original-primary)/0.5)]"
+                                className="text-current drop-shadow-[0_0_10px_currentColor]"
                                 strokeDasharray="772"
                                 initial={{ strokeDashoffset: 772 }}
                                 animate={{ strokeDashoffset: 772 - (772 * progress) }}
@@ -250,7 +259,7 @@ export const CounterVisuals = memo(({
                             {[...Array(8)].map((_, i) => (
                                 <div
                                     key={i}
-                                    className="absolute top-1/2 left-1/2 w-24 h-24 bg-original-primary rounded-full origin-bottom-right"
+                                    className="absolute top-1/2 left-1/2 w-24 h-24 bg-current rounded-full origin-bottom-right"
                                     style={{ transform: `rotate(${i * 45}deg) translate(-50%, -100%)` }}
                                 />
                             ))}
@@ -265,17 +274,17 @@ export const CounterVisuals = memo(({
                         <div className="absolute bottom-0 left-0 right-0 h-full bg-original-muted/20" />
 
                         <motion.div
-                            className="absolute bottom-0 left-0 right-0 bg-original-primary/40 text-original-primary"
+                            className="absolute bottom-0 left-0 right-0 bg-current/40 text-current"
                             initial={{ height: 0 }}
                             animate={{ height: `${Math.max(progress * 100, 5)}%` }}
                             transition={{ type: 'spring', bounce: 0, duration: 0.5 }}
                         >
                             {/* Glowing Top Edge */}
-                            <div className="absolute top-0 left-0 right-0 h-1 bg-original-primary shadow-[0_0_15px_currentColor]" />
-                            <div className="absolute top-0 left-0 right-0 h-6 bg-original-primary/40 blur-md transform -translate-y-1/2" />
+                            <div className="absolute top-0 left-0 right-0 h-1 bg-current shadow-[0_0_15px_currentColor]" />
+                            <div className="absolute top-0 left-0 right-0 h-6 bg-current/40 blur-md transform -translate-y-1/2" />
                         </motion.div>
                         {/* Crisp outline */}
-                        <div className="absolute inset-0 rounded-full border-2 border-original-primary/30 pointer-events-none" />
+                        <div className="absolute inset-0 rounded-full border-2 border-current/30 pointer-events-none" />
                     </div>
                 )}
 
@@ -295,8 +304,8 @@ export const CounterVisuals = memo(({
                                     return (
                                         <circle
                                             key={i}
-                                            cx={isNaN(x) ? 128 : x}
-                                            cy={isNaN(y) ? 128 : y}
+                                            cx={Number.isFinite(x) ? x : 128}
+                                            cy={Number.isFinite(y) ? y : 128}
                                             r="4.5"
                                             fill={i < (safeProgress * 33) ? "var(--primary)" : "rgba(255,255,255,0.15)"}
                                             style={{
@@ -344,7 +353,7 @@ export const CounterVisuals = memo(({
                             <motion.div
                                 animate={{ rotate: 360 }}
                                 transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-                                className="absolute w-[280px] h-[280px] rounded-full border border-original-primary/10 border-t-original-primary/50 border-r-transparent"
+                                className="absolute w-[280px] h-[280px] rounded-full border border-current/10 border-t-current/50 border-r-transparent"
                             />
                             <motion.div
                                 animate={{ rotate: -360 }}
@@ -377,7 +386,7 @@ export const CounterVisuals = memo(({
                     <div className="absolute inset-0 flex items-center justify-center -z-10 scale-[0.8]">
                         <svg width="100%" height="100%" viewBox="0 0 300 300" className="animate-[spin_60s_linear_infinite]">
                             {/* Outer Ring */}
-                            <circle cx="150" cy="150" r="145" stroke="currentColor" strokeWidth="1" className="text-original-primary/30" />
+                            <circle cx="150" cy="150" r="145" stroke="currentColor" strokeWidth="1" className="text-current/30" />
 
                             {/* 8-pointed Islamic Star */}
                             <path
@@ -385,7 +394,7 @@ export const CounterVisuals = memo(({
                                 fill="none"
                                 stroke="currentColor"
                                 strokeWidth="2"
-                                className="text-original-primary/20"
+                                className="text-current/20"
                             />
                             {/* Inner dashed circle */}
                             <circle cx="150" cy="150" r="130" stroke="currentColor" strokeWidth="1" className="text-original-muted/10" strokeDasharray="4 4" />
@@ -398,7 +407,7 @@ export const CounterVisuals = memo(({
 
                 {counterShape === 'fluid' && (
                     <div className="absolute inset-0 flex items-center justify-center -z-10 overflow-hidden rounded-full">
-                        <div className="absolute inset-0 bg-original-primary/5 opacity-50 blur-3xl" />
+                        <div className="absolute inset-0 bg-current/5 opacity-50 blur-3xl" />
                         <motion.div
                             className="absolute inset-0 bg-gradient-to-tr from-original-primary/30 to-original-secondary/30"
                             animate={{
@@ -446,16 +455,16 @@ export const CounterVisuals = memo(({
                                     return (
                                         <g key={i}>
                                             <circle
-                                                cx={isNaN(x) ? 150 : x}
-                                                cy={isNaN(y) ? 150 : y}
+                                                cx={Number.isFinite(x) ? x : 150}
+                                                cy={Number.isFinite(y) ? y : 150}
                                                 r="12"
                                                 fill="url(#beadGradient)"
                                                 stroke="#5d4037"
                                                 strokeWidth="1"
                                             />
                                             <circle
-                                                cx={isNaN(x) ? 150 : x - 3}
-                                                cy={isNaN(y) ? 150 : y - 3}
+                                                cx={Number.isFinite(x) ? x - 3 : 147}
+                                                cy={Number.isFinite(y) ? y - 3 : 147}
                                                 r="4"
                                                 fill="white"
                                                 opacity="0.3"
@@ -483,13 +492,13 @@ export const CounterVisuals = memo(({
                 {counterShape === 'radar' && (
                     <div className="absolute inset-0 flex items-center justify-center -z-10 bg-black/80 rounded-full border-2 border-original-primary/30 overflow-hidden">
                         {/* Grid */}
-                        <div className="absolute inset-0" style={{ backgroundImage: 'radial-gradient(circle, hsl(var(--original-primary)/0.2) 1px, transparent 1px)', backgroundSize: '30px 30px' }} />
-                        <div className="absolute inset-0 border border-original-primary/20 rounded-full scale-50" />
-                        <div className="absolute inset-0 border border-original-primary/20 rounded-full scale-75" />
+                        <div className="absolute inset-0" style={{ backgroundImage: 'radial-gradient(circle, currentColor 1px, transparent 1px)', backgroundSize: '30px 30px' }} />
+                        <div className="absolute inset-0 border border-current/20 rounded-full scale-50" />
+                        <div className="absolute inset-0 border border-current/20 rounded-full scale-75" />
 
                         {/* Scanner */}
                         <motion.div
-                            className="absolute inset-0 bg-[conic-gradient(from_0deg,transparent_0deg,hsl(var(--original-primary)/0.5)_360deg)]"
+                            className="absolute inset-0 bg-[conic-gradient(from_0deg,transparent_0deg,currentColor_360deg)] opacity-50"
                             animate={{ rotate: 360 }}
                             transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
                             style={{ clipPath: 'polygon(50% 50%, 100% 50%, 100% 0, 50% 0)' }}
@@ -513,7 +522,7 @@ export const CounterVisuals = memo(({
                         {Array.from({ length: 5 }).map((_, i) => (
                             <motion.div
                                 key={i}
-                                className="absolute inset-0 rounded-full border-2 border-original-primary/50 shadow-[0_0_20px_hsl(var(--original-primary)/0.5)]"
+                                className="absolute inset-0 rounded-full border-2 border-current/50 shadow-[0_0_20px_currentColor]"
                                 initial={{ scale: 0.1, opacity: 0 }}
                                 animate={{ scale: 2, opacity: [0, 1, 0] }}
                                 transition={{ duration: 4, repeat: Infinity, delay: i * 0.8, ease: "linear" }}
@@ -525,9 +534,9 @@ export const CounterVisuals = memo(({
 
                 {counterShape === 'luminous-ring' && (
                     <div className="absolute inset-0 flex items-center justify-center -z-10">
-                        <div className="w-[280px] h-[280px] rounded-full bg-black flex items-center justify-center shadow-[0_0_60px_hsl(var(--original-primary)/0.3)] border border-original-primary/20">
-                            <div className="w-[90%] h-[90%] rounded-full border-[6px] border-original-primary shadow-[0_0_20px_hsl(var(--original-primary)/0.8),inset_0_0_20px_hsl(var(--original-primary)/0.5)]" />
-                            <div className="absolute inset-0 bg-gradient-to-b from-original-primary/20 to-transparent rounded-full mix-blend-overlay" />
+                        <div className="w-[280px] h-[280px] rounded-full bg-black flex items-center justify-center shadow-[0_0_60px_currentColor] border border-current/20">
+                            <div className="w-[90%] h-[90%] rounded-full border-[6px] border-current shadow-[0_0_20px_currentColor,inset_0_0_20px_currentColor]" />
+                            <div className="absolute inset-0 bg-gradient-to-b from-current/20 to-transparent rounded-full mix-blend-overlay" />
                         </div>
                     </div>
                 )}
@@ -617,7 +626,7 @@ export const CounterVisuals = memo(({
                                 </div>
 
                                 {/* Main Glow Source behind numbers */}
-                                <div className="absolute w-[80%] h-[80%] bg-original-primary opacity-10 blur-xl rounded-full animate-pulse-slow" />
+                                <div className="absolute w-[80%] h-[80%] bg-current opacity-10 blur-xl rounded-full animate-pulse-slow" />
                             </div>
                         </div>
                     </div>
@@ -743,7 +752,7 @@ export const CounterVisuals = memo(({
                 {counterShape === 'nebula-cloud' && (
                     <div className="absolute inset-0 flex items-center justify-center -z-10">
                         <motion.div
-                            className="w-full h-full rounded-full bg-gradient-to-tr from-original-primary/20 via-transparent to-accent/20 blur-2xl"
+                            className="w-full h-full rounded-full bg-gradient-to-tr from-current/20 via-transparent to-accent/20 blur-2xl"
                             animate={{
                                 rotate: 360,
                                 scale: [1, 1.2, 1],
@@ -753,7 +762,7 @@ export const CounterVisuals = memo(({
                         {Array.from({ length: 12 }).map((_, i) => (
                             <motion.div
                                 key={i}
-                                className="absolute w-24 h-24 bg-original-primary/10 rounded-full blur-xl"
+                                className="absolute w-24 h-24 bg-current/10 rounded-full blur-xl"
                                 animate={{
                                     x: [0, Math.cos(i) * 100, 0],
                                     y: [0, Math.sin(i) * 100, 0],
@@ -786,7 +795,7 @@ export const CounterVisuals = memo(({
                                 fill="none"
                                 stroke="currentColor"
                                 strokeWidth="2"
-                                className="text-original-primary/50"
+                                className="text-current/50"
                                 initial={{ pathLength: 0 }}
                                 animate={{ pathLength: 1, rotate: [0, -360] }}
                                 transition={{

@@ -87,8 +87,8 @@ export function SmartRing({ currentCount }: SmartRingProps) {
                             fill="white"
                             filter="url(#glow)"
                             animate={{
-                                cx: isNaN(targetX) ? centerX : targetX,
-                                cy: isNaN(targetY) ? centerY : targetY
+                                cx: Number.isFinite(targetX) ? targetX : centerX,
+                                cy: Number.isFinite(targetY) ? targetY : centerY,
                             }}
                             transition={{ type: "spring", stiffness: 100, damping: 20 }}
                         />

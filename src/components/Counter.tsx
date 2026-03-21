@@ -12,6 +12,7 @@ import { UndoButton } from './UndoButton';
 import { initShakeDetection, isShakeDetectionSupported } from '@/lib/shakeDetection';
 import { requestWakeLock, releaseWakeLock, isWakeLockSupported } from '@/lib/wakeLock';
 import { initVolumeButtonListener } from '@/lib/volumeButtons';
+import { themes, counterShapes } from '@/lib/constants';
 import { toast } from 'sonner';
 
 export function Counter() {
@@ -302,13 +303,20 @@ export function Counter() {
   const progress = getProgress();
   const totalProgress = getTotalSessionProgress();
 
+  const currentShapeData = counterShapes.find(s => s.id === counterShape);
+  const shapeBg = currentShapeData?.bg || 'transparent';
+  const shapeColor = currentShapeData?.color || 'currentColor';
+
   const renderSection = (id: string) => {
     switch (id) {
       case 'dhikr':
         return renderDhikrText();
       case 'counter':
         return (
-          <div className="flex flex-col items-center justify-center w-full relative z-10 my-0.5 select-none">
+          <div 
+            className="flex flex-col items-center justify-center w-full relative z-10 my-0.5 select-none rounded-[40px] transition-all duration-700 p-8"
+            style={{ backgroundColor: shapeBg }}
+          >
             {/* Pull-to-Reset Wrapper */}
             <motion.div 
               drag="y"
@@ -352,43 +360,13 @@ export function Counter() {
                   </motion.div>
                 )}
               </AnimatePresence>
-
+ 
               <div className="relative transition-all duration-300 transform-none select-none"
                 style={{ 
                   filter: pullProgress > 0 ? `blur(${pullProgress * 4}px)` : 'none',
                   opacity: 1 - (pullProgress * 0.3)
                 }}
               >
-                {/* Classic Mobile Controls above the counter */}
-                {!zenMode && (counterShape === 'digital' || counterShape === 'classic') && (
-                  <div className="absolute top-2 left-1/2 -translate-x-1/2 flex items-center justify-center gap-8 z-20 pointer-events-auto">
-                    <motion.button
-                      whileTap={{ scale: 0.95 }}
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        useTasbeehStore.getState().decrement();
-                      }}
-                      disabled={currentCount === 0}
-                      className="w-10 h-10 rounded-full bg-secondary/10 backdrop-blur-sm flex items-center justify-center disabled:opacity-30 hover:bg-secondary/30 transition-colors border border-white/5 shadow-sm"
-                    >
-                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14" /></svg>
-                    </motion.button>
-                    <motion.button
-                      whileTap={{ scale: 0.95 }}
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        if (window.confirm('Reset counter?')) {
-                          useTasbeehStore.getState().reset();
-                        }
-                      }}
-                      disabled={currentCount === 0}
-                      className="w-10 h-10 rounded-full bg-secondary/10 backdrop-blur-sm flex items-center justify-center disabled:opacity-30 hover:bg-secondary/30 transition-colors border border-white/5 shadow-sm"
-                    >
-                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 12" /><path d="M3 3v9h9" /></svg>
-                    </motion.button>
-                  </div>
-                )}
-
                 <CounterVisuals
                   counterShape={counterShape}
                   counterVerticalOffset={counterVerticalOffset}
@@ -403,10 +381,10 @@ export function Counter() {
                 />
               </div>
             </motion.div>
-
-            {/* Mobile controls (Minus & Reset) removed below counter for classic layouts as they are moved above */}
-            {!(counterShape === 'digital' || counterShape === 'classic') && (
-              <div className={`flex items-center justify-center gap-3 xs:gap-6 sm:gap-8 mt-4 xs:mt-5 sm:mt-6 lg:hidden relative z-20 transition-opacity duration-300 ${zenMode ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
+ 
+            {/* Main Controls - Unified below the counter */}
+            {!zenMode && (
+              <div className={`flex items-center justify-center gap-3 xs:gap-6 sm:gap-8 mt-4 xs:mt-5 sm:mt-6 relative z-20 transition-opacity duration-300`}>
                 <motion.button
                   whileTap={{ scale: 0.95 }}
                   onClick={(e) => {
@@ -415,10 +393,12 @@ export function Counter() {
                   }}
                   disabled={currentCount === 0}
                   className="w-10 h-10 xs:w-11 xs:h-11 sm:w-12 sm:h-12 rounded-full bg-secondary/50 backdrop-blur-sm flex items-center justify-center disabled:opacity-30 hover:bg-secondary transition-colors border border-white/5"
+                  title="Decrement"
+                  style={{ color: shapeColor }}
                 >
                   <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14" /></svg>
                 </motion.button>
-
+ 
                 <motion.button
                   whileTap={{ scale: 0.95 }}
                   onClick={(e) => {
@@ -429,33 +409,15 @@ export function Counter() {
                   }}
                   disabled={currentCount === 0}
                   className="w-10 h-10 xs:w-11 xs:h-11 sm:w-12 sm:h-12 rounded-full bg-secondary/50 backdrop-blur-sm flex items-center justify-center disabled:opacity-30 hover:bg-secondary transition-colors border border-white/5"
+                  title="Reset"
+                  style={{ color: shapeColor }}
                 >
                   <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 12" /><path d="M3 3v9h9" /></svg>
                 </motion.button>
-
+ 
                 <UndoButton />
-
-                {/* Direct Counter Shape Button */}
-                <SettingsView defaultTab="appearance">
-                  <motion.button
-                    whileTap={{ scale: 0.95 }}
-                    className="w-10 h-10 xs:w-11 xs:h-11 sm:w-12 sm:h-12 rounded-full bg-primary/20 backdrop-blur-sm flex items-center justify-center hover:bg-primary/30 transition-colors border border-primary/20 shadow-[0_0_15px_rgba(var(--primary),0.3)]"
-                    title="Change Shapes"
-                  >
-                    <div className="relative">
-                      <div className="grid grid-cols-2 gap-0.5">
-                        <div className="w-1.5 h-1.5 rounded-sm bg-primary" />
-                        <div className="w-1.5 h-1.5 rounded-sm bg-primary/70" />
-                        <div className="w-1.5 h-1.5 rounded-sm bg-primary/50" />
-                        <div className="w-1.5 h-1.5 rounded-sm bg-primary/90" />
-                      </div>
-                    </div>
-                  </motion.button>
-                </SettingsView>
               </div>
             )}
-
-            {/* Routine Next Step Button Removed */}
           </div>
         );
       case 'stats':

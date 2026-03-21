@@ -19,8 +19,8 @@ export function LuminousBeads({ progress }: LuminousBeadsProps) {
                     const radius = 110;
                     const rawX = 128 + radius * Math.cos((angle * Math.PI) / 180);
                     const rawY = 128 + radius * Math.sin((angle * Math.PI) / 180);
-                    const x = isNaN(rawX) ? 128 : rawX;
-                    const y = isNaN(rawY) ? 128 : rawY;
+                    const x = Number.isFinite(rawX) ? rawX : 128;
+                    const y = Number.isFinite(rawY) ? rawY : 128;
 
                     // Calculate if this bead is active based on progress
                     // Assuming progress 0-1 maps to 0-33 beads

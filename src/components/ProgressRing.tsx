@@ -20,9 +20,9 @@ export function ProgressRing({
   const safeProgress = isNaN(progress) ? 0 : Math.max(0, Math.min(1, progress));
   const offset = circumference - (safeProgress * circumference);
 
-  const cx = safeSize / 2;
-  const cy = safeSize / 2;
-  const safeRadius = isNaN(radius) || radius < 0 ? 0 : radius;
+  const cx = Number.isFinite(safeSize) ? safeSize / 2 : 140;
+  const cy = Number.isFinite(safeSize) ? safeSize / 2 : 140;
+  const safeRadius = Number.isFinite(radius) && radius >= 0 ? radius : 0;
 
   return (
     <svg

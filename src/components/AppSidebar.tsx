@@ -127,25 +127,6 @@ export function AppSidebar() {
                 </SidebarGroup>
 
                 {/* App Settings */}
-                <SidebarGroup className="pb-10">
-                    <SidebarGroupLabel>Application</SidebarGroupLabel>
-                    <SidebarGroupContent>
-                        <SidebarMenu>
-
-
-                            <SidebarMenuItem>
-                                <SettingsView>
-                                    <SidebarMenuButton asChild tooltip="Settings">
-                                        <button className="w-full justify-start cursor-pointer hover:bg-secondary/50">
-                                            <Settings className="text-muted-foreground" />
-                                            <span>Settings</span>
-                                        </button>
-                                    </SidebarMenuButton>
-                                </SettingsView>
-                            </SidebarMenuItem>
-                        </SidebarMenu>
-                    </SidebarGroupContent>
-                </SidebarGroup>
             </SidebarContent>
         </Sidebar>
     );

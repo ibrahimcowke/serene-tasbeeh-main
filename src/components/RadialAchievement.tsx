@@ -66,8 +66,8 @@ export const RadialAchievement = ({ progress, title }: RadialAchievementProps) =
 
                         return (
                             <motion.circle
-                                cx={isNaN(targetX) ? centerX : targetX}
-                                cy={isNaN(targetY) ? centerY : targetY}
+                                 cx={Number.isFinite(targetX) ? targetX : centerX}
+                                 cy={Number.isFinite(targetY) ? targetY : centerY}
                                 r="6"
                                 fill="#4ade80"
                                 filter="url(#glow)"
