@@ -39,6 +39,7 @@ import { requestNotificationPermission, sendLocalNotification } from '@/lib/noti
 
 interface SettingsViewProps {
   children: React.ReactNode;
+  defaultTab?: string;
 }
 
 import { themes, counterShapes, APP_VERSION } from '@/lib/constants';
@@ -46,7 +47,7 @@ import { themes, counterShapes, APP_VERSION } from '@/lib/constants';
 
 import { RemindersView } from './RemindersView';
 
-export function SettingsView({ children }: SettingsViewProps) {
+export function SettingsView({ children, defaultTab = 'appearance' }: SettingsViewProps) {
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
 
@@ -62,8 +63,6 @@ export function SettingsView({ children }: SettingsViewProps) {
     setFontScale,
     setSoundType,
     setTheme,
-    layout,
-    setLayout,
     hadithSlideDuration,
     hadithSlidePosition,
     setHadithSlideDuration,
@@ -162,7 +161,7 @@ export function SettingsView({ children }: SettingsViewProps) {
         </SheetHeader>
 
         <div className="flex-1 overflow-hidden flex flex-col">
-          <Tabs defaultValue="appearance" className="flex-1 flex flex-col h-full">
+          <Tabs defaultValue={defaultTab} className="flex-1 flex flex-col h-full">
             <div className="px-6 pt-2 pb-4 shrink-0 bg-background/50 backdrop-blur-sm z-10">
               <TabsList className="grid w-full grid-cols-2">
                 <TabsTrigger value="appearance" className="flex-1">Settings</TabsTrigger>

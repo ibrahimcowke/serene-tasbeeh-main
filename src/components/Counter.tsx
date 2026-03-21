@@ -5,7 +5,7 @@ import { ProgressRing } from './ProgressRing';
 import { HadithSlider } from './HadithSlider';
 import { SoundManager } from '@/lib/sound';
 import { CounterVisuals } from './CounterVisuals';
-import { Settings, Palette } from 'lucide-react';
+import { Settings, Palette, Grid } from 'lucide-react';
 import { SettingsView } from './SettingsView';
 import { SessionTimer } from './SessionTimer';
 import { UndoButton } from './UndoButton';
@@ -24,25 +24,17 @@ export function Counter() {
     sessionMode,
     theme,
     themeSettings,
-    layout = 'default',
-    counterShape = 'plain', // Default to plain if undefined in persisted state
-    hadithSlidePosition = 'right',
-    verticalOffset = 0,
+    counterShape = 'plain',
     dhikrVerticalOffset = 0,
     counterVerticalOffset = 0,
     counterScale = 1,
     countFontSize = 1,
-    dhikrTextPosition = 'below-counter',
-    layoutOrder,
-    setLayoutOrder,
     shakeToReset,
     wakeLockEnabled,
     volumeButtonCounting,
     reset,
-    nextRoutineStep,
     increment,
     decrement,
-    exitSessionMode,
   } = useTasbeehStore();
 
   // Ensure we have the latest data (e.g. hadiths) even if state is persisted
@@ -57,7 +49,6 @@ export function Counter() {
   };
 
   const [showCompletion, setShowCompletion] = useState(false);
-  const [isEditingLayout, setIsEditingLayout] = useState(false);
   const lastCompletionRef = useRef<number>(0);
 
   // Calculate progress based on mode
@@ -362,7 +353,7 @@ export function Counter() {
                 )}
               </AnimatePresence>
 
-              <div className={`relative transition-all duration-300 ${isEditingLayout ? 'pointer-events-none opacity-50' : ''}`}
+              <div className="relative transition-all duration-300 transform-none select-none"
                 style={{ 
                   filter: pullProgress > 0 ? `blur(${pullProgress * 4}px)` : 'none',
                   opacity: 1 - (pullProgress * 0.3)
@@ -399,7 +390,6 @@ export function Counter() {
                 )}
 
                 <CounterVisuals
-                  layout={layout}
                   counterShape={counterShape}
                   counterVerticalOffset={counterVerticalOffset}
                   counterScale={counterScale}
@@ -416,7 +406,7 @@ export function Counter() {
 
             {/* Mobile controls (Minus & Reset) removed below counter for classic layouts as they are moved above */}
             {!(counterShape === 'digital' || counterShape === 'classic') && (
-              <div className={`flex items-center justify-center gap-3 xs:gap-6 sm:gap-8 mt-4 xs:mt-5 sm:mt-6 lg:hidden relative z-20 transition-opacity duration-300 ${isEditingLayout || zenMode ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
+              <div className={`flex items-center justify-center gap-3 xs:gap-6 sm:gap-8 mt-4 xs:mt-5 sm:mt-6 lg:hidden relative z-20 transition-opacity duration-300 ${zenMode ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
                 <motion.button
                   whileTap={{ scale: 0.95 }}
                   onClick={(e) => {
@@ -445,14 +435,21 @@ export function Counter() {
 
                 <UndoButton />
 
-                {/* Theme & Shape selectors moved inline from absolute position */}
-                <SettingsView>
+                {/* Direct Counter Shape Button */}
+                <SettingsView defaultTab="appearance">
                   <motion.button
                     whileTap={{ scale: 0.95 }}
-                    className="w-10 h-10 xs:w-11 xs:h-11 sm:w-12 sm:h-12 rounded-full bg-secondary/50 backdrop-blur-sm flex items-center justify-center hover:bg-secondary transition-colors border border-white/5"
-                    title="Settings"
+                    className="w-10 h-10 xs:w-11 xs:h-11 sm:w-12 sm:h-12 rounded-full bg-primary/20 backdrop-blur-sm flex items-center justify-center hover:bg-primary/30 transition-colors border border-primary/20 shadow-[0_0_15px_rgba(var(--primary),0.3)]"
+                    title="Change Shapes"
                   >
-                    <Palette className="w-4 h-4 text-muted-foreground" />
+                    <div className="relative">
+                      <div className="grid grid-cols-2 gap-0.5">
+                        <div className="w-1.5 h-1.5 rounded-sm bg-primary" />
+                        <div className="w-1.5 h-1.5 rounded-sm bg-primary/70" />
+                        <div className="w-1.5 h-1.5 rounded-sm bg-primary/50" />
+                        <div className="w-1.5 h-1.5 rounded-sm bg-primary/90" />
+                      </div>
+                    </div>
                   </motion.button>
                 </SettingsView>
               </div>
@@ -463,8 +460,7 @@ export function Counter() {
         );
       case 'stats':
         return (
-          <div className={`mt-0 sm:mt-1 text-center transition-opacity duration-300 ${layout === 'focus' ? 'opacity-50 hover:opacity-100' : ''}`}>
-            {/* SessionTimer removed */}
+          <div className="mt-0 sm:mt-1 text-center transition-opacity duration-300">
             <p className="text-xs xs:text-sm text-muted-foreground">
               {currentCount} / {getCurrentTarget() > 0 ? getCurrentTarget() : '∞'}
             </p>
@@ -502,51 +498,16 @@ export function Counter() {
   };
 
   return (
-    <>
-      <div className={`flex flex-col items-center flex-1 px-4 sm:px-6 md:px-8 lg:px-12 relative w-full min-h-full transition-all duration-500 py-1
-      ${layout === 'ergonomic' ? 'justify-end pb-8' : ''}
-    `}
-        style={{ transform: `translateY(${verticalOffset}px)` }}
-      >
-
-        {!zenMode && (
-          <button
-            onClick={() => setIsEditingLayout(!isEditingLayout)}
-            className={`absolute top-4 right-4 z-50 p-2 rounded-full backdrop-blur-md transition-all duration-300 ${isEditingLayout ? 'bg-primary text-primary-foreground shadow-lg scale-110' : 'bg-secondary/30 text-muted-foreground hover:bg-secondary/50'}`}
-            title="Edit Layout"
-          >
-            {isEditingLayout ? (
-              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z" /><polyline points="17 21 17 13 7 13 7 21" /><polyline points="7 3 7 8 15 8" /></svg>
-            ) : (
-              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" /><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" /></svg>
-            )}
-          </button>
-        )}
-
-        <AnimatePresence>
-          {/* Session mode indicators moved to renderDhikrText to be grouped with Dhikr text */}
-        </AnimatePresence>
-
-        <div className={`relative flex flex-col items-center justify-center w-full max-w-7xl mx-auto z-10 ${layout !== 'ergonomic' ? 'my-auto' : ''}`}>
-
-          <Reorder.Group axis="y" values={layoutOrder || ['dhikr', 'counter']} onReorder={setLayoutOrder} className="flex flex-col items-center w-full">
-            {(layoutOrder || ['dhikr', 'counter']).map(item => (
-              <Reorder.Item key={item} value={item} dragListener={isEditingLayout} className={`w-full flex justify-center touch-none ${isEditingLayout ? 'cursor-grab active:cursor-grabbing border-2 border-dashed border-primary/30 rounded-xl p-4 my-2 hover:bg-primary/5 relative bg-background/50 backdrop-blur-sm' : ''}`}>
-                {isEditingLayout && (
-                  <div className="absolute top-2 right-2 text-muted-foreground pointer-events-none">
-                    <svg width="16" height="16" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-4 h-4"><path d="M5.5 3C5.5 3.55228 5.05228 4 4.5 4C3.94772 4 3.5 3.55228 3.5 3C3.5 2.44772 3.94772 2 4.5 2C5.05228 2 5.5 2.44772 5.5 3ZM8.5 3C8.5 3.55228 8.05228 4 7.5 4C6.94772 4 6.5 3.55228 6.5 3C6.5 2.44772 6.94772 2 7.5 2C8.05228 2 8.5 2.44772 8.5 3ZM11.5 3C11.5 3.55228 11.0523 4 10.5 4C9.94772 4 9.5 3.55228 9.5 3C9.5 2.44772 9.94772 2 10.5 2C11.0523 2 11.5 2.44772 11.5 3ZM5.5 7.5C5.5 8.05228 5.05228 8.5 4.5 8.5C3.94772 8.5 3.5 8.05228 3.5 7.5C3.5 6.94772 3.94772 6.5 4.5 6.5C5.05228 6.5 5.5 6.94772 5.5 7.5ZM8.5 7.5C8.5 8.05228 8.05228 8.5 7.5 8.5C6.94772 8.5 6.5 8.05228 6.5 7.5C6.5 6.94772 6.94772 6.5 7.5 6.5C8.05228 6.5 8.5 6.94772 8.5 7.5ZM11.5 7.5C11.5 8.05228 11.0523 8.5 10.5 8.5C9.94772 8.5 9.5 8.05228 9.5 7.5C9.5 6.94772 9.94772 6.5 10.5 6.5C11.0523 6.5 11.5 6.94772 11.5 7.5ZM5.5 12C5.5 12.5523 5.05228 13 4.5 13C3.94772 13 3.5 12.5523 3.5 12C3.5 11.4477 3.94772 11 4.5 11C5.05228 11 5.5 11.4477 5.5 12ZM8.5 12C8.5 12.5523 8.05228 13 7.5 13C6.94772 13 6.5 12.5523 6.5 12C6.5 11.4477 6.94772 11 7.5 11C8.05228 11 8.5 11.4477 8.5 12ZM11.5 12C11.5 12.5523 11.0523 13 10.5 13C9.94772 13 9.5 12.5523 9.5 12C9.5 11.4477 9.94772 11 10.5 11C11.0523 11 11.5 11.4477 11.5 12Z" fill="currentColor" fillRule="evenodd" clipRule="evenodd"></path></svg>
-                  </div>
-                )}
-                {renderSection(item)}
-              </Reorder.Item>
-            ))}
-          </Reorder.Group>
+    <div className="flex flex-col items-center flex-1 px-4 sm:px-6 md:px-8 lg:px-12 relative w-full min-h-full py-1">
+      <div className="relative flex flex-col items-center justify-center w-full max-w-7xl mx-auto z-10 my-auto">
+        <div className="flex flex-col items-center w-full">
+          {['dhikr', 'counter', 'hadith', 'stats'].map(item => (
+            <div key={item} className="w-full flex justify-center">
+              {renderSection(item)}
+            </div>
+          ))}
         </div>
-
       </div>
-
-      <AnimatePresence>
-      </AnimatePresence>
-    </>
+    </div>
   );
 }

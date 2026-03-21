@@ -11,7 +11,6 @@ import { CyberHexagon } from './counter-shapes/CyberHexagon';
 import { BloomingLotus } from './counter-shapes/BloomingLotus';
 import { Constellation } from './counter-shapes/Constellation';
 import { GlassPill } from './counter-shapes/GlassPill';
-import { EmeraldLoop } from './counter-shapes/EmeraldLoop';
 import { SmartRing } from './counter-shapes/SmartRing';
 import { MoonPhase } from './counter-shapes/MoonPhase';
 import { WaterRipple } from './counter-shapes/WaterRipple';
@@ -37,7 +36,6 @@ import { FireEmbers } from './counter-shapes/FireEmbers';
 
 
 interface CounterVisualsProps {
-    layout: 'default' | 'focus' | 'ergonomic' | 'hub' | 'zen' | 'minimal' | 'timeline' | 'classic';
     counterShape: CounterShape;
     counterVerticalOffset: number;
     counterScale: number;
@@ -112,7 +110,6 @@ export const CounterNumber = memo(({
 });
 
 export const CounterVisuals = memo(({
-    layout,
     counterShape,
     counterVerticalOffset,
     counterScale,
@@ -127,12 +124,7 @@ export const CounterVisuals = memo(({
 }: CounterVisualsProps) => {
     return (
         <motion.div
-            layout
-            className={`relative flex items-center justify-center
-      ${layout === 'focus' ? 'scale-100 sm:scale-110' : ''}
-      ${layout === 'ergonomic' ? 'scale-90 sm:scale-100 translate-y-2 sm:translate-y-4' : ''}
-      ${layout === 'hub' ? 'w-[min(80vw,60vh)] h-[min(80vw,60vh)] sm:w-[300px] sm:h-[300px] max-w-[320px] max-h-[320px]' : 'w-[min(80vw,60vh)] h-[min(80vw,60vh)] sm:w-[300px] sm:h-[300px] max-w-[320px] max-h-[320px]'}
-    `}
+            className="relative flex items-center justify-center w-[min(80vw,60vh)] h-[min(80vw,60vh)] sm:w-[300px] sm:h-[300px] max-w-[320px] max-h-[320px]"
             style={{
                 transform: `translateY(${counterVerticalOffset}px) scale(${counterScale})`
             }}
@@ -859,7 +851,6 @@ export const CounterVisuals = memo(({
                         {counterShape === 'blooming-lotus' && <BloomingLotus currentCount={currentCount} />}
                         {counterShape === 'constellation' && <Constellation currentCount={currentCount} />}
                         {counterShape === 'glass-pill' && <GlassPill currentCount={currentCount} />}
-                        {counterShape === 'emerald-loop' && <EmeraldLoop currentCount={currentCount} />}
                         {counterShape === 'smart-ring' && <SmartRing currentCount={currentCount} />}
                         {counterShape === 'moon-phase' && <MoonPhase currentCount={currentCount} />}
                         {counterShape === 'water-ripple' && <WaterRipple currentCount={currentCount} />}

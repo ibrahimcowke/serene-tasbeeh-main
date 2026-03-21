@@ -62,7 +62,6 @@ export const counterShapes = [
   { id: 'blooming-lotus', label: 'Lotus', icon: '🌸' },
   { id: 'constellation', label: 'Stars', icon: '🌌' },
   { id: 'glass-pill', label: 'iOS Glass', icon: '🔮' },
-  { id: 'emerald-loop', label: 'Emerald', icon: '🕋' },
   { id: 'smart-ring', label: 'Smart Ring', icon: '⌚' },
 
   // New Shapes

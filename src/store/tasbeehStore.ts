@@ -81,7 +81,6 @@ interface TasbeehState {
 
   // Global preference (not per theme)
   counterShape: CounterShape;
-  layout: 'default' | 'focus' | 'ergonomic' | 'hub' | 'zen' | 'minimal' | 'timeline' | 'classic';
   showTransliteration: boolean;
 
   // Mindfulness
@@ -140,7 +139,6 @@ interface TasbeehState {
   shakeToReset: boolean;
   wakeLockEnabled: boolean;
   volumeButtonCounting: boolean;
-  dashboardType: 'classic';
   lastSeenVersion: string | null;
   deviceId: string;
 
@@ -193,7 +191,6 @@ interface TasbeehState {
 
   // New Settings Actions
   setCounterShape: (shape: CounterShape) => void;
-  setLayout: (layout: 'default' | 'focus' | 'ergonomic' | 'hub' | 'zen' | 'minimal' | 'timeline' | 'classic') => void;
   setHadithSlideDuration: (duration: number) => void;
   setHadithSlidePosition: (position: 'top-right' | 'top-left' | 'bottom-right' | 'bottom-left' | 'right' | 'bottom' | 'hidden') => void;
   setDailyGoal: (goal: number) => void;
@@ -209,17 +206,12 @@ interface TasbeehState {
   setCountFontSize: (scale: number) => void;
   setDhikrTextPosition: (position: 'top' | 'above-counter' | 'below-counter' | 'bottom' | 'hidden') => void;
 
-  // Layout Ordering
-  layoutOrder: string[];
-  setLayoutOrder: (order: string[]) => void;
-
   // Quick Win Actions
   undo: () => void;
   setAutoThemeSwitch: (enabled: boolean) => void;
   setShakeToReset: (enabled: boolean) => void;
   setWakeLockEnabled: (enabled: boolean) => void;
   setVolumeButtonCounting: (enabled: boolean) => void;
-  setDashboardType: (type: 'classic') => void;
   setLastSeenVersion: (version: string) => void;
 
   // Notification Actions
@@ -531,7 +523,6 @@ export const useTasbeehStore = create<TasbeehState>()(
       hadithSlideDuration: 15, // 15 seconds default
       hadithSlidePosition: 'right', // default position
       dhikrTextPosition: 'below-counter', // Default position
-      layoutOrder: ['dhikr', 'counter', 'hadith', 'stats'], // Default order
       verticalOffset: 0,
       dhikrVerticalOffset: 0,
       counterVerticalOffset: 0,
@@ -578,7 +569,6 @@ export const useTasbeehStore = create<TasbeehState>()(
       shakeToReset: false,
       wakeLockEnabled: false,
       volumeButtonCounting: false,
-      dashboardType: 'classic',
       lastSeenVersion: null,
       deviceId: (() => {
         let id = localStorage.getItem('visitor_device_id');
@@ -829,7 +819,6 @@ export const useTasbeehStore = create<TasbeehState>()(
           themeSettings: initialThemeSettings,
           theme: 'light',
           counterShape: 'minimal',
-          layout: 'default',
           showTransliteration: true
         });
       },
@@ -986,8 +975,6 @@ export const useTasbeehStore = create<TasbeehState>()(
             // Basic merge, real logic might be slightly safer but this works for simple restore
             theme: parsed.settings?.theme || state.theme,
             counterShape: parsed.settings?.counterShape || state.counterShape,
-            layout: parsed.settings?.layout || state.layout,
-            layoutOrder: parsed.settings?.layoutOrder || state.layoutOrder,
             themeSettings: parsed.settings?.themeSettings || state.themeSettings
           }));
           return true;
@@ -1090,7 +1077,6 @@ export const useTasbeehStore = create<TasbeehState>()(
       },
 
       setCounterShape: (shape) => set({ counterShape: shape }),
-      setLayout: (layout) => set({ layout, zenMode: layout === 'zen' }),
       setHadithSlideDuration: (duration) => set({ hadithSlideDuration: duration }),
       setHadithSlidePosition: (position) => set({ hadithSlidePosition: position }),
       setDailyGoal: (goal) => set({ dailyGoal: goal }),
@@ -1100,8 +1086,7 @@ export const useTasbeehStore = create<TasbeehState>()(
       setCounterScale: (scale) => set({ counterScale: scale }),
       setCountFontSize: (scale) => set({ countFontSize: scale }),
       setDhikrTextPosition: (position) => set({ dhikrTextPosition: position }),
-      setLayoutOrder: (order) => set({ layoutOrder: order }),
-      setZenMode: (enabled) => set({ zenMode: enabled, layout: enabled ? 'zen' : 'default' }),
+      setZenMode: (enabled) => set({ zenMode: enabled }),
       setBreathingGuide: (enabled) => set({ breathingGuideEnabled: enabled }),
       setBreathingGuideSpeed: (speed) => set({ breathingGuideSpeed: speed }),
 
@@ -1132,8 +1117,6 @@ export const useTasbeehStore = create<TasbeehState>()(
       setShakeToReset: (enabled) => set({ shakeToReset: enabled }),
       setWakeLockEnabled: (enabled) => set({ wakeLockEnabled: enabled }),
       setVolumeButtonCounting: (enabled) => set({ volumeButtonCounting: enabled }),
-      setDashboardType: (type) => set({ dashboardType: 'classic' }),
-
       setLastSeenVersion: (version) => set({ lastSeenVersion: version }),
 
       // Notification Actions
@@ -1169,7 +1152,6 @@ export const useTasbeehStore = create<TasbeehState>()(
         language: state.language,
         zenMode: state.zenMode,
         counterShape: state.counterShape,
-        layout: state.layout,
         hadithSlideDuration: state.hadithSlideDuration,
         hadithSlidePosition: state.hadithSlidePosition,
         dhikrTextPosition: state.dhikrTextPosition,
@@ -1194,9 +1176,7 @@ export const useTasbeehStore = create<TasbeehState>()(
         volumeButtonCounting: state.volumeButtonCounting,
         // Previously missing — now persisted:
         unlockedAchievements: state.unlockedAchievements,
-        layoutOrder: state.layoutOrder,
         screenOffMode: state.screenOffMode,
-        dashboardType: state.dashboardType,
         notificationPermission: state.notificationPermission,
         reminderEnabled: state.reminderEnabled,
         reminderTime: state.reminderTime,
