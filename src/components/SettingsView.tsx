@@ -44,6 +44,7 @@ interface SettingsViewProps {
 import { themes, counterShapes, APP_VERSION } from '@/lib/constants';
 
 
+import { RemindersView } from './RemindersView';
 
 export function SettingsView({ children }: SettingsViewProps) {
   const [open, setOpen] = useState(false);
@@ -102,11 +103,7 @@ export function SettingsView({ children }: SettingsViewProps) {
     reminderTime,
     setNotificationPermission,
     setReminderEnabled,
-    setTheme,
-    counterShape,
     setCounterShape,
-    layout,
-    setLayout,
   } = useTasbeehStore();
 
   const [importStatus, setImportStatus] = useState<'idle' | 'success' | 'error'>('idle');
@@ -175,6 +172,25 @@ export function SettingsView({ children }: SettingsViewProps) {
 
             <div className="flex-1 overflow-y-auto px-1 py-1 custom-scrollbar">
               <TabsContent value="appearance" className="space-y-6 mt-0 pb-6 px-1">
+                {/* Reminders & Notifications */}
+                <div className="space-y-1">
+                  <p className="text-xs text-muted-foreground uppercase tracking-wide mb-3 px-1">Reminders</p>
+                  <RemindersView>
+                    <button className="w-full flex items-center justify-between p-4 rounded-2xl bg-primary/10 border border-primary/20 hover:bg-primary/20 transition-all group">
+                      <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 rounded-xl bg-primary/20 flex items-center justify-center text-primary">
+                          <Bell className="w-5 h-5" />
+                        </div>
+                        <div className="text-left">
+                          <p className="text-sm font-semibold text-primary">Reminders & Notifications</p>
+                          <p className="text-xs text-primary/70">Schedule your dhikr sessions</p>
+                        </div>
+                      </div>
+                      <ChevronRight className="w-5 h-5 text-primary/50 group-hover:text-primary transition-colors" />
+                    </button>
+                  </RemindersView>
+                </div>
+
                 {/* Theme Customization */}
                 <div className="space-y-1">
                   <p className="text-xs text-muted-foreground uppercase tracking-wide mb-3 px-1">Theme</p>

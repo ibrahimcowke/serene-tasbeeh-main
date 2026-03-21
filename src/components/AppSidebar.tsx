@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { BookOpen, Target, ClipboardList, Settings, History, Trophy, BarChart3, AppWindow, Swords, Palette } from "lucide-react";
+import { BookOpen, Target, ClipboardList, Settings, History, Trophy, BarChart3, AppWindow, Swords, Palette, Bell } from "lucide-react";
 import {
     Sidebar,
     SidebarContent,
@@ -20,7 +20,7 @@ import { SettingsView } from "./SettingsView";
 import { HistoryView } from "./HistoryView";
 import { AchievementsView } from "./AchievementsView";
 import { ProgressView } from "./ProgressView";
-import { ChallengesView } from "./ChallengesView";
+import { RemindersView } from "./RemindersView";
 import { toast } from "sonner";
 import { motion } from "framer-motion";
 
@@ -71,7 +71,16 @@ export function AppSidebar() {
                                 </RoutinesView>
                             </SidebarMenuItem>
 
-
+                            <SidebarMenuItem>
+                                <RemindersView>
+                                    <SidebarMenuButton asChild tooltip="Reminders">
+                                        <button className="w-full justify-start cursor-pointer hover:bg-secondary/50">
+                                            <Bell className="text-primary" />
+                                            <span>Reminders</span>
+                                        </button>
+                                    </SidebarMenuButton>
+                                </RemindersView>
+                            </SidebarMenuItem>
                         </SidebarMenu>
                     </SidebarGroupContent>
                 </SidebarGroup>

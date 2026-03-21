@@ -1,7 +1,8 @@
-import { BookOpen, Target, Grid, Settings } from "lucide-react";
+import { BookOpen, Target, Grid, Settings, Bell } from "lucide-react";
 import { DhikrSelector } from "./DhikrSelector";
 import { TargetSelector } from "./TargetSelector";
 import { SettingsView } from "./SettingsView";
+import { RemindersView } from "./RemindersView";
 import { useSidebar } from "@/components/ui/sidebar";
 
 export function MobileNavBar() {
@@ -23,6 +24,13 @@ export function MobileNavBar() {
                         <span className="text-[10px] font-medium">Target</span>
                     </button>
                 </TargetSelector>
+
+                <RemindersView>
+                    <button className="flex flex-col items-center justify-center w-full h-full gap-1 text-muted-foreground hover:text-white transition-colors">
+                        <Bell className="w-5 h-5" />
+                        <span className="text-[10px] font-medium">Reminders</span>
+                    </button>
+                </RemindersView>
 
                 <button 
                     onClick={() => setOpenMobile(true)}

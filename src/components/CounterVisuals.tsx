@@ -37,7 +37,7 @@ import { FireEmbers } from './counter-shapes/FireEmbers';
 
 
 interface CounterVisualsProps {
-    layout: 'default' | 'focus' | 'ergonomic' | 'hub' | 'zen' | 'minimal' | 'timeline' | 'classic' | 'choco' | 'rose-gold' | 'obsidian' | 'emerald' | 'desert';
+    layout: 'default' | 'focus' | 'ergonomic' | 'hub' | 'zen' | 'minimal' | 'timeline' | 'classic';
     counterShape: CounterShape;
     counterVerticalOffset: number;
     counterScale: number;

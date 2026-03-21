@@ -140,7 +140,7 @@ interface TasbeehState {
   shakeToReset: boolean;
   wakeLockEnabled: boolean;
   volumeButtonCounting: boolean;
-  dashboardType: 'classic' | 'choco';
+  dashboardType: 'classic';
   lastSeenVersion: string | null;
   deviceId: string;
 
@@ -219,7 +219,7 @@ interface TasbeehState {
   setShakeToReset: (enabled: boolean) => void;
   setWakeLockEnabled: (enabled: boolean) => void;
   setVolumeButtonCounting: (enabled: boolean) => void;
-  setDashboardType: (type: 'classic' | 'choco') => void;
+  setDashboardType: (type: 'classic') => void;
   setLastSeenVersion: (version: string) => void;
 
   // Notification Actions
@@ -1132,7 +1132,7 @@ export const useTasbeehStore = create<TasbeehState>()(
       setShakeToReset: (enabled) => set({ shakeToReset: enabled }),
       setWakeLockEnabled: (enabled) => set({ wakeLockEnabled: enabled }),
       setVolumeButtonCounting: (enabled) => set({ volumeButtonCounting: enabled }),
-      setDashboardType: (type) => set({ dashboardType: type }),
+      setDashboardType: (type) => set({ dashboardType: 'classic' }),
 
       setLastSeenVersion: (version) => set({ lastSeenVersion: version }),
 
