@@ -1,50 +1,46 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-// Types
-import { Routine, RoutineStep, defaultRoutines } from '@/data/routines';
-import { achievements } from '@/data/achievements';
-import { getContext } from '@/lib/hijri';
-import { toast } from 'sonner';
+import { counterShapes } from '@/lib/constants';
 
-export type Dhikr = {
+const getTodayDate = () => new Date().toISOString().split('T')[0];
+
+export interface Dhikr {
   id: string;
   arabic: string;
+  translation: string;
   transliteration: string;
-  meaning: string;
+  category?: string;
+  isCustom?: boolean;
   hadiths?: { text: string; source: string }[];
-};
+}
 
-export type SessionMode =
-  | { type: 'free' }
-  | {
-    type: 'tasbih100';
-    currentPhase: number;
-    phaseCounts: number[];
-    isComplete: boolean;
-    challengeId?: string;
-  }
-  | {
-    type: 'tasbih1000';
-    currentPhase: number; // 0-7 (8 adhkar)
-    currentSetCount: number;
-    isComplete: boolean;
-    challengeId?: string;
-  }
-  | {
-    type: 'routine';
-    routineId: string;
-    currentStepIndex: number;
-    steps: RoutineStep[];
-    isComplete: boolean;
-  };
+export type ThemeType =
+  | 'light' | 'theme-midnight' | 'theme-glass' | 'theme-sunset' | 'theme-forest'
+  | 'theme-oled' | 'theme-mecca-night' | 'theme-medina-rose' | 'theme-blue-mosque'
+  | 'theme-sahara-warmth' | 'theme-andalusia-earth' | 'theme-taj-marble'
+  | 'theme-royal-persian' | 'theme-ramadan-lantern';
 
+export interface ThemeSettings {
+  primary: string;
+  secondary: string;
+  accent: string;
+  background: string;
+  card: string;
+  text: string;
+  textMuted: string;
+  border: string;
+  hapticEnabled: boolean;
+  soundEnabled: boolean;
+  vibrationIntensity: number;
+  fontScale: number;
+  soundType: 'click' | 'bubble' | 'mechanical' | 'digital';
+}
 
-
-export type DailyRecord = {
+export interface DayRecord {
   date: string;
   totalCount: number;
   counts: Record<string, number>;
-};
+}
 
 export type CounterShape =
   | 'plain' | 'minimal' | 'classic' | 'beads' | 'flower' | 'waveform' | 'digital'
@@ -54,750 +50,369 @@ export type CounterShape =
   | 'solar-flare' | 'nebula-cloud' | 'infinite-knot'
   | 'holo-fan'
   | 'animated-ripple' | 'bead-ring' | 'halo-ring' | 'vertical-capsules' | 'luminous-beads'
-  | 'helix-strand' | 'cyber-hexagon' | 'blooming-lotus' | 'constellation' | 'glass-pill' | 'emerald-loop'
+  | 'helix-strand' | 'cyber-hexagon' | 'glass-pill' | 'emerald-loop'
   | 'smart-ring' | 'moon-phase' | 'water-ripple' | 'sand-hourglass' | 'lantern-fanous'
-  | 'digital-watch' | 'star-burst' | 'crystal-prism' | 'galaxy' | 'tally-clicker'
+  | 'digital-watch' | 'star-burst' | 'crystal-prism' | 'tally-clicker'
   | 'cyber-3d' | 'crystal-iso' | 'neumorph'
-  | 'lava-lamp' | 'matrix-code' | 'sunset-horizon' | 'mechanical-lock'
-  | 'plasma-ball' | 'origami-crane' | 'retro-lcd' | 'zen-garden' | 'fire-embers';
+  | 'sunset-horizon' | 'retro-lcd';
+
 interface TasbeehState {
   // Counts
   count: number; // Legacy, keep for migration
   currentCount: number;
-  targetCount: number; // Keep targetCount for now to avoid breaking changes
-
-  // Session
-  sessionMode: SessionMode;
-  sessionStartTime: number | null;
-
-  // Settings
-  currentDhikr: Dhikr;
-  // hapticEnabled/soundEnabled removed in favor of themeSettings
-  theme: 'light' | 'theme-midnight' | 'theme-neon' | 'theme-green' | 'theme-cyberpunk' | 'theme-glass' | 'theme-sunset' | 'theme-forest' | 'theme-oled' | 'theme-biolum' | 'theme-radar-tactical' | 'theme-steampunk' | 'theme-crystal-depth' | 'theme-mecca-night' | 'theme-medina-rose' | 'theme-blue-mosque' | 'theme-desert-starlight' | 'theme-sahara-warmth' | 'theme-andalusia-earth' | 'theme-istanbul-sunset' | 'theme-taj-marble' | 'theme-royal-persian' | 'theme-ramadan-lantern';
-  language: 'en' | 'ar';
-
-  // Theme-specific settings container
-  themeSettings: Record<string, ThemeSettings>;
-
-  // Global preference (not per theme)
-  counterShape: CounterShape;
-  showTransliteration: boolean;
-
-  // Mindfulness
-  breathingGuideEnabled: boolean;
-  breathingGuideSpeed: number;
-  setBreathingGuide: (enabled: boolean) => void;
-  setBreathingGuideSpeed: (speed: number) => void;
-
-  // Zen Mode
-  zenMode: boolean;
-  setZenMode: (enabled: boolean) => void;
-
-  // Hadith slider settings
-  hadithSlideDuration: number; // in seconds
-  hadithSlidePosition: 'top-right' | 'top-left' | 'bottom-right' | 'bottom-left' | 'right' | 'bottom' | 'hidden';
-
-  // Dhikr Text Position
-  dhikrTextPosition: 'top' | 'above-counter' | 'below-counter' | 'bottom' | 'hidden';
-
-
-  // Data
-  dailyRecords: DailyRecord[];
+  targetCount: number;
   totalAllTime: number;
-  unlockedAchievements: string[];
-
-  // Context
-  dateContext: {
-    hijriDate: string;
-    isJummah: boolean;
-    isWhiteDay: boolean;
-    isRamadan: boolean;
-    specialDayName: string;
-  };
-  updateDateContext: () => void;
-
-  // Accessibility
-  screenOffMode: boolean;
-  setScreenOffMode: (enabled: boolean) => void;
-
-  // Available dhikrs
-  dhikrs: Dhikr[];
-  customDhikrs: Dhikr[];
-
-  streakDays: number;
-  lastActiveDate: string | null;
-  longestStreak: number;
-
-  favoriteDhikrIds: string[];
+  dailyRecords: DayRecord[];
   dailyGoal: number;
 
-  // Quick Win Features
-  lastCount: number;
-  lastDhikrId: string | null;
-  canUndo: boolean;
+  // Dhikr
+  currentDhikr: Dhikr;
+  dhikrs: Dhikr[];
+  customDhikrs: Dhikr[];
+  favoriteDhikrIds: string[];
+
+  // Settings
+  theme: ThemeType;
+  themeSettings: Record<string, ThemeSettings>;
+  language: string;
+  showTransliteration: boolean;
+  counterShape: CounterShape;
+  countFontSize: number;
+  dhikrTextPosition: 'top' | 'middle' | 'bottom' | 'none';
+  verticalOffset: number;
+  dhikrVerticalOffset: number;
+  counterVerticalOffset: number;
+  counterScale: number;
+  zenMode: boolean;
   autoThemeSwitch: boolean;
   shakeToReset: boolean;
   wakeLockEnabled: boolean;
   volumeButtonCounting: boolean;
-  lastSeenVersion: string | null;
-  deviceId: string;
+  lastSeenVersion: string;
 
-  // Notifications
-  notificationPermission: NotificationPermission | 'default';
+  // Appearance & Behavior
+  hadithSlideDuration: number;
+  hadithSlidePosition: 'top' | 'bottom' | 'none';
+  breathingGuideEnabled: boolean;
+  breathingGuideSpeed: number;
+
+  // Experience
+  streakDays: number;
+  lastActiveDate: string | null;
+  longestStreak: number;
+  unlockedAchievements: string[];
+  screenOffMode: boolean; // Keep screen on during active session
+
+  // Session
+  sessionStartTime: number | null;
+  sessionMode: SessionMode;
+
+  // Notification Status
+  notificationPermission: NotificationPermission | 'not-supported';
   reminderEnabled: boolean;
-  reminderTime: string;
+  reminderTime: string; // "HH:mm"
 
-  // Congratulations State
-  showCongrats: boolean;
-  congratsData: {
-    type: 'tasbih100' | 'tasbih1000' | 'routine';
-    hasanatEarned: number;
-    description: string;
-  } | null;
-  closeCongrats: () => void;
+  // Quick Undo
+  lastCount: number;
+  lastDhikrId: string;
+  canUndo: boolean;
 
   // Actions
   increment: () => void;
   decrement: () => void;
   reset: () => void;
   setDhikr: (dhikr: Dhikr) => void;
-  resetSettings: () => void;
   setTarget: (target: number) => void;
   toggleTransliteration: () => void;
-  // Settings actions now update the specific theme
+  setTheme: (theme: ThemeType) => void;
+  setThemeSettings: (theme: string, settings: Partial<ThemeSettings>) => void;
+  setLanguage: (lang: string) => void;
+  addCustomDhikr: (dhikr: Omit<Dhikr, 'id' | 'isCustom'>) => void;
+  removeCustomDhikr: (id: string) => void;
+  toggleFavorite: (id: string) => void;
+  clearAllData: () => void;
+  setCounterShape: (shape: CounterShape) => void;
+  setHadithSlideDuration: (duration: number) => void;
+  setHadithSlidePosition: (position: 'top' | 'bottom' | 'none') => void;
+  setDailyGoal: (goal: number) => void;
+  setVerticalOffset: (offset: number) => void;
+  setDhikrVerticalOffset: (offset: number) => void;
+  setCounterVerticalOffset: (offset: number) => void;
+  setCounterScale: (scale: number) => void;
+  setCountFontSize: (scale: number) => void;
+  setDhikrTextPosition: (pos: 'top' | 'middle' | 'bottom' | 'none') => void;
+  setZenMode: (enabled: boolean) => void;
+  setBreathingGuide: (enabled: boolean) => void;
+  setBreathingGuideSpeed: (speed: number) => void;
   toggleHaptic: () => void;
   toggleSound: () => void;
-  setVibrationIntensity: (intensity: 'light' | 'medium' | 'heavy') => void;
-  setFontScale: (scale: 0.8 | 1 | 1.2) => void;
-  setSoundType: (type: 'click' | 'soft' | 'water') => void;
-
-  setTheme: (theme: 'light' | 'theme-midnight' | 'theme-neon' | 'theme-green' | 'theme-cyberpunk' | 'theme-glass' | 'theme-sunset' | 'theme-forest' | 'theme-oled' | 'theme-biolum' | 'theme-radar-tactical' | 'theme-steampunk' | 'theme-crystal-depth' | 'theme-mecca-night' | 'theme-medina-rose' | 'theme-blue-mosque' | 'theme-desert-starlight' | 'theme-sahara-warmth' | 'theme-andalusia-earth' | 'theme-istanbul-sunset' | 'theme-taj-marble' | 'theme-royal-persian' | 'theme-ramadan-lantern') => void;
-  setLanguage: (lang: 'ar' | 'en') => void;
-  addCustomDhikr: (dhikr: Omit<Dhikr, 'id'>) => void;
-  removeCustomDhikr: (id: string) => void;
-  clearAllData: () => void;
+  setVibrationIntensity: (intensity: number) => void;
+  setFontScale: (scale: number) => void;
+  setSoundType: (type: 'click' | 'bubble' | 'mechanical' | 'digital') => void;
   exportData: () => string;
   importData: (data: string) => boolean;
-
-  // Session mode actions
   startTasbih100: (challengeId?: string) => void;
   startTasbih1000: (challengeId?: string) => void;
   startRoutine: (routineId: string) => void;
   nextRoutineStep: () => void;
   exitSessionMode: () => void;
-
-  updateStreak: () => void;
-  toggleFavorite: (id: string) => void;
-
-  // New Settings Actions
-  setCounterShape: (shape: CounterShape) => void;
-  setHadithSlideDuration: (duration: number) => void;
-  setHadithSlidePosition: (position: 'top-right' | 'top-left' | 'bottom-right' | 'bottom-left' | 'right' | 'bottom' | 'hidden') => void;
-  setDailyGoal: (goal: number) => void;
-  verticalOffset: number;
-  setVerticalOffset: (offset: number) => void;
-  dhikrVerticalOffset: number;
-  setDhikrVerticalOffset: (offset: number) => void;
-  counterVerticalOffset: number;
-  setCounterVerticalOffset: (offset: number) => void;
-  counterScale: number;
-  setCounterScale: (scale: number) => void;
-  countFontSize: number;
-  setCountFontSize: (scale: number) => void;
-  setDhikrTextPosition: (position: 'top' | 'above-counter' | 'below-counter' | 'bottom' | 'hidden') => void;
-
-  // Quick Win Actions
   undo: () => void;
   setAutoThemeSwitch: (enabled: boolean) => void;
   setShakeToReset: (enabled: boolean) => void;
   setWakeLockEnabled: (enabled: boolean) => void;
   setVolumeButtonCounting: (enabled: boolean) => void;
   setLastSeenVersion: (version: string) => void;
-
-  // Notification Actions
-  setNotificationPermission: (permission: NotificationPermission | 'default') => void;
+  setNotificationPermission: (perm: NotificationPermission | 'not-supported') => void;
   setReminderEnabled: (enabled: boolean) => void;
   setReminderTime: (time: string) => void;
+  updateStreak: () => void;
 }
 
-export type ThemeSettings = {
-  hapticEnabled: boolean;
-  soundEnabled: boolean;
-  vibrationIntensity: 'light' | 'medium' | 'heavy';
-  fontScale: 0.8 | 1 | 1.2;
-  soundType: 'click' | 'soft' | 'water';
-};
+export type SessionMode =
+  | { type: 'free' }
+  | { type: 'tasbih100'; currentPhase: number; phaseCounts: number[]; isComplete: boolean; challengeId?: string }
+  | { type: 'tasbih1000'; currentPhase: number; currentSetCount: number; isComplete: boolean; challengeId?: string }
+  | { type: 'routine'; routineId: string; currentStepIndex: number; steps: RoutineStep[]; isComplete: boolean };
 
-const defaultThemeSettings: ThemeSettings = {
-  hapticEnabled: true,
-  soundEnabled: false,
-  vibrationIntensity: 'medium',
-  fontScale: 1,
-  soundType: 'click',
-};
-
-const initialThemeSettings: Record<string, ThemeSettings> = {
-  'light': { ...defaultThemeSettings },
-  'theme-midnight': { ...defaultThemeSettings },
-  'theme-neon': { ...defaultThemeSettings },
-  'theme-green': { ...defaultThemeSettings },
-  'theme-cyberpunk': { ...defaultThemeSettings },
-  'theme-glass': { ...defaultThemeSettings },
-  'theme-sunset': { ...defaultThemeSettings },
-  'theme-forest': { ...defaultThemeSettings },
-  'theme-oled': { ...defaultThemeSettings },
-  'theme-biolum': { ...defaultThemeSettings },
-  'theme-radar-tactical': { ...defaultThemeSettings },
-  'theme-steampunk': { ...defaultThemeSettings },
-  'theme-crystal-depth': { ...defaultThemeSettings },
-  'theme-mecca-night': { ...defaultThemeSettings },
-  'theme-medina-rose': { ...defaultThemeSettings },
-  'theme-blue-mosque': { ...defaultThemeSettings },
-  'theme-desert-starlight': { ...defaultThemeSettings },
-  'theme-sahara-warmth': { ...defaultThemeSettings },
-  'theme-andalusia-earth': { ...defaultThemeSettings },
-  'theme-istanbul-sunset': { ...defaultThemeSettings },
-  'theme-taj-marble': { ...defaultThemeSettings },
-  'theme-royal-persian': { ...defaultThemeSettings },
-  'theme-ramadan-lantern': { ...defaultThemeSettings },
-};
-
-
-
+export interface RoutineStep {
+  dhikrId: string;
+  target: number;
+}
 
 export const defaultDhikrs: Dhikr[] = [
+  { id: 'subahanallah', arabic: 'سُبْحَانَ ٱللَّٰهِ', transliteration: 'Subhan-Allah', translation: 'Glory be to Allah' },
+  { id: 'alhamdulillah', arabic: 'ٱلْحَمْدُ لِلَّٰهِ', transliteration: 'Alhamdulillah', translation: 'Praise be to Allah' },
+  { id: 'allahuakbar', arabic: 'ٱللَّٰهُ أَكْبَرُ', transliteration: 'Allahu Akbar', translation: 'Allah is the Greatest' },
+  { id: 'astaghfirullah', arabic: 'أَسْتَغْفِرُ ٱللَّٰهَ', transliteration: 'Astaghfirullah', translation: 'I seek forgiveness from Allah' },
+  { id: 'la-ilaha-illallah', arabic: 'لَا إِلَٰهَ إِلَّا ٱللَّٰهُ', transliteration: 'La ilaha illallah', translation: 'There is no god but Allah' },
+  { id: 'allahuma-sali', arabic: 'اللَّهُمَّ صَلِّ عَلَى سَيِّدِنَا مُحَمَّدٍ', transliteration: 'Allahumma Salli Ala Sayyidina Muhammad', translation: 'O Allah, send blessings upon our Master Muhammad' },
+];
+
+const defaultRoutines = [
   {
-    id: 'subhanallah',
-    arabic: 'سُبْحَانَ اللهِ',
-    transliteration: 'SubhanAllah',
-    meaning: 'Glory be to Allah',
-    hadiths: [
-      {
-        text: "مَنْ سَبَّحَ اللَّهَ فِي دُبُرِ كُلِّ صَلَاةٍ ثَلَاثًا وَثَلَاثِينَ، وَحَمِدَ اللَّهَ ثَلَاثًا وَثَلَاثِينَ، وَكَبَّرَ اللَّهَ ثَلَاثًا وَثَلَاثِينَ، فَتْلِكَ تِسْعَةٌ وَتِسْعُونَ، وَقَالَ تَمَامَ الْمِائَةِ: لَا إِلَهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ غُفِرَتْ خَطَايَاهُ وَإِنْ كَانَتْ مِثْلَ زَبَدِ الْبَحْرِ",
-        source: "صحيح مسلم"
-      },
-      {
-        text: "كَلِمَتَانِ خَفِيفَتَانِ عَلَى اللِّسَانِ، ثَقِيلَتَانِ فِي الْمِيزَانِ، حَبِيبَتَانِ إِلَى الرَّحْمَنِ: سُبْحَانَ اللَّهِ وَبِحَمْدِهِ، سُبْحَانَ اللَّهِ الْعَظِيمِ",
-        source: "صحيح البخاري"
-      },
-      {
-        text: "مَنْ قَالَ: سُبْحَانَ اللَّهِ وَبِحَمْدِهِ، فِي يَوْمٍ مِائَةَ مَرَّةٍ، حُطَّتْ خَطَايَاهُ وَإِنْ كَانَتْ مِثْلَ زَبَدِ الْبَحْرِ",
-        source: "صحيح البخاري"
-      },
-      {
-        text: "سُبْحَانَ اللَّهِ عَدَدَ خَلْقِهِ، سُبْحَانَ اللَّهِ رِضَا نَفْسِهِ، سُبْحَانَ اللَّهِ زِنَةَ عَرْشِهِ، سُبْحَانَ اللَّهِ مِدَادَ كَلِمَاتِهِ",
-        source: "صحيح مسلم"
-      },
-      {
-        text: "أَلَا أُخْبِرُكَ بِأَحَبِّ الْكَلَامِ إِلَى اللَّهِ؟ إِنَّ أَحَبَّ الْكَلَامِ إِلَى اللَّهِ: سُبْحَانَ اللَّهِ وَبِحَمْدِهِ",
-        source: "صحيح مسلم"
-      }
-    ]
-  },
-  {
-    id: 'alhamdulillah',
-    arabic: 'الْحَمْدُ لِلَّهِ',
-    transliteration: 'Alhamdulillah',
-    meaning: 'Praise be to Allah',
-    hadiths: [
-      {
-        text: "الطُّهُورُ شَطْرُ الْإِيمَانِ، وَالْحَمْدُ لِلَّهِ تَمْلَأُ الْمِيزَانَ، وَسُبْحَانَ اللَّهِ وَالْحَمْدُ لِلَّهِ تَمْلَآنِ - أَوْ تَمْلَأُ - مَا بَيْنَ السَّمَاوَاتِ وَالْأَرْضِ",
-        source: "صحيح مسلم"
-      },
-      {
-        text: "إِنَّ اللَّهَ لَيَرْضَى عَنِ الْعَبْدِ أَنْ يَأْكُلَ الْأَكْلَةَ فَيَحْمَدَهُ عَلَيْهَا، أَوْ يَشْرَبَ الشَّرْبَةَ فَيَحْمَدَهُ عَلَيْهَا",
-        source: "صحيح مسلم"
-      },
-      {
-        text: "الْحَمْدُ لِلَّهِ تَمْلَأُ الْمِيزَانَ، وَسُبْحَانَ اللَّهِ وَالْحَمْدُ لِلَّهِ تَمْلَآنِ مَا بَيْنَ السَّمَاءِ وَالْأَرْضِ",
-        source: "صحيح مسلم"
-      },
-      {
-        text: "مَنْ قَالَ: الْحَمْدُ لِلَّهِ عَدَدَ مَا خَلَقَ، وَالْحَمْدُ لِلَّهِ مِلْءَ مَا خَلَقَ، وَالْحَمْدُ لِلَّهِ عَدَدَ مَا فِي السَّمَاوَاتِ وَالْأَرْضِ، وَالْحَمْدُ لِلَّهِ عَدَدَ مَا أَحْصَى كِتَابُهُ، وَالْحَمْدُ لِلَّهِ مِلْءَ مَا أَحْصَى كِتَابُهُ، وَالْحَمْدُ لِلَّهِ عَدَدَ كُلِّ شَيْءٍ، وَالْحَمْدُ لِلَّهِ مِلْءَ كُلِّ شَيْءٍ",
-        source: "سنن أبي داود"
-      },
-      {
-        text: "أَفْضَلُ الذِّكْرِ لَا إِلَهَ إِلَّا اللَّهُ، وَأَفْضَلُ الدُّعَاءِ الْحَمْدُ لِلَّهِ",
-        source: "سنن الترمذي"
-      }
-    ]
-  },
-  {
-    id: 'allahuakbar',
-    arabic: 'اللهُ أَكْبَرُ',
-    transliteration: 'Allahu Akbar',
-    meaning: 'Allah is the Greatest',
-    hadiths: [
-      {
-        text: "أَحَبُّ الْكَلَامِ إِلَى اللَّهِ أَرْبَعٌ: سُبْحَانَ اللَّهِ، وَالْحَمْدُ لِلَّهِ، وَلَا إِلَهَ إِلَّا اللَّهُ، وَاللَّهُ أَكْبَرُ",
-        source: "صحيح مسلم"
-      },
-      {
-        text: "مَا أَهَلَّ مُهِلٌّ قَطُّ إِلَّا بُشِّرَ، وَلَا كَبَّرَ مُكَبِّرٌ قَطُّ إِلَّا بُشِّرَ",
-        source: "المعجم الكبير للطبراني"
-      },
-      {
-        text: "التَّكْبِيرُ جَزْمٌ، وَالتَّسْبِيحُ نِصْفٌ، وَالتَّحْمِيدُ شُكْرٌ",
-        source: "الأدب المفرد للبخاري"
-      },
-      {
-        text: "مَنْ قَالَ: لَا إِلَهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ، فِي يَوْمٍ مِائَةَ مَرَّةٍ، كَانَتْ لَهُ عَدْلَ عَشْرِ رِقَابٍ، وَكُتِبَتْ لَهُ مِائَةُ حَسَنَةٍ، وَمُحِيَتْ عَنْهُ مِائَةُ سَيِّئَةٍ",
-        source: "صحيح البخاري"
-      },
-      {
-        text: "الْبَاقِيَاتُ الصَّالِحَاتُ: سُبْحَانَ اللَّهِ، وَالْحَمْدُ لِلَّهِ، وَلَا إِلَهَ إِلَّا اللَّهُ، وَاللَّهُ أَكْبَرُ",
-        source: "سنن النسائي"
-      }
-    ]
-  },
-  {
-    id: 'lailaha',
-    arabic: 'لَا إِلَٰهَ إِلَّا اللهُ',
-    transliteration: 'La ilaha illallah',
-    meaning: 'There is no god but Allah',
-    hadiths: [
-      {
-        text: "أَفْضَلُ الذِّكْرِ لَا إِلَهَ إِلَّا اللَّهُ",
-        source: "سنن الترمذي"
-      },
-      {
-        text: "مَنْ قَالَ: لَا إِلَهَ إِلَّا اللَّهُ مَنْقَذًا لِنَفْسِهِ مِنْ جُرْمٍ، أَوْ قَالَ: مُخْلِصًا دَخَلَ الْجَنَّةَ",
-        source: "صحيح البخاري"
-      },
-      {
-        text: "مَنْ قَالَ: لَا إِلَهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ، عَشْرَ مَرَّاتٍ، كَانَ كَمَنْ أَعْتَقَ أَرْبَعَةَ أَنْفُسٍ مِنْ وَلَدِ إِسْمَاعِيلَ",
-        source: "صحيح البخاري"
-      },
-      {
-        text: "مَنْ كَانَ آخِرُ كَلَامِهِ لَا إِلَهَ إِلَّا اللَّهُ دَخَلَ الْجَنَّةَ",
-        source: "سنن أبي داود"
-      },
-      {
-        text: "جَدِّدُوا إِيمَانَكُمْ، قِيلَ: يَا رَسُولَ اللَّهِ، وَكَيْفَ نُجَدِّدُ إِيمَانَنَا؟ قَالَ: أَكْثِرُوا مِنْ قَوْلِ لَا إِلَهَ إِلَّا اللَّهُ",
-        source: "مسند أحمد"
-      }
-    ]
-  },
-  {
-    id: 'astaghfirullah',
-    arabic: 'أَسْتَغْفِرُ اللهَ',
-    transliteration: 'Astaghfirullah',
-    meaning: 'I seek forgiveness from Allah',
-    hadiths: [
-      {
-        text: "وَاللَّهِ إِنِّي لَأَسْتَغْفِرُ اللَّهَ وَأَتُوبُ إِلَيْهِ فِي الْيَوْمِ أَكْثَرَ مِنْ سَبْعِينَ مَرَّةً",
-        source: "صحيح البخاري"
-      },
-      {
-        text: "مَنْ لَزِمَ الِاسْتِغْفَارَ جَعَلَ اللَّهُ لَهُ مِنْ كُلِّ ضِيقٍ مَخْرَجًا، وَمِنْ كُلِّ هَمٍّ فَرَجًا، وَرَزَقَهُ مِنْ حَيْثُ لَا يَحْتَسِبُ",
-        source: "سنن أبي داود"
-      },
-      {
-        text: "مَنْ قَالَ: أَسْتَغْفِرُ اللَّهَ الَّذِي لَا إِلَهَ إِلَّا هُوَ الْحَيَّ الْقَيُّومَ وَأَتُوبُ إِلَيْهِ، غُفِرَ لَهُ وَإِنْ كَانَ فَرَّ مِنَ الزَّحْفِ",
-        source: "سنن أبي داود"
-      },
-      {
-        text: "طُوبَى لِمَنْ وَجَدَ فِي صَحِيفَتِهِ اسْتِغْفَارًا كَثِيرًا",
-        source: "سنن ابن ماجه"
-      },
-      {
-        text: "يَا أَيُّهَا النَّاسُ، تُوبُوا إِلَى اللَّهِ، فَإِنِّي أَتُوبُ فِي الْيَوْمِ إِلَيْهِ مِائَةَ مَرَّةٍ",
-        source: "صحيح مسلم"
-      }
-    ]
-  },
-  {
-    id: 'lahawla',
-    arabic: 'لَا حَوْلَ وَلَا قُوَّةَ إِلَّا بِاللَّهِ',
-    transliteration: 'La hawla wa la quwwata illa billah',
-    meaning: 'There is no power and no strength except with Allah',
-    hadiths: [
-      {
-        text: "يَا عَبْدَ اللَّهِ بْنَ قَيْسٍ، أَلَا أَدُلُّكَ عَلَى كَنْزٍ مِنْ كُنُوزِ الْجَنَّةِ؟ فَقُلْتُ: بَلَى يَا رَسُولَ اللَّهِ، قَالَ: قُلْ: لَا حَوْلَ وَلَا قُوَّةَ إِلَّا بِاللَّهِ",
-        source: "صحيح البخاري"
-      },
-      {
-        text: "أَكْثِرُوا مِنْ قَوْلِ: لَا حَوْلَ وَلَا قُوَّةَ إِلَّا بِاللَّهِ، فَإِنَّهَا كَنْزٌ مِنْ كُنُوزِ الْجَنَّةِ",
-        source: "مسند أحمد"
-      }
-    ]
-  },
-  {
-    id: 'subhanallah_azeem',
-    arabic: 'سُبْحَانَ اللَّهِ وَبِحَمْدِهِ، سُبْحَانَ اللَّهِ الْعَظِيمِ',
-    transliteration: 'SubhanAllahi wa bihamdihi, SubhanAllahil Azeem',
-    meaning: 'Glory be to Allah and His is the praise, Glory be to Allah, the Magnificent',
-    hadiths: [
-      {
-        text: "كَلِمَتَانِ خَفِيفَتَانِ عَلَى اللِّسَانِ، ثَقِيلَتَانِ فِي الْمِيزَانِ، حَبِيبَتَانِ إِلَى الرَّحْمَنِ: سُبْحَانَ اللَّهِ وَبِحَمْدِهِ، سُبْحَانَ اللَّهِ الْعَظِيمِ",
-        source: "صحيح البخاري"
-      }
-    ]
-  },
-  {
-    id: 'salawat',
-    arabic: 'اللَّهُمَّ صَلِّ عَلَى مُحَمَّدٍ وَعَلَى آلِ مُحَمَّدٍ',
-    transliteration: 'Allahumma salli \'ala Muhammad',
-    meaning: 'O Allah, send prayers upon Muhammad',
-    hadiths: [
-      {
-        text: "مَنْ صَلَّى عَلَيَّ وَاحِدَةً صَلَّى اللَّهُ عَلَيْهِ عَشْرًا",
-        source: "صحيح مسلم"
-      },
-      {
-        text: "أَوْلَى النَّاسِ بِي يَوْمَ الْقِيَامَةِ أَكْثَرُهُمْ عَلَيَّ صَلَاةً",
-        source: "سنن الترمذي"
-      }
+    id: 'post-prayer',
+    label: 'After Prayer',
+    steps: [
+      { dhikrId: 'subahanallah', target: 33 },
+      { dhikrId: 'alhamdulillah', target: 33 },
+      { dhikrId: 'allahuakbar', target: 34 }
     ]
   }
 ];
 
-const getTodayDate = () => new Date().toISOString().split('T')[0];
+const defaultThemeSettings: ThemeSettings = {
+  primary: '#60a5fa',
+  secondary: '#1e293b',
+  accent: '#3b82f6',
+  background: '#0a0f1c',
+  card: '#161e31',
+  text: '#f8fafc',
+  textMuted: '#94a3b8',
+  border: '#1e293b',
+  hapticEnabled: true,
+  soundEnabled: true,
+  vibrationIntensity: 50,
+  fontScale: 1,
+  soundType: 'click'
+};
 
-const getDefaultSessionMode = (): SessionMode => ({
-  type: 'tasbih100',
-  currentPhase: 0,
-  phaseCounts: [0, 0, 0, 0],
-  isComplete: false,
-});
+const initialThemeSettings: Record<string, ThemeSettings> = {
+  light: { ...defaultThemeSettings, primary: '#3b82f6', background: '#f8fafc', card: '#ffffff', text: '#1e293b', textMuted: '#64748b', border: '#e2e8f0' },
+  'theme-midnight': { ...defaultThemeSettings },
+  'theme-biolum': { ...defaultThemeSettings, primary: '#2dd4bf', background: '#020617', card: '#0f172a', text: '#ccfbf1', textMuted: '#5eead4' },
+  'theme-green': { ...defaultThemeSettings, primary: '#22c55e', background: '#050505', card: '#0a0a0a', text: '#dcfce7', textMuted: '#4ade80' },
+  'theme-oled': { ...defaultThemeSettings, primary: '#ffffff', background: '#000000', card: '#000000', text: '#ffffff', textMuted: '#a3a3a3' },
+  'theme-mecca-night': { primary: '#fbbf24', background: '#050505', card: '#0f0f0f', text: '#ffffff', textMuted: '#a1a1aa', secondary: '#18181b', accent: '#f59e0b', border: '#27272a', hapticEnabled: true, soundEnabled: true, vibrationIntensity: 50, fontScale: 1, soundType: 'click' },
+  'theme-medina-rose': { primary: '#ec4899', background: '#fdf2f8', card: '#ffffff', text: '#1e293b', textMuted: '#64748b', secondary: '#fbcfe8', accent: '#db2777', border: '#fae8f0', hapticEnabled: true, soundEnabled: true, vibrationIntensity: 50, fontScale: 1, soundType: 'click' },
+  'theme-blue-mosque': { primary: '#0ea5e9', background: '#f0f9ff', card: '#ffffff', text: '#0f172a', textMuted: '#64748b', secondary: '#bae6fd', accent: '#0284c7', border: '#e0f2fe', hapticEnabled: true, soundEnabled: true, vibrationIntensity: 50, fontScale: 1, soundType: 'click' },
+  'theme-desert-starlight': { primary: '#818cf8', background: '#0f172a', card: '#1e293b', text: '#f1f5f9', textMuted: '#94a3b8', secondary: '#312e81', accent: '#6366f1', border: '#334155', hapticEnabled: true, soundEnabled: true, vibrationIntensity: 50, fontScale: 1, soundType: 'click' },
+  'theme-sahara-warmth': { primary: '#f97316', background: '#fff7ed', card: '#ffffff', text: '#431407', textMuted: '#9a3412', secondary: '#fed7aa', accent: '#ea580c', border: '#ffedd5', hapticEnabled: true, soundEnabled: true, vibrationIntensity: 50, fontScale: 1, soundType: 'click' },
+  'theme-andalusia-earth': { primary: '#10b981', background: '#f0fdf4', card: '#ffffff', text: '#064e3b', textMuted: '#059669', secondary: '#bbf7d0', accent: '#059669', border: '#dcfce7', hapticEnabled: true, soundEnabled: true, vibrationIntensity: 50, fontScale: 1, soundType: 'click' },
+  'theme-istanbul-sunset': { primary: '#d946ef', background: '#fdf4ff', card: '#ffffff', text: '#4a044e', textMuted: '#c026d3', secondary: '#fae8ff', accent: '#c026d3', border: '#f5d0fe', hapticEnabled: true, soundEnabled: true, vibrationIntensity: 50, fontScale: 1, soundType: 'click' },
+  'theme-taj-marble': { primary: '#71717a', background: '#fafafa', card: '#ffffff', text: '#18181b', textMuted: '#71717a', secondary: '#f4f4f5', accent: '#52525b', border: '#e4e4e7', hapticEnabled: true, soundEnabled: true, vibrationIntensity: 50, fontScale: 1, soundType: 'click' },
+  'theme-royal-persian': { primary: '#0d9488', background: '#f0fdfa', card: '#ffffff', text: '#134e4a', textMuted: '#0d9488', secondary: '#ccfbf1', accent: '#0f766e', border: '#99f6e4', hapticEnabled: true, soundEnabled: true, vibrationIntensity: 50, fontScale: 1, soundType: 'click' },
+  'theme-ramadan-lantern': { primary: '#f59e0b', background: '#0c0a09', card: '#1c1917', text: '#fef3c7', textMuted: '#d97706', secondary: '#451a03', accent: '#d97706', border: '#292524', hapticEnabled: true, soundEnabled: true, vibrationIntensity: 50, fontScale: 1, soundType: 'click' },
+};
 
-const calculateStreakFromHistory = (history: DailyRecord[]) => {
+const getDefaultSessionMode = (): SessionMode => ({ type: 'free' });
+
+const calculateStreakFromHistory = (records: DayRecord[]): number => {
+  if (!records.length) return 0;
+  const today = getTodayDate();
+  const sorted = [...records].sort((a, b) => b.date.localeCompare(a.date));
+
   let streak = 0;
-  const sortedHistory = [...(history || [])].sort((a, b) => b.date.localeCompare(a.date));
+  let currentDate = today;
 
-  if (sortedHistory.length === 0) return 0;
-
-  const today = new Date().toISOString().split('T')[0];
   const yesterday = new Date();
   yesterday.setDate(yesterday.getDate() - 1);
   const yesterdayStr = yesterday.toISOString().split('T')[0];
 
-  const latestDate = sortedHistory[0].date;
-  if (latestDate !== today && latestDate !== yesterdayStr) return 0;
+  // Start from today or yesterday
+  const lastActive = sorted[0].date;
+  if (lastActive !== today && lastActive !== yesterdayStr) return 0;
 
-  let current = new Date(latestDate);
-  let count = 0;
+  currentDate = lastActive;
 
-  for (const record of sortedHistory) {
-    if (record.date === current.toISOString().split('T')[0]) {
-      count++;
-      current.setDate(current.getDate() - 1);
+  for (const record of sorted) {
+    if (record.date === currentDate) {
+      streak++;
+      const d = new Date(currentDate);
+      d.setDate(d.getDate() - 1);
+      currentDate = d.toISOString().split('T')[0];
     } else {
       break;
     }
   }
-  return count;
+  return streak;
 };
 
 export const useTasbeehStore = create<TasbeehState>()(
   persist(
     (set, get) => ({
-      // Initial state
-      count: 0, // Legacy support
-      currentDhikr: defaultDhikrs[0],
+      count: 0,
       currentCount: 0,
-      targetCount: 33, // Renamed to target in the diff, but keeping targetCount for now
-      sessionStartTime: null,
-
-      // Session mode
-      sessionMode: getDefaultSessionMode(),
-
-      // Streak
-      streakDays: 0,
-      lastActiveDate: null,
-      longestStreak: 0,
-
+      targetCount: 33,
+      totalAllTime: 0,
+      dailyRecords: [],
+      dailyGoal: 100,
+      dhikrs: defaultDhikrs,
+      customDhikrs: [],
+      currentDhikr: defaultDhikrs[0],
+      favoriteDhikrIds: [],
+      theme: 'light',
       themeSettings: initialThemeSettings,
+      language: 'en',
       showTransliteration: true,
-
-      // Removed top-level haptic/sound/vib in favor of themeSettings, but keeping them accessing current theme would be ideal or we just migrate
-      // We will access them via getters or helpers in the components.
-
-      theme: 'theme-midnight',
-      language: 'en', // Keeping language for now
-      zenMode: false,
-      counterShape: 'digital', // New default
-      breathingGuideEnabled: false,
-      breathingGuideSpeed: 4, // seconds per breath cycle
-      layout: 'classic',
-      hadithSlideDuration: 15, // 15 seconds default
-      hadithSlidePosition: 'right', // default position
-      dhikrTextPosition: 'below-counter', // Default position
+      counterShape: 'minimal',
+      countFontSize: 1,
+      dhikrTextPosition: 'middle',
       verticalOffset: 0,
       dhikrVerticalOffset: 0,
       counterVerticalOffset: 0,
       counterScale: 1,
-      countFontSize: 1,
-
-      dailyRecords: [],
-      totalAllTime: 0,
-      unlockedAchievements: [],
-
-      dateContext: {
-        hijriDate: '',
-        isJummah: false,
-        isWhiteDay: false,
-        isRamadan: false,
-        specialDayName: ''
-      },
-
-      updateDateContext: () => {
-        const ctx = getContext();
-        set({
-          dateContext: {
-            hijriDate: `${ctx.hijri.day} ${ctx.hijri.monthName} ${ctx.hijri.year}`,
-            isJummah: ctx.isJummah,
-            isWhiteDay: ctx.isWhiteDay,
-            isRamadan: ctx.isRamadan,
-            specialDayName: ctx.specialDayName
-          }
-        });
-      },
-
-      screenOffMode: false,
-      setScreenOffMode: (enabled) => set({ screenOffMode: enabled }),
-
-      dhikrs: defaultDhikrs,
-      customDhikrs: [],
-      dailyGoal: 100,
-
-      // Quick Win Features initial state
-      lastCount: 0,
-      lastDhikrId: null,
-      canUndo: false,
+      zenMode: false,
       autoThemeSwitch: false,
-      shakeToReset: false,
-      wakeLockEnabled: false,
+      shakeToReset: true,
+      wakeLockEnabled: true,
       volumeButtonCounting: false,
-      lastSeenVersion: null,
-      deviceId: (() => {
-        let id = localStorage.getItem('visitor_device_id');
-        if (!id) {
-          id = `anon_${Math.random().toString(36).substring(2, 15)}`;
-          localStorage.setItem('visitor_device_id', id);
-        }
-        return id;
-      })(),
-
-      // Notifications
+      lastSeenVersion: '0.0.0',
+      hadithSlideDuration: 5,
+      hadithSlidePosition: 'bottom',
+      breathingGuideEnabled: false,
+      breathingGuideSpeed: 4,
+      streakDays: 0,
+      lastActiveDate: null,
+      longestStreak: 0,
+      unlockedAchievements: [],
+      screenOffMode: false,
+      sessionStartTime: null,
+      sessionMode: getDefaultSessionMode(),
       notificationPermission: 'default',
       reminderEnabled: false,
-      reminderTime: '08:00',
+      reminderTime: '18:00',
+      lastCount: 0,
+      lastDhikrId: '',
+      canUndo: false,
 
-      // Congrats State
-      showCongrats: false,
-      congratsData: null,
-      closeCongrats: () => set({ showCongrats: false, congratsData: null }),
-
-      // Actions
       increment: () => {
         const state = get();
+        const now = Date.now();
         const today = getTodayDate();
 
-        // Save state for undo
+        const currentSettings = state.themeSettings[state.theme] || defaultThemeSettings;
+        if (currentSettings.hapticEnabled && navigator.vibrate) {
+          navigator.vibrate(currentSettings.vibrationIntensity || 50);
+        }
+
+        const newCount = state.currentCount + 1;
+        const newTotal = state.totalAllTime + 1;
+
+        // Update daily records
+        const records = [...state.dailyRecords];
+        const todayIdx = records.findIndex(r => r.date === today);
+
+        if (todayIdx > -1) {
+          records[todayIdx] = {
+            ...records[todayIdx],
+            totalCount: records[todayIdx].totalCount + 1,
+            counts: {
+              ...records[todayIdx].counts,
+              [state.currentDhikr.id]: (records[todayIdx].counts[state.currentDhikr.id] || 0) + 1
+            }
+          };
+        } else {
+          records.push({
+            date: today,
+            totalCount: 1,
+            counts: { [state.currentDhikr.id]: 1 }
+          });
+          // Update streak when starting first dhikr of the day
+          setTimeout(() => get().updateStreak(), 0);
+        }
+
+        // Handle Session Modes
+        let { sessionMode } = state;
+        if (sessionMode.type === 'tasbih100') {
+          const phaseTarget = [33, 33, 34, 0][sessionMode.currentPhase];
+          if (newCount >= phaseTarget && sessionMode.currentPhase < 2) {
+            const currentPhase = sessionMode.currentPhase;
+            const nextPhase = currentPhase + 1;
+            sessionMode = {
+              ...sessionMode,
+              currentPhase: nextPhase,
+              phaseCounts: sessionMode.phaseCounts.map((c, i) => i === currentPhase ? newCount : c)
+            };
+            set({
+              currentCount: 0,
+              currentDhikr: defaultDhikrs[nextPhase],
+              targetCount: [33, 33, 34][nextPhase],
+              sessionMode
+            });
+            return;
+          } else if (sessionMode.currentPhase === 2 && newCount >= 34) {
+            sessionMode = { ...sessionMode, isComplete: true };
+          }
+        } else if (sessionMode.type === 'tasbih1000') {
+          if (newCount >= 100) {
+            const nextSet = sessionMode.currentSetCount + 100;
+            if (nextSet >= 1000) {
+              sessionMode = { ...sessionMode, isComplete: true, currentSetCount: 1000 };
+            } else {
+              sessionMode = { ...sessionMode, currentSetCount: nextSet };
+              set({ currentCount: 0, sessionMode });
+              return;
+            }
+          }
+        } else if (sessionMode.type === 'routine') {
+          if (newCount >= state.targetCount) {
+            // Routine step complete, wait for manual next if needed or auto-advance
+            // For now, let UI handle the "Next" button or auto-advance
+          }
+        }
+
         set({
+          currentCount: newCount,
+          totalAllTime: newTotal,
+          dailyRecords: records,
+          sessionStartTime: state.sessionStartTime || now,
+          sessionMode,
           lastCount: state.currentCount,
           lastDhikrId: state.currentDhikr.id,
           canUndo: true,
         });
+      },
 
-        const currentSettings = state.themeSettings[state.theme] || defaultThemeSettings;
-
-        // Trigger haptic if enabled for this theme
-        if (currentSettings.hapticEnabled && navigator.vibrate) {
-          const intensity = currentSettings.vibrationIntensity === 'light' ? 10 : currentSettings.vibrationIntensity === 'medium' ? 15 : 25;
-          navigator.vibrate(intensity);
-        }
-
-        set((state) => {
-          let newCount = state.currentCount + 1;
-          const newTotal = state.totalAllTime + 1;
-
-          // Update daily record logic... (keeping existing valid logic)
-          const updatedRecords = [...state.dailyRecords];
-          const lastRecordIndex = updatedRecords.length - 1;
-          const lastRecord = updatedRecords[lastRecordIndex];
-
-          let targetIndex = -1;
-          if (lastRecord && lastRecord.date === today) {
-            targetIndex = lastRecordIndex;
-          } else {
-            targetIndex = updatedRecords.findIndex(r => r.date === today);
-          }
-
-          if (targetIndex >= 0) {
-            const record = { ...updatedRecords[targetIndex] };
-            record.counts = { ...record.counts };
-            record.counts[state.currentDhikr.id] = (record.counts[state.currentDhikr.id] || 0) + 1;
-            record.totalCount += 1;
-            updatedRecords[targetIndex] = record;
-          } else {
-            updatedRecords.push({
-              date: today,
-              counts: { [state.currentDhikr.id]: 1 },
-              totalCount: 1,
-            });
-          }
-
-          // Handle session modes
-          let sessionMode = { ...state.sessionMode };
-          let currentDhikr = state.currentDhikr;
-          let newTargetCount = state.targetCount;
-
-          if (sessionMode.type === 'tasbih100') {
-            // 100 Session: SubhanAllah(33) → Alhamdulillah(33) → Allahu Akbar(33) → La ilaha illallah(1)
-            const phaseTargets = [33, 33, 33, 1];
-            const phaseDhikrs = [defaultDhikrs[0], defaultDhikrs[1], defaultDhikrs[2], defaultDhikrs[3]];
-
-            // Deep clone phaseCounts to avoid mutation
-            sessionMode.phaseCounts = [...sessionMode.phaseCounts];
-            sessionMode.phaseCounts[sessionMode.currentPhase] = newCount;
-
-            if (newCount >= phaseTargets[sessionMode.currentPhase]) {
-              if (sessionMode.currentPhase < 3) {
-                sessionMode.currentPhase += 1;
-                // Final phase for 100 is now Always Takbir (Allahu Akbar) if defined so by user
-                // User said: "ONE AKBIIR" for the final 1.
-                currentDhikr = sessionMode.currentPhase === 3 ? defaultDhikrs[2] : phaseDhikrs[sessionMode.currentPhase];
-                newTargetCount = phaseTargets[sessionMode.currentPhase];
-                newCount = 0;
-              } else {
-                sessionMode.isComplete = true;
-                // Trigger Congrats Pop
-                state.showCongrats = true;
-                state.congratsData = {
-                  type: 'tasbih100',
-                  hasanatEarned: 1000,
-                  description: '🎉 MashaAllah! 100 Dhikr Sprint Complete! Sins forgiven even if like the foam of the sea! (Sahih Muslim)'
-                };
-
-                // Milestone pulse disabled
-              }
-            }
-          } else if (sessionMode.type === 'tasbih1000') {
-            // 1000 Session: All 8 adhkar × 125 each = 1000 total
-            sessionMode.currentSetCount = newCount;
-
-            if (newCount >= 125) {
-              if (sessionMode.currentPhase < defaultDhikrs.length - 1) {
-                sessionMode.currentPhase += 1;
-                currentDhikr = defaultDhikrs[sessionMode.currentPhase];
-                newTargetCount = 125;
-                newCount = 0;
-                sessionMode.currentSetCount = 0;
-              } else {
-                sessionMode.isComplete = true;
-                // Trigger Congrats Pop
-                state.showCongrats = true;
-                state.congratsData = {
-                  type: 'tasbih1000',
-                  hasanatEarned: 10000,
-                  description: '🎉 SubhanAllah! 1000 Dhikr Endurance Complete! A palace in Jannah for every 1000 tasbeeh! (Sahih Muslim)'
-                };
-
-                // Milestone pulse disabled
-              }
-            }
-          } else if (sessionMode.type === 'routine') {
-            const currentStep = sessionMode.steps[sessionMode.currentStepIndex];
-            if (newCount >= currentStep.target) {
-              if (sessionMode.currentStepIndex < sessionMode.steps.length - 1) {
-                sessionMode.currentStepIndex += 1;
-                const nextStep = sessionMode.steps[sessionMode.currentStepIndex];
-                const nextDhikr = state.dhikrs.find(d => d.id === nextStep.dhikrId) || defaultDhikrs[0];
-                currentDhikr = nextDhikr;
-                newTargetCount = nextStep.target;
-                newCount = 0;
-              } else {
-                sessionMode.isComplete = true;
-                // Trigger Congrats Pop
-                state.showCongrats = true;
-                state.congratsData = {
-                  type: 'routine',
-                  hasanatEarned: sessionMode.steps.reduce((acc, step) => acc + step.target, 0) * 10,
-                  description: '🎉 Routine Complete! MashaAllah, may Allah accept your dhikr and reward you abundantly!'
-                };
-              }
+      setThemeSettings: (theme, settings) => {
+        set((state) => ({
+          themeSettings: {
+            ...state.themeSettings,
+            [theme]: {
+              ...state.themeSettings[theme],
+              ...settings
             }
           }
-
-          // Auto-cycle adhkar in free mode when target is reached
-          if (sessionMode.type === 'free' && state.targetCount > 0 && newCount >= state.targetCount) {
-            const autoCycleOrder = ['subhanallah', 'alhamdulillah', 'allahuakbar', 'lailaha'];
-            const currentIdx = autoCycleOrder.indexOf(currentDhikr.id);
-            if (currentIdx >= 0 && currentIdx < autoCycleOrder.length - 1) {
-              const nextDhikrId = autoCycleOrder[currentIdx + 1];
-              const nextDhikr = [...defaultDhikrs, ...state.customDhikrs].find(d => d.id === nextDhikrId);
-              if (nextDhikr) {
-                currentDhikr = nextDhikr;
-                newCount = 0;
-              }
-            }
-          }
-
-          // Update Total All Time
-          const newTotalAllTime = (state.totalAllTime || 0) + 1;
-
-          // Check Achievements
-          const newlyUnlocked: string[] = [];
-          const currentUnlocked = state.unlockedAchievements || [];
-
-          // Create a temporary state proxy for condition checking
-          // We need to approximate the state after this update
-          const tempState = {
-            ...state,
-            currentCount: newCount,
-            totalCount: newTotalAllTime, // Mapping totalAllTime to totalCount for achievements
-            // We might need to pass other state vars if conditions use them
-            streakDays: state.streakDays,
-            dailyRecords: updatedRecords
-          };
-
-          achievements.forEach(achievement => {
-            if (!currentUnlocked.includes(achievement.id) && !newlyUnlocked.includes(achievement.id)) {
-              if (achievement.condition(tempState)) {
-                newlyUnlocked.push(achievement.id);
-                /*
-                toast.success(`Achievement Unlocked: ${achievement.title}`, {
-                  description: achievement.description,
-                  duration: 4000,
-                  icon: '🏆'
-                });
-                */
-              }
-            }
-          });
-
-          // Compute streak update inline so it always runs on first tap of the day
-          let newStreak = state.streakDays;
-          if (state.lastActiveDate !== today) {
-            const yesterday = new Date();
-            yesterday.setDate(yesterday.getDate() - 1);
-            const yesterdayStr = yesterday.toISOString().split('T')[0];
-            if (state.lastActiveDate === yesterdayStr) {
-              newStreak = state.streakDays + 1;
-            } else {
-              newStreak = 1;
-            }
-          }
-          const newLongestStreak = Math.max(state.longestStreak || 0, newStreak);
-
-          return {
-            count: state.count + 1, // Legacy
-            currentCount: newCount,
-            currentDhikr: currentDhikr,
-            targetCount: newTargetCount,
-            dailyRecords: updatedRecords,
-            totalAllTime: newTotalAllTime,
-            sessionMode: sessionMode,
-            lastActiveDate: today,
-            streakDays: newStreak,
-            longestStreak: newLongestStreak,
-            unlockedAchievements: [...currentUnlocked, ...newlyUnlocked],
-          };
-        });
-
-        get().updateStreak();
+        }));
       },
 
       decrement: () => {
@@ -805,8 +420,6 @@ export const useTasbeehStore = create<TasbeehState>()(
           currentCount: Math.max(0, state.currentCount - 1),
         }));
       },
-
-      favoriteDhikrIds: [],
 
       toggleFavorite: (id) => set((state) => ({
         favoriteDhikrIds: state.favoriteDhikrIds.includes(id)
@@ -1174,7 +787,7 @@ export const useTasbeehStore = create<TasbeehState>()(
         shakeToReset: state.shakeToReset,
         wakeLockEnabled: state.wakeLockEnabled,
         volumeButtonCounting: state.volumeButtonCounting,
-        // Previously missing — now persisted:
+        // Previously missing - now persisted:
         unlockedAchievements: state.unlockedAchievements,
         screenOffMode: state.screenOffMode,
         notificationPermission: state.notificationPermission,
@@ -1186,3 +799,4 @@ export const useTasbeehStore = create<TasbeehState>()(
 );
 
 // End of store
+

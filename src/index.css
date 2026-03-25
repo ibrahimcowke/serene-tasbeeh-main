@@ -1,4 +1,6 @@
-/* Google Fonts are now preloaded in index.html for better LCP */
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
 
 /* Quran Fonts - Fallbacks using Google Fonts as CDN is unreliable */
 @font-face {
@@ -19,9 +21,8 @@
   font-display: swap;
 }
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+/* Google Fonts are now preloaded in index.html for better LCP */
+
 
 @layer base {
   :root {
@@ -83,134 +84,6 @@
 
   }
 
-  .theme-biolum {
-    color-scheme: dark;
-    --background: 180 100% 2%;
-    --foreground: 180 20% 98%;
-    --card: 180 100% 4%;
-    --card-foreground: 180 20% 98%;
-    --popover: 180 100% 4%;
-    --popover-foreground: 180 20% 98%;
-    --primary: 180 100% 50%;
-    /* Bio Cyan/Teal */
-    --primary-foreground: 180 100% 2%;
-    --secondary: 180 50% 10%;
-    --secondary-foreground: 180 20% 90%;
-    --muted: 180 50% 12%;
-    --muted-foreground: 180 20% 60%;
-    --accent: 180 100% 50%;
-    --accent-foreground: 180 100% 2%;
-    --destructive: 0 84% 60%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 180 50% 15%;
-    --input: 180 50% 15%;
-    --ring: 180 100% 50%;
-    --counter-bg: 180 100% 3%;
-    --counter-ring: 180 100% 50%;
-    --counter-text: 180 100% 90%;
-    --counter-glow: 180 100% 40%;
-    --arabic-text: 180 20% 98%;
-    --progress-track: 180 50% 12%;
-    --progress-fill: 180 100% 50%;
-    --sheet-bg: 180 100% 3%;
-  }
-
-  .theme-radar-tactical {
-    color-scheme: dark;
-    --background: 120 100% 2%;
-    --foreground: 120 20% 95%;
-    --card: 120 100% 4%;
-    --card-foreground: 120 20% 95%;
-    --popover: 120 100% 4%;
-    --popover-foreground: 120 20% 95%;
-    --primary: 120 100% 45%;
-    /* Phosphor Green */
-    --primary-foreground: 120 100% 2%;
-    --secondary: 120 40% 10%;
-    --secondary-foreground: 120 20% 90%;
-    --muted: 120 40% 12%;
-    --muted-foreground: 120 20% 60%;
-    --accent: 120 100% 45%;
-    --accent-foreground: 120 100% 2%;
-    --destructive: 0 84% 60%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 120 40% 15%;
-    --input: 120 40% 15%;
-    --ring: 120 100% 45%;
-    --counter-bg: 120 100% 3%;
-    --counter-ring: 120 100% 45%;
-    --counter-text: 120 100% 90%;
-    --counter-glow: 120 100% 35%;
-    --arabic-text: 120 20% 95%;
-    --progress-track: 120 40% 12%;
-    --progress-fill: 120 100% 45%;
-    --sheet-bg: 120 100% 3%;
-  }
-
-  .theme-steampunk {
-    color-scheme: dark;
-    --background: 25 30% 6%;
-    --foreground: 45 40% 90%;
-    --card: 25 30% 8%;
-    --card-foreground: 45 40% 90%;
-    --popover: 25 30% 8%;
-    --popover-foreground: 45 40% 90%;
-    --primary: 35 100% 50%;
-    /* Amber/Gold */
-    --primary-foreground: 25 30% 6%;
-    --secondary: 25 20% 15%;
-    --secondary-foreground: 45 40% 80%;
-    --muted: 25 20% 18%;
-    --muted-foreground: 25 10% 60%;
-    --accent: 25 100% 40%;
-    /* Copper */
-    --accent-foreground: 45 40% 95%;
-    --destructive: 0 84% 60%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 25 20% 20%;
-    --input: 25 20% 20%;
-    --ring: 35 100% 50%;
-    --counter-bg: 25 30% 7%;
-    --counter-ring: 35 100% 50%;
-    --counter-text: 35 100% 90%;
-    --counter-glow: 35 100% 40%;
-    --arabic-text: 45 40% 95%;
-    --progress-track: 25 20% 18%;
-    --progress-fill: 35 100% 50%;
-    --sheet-bg: 25 30% 7%;
-  }
-
-  .theme-crystal-depth {
-    color-scheme: dark;
-    --background: 260 50% 6%;
-    --foreground: 260 20% 95%;
-    --card: 260 40% 10%;
-    --card-foreground: 260 20% 95%;
-    --popover: 260 40% 10%;
-    --popover-foreground: 260 20% 95%;
-    --primary: 280 100% 65%;
-    /* Crystal Purple */
-    --primary-foreground: 260 50% 6%;
-    --secondary: 260 30% 15%;
-    --secondary-foreground: 260 20% 90%;
-    --muted: 260 30% 18%;
-    --muted-foreground: 260 10% 60%;
-    --accent: 280 100% 65%;
-    --accent-foreground: 260 50% 6%;
-    --destructive: 0 84% 60%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 260 30% 20%;
-    --input: 260 30% 20%;
-    --ring: 280 100% 65%;
-    --counter-bg: 260 40% 8%;
-    --counter-ring: 280 100% 65%;
-    --counter-text: 280 100% 90%;
-    --counter-glow: 280 100% 45%;
-    --arabic-text: 260 20% 95%;
-    --progress-track: 260 30% 18%;
-    --progress-fill: 280 100% 65%;
-    --sheet-bg: 260 40% 8%;
-  }
 
   .theme-midnight {
     color-scheme: dark;
@@ -266,145 +139,6 @@
     --choco-shadow: #05070a;
   }
 
-  .theme-neon {
-    color-scheme: dark;
-    /* High contrast Neon */
-    --background: 260 50% 8%;
-    --foreground: 280 20% 98%;
-
-    --card: 260 45% 12%;
-    --card-foreground: 280 20% 98%;
-
-    --popover: 260 45% 12%;
-    --popover-foreground: 280 20% 98%;
-
-    /* Neon Pink */
-    --primary: 310 100% 65%;
-    --primary-foreground: 0 0% 100%;
-
-    --secondary: 260 40% 18%;
-    --secondary-foreground: 280 20% 90%;
-
-    --muted: 260 40% 20%;
-    --muted-foreground: 260 20% 70%;
-
-    --accent: 310 100% 65%;
-    --accent-foreground: 0 0% 100%;
-
-    --destructive: 0 62% 30%;
-    --destructive-foreground: 0 85% 95%;
-
-    --border: 260 40% 20%;
-    --input: 260 40% 20%;
-    --ring: 310 100% 65%;
-
-    --counter-bg: 260 45% 10%;
-    --counter-ring: 310 100% 65%;
-    --counter-text: 310 100% 90%;
-    --counter-glow: 310 100% 60%;
-
-    --arabic-text: 280 20% 98%;
-    --progress-track: 260 40% 20%;
-    --progress-fill: 310 100% 65%;
-    --sheet-bg: 260 45% 10%;
-  }
-
-  .theme-green {
-    color-scheme: dark;
-    /* Matrix Green */
-    --background: 140 30% 3%;
-    --foreground: 140 60% 90%;
-
-    --card: 140 30% 6%;
-    --card-foreground: 140 60% 90%;
-
-    --popover: 140 30% 6%;
-    --popover-foreground: 140 60% 90%;
-
-    /* Terminal Green */
-    --primary: 140 100% 55%;
-    --primary-foreground: 140 30% 3%;
-
-    --secondary: 140 30% 10%;
-    --secondary-foreground: 140 60% 80%;
-
-    --muted: 140 30% 12%;
-    --muted-foreground: 140 40% 50%;
-
-    --accent: 140 100% 55%;
-    --accent-foreground: 140 30% 3%;
-
-    --destructive: 0 62% 30%;
-    --destructive-foreground: 0 85% 95%;
-
-    --border: 140 30% 15%;
-    --input: 140 30% 15%;
-    --ring: 140 100% 55%;
-
-    --counter-bg: 140 30% 5%;
-    --counter-ring: 140 100% 55%;
-    --counter-text: 140 100% 90%;
-    --counter-glow: 140 100% 40%;
-
-    --arabic-text: 140 60% 95%;
-    --progress-track: 140 30% 12%;
-    --progress-fill: 140 100% 55%;
-    --sheet-bg: 140 30% 5%;
-
-    /* Choco Emerald/Green */
-    --choco-bg: #050a06;
-    --choco-clay: #0d1a0f;
-    --choco-inner: #020503;
-    --choco-gold: #10b981;
-    --choco-gold-light: #6ee7b7;
-    --choco-gold-dark: #065f46;
-    --choco-highlight: #1a331e;
-    --choco-shadow: #020503;
-  }
-
-  .theme-cyberpunk {
-    color-scheme: dark;
-    /* Cyberpunk Blue/Yellow */
-    --background: 245 40% 12%;
-    --foreground: 55 100% 90%;
-
-    --card: 245 35% 16%;
-    --card-foreground: 55 100% 90%;
-
-    --popover: 245 40% 15%;
-    --popover-foreground: 55 100% 90%;
-
-    /* Cyber Yellow */
-    --primary: 60 100% 60%;
-    --primary-foreground: 245 40% 12%;
-
-    --secondary: 245 35% 20%;
-    --secondary-foreground: 180 100% 60%;
-
-    --muted: 245 35% 25%;
-    --muted-foreground: 245 20% 65%;
-
-    --accent: 180 100% 60%;
-    /* Cyan */
-    --accent-foreground: 245 40% 12%;
-
-    --destructive: 0 100% 60%;
-    --destructive-foreground: 0 0% 100%;
-
-    --border: 245 35% 25%;
-    --input: 245 35% 25%;
-    --ring: 60 100% 60%;
-
-    --counter-bg: 245 35% 14%;
-    --counter-ring: 60 100% 60%;
-    --counter-text: 60 100% 90%;
-    --counter-glow: 60 100% 50%;
-
-    --arabic-text: 60 100% 95%;
-    --progress-track: 245 35% 25%;
-    --progress-fill: 60 100% 60%;
-    --sheet-bg: 245 35% 14%;
-  }
 
   .theme-glass {
     color-scheme: light;
@@ -722,49 +456,6 @@
     --sheet-bg: 210 20% 99%;
   }
 
-  .theme-desert-starlight {
-    color-scheme: dark;
-    /* Deep Indigo Night */
-    --background: 240 40% 6%;
-    --foreground: 240 20% 95%;
-
-    --card: 240 30% 10%;
-    --card-foreground: 240 20% 95%;
-
-    --popover: 240 30% 10%;
-    --popover-foreground: 240 20% 95%;
-
-    /* Starlight White/Blue */
-    --primary: 200 80% 70%;
-    --primary-foreground: 240 40% 10%;
-
-    --secondary: 240 40% 15%;
-    --secondary-foreground: 240 20% 90%;
-
-    --muted: 240 30% 20%;
-    --muted-foreground: 240 20% 60%;
-
-    --accent: 260 50% 60%;
-    /* Cosmic Purple */
-    --accent-foreground: 0 0% 100%;
-
-    --destructive: 0 60% 50%;
-    --destructive-foreground: 0 0% 100%;
-
-    --border: 240 30% 20%;
-    --input: 240 30% 20%;
-    --ring: 200 80% 70%;
-
-    --counter-bg: 240 40% 8%;
-    --counter-ring: 200 80% 70%;
-    --counter-text: 200 80% 90%;
-    --counter-glow: 200 80% 60%;
-
-    --arabic-text: 240 20% 95%;
-    --progress-track: 240 30% 20%;
-    --progress-fill: 200 80% 70%;
-    --sheet-bg: 240 30% 8%;
-  }
 
   .theme-sahara-warmth {
     color-scheme: light;
@@ -842,37 +533,6 @@
     --sheet-bg: 25 30% 96%;
   }
 
-  .theme-istanbul-sunset {
-    color-scheme: dark;
-    /* Purple & Orange */
-    --background: 260 50% 8%;
-    --foreground: 20 100% 95%;
-    --card: 260 50% 12%;
-    --card-foreground: 20 100% 95%;
-    --popover: 260 50% 12%;
-    --popover-foreground: 20 100% 95%;
-    --primary: 20 100% 60%;
-    /* Orange */
-    --primary-foreground: 260 50% 8%;
-    --secondary: 260 40% 18%;
-    --secondary-foreground: 20 100% 90%;
-    --muted: 260 40% 20%;
-    --muted-foreground: 260 20% 60%;
-    --accent: 280 80% 60%;
-    /* Purple */
-    --accent-foreground: 0 0% 100%;
-    --border: 260 40% 20%;
-    --input: 260 40% 20%;
-    --ring: 20 100% 60%;
-    --counter-bg: 260 50% 10%;
-    --counter-ring: 20 100% 60%;
-    --counter-text: 20 100% 90%;
-    --counter-glow: 20 100% 50%;
-    --arabic-text: 20 100% 95%;
-    --progress-track: 260 40% 20%;
-    --progress-fill: 20 100% 60%;
-    --sheet-bg: 260 50% 10%;
-  }
 
   .theme-taj-marble {
     color-scheme: light;

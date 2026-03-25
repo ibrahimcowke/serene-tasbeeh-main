@@ -9,8 +9,6 @@ import { VerticalCapsules } from './counter-shapes/VerticalCapsules';
 import { LuminousBeads } from './counter-shapes/LuminousBeads';
 import { HelixStrand } from './counter-shapes/HelixStrand';
 import { CyberHexagon } from './counter-shapes/CyberHexagon';
-import { BloomingLotus } from './counter-shapes/BloomingLotus';
-import { Constellation } from './counter-shapes/Constellation';
 import { GlassPill } from './counter-shapes/GlassPill';
 import { SmartRing } from './counter-shapes/SmartRing';
 import { MoonPhase } from './counter-shapes/MoonPhase';
@@ -20,20 +18,12 @@ import { LanternFanous } from './counter-shapes/LanternFanous';
 import { DigitalWatch } from './counter-shapes/DigitalWatch';
 import { StarBurst } from './counter-shapes/StarBurst';
 import { CrystalPrism } from './counter-shapes/CrystalPrism';
-import { Galaxy } from './counter-shapes/Galaxy';
 import { TallyClicker } from './counter-shapes/TallyClicker';
 import { Cyber3D } from './counter-shapes/Cyber3D';
 import { CrystalISO } from './counter-shapes/CrystalISO';
 import { Neumorph } from './counter-shapes/Neumorph';
-import { LavaLamp } from './counter-shapes/LavaLamp';
-import { MatrixCode } from './counter-shapes/MatrixCode';
 import { SunsetHorizon } from './counter-shapes/SunsetHorizon';
-import { MechanicalLock } from './counter-shapes/MechanicalLock';
-import { PlasmaBall } from './counter-shapes/PlasmaBall';
-import { OrigamiCrane } from './counter-shapes/OrigamiCrane';
 import { RetroLCD } from './counter-shapes/RetroLCD';
-import { ZenGarden } from './counter-shapes/ZenGarden';
-import { FireEmbers } from './counter-shapes/FireEmbers';
 
 
 interface CounterVisualsProps {
@@ -76,7 +66,7 @@ export const CounterNumber = memo(({
             transition={{ duration: 0.15, ease: [0.34, 1.56, 0.64, 1] }}
             className={`
   counter-number text-counter-text
-  ${['digital', 'vertical-capsules', 'tally-clicker', 'cyber-3d', 'crystal-iso', 'neumorph', 'digital-watch', 'steampunk-nixie', 'matrix-code', 'retro-lcd'].includes(counterShape) ? 'hidden' : ''}
+  ${['digital', 'vertical-capsules', 'tally-clicker', 'cyber-3d', 'crystal-iso', 'neumorph', 'digital-watch', 'steampunk-nixie', 'retro-lcd'].includes(counterShape) ? 'hidden' : ''}
   ${counterShape === 'classic' ? 'font-mono text-5xl sm:text-6xl md:text-7xl tracking-widest bg-black/10 px-4 sm:px-6 py-2 rounded-lg inset-shadow mb-4' : 'text-5xl sm:text-6xl md:text-7xl lg:text-8xl'}
   ${counterShape === 'waveform' ? 'drop-shadow-md z-10' : ''}
   ${counterShape === 'modern-ring' ? 'font-sans font-light tracking-tighter drop-shadow-[0_0_15px_currentColor]' : ''}
@@ -90,15 +80,13 @@ export const CounterNumber = memo(({
   ${counterShape === 'steampunk-nixie' ? 'font-mono text-orange-500 font-bold tracking-widest drop-shadow-[0_0_10px_orange] text-6xl' : ''}
   ${counterShape === 'biolum-organic' ? 'font-mono text-current font-bold tracking-widest drop-shadow-[0_0_15px_currentColor] text-6xl' : ''}
   ${counterShape === 'solar-flare' ? 'text-white drop-shadow-[0_0_20px_orange] font-bold' : ''}
-  ${['nebula-cloud', 'infinite-knot', 'holo-fan', 'luminous-beads', 'galaxy'].includes(counterShape) ? 'text-current drop-shadow-[0_0_12px_currentColor] font-bold' : ''}
+  ${['nebula-cloud', 'infinite-knot', 'holo-fan', 'luminous-beads'].includes(counterShape) ? 'text-current drop-shadow-[0_0_12px_currentColor] font-bold' : ''}
   ${counterShape === 'halo-ring' ? 'text-emerald-400 font-bold drop-shadow-[0_0_10px_rgba(52,211,153,0.8)]' : ''}
   
   ${counterShape === 'animated-ripple' ? 'text-blue-200 font-light text-7xl tracking-widest drop-shadow-[0_0_10px_rgba(59,130,246,0.6)]' : ''}
   ${counterShape === 'bead-ring' ? 'text-amber-500 font-mono text-7xl font-bold tracking-wider drop-shadow-[0_0_10px_rgba(245,158,11,0.6)]' : ''}
   ${counterShape === 'helix-strand' ? 'text-cyan-400 font-mono tracking-widest drop-shadow-[0_0_10px_rgba(34,211,238,0.8)]' : ''}
   ${counterShape === 'cyber-hexagon' ? 'font-mono text-current font-bold tracking-widest drop-shadow-[0_0_10px_currentColor]' : ''}
-  ${counterShape === 'blooming-lotus' ? 'font-serif text-white/90 drop-shadow-lg font-light' : ''}
-  ${counterShape === 'constellation' ? 'font-thin text-white tracking-widest drop-shadow-[0_0_10px_white]' : ''}
   ${counterShape === 'glass-pill' ? 'font-sans font-medium text-white tracking-widest text-6xl drop-shadow-md' : ''}
   ${counterShape === 'emerald-loop' ? 'font-serif text-emerald-100 font-bold tracking-widest text-5xl drop-shadow-md' : ''}
   ${counterShape === 'smart-ring' ? 'font-sans font-light text-white tracking-tighter text-6xl drop-shadow-none' : ''}
@@ -324,7 +312,7 @@ export const CounterVisuals = memo(({
                                 {/* Screen Area */}
                                 <div className="w-[88%] h-[80px] bg-[#050505] rounded-2xl border-[3px] border-[#a07d2a] shadow-[inset_0_5px_15px_rgba(0,0,0,1)] flex flex-col items-center justify-center relative overflow-hidden mb-4">
                                     <div className="absolute top-0 left-0 w-full h-1/2 bg-gradient-to-b from-white/10 to-transparent" />
-                                    <span className="text-[#d4af37] font-arabic text-md mb-0.5 tracking-wider drop-shadow-sm font-medium">تسبيح</span>
+                                    <span className="text-[#d4af37] font-arabic text-md mb-0.5 tracking-wider drop-shadow-sm font-medium">تسبِيح</span>
                                     <div className="bg-[#142016] px-3 py-1 rounded-sm border border-[#222] shadow-[inset_0_0_8px_rgba(0,0,0,0.8)] min-w-[100px] text-center">
                                         <span className="font-mono text-[#7ea37e] text-3xl tracking-[0.25em] drop-shadow-[0_0_5px_rgba(126,163,126,0.6)]">
                                             {currentCount.toString().padStart(4, '0')}
@@ -857,8 +845,6 @@ export const CounterVisuals = memo(({
                         {counterShape === 'bead-ring' && <BeadRing currentCount={currentCount} />}
                         {counterShape === 'helix-strand' && <HelixStrand currentCount={currentCount} />}
                         {counterShape === 'cyber-hexagon' && <CyberHexagon currentCount={currentCount} />}
-                        {counterShape === 'blooming-lotus' && <BloomingLotus currentCount={currentCount} />}
-                        {counterShape === 'constellation' && <Constellation currentCount={currentCount} />}
                         {counterShape === 'glass-pill' && <GlassPill currentCount={currentCount} />}
                         {counterShape === 'smart-ring' && <SmartRing currentCount={currentCount} />}
                         {counterShape === 'moon-phase' && <MoonPhase currentCount={currentCount} />}
@@ -868,20 +854,12 @@ export const CounterVisuals = memo(({
                         {counterShape === 'digital-watch' && <DigitalWatch currentCount={currentCount} />}
                         {counterShape === 'star-burst' && <StarBurst currentCount={currentCount} />}
                         {counterShape === 'crystal-prism' && <CrystalPrism currentCount={currentCount} />}
-                        {counterShape === 'galaxy' && <Galaxy currentCount={currentCount} />}
                         {counterShape === 'tally-clicker' && <TallyClicker currentCount={currentCount} />}
                         {counterShape === 'cyber-3d' && <Cyber3D currentCount={currentCount} />}
                         {counterShape === 'crystal-iso' && <CrystalISO currentCount={currentCount} />}
                         {counterShape === 'neumorph' && <Neumorph currentCount={currentCount} />}
-                        {counterShape === 'lava-lamp' && <LavaLamp progress={progress} currentCount={currentCount} />}
-                        {counterShape === 'matrix-code' && <MatrixCode progress={progress} currentCount={currentCount} />}
                         {counterShape === 'sunset-horizon' && <SunsetHorizon progress={progress} currentCount={currentCount} />}
-                        {counterShape === 'mechanical-lock' && <MechanicalLock progress={progress} currentCount={currentCount} />}
-                        {counterShape === 'plasma-ball' && <PlasmaBall progress={progress} currentCount={currentCount} />}
-                        {counterShape === 'origami-crane' && <OrigamiCrane progress={progress} currentCount={currentCount} />}
                         {counterShape === 'retro-lcd' && <RetroLCD progress={progress} currentCount={currentCount} />}
-                        {counterShape === 'zen-garden' && <ZenGarden progress={progress} currentCount={currentCount} />}
-                        {counterShape === 'fire-embers' && <FireEmbers progress={progress} currentCount={currentCount} />}
 
                         {counterShape === 'vertical-capsules' && <VerticalCapsules currentCount={currentCount} />}
                         {counterShape === 'luminous-beads' && <LuminousBeads progress={progress} />}
@@ -934,7 +912,7 @@ export const CounterVisuals = memo(({
 
         ${counterShape === 'animated-ripple' ? 'w-64 h-64 flex items-center justify-center bg-transparent z-10' : ''}
         ${counterShape === 'bead-ring' ? 'w-64 h-64 flex items-center justify-center bg-transparent z-10' : ''}
-        ${['helix-strand', 'cyber-hexagon', 'blooming-lotus', 'constellation', 'glass-pill', 'emerald-loop', 'smart-ring', 'moon-phase', 'water-ripple', 'sand-hourglass', 'lantern-fanous', 'star-burst', 'crystal-prism', 'galaxy', 'tally-clicker', 'cyber-3d', 'crystal-iso', 'neumorph', 'lava-lamp', 'matrix-code', 'sunset-horizon', 'mechanical-lock', 'plasma-ball', 'origami-crane', 'retro-lcd', 'zen-garden', 'fire-embers'].includes(counterShape) ? 'w-64 h-64 flex items-center justify-center bg-transparent z-10' : ''}
+        ${['helix-strand', 'cyber-hexagon', 'glass-pill', 'emerald-loop', 'smart-ring', 'moon-phase', 'water-ripple', 'sand-hourglass', 'lantern-fanous', 'star-burst', 'crystal-prism', 'tally-clicker', 'cyber-3d', 'crystal-iso', 'neumorph', 'sunset-horizon', 'retro-lcd'].includes(counterShape) ? 'w-64 h-64 flex items-center justify-center bg-transparent z-10' : ''}
 
         flex items-center justify-center
         cursor-pointer
@@ -984,3 +962,5 @@ export const CounterVisuals = memo(({
         </motion.div >
     );
 });
+
+
