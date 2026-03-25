@@ -10,7 +10,6 @@ import { WhatsNew } from '@/components/WhatsNew';
 import { BreathingGuide } from '@/components/BreathingGuide';
 import ClassicDashboard from '../components/dashboards/ClassicDashboard';
 import { MobileNavBar } from '@/components/MobileNavBar';
-import { ThemeToggle } from '@/components/ThemeToggle';
 
 const Index = () => {
   const { zenMode, setZenMode } = useTasbeehStore();
@@ -32,14 +31,9 @@ const Index = () => {
 
             {/* Sidebar Toggle (Visible when sidebar is collapsed or on mobile) */}
             {!zenMode && (
-              <>
-                <div className="fixed top-4 left-4 z-50 pointer-events-auto">
-                  <SidebarTrigger className="h-10 w-10 bg-card/40 backdrop-blur-xl border border-white/10 shadow-lg hover:bg-white/5 transition-all duration-300" />
-                </div>
-                <div className="fixed top-4 right-4 z-50 pointer-events-auto">
-                  <ThemeToggle />
-                </div>
-              </>
+              <div className="fixed top-4 left-4 z-50 pointer-events-auto">
+                <SidebarTrigger className="h-10 w-10 bg-card/40 backdrop-blur-xl border border-white/10 shadow-lg hover:bg-white/5 transition-all duration-300" />
+              </div>
             )}
 
             <RoutinesView>
