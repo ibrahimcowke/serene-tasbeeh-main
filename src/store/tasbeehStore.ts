@@ -240,6 +240,26 @@ export const defaultDhikrs: Dhikr[] = [
       { text: "The closest of people to me on the Day of Resurrection will be those who sent the most blessings upon me.", source: "Tirmidhi" }
     ]
   },
+  {
+    id: 'ayat_alkursi',
+    arabic: 'آيَةُ الْكُرْسِيِّ',
+    transliteration: 'Ayat al-Kursi',
+    translation: 'The Throne Verse',
+    hadiths: [
+      { text: "Whoever recites Ayat al-Kursi after every prayer, nothing will prevent him from entering Paradise except death.", source: "An-Nasa'i" },
+      { text: "It is the greatest verse in the Book of Allah.", source: "Muslim" }
+    ]
+  },
+  {
+    id: '3_quls',
+    arabic: 'الْمُعَوِّذَاتِ',
+    transliteration: 'The 3 Quls',
+    translation: 'Surah Ikhlas, Falaq, and Nas',
+    hadiths: [
+      { text: "Reciting 'Qul Huwallahu Ahad' is equivalent to one third of the Quran.", source: "Bukhari" },
+      { text: "The Prophet (ﷺ) would recite them and blow into his hands for protection before sleep.", source: "Bukhari" }
+    ]
+  }
 ];
 
 const defaultRoutines = [

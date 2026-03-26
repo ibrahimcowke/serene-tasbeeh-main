@@ -23,10 +23,10 @@ export const defaultRoutines: Routine[] = [
         icon: 'Sun',
         color: 'from-orange-400 to-amber-200',
         steps: [
-            { id: 'step_1', dhikrId: 'subhanallah', target: 33, description: 'SubhanAllah x33' },
+            { id: 'step_1', dhikrId: 'subahanallah', target: 33, description: 'SubhanAllah x33' },
             { id: 'step_2', dhikrId: 'alhamdulillah', target: 33, description: 'Alhamdulillah x33' },
             { id: 'step_3', dhikrId: 'allahuakbar', target: 33, description: 'Allahu Akbar x33' },
-            { id: 'step_4', dhikrId: 'lailaha', target: 1, description: 'La ilaha illallah x1' },
+            { id: 'step_4', dhikrId: 'la-ilaha-illallah', target: 1, description: 'La ilaha illallah x1' },
             { id: 'step_5', dhikrId: 'ayat_alkursi', target: 1, description: 'Ayat al-Kursi x1 (Recite)' }, // Need to ensure this ID exists or handle text-only steps
         ]
     },
@@ -37,7 +37,7 @@ export const defaultRoutines: Routine[] = [
         icon: 'Moon',
         color: 'from-indigo-500 to-purple-400',
         steps: [
-            { id: 'step_1', dhikrId: 'subhanallah', target: 33, description: 'SubhanAllah x33' },
+            { id: 'step_1', dhikrId: 'subahanallah', target: 33, description: 'SubhanAllah x33' },
             { id: 'step_2', dhikrId: 'alhamdulillah', target: 33, description: 'Alhamdulillah x33' },
             { id: 'step_3', dhikrId: 'allahuakbar', target: 34, description: 'Allahu Akbar x34' },
             { id: 'step_4', dhikrId: 'ayat_alkursi', target: 1, description: 'Ayat al-Kursi x1' },
@@ -51,10 +51,10 @@ export const defaultRoutines: Routine[] = [
         icon: 'PrayerRug', // Placeholder
         color: 'from-emerald-500 to-teal-400',
         steps: [
-            { id: 'step_1', dhikrId: 'subhanallah', target: 33, description: 'SubhanAllah' },
+            { id: 'step_1', dhikrId: 'subahanallah', target: 33, description: 'SubhanAllah' },
             { id: 'step_2', dhikrId: 'alhamdulillah', target: 33, description: 'Alhamdulillah' },
             { id: 'step_3', dhikrId: 'allahuakbar', target: 33, description: 'Allahu Akbar' },
-            { id: 'step_4', dhikrId: 'lailaha', target: 1, description: 'Final Du\'a' },
+            { id: 'step_4', dhikrId: 'la-ilaha-illallah', target: 1, description: 'Final Du\'a' },
         ]
     }
 ];
