@@ -14,6 +14,7 @@ export default defineConfig(({ mode }) => ({
     react(),
     mode === "development" && componentTagger(),
     VitePWA({
+      injectRegister: 'auto',
       devOptions: {
         enabled: true,
         type: "module",
@@ -22,7 +23,7 @@ export default defineConfig(({ mode }) => ({
       srcDir: "src",
       filename: "sw.ts",
       registerType: "autoUpdate",
-      includeAssets: ["favicon.ico", "robots.txt", "screenshot-mobile.png", "screenshot-desktop.png"],
+      includeAssets: ["robots.txt", "screenshot-mobile.png", "screenshot-desktop.png"],
       manifest: {
         id: "/",
         name: "tasbeehdikr",
@@ -38,7 +39,7 @@ export default defineConfig(({ mode }) => ({
         orientation: "portrait",
         scope: "/",
         start_url: "/",
-        prefer_related_applications: true,
+        prefer_related_applications: false,
         related_applications: [
           {
             platform: "play",

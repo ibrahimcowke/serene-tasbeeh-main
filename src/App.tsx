@@ -10,6 +10,7 @@ import MiniCounter from "./pages/MiniCounter";
 import Challenges from "./pages/Challenges";
 import { ThemeProvider } from "./components/ThemeProvider";
 import { CongratsPopup } from "./components/CongratsPopup";
+import { PWAInstallPrompt } from "./components/PWAInstallPrompt";
 import { useEffect } from "react";
 import { registerPeriodicSync } from "./lib/notifications";
 
@@ -27,6 +28,7 @@ const App = () => {
         <Toaster />
         <Sonner />
         <CongratsPopup />
+        <PWAInstallPrompt />
         <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
           <Routes>
             <Route path="/" element={<Index />} />
