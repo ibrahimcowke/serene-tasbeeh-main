@@ -471,15 +471,23 @@ export function Counter() {
   };
 
   return (
-    <div className="flex flex-col items-center flex-1 px-4 sm:px-6 md:px-8 lg:px-12 relative w-full min-h-full py-1">
-      <div className="relative flex flex-col items-center justify-center w-full max-w-7xl mx-auto z-10 my-auto">
+    <div className="flex flex-col items-center justify-between h-full w-full px-4 sm:px-6 md:px-8 lg:px-12 relative overflow-hidden py-4 sm:py-8">
+      {/* Top Section: Dhikr */}
+      <div className="w-full flex justify-center items-end min-h-[20%] max-h-[30%]">
+        {renderSection('dhikr')}
+      </div>
+
+      {/* Center Section: Counter - This stays visually fixed */}
+      <div className="relative flex flex-col items-center justify-center w-full max-w-7xl mx-auto z-10 flex-1">
         <div className="flex flex-col items-center w-full">
-          {['dhikr', 'counter', 'hadith', 'stats'].map(item => (
-            <div key={item} className="w-full flex justify-center">
-              {renderSection(item)}
-            </div>
-          ))}
+          {renderSection('counter')}
         </div>
+      </div>
+
+      {/* Bottom Section: Hadith & Stats */}
+      <div className="w-full flex flex-col items-center justify-start min-h-[20%] max-h-[30%] overflow-hidden">
+        {renderSection('hadith')}
+        {renderSection('stats')}
       </div>
     </div>
   );

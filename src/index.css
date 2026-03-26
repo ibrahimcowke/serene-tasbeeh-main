@@ -641,10 +641,11 @@
   #root {
     height: 100dvh;
     width: 100%;
-    overflow: hidden;
+    overflow: hidden !important;
     position: fixed;
     top: 0;
     left: 0;
+    touch-action: none;
   }
 
   body {
