@@ -180,12 +180,66 @@ export interface RoutineStep {
 }
 
 export const defaultDhikrs: Dhikr[] = [
-  { id: 'subahanallah', arabic: 'سُبْحَانَ ٱللَّٰهِ', transliteration: 'Subhan-Allah', translation: 'Glory be to Allah' },
-  { id: 'alhamdulillah', arabic: 'ٱلْحَمْدُ لِلَّٰهِ', transliteration: 'Alhamdulillah', translation: 'Praise be to Allah' },
-  { id: 'allahuakbar', arabic: 'ٱللَّٰهُ أَكْبَرُ', transliteration: 'Allahu Akbar', translation: 'Allah is the Greatest' },
-  { id: 'astaghfirullah', arabic: 'أَسْتَغْفِرُ ٱللَّٰهَ', transliteration: 'Astaghfirullah', translation: 'I seek forgiveness from Allah' },
-  { id: 'la-ilaha-illallah', arabic: 'لَا إِلَٰهَ إِلَّا ٱللَّٰهُ', transliteration: 'La ilaha illallah', translation: 'There is no god but Allah' },
-  { id: 'allahuma-sali', arabic: 'اللَّهُمَّ صَلِّ عَلَى سَيِّدِنَا مُحَمَّدٍ', transliteration: 'Allahumma Salli Ala Sayyidina Muhammad', translation: 'O Allah, send blessings upon our Master Muhammad' },
+  { 
+    id: 'subahanallah', 
+    arabic: 'سُبْحَانَ ٱللَّٰهِ', 
+    transliteration: 'Subhan-Allah', 
+    translation: 'Glory be to Allah',
+    hadiths: [
+      { text: "كلمتان خفيفتان على اللسان، ثقيلتان في الميزان: سبحان الله وبحمده، سبحان الله العظيم", source: "Bukhari & Muslim" },
+      { text: "Whoever says 'SubhanAllah wa bihamdihi' 100 times a day, will be forgiven all his sins even if they were as much as the foam of the sea.", source: "Bukhari" }
+    ]
+  },
+  { 
+    id: 'alhamdulillah', 
+    arabic: 'ٱلْحَمْدُ لِلَّٰهِ', 
+    transliteration: 'Alhamdulillah', 
+    translation: 'Praise be to Allah',
+    hadiths: [
+      { text: "أفضل الدعاء الحمد لله", source: "Tirmidhi" },
+      { text: "Allah is pleased with the servant who praises Him when he eats or drinks.", source: "Muslim" }
+    ]
+  },
+  { 
+    id: 'allahuakbar', 
+    arabic: 'ٱللَّٰهُ أَكْبَرُ', 
+    transliteration: 'Allahu Akbar', 
+    translation: 'Allah is the Greatest',
+    hadiths: [
+      { text: "The dearest words to Allah are four: SubhanAllah, Alhamdulillah, La ilaha illallah, and Allahu Akbar.", source: "Muslim" },
+      { text: "To say 'SubhanAllah, Alhamdulillah, La ilaha illallah, and Allahu Akbar' is dearer to me than everything over which the sun rises.", source: "Muslim" }
+    ]
+  },
+  { 
+    id: 'astaghfirullah', 
+    arabic: 'أَسْتَغْفِرُ ٱللَّٰهَ', 
+    transliteration: 'Astaghfirullah', 
+    translation: 'I seek forgiveness from Allah',
+    hadiths: [
+      { text: "من أكثر من الاستغفار جعل الله له من كل هم فرجا، ومن كل ضيق مخرجا", source: "Abu Dawud" },
+      { text: "The Prophet (ﷺ) used to seek Allah's forgiveness and repent to Him more than seventy times a day.", source: "Bukhari" }
+    ]
+  },
+  { 
+    id: 'la-ilaha-illallah', 
+    arabic: 'لَا إِلَٰهَ إِلَّا ٱللَّٰهُ', 
+    transliteration: 'La ilaha illallah', 
+    translation: 'There is no god but Allah',
+    hadiths: [
+      { text: "The fortunate person who will gain my intercession will be that person who says 'La ilaha illallah' sincerely from his heart.", source: "Bukhari" },
+      { text: "When a servant sincerely says 'La Ilaha Illa Allah', the gates of the heavens are opened for it until it reaches the Throne.", source: "Tirmidhi" }
+    ]
+  },
+  { 
+    id: 'allahuma-sali', 
+    arabic: 'اللَّهُمَّ صَلِّ عَلَى سَيِّدِنَا مُحَمَّدٍ', 
+    transliteration: 'Allahumma Salli Ala Sayyidina Muhammad', 
+    translation: 'O Allah, send blessings upon our Master Muhammad',
+    hadiths: [
+      { text: "من صلى علي واحدة، صلى الله عليه عشرا", source: "Muslim" },
+      { text: "The closest of people to me on the Day of Resurrection will be those who sent the most blessings upon me.", source: "Tirmidhi" }
+    ]
+  },
 ];
 
 const defaultRoutines = [
