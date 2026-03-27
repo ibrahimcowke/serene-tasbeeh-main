@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { motion } from 'framer-motion';
-import { Flame } from 'lucide-react';
+import { Flame, BarChart3 } from 'lucide-react';
 import { BarChart, Bar, XAxis, Tooltip, ResponsiveContainer } from 'recharts';
 import { useTasbeehStore } from '@/store/tasbeehStore';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger, SheetDescription } from '@/components/ui/sheet';
@@ -188,50 +188,98 @@ function HistoryStats() {
       {/* Summary stats */}
       <div className="grid grid-cols-2 gap-3">
         {[
-          { label: 'Today', value: stats.today },
-          { label: 'This Week', value: stats.week },
-          { label: 'This Month', value: stats.month },
-          { label: 'All Time', value: stats.allTime },
+          { label: 'Today', value: stats.today, color: 'text-primary' },
+          { label: 'This Week', value: stats.week, color: 'text-blue-500' },
+          { label: 'This Month', value: stats.month, color: 'text-purple-500' },
+          { label: 'All Time', value: stats.allTime, color: 'text-green-500' },
         ].map((stat, index) => (
           <motion.div
             key={stat.label}
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: index * 0.05 + 0.2 }}
-            className="p-4 rounded-2xl bg-card"
+            className="p-4 rounded-2xl bg-card border border-border/40 hover:border-primary/20 transition-colors shadow-sm"
           >
-            <p className="text-xs text-muted-foreground mb-1">{stat.label}</p>
-            <p className="text-2xl font-light text-foreground">
+            <p className="text-xs text-muted-foreground mb-1 uppercase tracking-wider font-semibold">{stat.label}</p>
+            <p className={`text-2xl font-bold ${stat.color}`}>
               {stat.value.toLocaleString()}
             </p>
           </motion.div>
         ))}
       </div>
 
+      {/* Activity Heatmap (Monthly) */}
+      <div className="p-5 rounded-2xl bg-card border border-border/40 shadow-sm">
+        <p className="text-sm font-medium text-foreground mb-4 flex items-center gap-2">
+            <BarChart3 className="w-4 h-4 text-primary" />
+            Activity Intensity (Last 30 Days)
+        </p>
+        <div className="grid grid-cols-7 gap-1">
+          {Array.from({ length: 30 }, (_, i) => {
+            const date = new Date();
+            date.setDate(date.getDate() - (29 - i));
+            const dateStr = date.toISOString().split('T')[0];
+            const record = dailyRecords.find(r => r.date === dateStr);
+            const count = record?.totalCount || 0;
+            const intensity = count > 0 ? Math.min(Math.ceil(count / 100), 4) : 0;
+            
+            return (
+              <div
+                key={dateStr}
+                className={`aspect-square rounded-[3px] transition-all hover:ring-2 hover:ring-primary/50 cursor-pointer
+                    ${intensity === 0 ? 'bg-muted/30' : 
+                      intensity === 1 ? 'bg-primary/20' :
+                      intensity === 2 ? 'bg-primary/40' :
+                      intensity === 3 ? 'bg-primary/70' :
+                      'bg-primary'
+                    }`}
+                title={`${dateStr}: ${count} dhikr`}
+              />
+            );
+          })}
+        </div>
+        <div className="flex items-center justify-between mt-3 text-[10px] text-muted-foreground">
+            <span>Less activity</span>
+            <div className="flex gap-1">
+                <div className="w-2 h-2 rounded-[1px] bg-muted/30" />
+                <div className="w-2 h-2 rounded-[1px] bg-primary/20" />
+                <div className="w-2 h-2 rounded-[1px] bg-primary/40" />
+                <div className="w-2 h-2 rounded-[1px] bg-primary/70" />
+                <div className="w-2 h-2 rounded-[1px] bg-primary" />
+            </div>
+            <span>More activity</span>
+        </div>
+      </div>
+
       {/* Activity Chart */}
-      <div className="p-4 rounded-2xl bg-card">
-        <p className="text-sm text-muted-foreground mb-4">Activity Trend (Last 14 Days)</p>
-        <div className="h-48 w-full">
+      <div className="p-5 rounded-2xl bg-card border border-border/40 shadow-sm">
+        <p className="text-sm font-medium text-foreground mb-4">Daily Performance (14d)</p>
+        <div className="h-40 w-full">
           <ResponsiveContainer width="100%" height="100%">
             <BarChart data={chartData}>
               <XAxis
                 dataKey="date"
-                stroke="#888888"
+                stroke="hsl(var(--muted-foreground))"
                 fontSize={10}
                 tickLine={false}
                 axisLine={false}
                 interval={2}
               />
               <Tooltip
-                contentStyle={{ backgroundColor: 'hsl(var(--card))', borderRadius: '8px', border: '1px solid hsl(var(--border))' }}
+                contentStyle={{ 
+                    backgroundColor: 'hsl(var(--card))', 
+                    borderRadius: '12px', 
+                    border: '1px solid hsl(var(--border))',
+                    boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1)'
+                }}
                 itemStyle={{ color: 'hsl(var(--foreground))' }}
-                cursor={{ fill: 'hsl(var(--muted)/0.2)' }}
+                cursor={{ fill: 'hsl(var(--primary)/0.05)', radius: 4 }}
               />
               <Bar
                 dataKey="count"
                 fill="hsl(var(--primary))"
                 radius={[4, 4, 0, 0]}
-                maxBarSize={40}
+                maxBarSize={24}
               />
             </BarChart>
           </ResponsiveContainer>
@@ -239,30 +287,39 @@ function HistoryStats() {
       </div>
 
       {recentDays.length > 0 && (
-        <div>
-          <p className="text-sm text-muted-foreground mb-3">Recent Activity</p>
-          <div className="space-y-2">
+        <div className="space-y-4">
+          <div className="flex items-center justify-between">
+            <p className="text-sm font-medium text-foreground">Recent Activity Logs</p>
+          </div>
+          <div className="space-y-3">
             {recentDays.map((record, index) => (
               <motion.div
                 key={record.date}
                 initial={{ opacity: 0, x: -10 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: index * 0.03 + 0.3 }}
-                className="p-4 rounded-2xl bg-card"
+                className="p-4 rounded-2xl bg-card border border-border/40 hover:bg-muted/10 transition-colors"
               >
-                <div className="flex items-center justify-between mb-2">
-                  <p className="text-sm font-medium text-foreground">
-                    {formatDate(record.date)}
-                  </p>
-                  <p className="text-lg font-light text-foreground">
-                    {record.totalCount.toLocaleString()}
-                  </p>
+                <div className="flex items-center justify-between mb-3">
+                  <div className="flex flex-col">
+                    <p className="text-sm font-semibold text-foreground">
+                        {formatDate(record.date)}
+                    </p>
+                    <p className="text-[10px] text-muted-foreground uppercase tracking-wider">
+                        Session Summary
+                    </p>
+                  </div>
+                  <div className="bg-primary/10 px-3 py-1 rounded-full">
+                    <p className="text-sm font-bold text-primary">
+                        {record.totalCount.toLocaleString()}
+                    </p>
+                  </div>
                 </div>
                 <div className="flex flex-wrap gap-2">
                   {Object.entries(record.counts).map(([dhikrId, count]) => (
                     <span
                       key={dhikrId}
-                      className="text-xs px-2 py-1 rounded-full bg-secondary text-muted-foreground"
+                      className="text-[10px] font-medium px-2 py-1 rounded-md bg-secondary/50 text-muted-foreground border border-border/50"
                     >
                       {getDhikrName(dhikrId)}: {count}
                     </span>

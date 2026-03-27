@@ -1,11 +1,12 @@
+import * as React from 'react';
 import { useTasbeehStore } from '@/store/tasbeehStore';
 import { motion } from 'framer-motion';
 import { TrendingUp, Calendar, Target, Award, Flame, BarChart3 } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger, SheetDescription } from '@/components/ui/sheet';
+import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell, PieChart, Pie } from 'recharts';
 
 interface StatsViewProps {
     children: React.ReactNode;
@@ -53,27 +54,12 @@ export function StatsViewContent() {
         };
     }).reverse();
 
-    // Last 30 days data
-    const last30Days = Array.from({ length: 30 }, (_, i) => {
-        const date = new Date();
-        date.setDate(date.getDate() - i);
-        const dateStr = date.toISOString().split('T')[0];
-        const record = history.find(h => h.date === dateStr);
-        return {
-            date: dateStr,
-            count: record?.totalCount || 0,
-        };
-    }).reverse();
-
     const totalAllTime = history.reduce((sum, record) => sum + record.totalCount, 0);
     const averageDaily = history.length > 0 ? Math.round(totalAllTime / history.length) : 0;
     const maxInDay = Math.max(...history.map(h => h.totalCount), 0);
     const weekTotal = last7Days.reduce((sum, day) => sum + day.count, 0);
-    const monthTotal = last30Days.reduce((sum, day) => sum + day.count, 0);
 
     const currentStreakDays = streakDays;
-
-    const maxValue = Math.max(...last7Days.map(d => d.count), 1);
 
     return (
         <div className="overflow-y-auto space-y-6 pb-24 h-full">
@@ -164,8 +150,8 @@ export function StatsViewContent() {
                 {/* Charts */}
                 <Tabs defaultValue="week" className="w-full">
                     <TabsList className="grid w-full grid-cols-2">
-                        <TabsTrigger value="week">Last 7 Days</TabsTrigger>
-                        <TabsTrigger value="month">Last 30 Days</TabsTrigger>
+                        <TabsTrigger value="week">Overview</TabsTrigger>
+                        <TabsTrigger value="distribution">Focus</TabsTrigger>
                     </TabsList>
 
                     <TabsContent value="week" className="space-y-4">
@@ -177,81 +163,82 @@ export function StatsViewContent() {
                                 </CardDescription>
                             </CardHeader>
                             <CardContent>
-                                <div className="flex items-end justify-between gap-2 h-48">
-                                    {last7Days.map((day, index) => (
-                                        <motion.div
-                                            key={day.date}
-                                            initial={{ height: 0 }}
-                                            animate={{ height: `${(day.count / maxValue) * 100}%` }}
-                                            transition={{ delay: index * 0.1, duration: 0.5 }}
-                                            className="flex-1 flex flex-col items-center gap-2"
-                                        >
-                                            <div className="w-full bg-primary/20 rounded-t-lg relative group cursor-pointer hover:bg-primary/30 transition-colors">
-                                                <div
-                                                    className="w-full bg-primary rounded-t-lg transition-all"
-                                                    style={{ height: `${(day.count / maxValue) * 100}%`, minHeight: day.count > 0 ? '4px' : '0' }}
-                                                />
-                                                <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-card border border-border rounded px-2 py-1 text-xs opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap shadow-lg">
-                                                    {day.count} dhikr
-                                                </div>
-                                            </div>
-                                            <span className="text-xs text-muted-foreground">{day.day}</span>
-                                        </motion.div>
-                                    ))}
+                                <div className="h-64 w-full">
+                                    <ResponsiveContainer width="100%" height="100%">
+                                        <BarChart data={last7Days}>
+                                            <XAxis 
+                                                dataKey="day" 
+                                                stroke="#888888" 
+                                                fontSize={12} 
+                                                tickLine={false} 
+                                                axisLine={false} 
+                                            />
+                                            <Tooltip
+                                                contentStyle={{ 
+                                                    backgroundColor: 'hsl(var(--card))', 
+                                                    borderRadius: '12px', 
+                                                    border: '1px solid hsl(var(--border))',
+                                                    boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1)'
+                                                }}
+                                                itemStyle={{ color: 'hsl(var(--foreground))' }}
+                                                cursor={{ fill: 'hsl(var(--primary)/0.1)', radius: 8 }}
+                                            />
+                                            <Bar 
+                                                dataKey="count" 
+                                                radius={[6, 6, 0, 0]}
+                                                className="fill-primary"
+                                            >
+                                                {last7Days.map((entry, index) => (
+                                                    <Cell 
+                                                        key={`cell-${index}`} 
+                                                        fill={entry.date === today ? 'hsl(var(--primary))' : 'hsl(var(--primary)/0.4)'} 
+                                                    />
+                                                ))}
+                                            </Bar>
+                                        </BarChart>
+                                    </ResponsiveContainer>
                                 </div>
                             </CardContent>
                         </Card>
                     </TabsContent>
 
-                    <TabsContent value="month" className="space-y-4">
+                    <TabsContent value="distribution" className="space-y-4">
                         <Card>
                             <CardHeader>
-                                <CardTitle className="text-lg">Monthly Overview</CardTitle>
+                                <CardTitle className="text-lg">Dhikr Distribution</CardTitle>
                                 <CardDescription>
-                                    Total this month: {monthTotal} dhikr
+                                    Most frequent recitations
                                 </CardDescription>
                             </CardHeader>
                             <CardContent>
-                                <div className="grid grid-cols-10 gap-1">
-                                    {last30Days.map((day, index) => {
-                                        const intensity = day.count > 0 ? Math.min((day.count / dailyGoal) * 100, 100) : 0;
-                                        return (
-                                            <motion.div
-                                                key={day.date}
-                                                initial={{ opacity: 0, scale: 0 }}
-                                                animate={{ opacity: 1, scale: 1 }}
-                                                transition={{ delay: index * 0.02 }}
-                                                className="aspect-square rounded-sm group relative cursor-pointer"
-                                                style={{
-                                                    backgroundColor: intensity === 0
-                                                        ? 'hsl(var(--muted))'
-                                                        : `hsl(var(--primary) / ${intensity / 100})`,
-                                                }}
+                                <div className="h-64 w-full">
+                                    <ResponsiveContainer width="100%" height="100%">
+                                        <PieChart>
+                                            <Pie
+                                                data={Object.entries(todayRecord?.counts || {}).map(([id, count]) => ({
+                                                    name: id.charAt(0).toUpperCase() + id.slice(1).replace(/-/g, ' '),
+                                                    value: count
+                                                }))}
+                                                cx="50%"
+                                                cy="50%"
+                                                innerRadius={60}
+                                                outerRadius={80}
+                                                paddingAngle={5}
+                                                dataKey="value"
                                             >
-                                                <div className="absolute -top-12 left-1/2 -translate-x-1/2 bg-card border border-border rounded px-2 py-1 text-xs opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap shadow-lg z-10">
-                                                    {new Date(day.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}<br />
-                                                    {day.count} dhikr
-                                                </div>
-                                            </motion.div>
-                                        );
-                                    })}
-                                </div>
-                                <div className="flex items-center justify-between mt-4 text-xs text-muted-foreground">
-                                    <span>Less</span>
-                                    <div className="flex gap-1">
-                                        {[0, 25, 50, 75, 100].map((intensity) => (
-                                            <div
-                                                key={intensity}
-                                                className="w-3 h-3 rounded-sm"
-                                                style={{
-                                                    backgroundColor: intensity === 0
-                                                        ? 'hsl(var(--muted))'
-                                                        : `hsl(var(--primary) / ${intensity / 100})`,
+                                                {(Object.entries(todayRecord?.counts || {})).map((entry, index) => (
+                                                    <Cell key={`cell-${index}`} fill={`hsl(var(--primary) / ${0.2 + (index * 0.2)})`} />
+                                                ))}
+                                            </Pie>
+                                            <Tooltip 
+                                                contentStyle={{ 
+                                                    backgroundColor: 'hsl(var(--card))', 
+                                                    borderRadius: '12px', 
+                                                    border: '1px solid hsl(var(--border))' 
                                                 }}
                                             />
-                                        ))}
-                                    </div>
-                                    <span>More</span>
+                                        </PieChart>
+                                    </ResponsiveContainer>
                                 </div>
                             </CardContent>
                         </Card>

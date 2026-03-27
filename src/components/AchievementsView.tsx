@@ -304,13 +304,20 @@ export function AchievementsContent() {
             <ScrollArea className="h-full pb-20">
                 <div className="space-y-6 px-1">
                     {/* Level Progress */}
-                    <div className="bg-card border border-border rounded-2xl p-5 relative overflow-hidden">
-                        <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent pointer-events-none" />
+                    <div className="bg-card/40 border border-border/60 backdrop-blur-md rounded-2xl p-5 relative overflow-hidden group shadow-lg">
+                        <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-transparent to-primary/5 pointer-events-none" />
+                        
+                        {/* Sync Indicator */}
+                        <div className="absolute top-3 right-3 flex items-center gap-1.5 opacity-60 group-hover:opacity-100 transition-opacity">
+                            <div className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
+                            <span className="text-[10px] uppercase font-bold tracking-tighter text-muted-foreground">Cloud Synced</span>
+                        </div>
+
                         <div className="relative z-10">
-                            <div className="flex justify-between items-end mb-2">
+                            <div className="flex justify-between items-end mb-4">
                                 <div>
-                                    <p className="text-sm text-muted-foreground uppercase tracking-wider font-medium">Current Rank</p>
-                                    <h3 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/60">
+                                    <p className="text-[10px] text-muted-foreground uppercase tracking-widest font-bold mb-1">Current Spiritual Rank</p>
+                                    <h3 className="text-3xl font-black bg-clip-text text-transparent bg-gradient-to-r from-primary via-primary/80 to-primary/40 leading-none">
                                         {currentLevel.name}
                                     </h3>
                                 </div>
