@@ -1,6 +1,6 @@
 import { useState, useCallback, useRef, useEffect } from 'react';
 import { motion, AnimatePresence, Reorder } from 'framer-motion';
-import { useTasbeehStore, defaultDhikrs } from '@/store/tasbeehStore';
+import { useTasbeehStore, defaultDhikrs, defaultThemeSettings } from '@/store/tasbeehStore';
 import { ProgressRing } from './ProgressRing';
 import { HadithSlider } from './HadithSlider';
 import { SoundManager } from '@/lib/sound';
@@ -41,13 +41,7 @@ export function Counter() {
   // Ensure we have the latest data (e.g. hadiths) even if state is persisted
   const currentDhikr = defaultDhikrs.find(d => d.id === stateCurrentDhikr.id) || stateCurrentDhikr;
 
-  const currentSettings = themeSettings?.[theme] || {
-    hapticEnabled: true,
-    soundEnabled: false,
-    vibrationIntensity: 'medium',
-    fontScale: 1,
-    soundType: 'click'
-  };
+  const currentSettings = themeSettings?.[theme] || defaultThemeSettings;
 
   const [showCompletion, setShowCompletion] = useState(false);
   const lastCompletionRef = useRef<number>(0);
@@ -95,12 +89,13 @@ export function Counter() {
       <div className="text-center mt-6 mb-4 px-3 sm:px-0 relative z-20"
         style={{ transform: `translateY(${dhikrVerticalOffset}px)` }}
       >
-        <AnimatePresence mode="wait">
+        <AnimatePresence mode="wait" initial={false}>
           <motion.p
             key={currentDhikr.id}
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 1.05 }}
+            transition={{ duration: 0.3, ease: "easeOut" }}
             className="font-arabic text-lg xs:text-xl sm:text-2xl md:text-3xl lg:text-4xl text-foreground leading-snug mb-0 max-w-[95vw] mx-auto overflow-visible select-none"
           >
             {currentDhikr.arabic}

@@ -52,13 +52,16 @@ export function HadithSlider({ dhikr }: { dhikr: Dhikr }) {
                 </svg>
             </div>
 
-            <AnimatePresence mode="wait">
+            <AnimatePresence mode="wait" initial={false}>
                 <motion.div
                     key={`${dhikr.id}-${index}`}
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -10 }}
-                    transition={{ duration: 0.5 }}
+                    initial={{ opacity: 0, scale: 0.98 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 1.02 }}
+                    transition={{ 
+                        duration: 0.4,
+                        ease: [0.23, 1, 0.32, 1] // Custom ease-out
+                    }}
                     className="flex flex-col gap-1.5 xs:gap-2 sm:gap-3 relative z-10"
                     dir={isArabic ? 'rtl' : 'ltr'}
                 >

@@ -175,8 +175,10 @@ export type SessionMode =
   | { type: 'routine'; routineId: string; currentStepIndex: number; steps: RoutineStep[]; isComplete: boolean };
 
 export interface RoutineStep {
+  id: string;
   dhikrId: string;
   target: number;
+  description?: string;
 }
 
 export const defaultDhikrs: Dhikr[] = [
@@ -187,7 +189,9 @@ export const defaultDhikrs: Dhikr[] = [
     translation: 'Glory be to Allah',
     hadiths: [
       { text: "كلمتان خفيفتان على اللسان، ثقيلتان في الميزان: سبحان الله وبحمده، سبحان الله العظيم", source: "Bukhari & Muslim" },
-      { text: "Whoever says 'SubhanAllah wa bihamdihi' 100 times a day, will be forgiven all his sins even if they were as much as the foam of the sea.", source: "Bukhari" }
+      { text: "Whoever says 'SubhanAllah wa bihamdihi' 100 times a day, will be forgiven all his sins even if they were as much as the foam of the sea.", source: "Bukhari" },
+      { text: "Whoever says 'Subhan-Allah' 100 times, 1000 good deeds are recorded for him or 1000 sins are removed.", source: "Muslim" },
+      { text: "For him who says: 'SubhanAllahil adhim wa bihamdih', a palm-tree will be planted in Jannah.", source: "Tirmidhi" }
     ]
   },
   { 
@@ -197,7 +201,9 @@ export const defaultDhikrs: Dhikr[] = [
     translation: 'Praise be to Allah',
     hadiths: [
       { text: "أفضل الدعاء الحمد لله", source: "Tirmidhi" },
-      { text: "Allah is pleased with the servant who praises Him when he eats or drinks.", source: "Muslim" }
+      { text: "Allah is pleased with the servant who praises Him when he eats or drinks.", source: "Muslim" },
+      { text: "Alhamdulillah fills the scale (of good deeds).", source: "Muslim" },
+      { text: "The best of remembrance is La ilaha illallah and the best of supplication is Alhamdulillah.", source: "Tirmidhi" }
     ]
   },
   { 
@@ -207,7 +213,8 @@ export const defaultDhikrs: Dhikr[] = [
     translation: 'Allah is the Greatest',
     hadiths: [
       { text: "The dearest words to Allah are four: SubhanAllah, Alhamdulillah, La ilaha illallah, and Allahu Akbar.", source: "Muslim" },
-      { text: "To say 'SubhanAllah, Alhamdulillah, La ilaha illallah, and Allahu Akbar' is dearer to me than everything over which the sun rises.", source: "Muslim" }
+      { text: "To say 'SubhanAllah, Alhamdulillah, La ilaha illallah, and Allahu Akbar' is dearer to me than everything over which the sun rises.", source: "Muslim" },
+      { text: "Allahu Akbar' is better than the world and all that is in it.", source: "Umar ibn Al-Khattab" }
     ]
   },
   { 
@@ -217,7 +224,9 @@ export const defaultDhikrs: Dhikr[] = [
     translation: 'I seek forgiveness from Allah',
     hadiths: [
       { text: "من أكثر من الاستغفار جعل الله له من كل هم فرجا، ومن كل ضيق مخرجا", source: "Abu Dawud" },
-      { text: "The Prophet (ﷺ) used to seek Allah's forgiveness and repent to Him more than seventy times a day.", source: "Bukhari" }
+      { text: "The Prophet (ﷺ) used to seek Allah's forgiveness and repent to Him more than seventy times a day.", source: "Bukhari" },
+      { text: "Whoever says 'Astaghfirullah al-Adheem...' his sins will be forgiven even if he fled from battle.", source: "Abu Dawud" },
+      { text: "I seek forgiveness from Allah 100 times a day.", source: "Muslim" }
     ]
   },
   { 
@@ -227,7 +236,9 @@ export const defaultDhikrs: Dhikr[] = [
     translation: 'There is no god but Allah',
     hadiths: [
       { text: "The fortunate person who will gain my intercession will be that person who says 'La ilaha illallah' sincerely from his heart.", source: "Bukhari" },
-      { text: "When a servant sincerely says 'La Ilaha Illa Allah', the gates of the heavens are opened for it until it reaches the Throne.", source: "Tirmidhi" }
+      { text: "When a servant sincerely says 'La Ilaha Illa Allah', the gates of the heavens are opened for it until it reaches the Throne.", source: "Tirmidhi" },
+      { text: "The best dhikr is La ilaha illallah.", source: "Tirmidhi" },
+      { text: "Whoever says 'La ilaha illallah wahdahu la sharika lah...' 100 times, it is like freeing 10 slaves.", source: "Bukhari" }
     ]
   },
   { 
@@ -237,7 +248,9 @@ export const defaultDhikrs: Dhikr[] = [
     translation: 'O Allah, send blessings upon our Master Muhammad',
     hadiths: [
       { text: "من صلى علي واحدة، صلى الله عليه عشرا", source: "Muslim" },
-      { text: "The closest of people to me on the Day of Resurrection will be those who sent the most blessings upon me.", source: "Tirmidhi" }
+      { text: "The closest of people to me on the Day of Resurrection will be those who sent the most blessings upon me.", source: "Tirmidhi" },
+      { text: "The miser is the one in whose presence I am mentioned and he does not send blessings upon me.", source: "Tirmidhi" },
+      { text: "Increase your prayers upon me on Friday.", source: "Abu Dawud" }
     ]
   },
   {
@@ -247,7 +260,8 @@ export const defaultDhikrs: Dhikr[] = [
     translation: 'The Throne Verse',
     hadiths: [
       { text: "Whoever recites Ayat al-Kursi after every prayer, nothing will prevent him from entering Paradise except death.", source: "An-Nasa'i" },
-      { text: "It is the greatest verse in the Book of Allah.", source: "Muslim" }
+      { text: "It is the greatest verse in the Book of Allah.", source: "Muslim" },
+      { text: "Reciting it at night ensures a protector from Allah stays with you and no Shaitan comes near you.", source: "Bukhari" }
     ]
   },
   {
@@ -257,7 +271,8 @@ export const defaultDhikrs: Dhikr[] = [
     translation: 'Surah Ikhlas, Falaq, and Nas',
     hadiths: [
       { text: "Reciting 'Qul Huwallahu Ahad' is equivalent to one third of the Quran.", source: "Bukhari" },
-      { text: "The Prophet (ﷺ) would recite them and blow into his hands for protection before sleep.", source: "Bukhari" }
+      { text: "The Prophet (ﷺ) would recite them and blow into his hands for protection before sleep.", source: "Bukhari" },
+      { text: "Reciting them three times in the morning and evening suffices you against everything.", source: "Abu Dawud" }
     ]
   }
 ];
@@ -267,14 +282,14 @@ const defaultRoutines = [
     id: 'post-prayer',
     label: 'After Prayer',
     steps: [
-      { dhikrId: 'subahanallah', target: 33 },
-      { dhikrId: 'alhamdulillah', target: 33 },
-      { dhikrId: 'allahuakbar', target: 34 }
+      { id: 'tasbih100_1', dhikrId: 'subahanallah', target: 33 },
+      { id: 'tasbih100_2', dhikrId: 'alhamdulillah', target: 33 },
+      { id: 'tasbih100_3', dhikrId: 'allahuakbar', target: 34 }
     ]
   }
 ];
 
-const defaultThemeSettings: ThemeSettings = {
+export const defaultThemeSettings: ThemeSettings = {
   primary: '#60a5fa',
   secondary: '#1e293b',
   accent: '#3b82f6',

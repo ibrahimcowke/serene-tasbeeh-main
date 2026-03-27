@@ -21,9 +21,11 @@ export const PWAInstallPrompt = () => {
       // Prevent the mini-infobar from appearing on mobile
       e.preventDefault();
       // Stash the event so it can be triggered later.
-      setInstallPrompt(e as BeforeInstallPromptEvent);
+      const promptEvent = e as BeforeInstallPromptEvent;
+      setInstallPrompt(promptEvent);
       // Show the install button/toast after a short delay
       setTimeout(() => setIsVisible(true), 3000);
+      console.log("PWA: beforeinstallprompt captured and custom UI scheduled.");
     };
 
     window.addEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
