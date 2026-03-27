@@ -74,7 +74,7 @@ export function ChallengesView({ children }: { children: ReactNode }) {
 }
 
 export function ChallengesViewContent({ isPage = false }: { isPage?: boolean }) {
-    const { startTasbih100, startTasbih1000, dhikrs, totalAllTime, dailyGoal, deviceId } = useTasbeehStore();
+    const { startTasbih100, startTasbih1000, totalAllTime } = useTasbeehStore();
     const [tab, setTab] = useState<'challenges' | 'history'>('challenges');
     const [completedCount, setCompletedCount] = useState(0);
 

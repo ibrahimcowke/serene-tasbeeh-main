@@ -25,7 +25,7 @@ export default function MiniCounter() {
 
     return (
         <ThemeProvider>
-            <div className="h-screen h-dvh min-h-svh w-screen bg-background flex flex-col items-center justify-center p-4 relative overflow-hidden select-none">
+            <div className="h-dvh min-h-svh w-screen bg-background flex flex-col items-center justify-center p-4 relative overflow-hidden select-none">
                 {/* Pattern Background */}
                 <div className="absolute inset-0 opacity-5 pointer-events-none">
                     <svg width="100%" height="100%">
