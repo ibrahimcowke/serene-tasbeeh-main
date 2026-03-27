@@ -71,7 +71,7 @@ export function HadithSlider({ dhikr }: { dhikr: Dhikr }) {
                         </span>
                         {isPaused && (
                             <span className="text-[9px] xs:text-[10px] text-muted-foreground animate-pulse ml-2 bg-background/50 px-2 py-0.5 rounded-full border border-border/50">
-                                Paused
+                                متوقف مؤقتاً
                             </span>
                         )}
                     </div>

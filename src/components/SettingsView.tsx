@@ -502,10 +502,10 @@ export function SettingsView({ children, defaultTab = 'appearance' }: SettingsVi
                       ))}
                     </div>
                     <button
-                      onClick={() => setDhikrTextPosition('hidden')}
+                      onClick={() => setDhikrTextPosition('none')}
                       className={`
                           w-full mt-2 py-2 px-3 rounded-lg text-xs font-medium border transition-colors
-                          ${dhikrTextPosition === 'hidden'
+                          ${dhikrTextPosition === 'none'
                           ? 'bg-primary text-primary-foreground border-primary'
                           : 'bg-background border-border hover:bg-muted'}
                         `}
@@ -517,12 +517,12 @@ export function SettingsView({ children, defaultTab = 'appearance' }: SettingsVi
 
                 {/* Hadith Slider Settings */}
                 <div className="space-y-1">
-                  <p className="text-xs text-muted-foreground uppercase tracking-wide mb-3">Hadith Slider</p>
+                  <p className="text-xs text-muted-foreground uppercase tracking-wide mb-3">شريط فضائل الذكر</p>
                   <div className="p-4 rounded-2xl bg-card mb-2">
                     <div className="flex items-center justify-between mb-3">
                       <div>
-                        <p className="text-sm font-medium text-foreground">Slide Duration</p>
-                        <p className="text-xs text-muted-foreground">{hadithSlideDuration} seconds per slide</p>
+                        <p className="text-sm font-medium text-foreground">مدة عرض الحديث</p>
+                        <p className="text-xs text-muted-foreground">{hadithSlideDuration} ثوانٍ لكل شريحة</p>
                       </div>
                     </div>
                     <Slider
@@ -533,20 +533,20 @@ export function SettingsView({ children, defaultTab = 'appearance' }: SettingsVi
                       onValueChange={([val]) => setHadithSlideDuration(val)}
                     />
                     <div className="flex justify-between text-xs text-muted-foreground mt-1">
-                      <span>5s</span>
-                      <span>60s</span>
+                      <span>5ث</span>
+                      <span>60ث</span>
                     </div>
                   </div>
                   {/* Slide Position */}
                   <div className="p-4 rounded-2xl bg-card">
                     <div className="flex items-center justify-between mb-3">
-                      <p className="text-sm font-medium text-foreground">Position</p>
+                      <p className="text-sm font-medium text-foreground">موقع الشريط</p>
                     </div>
                     <div className="grid grid-cols-3 gap-2 mb-2">
                       {[
-                        { id: 'top-left', label: '↖ Top Left' },
-                        { id: 'top-right', label: '↗ Top Right' },
-                        { id: 'right', label: '→ Right' },
+                        { id: 'top-left', label: '↖ أعلى اليسار' },
+                        { id: 'top-right', label: '↗ أعلى اليمين' },
+                        { id: 'right', label: '→ اليمين' },
                       ].map((pos) => (
                         <button
                           key={pos.id}
@@ -564,9 +564,9 @@ export function SettingsView({ children, defaultTab = 'appearance' }: SettingsVi
                     </div>
                     <div className="grid grid-cols-3 gap-2">
                       {[
-                        { id: 'bottom-left', label: '↙ Bottom Left' },
-                        { id: 'bottom-right', label: '↘ Bottom Right' },
-                        { id: 'bottom', label: '↓ Bottom' },
+                        { id: 'bottom-left', label: '↙ أسفل اليسار' },
+                        { id: 'bottom-right', label: '↘ أسفل اليمين' },
+                        { id: 'bottom', label: '↓ أسفل' },
                       ].map((pos) => (
                         <button
                           key={pos.id}
@@ -583,15 +583,15 @@ export function SettingsView({ children, defaultTab = 'appearance' }: SettingsVi
                       ))}
                     </div>
                     <button
-                      onClick={() => setHadithSlidePosition('hidden')}
+                      onClick={() => setHadithSlidePosition('none')}
                       className={`
                           w-full mt-2 py-2 px-3 rounded-lg text-xs font-medium border transition-colors
-                          ${hadithSlidePosition === 'hidden'
+                          ${hadithSlidePosition === 'none'
                           ? 'bg-primary text-primary-foreground border-primary'
                           : 'bg-background border-border hover:bg-muted'}
                         `}
                     >
-                      ✕ Hidden
+                      ✕ مخفي
                     </button>
                   </div>
                 </div>
@@ -629,20 +629,23 @@ export function SettingsView({ children, defaultTab = 'appearance' }: SettingsVi
 
                     {currentSettings.hapticEnabled && (
                       <div className="grid grid-cols-3 gap-2 pt-2 border-t border-border/50">
-                        {['light', 'medium', 'heavy'].map((intensity) => (
-                          <button
-                            key={intensity}
-                            onClick={() => setVibrationIntensity(intensity as 'light' | 'medium' | 'heavy')}
-                            className={`
-                                py-1.5 px-3 rounded-lg text-xs font-medium border transition-colors capitalize
-                                ${currentSettings.vibrationIntensity === intensity
-                                ? 'bg-primary/20 text-primary border-primary'
-                                : 'bg-background border-border hover:bg-muted'}
-                              `}
-                          >
-                            {intensity}
-                          </button>
-                        ))}
+                        {['light', 'medium', 'heavy'].map((intensity) => {
+                          const val = intensity === 'light' ? 30 : intensity === 'medium' ? 50 : 80;
+                          return (
+                            <button
+                              key={intensity}
+                              onClick={() => setVibrationIntensity(val)}
+                              className={`
+                                  py-1.5 px-3 rounded-lg text-xs font-medium border transition-colors capitalize
+                                  ${currentSettings.vibrationIntensity === val
+                                  ? 'bg-primary/20 text-primary border-primary'
+                                  : 'bg-background border-border hover:bg-muted'}
+                                `}
+                            >
+                              {intensity}
+                            </button>
+                          );
+                        })}
                       </div>
                     )}
                   </div>
@@ -661,10 +664,10 @@ export function SettingsView({ children, defaultTab = 'appearance' }: SettingsVi
 
                     {currentSettings.soundEnabled && (
                       <div className="grid grid-cols-3 gap-2 pt-2 border-t border-border/50">
-                        {['click', 'soft', 'water'].map((type) => (
+                        {['click', 'bubble', 'digital'].map((type) => (
                           <button
                             key={type}
-                            onClick={() => setSoundType(type as 'click' | 'soft' | 'water')}
+                            onClick={() => setSoundType(type as 'click' | 'bubble' | 'mechanical' | 'digital')}
                             className={`
                                 py-1.5 px-3 rounded-lg text-xs font-medium border transition-colors capitalize
                                 ${currentSettings.soundType === type

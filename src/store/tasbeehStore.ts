@@ -131,6 +131,7 @@ interface TasbeehState {
   removeCustomDhikr: (id: string) => void;
   toggleFavorite: (id: string) => void;
   clearAllData: () => void;
+  resetSettings: () => void;
   setCounterShape: (shape: CounterShape) => void;
   setHadithSlideDuration: (duration: number) => void;
   setHadithSlidePosition: (position: 'top' | 'bottom' | 'none') => void;
@@ -188,10 +189,10 @@ export const defaultDhikrs: Dhikr[] = [
     transliteration: 'Subhan-Allah', 
     translation: 'Glory be to Allah',
     hadiths: [
-      { text: "كلمتان خفيفتان على اللسان، ثقيلتان في الميزان: سبحان الله وبحمده، سبحان الله العظيم", source: "Bukhari & Muslim" },
-      { text: "Whoever says 'SubhanAllah wa bihamdihi' 100 times a day, will be forgiven all his sins even if they were as much as the foam of the sea.", source: "Bukhari" },
-      { text: "Whoever says 'Subhan-Allah' 100 times, 1000 good deeds are recorded for him or 1000 sins are removed.", source: "Muslim" },
-      { text: "For him who says: 'SubhanAllahil adhim wa bihamdih', a palm-tree will be planted in Jannah.", source: "Tirmidhi" }
+      { text: "كلمتان خفيفتان على اللسان، ثقيلتان في الميزان: سبحان الله وبحمده، سبحان الله العظيم", source: "البخاري ومسلم" },
+      { text: "من قال: سبحان الله وبحمده، في يوم مائة مرة، حطت خطاياه وإن كانت مثل زبد البحر", source: "البخاري" },
+      { text: "أيعجز أحدكم أن يكسب كل يوم ألف حسنة؟ يسبح مائة تسبيحة، فيكتب له ألف حسنة، أو يحط عنه ألف خطيئة", source: "مسلم" },
+      { text: "من قال: سبحان الله العظيم وبحمده، غرست له نخلة في الجنة", source: "الترمذي" }
     ]
   },
   { 
@@ -200,10 +201,10 @@ export const defaultDhikrs: Dhikr[] = [
     transliteration: 'Alhamdulillah', 
     translation: 'Praise be to Allah',
     hadiths: [
-      { text: "أفضل الدعاء الحمد لله", source: "Tirmidhi" },
-      { text: "Allah is pleased with the servant who praises Him when he eats or drinks.", source: "Muslim" },
-      { text: "Alhamdulillah fills the scale (of good deeds).", source: "Muslim" },
-      { text: "The best of remembrance is La ilaha illallah and the best of supplication is Alhamdulillah.", source: "Tirmidhi" }
+      { text: "أفضل الدعاء الحمد لله", source: "الترمذي" },
+      { text: "إن الله ليرضى عن العبد أن يأكل الأكلة فيحمده عليها، أو يشرب الشربة فيحمده عليها", source: "مسلم" },
+      { text: "والحمد لله تملأ الميزان", source: "مسلم" },
+      { text: "أفضل الذكر: لا إله إلا الله، وأفضل الدعاء: الحمد لله", source: "الترمذي" }
     ]
   },
   { 
@@ -212,9 +213,9 @@ export const defaultDhikrs: Dhikr[] = [
     transliteration: 'Allahu Akbar', 
     translation: 'Allah is the Greatest',
     hadiths: [
-      { text: "The dearest words to Allah are four: SubhanAllah, Alhamdulillah, La ilaha illallah, and Allahu Akbar.", source: "Muslim" },
-      { text: "To say 'SubhanAllah, Alhamdulillah, La ilaha illallah, and Allahu Akbar' is dearer to me than everything over which the sun rises.", source: "Muslim" },
-      { text: "Allahu Akbar' is better than the world and all that is in it.", source: "Umar ibn Al-Khattab" }
+      { text: "أحب الكلام إلى الله أربع: سبحان الله، والحمد لله، ولا إله إلا الله، والله أكبر", source: "مسلم" },
+      { text: "لأن أقول سبحان الله، والحمد لله، ولا إله إلا الله، والله أكبر، أحب إلي مما طلعت عليه الشمس", source: "مسلم" },
+      { text: "الله أكبر كبيرا، والحمد لله كثيرا، وسبحان الله بكرة وأصيلا", source: "مسلم" }
     ]
   },
   { 
@@ -223,10 +224,10 @@ export const defaultDhikrs: Dhikr[] = [
     transliteration: 'Astaghfirullah', 
     translation: 'I seek forgiveness from Allah',
     hadiths: [
-      { text: "من أكثر من الاستغفار جعل الله له من كل هم فرجا، ومن كل ضيق مخرجا", source: "Abu Dawud" },
-      { text: "The Prophet (ﷺ) used to seek Allah's forgiveness and repent to Him more than seventy times a day.", source: "Bukhari" },
-      { text: "Whoever says 'Astaghfirullah al-Adheem...' his sins will be forgiven even if he fled from battle.", source: "Abu Dawud" },
-      { text: "I seek forgiveness from Allah 100 times a day.", source: "Muslim" }
+      { text: "من لزم الاستغفار جعل الله له من كل هم فرجا، ومن كل ضيق مخرجا، ورزقه من حيث لا يحتسب", source: "أبو داود" },
+      { text: "والله إني لأستغفر الله وأتوب إليه في اليوم أكثر من سبعين مرة", source: "البخاري" },
+      { text: "من قال: أستغفر الله العظيم الذي لا إله إلا هو الحي القيوم وأتوب إليه، غفر له وإن كان فر من الزحف", source: "أبو داود" },
+      { text: "إنه ليغان على قلبي، وإني لأستغفر الله في اليوم مائة مرة", source: "مسلم" }
     ]
   },
   { 
@@ -235,10 +236,10 @@ export const defaultDhikrs: Dhikr[] = [
     transliteration: 'La ilaha illallah', 
     translation: 'There is no god but Allah',
     hadiths: [
-      { text: "The fortunate person who will gain my intercession will be that person who says 'La ilaha illallah' sincerely from his heart.", source: "Bukhari" },
-      { text: "When a servant sincerely says 'La Ilaha Illa Allah', the gates of the heavens are opened for it until it reaches the Throne.", source: "Tirmidhi" },
-      { text: "The best dhikr is La ilaha illallah.", source: "Tirmidhi" },
-      { text: "Whoever says 'La ilaha illallah wahdahu la sharika lah...' 100 times, it is like freeing 10 slaves.", source: "Bukhari" }
+      { text: "أسعد الناس بشفاعتي يوم القيامة من قال: لا إله إلا الله، خالصا من قلبه", source: "البخاري" },
+      { text: "ما قال عبد: لا إله إلا الله قط مخلصا، إلا فتحت له أبواب السماء، حتى تفضي إلى العرش", source: "الترمذي" },
+      { text: "أفضل الذكر لا إله إلا الله", source: "الترمذي" },
+      { text: "من قال: لا إله إلا الله وحده لا شريك له، له الملك وله الحمد وهو على كل شيء قدير، في يوم مائة مرة كانت له عدل عشر رقاب", source: "البخاري" }
     ]
   },
   { 
@@ -247,10 +248,10 @@ export const defaultDhikrs: Dhikr[] = [
     transliteration: 'Allahumma Salli Ala Sayyidina Muhammad', 
     translation: 'O Allah, send blessings upon our Master Muhammad',
     hadiths: [
-      { text: "من صلى علي واحدة، صلى الله عليه عشرا", source: "Muslim" },
-      { text: "The closest of people to me on the Day of Resurrection will be those who sent the most blessings upon me.", source: "Tirmidhi" },
-      { text: "The miser is the one in whose presence I am mentioned and he does not send blessings upon me.", source: "Tirmidhi" },
-      { text: "Increase your prayers upon me on Friday.", source: "Abu Dawud" }
+      { text: "من صلى علي واحدة صلى الله عليه عشرا", source: "مسلم" },
+      { text: "أولى الناس بي يوم القيامة أكثرهم علي صلاة", source: "الترمذي" },
+      { text: "البخيل من ذكرت عنده فلم يصل علي", source: "الترمذي" },
+      { text: "أكثروا الصلاة علي يوم الجمعة", source: "أبو داود" }
     ]
   },
   {
@@ -259,9 +260,9 @@ export const defaultDhikrs: Dhikr[] = [
     transliteration: 'Ayat al-Kursi',
     translation: 'The Throne Verse',
     hadiths: [
-      { text: "Whoever recites Ayat al-Kursi after every prayer, nothing will prevent him from entering Paradise except death.", source: "An-Nasa'i" },
-      { text: "It is the greatest verse in the Book of Allah.", source: "Muslim" },
-      { text: "Reciting it at night ensures a protector from Allah stays with you and no Shaitan comes near you.", source: "Bukhari" }
+      { text: "من قرأ آية الكرسي في دبر كل صلاة مكتوبة لم يمنعه من دخول الجنة إلا أن يموت", source: "النسائي" },
+      { text: "هي أعظم آية في كتاب الله", source: "مسلم" },
+      { text: "إذا أويت إلى فراشك، فاقرأ آية الكرسي، لن يزال عليك من الله حافظ، ولا يقربك شيطان حتى تصبح", source: "البخاري" }
     ]
   },
   {
@@ -270,9 +271,9 @@ export const defaultDhikrs: Dhikr[] = [
     transliteration: 'The 3 Quls',
     translation: 'Surah Ikhlas, Falaq, and Nas',
     hadiths: [
-      { text: "Reciting 'Qul Huwallahu Ahad' is equivalent to one third of the Quran.", source: "Bukhari" },
-      { text: "The Prophet (ﷺ) would recite them and blow into his hands for protection before sleep.", source: "Bukhari" },
-      { text: "Reciting them three times in the morning and evening suffices you against everything.", source: "Abu Dawud" }
+      { text: "قل هو الله أحد تعدل ثلث القرآن", source: "البخاري" },
+      { text: "كان النبي ﷺ إذا أوى إلى فراشه كل ليلة جمع كفيه ثم نفث فيهما فقرأ فيهما قل هو الله أحد والمعوذتين", source: "البخاري" },
+      { text: "قل هو الله أحد، والمعوذتين، حين تمسي وحين تصبح ثلاث مرات، تكفيك من كل شيء", source: "أبو داود" }
     ]
   }
 ];
