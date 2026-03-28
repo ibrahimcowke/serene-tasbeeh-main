@@ -1,5 +1,4 @@
 import { memo } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
 import { useTasbeehStore, defaultDhikrs } from '@/store/tasbeehStore';
 import { HadithSlider } from '../HadithSlider';
 
@@ -8,8 +7,20 @@ export const CounterFooter = memo(function CounterFooter() {
   const targetCount = useTasbeehStore(state => state.targetCount);
   const currentDhikrId = useTasbeehStore(state => state.currentDhikr.id);
   const sessionMode = useTasbeehStore(state => state.sessionMode);
+  const hadithSlidePosition = useTasbeehStore(state => state.hadithSlidePosition);
+  const zenMode = useTasbeehStore(state => state.zenMode);
   
   const currentDhikr = defaultDhikrs.find(d => d.id === currentDhikrId) || { id: currentDhikrId };
+
+  if (zenMode || hadithSlidePosition === 'none') {
+    return (
+      <div className="w-full flex flex-col items-center justify-center py-4">
+        <p className="text-xs xs:text-sm text-muted-foreground opacity-50">
+          {currentCount} / {targetCount > 0 ? targetCount : '∞'}
+        </p>
+      </div>
+    );
+  }
 
   const getCurrentTarget = () => {
     if (sessionMode.type === 'tasbih100') return [33, 33, 33, 1][sessionMode.currentPhase];
@@ -18,14 +29,14 @@ export const CounterFooter = memo(function CounterFooter() {
   };
 
   return (
-    <div className="w-full flex flex-col items-center justify-start min-h-[20%] max-h-[30%] overflow-hidden mt-2">
-      <div className="w-full flex justify-center mb-6">
+    <div className="w-full flex flex-col items-center justify-start gap-4 py-2 transition-all duration-500">
+      <div className="w-full flex justify-center">
         <HadithSlider dhikr={currentDhikr as any} />
       </div>
       
-      <div className="text-center transition-opacity duration-300">
-        <p className="text-xs xs:text-sm text-muted-foreground">
-          {currentCount} / {getCurrentTarget() > 0 ? getCurrentTarget() : '∞'}
+      <div className="text-center">
+        <p className="text-[10px] xs:text-xs text-muted-foreground uppercase tracking-widest font-medium opacity-60">
+          Progress: {currentCount} / {getCurrentTarget() > 0 ? getCurrentTarget() : '∞'}
         </p>
       </div>
     </div>
