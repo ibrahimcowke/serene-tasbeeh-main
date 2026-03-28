@@ -56,6 +56,20 @@ registerRoute(
   })
 )
 
+// Cache Audio (Sounds)
+registerRoute(
+  ({ request }) => request.destination === 'audio',
+  new CacheFirst({
+    cacheName: 'audio',
+    plugins: [
+      new ExpirationPlugin({
+        maxEntries: 20,
+        maxAgeSeconds: 60 * 60 * 24 * 30, // 30 Days
+      }),
+    ],
+  })
+)
+
 // Periodic Sync Event
 // @ts-ignore
 self.addEventListener('periodicsync', (event) => {

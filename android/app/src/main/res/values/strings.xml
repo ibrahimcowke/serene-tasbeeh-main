@@ -2,6 +2,6 @@
 <resources>
     <string name="app_name">Tasbeeh Dikr</string>
     <string name="title_activity_main">Tasbeeh Dikr</string>
-    <string name="package_name">app.netlify.tasbeehdikr.native</string>
-    <string name="custom_url_scheme">app.netlify.tasbeehdikr.native</string>
+    <string name="package_name">app.netlify.tasbeehdikr.app</string>
+    <string name="custom_url_scheme">app.netlify.tasbeehdikr.app</string>
 </resources>

@@ -3,15 +3,16 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Index from "./pages/Index";
-import NotFound from "./pages/NotFound";
-import PrivacyPolicy from "./pages/PrivacyPolicy";
-import MiniCounter from "./pages/MiniCounter";
-import Challenges from "./pages/Challenges";
+import { lazy, Suspense, useEffect } from "react";
+const Index = lazy(() => import("./pages/Index"));
+const NotFound = lazy(() => import("./pages/NotFound"));
+const PrivacyPolicy = lazy(() => import("./pages/PrivacyPolicy"));
+const MiniCounter = lazy(() => import("./pages/MiniCounter"));
+const Challenges = lazy(() => import("./pages/Challenges"));
+
 import { ThemeProvider } from "./components/ThemeProvider";
 import { CongratsPopup } from "./components/CongratsPopup";
 import { PWAInstallPrompt } from "./components/PWAInstallPrompt";
-import { useEffect } from "react";
 import { registerPeriodicSync } from "./lib/notifications";
 import { useTasbeehStore } from "./store/tasbeehStore";
 
@@ -47,14 +48,16 @@ const App = () => {
         <CongratsPopup />
         <PWAInstallPrompt />
         <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
-          <Routes>
-            <Route path="/" element={<Index />} />
-            <Route path="/mini" element={<MiniCounter />} />
-            <Route path="/privacy" element={<PrivacyPolicy />} />
-            <Route path="/challenges" element={<Challenges />} />
-            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-            <Route path="*" element={<NotFound />} />
-          </Routes>
+          <Suspense fallback={<div className="h-dvh w-full flex items-center justify-center bg-background text-muted-foreground animate-pulse">Loading...</div>}>
+            <Routes>
+              <Route path="/" element={<Index />} />
+              <Route path="/mini" element={<MiniCounter />} />
+              <Route path="/privacy" element={<PrivacyPolicy />} />
+              <Route path="/challenges" element={<Challenges />} />
+              {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </Suspense>
         </BrowserRouter>
       </ThemeProvider>
     </TooltipProvider>
