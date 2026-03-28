@@ -1,6 +1,9 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { counterShapes } from '@/lib/constants';
+import { supabase } from '@/lib/supabaseClient';
+import { onAuthStateChange } from '@/lib/auth';
+import { Session, User } from '@supabase/supabase-js';
 
 const getTodayDate = () => new Date().toISOString().split('T')[0];
 
@@ -167,6 +170,12 @@ interface TasbeehState {
   setReminderEnabled: (enabled: boolean) => void;
   setReminderTime: (time: string) => void;
   updateStreak: () => void;
+
+  // Auth & Sync
+  session: Session | null;
+  user: User | null;
+  initializeAuth: () => void;
+  syncWithSupabase: () => Promise<void>;
 }
 
 export type SessionMode =
@@ -404,6 +413,64 @@ export const useTasbeehStore = create<TasbeehState>()(
       lastCount: 0,
       lastDhikrId: '',
       canUndo: false,
+      session: null,
+      user: null,
+
+      initializeAuth: () => {
+        onAuthStateChange((session) => {
+          set({
+            session,
+            user: session?.user ?? null
+          });
+          if (session?.user) {
+            get().syncWithSupabase();
+          }
+        });
+      },
+
+      syncWithSupabase: async () => {
+        const state = get();
+        if (!state.user) return;
+
+        try {
+          // Sync profile
+          const { error: profileError } = await supabase
+            .from('profiles')
+            .upsert({
+              id: state.user.id,
+              updated_at: new Date().toISOString(),
+              total_all_time: state.totalAllTime,
+              streak_days: state.streakDays,
+              settings: {
+                theme: state.theme,
+                language: state.language,
+                counterShape: state.counterShape,
+                dailyGoal: state.dailyGoal
+              }
+            });
+
+          if (profileError) throw profileError;
+
+          // Sync current day record
+          const today = getTodayDate();
+          const todayRecord = state.dailyRecords.find(r => r.date === today);
+
+          if (todayRecord) {
+            const { error: historyError } = await supabase
+              .from('dhikr_history')
+              .upsert({
+                user_id: state.user.id,
+                date: today,
+                total_count: todayRecord.totalCount,
+                counts: todayRecord.counts
+              }, { onConflict: 'user_id,date' });
+
+            if (historyError) throw historyError;
+          }
+        } catch (error) {
+          console.error("Sync failed:", error);
+        }
+      },
 
       increment: () => {
         const state = get();
@@ -491,6 +558,11 @@ export const useTasbeehStore = create<TasbeehState>()(
           lastDhikrId: state.currentDhikr.id,
           canUndo: true,
         });
+        
+        // Sync with Supabase (every 10 counts or when first starting)
+        if (newCount % 10 === 0 || newCount === 1) {
+          get().syncWithSupabase();
+        }
       },
 
       setThemeSettings: (theme, settings) => {
@@ -559,6 +631,8 @@ export const useTasbeehStore = create<TasbeehState>()(
         } else {
           set({ currentCount: 0, sessionStartTime: null });
         }
+        
+        get().syncWithSupabase();
       },
 
       setDhikr: (dhikr) => set({ currentDhikr: dhikr, currentCount: 0, sessionStartTime: null }),
@@ -877,7 +951,6 @@ export const useTasbeehStore = create<TasbeehState>()(
         shakeToReset: state.shakeToReset,
         wakeLockEnabled: state.wakeLockEnabled,
         volumeButtonCounting: state.volumeButtonCounting,
-        // Previously missing - now persisted:
         unlockedAchievements: state.unlockedAchievements,
         screenOffMode: state.screenOffMode,
         notificationPermission: state.notificationPermission,

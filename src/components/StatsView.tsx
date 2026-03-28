@@ -53,6 +53,20 @@ export function StatsViewContent() {
             count: record?.totalCount || 0,
         };
     }).reverse();
+    
+    // Last 30 days data
+    const last30Days = Array.from({ length: 30 }, (_, i) => {
+        const date = new Date();
+        date.setDate(date.getDate() - i);
+        const dateStr = date.toISOString().split('T')[0];
+        const record = history.find(h => h.date === dateStr);
+        return {
+            date: dateStr,
+            day: date.getDate(),
+            count: record?.totalCount || 0,
+        };
+    }).reverse();
+
 
     const totalAllTime = history.reduce((sum, record) => sum + record.totalCount, 0);
     const averageDaily = history.length > 0 ? Math.round(totalAllTime / history.length) : 0;
@@ -149,49 +163,94 @@ export function StatsViewContent() {
 
                 {/* Charts */}
                 <Tabs defaultValue="week" className="w-full">
-                    <TabsList className="grid w-full grid-cols-2">
-                        <TabsTrigger value="week">Overview</TabsTrigger>
+                    <TabsList className="grid w-full grid-cols-4">
+                        <TabsTrigger value="week">Week</TabsTrigger>
+                        <TabsTrigger value="month">Month</TabsTrigger>
                         <TabsTrigger value="distribution">Focus</TabsTrigger>
+                        <TabsTrigger value="activity">History</TabsTrigger>
                     </TabsList>
 
                     <TabsContent value="week" className="space-y-4">
-                        <Card>
-                            <CardHeader>
-                                <CardTitle className="text-lg">Weekly Overview</CardTitle>
+                        <Card className="border-none bg-card/50 shadow-none">
+                            <CardHeader className="pb-2">
+                                <CardTitle className="text-base font-semibold">Weekly Overview</CardTitle>
                                 <CardDescription>
-                                    Total this week: {weekTotal} dhikr
+                                    Total this week: {weekTotal.toLocaleString()} dhikr
                                 </CardDescription>
                             </CardHeader>
                             <CardContent>
-                                <div className="h-64 w-full">
+                                <div className="h-48 w-full mt-4">
                                     <ResponsiveContainer width="100%" height="100%">
                                         <BarChart data={last7Days}>
                                             <XAxis 
                                                 dataKey="day" 
-                                                stroke="#888888" 
-                                                fontSize={12} 
+                                                stroke="currentColor" 
+                                                fontSize={10} 
                                                 tickLine={false} 
-                                                axisLine={false} 
+                                                axisLine={false}
+                                                className="text-muted-foreground"
                                             />
                                             <Tooltip
                                                 contentStyle={{ 
                                                     backgroundColor: 'hsl(var(--card))', 
                                                     borderRadius: '12px', 
                                                     border: '1px solid hsl(var(--border))',
-                                                    boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1)'
+                                                    boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1)',
+                                                    fontSize: '12px'
                                                 }}
                                                 itemStyle={{ color: 'hsl(var(--foreground))' }}
                                                 cursor={{ fill: 'hsl(var(--primary)/0.1)', radius: 8 }}
                                             />
                                             <Bar 
                                                 dataKey="count" 
-                                                radius={[6, 6, 0, 0]}
+                                                radius={[4, 4, 0, 0]}
                                                 className="fill-primary"
                                             >
                                                 {last7Days.map((entry, index) => (
                                                     <Cell 
                                                         key={`cell-${index}`} 
-                                                        fill={entry.date === today ? 'hsl(var(--primary))' : 'hsl(var(--primary)/0.4)'} 
+                                                        fill={entry.date === today ? 'hsl(var(--primary))' : 'hsl(var(--primary)/0.3)'} 
+                                                    />
+                                                ))}
+                                            </Bar>
+                                        </BarChart>
+                                    </ResponsiveContainer>
+                                </div>
+                            </CardContent>
+                        </Card>
+                    </TabsContent>
+
+                    <TabsContent value="month" className="space-y-4">
+                        <Card className="border-none bg-card/50 shadow-none">
+                            <CardHeader className="pb-2">
+                                <CardTitle className="text-base font-semibold">Monthly Trends</CardTitle>
+                                <CardDescription>
+                                    Past 30 days activity
+                                </CardDescription>
+                            </CardHeader>
+                            <CardContent>
+                                <div className="h-48 w-full mt-4">
+                                    <ResponsiveContainer width="100%" height="100%">
+                                        <BarChart data={last30Days}>
+                                            <Tooltip
+                                                contentStyle={{ 
+                                                    backgroundColor: 'hsl(var(--card))', 
+                                                    borderRadius: '12px', 
+                                                    border: '1px solid hsl(var(--border))',
+                                                    fontSize: '12px'
+                                                }}
+                                                itemStyle={{ color: 'hsl(var(--foreground))' }}
+                                                cursor={{ fill: 'hsl(var(--primary)/0.1)', radius: 4 }}
+                                            />
+                                            <Bar 
+                                                dataKey="count" 
+                                                radius={[2, 2, 0, 0]}
+                                                className="fill-primary"
+                                            >
+                                                {last30Days.map((entry, index) => (
+                                                    <Cell 
+                                                        key={`cell-${index}`} 
+                                                        fill={entry.date === today ? 'hsl(var(--primary))' : 'hsl(var(--primary)/0.2)'} 
                                                     />
                                                 ))}
                                             </Bar>
@@ -203,15 +262,15 @@ export function StatsViewContent() {
                     </TabsContent>
 
                     <TabsContent value="distribution" className="space-y-4">
-                        <Card>
-                            <CardHeader>
-                                <CardTitle className="text-lg">Dhikr Distribution</CardTitle>
+                        <Card className="border-none bg-card/50 shadow-none">
+                            <CardHeader className="pb-2">
+                                <CardTitle className="text-base font-semibold">Dhikr Distribution</CardTitle>
                                 <CardDescription>
-                                    Most frequent recitations
+                                    Today's recitation mix
                                 </CardDescription>
                             </CardHeader>
                             <CardContent>
-                                <div className="h-64 w-full">
+                                <div className="h-48 w-full mt-4">
                                     <ResponsiveContainer width="100%" height="100%">
                                         <PieChart>
                                             <Pie
@@ -221,24 +280,69 @@ export function StatsViewContent() {
                                                 }))}
                                                 cx="50%"
                                                 cy="50%"
-                                                innerRadius={60}
-                                                outerRadius={80}
-                                                paddingAngle={5}
+                                                innerRadius={45}
+                                                outerRadius={65}
+                                                paddingAngle={8}
                                                 dataKey="value"
+                                                animationBegin={0}
+                                                animationDuration={1000}
                                             >
                                                 {(Object.entries(todayRecord?.counts || {})).map((entry, index) => (
-                                                    <Cell key={`cell-${index}`} fill={`hsl(var(--primary) / ${0.2 + (index * 0.2)})`} />
+                                                    <Cell key={`cell-${index}`} fill={`hsl(var(--primary) / ${0.3 + (index * 0.15)})`} className="stroke-background border-2" />
                                                 ))}
                                             </Pie>
                                             <Tooltip 
                                                 contentStyle={{ 
                                                     backgroundColor: 'hsl(var(--card))', 
                                                     borderRadius: '12px', 
-                                                    border: '1px solid hsl(var(--border))' 
+                                                    border: '1px solid hsl(var(--border))',
+                                                    fontSize: '12px'
                                                 }}
                                             />
                                         </PieChart>
                                     </ResponsiveContainer>
+                                </div>
+                            </CardContent>
+                        </Card>
+                    </TabsContent>
+
+                    <TabsContent value="activity" className="space-y-4">
+                        <Card className="border-none bg-card/50 shadow-none">
+                            <CardHeader className="pb-2">
+                                <CardTitle className="text-base font-semibold">Daily Intensity</CardTitle>
+                                <CardDescription>
+                                    Your consistency over the last month
+                                </CardDescription>
+                            </CardHeader>
+                            <CardContent>
+                                <div className="grid grid-cols-7 gap-1.5 mt-4">
+                                    {last30Days.map((day, i) => {
+                                        const intensity = day.count === 0 ? 0 
+                                            : day.count < dailyGoal / 2 ? 1 
+                                            : day.count < dailyGoal ? 2 
+                                            : 3;
+                                            
+                                        return (
+                                            <motion.div
+                                                key={day.date}
+                                                initial={{ scale: 0 }}
+                                                animate={{ scale: 1 }}
+                                                transition={{ delay: i * 0.01 }}
+                                                className={`
+                                                    aspect-square rounded-sm border border-white/5
+                                                    ${intensity === 0 ? 'bg-muted/20' : ''}
+                                                    ${intensity === 1 ? 'bg-primary/20' : ''}
+                                                    ${intensity === 2 ? 'bg-primary/50' : ''}
+                                                    ${intensity === 3 ? 'bg-primary' : ''}
+                                                `}
+                                                title={`${day.date}: ${day.count} dhikr`}
+                                            />
+                                        );
+                                    })}
+                                </div>
+                                <div className="flex justify-between items-center mt-4 text-[10px] text-muted-foreground uppercase tracking-widest font-medium px-1">
+                                    <span>{last30Days[0].date}</span>
+                                    <span>Today</span>
                                 </div>
                             </CardContent>
                         </Card>

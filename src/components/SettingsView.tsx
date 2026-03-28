@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { Check, Download, Upload, Trash2, RotateCcw, Smartphone, Maximize, Wind, Zap, ExternalLink, ChevronRight, LayoutDashboard, Share2, Bell, Clock } from 'lucide-react';
 import { useTasbeehStore } from '@/store/tasbeehStore';
+import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger, SheetDescription } from '@/components/ui/sheet';
 import { Switch } from '@/components/ui/switch';
 import {
@@ -36,6 +37,8 @@ import { Label } from '@/components/ui/label';
 import { StatisticsView } from './StatisticsView';
 import { toast } from 'sonner';
 import { requestNotificationPermission, sendLocalNotification } from '@/lib/notifications';
+import { AuthView } from './AuthView';
+import { signOut } from '@/lib/auth';
 
 interface SettingsViewProps {
   children: React.ReactNode;
@@ -98,11 +101,9 @@ export function SettingsView({ children, defaultTab = 'appearance' }: SettingsVi
     volumeButtonCounting,
     setVolumeButtonCounting,
     notificationPermission,
-    reminderEnabled,
-    reminderTime,
-    setNotificationPermission,
     setReminderEnabled,
     setCounterShape,
+    user,
   } = useTasbeehStore();
 
   const [importStatus, setImportStatus] = useState<'idle' | 'success' | 'error'>('idle');
@@ -171,6 +172,57 @@ export function SettingsView({ children, defaultTab = 'appearance' }: SettingsVi
 
             <div className="flex-1 overflow-y-auto px-1 py-1 custom-scrollbar">
               <TabsContent value="appearance" className="space-y-6 mt-0 pb-6 px-1">
+                {/* Account & Sync */}
+                <div className="space-y-1">
+                  <p className="text-xs text-muted-foreground uppercase tracking-wide mb-3 px-1">Cloud Account</p>
+                  {!user ? (
+                    <Dialog>
+                      <DialogTrigger asChild>
+                        <button className="w-full flex items-center justify-between p-4 rounded-2xl bg-primary/10 border border-primary/20 hover:bg-primary/20 transition-all group">
+                          <div className="flex items-center gap-3">
+                            <div className="w-10 h-10 rounded-xl bg-primary/20 flex items-center justify-center text-primary">
+                              <Upload className="w-5 h-5" />
+                            </div>
+                            <div className="text-left">
+                              <p className="text-sm font-semibold text-primary">Enable Cloud Sync</p>
+                              <p className="text-xs text-primary/70">Backup and sync your data</p>
+                            </div>
+                          </div>
+                          <ChevronRight className="w-5 h-5 text-primary/50 group-hover:text-primary transition-colors" />
+                        </button>
+                      </DialogTrigger>
+                      <DialogContent className="sm:max-w-md bg-transparent border-none p-0 shadow-none">
+                         <AuthView />
+                      </DialogContent>
+                    </Dialog>
+                  ) : (
+                    <div className="p-4 rounded-2xl bg-card border border-border/50 flex flex-col gap-4">
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-3">
+                          <div className="w-10 h-10 rounded-xl bg-orange-500/10 flex items-center justify-center text-orange-500">
+                             <Check className="w-5 h-5" />
+                          </div>
+                          <div>
+                            <p className="text-sm font-semibold">{user.email}</p>
+                            <p className="text-xs text-muted-foreground flex items-center gap-1">
+                              <span className="w-2 h-2 rounded-full bg-green-500" />
+                              Synced to Cloud
+                            </p>
+                          </div>
+                        </div>
+                        <Button 
+                          variant="ghost" 
+                          size="sm" 
+                          onClick={() => signOut()}
+                          className="text-xs text-muted-foreground hover:text-destructive transition-colors"
+                        >
+                          Sign Out
+                        </Button>
+                      </div>
+                    </div>
+                  )}
+                </div>
+
                 {/* Reminders & Notifications */}
                 <div className="space-y-1">
                   <p className="text-xs text-muted-foreground uppercase tracking-wide mb-3 px-1">Reminders</p>

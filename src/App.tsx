@@ -13,13 +13,17 @@ import { CongratsPopup } from "./components/CongratsPopup";
 import { PWAInstallPrompt } from "./components/PWAInstallPrompt";
 import { useEffect } from "react";
 import { registerPeriodicSync } from "./lib/notifications";
+import { useTasbeehStore } from "./store/tasbeehStore";
 
 const queryClient = new QueryClient();
 
 const App = () => {
+  const initializeAuth = useTasbeehStore(state => state.initializeAuth);
+
   useEffect(() => {
     registerPeriodicSync();
-  }, []);
+    initializeAuth();
+  }, [initializeAuth]);
 
   return (
     <QueryClientProvider client={queryClient}>

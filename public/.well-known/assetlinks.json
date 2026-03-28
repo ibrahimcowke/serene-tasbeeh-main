@@ -4,7 +4,8 @@
     "namespace": "android_app",
     "package_name": "app.netlify.tasbeehdikr.twa",
     "sha256_cert_fingerprints": [
-      "B4:66:6D:EE:01:6A:03:3F:A2:64:5C:FF:D9:25:AE:1E:D1:4C:30:90:CF:84:74:6D:17:73:3F:55:56:56:41:86"
+       "B4:66:6D:EE:01:6A:03:3F:A2:64:5C:FF:D9:25:AE:1E:D1:4C:30:90:CF:84:74:6D:17:73:3F:55:56:56:41:86",
+       "CF:88:89:E5:2A:76:D8:D2:0E:1B:DF:A9:84:A9:2F:75:CE:FA:B2:24:2D:58:3F:92:10:ED:10:A3:2E:94:0C:08"
     ]
   }
 }]
