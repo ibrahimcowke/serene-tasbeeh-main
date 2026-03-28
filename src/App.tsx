@@ -17,9 +17,25 @@ import { useTasbeehStore } from "./store/tasbeehStore";
 
 const queryClient = new QueryClient();
 
+import { StatusBar, Style } from '@capacitor/status-bar';
+import { Keyboard } from '@capacitor/keyboard';
+
 const App = () => {
   useEffect(() => {
     registerPeriodicSync();
+    
+    // Native Mobile Adjustments
+    const configureNative = async () => {
+      try {
+        await StatusBar.setStyle({ style: Style.Dark });
+        await StatusBar.setOverlaysWebView({ overlay: true });
+        await Keyboard.setAccessoryBarVisible({ isVisible: false });
+      } catch (e) {
+        // Ignore on web
+      }
+    };
+    
+    configureNative();
   }, []);
 
   return (

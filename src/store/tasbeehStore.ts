@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { counterShapes } from '@/lib/constants';
+import { Haptics, ImpactStyle } from '@capacitor/haptics';
 
 const getTodayDate = () => new Date().toISOString().split('T')[0];
 
@@ -238,7 +239,10 @@ export const useTasbeehStore = create<TasbeehState>()(
         const now = Date.now();
         const today = getTodayDate();
         const currentSettings = state.themeSettings[state.theme] || defaultThemeSettings;
-        if (currentSettings.hapticEnabled && navigator.vibrate) navigator.vibrate(currentSettings.vibrationIntensity || 50);
+        if (currentSettings.hapticEnabled) {
+          try { Haptics.impact({ style: ImpactStyle.Light }); } catch { /* ignore on web */ }
+          if (navigator.vibrate) navigator.vibrate(currentSettings.vibrationIntensity || 50);
+        }
 
         const newCount = state.currentCount + 1;
         const newTotal = state.totalAllTime + 1;
@@ -252,22 +256,33 @@ export const useTasbeehStore = create<TasbeehState>()(
           setTimeout(() => get().updateStreak(), 0);
         }
 
-        let { sessionMode } = state;
+        const sessionMode = state.sessionMode;
         if (sessionMode.type === 'tasbih100') {
-          const phaseTarget = [33, 33, 34][sessionMode.currentPhase];
-          if (newCount >= phaseTarget && sessionMode.currentPhase < 2) {
-            const nextPhase = sessionMode.currentPhase + 1;
-            sessionMode = { ...sessionMode, currentPhase: nextPhase, phaseCounts: sessionMode.phaseCounts.map((c, i) => i === sessionMode.currentPhase ? newCount : c) };
-            set({ currentCount: 0, currentDhikr: defaultDhikrs[nextPhase], targetCount: [33, 33, 34][nextPhase], sessionMode });
+          const mode = sessionMode; // local variable for narrowing
+          const phaseTarget = [33, 33, 34][mode.currentPhase];
+          if (newCount >= phaseTarget && mode.currentPhase < 2) {
+            const nextPhase = mode.currentPhase + 1;
+            const newSessionMode: SessionMode = {
+              ...mode,
+              currentPhase: nextPhase,
+              phaseCounts: mode.phaseCounts.map((c, i) => i === mode.currentPhase ? newCount : c)
+            };
+            set({ currentCount: 0, currentDhikr: defaultDhikrs[nextPhase], targetCount: [33, 33, 34][nextPhase], sessionMode: newSessionMode });
             return;
-          } else if (sessionMode.currentPhase === 2 && newCount >= 34) {
-            sessionMode = { ...sessionMode, isComplete: true };
+          } else if (mode.currentPhase === 2 && newCount >= 34) {
+             set({ currentCount: newCount, totalAllTime: newTotal, dailyRecords: records, sessionStartTime: state.sessionStartTime || now, sessionMode: { ...mode, isComplete: true }, lastCount: state.currentCount, lastDhikrId: state.currentDhikr.id, canUndo: true });
+             return;
           }
         } else if (sessionMode.type === 'tasbih1000') {
+          const mode = sessionMode;
           if (newCount >= 100) {
-            const nextSet = sessionMode.currentSetCount + 100;
-            if (nextSet >= 1000) { sessionMode = { ...sessionMode, isComplete: true, currentSetCount: 1000 }; }
-            else { sessionMode = { ...sessionMode, currentSetCount: nextSet }; set({ currentCount: 0, sessionMode }); return; }
+            const nextSet = mode.currentSetCount + 100;
+            if (nextSet >= 1000) {
+              set({ currentCount: newCount, totalAllTime: newTotal, dailyRecords: records, sessionStartTime: state.sessionStartTime || now, sessionMode: { ...mode, isComplete: true, currentSetCount: 1000 }, lastCount: state.currentCount, lastDhikrId: state.currentDhikr.id, canUndo: true });
+            } else {
+              set({ currentCount: 0, totalAllTime: newTotal, dailyRecords: records, sessionStartTime: state.sessionStartTime || now, sessionMode: { ...mode, currentSetCount: nextSet }, lastCount: state.currentCount, lastDhikrId: state.currentDhikr.id, canUndo: true });
+            }
+            return;
           }
         }
 
@@ -278,7 +293,10 @@ export const useTasbeehStore = create<TasbeehState>()(
       reset: () => {
         const state = get();
         const currentSettings = state.themeSettings[state.theme] || defaultThemeSettings;
-        if (currentSettings.hapticEnabled && navigator.vibrate) navigator.vibrate([30, 50, 30]);
+        if (currentSettings.hapticEnabled) {
+          try { Haptics.impact({ style: ImpactStyle.Heavy }); } catch { /* ignore */ }
+          if (navigator.vibrate) navigator.vibrate([30, 50, 30]);
+        }
         if (state.sessionMode.type === 'tasbih100') {
           set({ currentCount: 0, sessionStartTime: null, sessionMode: { type: 'tasbih100', currentPhase: 0, phaseCounts: [0, 0, 0, 0], isComplete: false, challengeId: state.sessionMode.challengeId }, currentDhikr: defaultDhikrs[0] });
         } else if (state.sessionMode.type === 'tasbih1000') {
