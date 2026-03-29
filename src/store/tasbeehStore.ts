@@ -287,12 +287,6 @@ export const useTasbeehStore = create<TasbeehState>()(
             }
             return;
           }
-        } else if (sessionMode.type === 'free' && state.targetCount > 0 && newCount === state.targetCount && !state.showCongrats) {
-             get().triggerCongrats({
-               title: "MashaAllah!",
-               description: `You have reached your target of ${state.targetCount}. May Allah accept it from you.`,
-               hasanatEarned: state.targetCount * 10
-             });
         }
 
         set({ currentCount: newCount, totalAllTime: newTotal, totalHasanat: newHasanat, dailyRecords: records, sessionStartTime: state.sessionStartTime || now, sessionMode, lastCount: state.currentCount, lastDhikrId: state.currentDhikr.id, canUndo: true });

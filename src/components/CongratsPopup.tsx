@@ -1,11 +1,11 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTasbeehStore } from '@/store/tasbeehStore';
-import { Trophy, Star, X, CheckCircle2 } from 'lucide-react';
+import { Trophy, Star, X, CheckCircle2, RefreshCw, Settings2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 export const CongratsPopup: React.FC = () => {
-    const { showCongrats, congratsData, closeCongrats } = useTasbeehStore();
+    const { showCongrats, congratsData, closeCongrats, reset } = useTasbeehStore();
 
     if (!showCongrats || !congratsData) return null;
 
@@ -70,14 +70,28 @@ export const CongratsPopup: React.FC = () => {
                             </div>
                         </motion.div>
 
-                        {/* Action */}
-                        <Button
-                            onClick={closeCongrats}
-                            className="w-full h-12 rounded-xl text-lg font-semibold shadow-lg shadow-primary/20 active:scale-95 transition-transform"
-                        >
-                            Alhamdulillah
-                            <CheckCircle2 className="ml-2 w-5 h-5" />
-                        </Button>
+                        {/* Actions */}
+                        <div className="w-full flex flex-col gap-3">
+                            <Button
+                                onClick={() => {
+                                    reset();
+                                    closeCongrats();
+                                }}
+                                className="w-full h-12 rounded-xl text-lg font-semibold shadow-lg shadow-primary/20 hover:scale-[1.02] active:scale-95 transition-all bg-primary hover:bg-primary/90"
+                            >
+                                <RefreshCw className="mr-2 w-5 h-5" />
+                                Repeat Session
+                            </Button>
+                            
+                            <Button
+                                variant="outline"
+                                onClick={closeCongrats}
+                                className="w-full h-12 rounded-xl text-lg font-medium border-primary/20 hover:bg-primary/5 active:scale-95 transition-all"
+                            >
+                                <Settings2 className="mr-2 w-5 h-5" />
+                                Switch Dhikr
+                            </Button>
+                        </div>
                     </div>
 
                     {/* Close button */}
