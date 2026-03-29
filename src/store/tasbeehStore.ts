@@ -174,6 +174,7 @@ interface TasbeehState {
   addReminder: (reminder: Omit<Reminder, 'id'>) => void;
   removeReminder: (id: string) => void;
   toggleReminder: (id: string) => void;
+  switchDhikr: () => void;
   triggerCongrats: (data: { title: string; description: string; hasanatEarned: number }) => void;
   closeCongrats: () => void;
   updateStreak: () => void;
@@ -272,14 +273,16 @@ export const useTasbeehStore = create<TasbeehState>()(
           const phaseTarget = [33, 33, 33, 1][mode.currentPhase];
           if (newCount >= phaseTarget && mode.currentPhase < 3) {
             const nextPhase = mode.currentPhase + 1;
-            // Map phase to defaultDhikrs index: 0->1, 1->2, 2->4 (La ilaha illallah)
-            const nextDhikrIdx = nextPhase === 3 ? 4 : nextPhase;
+            const ritualDhikrIds = ['subahanallah', 'alhamdulillah', 'allahuakbar', 'la-ilaha-illallah'];
+            const nextDhikrId = ritualDhikrIds[nextPhase];
+            const nextDhikr = state.dhikrs.find(d => d.id === nextDhikrId) || defaultDhikrs[0];
+
             const newSessionMode: SessionMode = {
               ...mode,
               currentPhase: nextPhase,
               phaseCounts: mode.phaseCounts.map((c, i) => i === mode.currentPhase ? newCount : c)
             };
-            set({ currentCount: 0, currentDhikr: defaultDhikrs[nextDhikrIdx], targetCount: [33, 33, 33, 1][nextPhase], sessionMode: newSessionMode });
+            set({ currentCount: 0, currentDhikr: nextDhikr, targetCount: [33, 33, 33, 1][nextPhase], sessionMode: newSessionMode });
             return;
           } else if (mode.currentPhase === 3 && newCount >= 1 && !mode.isComplete) {
              set({ currentCount: newCount, totalAllTime: newTotal, totalHasanat: newHasanat + 1000, dailyRecords: records, sessionStartTime: state.sessionStartTime || now, sessionMode: { ...mode, isComplete: true }, lastCount: state.currentCount, lastDhikrId: state.currentDhikr.id, canUndo: true });
@@ -295,14 +298,16 @@ export const useTasbeehStore = create<TasbeehState>()(
           const phaseTarget = [333, 333, 333, 1][mode.currentPhase];
           if (newCount >= phaseTarget && mode.currentPhase < 3) {
             const nextPhase = mode.currentPhase + 1;
-            // Map phase to defaultDhikrs index: 0->1, 1->2, 2->4 (La ilaha illallah)
-            const nextDhikrIdx = nextPhase === 3 ? 4 : nextPhase;
+            const ritualDhikrIds = ['subahanallah', 'alhamdulillah', 'allahuakbar', 'la-ilaha-illallah'];
+            const nextDhikrId = ritualDhikrIds[nextPhase];
+            const nextDhikr = state.dhikrs.find(d => d.id === nextDhikrId) || defaultDhikrs[0];
+
             const newSessionMode: SessionMode = {
               ...mode,
               currentPhase: nextPhase,
               phaseCounts: mode.phaseCounts.map((c, i) => i === mode.currentPhase ? newCount : c)
             };
-            set({ currentCount: 0, currentDhikr: defaultDhikrs[nextDhikrIdx], targetCount: [333, 333, 333, 1][nextPhase], sessionMode: newSessionMode });
+            set({ currentCount: 0, currentDhikr: nextDhikr, targetCount: [333, 333, 333, 1][nextPhase], sessionMode: newSessionMode });
             return;
           } else if (mode.currentPhase === 3 && newCount >= 1 && !mode.isComplete) {
             set({ currentCount: newCount, totalAllTime: newTotal, totalHasanat: newHasanat + 10000, dailyRecords: records, sessionStartTime: state.sessionStartTime || now, sessionMode: { ...mode, isComplete: true }, lastCount: state.currentCount, lastDhikrId: state.currentDhikr.id, canUndo: true });
@@ -312,6 +317,31 @@ export const useTasbeehStore = create<TasbeehState>()(
               hasanatEarned: 10000
             });
             return;
+          }
+        } else if (sessionMode.type === 'routine') {
+          const mode = sessionMode;
+          const currentStep = mode.steps[mode.currentStepIndex];
+          if (newCount >= currentStep.target) {
+            const nextIndex = mode.currentStepIndex + 1;
+            if (nextIndex < mode.steps.length) {
+              const nextStep = mode.steps[nextIndex];
+              const nextDhikr = state.dhikrs.find(d => d.id === nextStep.dhikrId) || state.customDhikrs.find(d => d.id === nextStep.dhikrId) || defaultDhikrs[0];
+              set({
+                currentCount: 0,
+                currentDhikr: nextDhikr,
+                targetCount: nextStep.target,
+                sessionMode: { ...mode, currentStepIndex: nextIndex }
+              });
+              return;
+            } else if (!mode.isComplete) {
+              set({ currentCount: newCount, totalAllTime: newTotal, totalHasanat: newHasanat + 1000, dailyRecords: records, sessionMode: { ...mode, isComplete: true } });
+              get().triggerCongrats({
+                title: "Routine Complete!",
+                description: `You have completed the ${mode.routineId.replace('-', ' ')} routine. May Allah reward you.`,
+                hasanatEarned: 1000
+              });
+              return;
+            }
           }
         }
 
@@ -400,6 +430,16 @@ export const useTasbeehStore = create<TasbeehState>()(
       addReminder: (r) => set((s) => ({ reminders: [...s.reminders, { ...r, id: Date.now().toString() }] })),
       removeReminder: (id) => set((s) => ({ reminders: s.reminders.filter(r => r.id !== id) })),
       toggleReminder: (id) => set((s) => ({ reminders: s.reminders.map(r => r.id === id ? { ...r, enabled: !r.enabled } : r) })),
+      switchDhikr: () => {
+        const s = get();
+        const pool = [...s.dhikrs, ...s.customDhikrs].filter(d => d.id !== s.currentDhikr.id);
+        if (pool.length > 0) {
+          const next = pool[Math.floor(Math.random() * pool.length)];
+          set({ currentDhikr: next, currentCount: 0, sessionStartTime: null, sessionMode: getDefaultSessionMode() });
+        } else {
+          set({ currentCount: 0, sessionStartTime: null, sessionMode: getDefaultSessionMode() });
+        }
+      },
       triggerCongrats: (data) => set((s) => ({ showCongrats: true, congratsData: data, totalHasanat: s.totalHasanat + data.hasanatEarned })),
       closeCongrats: () => set({ showCongrats: false, congratsData: null }),
       updateStreak: () => {

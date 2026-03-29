@@ -5,7 +5,7 @@ import { Trophy, Star, X, CheckCircle2, RefreshCw, Settings2 } from 'lucide-reac
 import { Button } from '@/components/ui/button';
 
 export const CongratsPopup: React.FC = () => {
-    const { showCongrats, congratsData, closeCongrats, reset } = useTasbeehStore();
+    const { showCongrats, congratsData, closeCongrats, reset, switchDhikr } = useTasbeehStore();
 
     if (!showCongrats || !congratsData) return null;
 
@@ -86,7 +86,7 @@ export const CongratsPopup: React.FC = () => {
                             <Button
                                 variant="outline"
                                 onClick={() => {
-                                    reset();
+                                    switchDhikr();
                                     closeCongrats();
                                 }}
                                 className="w-full h-12 rounded-xl text-lg font-medium border-primary/20 hover:bg-primary/5 active:scale-95 transition-all"
