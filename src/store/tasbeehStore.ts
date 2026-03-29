@@ -179,7 +179,7 @@ export const defaultDhikrs: Dhikr[] = [
 ];
 
 export const defaultRoutines: any[] = [
-  { id: 'post-prayer', label: 'After Prayer', steps: [{ id: 'step1', dhikrId: 'subahanallah', target: 33 }, { id: 'step2', dhikrId: 'alhamdulillah', target: 33 }, { id: 'step3', dhikrId: 'allahuakbar', target: 34 }] }
+  { id: 'post-prayer', label: 'After Prayer', steps: [{ id: 'step1', dhikrId: 'subahanallah', target: 33 }, { id: 'step2', dhikrId: 'alhamdulillah', target: 33 }, { id: 'step3', dhikrId: 'allahuakbar', target: 33 }, { id: 'step4', dhikrId: 'la-ilaha-illallah', target: 1 }] }
 ];
 
 export const defaultThemeSettings: ThemeSettings = {
@@ -251,19 +251,21 @@ export const useTasbeehStore = create<TasbeehState>()(
 
         const sessionMode = state.sessionMode;
         if (sessionMode.type === 'tasbih100') {
-          const mode = sessionMode; // local variable for narrowing
-          const phaseTarget = [33, 33, 34][mode.currentPhase];
-          if (newCount >= phaseTarget && mode.currentPhase < 2) {
+          const mode = sessionMode; 
+          const phaseTarget = [33, 33, 33, 1][mode.currentPhase];
+          if (newCount >= phaseTarget && mode.currentPhase < 3) {
             const nextPhase = mode.currentPhase + 1;
+            // Map phase to defaultDhikrs index: 0->1, 1->2, 2->4 (La ilaha illallah)
+            const nextDhikrIdx = nextPhase === 3 ? 4 : nextPhase;
             const newSessionMode: SessionMode = {
               ...mode,
               currentPhase: nextPhase,
               phaseCounts: mode.phaseCounts.map((c, i) => i === mode.currentPhase ? newCount : c)
             };
-            set({ currentCount: 0, currentDhikr: defaultDhikrs[nextPhase], targetCount: [33, 33, 34][nextPhase], sessionMode: newSessionMode });
+            set({ currentCount: 0, currentDhikr: defaultDhikrs[nextDhikrIdx], targetCount: [33, 33, 33, 1][nextPhase], sessionMode: newSessionMode });
             return;
-          } else if (mode.currentPhase === 2 && newCount >= 34 && !mode.isComplete) {
-             set({ currentCount: newCount, totalAllTime: newTotal, totalHasanat: newHasanat, dailyRecords: records, sessionStartTime: state.sessionStartTime || now, sessionMode: { ...mode, isComplete: true }, lastCount: state.currentCount, lastDhikrId: state.currentDhikr.id, canUndo: true });
+          } else if (mode.currentPhase === 3 && newCount >= 1 && !mode.isComplete) {
+             set({ currentCount: newCount, totalAllTime: newTotal, totalHasanat: newHasanat + 1000, dailyRecords: records, sessionStartTime: state.sessionStartTime || now, sessionMode: { ...mode, isComplete: true }, lastCount: state.currentCount, lastDhikrId: state.currentDhikr.id, canUndo: true });
              get().triggerCongrats({
                title: "MashaAllah!",
                description: "You have completed the 100 Tasbeeh session. May Allah accept your dhikr.",
@@ -276,7 +278,7 @@ export const useTasbeehStore = create<TasbeehState>()(
           if (newCount >= 100) {
             const nextSet = mode.currentSetCount + 100;
             if (nextSet >= 1000 && !mode.isComplete) {
-              set({ currentCount: newCount, totalAllTime: newTotal, totalHasanat: newHasanat, dailyRecords: records, sessionStartTime: state.sessionStartTime || now, sessionMode: { ...mode, isComplete: true, currentSetCount: 1000 }, lastCount: state.currentCount, lastDhikrId: state.currentDhikr.id, canUndo: true });
+              set({ currentCount: newCount, totalAllTime: newTotal, totalHasanat: newHasanat + 10000, dailyRecords: records, sessionStartTime: state.sessionStartTime || now, sessionMode: { ...mode, isComplete: true, currentSetCount: 1000 }, lastCount: state.currentCount, lastDhikrId: state.currentDhikr.id, canUndo: true });
               get().triggerCongrats({
                 title: "MashaAllah!",
                 description: "You have completed the 1000 Tasbeeh session. May Allah reward you immensely.",
