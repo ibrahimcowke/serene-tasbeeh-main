@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { motion } from 'framer-motion';
-import { Flame, BarChart3 } from 'lucide-react';
+import { Flame, BarChart3, Gem, Target, TrendingUp } from 'lucide-react';
 import { BarChart, Bar, XAxis, Tooltip, ResponsiveContainer } from 'recharts';
 import { useTasbeehStore } from '@/store/tasbeehStore';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger, SheetDescription } from '@/components/ui/sheet';
@@ -30,7 +30,7 @@ export function HistoryView({ children }: HistoryViewProps) {
 }
 
 function HistoryStats() {
-  const { dailyRecords, totalAllTime, dhikrs, customDhikrs, streakDays, longestStreak } = useTasbeehStore();
+  const { dailyRecords, totalAllTime, totalHasanat, dhikrs, customDhikrs, streakDays, longestStreak, dailyGoal } = useTasbeehStore();
   const allDhikrs = [...dhikrs, ...customDhikrs];
 
   const stats = useMemo(() => {
@@ -62,8 +62,10 @@ function HistoryStats() {
       week: last7Days,
       month: last30Days,
       allTime: totalAllTime,
+      hasanat: totalHasanat,
+      dailyGoalProgress: Math.min(((todayRecord?.totalCount || 0) / (dailyGoal || 100)) * 100, 100)
     };
-  }, [dailyRecords, totalAllTime]);
+  }, [dailyRecords, totalAllTime, totalHasanat, dailyGoal]);
 
   // Get last 7 days for streak visualization
   const weekDays = useMemo(() => {
@@ -135,6 +137,62 @@ function HistoryStats() {
 
   return (
     <div className="overflow-y-auto pb-8 space-y-6 max-h-[calc(85vh-80px)]">
+      {/* Daily Goal & Hasanat Summary */}
+      <div className="grid grid-cols-1 gap-4">
+        <motion.div
+           initial={{ opacity: 0, y: 10 }}
+           animate={{ opacity: 1, y: 0 }}
+           className="p-5 rounded-2xl bg-card border border-primary/10 shadow-sm relative overflow-hidden"
+        >
+          <div className="absolute top-0 right-0 p-4 opacity-5">
+            <Target className="w-24 h-24" />
+          </div>
+          <div className="flex items-center justify-between mb-4">
+            <div>
+              <p className="text-xs text-muted-foreground uppercase tracking-wider font-semibold">Today's Goal</p>
+              <div className="flex items-baseline gap-2">
+                <p className="text-3xl font-bold text-foreground">{stats.today}</p>
+                <p className="text-sm text-muted-foreground">/ {dailyGoal}</p>
+              </div>
+            </div>
+            <div className="text-right">
+                <p className="text-xs text-muted-foreground uppercase tracking-wider font-semibold">Goal Progress</p>
+                <p className="text-2xl font-bold text-primary">{Math.round(stats.dailyGoalProgress)}%</p>
+            </div>
+          </div>
+          <div className="w-full h-2 bg-muted rounded-full overflow-hidden">
+             <motion.div 
+                initial={{ width: 0 }}
+                animate={{ width: `${stats.dailyGoalProgress}%` }}
+                className="h-full bg-primary"
+             />
+          </div>
+          <p className="text-[10px] text-muted-foreground mt-2">
+            {stats.dailyGoalProgress >= 100 ? "Goal completed! Masha Allah." : `${dailyGoal - stats.today} more to reach your daily goal.`}
+          </p>
+        </motion.div>
+      </div>
+
+      <div className="grid grid-cols-1 gap-4">
+        <motion.div
+           initial={{ opacity: 0, y: 10 }}
+           animate={{ opacity: 1, y: 0 }}
+           transition={{ delay: 0.1 }}
+           className="p-5 rounded-2xl bg-gradient-to-br from-yellow-500/5 to-orange-500/10 border border-yellow-500/20 shadow-sm"
+        >
+          <div className="flex items-center gap-4">
+            <div className="w-12 h-12 rounded-xl bg-yellow-500/10 flex items-center justify-center">
+              <Gem className="w-6 h-6 text-yellow-600" />
+            </div>
+            <div>
+              <p className="text-xs text-muted-foreground uppercase tracking-wider font-semibold">Total Hasanat (Estimated)</p>
+              <p className="text-3xl font-black text-yellow-600">
+                {stats.hasanat.toLocaleString()}
+              </p>
+            </div>
+          </div>
+        </motion.div>
+      </div>
       {/* Streak card */}
       <motion.div
         initial={{ opacity: 0, y: 10 }}

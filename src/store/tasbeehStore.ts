@@ -112,6 +112,7 @@ interface TasbeehState {
 
   showCongrats: boolean;
   congratsData: { title: string; description: string; hasanatEarned: number } | null;
+  totalHasanat: number;
 
   increment: () => void;
   decrement: () => void;
@@ -223,7 +224,7 @@ export const useTasbeehStore = create<TasbeehState>()(
   persist(
     (set, get) => ({
       count: 0, currentCount: 0, targetCount: 33, totalAllTime: 0, dailyRecords: [], dailyGoal: 100, dhikrs: defaultDhikrs, customDhikrs: [], currentDhikr: defaultDhikrs[0], favoriteDhikrIds: [], theme: 'light', themeSettings: initialThemeSettings, language: 'en', showTransliteration: true, counterShape: 'minimal', countFontSize: 1, dhikrTextPosition: 'middle', verticalOffset: 0, dhikrVerticalOffset: 0, counterVerticalOffset: 0, counterScale: 1, zenMode: false, autoThemeSwitch: false, shakeToReset: true, wakeLockEnabled: true, volumeButtonCounting: false, lastSeenVersion: '0.0.0', hadithSlideDuration: 5, hadithSlidePosition: 'bottom', breathingGuideEnabled: false, breathingGuideSpeed: 4, streakDays: 0, lastActiveDate: null, longestStreak: 0, unlockedAchievements: [], screenOffMode: false, sessionStartTime: null, sessionMode: getDefaultSessionMode(), notificationPermission: 'default', reminderEnabled: false, reminderTime: '18:00', lastCount: 0, lastDhikrId: '', canUndo: false,
-      showCongrats: false, congratsData: null,
+      showCongrats: false, congratsData: null, totalHasanat: 0,
 
       increment: () => {
         const state = get();
@@ -237,6 +238,7 @@ export const useTasbeehStore = create<TasbeehState>()(
 
         const newCount = state.currentCount + 1;
         const newTotal = state.totalAllTime + 1;
+        const newHasanat = state.totalHasanat + 10;
         const records = [...state.dailyRecords];
         const todayIdx = records.findIndex(r => r.date === today);
 
@@ -260,8 +262,8 @@ export const useTasbeehStore = create<TasbeehState>()(
             };
             set({ currentCount: 0, currentDhikr: defaultDhikrs[nextPhase], targetCount: [33, 33, 34][nextPhase], sessionMode: newSessionMode });
             return;
-          } else if (mode.currentPhase === 2 && newCount >= 34) {
-             set({ currentCount: newCount, totalAllTime: newTotal, dailyRecords: records, sessionStartTime: state.sessionStartTime || now, sessionMode: { ...mode, isComplete: true }, lastCount: state.currentCount, lastDhikrId: state.currentDhikr.id, canUndo: true });
+          } else if (mode.currentPhase === 2 && newCount >= 34 && !mode.isComplete) {
+             set({ currentCount: newCount, totalAllTime: newTotal, totalHasanat: newHasanat, dailyRecords: records, sessionStartTime: state.sessionStartTime || now, sessionMode: { ...mode, isComplete: true }, lastCount: state.currentCount, lastDhikrId: state.currentDhikr.id, canUndo: true });
              get().triggerCongrats({
                title: "MashaAllah!",
                description: "You have completed the 100 Tasbeeh session. May Allah accept your dhikr.",
@@ -273,19 +275,19 @@ export const useTasbeehStore = create<TasbeehState>()(
           const mode = sessionMode;
           if (newCount >= 100) {
             const nextSet = mode.currentSetCount + 100;
-            if (nextSet >= 1000) {
-              set({ currentCount: newCount, totalAllTime: newTotal, dailyRecords: records, sessionStartTime: state.sessionStartTime || now, sessionMode: { ...mode, isComplete: true, currentSetCount: 1000 }, lastCount: state.currentCount, lastDhikrId: state.currentDhikr.id, canUndo: true });
+            if (nextSet >= 1000 && !mode.isComplete) {
+              set({ currentCount: newCount, totalAllTime: newTotal, totalHasanat: newHasanat, dailyRecords: records, sessionStartTime: state.sessionStartTime || now, sessionMode: { ...mode, isComplete: true, currentSetCount: 1000 }, lastCount: state.currentCount, lastDhikrId: state.currentDhikr.id, canUndo: true });
               get().triggerCongrats({
                 title: "MashaAllah!",
                 description: "You have completed the 1000 Tasbeeh session. May Allah reward you immensely.",
                 hasanatEarned: 10000
               });
             } else {
-              set({ currentCount: 0, totalAllTime: newTotal, dailyRecords: records, sessionStartTime: state.sessionStartTime || now, sessionMode: { ...mode, currentSetCount: nextSet }, lastCount: state.currentCount, lastDhikrId: state.currentDhikr.id, canUndo: true });
+              set({ currentCount: 0, totalAllTime: newTotal, totalHasanat: newHasanat, dailyRecords: records, sessionStartTime: state.sessionStartTime || now, sessionMode: { ...mode, currentSetCount: nextSet }, lastCount: state.currentCount, lastDhikrId: state.currentDhikr.id, canUndo: true });
             }
             return;
           }
-        } else if (sessionMode.type === 'free' && state.targetCount > 0 && newCount === state.targetCount) {
+        } else if (sessionMode.type === 'free' && state.targetCount > 0 && newCount === state.targetCount && !state.showCongrats) {
              get().triggerCongrats({
                title: "MashaAllah!",
                description: `You have reached your target of ${state.targetCount}. May Allah accept it from you.`,
@@ -293,7 +295,7 @@ export const useTasbeehStore = create<TasbeehState>()(
              });
         }
 
-        set({ currentCount: newCount, totalAllTime: newTotal, dailyRecords: records, sessionStartTime: state.sessionStartTime || now, sessionMode, lastCount: state.currentCount, lastDhikrId: state.currentDhikr.id, canUndo: true });
+        set({ currentCount: newCount, totalAllTime: newTotal, totalHasanat: newHasanat, dailyRecords: records, sessionStartTime: state.sessionStartTime || now, sessionMode, lastCount: state.currentCount, lastDhikrId: state.currentDhikr.id, canUndo: true });
       },
 
       decrement: () => set((state) => ({ currentCount: Math.max(0, state.currentCount - 1) })),
@@ -364,7 +366,7 @@ export const useTasbeehStore = create<TasbeehState>()(
         const settings = s.themeSettings[s.theme] || defaultThemeSettings; if (settings.hapticEnabled && navigator.vibrate) navigator.vibrate([20, 50, 20]);
       },
       setAutoThemeSwitch: (e) => set({ autoThemeSwitch: e }), setShakeToReset: (e) => set({ shakeToReset: e }), setWakeLockEnabled: (e) => set({ wakeLockEnabled: e }), setVolumeButtonCounting: (e) => set({ volumeButtonCounting: e }), setLastSeenVersion: (v) => set({ lastSeenVersion: v }), setNotificationPermission: (p) => set({ notificationPermission: p }), setReminderEnabled: (e) => set({ reminderEnabled: e }), setReminderTime: (t) => set({ reminderTime: t }),
-      triggerCongrats: (data) => set({ showCongrats: true, congratsData: data }),
+      triggerCongrats: (data) => set((s) => ({ showCongrats: true, congratsData: data, totalHasanat: s.totalHasanat + data.hasanatEarned })),
       closeCongrats: () => set({ showCongrats: false, congratsData: null }),
       updateStreak: () => {
         const today = getTodayDate(); const state = get(); if (state.lastActiveDate === today) return;
@@ -375,17 +377,28 @@ export const useTasbeehStore = create<TasbeehState>()(
     }),
     {
       name: 'tasbeeh-storage',
-      version: 1,
+      version: 2,
       migrate: (persistedState: any, version: number) => {
+        let state = persistedState;
         if (version === 0) {
-          const history = persistedState.dailyRecords || [];
+          const history = state.dailyRecords || [];
           const streak = calculateStreakFromHistory(history);
-          return { ...persistedState, streakDays: streak, longestStreak: streak, favoriteDhikrIds: persistedState.favoriteDhikrIds || [], dailyGoal: persistedState.dailyGoal || 100 };
+          state = { ...state, streakDays: streak, longestStreak: streak, favoriteDhikrIds: state.favoriteDhikrIds || [], dailyGoal: state.dailyGoal || 100 };
         }
-        return persistedState as TasbeehState;
+        if (version < 2) {
+          // Ensure themeSettings are fully populated and new states exist
+          const repairedSettings = { ...initialThemeSettings, ...state.themeSettings };
+          state = { 
+            ...state, 
+            themeSettings: repairedSettings,
+            showCongrats: false,
+            congratsData: null
+          };
+        }
+        return state as TasbeehState;
       },
       partialize: (state) => ({
-        currentDhikr: state.currentDhikr, currentCount: state.currentCount, targetCount: state.targetCount, showTransliteration: state.showTransliteration, themeSettings: state.themeSettings, theme: state.theme, language: state.language, zenMode: state.zenMode, counterShape: state.counterShape, hadithSlideDuration: state.hadithSlideDuration, hadithSlidePosition: state.hadithSlidePosition, dhikrTextPosition: state.dhikrTextPosition, verticalOffset: state.verticalOffset, dhikrVerticalOffset: state.dhikrVerticalOffset, counterVerticalOffset: state.counterVerticalOffset, counterScale: state.counterScale, countFontSize: state.countFontSize, dailyRecords: state.dailyRecords, totalAllTime: state.totalAllTime, customDhikrs: state.customDhikrs, streakDays: state.streakDays, lastActiveDate: state.lastActiveDate, longestStreak: state.longestStreak, sessionMode: state.sessionMode, dailyGoal: state.dailyGoal, favoriteDhikrIds: state.favoriteDhikrIds, lastSeenVersion: state.lastSeenVersion, autoThemeSwitch: state.autoThemeSwitch, shakeToReset: state.shakeToReset, wakeLockEnabled: state.wakeLockEnabled, volumeButtonCounting: state.volumeButtonCounting, unlockedAchievements: state.unlockedAchievements, screenOffMode: state.screenOffMode, notificationPermission: state.notificationPermission, reminderEnabled: state.reminderEnabled, reminderTime: state.reminderTime,
+        currentDhikr: state.currentDhikr, currentCount: state.currentCount, targetCount: state.targetCount, showTransliteration: state.showTransliteration, themeSettings: state.themeSettings, theme: state.theme, language: state.language, zenMode: state.zenMode, counterShape: state.counterShape, hadithSlideDuration: state.hadithSlideDuration, hadithSlidePosition: state.hadithSlidePosition, dhikrTextPosition: state.dhikrTextPosition, verticalOffset: state.verticalOffset, dhikrVerticalOffset: state.dhikrVerticalOffset, counterVerticalOffset: state.counterVerticalOffset, counterScale: state.counterScale, countFontSize: state.countFontSize, dailyRecords: state.dailyRecords, totalAllTime: state.totalAllTime, totalHasanat: state.totalHasanat, customDhikrs: state.customDhikrs, streakDays: state.streakDays, lastActiveDate: state.lastActiveDate, longestStreak: state.longestStreak, sessionMode: state.sessionMode, dailyGoal: state.dailyGoal, favoriteDhikrIds: state.favoriteDhikrIds, lastSeenVersion: state.lastSeenVersion, autoThemeSwitch: state.autoThemeSwitch, shakeToReset: state.shakeToReset, wakeLockEnabled: state.wakeLockEnabled, volumeButtonCounting: state.volumeButtonCounting, unlockedAchievements: state.unlockedAchievements, screenOffMode: state.screenOffMode, notificationPermission: state.notificationPermission, reminderEnabled: state.reminderEnabled, reminderTime: state.reminderTime,
       }),
     }
   )

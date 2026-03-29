@@ -85,7 +85,7 @@ export const CounterNumber = memo(({
   ${['moon-phase'].includes(counterShape) ? 'font-sans font-light text-white text-5xl drop-shadow-lg' : ''}
 `}
             style={{
-                fontSize: counterShape === 'digital' ? '0px' : `${(counterShape === 'classic' ? 4.5 : 4.5) * currentSettings.fontScale * countFontSize}rem`,
+                fontSize: counterShape === 'digital' ? '0px' : `${(counterShape === 'classic' ? 4.5 : 4.5) * (currentSettings?.fontScale ?? 1) * countFontSize}rem`,
                 color: shapeColor
             }}
         >

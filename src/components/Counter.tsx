@@ -1,5 +1,5 @@
 import { useEffect, memo } from 'react';
-import { useTasbeehStore } from '@/store/tasbeehStore';
+import { useTasbeehStore, defaultThemeSettings } from '@/store/tasbeehStore';
 import { SoundManager } from '@/lib/sound';
 import { initShakeDetection, isShakeDetectionSupported } from '@/lib/shakeDetection';
 import { requestWakeLock, releaseWakeLock, isWakeLockSupported } from '@/lib/wakeLock';
@@ -19,7 +19,7 @@ export const Counter = memo(function Counter() {
   const volumeButtonCounting = useTasbeehStore(state => state.volumeButtonCounting);
   const sessionModeType = useTasbeehStore(state => state.sessionMode.type);
   const theme = useTasbeehStore(state => state.theme);
-  const currentSettings = useTasbeehStore(state => state.themeSettings[theme]);
+  const currentSettings = useTasbeehStore(state => state.themeSettings[theme] || defaultThemeSettings);
 
   // Handle Side Effects (Sound, Milestones)
   useEffect(() => {

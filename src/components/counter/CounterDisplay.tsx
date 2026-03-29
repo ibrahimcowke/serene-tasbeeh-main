@@ -1,6 +1,6 @@
 import { memo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useTasbeehStore } from '@/store/tasbeehStore';
+import { useTasbeehStore, defaultThemeSettings } from '@/store/tasbeehStore';
 import { CounterVisuals } from '../CounterVisuals';
 
 export const CounterDisplay = memo(function CounterDisplay() {
@@ -13,7 +13,7 @@ export const CounterDisplay = memo(function CounterDisplay() {
   const targetCount = useTasbeehStore(state => state.targetCount);
   const countFontSize = useTasbeehStore(state => state.countFontSize);
   
-  const currentSettings = useTasbeehStore(state => state.themeSettings[theme]);
+  const currentSettings = useTasbeehStore(state => state.themeSettings[theme]) || defaultThemeSettings;
 
   const handleTap = () => {
     increment();
