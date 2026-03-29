@@ -31,7 +31,7 @@ const Index = () => {
 
             {/* Sidebar Trigger */}
             {!zenMode && (
-              <div className="fixed top-4 left-4 z-50 pointer-events-auto">
+              <div className="fixed top-12 left-4 z-50 pointer-events-auto">
                 <SidebarTrigger className="h-10 w-10 bg-card/40 backdrop-blur-xl border border-white/10 shadow-lg" />
               </div>
             )}
@@ -41,7 +41,7 @@ const Index = () => {
             </RoutinesView>
 
             {/* Main Content Area - Fixed layout without transitions to prevent auto-movement */}
-            <div className={`flex-1 min-h-0 w-full flex flex-col pb-safe ${zenMode ? 'items-center justify-center' : 'pt-12 pb-16 xs:pt-2 xs:pb-12'}`}>
+            <div className={`flex-1 min-h-0 w-full flex flex-col pb-safe ${zenMode ? 'items-center justify-center' : 'pt-24 pb-16 xs:pt-2 xs:pb-12'}`}>
               <div className={`max-w-[1600px] mx-auto w-full h-full flex flex-col justify-center px-4 sm:px-6 md:px-8 ${zenMode ? 'max-w-4xl' : ''}`}>
                 {renderDashboard()}
               </div>
