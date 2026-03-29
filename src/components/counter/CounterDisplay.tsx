@@ -42,31 +42,6 @@ export const CounterDisplay = memo(function CounterDisplay() {
             showCompletion={showCompletion}
             disabled={false}
           />
-          
-          <div className="absolute inset-0 flex items-center justify-center">
-            <AnimatePresence mode="popLayout">
-              <motion.h2
-                key={currentCount}
-                initial={{ opacity: 0.5, y: 5, scale: 0.9 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                exit={{ opacity: 0, y: -5, scale: 1.1 }}
-                transition={{
-                  type: "spring",
-                  stiffness: 400,
-                  damping: 15,
-                  mass: 0.8
-                }}
-                className="counter-number pointer-events-none select-none text-foreground z-10"
-                style={{ 
-                  fontSize: `clamp(40px, 12vh, ${countFontSize || 80}px)`,
-                  transform: `scale(${counterScale || 1})`,
-                  lineHeight: 1
-                }}
-              >
-                {currentCount.toLocaleString()}
-              </motion.h2>
-            </AnimatePresence>
-          </div>
         </div>
 
         {/* Improved shadow/glow for depth */}

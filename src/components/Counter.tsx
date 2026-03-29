@@ -64,22 +64,22 @@ export const Counter = memo(function Counter() {
   }, [volumeButtonCounting, increment, decrement]);
 
   return (
-    <div className="flex flex-col items-center justify-between min-h-screen w-full px-4 sm:px-6 md:px-8 lg:px-12 relative overflow-hidden py-2 xs:py-4 sm:py-8 safe-area-top safe-area-bottom">
-      {/* Top Section: Dhikr */}
-      <div className="w-full flex justify-center items-end py-1 xs:py-2">
+    <div className="flex flex-col items-center justify-center min-h-screen w-full px-4 sm:px-6 md:px-8 lg:px-12 relative overflow-hidden py-4 sm:py-8 safe-area-top safe-area-bottom gap-4 xs:gap-8">
+      {/* Top Section: Dhikr and Progress */}
+      <div className="w-full flex flex-col items-center justify-center z-10 animate-fade-in-down">
         <DhikrHeader />
       </div>
 
-      {/* Center Section: Counter */}
-      <div className="relative flex flex-col items-center justify-center w-full max-w-7xl mx-auto z-10 flex-1 py-1 xs:py-2">
-        <div className="flex flex-col items-center w-full max-h-min">
+      {/* Center Section: Main Interactive Counter */}
+      <div className="relative flex flex-col items-center justify-center w-full max-w-lg mx-auto z-20">
+        <div className="flex flex-col items-center w-full space-y-4 xs:space-y-6">
           <CounterDisplay />
           <CounterActions />
         </div>
       </div>
 
-      {/* Bottom Section: Hadith & Stats */}
-      <div className="w-full flex flex-col items-center justify-start py-1 xs:py-2">
+      {/* Bottom Section: Insights and History */}
+      <div className="w-full flex flex-col items-center justify-center z-10 animate-fade-in-up mt-4 sm:mt-8">
         <CounterFooter />
       </div>
     </div>

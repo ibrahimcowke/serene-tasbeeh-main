@@ -17,9 +17,7 @@ export interface Dhikr {
 
 export type ThemeType =
   | 'light' | 'theme-midnight' | 'theme-glass' | 'theme-sunset' | 'theme-forest'
-  | 'theme-oled' | 'theme-mecca-night' | 'theme-medina-rose' | 'theme-blue-mosque'
-  | 'theme-sahara-warmth' | 'theme-andalusia-earth' | 'theme-taj-marble'
-  | 'theme-royal-persian' | 'theme-ramadan-lantern';
+  | 'theme-oled';
 
 export interface ThemeSettings {
   primary: string;
@@ -45,17 +43,13 @@ export interface DayRecord {
 
 export type CounterShape =
   | 'plain' | 'minimal' | 'classic' | 'beads' | 'flower' | 'waveform' | 'digital'
-  | 'modern-ring' | 'vintage-wood' | 'geometric-star' | 'fluid' | 'radar'
-  | 'real-beads' | 'glass-orb' | 'portal-depth' | 'luminous-ring'
-  | 'ring-light' | 'steampunk-nixie' | 'biolum-organic'
-  | 'solar-flare' | 'nebula-cloud' | 'infinite-knot'
-  | 'holo-fan'
+  | 'modern-ring' | 'vintage-wood' | 'luminous-ring' 
+  | 'ring-light' 
   | 'animated-ripple' | 'bead-ring' | 'halo-ring' | 'vertical-capsules' | 'luminous-beads'
   | 'helix-strand' | 'cyber-hexagon' | 'glass-pill' | 'emerald-loop'
   | 'smart-ring' | 'moon-phase' | 'water-ripple' | 'sand-hourglass' | 'lantern-fanous'
   | 'digital-watch' | 'star-burst' | 'crystal-prism' | 'tally-clicker'
-  | 'cyber-3d' | 'crystal-iso' | 'neumorph'
-  | 'sunset-horizon' | 'retro-lcd';
+  | 'cyber-3d' | 'crystal-iso' | 'neumorph';
 
 export interface RoutineStep {
   id: string;
@@ -189,19 +183,10 @@ export const defaultThemeSettings: ThemeSettings = {
 export const initialThemeSettings: Record<string, ThemeSettings> = {
   light: { ...defaultThemeSettings, primary: '#3b82f6', background: '#f8fafc', card: '#ffffff', text: '#1e293b', textMuted: '#64748b', border: '#e2e8f0' },
   'theme-midnight': { ...defaultThemeSettings },
-  'theme-biolum': { ...defaultThemeSettings, primary: '#2dd4bf', background: '#020617', card: '#0f172a', text: '#ccfbf1', textMuted: '#5eead4' },
-  'theme-green': { ...defaultThemeSettings, primary: '#22c55e', background: '#050505', card: '#0a0a0a', text: '#dcfce7', textMuted: '#4ade80' },
+  'theme-glass': { ...defaultThemeSettings, primary: '#0ea5e9', background: '#f0f9ff', card: '#ffffff', text: '#0f172a', textMuted: '#64748b' },
+  'theme-sunset': { ...defaultThemeSettings, primary: '#f97316', background: '#fff7ed', card: '#ffffff', text: '#431407', textMuted: '#9a3412' },
+  'theme-forest': { ...defaultThemeSettings, primary: '#10b981', background: '#f0fdf4', card: '#ffffff', text: '#064e3b', textMuted: '#059669' },
   'theme-oled': { ...defaultThemeSettings, primary: '#ffffff', background: '#000000', card: '#000000', text: '#ffffff', textMuted: '#a3a3a3' },
-  'theme-mecca-night': { ...defaultThemeSettings, primary: '#fbbf24', background: '#050505', card: '#0f0f0f', text: '#ffffff', textMuted: '#a1a1aa' },
-  'theme-medina-rose': { ...defaultThemeSettings, primary: '#ec4899', background: '#fdf2f8', card: '#ffffff', text: '#1e293b', textMuted: '#64748b' },
-  'theme-blue-mosque': { ...defaultThemeSettings, primary: '#0ea5e9', background: '#f0f9ff', card: '#ffffff', text: '#0f172a', textMuted: '#64748b' },
-  'theme-desert-starlight': { ...defaultThemeSettings, primary: '#818cf8', background: '#0f172a', card: '#1e293b', text: '#f1f5f9', textMuted: '#94a3b8' },
-  'theme-sahara-warmth': { ...defaultThemeSettings, primary: '#f97316', background: '#fff7ed', card: '#ffffff', text: '#431407', textMuted: '#9a3412' },
-  'theme-andalusia-earth': { ...defaultThemeSettings, primary: '#10b981', background: '#f0fdf4', card: '#ffffff', text: '#064e3b', textMuted: '#059669' },
-  'theme-istanbul-sunset': { ...defaultThemeSettings, primary: '#d946ef', background: '#fdf4ff', card: '#ffffff', text: '#4a044e', textMuted: '#c026d3' },
-  'theme-taj-marble': { ...defaultThemeSettings, primary: '#71717a', background: '#fafafa', card: '#ffffff', text: '#18181b', textMuted: '#71717a' },
-  'theme-royal-persian': { ...defaultThemeSettings, primary: '#0d9488', background: '#f0fdfa', card: '#ffffff', text: '#134e4a', textMuted: '#0d9488' },
-  'theme-ramadan-lantern': { ...defaultThemeSettings, primary: '#f59e0b', background: '#0c0a09', card: '#1c1917', text: '#fef3c7', textMuted: '#d97706' },
 };
 
 const getDefaultSessionMode = (): SessionMode => ({ type: 'free' });
