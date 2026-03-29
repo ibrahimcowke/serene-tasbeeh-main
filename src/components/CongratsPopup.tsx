@@ -85,7 +85,10 @@ export const CongratsPopup: React.FC = () => {
                             
                             <Button
                                 variant="outline"
-                                onClick={closeCongrats}
+                                onClick={() => {
+                                    reset();
+                                    closeCongrats();
+                                }}
                                 className="w-full h-12 rounded-xl text-lg font-medium border-primary/20 hover:bg-primary/5 active:scale-95 transition-all"
                             >
                                 <Settings2 className="mr-2 w-5 h-5" />

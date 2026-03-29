@@ -1,13 +1,21 @@
 export class SoundManager {
   private static audioContext: AudioContext | null = null;
   
-  private static init() {
+  public static init() {
     if (!this.audioContext) {
       this.audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
     }
-    // Resume context if suspended (browser autoplay policy)
-    if (this.audioContext.state === 'suspended') {
-      this.audioContext.resume();
+    return this.audioContext;
+  }
+
+  public static async resume() {
+    this.init();
+    if (this.audioContext && this.audioContext.state === 'suspended') {
+      try {
+        await this.audioContext.resume();
+      } catch (e) {
+        console.warn('AudioContext resume failed:', e);
+      }
     }
   }
   

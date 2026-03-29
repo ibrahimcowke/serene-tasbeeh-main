@@ -25,6 +25,20 @@ const App = () => {
   useEffect(() => {
     registerPeriodicSync();
     
+    // Resume AudioContext on first user interaction
+    const handleGesture = () => {
+      import("./lib/sound").then(({ SoundManager }) => {
+        SoundManager.resume();
+      });
+      window.removeEventListener('click', handleGesture);
+      window.removeEventListener('keydown', handleGesture);
+      window.removeEventListener('touchstart', handleGesture);
+    };
+    
+    window.addEventListener('click', handleGesture, { once: true });
+    window.addEventListener('keydown', handleGesture, { once: true });
+    window.addEventListener('touchstart', handleGesture, { once: true });
+
     // Native Mobile Adjustments
     const configureNative = async () => {
       try {
@@ -37,6 +51,12 @@ const App = () => {
     };
     
     configureNative();
+
+    return () => {
+      window.removeEventListener('click', handleGesture);
+      window.removeEventListener('keydown', handleGesture);
+      window.removeEventListener('touchstart', handleGesture);
+    };
   }, []);
 
   return (
