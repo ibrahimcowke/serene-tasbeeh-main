@@ -41,16 +41,17 @@ export function RemindersView({ children }: RemindersViewProps) {
     );
 }
 
+import { useTasbeehStore } from '@/store/tasbeehStore';
+
 export function RemindersContent() {
-    const [reminders, setReminders] = useState<Reminder[]>(() => {
-        const saved = localStorage.getItem('tasbeeh-reminders');
-        return saved ? JSON.parse(saved) : [
-            { id: '1', time: '06:00', label: 'Fajr Dhikr', enabled: true, days: [0, 1, 2, 3, 4, 5, 6] },
-            { id: '2', time: '13:00', label: 'Dhuhr Dhikr', enabled: true, days: [0, 1, 2, 3, 4, 5, 6] },
-            { id: '3', time: '18:00', label: 'Maghrib Dhikr', enabled: true, days: [0, 1, 2, 3, 4, 5, 6] },
-            { id: '4', time: '21:00', label: 'Evening Dhikr', enabled: true, days: [0, 1, 2, 3, 4, 5, 6] },
-        ];
-    });
+    const { 
+        reminders, 
+        reminderEnabled: notificationsEnabled,
+        addReminder: storeAddReminder,
+        removeReminder: storeDeleteReminder,
+        toggleReminder: storeToggleReminder,
+        setReminderEnabled: setNotificationsEnabled,
+    } = useTasbeehStore();
 
     const [showAddForm, setShowAddForm] = useState(false);
     const [newReminder, setNewReminder] = useState({
@@ -58,18 +59,6 @@ export function RemindersContent() {
         label: '',
         days: [0, 1, 2, 3, 4, 5, 6],
     });
-
-    const [notificationsEnabled, setNotificationsEnabled] = useState(() => {
-        return localStorage.getItem('notifications-enabled') === 'true';
-    });
-
-    useEffect(() => {
-        localStorage.setItem('tasbeeh-reminders', JSON.stringify(reminders));
-    }, [reminders]);
-
-    useEffect(() => {
-        localStorage.setItem('notifications-enabled', String(notificationsEnabled));
-    }, [notificationsEnabled]);
 
     // Request notification permission
     const requestNotificationPermission = async () => {
@@ -88,7 +77,7 @@ export function RemindersContent() {
 
     // Schedule notifications
     useEffect(() => {
-        if (!notificationsEnabled || !('Notification' in window)) return;
+        if (!notificationsEnabled || !('Notification' in window) || Notification.permission !== 'granted') return;
 
         const checkReminders = () => {
             const now = new Date();
@@ -99,11 +88,12 @@ export function RemindersContent() {
                 if (
                     reminder.enabled &&
                     reminder.time === currentTime &&
-                    reminder.days.includes(currentDay)
+                    reminder.days.includes(currentDay) &&
+                    now.getSeconds() < 2 // Only trigger during the first 2 seconds of the minute
                 ) {
                     if ('serviceWorker' in navigator) {
                         navigator.serviceWorker.ready.then(registration => {
-                            registration.showNotification('tasbeehdikr Reminder', {
+                            registration.showNotification('Serene Tasbeeh Reminder', {
                                 body: reminder.label || 'Time for dhikr',
                                 icon: '/pwa-192x192.png',
                                 badge: '/pwa-192x192.png',
@@ -113,7 +103,7 @@ export function RemindersContent() {
                             } as any);
                         });
                     } else {
-                        new Notification('tasbeehdikr Reminder', {
+                        new Notification('Serene Tasbeeh Reminder', {
                             body: reminder.label || 'Time for dhikr',
                             icon: '/pwa-192x192.png',
                             badge: '/pwa-192x192.png',
@@ -125,7 +115,7 @@ export function RemindersContent() {
             });
         };
 
-        const interval = setInterval(checkReminders, 60000); // Check every minute
+        const interval = setInterval(checkReminders, 1000); // Check every second for better precision
         return () => clearInterval(interval);
     }, [reminders, notificationsEnabled]);
 
@@ -135,29 +125,25 @@ export function RemindersContent() {
             return;
         }
 
-        const reminder: Reminder = {
-            id: Date.now().toString(),
+        storeAddReminder({
             time: newReminder.time,
             label: newReminder.label,
             enabled: true,
             days: newReminder.days,
-        };
+        });
 
-        setReminders([...reminders, reminder]);
         setNewReminder({ time: '12:00', label: '', days: [0, 1, 2, 3, 4, 5, 6] });
         setShowAddForm(false);
         toast.success('Reminder added!');
     };
 
     const deleteReminder = (id: string) => {
-        setReminders(reminders.filter(r => r.id !== id));
+        storeDeleteReminder(id);
         toast.success('Reminder deleted');
     };
 
     const toggleReminder = (id: string) => {
-        setReminders(reminders.map(r =>
-            r.id === id ? { ...r, enabled: !r.enabled } : r
-        ));
+        storeToggleReminder(id);
     };
 
     const toggleDay = (day: number) => {
