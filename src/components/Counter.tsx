@@ -64,7 +64,7 @@ export const Counter = memo(function Counter() {
   }, [volumeButtonCounting, increment, decrement]);
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen w-full px-4 sm:px-6 md:px-8 lg:px-12 relative overflow-hidden py-4 sm:py-8 safe-area-top safe-area-bottom gap-4 xs:gap-8">
+    <div className="flex flex-col items-center justify-center h-full w-full px-4 sm:px-6 md:px-8 lg:px-12 relative overflow-hidden py-2 sm:py-4 safe-area-top safe-area-bottom gap-2 xs:gap-4">
       {/* Top Section: Dhikr and Progress */}
       <div className="w-full flex flex-col items-center justify-center z-10 animate-fade-in-down">
         <DhikrHeader />
@@ -79,7 +79,7 @@ export const Counter = memo(function Counter() {
       </div>
 
       {/* Bottom Section: Insights and History */}
-      <div className="w-full flex flex-col items-center justify-center z-10 animate-fade-in-up mt-4 sm:mt-8">
+      <div className="w-full flex flex-col items-center justify-center z-10 animate-fade-in-up mt-2 sm:mt-4">
         <CounterFooter />
       </div>
     </div>
