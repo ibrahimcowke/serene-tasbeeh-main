@@ -240,10 +240,21 @@ export function SettingsView({ children, defaultTab = 'themes' }: SettingsViewPr
 
               {/* COUNTER TAB */}
               <TabsContent value="counter" className="space-y-6 mt-0 pb-10 px-4 overflow-x-hidden focus-visible:outline-none">
-                <div className="space-y-1">
-                  <p className="text-xs text-muted-foreground uppercase tracking-wide mb-3 px-1">Counter Shape</p>
-                  <div className="grid grid-cols-3 gap-2 pb-2">
-                    {counterShapes.map((shape, index) => (
+                <div className="space-y-4">
+                  <p className="text-xs text-muted-foreground uppercase tracking-wide px-1">Counter Shape</p>
+                  
+                  {/* Categorized Shapes */}
+                  {[
+                    { title: 'Essential', list: ['plain', 'minimal', 'classic', 'beads', 'waveform'] },
+                    { title: 'Luminous', list: ['luminous-ring', 'ring-light', 'halo-ring', 'luminous-beads', 'star-burst'] },
+                    { title: 'Modern', list: ['flower', 'modern-ring', 'animated-ripple', 'water-ripple', 'moon-phase', 'glass-pill', 'neumorph'] },
+                    { title: 'Objects & 3D', list: ['vintage-wood', 'digital', 'bead-ring', 'sand-hourglass', 'lantern-fanous', 'digital-watch', 'tally-clicker', 'cyber-3d', 'crystal-iso'] },
+                    { title: 'Tech & Abstract', list: ['vertical-capsules', 'helix-strand', 'cyber-hexagon', 'emerald-loop', 'smart-ring', 'crystal-prism'] }
+                  ].map((category, catIndex) => (
+                    <div key={category.title} className="space-y-2">
+                      <p className="text-[11px] font-medium text-muted-foreground/70 px-1">{category.title}</p>
+                      <div className="grid grid-cols-3 gap-2 pb-2">
+                        {counterShapes.filter(s => category.list.includes(s.id)).map((shape, index) => (
                       <motion.button
                         key={shape.id}
                         initial={{ opacity: 0, scale: 0.95 }}
@@ -265,8 +276,10 @@ export function SettingsView({ children, defaultTab = 'themes' }: SettingsViewPr
                           {shape.label}
                         </span>
                       </motion.button>
-                    ))}
-                  </div>
+                        ))}
+                      </div>
+                    </div>
+                  ))}
                 </div>
 
                 <div className="space-y-1">

@@ -1,10 +1,10 @@
 apply plugin: 'com.android.application'
 
 android {
-    namespace = "app.netlify.tasbeehdikr.app"
+    namespace = "app.netlify.tasbeehdikr.twa"
     compileSdk = rootProject.ext.compileSdkVersion
     defaultConfig {
-        applicationId "app.netlify.tasbeehdikr.app"
+        applicationId "app.netlify.tasbeehdikr.twa"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 10400

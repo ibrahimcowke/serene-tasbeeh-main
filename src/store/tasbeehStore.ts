@@ -2,6 +2,7 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { counterShapes } from '@/lib/constants';
 import { Haptics, ImpactStyle } from '@capacitor/haptics';
+import { defaultRoutines } from '@/data/routines';
 
 const getTodayDate = () => new Date().toISOString().split('T')[0];
 
@@ -191,9 +192,7 @@ export const defaultDhikrs: Dhikr[] = [
   { id: '3_quls', arabic: 'الْمُعَوِّذَاتِ', transliteration: 'The 3 Quls', translation: 'Surah Ikhlas, Falaq, and Nas', hadiths: [{ text: "قل هو الله أحد تعدل ثلث القرآن", source: "البخاري" }] }
 ];
 
-export const defaultRoutines: any[] = [
-  { id: 'post-prayer', label: 'After Prayer', steps: [{ id: 'step1', dhikrId: 'subahanallah', target: 33 }, { id: 'step2', dhikrId: 'alhamdulillah', target: 33 }, { id: 'step3', dhikrId: 'allahuakbar', target: 33 }, { id: 'step4', dhikrId: 'la-ilaha-illallah', target: 1 }] }
-];
+// Imported from data/routines.ts
 
 export const defaultThemeSettings: ThemeSettings = {
   primary: '#60a5fa', secondary: '#1e293b', accent: '#3b82f6', background: '#0a0f1c', card: '#161e31', text: '#f8fafc', textMuted: '#94a3b8', border: '#1e293b', hapticEnabled: true, soundEnabled: true, vibrationIntensity: 50, fontScale: 1, soundType: 'click'
@@ -343,11 +342,6 @@ export const useTasbeehStore = create<TasbeehState>()(
         // Handle general completion if targetCount resides in any other session mode
         if (state.targetCount > 0 && newCount >= state.targetCount && sessionMode.type === 'free') {
           set({ currentCount: newCount, totalAllTime: newTotal, totalHasanat: newHasanat + (state.targetCount * 10), dailyRecords: records, sessionStartTime: state.sessionStartTime || now, sessionMode, lastCount: state.currentCount, lastDhikrId: state.currentDhikr.id, canUndo: true });
-          get().triggerCongrats({
-            title: "MashaAllah!",
-            description: `You have reached your target of ${state.targetCount} for ${state.currentDhikr.transliteration}.`,
-            hasanatEarned: state.targetCount * 10
-          });
           return;
         }
 

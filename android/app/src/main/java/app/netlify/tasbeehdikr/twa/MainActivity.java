@@ -1,4 +1,4 @@
-package app.netlify.tasbeehdikr.nativeapp;
+package app.netlify.tasbeehdikr.twa;
 
 import com.getcapacitor.BridgeActivity;
 
