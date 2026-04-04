@@ -157,14 +157,14 @@ export function SettingsView({ children, defaultTab = 'themes' }: SettingsViewPr
               <TabsList className="grid w-full grid-cols-4">
                 <TabsTrigger value="themes" className="text-xs">Themes</TabsTrigger>
                 <TabsTrigger value="counter" className="text-xs">Counter</TabsTrigger>
-                <TabsTrigger value="system" className="text-xs">System</TabsTrigger>
+                <TabsTrigger value="system" className="text-xs">Behavior</TabsTrigger>
                 <TabsTrigger value="data" className="text-xs">Data</TabsTrigger>
               </TabsList>
             </div>
 
             <div className="flex-1 overflow-y-auto px-1 py-1 custom-scrollbar">
               {/* THEMES TAB */}
-              <TabsContent value="themes" className="space-y-6 mt-0 pb-6 px-4">
+              <TabsContent value="themes" className="space-y-6 mt-0 pb-6 px-4 overflow-x-hidden">
                 <div className="space-y-1">
                   <p className="text-xs text-muted-foreground uppercase tracking-wide mb-3 px-1">Visual Theme</p>
                   <div className="grid grid-cols-2 gap-2 pb-2">
@@ -239,7 +239,7 @@ export function SettingsView({ children, defaultTab = 'themes' }: SettingsViewPr
               </TabsContent>
 
               {/* COUNTER TAB */}
-              <TabsContent value="counter" className="space-y-6 mt-0 pb-6 px-4">
+              <TabsContent value="counter" className="space-y-6 mt-0 pb-10 px-4 overflow-x-hidden focus-visible:outline-none">
                 <div className="space-y-1">
                   <p className="text-xs text-muted-foreground uppercase tracking-wide mb-3 px-1">Counter Shape</p>
                   <div className="grid grid-cols-3 gap-2 pb-2">
@@ -408,7 +408,7 @@ export function SettingsView({ children, defaultTab = 'themes' }: SettingsViewPr
               </TabsContent>
 
               {/* SYSTEM TAB */}
-              <TabsContent value="system" className="space-y-6 mt-0 pb-6 px-4">
+              <TabsContent value="system" className="space-y-6 mt-0 pb-10 px-4 overflow-x-hidden focus-visible:outline-none">
                 <div className="space-y-1">
                   <p className="text-xs text-muted-foreground uppercase tracking-wide mb-3 px-1">Notifications</p>
                   <RemindersView>
@@ -468,6 +468,24 @@ export function SettingsView({ children, defaultTab = 'themes' }: SettingsViewPr
                       <p className="text-xs text-muted-foreground">Use physical keys to count</p>
                     </div>
                     <Switch checked={volumeButtonCounting} onCheckedChange={setVolumeButtonCounting} />
+                  </div>
+                </div>
+
+                <div className="p-4 rounded-2xl bg-card border border-border/50 space-y-4">
+                  <p className="text-xs text-muted-foreground uppercase tracking-wide px-1">Display Preferences</p>
+                  <div className="space-y-3">
+                    <div className="flex justify-between items-center text-sm">
+                      <Label className="font-medium">Hadith Slide Delay</Label>
+                      <span className="text-muted-foreground font-mono text-xs">{hadithSlideDuration}s</span>
+                    </div>
+                    <Slider 
+                      min={3} 
+                      max={20} 
+                      step={1} 
+                      value={[hadithSlideDuration]} 
+                      onValueChange={([val]) => setHadithSlideDuration(val)} 
+                    />
+                    <p className="text-[10px] text-muted-foreground">Time before showing the next guidance message</p>
                   </div>
                 </div>
 

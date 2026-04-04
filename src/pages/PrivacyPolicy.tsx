@@ -9,7 +9,7 @@ export default function PrivacyPolicy() {
         {
             icon: Shield,
             title: "Our Commitment",
-            content: "tasbeehdikr is designed with a 'privacy-first' philosophy. We believe your spiritual practice is personal. This policy complies with Google Play Store standards and explains how we treat your information."
+            content: "Tasbeehly is designed with a 'privacy-first' philosophy. We believe your spiritual practice is personal. This policy complies with Google Play Store standards and explains how we treat your information."
         },
         {
             icon: Database,
@@ -100,7 +100,7 @@ export default function PrivacyPolicy() {
                         <p className="text-sm text-muted-foreground">
                             Questions about our privacy practices?
                             <br />
-                            Email us at <span className="text-primary font-medium">privacy@tasbeehdikr.com</span>
+                            Email us at <span className="text-primary font-medium">privacy@tasbeehly.com</span>
                         </p>
                         <button
                             onClick={() => navigate('/')}

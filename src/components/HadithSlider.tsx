@@ -1,8 +1,8 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, memo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Dhikr, useTasbeehStore } from '@/store/tasbeehStore';
 
-export function HadithSlider({ dhikr }: { dhikr: Dhikr }) {
+export const HadithSlider = memo(({ dhikr }: { dhikr: Dhikr }) => {
     const hadithSlideDuration = useTasbeehStore((state) => state.hadithSlideDuration);
     const [index, setIndex] = useState(0);
     const [isPaused, setIsPaused] = useState(false);
@@ -112,4 +112,4 @@ export function HadithSlider({ dhikr }: { dhikr: Dhikr }) {
             )}
         </div>
     );
-}
+});

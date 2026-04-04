@@ -62,7 +62,7 @@ export const PWAInstallPrompt = () => {
             </div>
             <div>
               <h3 className="text-sm font-semibold text-foreground">Install App</h3>
-              <p className="text-xs text-muted-foreground">Add tasbeehdikr to your home screen</p>
+              <p className="text-xs text-muted-foreground">Add Tasbeehly to your home screen</p>
             </div>
           </div>
           <button 

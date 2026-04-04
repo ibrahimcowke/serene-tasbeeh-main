@@ -51,7 +51,7 @@ export default function MiniCounter() {
                 </div>
 
                 <div className="flex items-center gap-1 opacity-50 justify-center pb-2">
-                    <span className="text-[10px] uppercase tracking-widest font-bold">tasbeehdikr</span>
+                    <span className="text-[10px] uppercase tracking-widest font-bold">Tasbeehly</span>
                 </div>
                 {/* Dhikr Text */}
                 <div className="relative z-10 text-center mb-6 mt-8">
@@ -93,7 +93,7 @@ export default function MiniCounter() {
                 </div>
 
                 <p className="text-[10px] text-muted-foreground/50 absolute bottom-2 font-mono">
-                    tasbeehdikr
+                    Tasbeehly
                 </p>
             </div>
         </ThemeProvider>

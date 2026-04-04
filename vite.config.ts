@@ -28,9 +28,9 @@ export default defineConfig(({ mode }) => ({
       includeAssets: ["robots.txt", "screenshot-mobile.png", "screenshot-desktop.png"],
       manifest: {
         id: "/",
-        name: "tasbeehdikr",
-        short_name: "tasbeehdikr",
-        description: "A peaceful digital tasbeehdikr counter for your daily dhikr practice",
+        name: "Tasbeehly",
+        short_name: "Tasbeehly",
+        description: "A peaceful digital Tasbeehly counter for your daily dhikr practice",
         lang: "en",
         dir: "ltr",
         categories: ["lifestyle", "utilities", "productivity"],
@@ -83,14 +83,14 @@ export default defineConfig(({ mode }) => ({
             sizes: "1024x1024",
             type: "image/jpeg",
             form_factor: "narrow",
-            label: "tasbeehdikr - Mobile View"
+            label: "Tasbeehly - Mobile View"
           },
           {
             src: "/screenshot-desktop.png",
             sizes: "1024x1024",
             type: "image/jpeg",
             form_factor: "wide",
-            label: "tasbeehdikr - Desktop View"
+            label: "Tasbeehly - Desktop View"
           }
         ],
         shortcuts: [
@@ -119,7 +119,7 @@ export default defineConfig(({ mode }) => ({
         // @ts-ignore - Experimental W3C Widgets API not yet typed in vite-plugin-pwa
         widgets: [
           {
-            name: "tasbeehdikr Quick Action",
+            name: "Tasbeehly Quick Action",
             description: "Access your Tasbeeh directly from the home screen",
             tag: "tasbeeh",
             template: "widget_template.json",

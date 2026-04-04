@@ -1,5 +1,5 @@
 /**
- * Notification helper for tasbeehdikr
+ * Notification helper for Tasbeehly
  */
 
 export async function requestNotificationPermission() {

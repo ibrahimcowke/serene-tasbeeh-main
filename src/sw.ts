@@ -76,7 +76,7 @@ self.addEventListener('periodicsync', (event) => {
   console.log('Periodic Sync fired', event)
   if (event.tag === 'daily-reminder') {
     event.waitUntil(
-      self.registration.showNotification('tasbeehdikr', {
+      self.registration.showNotification('Tasbeehly', {
         body: 'Time for your daily dhikr practice. 📿',
         icon: '/pwa-192x192.png',
         badge: '/pwa-192x192.png',
@@ -98,7 +98,7 @@ self.addEventListener('sync', (event) => {
 // Push Notification Event
 self.addEventListener('push', (event) => {
   console.log('Push received', event)
-  const data = event.data?.json() ?? { title: 'tasbeehdikr', body: 'Time for Dhikr' }
+  const data = event.data?.json() ?? { title: 'Tasbeehly', body: 'Time for Dhikr' }
   
   event.waitUntil(
     self.registration.showNotification(data.title, {

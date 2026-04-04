@@ -12,7 +12,8 @@ import ClassicDashboard from '../components/dashboards/ClassicDashboard';
 import { MobileNavBar } from '@/components/MobileNavBar';
 
 const Index = () => {
-  const { zenMode, setZenMode } = useTasbeehStore();
+  const zenMode = useTasbeehStore((state) => state.zenMode);
+  const setZenMode = useTasbeehStore((state) => state.setZenMode);
 
   const renderDashboard = () => {
     return <ClassicDashboard />;

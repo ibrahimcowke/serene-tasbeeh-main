@@ -236,7 +236,7 @@ const calculateStreakFromHistory = (records: DayRecord[]): number => {
 export const useTasbeehStore = create<TasbeehState>()(
   persist(
     (set, get) => ({
-      count: 0, currentCount: 0, targetCount: 33, totalAllTime: 0, dailyRecords: [], dailyGoal: 100, dhikrs: defaultDhikrs, customDhikrs: [], currentDhikr: defaultDhikrs[0], favoriteDhikrIds: [], theme: 'light', themeSettings: initialThemeSettings, language: 'en', showTransliteration: true, counterShape: 'minimal', countFontSize: 1, dhikrTextPosition: 'middle', verticalOffset: 0, dhikrVerticalOffset: 0, counterVerticalOffset: 0, counterScale: 1, zenMode: false, autoThemeSwitch: false, shakeToReset: true, wakeLockEnabled: true, volumeButtonCounting: false, lastSeenVersion: '0.0.0', hadithSlideDuration: 5, hadithSlidePosition: 'bottom', breathingGuideEnabled: false, breathingGuideSpeed: 4, streakDays: 0, lastActiveDate: null, longestStreak: 0, unlockedAchievements: [], screenOffMode: false, sessionStartTime: null, sessionMode: getDefaultSessionMode(), notificationPermission: 'default', reminderEnabled: false, reminderTime: '18:00', reminders: [
+      count: 0, currentCount: 0, targetCount: 33, totalAllTime: 0, dailyRecords: [], dailyGoal: 100, dhikrs: defaultDhikrs, customDhikrs: [], currentDhikr: defaultDhikrs[0], favoriteDhikrIds: [], theme: 'light', themeSettings: initialThemeSettings, language: 'en', showTransliteration: true, counterShape: 'minimal', countFontSize: 1, dhikrTextPosition: 'middle', verticalOffset: 0, dhikrVerticalOffset: 0, counterVerticalOffset: 0, counterScale: 1, zenMode: false, autoThemeSwitch: false, shakeToReset: false, wakeLockEnabled: true, volumeButtonCounting: false, lastSeenVersion: '0.0.0', hadithSlideDuration: 8, hadithSlidePosition: 'bottom', breathingGuideEnabled: false, breathingGuideSpeed: 4, streakDays: 0, lastActiveDate: null, longestStreak: 0, unlockedAchievements: [], screenOffMode: false, sessionStartTime: null, sessionMode: getDefaultSessionMode(), notificationPermission: 'default', reminderEnabled: false, reminderTime: '18:00', reminders: [
         { id: '1', time: '06:00', label: 'Fajr Dhikr', enabled: true, days: [0, 1, 2, 3, 4, 5, 6] },
         { id: '2', time: '13:00', label: 'Dhuhr Dhikr', enabled: true, days: [0, 1, 2, 3, 4, 5, 6] },
         { id: '3', time: '18:00', label: 'Maghrib Dhikr', enabled: true, days: [0, 1, 2, 3, 4, 5, 6] },
@@ -335,18 +335,13 @@ export const useTasbeehStore = create<TasbeehState>()(
               return;
             } else if (!mode.isComplete) {
               set({ currentCount: newCount, totalAllTime: newTotal, totalHasanat: newHasanat + 1000, dailyRecords: records, sessionMode: { ...mode, isComplete: true } });
-              get().triggerCongrats({
-                title: "Routine Complete!",
-                description: `You have completed the ${mode.routineId.replace('-', ' ')} routine. May Allah reward you.`,
-                hasanatEarned: 1000
-              });
               return;
             }
           }
         }
 
         // Handle general completion if targetCount resides in any other session mode
-        if (state.targetCount > 0 && newCount >= state.targetCount && !sessionMode.type.startsWith('tasbih')) {
+        if (state.targetCount > 0 && newCount >= state.targetCount && sessionMode.type === 'free') {
           set({ currentCount: newCount, totalAllTime: newTotal, totalHasanat: newHasanat + (state.targetCount * 10), dailyRecords: records, sessionStartTime: state.sessionStartTime || now, sessionMode, lastCount: state.currentCount, lastDhikrId: state.currentDhikr.id, canUndo: true });
           get().triggerCongrats({
             title: "MashaAllah!",

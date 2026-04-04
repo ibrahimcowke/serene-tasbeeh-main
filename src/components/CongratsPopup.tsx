@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTasbeehStore } from '@/store/tasbeehStore';
 import { Trophy, Star, X, CheckCircle2, RefreshCw, Settings2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
-export const CongratsPopup: React.FC = () => {
+export const CongratsPopup: React.FC = memo(() => {
     const { showCongrats, congratsData, closeCongrats, reset, switchDhikr } = useTasbeehStore();
 
     if (!showCongrats || !congratsData) return null;
@@ -108,4 +108,4 @@ export const CongratsPopup: React.FC = () => {
             </div>
         </AnimatePresence>
     );
-};
+});
