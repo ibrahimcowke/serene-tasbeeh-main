@@ -101,3 +101,40 @@ export const AnimatedRippleVisuals = memo(() => (
       </div>
   </div>
 ));
+
+export const BeadsDecorator = memo(() => (
+  <div className="absolute inset-0 flex items-center justify-center -z-10 pointer-events-none">
+    <svg className="w-[300px] h-[300px] -rotate-90">
+      <circle cx="150" cy="150" r="140" stroke="currentColor" fill="none" strokeWidth="2" className="text-original-muted/10" strokeDasharray="1 30" />
+    </svg>
+  </div>
+));
+
+export const MinimalBorder = memo(() => (
+  <div className="absolute inset-4 rounded-full border border-border/50" />
+));
+
+export const ClassicBody = memo(() => (
+  <div className="absolute inset-x-0 -top-4 bottom-0 bg-original-secondary/30 rounded-3xl border-4 border-original-muted flex items-center justify-center -z-10 flex-col">
+    <div className="absolute top-3 left-3 w-3 h-3 rounded-full bg-original-muted/30" />
+    <div className="absolute top-3 right-3 w-3 h-3 rounded-full bg-original-muted/30" />
+    <div className="absolute bottom-3 left-3 w-3 h-3 rounded-full bg-original-muted/30" />
+    <div className="absolute bottom-3 right-3 w-3 h-3 rounded-full bg-original-muted/30" />
+  </div>
+));
+
+export const BeadsButtonInterior = memo(() => (
+  <div className="absolute inset-0 rounded-full">
+    <svg className="w-full h-full -rotate-90">
+      <circle cx="50%" cy="50%" r="48%" stroke="currentColor" fill="none" strokeWidth="1" className="text-muted/20" />
+      <circle
+        cx="50%" cy="50%" r="48%"
+        stroke="currentColor"
+        fill="none"
+        strokeWidth="12"
+        className="text-primary/10"
+        strokeDasharray="1 15"
+      />
+    </svg>
+  </div>
+));

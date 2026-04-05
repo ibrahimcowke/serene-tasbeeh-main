@@ -1,4 +1,4 @@
-package app.netlify.tasbeehdikr.twa;
+package com.ibrahimcowke.tasbeehly;
 
 import com.getcapacitor.BridgeActivity;
 

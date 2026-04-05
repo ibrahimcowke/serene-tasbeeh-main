@@ -44,8 +44,8 @@ export default defineConfig(({ mode }) => ({
         related_applications: [
           {
             platform: "play",
-            url: "https://play.google.com/store/apps/details?id=app.netlify.tasbeehdikr.twa",
-            id: "app.netlify.tasbeehdikr.twa"
+            url: "https://play.google.com/store/apps/details?id=com.ibrahimcowke.tasbeehly",
+            id: "com.ibrahimcowke.tasbeehly"
           }
         ],
         iarc_rating_id: "e84b072d-71b3-4d3e-86ae-31a8ce4e53b7",
