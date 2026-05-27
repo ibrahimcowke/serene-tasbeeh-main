@@ -1,6 +1,7 @@
 import { memo, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTasbeehStore, defaultThemeSettings } from '@/store/tasbeehStore';
+import { CounterVisuals } from '../CounterVisuals';
 
 // Convert number to Arabic-Indic numerals
 const toArabicNumerals = (n: number): string => {
@@ -122,12 +123,20 @@ export const CounterDisplay = memo(function CounterDisplay() {
   const theme = useTasbeehStore(state => state.theme);
   const targetCount = useTasbeehStore(state => state.targetCount);
   const sessionMode = useTasbeehStore(state => state.sessionMode);
+  
+  // Custom shapes settings
+  const counterShape = useTasbeehStore(state => state.counterShape);
+  const counterVerticalOffset = useTasbeehStore(state => state.counterVerticalOffset);
+  const counterScale = useTasbeehStore(state => state.counterScale);
+  const countFontSize = useTasbeehStore(state => state.countFontSize);
+  const currentSettings = useTasbeehStore(state => state.themeSettings[theme] || defaultThemeSettings);
 
   // Tasbeeh logic: each round is 33. beadPosition = currentCount % 33
   const ROUND_SIZE = 33;
   const beadPosition = currentCount % ROUND_SIZE;
   const roundCount = Math.floor(currentCount / ROUND_SIZE); // completed full rounds
   const progress = targetCount > 0 ? Math.min(currentCount / targetCount, 1) : 0;
+  const showCompletion = targetCount > 0 && currentCount >= targetCount;
 
   const handleTap = () => increment();
 
@@ -137,98 +146,115 @@ export const CounterDisplay = memo(function CounterDisplay() {
 
   return (
     <div className="flex flex-col items-center justify-center w-full py-2">
-      <motion.div
-        whileTap={{ scale: 0.97 }}
-        onClick={handleTap}
-        className="relative cursor-pointer select-none"
-        style={{ width: 'min(78vw, 40vh, 320px)', height: 'min(78vw, 40vh, 320px)' }}
-      >
-        {/* Outer ambient glow */}
+      {counterShape === 'bead-ring' ? (
         <motion.div
-          key={currentCount}
-          className="absolute inset-0 rounded-full pointer-events-none"
-          style={{
-            background: 'radial-gradient(circle, rgba(217,119,6,0.12) 0%, transparent 70%)',
-          }}
-          initial={{ scale: 0.8, opacity: 0 }}
-          animate={{ scale: 1.2, opacity: 0 }}
-          transition={{ duration: 0.6, ease: 'easeOut' }}
-        />
+          whileTap={{ scale: 0.97 }}
+          onClick={handleTap}
+          className="relative cursor-pointer select-none"
+          style={{ width: 'min(78vw, 40vh, 320px)', height: 'min(78vw, 40vh, 320px)' }}
+        >
+          {/* Outer ambient glow */}
+          <motion.div
+            key={currentCount}
+            className="absolute inset-0 rounded-full pointer-events-none"
+            style={{
+              background: 'radial-gradient(circle, rgba(217,119,6,0.12) 0%, transparent 70%)',
+            }}
+            initial={{ scale: 0.8, opacity: 0 }}
+            animate={{ scale: 1.2, opacity: 0 }}
+            transition={{ duration: 0.6, ease: 'easeOut' }}
+          />
 
-        {/* Bead ring */}
-        <div className="absolute inset-0">
-          <TasbeehBeadRing
-            beadPosition={beadPosition}
-            roundCount={roundCount}
+          {/* Bead ring */}
+          <div className="absolute inset-0">
+            <TasbeehBeadRing
+              beadPosition={beadPosition}
+              roundCount={roundCount}
+              progress={progress}
+            />
+          </div>
+
+          {/* Center button area */}
+          <div className="absolute inset-0 flex items-center justify-center">
+            <motion.div
+              className="relative flex flex-col items-center justify-center rounded-full"
+              style={{
+                width: '54%',
+                height: '54%',
+                background: 'radial-gradient(circle at 40% 35%, rgba(255,255,255,0.07) 0%, rgba(0,0,0,0.4) 100%)',
+                border: '1px solid rgba(217,119,6,0.3)',
+                boxShadow: `
+                  0 0 0 1px rgba(255,255,255,0.04),
+                  inset 0 1px 1px rgba(255,255,255,0.08),
+                  0 8px 32px rgba(0,0,0,0.5),
+                  0 0 40px rgba(217,119,6,0.08)
+                `,
+              }}
+            >
+              {/* Main count number */}
+              <AnimatePresence mode="popLayout">
+                <motion.div
+                  key={currentCount}
+                  initial={{ scale: 1.4, opacity: 0, y: -4 }}
+                  animate={{ scale: 1, opacity: 1, y: 0 }}
+                  exit={{ scale: 0.7, opacity: 0, y: 4 }}
+                  transition={{ duration: 0.18, ease: [0.34, 1.56, 0.64, 1] }}
+                  className="flex flex-col items-center"
+                >
+                  <span
+                    className="font-arabic leading-none text-amber-200 select-none"
+                    style={{
+                      fontSize: currentCount >= 1000 ? '1.8rem' : '2.6rem',
+                      fontWeight: 700,
+                      textShadow: '0 0 20px rgba(251,191,36,0.5), 0 2px 8px rgba(0,0,0,0.4)',
+                      letterSpacing: '-0.02em',
+                    }}
+                  >
+                    {toArabicNumerals(currentCount)}
+                  </span>
+
+                  {/* Round counter badge */}
+                  {roundCount > 0 && (
+                    <motion.span
+                      initial={{ scale: 0, opacity: 0 }}
+                      animate={{ scale: 1, opacity: 1 }}
+                      className="mt-0.5 text-amber-400/70 font-arabic"
+                      style={{ fontSize: '0.85rem', letterSpacing: '0.02em' }}
+                    >
+                      {toArabicNumerals(roundCount)} × ٣٣
+                    </motion.span>
+                  )}
+                </motion.div>
+              </AnimatePresence>
+            </motion.div>
+          </div>
+
+          {/* Tap ripple effect */}
+          <motion.div
+            key={`ripple-${currentCount}`}
+            className="absolute inset-0 rounded-full pointer-events-none"
+            style={{ border: '1px solid rgba(251,191,36,0.4)' }}
+            initial={{ scale: 0.6, opacity: 0.7 }}
+            animate={{ scale: 1.15, opacity: 0 }}
+            transition={{ duration: 0.5, ease: 'easeOut' }}
+          />
+        </motion.div>
+      ) : (
+        <div className="relative p-2 xs:p-4 sm:p-6 scale-[0.8] xs:scale-100 transition-transform origin-center">
+          <CounterVisuals
+            counterShape={counterShape}
+            counterVerticalOffset={counterVerticalOffset}
+            counterScale={counterScale}
             progress={progress}
+            currentCount={currentCount}
+            currentSettings={currentSettings}
+            countFontSize={countFontSize}
+            handleTap={handleTap}
+            showCompletion={showCompletion}
+            disabled={false}
           />
         </div>
-
-        {/* Center button area */}
-        <div className="absolute inset-0 flex items-center justify-center">
-          <motion.div
-            className="relative flex flex-col items-center justify-center rounded-full"
-            style={{
-              width: '54%',
-              height: '54%',
-              background: 'radial-gradient(circle at 40% 35%, rgba(255,255,255,0.07) 0%, rgba(0,0,0,0.4) 100%)',
-              border: '1px solid rgba(217,119,6,0.3)',
-              boxShadow: `
-                0 0 0 1px rgba(255,255,255,0.04),
-                inset 0 1px 1px rgba(255,255,255,0.08),
-                0 8px 32px rgba(0,0,0,0.5),
-                0 0 40px rgba(217,119,6,0.08)
-              `,
-            }}
-          >
-            {/* Main count number */}
-            <AnimatePresence mode="popLayout">
-              <motion.div
-                key={currentCount}
-                initial={{ scale: 1.4, opacity: 0, y: -4 }}
-                animate={{ scale: 1, opacity: 1, y: 0 }}
-                exit={{ scale: 0.7, opacity: 0, y: 4 }}
-                transition={{ duration: 0.18, ease: [0.34, 1.56, 0.64, 1] }}
-                className="flex flex-col items-center"
-              >
-                <span
-                  className="font-arabic leading-none text-amber-200 select-none"
-                  style={{
-                    fontSize: currentCount >= 1000 ? '1.8rem' : '2.6rem',
-                    fontWeight: 700,
-                    textShadow: '0 0 20px rgba(251,191,36,0.5), 0 2px 8px rgba(0,0,0,0.4)',
-                    letterSpacing: '-0.02em',
-                  }}
-                >
-                  {toArabicNumerals(currentCount)}
-                </span>
-
-                {/* Round counter badge */}
-                {roundCount > 0 && (
-                  <motion.span
-                    initial={{ scale: 0, opacity: 0 }}
-                    animate={{ scale: 1, opacity: 1 }}
-                    className="mt-0.5 text-amber-400/70 font-arabic"
-                    style={{ fontSize: '0.85rem', letterSpacing: '0.02em' }}
-                  >
-                    {toArabicNumerals(roundCount)} × ٣٣
-                  </motion.span>
-                )}
-              </motion.div>
-            </AnimatePresence>
-          </motion.div>
-        </div>
-
-        {/* Tap ripple effect */}
-        <motion.div
-          key={`ripple-${currentCount}`}
-          className="absolute inset-0 rounded-full pointer-events-none"
-          style={{ border: '1px solid rgba(251,191,36,0.4)' }}
-          initial={{ scale: 0.6, opacity: 0.7 }}
-          animate={{ scale: 1.15, opacity: 0 }}
-          transition={{ duration: 0.5, ease: 'easeOut' }}
-        />
-      </motion.div>
+      )}
 
       {/* Progress indicator below the ring - redesigned for premium look on desktop and mobile */}
       {targetCount > 0 && (
