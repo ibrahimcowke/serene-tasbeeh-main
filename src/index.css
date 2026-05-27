@@ -75,6 +75,20 @@
     /* Sheet/modal */
     --sheet-bg: 30 15% 6%;
 
+    /* Bead Ring Theme Styling */
+    --bead-filled-start: #fde68a;
+    --bead-filled-mid: #d97706;
+    --bead-filled-end: #92400e;
+    --bead-current-start: #fef9c3;
+    --bead-current-mid: #fbbf24;
+    --bead-current-end: #f59e0b;
+    --bead-empty-start: rgba(255,255,255,0.15);
+    --bead-empty-end: rgba(255,255,255,0.03);
+    --bead-empty-border: rgba(255,255,255,0.08);
+    --bead-glow: rgba(251,191,36,0.15);
+    --bead-string: rgba(180,140,60,0.25);
+    --bead-imam: #d97706;
+
     /* Original Base (Protected from theming) */
     --original-primary: 38 85% 45%;
     --original-primary-glow: 38 90% 60%;
@@ -144,6 +158,20 @@
     --sidebar-accent-foreground: 30 15% 15%;
     --sidebar-border: 35 15% 88%;
     --sidebar-ring: 142 70% 35%;
+
+    /* Bead Ring Theme Styling */
+    --bead-filled-start: #a7f3d0;
+    --bead-filled-mid: #10b981;
+    --bead-filled-end: #047857;
+    --bead-current-start: #fef08a;
+    --bead-current-mid: #f59e0b;
+    --bead-current-end: #b45309;
+    --bead-empty-start: rgba(0,0,0,0.08);
+    --bead-empty-end: rgba(0,0,0,0.02);
+    --bead-empty-border: rgba(0,0,0,0.06);
+    --bead-glow: rgba(16,185,129,0.3);
+    --bead-string: rgba(16,185,129,0.15);
+    --bead-imam: #10b981;
   }
 
   .theme-midnight {
@@ -198,6 +226,20 @@
     --choco-gold-dark: #b45309;
     --choco-highlight: #232f4a;
     --choco-shadow: #05070a;
+
+    /* Bead Ring Theme Styling */
+    --bead-filled-start: #93c5fd;
+    --bead-filled-mid: #3b82f6;
+    --bead-filled-end: #1d4ed8;
+    --bead-current-start: #fef9c3;
+    --bead-current-mid: #fbbf24;
+    --bead-current-end: #f59e0b;
+    --bead-empty-start: rgba(255,255,255,0.12);
+    --bead-empty-end: rgba(255,255,255,0.02);
+    --bead-empty-border: rgba(255,255,255,0.08);
+    --bead-glow: rgba(59,130,246,0.5);
+    --bead-string: rgba(96,165,250,0.25);
+    --bead-imam: #fbbf24;
   }
 
 
@@ -253,6 +295,20 @@
     --choco-highlight: #ffffff;
     /* Use white for top highlights in light mode */
     --choco-shadow: #cbd5e1;
+
+    /* Bead Ring Theme Styling */
+    --bead-filled-start: #bae6fd;
+    --bead-filled-mid: #0ea5e9;
+    --bead-filled-end: #0369a1;
+    --bead-current-start: #e0f2fe;
+    --bead-current-mid: #38bdf8;
+    --bead-current-end: #0284c7;
+    --bead-empty-start: rgba(0,0,0,0.06);
+    --bead-empty-end: rgba(0,0,0,0.01);
+    --bead-empty-border: rgba(0,0,0,0.06);
+    --bead-glow: rgba(14,165,233,0.3);
+    --bead-string: rgba(14,165,233,0.15);
+    --bead-imam: #0ea5e9;
   }
 
   .theme-sunset {
@@ -297,6 +353,20 @@
     --progress-track: 20 30% 25%;
     --progress-fill: 25 90% 60%;
     --sheet-bg: 20 40% 12%;
+
+    /* Bead Ring Theme Styling */
+    --bead-filled-start: #ffedd5;
+    --bead-filled-mid: #f97316;
+    --bead-filled-end: #9a3412;
+    --bead-current-start: #fee2e2;
+    --bead-current-mid: #ef4444;
+    --bead-current-end: #991b1b;
+    --bead-empty-start: rgba(255,255,255,0.12);
+    --bead-empty-end: rgba(255,255,255,0.02);
+    --bead-empty-border: rgba(255,255,255,0.08);
+    --bead-glow: rgba(249,115,22,0.3);
+    --bead-string: rgba(249,115,22,0.15);
+    --bead-imam: #ea580c;
   }
 
   .theme-forest {
@@ -341,6 +411,20 @@
     --progress-track: 150 30% 20%;
     --progress-fill: 140 50% 50%;
     --sheet-bg: 150 30% 10%;
+
+    /* Bead Ring Theme Styling */
+    --bead-filled-start: #dcfce7;
+    --bead-filled-mid: #16a34a;
+    --bead-filled-end: #14532d;
+    --bead-current-start: #fef9c3;
+    --bead-current-mid: #eab308;
+    --bead-current-end: #854d0e;
+    --bead-empty-start: rgba(255,255,255,0.12);
+    --bead-empty-end: rgba(255,255,255,0.02);
+    --bead-empty-border: rgba(255,255,255,0.08);
+    --bead-glow: rgba(22,163,74,0.3);
+    --bead-string: rgba(22,163,74,0.15);
+    --bead-imam: #16a34a;
   }
 
   .theme-oled {
@@ -384,6 +468,20 @@
     --progress-track: 0 0% 20%;
     --progress-fill: 0 0% 100%;
     --sheet-bg: 0 0% 5%;
+
+    /* Bead Ring Theme Styling */
+    --bead-filled-start: #ffffff;
+    --bead-filled-mid: #a3a3a3;
+    --bead-filled-end: #404040;
+    --bead-current-start: #ffffff;
+    --bead-current-mid: #e5e5e5;
+    --bead-current-end: #737373;
+    --bead-empty-start: rgba(255,255,255,0.15);
+    --bead-empty-end: rgba(255,255,255,0.03);
+    --bead-empty-border: rgba(255,255,255,0.1);
+    --bead-glow: rgba(255,255,255,0.2);
+    --bead-string: rgba(255,255,255,0.15);
+    --bead-imam: #ffffff;
   }
 
   .theme-mecca-night {
@@ -435,6 +533,20 @@
     --sidebar-accent-foreground: 45 30% 85%;
     --sidebar-border: 270 20% 12%;
     --sidebar-ring: 45 80% 60%;
+
+    /* Bead Ring Theme Styling */
+    --bead-filled-start: #ffe4e6;
+    --bead-filled-mid: #fb7185;
+    --bead-filled-end: #be123c;
+    --bead-current-start: #fef9c3;
+    --bead-current-mid: #fbbf24;
+    --bead-current-end: #d97706;
+    --bead-empty-start: rgba(255,255,255,0.12);
+    --bead-empty-end: rgba(255,255,255,0.02);
+    --bead-empty-border: rgba(255,255,255,0.08);
+    --bead-glow: rgba(251,113,133,0.3);
+    --bead-string: rgba(251,113,133,0.15);
+    --bead-imam: #fb7185;
   }
 
   .theme-desert-starlight {
@@ -486,6 +598,20 @@
     --sidebar-accent-foreground: 45 25% 85%;
     --sidebar-border: 35 15% 12%;
     --sidebar-ring: 197 85% 55%;
+
+    /* Bead Ring Theme Styling */
+    --bead-filled-start: #e0f2fe;
+    --bead-filled-mid: #0284c7;
+    --bead-filled-end: #0c4a6e;
+    --bead-current-start: #ffedd5;
+    --bead-current-mid: #f59e0b;
+    --bead-current-end: #b45309;
+    --bead-empty-start: rgba(255,255,255,0.12);
+    --bead-empty-end: rgba(255,255,255,0.02);
+    --bead-empty-border: rgba(255,255,255,0.08);
+    --bead-glow: rgba(56,189,248,0.3);
+    --bead-string: rgba(56,189,248,0.15);
+    --bead-imam: #0ea5e9;
   }
 
   .theme-ramadan-lantern {
@@ -537,6 +663,20 @@
     --sidebar-accent-foreground: 35 50% 85%;
     --sidebar-border: 15 20% 10%;
     --sidebar-ring: 38 90% 55%;
+
+    /* Bead Ring Theme Styling */
+    --bead-filled-start: #fef3c7;
+    --bead-filled-mid: #d97706;
+    --bead-filled-end: #78350f;
+    --bead-current-start: #d1fae5;
+    --bead-current-mid: #10b981;
+    --bead-current-end: #065f46;
+    --bead-empty-start: rgba(255,255,255,0.12);
+    --bead-empty-end: rgba(255,255,255,0.02);
+    --bead-empty-border: rgba(255,255,255,0.08);
+    --bead-glow: rgba(217,119,6,0.3);
+    --bead-string: rgba(217,119,6,0.15);
+    --bead-imam: #d97706;
   }
 
   .theme-rose-bloom {
@@ -588,6 +728,20 @@
     --sidebar-accent-foreground: 340 30% 85%;
     --sidebar-border: 160 12% 12%;
     --sidebar-ring: 345 60% 65%;
+
+    /* Bead Ring Theme Styling */
+    --bead-filled-start: #fce7f3;
+    --bead-filled-mid: #db2777;
+    --bead-filled-end: #881337;
+    --bead-current-start: #d1fae5;
+    --bead-current-mid: #10b981;
+    --bead-current-end: #065f46;
+    --bead-empty-start: rgba(255,255,255,0.12);
+    --bead-empty-end: rgba(255,255,255,0.02);
+    --bead-empty-border: rgba(255,255,255,0.08);
+    --bead-glow: rgba(219,39,119,0.3);
+    --bead-string: rgba(219,39,119,0.15);
+    --bead-imam: #db2777;
   }
 }
 

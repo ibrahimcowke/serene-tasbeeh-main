@@ -35,18 +35,18 @@ const TasbeehBeadRing = memo(({ beadPosition, roundCount, progress }: {
     <svg viewBox="0 0 300 300" className="w-full h-full" style={{ overflow: 'visible' }}>
       <defs>
         <radialGradient id="beadFilled" cx="35%" cy="35%">
-          <stop offset="0%" stopColor="#fde68a" />
-          <stop offset="60%" stopColor="#d97706" />
-          <stop offset="100%" stopColor="#92400e" />
+          <stop offset="0%" stopColor="var(--bead-filled-start, #fde68a)" />
+          <stop offset="60%" stopColor="var(--bead-filled-mid, #d97706)" />
+          <stop offset="100%" stopColor="var(--bead-filled-end, #92400e)" />
         </radialGradient>
         <radialGradient id="beadEmpty" cx="35%" cy="35%">
-          <stop offset="0%" stopColor="rgba(255,255,255,0.15)" />
-          <stop offset="100%" stopColor="rgba(255,255,255,0.03)" />
+          <stop offset="0%" stopColor="var(--bead-empty-start, rgba(255,255,255,0.15))" />
+          <stop offset="100%" stopColor="var(--bead-empty-end, rgba(255,255,255,0.03))" />
         </radialGradient>
         <radialGradient id="beadCurrent" cx="30%" cy="30%">
-          <stop offset="0%" stopColor="#fef9c3" />
-          <stop offset="50%" stopColor="#fbbf24" />
-          <stop offset="100%" stopColor="#f59e0b" />
+          <stop offset="0%" stopColor="var(--bead-current-start, #fef9c3)" />
+          <stop offset="50%" stopColor="var(--bead-current-mid, #fbbf24)" />
+          <stop offset="100%" stopColor="var(--bead-current-end, #f59e0b)" />
         </radialGradient>
         <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
           <feGaussianBlur stdDeviation="3" result="blur" />
@@ -68,7 +68,7 @@ const TasbeehBeadRing = memo(({ beadPosition, roundCount, progress }: {
       <circle
         cx={cx} cy={cy} r={r}
         fill="none"
-        stroke="rgba(180,140,60,0.25)"
+        stroke="var(--bead-string, rgba(180,140,60,0.25))"
         strokeWidth="1.5"
         strokeDasharray="3 4"
       />
@@ -79,7 +79,7 @@ const TasbeehBeadRing = memo(({ beadPosition, roundCount, progress }: {
           {bead.current && (
             <circle
               cx={bead.x} cy={bead.y} r={beadR + 5}
-              fill="rgba(251,191,36,0.15)"
+              fill="var(--bead-glow, rgba(251,191,36,0.15))"
               filter="url(#softglow)"
             />
           )}
@@ -94,7 +94,7 @@ const TasbeehBeadRing = memo(({ beadPosition, roundCount, progress }: {
                 ? 'url(#beadCurrent)'
                 : 'url(#beadEmpty)'
             }
-            stroke={bead.filled ? 'rgba(180,120,30,0.6)' : bead.current ? 'rgba(251,191,36,0.8)' : 'rgba(255,255,255,0.08)'}
+            stroke={bead.filled ? 'var(--bead-filled-end)' : bead.current ? 'var(--bead-current-end)' : 'var(--bead-empty-border)'}
             strokeWidth={bead.current ? 1.5 : 0.8}
             filter={bead.current ? 'url(#glow)' : undefined}
           />
@@ -111,7 +111,7 @@ const TasbeehBeadRing = memo(({ beadPosition, roundCount, progress }: {
       ))}
 
       {/* Center Imam bead marker (top position divider) */}
-      <circle cx={cx} cy={cy - r - 0} r={4} fill="#d97706" stroke="#92400e" strokeWidth={1} />
+      <circle cx={cx} cy={cy - r - 0} r={4} fill="var(--bead-imam, #d97706)" stroke="var(--bead-filled-end, #92400e)" strokeWidth={1} />
     </svg>
   );
 });
@@ -158,7 +158,7 @@ export const CounterDisplay = memo(function CounterDisplay() {
             key={currentCount}
             className="absolute inset-0 rounded-full pointer-events-none"
             style={{
-              background: 'radial-gradient(circle, rgba(217,119,6,0.12) 0%, transparent 70%)',
+              background: 'radial-gradient(circle, var(--bead-glow, rgba(217,119,6,0.12)) 0%, transparent 70%)',
             }}
             initial={{ scale: 0.8, opacity: 0 }}
             animate={{ scale: 1.2, opacity: 0 }}
@@ -182,12 +182,12 @@ export const CounterDisplay = memo(function CounterDisplay() {
                 width: '54%',
                 height: '54%',
                 background: 'radial-gradient(circle at 40% 35%, rgba(255,255,255,0.07) 0%, rgba(0,0,0,0.4) 100%)',
-                border: '1px solid rgba(217,119,6,0.3)',
+                border: '1px solid hsl(var(--primary) / 0.3)',
                 boxShadow: `
                   0 0 0 1px rgba(255,255,255,0.04),
                   inset 0 1px 1px rgba(255,255,255,0.08),
                   0 8px 32px rgba(0,0,0,0.5),
-                  0 0 40px rgba(217,119,6,0.08)
+                  0 0 40px hsl(var(--primary) / 0.15)
                 `,
               }}
             >
@@ -202,11 +202,12 @@ export const CounterDisplay = memo(function CounterDisplay() {
                   className="flex flex-col items-center"
                 >
                   <span
-                    className="font-arabic leading-none text-amber-200 select-none"
+                    className="font-arabic leading-none select-none"
                     style={{
                       fontSize: currentCount >= 1000 ? '1.8rem' : '2.6rem',
                       fontWeight: 700,
-                      textShadow: '0 0 20px rgba(251,191,36,0.5), 0 2px 8px rgba(0,0,0,0.4)',
+                      color: 'hsl(var(--counter-text))',
+                      textShadow: '0 0 20px hsl(var(--counter-glow) / 0.5), 0 2px 8px rgba(0,0,0,0.4)',
                       letterSpacing: '-0.02em',
                     }}
                   >
@@ -218,8 +219,12 @@ export const CounterDisplay = memo(function CounterDisplay() {
                     <motion.span
                       initial={{ scale: 0, opacity: 0 }}
                       animate={{ scale: 1, opacity: 1 }}
-                      className="mt-0.5 text-amber-400/70 font-arabic"
-                      style={{ fontSize: '0.85rem', letterSpacing: '0.02em' }}
+                      className="mt-0.5 font-arabic"
+                      style={{
+                        fontSize: '0.85rem',
+                        letterSpacing: '0.02em',
+                        color: 'hsl(var(--counter-text) / 0.7)'
+                      }}
                     >
                       {toArabicNumerals(roundCount)} × ٣٣
                     </motion.span>
@@ -233,7 +238,7 @@ export const CounterDisplay = memo(function CounterDisplay() {
           <motion.div
             key={`ripple-${currentCount}`}
             className="absolute inset-0 rounded-full pointer-events-none"
-            style={{ border: '1px solid rgba(251,191,36,0.4)' }}
+            style={{ border: '1px solid hsl(var(--primary) / 0.5)' }}
             initial={{ scale: 0.6, opacity: 0.7 }}
             animate={{ scale: 1.15, opacity: 0 }}
             transition={{ duration: 0.5, ease: 'easeOut' }}
@@ -260,12 +265,18 @@ export const CounterDisplay = memo(function CounterDisplay() {
       {targetCount > 0 && (
         <div className="mt-3 sm:mt-6 flex items-center justify-center gap-3 w-full max-w-[240px] sm:max-w-[280px]">
           {/* Glassmorphic track with premium gradient fill */}
-          <div className="h-1.5 flex-1 rounded-full bg-amber-950/40 border border-amber-500/10 backdrop-blur-sm overflow-hidden relative shadow-inner">
+          <div
+            className="h-1.5 flex-1 rounded-full backdrop-blur-sm overflow-hidden relative shadow-inner"
+            style={{
+              backgroundColor: 'hsl(var(--primary) / 0.15)',
+              border: '1px solid hsl(var(--primary) / 0.2)'
+            }}
+          >
             <motion.div
               className="h-full rounded-full relative"
               style={{
-                background: 'linear-gradient(90deg, #d97706, #fbbf24, #fef08a)',
-                boxShadow: '0 0 8px rgba(251,191,36,0.6), inset 0 0.5px 0.5px rgba(255,255,255,0.4)',
+                background: 'linear-gradient(90deg, var(--bead-filled-end, #92400e), var(--bead-filled-mid, #d97706), var(--bead-filled-start, #fde68a))',
+                boxShadow: '0 0 8px hsl(var(--primary) / 0.6), inset 0 0.5px 0.5px rgba(255,255,255,0.4)',
               }}
               animate={{ width: `${progress * 100}%` }}
               transition={{ duration: 0.35, ease: 'easeOut' }}
@@ -273,8 +284,11 @@ export const CounterDisplay = memo(function CounterDisplay() {
           </div>
           {/* Premium Arabic numerals text */}
           <span
-            className="font-arabic text-amber-400/80 text-xs sm:text-sm font-medium tracking-wider select-none shrink-0"
-            style={{ textShadow: '0 0 10px rgba(251,191,36,0.3)' }}
+            className="font-arabic text-xs sm:text-sm font-medium tracking-wider select-none shrink-0"
+            style={{
+              color: 'hsl(var(--primary))',
+              textShadow: '0 0 10px hsl(var(--primary) / 0.3)'
+            }}
           >
             {toArabicNumerals(currentCount)}/{toArabicNumerals(targetCount)}
           </span>
