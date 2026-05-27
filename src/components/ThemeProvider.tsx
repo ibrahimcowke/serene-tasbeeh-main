@@ -29,7 +29,7 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
       'theme-midnight', 'theme-neon', 'theme-green', 'theme-cyberpunk', 'theme-glass',
       'theme-sunset', 'theme-forest', 'theme-oled', 'theme-biolum', 'theme-radar-tactical',
       'theme-steampunk', 'theme-crystal-depth', 'theme-mecca-night', 'theme-desert-starlight',
-      'theme-istanbul-sunset', 'theme-ramadan-lantern'
+      'theme-istanbul-sunset', 'theme-ramadan-lantern', 'theme-rose-bloom'
     ];
     if (darkThemes.includes(theme)) {
       root.classList.add('dark');

@@ -18,7 +18,8 @@ export interface Dhikr {
 
 export type ThemeType =
   | 'light' | 'theme-midnight' | 'theme-glass' | 'theme-sunset' | 'theme-forest'
-  | 'theme-oled';
+  | 'theme-oled'
+  | 'theme-mecca-night' | 'theme-desert-starlight' | 'theme-ramadan-lantern' | 'theme-rose-bloom';
 
 export interface ThemeSettings {
   primary: string;
@@ -205,6 +206,10 @@ export const initialThemeSettings: Record<string, ThemeSettings> = {
   'theme-sunset': { ...defaultThemeSettings, primary: '#f97316', background: '#fff7ed', card: '#ffffff', text: '#431407', textMuted: '#9a3412' },
   'theme-forest': { ...defaultThemeSettings, primary: '#10b981', background: '#f0fdf4', card: '#ffffff', text: '#064e3b', textMuted: '#059669' },
   'theme-oled': { ...defaultThemeSettings, primary: '#ffffff', background: '#000000', card: '#000000', text: '#ffffff', textMuted: '#a3a3a3' },
+  'theme-mecca-night': { ...defaultThemeSettings, primary: '#fbbf24', background: '#0c0714', card: '#160d24', text: '#f3e8ff', textMuted: '#a78bfa', border: '#2e1c4a', accent: '#ec4899', secondary: '#1e112c' },
+  'theme-desert-starlight': { ...defaultThemeSettings, primary: '#38bdf8', background: '#150f0d', card: '#221815', text: '#fef3c7', textMuted: '#d97706', border: '#3c2b27', accent: '#f59e0b', secondary: '#271c19' },
+  'theme-ramadan-lantern': { ...defaultThemeSettings, primary: '#f59e0b', background: '#170705', card: '#260c09', text: '#fef3c7', textMuted: '#f59e0b', border: '#3f1510', accent: '#10b981', secondary: '#2a0d0a' },
+  'theme-rose-bloom': { ...defaultThemeSettings, primary: '#f472b6', background: '#0a110e', card: '#15241f', text: '#fce7f3', textMuted: '#34d399', border: '#20362f', accent: '#10b981', secondary: '#131f1a' },
 };
 
 const getDefaultSessionMode = (): SessionMode => ({ type: 'free' });

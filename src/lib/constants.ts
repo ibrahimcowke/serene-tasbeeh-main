@@ -7,7 +7,10 @@ export const themes = [
   { id: 'theme-sunset', label: 'Sunset', description: 'Warm gradients' },
   { id: 'theme-forest', label: 'Forest', description: 'Deep nature greens' },
   { id: 'theme-oled', label: 'OLED', description: 'True black power saver' },
-
+  { id: 'theme-mecca-night', label: 'Mecca Night', description: 'Deep purple & gold' },
+  { id: 'theme-desert-starlight', label: 'Desert Star', description: 'Sand beige & blue' },
+  { id: 'theme-ramadan-lantern', label: 'Lantern Glow', description: 'Burgundy & amber' },
+  { id: 'theme-rose-bloom', label: 'Rose Bloom', description: 'Sage green & rose' },
 ] as const;
 
 export const counterShapes = [
