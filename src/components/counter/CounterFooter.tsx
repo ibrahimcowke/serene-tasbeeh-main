@@ -1,26 +1,24 @@
 import { memo } from 'react';
 import { useTasbeehStore, defaultDhikrs } from '@/store/tasbeehStore';
-import { HadithSlider } from '../HadithSlider';
+
+const toArabicNumerals = (n: number): string => {
+  const d = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'];
+  return n.toString().split('').map(c => d[parseInt(c)] ?? c).join('');
+};
 
 export const CounterFooter = memo(function CounterFooter() {
   const currentCount = useTasbeehStore(state => state.currentCount);
   const targetCount = useTasbeehStore(state => state.targetCount);
   const currentDhikrId = useTasbeehStore(state => state.currentDhikr.id);
   const sessionMode = useTasbeehStore(state => state.sessionMode);
-  const hadithSlidePosition = useTasbeehStore(state => state.hadithSlidePosition);
   const zenMode = useTasbeehStore(state => state.zenMode);
-  
-  const currentDhikr = defaultDhikrs.find(d => d.id === currentDhikrId) || { id: currentDhikrId };
+  const totalAllTime = useTasbeehStore(state => state.totalAllTime);
+  const streakDays = useTasbeehStore(state => state.streakDays);
 
-  if (zenMode || hadithSlidePosition === 'none') {
-    return (
-      <div className="w-full flex flex-col items-center justify-center py-4">
-        <p className="text-xs xs:text-sm text-muted-foreground opacity-50">
-          {currentCount} / {targetCount > 0 ? targetCount : '∞'}
-        </p>
-      </div>
-    );
-  }
+  const currentDhikr = defaultDhikrs.find(d => d.id === currentDhikrId);
+
+  const ROUND_SIZE = 33;
+  const roundsDone = Math.floor(currentCount / ROUND_SIZE);
 
   const getCurrentTarget = () => {
     if (sessionMode.type === 'tasbih100') return [33, 33, 33, 1][sessionMode.currentPhase];
@@ -29,16 +27,55 @@ export const CounterFooter = memo(function CounterFooter() {
   };
 
   return (
-    <div className="w-full flex flex-col items-center justify-start gap-4 py-2 transition-all duration-500">
-      <div className="w-full flex justify-center">
-        <HadithSlider dhikr={currentDhikr as any} />
-      </div>
-      
-      <div className="text-center">
-        <p className="text-[10px] xs:text-xs text-muted-foreground uppercase tracking-widest font-medium opacity-60">
-          Progress: {currentCount} / {getCurrentTarget() > 0 ? getCurrentTarget() : '∞'}
+    <div className="w-full flex flex-col items-center gap-3 pb-2">
+      {/* Translation of dhikr */}
+      {currentDhikr?.translation && (
+        <p className="text-white/25 text-[10px] sm:text-xs italic text-center px-6 max-w-xs leading-relaxed">
+          "{currentDhikr.translation}"
         </p>
-      </div>
+      )}
+
+      {/* Bottom stats strip */}
+      {!zenMode && (
+        <div className="flex items-center gap-5 sm:gap-8">
+          {/* All time count */}
+          <div className="flex flex-col items-center">
+            <span
+              className="font-arabic text-amber-400/80 text-sm font-semibold"
+              style={{ textShadow: '0 0 10px rgba(251,191,36,0.3)' }}
+            >
+              {toArabicNumerals(totalAllTime)}
+            </span>
+            <span className="text-white/25 text-[9px] uppercase tracking-widest mt-0.5">total</span>
+          </div>
+
+          {/* Divider dot */}
+          <div className="w-1 h-1 rounded-full bg-amber-500/20" />
+
+          {/* Current session rounds */}
+          <div className="flex flex-col items-center">
+            <span className="font-arabic text-amber-400/80 text-sm font-semibold"
+              style={{ textShadow: '0 0 10px rgba(251,191,36,0.3)' }}
+            >
+              {toArabicNumerals(roundsDone)}
+            </span>
+            <span className="text-white/25 text-[9px] uppercase tracking-widest mt-0.5">rounds</span>
+          </div>
+
+          {/* Divider dot */}
+          <div className="w-1 h-1 rounded-full bg-amber-500/20" />
+
+          {/* Streak */}
+          <div className="flex flex-col items-center">
+            <span className="font-arabic text-amber-400/80 text-sm font-semibold"
+              style={{ textShadow: '0 0 10px rgba(251,191,36,0.3)' }}
+            >
+              {toArabicNumerals(streakDays)}
+            </span>
+            <span className="text-white/25 text-[9px] uppercase tracking-widest mt-0.5">streak</span>
+          </div>
+        </div>
+      )}
     </div>
   );
 });

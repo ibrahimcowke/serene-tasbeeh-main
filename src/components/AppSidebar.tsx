@@ -1,5 +1,4 @@
-import { useState } from 'react';
-import { BookOpen, Target, ClipboardList, Settings, History, Trophy, BarChart3, AppWindow, Swords, Palette, Bell } from "lucide-react";
+import { BookOpen, Target, ClipboardList, Bell, BarChart3, History, Trophy } from "lucide-react";
 import {
     Sidebar,
     SidebarContent,
@@ -10,40 +9,81 @@ import {
     SidebarMenu,
     SidebarMenuButton,
     SidebarMenuItem,
-    useSidebar,
+    SidebarFooter,
 } from "@/components/ui/sidebar";
-import { useTasbeehStore } from "@/store/tasbeehStore";
 import { DhikrSelector } from "./DhikrSelector";
 import { TargetSelector } from "./TargetSelector";
 import { RoutinesView } from "./RoutinesView";
-import { SettingsView } from "./SettingsView";
 import { HistoryView } from "./HistoryView";
 import { AchievementsView } from "./AchievementsView";
 import { ProgressView } from "./ProgressView";
 import { RemindersView } from "./RemindersView";
-import { toast } from "sonner";
-import { motion } from "framer-motion";
+import { SettingsView } from "./SettingsView";
+
 
 export function AppSidebar() {
-    const { setZenMode } = useTasbeehStore();
-    const { state, setOpenMobile } = useSidebar();
-
     return (
         <Sidebar collapsible="icon">
-            <SidebarHeader className="border-b border-border/40 bg-card/20 backdrop-blur-sm p-4">
+            {/* Header with brand */}
+            <SidebarHeader
+                className="flex items-center justify-center py-4 px-2"
+                style={{
+                    background: "linear-gradient(to bottom, rgba(20,14,2,0.98), rgba(12,9,2,0.95))",
+                    borderBottom: "1px solid rgba(217,119,6,0.15)",
+                }}
+            >
+                {/* Single unified app icon — same in both collapsed & expanded */}
+                <div
+                    className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0"
+                    style={{
+                        background: "linear-gradient(135deg, rgba(217,119,6,0.18) 0%, rgba(120,53,15,0.25) 100%)",
+                        border: "1px solid rgba(217,119,6,0.35)",
+                        boxShadow: "0 0 18px rgba(217,119,6,0.2), inset 0 1px 1px rgba(253,230,138,0.1)",
+                    }}
+                >
+                    {/* Tasbeeh bead ring icon */}
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        {/* Ring string */}
+                        <circle cx="12" cy="12" r="8" stroke="#d97706" strokeWidth="0.6" strokeDasharray="2 2.2" fill="none" opacity="0.5" />
+                        {/* Beads around the ring */}
+                        {[0,1,2,3,4,5,6,7,8,9,10].map((i) => {
+                            const angle = (i / 11) * 2 * Math.PI - Math.PI / 2;
+                            const x = 12 + 8 * Math.cos(angle);
+                            const y = 12 + 8 * Math.sin(angle);
+                            return <circle key={i} cx={x} cy={y} r="1.5" fill={i < 7 ? "#d97706" : "rgba(217,119,6,0.25)"} />;
+                        })}
+                        {/* Center dot */}
+                        <circle cx="12" cy="12" r="1.5" fill="#fbbf24" opacity="0.7" />
+                        {/* Top knot */}
+                        <circle cx="12" cy="3.5" r="1" fill="#d97706" opacity="0.9" />
+                    </svg>
+                </div>
             </SidebarHeader>
-            <SidebarContent>
-                {/* Core Actions */}
+
+            {/* Content */}
+            <SidebarContent
+                style={{
+                    background: "linear-gradient(180deg, rgba(12,9,2,0.97) 0%, rgba(10,8,1,0.98) 100%)",
+                }}
+            >
+                {/* Tools group */}
                 <SidebarGroup>
-                    <SidebarGroupLabel>Tools</SidebarGroupLabel>
+                    <SidebarGroupLabel
+                        className="text-amber-600/40 uppercase tracking-[0.25em] text-[9px] font-medium px-3 mb-1"
+                    >
+                        Practice
+                    </SidebarGroupLabel>
                     <SidebarGroupContent>
-                        <SidebarMenu>
+                        <SidebarMenu className="gap-0.5">
+
                             <SidebarMenuItem>
                                 <DhikrSelector>
-                                    <SidebarMenuButton asChild tooltip="Select Dhikr">
-                                        <button className="w-full justify-start cursor-pointer hover:bg-secondary/50">
-                                            <BookOpen className="text-primary" />
-                                            <span>Select Dhikr</span>
+                                    <SidebarMenuButton asChild tooltip="Select Dhikr" size="lg">
+                                        <button className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-left transition-all group"
+                                            style={{ color: "rgba(253,230,138,0.75)" }}
+                                        >
+                                            <BookOpen className="w-4 h-4 text-amber-400 shrink-0" />
+                                            <span className="text-sm font-light tracking-wide">Select Dhikr</span>
                                         </button>
                                     </SidebarMenuButton>
                                 </DhikrSelector>
@@ -51,10 +91,12 @@ export function AppSidebar() {
 
                             <SidebarMenuItem>
                                 <TargetSelector>
-                                    <SidebarMenuButton asChild tooltip="Set Target">
-                                        <button className="w-full justify-start cursor-pointer hover:bg-secondary/50">
-                                            <Target className="text-muted-foreground" />
-                                            <span>Set Target</span>
+                                    <SidebarMenuButton asChild tooltip="Set Target" size="lg">
+                                        <button className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-left transition-all"
+                                            style={{ color: "rgba(253,230,138,0.75)" }}
+                                        >
+                                            <Target className="w-4 h-4 text-amber-400/70 shrink-0" />
+                                            <span className="text-sm font-light tracking-wide">Set Target</span>
                                         </button>
                                     </SidebarMenuButton>
                                 </TargetSelector>
@@ -62,10 +104,12 @@ export function AppSidebar() {
 
                             <SidebarMenuItem>
                                 <RoutinesView>
-                                    <SidebarMenuButton asChild tooltip="Routines">
-                                        <button className="w-full justify-start cursor-pointer hover:bg-secondary/50">
-                                            <ClipboardList className="text-orange-500" />
-                                            <span>Routines</span>
+                                    <SidebarMenuButton asChild tooltip="Routines" size="lg">
+                                        <button className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-left transition-all"
+                                            style={{ color: "rgba(253,230,138,0.75)" }}
+                                        >
+                                            <ClipboardList className="w-4 h-4 text-amber-500/70 shrink-0" />
+                                            <span className="text-sm font-light tracking-wide">Routines</span>
                                         </button>
                                     </SidebarMenuButton>
                                 </RoutinesView>
@@ -73,29 +117,42 @@ export function AppSidebar() {
 
                             <SidebarMenuItem>
                                 <RemindersView>
-                                    <SidebarMenuButton asChild tooltip="Reminders">
-                                        <button className="w-full justify-start cursor-pointer hover:bg-secondary/50">
-                                            <Bell className="text-primary" />
-                                            <span>Reminders</span>
+                                    <SidebarMenuButton asChild tooltip="Reminders" size="lg">
+                                        <button className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-left transition-all"
+                                            style={{ color: "rgba(253,230,138,0.75)" }}
+                                        >
+                                            <Bell className="w-4 h-4 text-amber-400/70 shrink-0" />
+                                            <span className="text-sm font-light tracking-wide">Reminders</span>
                                         </button>
                                     </SidebarMenuButton>
                                 </RemindersView>
                             </SidebarMenuItem>
+
                         </SidebarMenu>
                     </SidebarGroupContent>
                 </SidebarGroup>
 
-                {/* Analytics & History */}
+                {/* Divider */}
+                <div className="mx-4 h-px" style={{ background: "rgba(217,119,6,0.1)" }} />
+
+                {/* Analytics group */}
                 <SidebarGroup>
-                    <SidebarGroupLabel>Analytics</SidebarGroupLabel>
+                    <SidebarGroupLabel
+                        className="text-amber-600/40 uppercase tracking-[0.25em] text-[9px] font-medium px-3 mb-1"
+                    >
+                        Insights
+                    </SidebarGroupLabel>
                     <SidebarGroupContent>
-                        <SidebarMenu>
+                        <SidebarMenu className="gap-0.5">
+
                             <SidebarMenuItem>
                                 <ProgressView>
-                                    <SidebarMenuButton asChild tooltip="Stats">
-                                        <button className="w-full justify-start cursor-pointer hover:bg-secondary/50">
-                                            <BarChart3 className="text-blue-500" />
-                                            <span>Stats</span>
+                                    <SidebarMenuButton asChild tooltip="Stats" size="lg">
+                                        <button className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-left transition-all"
+                                            style={{ color: "rgba(253,230,138,0.75)" }}
+                                        >
+                                            <BarChart3 className="w-4 h-4 text-amber-400/70 shrink-0" />
+                                            <span className="text-sm font-light tracking-wide">Stats</span>
                                         </button>
                                     </SidebarMenuButton>
                                 </ProgressView>
@@ -103,10 +160,12 @@ export function AppSidebar() {
 
                             <SidebarMenuItem>
                                 <HistoryView>
-                                    <SidebarMenuButton asChild tooltip="History">
-                                        <button className="w-full justify-start cursor-pointer hover:bg-secondary/50">
-                                            <History className="text-green-500" />
-                                            <span>History</span>
+                                    <SidebarMenuButton asChild tooltip="History" size="lg">
+                                        <button className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-left transition-all"
+                                            style={{ color: "rgba(253,230,138,0.75)" }}
+                                        >
+                                            <History className="w-4 h-4 text-amber-400/70 shrink-0" />
+                                            <span className="text-sm font-light tracking-wide">History</span>
                                         </button>
                                     </SidebarMenuButton>
                                 </HistoryView>
@@ -114,20 +173,47 @@ export function AppSidebar() {
 
                             <SidebarMenuItem>
                                 <AchievementsView>
-                                    <SidebarMenuButton asChild tooltip="Awards">
-                                        <button className="w-full justify-start cursor-pointer hover:bg-secondary/50">
-                                            <Trophy className="text-yellow-500" />
-                                            <span>Awards</span>
+                                    <SidebarMenuButton asChild tooltip="Awards" size="lg">
+                                        <button className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-left transition-all"
+                                            style={{ color: "rgba(253,230,138,0.75)" }}
+                                        >
+                                            <Trophy className="w-4 h-4 text-amber-400/70 shrink-0" />
+                                            <span className="text-sm font-light tracking-wide">Awards</span>
                                         </button>
                                     </SidebarMenuButton>
                                 </AchievementsView>
                             </SidebarMenuItem>
+
                         </SidebarMenu>
                     </SidebarGroupContent>
                 </SidebarGroup>
-
-                {/* App Settings */}
             </SidebarContent>
+
+            {/* Footer with settings */}
+            <SidebarFooter
+                style={{
+                    background: "rgba(10,8,1,0.98)",
+                    borderTop: "1px solid rgba(217,119,6,0.1)",
+                }}
+                className="py-3"
+            >
+                <SidebarMenuItem>
+                    <SettingsView defaultTab="appearance">
+                        <SidebarMenuButton asChild tooltip="Settings" size="lg">
+                            <button className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-left transition-all"
+                                style={{ color: "rgba(253,230,138,0.5)" }}
+                            >
+                                {/* Settings icon */}
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="shrink-0 text-amber-500/50">
+                                    <circle cx="12" cy="12" r="3" />
+                                    <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" />
+                                </svg>
+                                <span className="text-sm font-light tracking-wide">Settings</span>
+                            </button>
+                        </SidebarMenuButton>
+                    </SettingsView>
+                </SidebarMenuItem>
+            </SidebarFooter>
         </Sidebar>
     );
 }

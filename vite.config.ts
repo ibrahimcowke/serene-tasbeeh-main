@@ -34,8 +34,8 @@ export default defineConfig(({ mode }) => ({
         lang: "en",
         dir: "ltr",
         categories: ["lifestyle", "utilities", "productivity"],
-        theme_color: "#f8fafc",
-        background_color: "#f8fafc",
+        theme_color: "#cca633",
+        background_color: "#cca633",
         display: "standalone",
         orientation: "portrait",
         scope: "/",
@@ -59,21 +59,21 @@ export default defineConfig(({ mode }) => ({
         },
         icons: [
           {
-            src: "/pwa-192x192.png",
+            src: "/icons/icon-192.webp",
             sizes: "192x192",
-            type: "image/png",
+            type: "image/webp",
             purpose: "any",
           },
           {
-            src: "/pwa-512x512.png",
+            src: "/icons/icon-512.webp",
             sizes: "512x512",
-            type: "image/png",
+            type: "image/webp",
             purpose: "any",
           },
           {
-            src: "/pwa-512x512.png",
+            src: "/icons/icon-512.webp",
             sizes: "512x512",
-            type: "image/png",
+            type: "image/webp",
             purpose: "maskable",
           },
         ],
@@ -99,21 +99,21 @@ export default defineConfig(({ mode }) => ({
             short_name: "100",
             description: "Start a 100-count dhikr session",
             url: "/?session=100",
-            icons: [{ src: "/pwa-192x192.png", sizes: "192x192", type: "image/png" }]
+            icons: [{ src: "/icons/icon-192.webp", sizes: "192x192", type: "image/webp" }]
           },
           {
             name: "Morning Adhkar",
             short_name: "Morning",
             description: "Start your Morning Adhkar routine",
             url: "/?routine=morning",
-            icons: [{ src: "/pwa-192x192.png", sizes: "192x192", type: "image/png" }]
+            icons: [{ src: "/icons/icon-192.webp", sizes: "192x192", type: "image/webp" }]
           },
           {
             name: "Evening Adhkar",
             short_name: "Evening",
             description: "Start your Evening Adhkar routine",
             url: "/?routine=evening",
-            icons: [{ src: "/pwa-192x192.png", sizes: "192x192", type: "image/png" }]
+            icons: [{ src: "/icons/icon-192.webp", sizes: "192x192", type: "image/webp" }]
           }
         ],
         // @ts-ignore - Experimental W3C Widgets API not yet typed in vite-plugin-pwa
@@ -129,9 +129,9 @@ export default defineConfig(({ mode }) => ({
             update: 86400,
             icons: [
               {
-                src: "/pwa-192x192.png",
+                src: "/icons/icon-192.webp",
                 sizes: "192x192",
-                type: "image/png"
+                type: "image/webp"
               }
             ]
           }
