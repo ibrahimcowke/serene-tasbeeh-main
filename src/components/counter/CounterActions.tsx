@@ -22,7 +22,7 @@ const GlassButton = forwardRef<HTMLButtonElement, {
     className="w-11 h-11 sm:w-12 sm:h-12 rounded-full flex items-center justify-center disabled:opacity-30 transition-all"
     style={{
       background: 'rgba(255,255,255,0.05)',
-      border: '1px solid rgba(217,119,6,0.2)',
+      border: '1px solid hsl(var(--primary) / 0.25)',
       backdropFilter: 'blur(10px)',
       boxShadow: '0 2px 12px rgba(0,0,0,0.3), inset 0 1px 1px rgba(255,255,255,0.06)',
     }}
@@ -48,7 +48,7 @@ export const CounterActions = memo(function CounterActions() {
         disabled={currentCount === 0}
         title="Decrement"
       >
-        <Minus className="w-4 h-4 text-amber-300/70" />
+        <Minus className="w-4 h-4 text-primary/75" />
       </GlassButton>
 
       <GlassButton
@@ -59,12 +59,12 @@ export const CounterActions = memo(function CounterActions() {
         disabled={currentCount === 0}
         title="Reset"
       >
-        <RotateCcw className="w-4 h-4 text-amber-300/70" />
+        <RotateCcw className="w-4 h-4 text-primary/75" />
       </GlassButton>
 
       <SettingsView defaultTab="appearance">
         <GlassButton title="Settings">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-amber-300/70">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-primary/75">
             <circle cx="12" cy="12" r="3" />
             <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" />
           </svg>

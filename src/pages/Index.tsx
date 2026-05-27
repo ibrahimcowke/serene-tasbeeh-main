@@ -23,7 +23,7 @@ const Index = () => {
           <div
             className="h-dvh w-full flex flex-col overflow-hidden relative"
             style={{
-              background: 'linear-gradient(160deg, #0a0800 0%, #0d0c07 40%, #080b12 100%)',
+              background: 'radial-gradient(circle at top left, hsl(var(--primary) / 0.12), transparent 50%), radial-gradient(circle at bottom right, hsl(var(--accent) / 0.08), transparent 50%), hsl(var(--background))',
             }}
           >
             <ScreenOffMode />
@@ -36,13 +36,14 @@ const Index = () => {
               {[...Array(40)].map((_, i) => (
                 <div
                   key={i}
-                  className="absolute rounded-full bg-amber-100"
+                  className="absolute rounded-full"
                   style={{
                     width: Math.random() * 1.5 + 0.5 + 'px',
                     height: Math.random() * 1.5 + 0.5 + 'px',
                     top: Math.random() * 100 + '%',
                     left: Math.random() * 100 + '%',
-                    opacity: Math.random() * 0.3 + 0.05,
+                    opacity: Math.random() * 0.2 + 0.05,
+                    backgroundColor: 'hsl(var(--primary))',
                   }}
                 />
               ))}
@@ -54,14 +55,14 @@ const Index = () => {
                 className="relative z-50 flex items-center justify-end px-4 sm:px-6 pt-safe"
                 style={{
                   height: '64px',
-                  background: 'linear-gradient(to bottom, rgba(10,8,0,0.9) 0%, transparent 100%)',
+                  background: 'linear-gradient(to bottom, hsl(var(--background) / 0.95) 0%, transparent 100%)',
                 }}
               >
                 {/* Sidebar trigger */}
-                <SidebarTrigger className="h-9 w-9 rounded-full flex items-center justify-center text-amber-400/60 hover:text-amber-400 transition-colors"
+                <SidebarTrigger className="h-9 w-9 rounded-full flex items-center justify-center text-primary/80 hover:text-primary transition-colors"
                   style={{
-                    background: 'rgba(255,255,255,0.05)',
-                    border: '1px solid rgba(217,119,6,0.15)',
+                    background: 'hsl(var(--foreground) / 0.05)',
+                    border: '1px solid hsl(var(--primary) / 0.2)',
                   }}
                 />
               </div>
@@ -88,14 +89,15 @@ const Index = () => {
             {zenMode && (
               <button
                 onClick={() => setZenMode(false)}
-                className="absolute bottom-10 left-1/2 -translate-x-1/2 z-50 px-8 py-3 rounded-full text-xs text-amber-400/60 hover:text-amber-400 transition-all animate-fade-in-up flex items-center gap-2"
+                className="absolute bottom-10 left-1/2 -translate-x-1/2 z-50 px-8 py-3 rounded-full text-xs transition-all animate-fade-in-up flex items-center gap-2"
                 style={{
-                  background: 'rgba(255,255,255,0.03)',
-                  border: '1px solid rgba(217,119,6,0.15)',
+                  background: 'hsl(var(--foreground) / 0.03)',
+                  border: '1px solid hsl(var(--primary) / 0.2)',
+                  color: 'hsl(var(--primary) / 0.8)',
                   backdropFilter: 'blur(10px)',
                 }}
               >
-                <div className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse" />
+                <div className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" style={{ backgroundColor: 'hsl(var(--primary))' }} />
                 Exit Zen Mode
               </button>
             )}

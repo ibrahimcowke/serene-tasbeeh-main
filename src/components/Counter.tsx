@@ -64,8 +64,8 @@ export const Counter = memo(function Counter() {
         className="pointer-events-none absolute inset-0 z-0"
         style={{
           background: `
-            radial-gradient(ellipse 80% 50% at 50% 100%, rgba(120,53,15,0.25) 0%, transparent 60%),
-            radial-gradient(ellipse 60% 40% at 50% 0%, rgba(30,20,5,0.5) 0%, transparent 70%)
+            radial-gradient(ellipse 80% 50% at 50% 100%, hsl(var(--primary) / 0.15) 0%, transparent 60%),
+            radial-gradient(ellipse 60% 40% at 50% 0%, hsl(var(--primary) / 0.05) 0%, transparent 70%)
           `,
         }}
       />
@@ -74,7 +74,7 @@ export const Counter = memo(function Counter() {
       <div
         className="pointer-events-none absolute inset-0 z-0 opacity-[0.025]"
         style={{
-          backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23d97706' fill-opacity='1'%3E%3Cpath d='M30 0l30 17.32v34.64L30 60 0 51.96V17.32L30 0zm0 4L4 19.2v26.4L30 56l26-10.4V19.2L30 4z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
+          backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='${(currentSettings.primary || '#d97706').replace('#', '%23')}' fill-opacity='1'%3E%3Cpath d='M30 0l30 17.32v34.64L30 60 0 51.96V17.32L30 0zm0 4L4 19.2v26.4L30 56l26-10.4V19.2L30 4z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
         }}
       />
 

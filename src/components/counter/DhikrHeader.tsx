@@ -36,9 +36,9 @@ export const DhikrHeader = memo(function DhikrHeader() {
     <div className="text-center px-4 relative z-20 flex flex-col items-center gap-1">
       {/* Decorative top line */}
       <div className="flex items-center gap-3 mb-1 opacity-40">
-        <div className="h-px w-10 bg-gradient-to-r from-transparent to-amber-500/60" />
-        <span className="text-amber-500 text-[10px] tracking-[0.3em] uppercase font-light">ذِكْر</span>
-        <div className="h-px w-10 bg-gradient-to-l from-transparent to-amber-500/60" />
+        <div className="h-px w-10 bg-gradient-to-r from-transparent to-primary/60" />
+        <span className="text-primary text-[10px] tracking-[0.3em] uppercase font-light">ذِكْر</span>
+        <div className="h-px w-10 bg-gradient-to-l from-transparent to-primary/60" />
       </div>
 
       {/* Arabic Text */}
@@ -51,8 +51,8 @@ export const DhikrHeader = memo(function DhikrHeader() {
           transition={{ duration: 0.35, ease: 'easeOut' }}
           className="font-arabic text-xl xs:text-2xl sm:text-3xl md:text-4xl leading-relaxed select-none"
           style={{
-            color: '#fde68a',
-            textShadow: '0 0 30px rgba(251,191,36,0.3), 0 2px 8px rgba(0,0,0,0.4)',
+            color: 'hsl(var(--counter-text))',
+            textShadow: '0 0 30px hsl(var(--counter-glow) / 0.3), 0 2px 8px rgba(0,0,0,0.4)',
             fontWeight: 400,
           }}
         >
@@ -69,7 +69,7 @@ export const DhikrHeader = memo(function DhikrHeader() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.2 }}
-            className="text-amber-300/50 text-xs sm:text-sm tracking-wide italic font-light"
+            className="text-primary/50 text-xs sm:text-sm tracking-wide italic font-light"
           >
             {currentDhikr.transliteration}
           </motion.p>
@@ -85,21 +85,27 @@ export const DhikrHeader = memo(function DhikrHeader() {
                 key={phase}
                 className={`w-1.5 h-1.5 rounded-full transition-all duration-500 ${
                   phase < sessionMode.currentPhase
-                    ? 'bg-amber-400'
+                    ? 'bg-primary'
                     : phase === sessionMode.currentPhase
-                    ? 'bg-amber-400 animate-pulse scale-150'
+                    ? 'bg-primary animate-pulse scale-150'
                     : 'bg-white/15'
                 }`}
               />
             ))}
           </div>
           {totalProgress !== null && (
-            <div className="w-36 h-1 bg-amber-950/40 border border-amber-500/10 backdrop-blur-sm rounded-full overflow-hidden">
+            <div
+              className="w-36 h-1 backdrop-blur-sm rounded-full overflow-hidden"
+              style={{
+                backgroundColor: 'hsl(var(--primary) / 0.15)',
+                border: '1px solid hsl(var(--primary) / 0.2)'
+              }}
+            >
               <motion.div
                 className="h-full rounded-full"
                 style={{
-                  background: 'linear-gradient(90deg, #d97706, #fbbf24)',
-                  boxShadow: '0 0 4px rgba(251,191,36,0.4)',
+                  background: 'linear-gradient(90deg, var(--bead-filled-end, #92400e), var(--bead-filled-mid, #d97706), var(--bead-filled-start, #fde68a))',
+                  boxShadow: '0 0 4px hsl(var(--primary) / 0.6)',
                 }}
                 initial={{ width: 0 }}
                 animate={{ width: `${totalProgress}%` }}
@@ -107,7 +113,7 @@ export const DhikrHeader = memo(function DhikrHeader() {
               />
             </div>
           )}
-          <p className="text-amber-400/50 text-[10px] tracking-wide">
+          <p className="text-primary/50 text-[10px] tracking-wide">
             Phase {sessionMode.currentPhase + 1} / 4 • {sessionMode.currentPhase === 3 ? '١' : '٣٣'} dhikr
           </p>
         </div>
@@ -117,12 +123,18 @@ export const DhikrHeader = memo(function DhikrHeader() {
       {sessionMode.type === 'tasbih1000' && (
         <div className="flex flex-col items-center mt-2 gap-1.5">
           {totalProgress !== null && (
-            <div className="w-44 h-1 bg-amber-950/40 border border-amber-500/10 backdrop-blur-sm rounded-full overflow-hidden">
+            <div
+              className="w-44 h-1 backdrop-blur-sm rounded-full overflow-hidden"
+              style={{
+                backgroundColor: 'hsl(var(--primary) / 0.15)',
+                border: '1px solid hsl(var(--primary) / 0.2)'
+              }}
+            >
               <motion.div
                 className="h-full rounded-full"
                 style={{
-                  background: 'linear-gradient(90deg, #d97706, #fbbf24)',
-                  boxShadow: '0 0 4px rgba(251,191,36,0.4)',
+                  background: 'linear-gradient(90deg, var(--bead-filled-end, #92400e), var(--bead-filled-mid, #d97706), var(--bead-filled-start, #fde68a))',
+                  boxShadow: '0 0 4px hsl(var(--primary) / 0.6)',
                 }}
                 initial={{ width: 0 }}
                 animate={{ width: `${totalProgress}%` }}
@@ -130,7 +142,7 @@ export const DhikrHeader = memo(function DhikrHeader() {
               />
             </div>
           )}
-          <p className="text-amber-400/50 text-[10px] tracking-wide">
+          <p className="text-primary/50 text-[10px] tracking-wide">
             Set {sessionMode.currentPhase + 1} / 8 • {toArabicNumerals(Math.floor(sessionMode.currentPhase * 125 + currentCount))}/١٠٠٠
           </p>
         </div>
@@ -141,13 +153,13 @@ export const DhikrHeader = memo(function DhikrHeader() {
         <motion.div
           initial={{ opacity: 0, y: 4 }}
           animate={{ opacity: 1, y: 0 }}
-          className="mt-2 flex items-center gap-2 text-xs text-amber-400/60"
+          className="mt-2 flex items-center gap-2 text-xs text-primary/60"
         >
           <span>Step {toArabicNumerals(sessionMode.currentStepIndex + 1)} of {toArabicNumerals(sessionMode.steps.length)}</span>
           {sessionMode.steps[sessionMode.currentStepIndex].description && (
             <>
               <span className="opacity-40">•</span>
-              <span className="text-amber-300/40">{sessionMode.steps[sessionMode.currentStepIndex].description}</span>
+              <span className="text-primary/40">{sessionMode.steps[sessionMode.currentStepIndex].description}</span>
             </>
           )}
         </motion.div>

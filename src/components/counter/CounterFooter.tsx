@@ -41,8 +41,11 @@ export const CounterFooter = memo(function CounterFooter() {
           {/* All time count */}
           <div className="flex flex-col items-center">
             <span
-              className="font-arabic text-amber-400/80 text-sm font-semibold"
-              style={{ textShadow: '0 0 10px rgba(251,191,36,0.3)' }}
+              className="font-arabic text-sm font-semibold animate-fade-in-up"
+              style={{
+                color: 'hsl(var(--primary) / 0.8)',
+                textShadow: '0 0 10px hsl(var(--primary) / 0.3)'
+              }}
             >
               {toArabicNumerals(totalAllTime)}
             </span>
@@ -50,12 +53,19 @@ export const CounterFooter = memo(function CounterFooter() {
           </div>
 
           {/* Divider dot */}
-          <div className="w-1 h-1 rounded-full bg-amber-500/20" />
+          <div
+            className="w-1 h-1 rounded-full"
+            style={{ backgroundColor: 'hsl(var(--primary) / 0.2)' }}
+          />
 
           {/* Current session rounds */}
           <div className="flex flex-col items-center">
-            <span className="font-arabic text-amber-400/80 text-sm font-semibold"
-              style={{ textShadow: '0 0 10px rgba(251,191,36,0.3)' }}
+            <span
+              className="font-arabic text-sm font-semibold"
+              style={{
+                color: 'hsl(var(--primary) / 0.8)',
+                textShadow: '0 0 10px hsl(var(--primary) / 0.3)'
+              }}
             >
               {toArabicNumerals(roundsDone)}
             </span>
@@ -63,12 +73,19 @@ export const CounterFooter = memo(function CounterFooter() {
           </div>
 
           {/* Divider dot */}
-          <div className="w-1 h-1 rounded-full bg-amber-500/20" />
+          <div
+            className="w-1 h-1 rounded-full"
+            style={{ backgroundColor: 'hsl(var(--primary) / 0.2)' }}
+          />
 
           {/* Streak */}
           <div className="flex flex-col items-center">
-            <span className="font-arabic text-amber-400/80 text-sm font-semibold"
-              style={{ textShadow: '0 0 10px rgba(251,191,36,0.3)' }}
+            <span
+              className="font-arabic text-sm font-semibold"
+              style={{
+                color: 'hsl(var(--primary) / 0.8)',
+                textShadow: '0 0 10px hsl(var(--primary) / 0.3)'
+              }}
             >
               {toArabicNumerals(streakDays)}
             </span>
