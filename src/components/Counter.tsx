@@ -21,39 +21,32 @@ export const Counter = memo(function Counter() {
   const theme = useTasbeehStore(state => state.theme);
   const currentSettings = useTasbeehStore(state => state.themeSettings[theme] || defaultThemeSettings);
 
-  // Handle Side Effects (Sound, Milestones)
+  // Sound
   useEffect(() => {
     if (currentCount > 0 && currentSettings?.soundEnabled) {
       SoundManager.playClick(currentSettings.soundType as any);
     }
   }, [currentCount, currentSettings?.soundEnabled, currentSettings?.soundType]);
 
-  // Shake to reset functionality
+  // Shake to reset
   useEffect(() => {
     if (!shakeToReset || !isShakeDetectionSupported()) return;
     const cleanup = initShakeDetection(() => {
-      if (currentCount > 0) {
-        if (window.confirm('Reset counter by shaking?')) {
-          reset();
-        }
-      }
+      if (currentCount > 0 && window.confirm('Reset counter by shaking?')) reset();
     });
     return cleanup;
   }, [shakeToReset, currentCount, reset]);
 
-  // Screen Wake Lock
+  // Wake lock
   useEffect(() => {
-    if (!wakeLockEnabled || !isWakeLockSupported()) {
-      releaseWakeLock();
-      return;
-    }
+    if (!wakeLockEnabled || !isWakeLockSupported()) { releaseWakeLock(); return; }
     const shouldHaveWakeLock = currentCount > 0 || sessionModeType !== 'free';
     if (shouldHaveWakeLock) requestWakeLock();
     else releaseWakeLock();
     return () => { releaseWakeLock(); };
   }, [wakeLockEnabled, currentCount, sessionModeType]);
 
-  // Volume Button Counting
+  // Volume buttons
   useEffect(() => {
     if (!volumeButtonCounting) return;
     const cleanup = initVolumeButtonListener((direction) => {
@@ -64,22 +57,40 @@ export const Counter = memo(function Counter() {
   }, [volumeButtonCounting, increment, decrement]);
 
   return (
-    <div className="flex flex-col items-center justify-center h-full w-full px-4 sm:px-6 md:px-8 lg:px-12 relative overflow-hidden py-2 sm:py-4 safe-area-top safe-area-bottom gap-2 xs:gap-4">
-      {/* Top Section: Dhikr and Progress */}
-      <div className="w-full flex flex-col items-center justify-center z-10 animate-fade-in-down">
+    <div className="relative flex flex-col items-center justify-between h-full w-full overflow-hidden">
+
+      {/* Ambient background glows */}
+      <div
+        className="pointer-events-none absolute inset-0 z-0"
+        style={{
+          background: `
+            radial-gradient(ellipse 80% 50% at 50% 100%, rgba(120,53,15,0.25) 0%, transparent 60%),
+            radial-gradient(ellipse 60% 40% at 50% 0%, rgba(30,20,5,0.5) 0%, transparent 70%)
+          `,
+        }}
+      />
+
+      {/* Subtle geometric pattern overlay */}
+      <div
+        className="pointer-events-none absolute inset-0 z-0 opacity-[0.025]"
+        style={{
+          backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23d97706' fill-opacity='1'%3E%3Cpath d='M30 0l30 17.32v34.64L30 60 0 51.96V17.32L30 0zm0 4L4 19.2v26.4L30 56l26-10.4V19.2L30 4z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
+        }}
+      />
+
+      {/* Top section: Dhikr label and text */}
+      <div className="w-full flex flex-col items-center justify-center z-10 pt-2 sm:pt-4 animate-fade-in-down">
         <DhikrHeader />
       </div>
 
-      {/* Center Section: Main Interactive Counter */}
-      <div className="relative flex flex-col items-center justify-center w-full max-w-lg mx-auto z-20">
-        <div className="flex flex-col items-center w-full space-y-4 xs:space-y-6">
-          <CounterDisplay />
-          <CounterActions />
-        </div>
+      {/* Center: Bead ring + action buttons side by side on desktop, stacked and centered on mobile */}
+      <div className="relative flex flex-col sm:flex-row items-center justify-center w-full z-20 flex-1 gap-2 sm:gap-6 px-2">
+        <CounterDisplay />
+        <CounterActions />
       </div>
 
-      {/* Bottom Section: Insights and History */}
-      <div className="w-full flex flex-col items-center justify-center z-10 animate-fade-in-up mt-2 sm:mt-4">
+      {/* Bottom: Footer stats */}
+      <div className="w-full flex flex-col items-center justify-center z-10 pb-2 animate-fade-in-up">
         <CounterFooter />
       </div>
     </div>

@@ -2,15 +2,23 @@ import { memo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTasbeehStore, defaultDhikrs } from '@/store/tasbeehStore';
 
+const toArabicNumerals = (n: number): string => {
+  const d = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'];
+  return n.toString().split('').map(c => d[parseInt(c)] ?? c).join('');
+};
+
 export const DhikrHeader = memo(function DhikrHeader() {
   const currentDhikrId = useTasbeehStore(state => state.currentDhikr.id);
   const showTransliteration = useTasbeehStore(state => state.showTransliteration);
-  const dhikrVerticalOffset = useTasbeehStore(state => state.dhikrVerticalOffset);
   const sessionMode = useTasbeehStore(state => state.sessionMode);
   const currentCount = useTasbeehStore(state => state.currentCount);
-  
-  // Get latest dhikr data
-  const currentDhikr = defaultDhikrs.find(d => d.id === currentDhikrId) || { id: currentDhikrId, arabic: '', transliteration: '', translation: '' };
+
+  const currentDhikr = defaultDhikrs.find(d => d.id === currentDhikrId) || {
+    id: currentDhikrId,
+    arabic: '',
+    transliteration: '',
+    translation: '',
+  };
 
   const totalProgress = (() => {
     if (sessionMode.type === 'tasbih100') {
@@ -25,117 +33,124 @@ export const DhikrHeader = memo(function DhikrHeader() {
   })();
 
   return (
-    <div className="text-center mt-2 mb-2 px-3 sm:px-0 relative z-20"
-      style={{ transform: `translateY(${dhikrVerticalOffset}px)` }}
-    >
+    <div className="text-center px-4 relative z-20 flex flex-col items-center gap-1">
+      {/* Decorative top line */}
+      <div className="flex items-center gap-3 mb-1 opacity-40">
+        <div className="h-px w-10 bg-gradient-to-r from-transparent to-amber-500/60" />
+        <span className="text-amber-500 text-[10px] tracking-[0.3em] uppercase font-light">ذِكْر</span>
+        <div className="h-px w-10 bg-gradient-to-l from-transparent to-amber-500/60" />
+      </div>
+
+      {/* Arabic Text */}
       <AnimatePresence mode="wait" initial={false}>
         <motion.p
           key={currentDhikr.id}
-          initial={{ opacity: 0, scale: 0.95 }}
-          animate={{ opacity: 1, scale: 1 }}
-          exit={{ opacity: 0, scale: 1.05 }}
-          transition={{ duration: 0.3, ease: "easeOut" }}
-          className="font-arabic text-lg xs:text-xl sm:text-2xl md:text-3xl lg:text-4xl text-foreground leading-snug mb-0 max-w-[95vw] mx-auto overflow-visible select-none"
+          initial={{ opacity: 0, scale: 0.9, y: -6 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          exit={{ opacity: 0, scale: 1.05, y: 6 }}
+          transition={{ duration: 0.35, ease: 'easeOut' }}
+          className="font-arabic text-xl xs:text-2xl sm:text-3xl md:text-4xl leading-relaxed select-none"
+          style={{
+            color: '#fde68a',
+            textShadow: '0 0 30px rgba(251,191,36,0.3), 0 2px 8px rgba(0,0,0,0.4)',
+            fontWeight: 400,
+          }}
         >
           {currentDhikr.arabic}
         </motion.p>
       </AnimatePresence>
+
+      {/* Transliteration */}
       <AnimatePresence mode="wait">
         {showTransliteration && (
           <motion.p
             key={currentDhikr.transliteration}
-            initial={{ opacity: 0, y: -5 }}
+            initial={{ opacity: 0, y: -4 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -5 }}
+            exit={{ opacity: 0 }}
             transition={{ duration: 0.2 }}
-            className="text-muted-foreground text-[9px] xs:text-[10px] sm:text-sm tracking-wide px-4"
+            className="text-amber-300/50 text-xs sm:text-sm tracking-wide italic font-light"
           >
             {currentDhikr.transliteration}
           </motion.p>
         )}
       </AnimatePresence>
 
-      {/* Phase indicator & Progress for 100 session */}
+      {/* Phase indicator for tasbih100 */}
       {sessionMode.type === 'tasbih100' && (
-        <div className="flex flex-col items-center mt-1.5 sm:mt-4 mb-0.5">
-          <div className="flex justify-center gap-1.5 mb-1.5">
+        <div className="flex flex-col items-center mt-2 gap-1.5">
+          <div className="flex justify-center gap-2">
             {[0, 1, 2, 3].map((phase) => (
               <div
                 key={phase}
-                className={`w-1 h-1 sm:w-2 sm:h-2 rounded-full transition-all duration-300 ${phase < sessionMode.currentPhase
-                  ? 'bg-primary'
-                  : phase === sessionMode.currentPhase
-                    ? 'bg-primary animate-pulse scale-125'
-                    : 'bg-muted'
-                  }`}
+                className={`w-1.5 h-1.5 rounded-full transition-all duration-500 ${
+                  phase < sessionMode.currentPhase
+                    ? 'bg-amber-400'
+                    : phase === sessionMode.currentPhase
+                    ? 'bg-amber-400 animate-pulse scale-150'
+                    : 'bg-white/15'
+                }`}
               />
             ))}
           </div>
           {totalProgress !== null && (
-            <div className="w-24 xs:w-40 sm:w-48 mx-auto h-1 bg-muted rounded-full overflow-hidden mb-2">
+            <div className="w-36 h-1 bg-amber-950/40 border border-amber-500/10 backdrop-blur-sm rounded-full overflow-hidden">
               <motion.div
-                className="h-full bg-primary rounded-full"
+                className="h-full rounded-full"
+                style={{
+                  background: 'linear-gradient(90deg, #d97706, #fbbf24)',
+                  boxShadow: '0 0 4px rgba(251,191,36,0.4)',
+                }}
                 initial={{ width: 0 }}
                 animate={{ width: `${totalProgress}%` }}
-                transition={{ duration: 0.3 }}
+                transition={{ duration: 0.4 }}
               />
             </div>
           )}
-          <motion.p
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            className="text-[9px] xs:text-xs text-muted-foreground"
-          >
-            Phase {sessionMode.currentPhase + 1}/4 • {sessionMode.currentPhase === 3 ? '1' : '33'} Dhikr
-          </motion.p>
+          <p className="text-amber-400/50 text-[10px] tracking-wide">
+            Phase {sessionMode.currentPhase + 1} / 4 • {sessionMode.currentPhase === 3 ? '١' : '٣٣'} dhikr
+          </p>
         </div>
       )}
 
-      {/* Phase indicator & Progress for 1000 session */}
+      {/* Phase indicator for tasbih1000 */}
       {sessionMode.type === 'tasbih1000' && (
-        <div className="flex flex-col items-center mt-1.5 sm:mt-4 mb-0.5">
+        <div className="flex flex-col items-center mt-2 gap-1.5">
           {totalProgress !== null && (
-            <div className="w-32 xs:w-40 sm:w-48 mx-auto h-1 bg-muted rounded-full overflow-hidden mb-2">
+            <div className="w-44 h-1 bg-amber-950/40 border border-amber-500/10 backdrop-blur-sm rounded-full overflow-hidden">
               <motion.div
-                className="h-full bg-primary rounded-full"
+                className="h-full rounded-full"
+                style={{
+                  background: 'linear-gradient(90deg, #d97706, #fbbf24)',
+                  boxShadow: '0 0 4px rgba(251,191,36,0.4)',
+                }}
                 initial={{ width: 0 }}
                 animate={{ width: `${totalProgress}%` }}
-                transition={{ duration: 0.3 }}
+                transition={{ duration: 0.4 }}
               />
             </div>
           )}
-          <motion.p
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            className="text-[10px] xs:text-xs text-muted-foreground text-center"
-          >
-            Set {sessionMode.currentPhase + 1} of 8 • {Math.floor((sessionMode.currentPhase * 125) + currentCount)}/1000
-          </motion.p>
+          <p className="text-amber-400/50 text-[10px] tracking-wide">
+            Set {sessionMode.currentPhase + 1} / 8 • {toArabicNumerals(Math.floor(sessionMode.currentPhase * 125 + currentCount))}/١٠٠٠
+          </p>
         </div>
       )}
 
-      {/* Routine Progress */}
+      {/* Routine indicator */}
       {sessionMode.type === 'routine' && (
-        <div className="flex flex-col items-center mt-1.5 sm:mt-4 mb-0.5">
-          <motion.div
-            initial={{ opacity: 0, y: 5 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="flex flex-col items-center gap-1"
-          >
-            <div className="flex items-center gap-2 text-xs font-medium text-primary">
-              <span>Step {sessionMode.currentStepIndex + 1} of {sessionMode.steps.length}</span>
-              {sessionMode.steps[sessionMode.currentStepIndex].description && (
-                <>
-                  <span className="opacity-50">•</span>
-                  <span className="text-muted-foreground">{sessionMode.steps[sessionMode.currentStepIndex].description}</span>
-                </>
-              )}
-            </div>
-
-            {/* Step Progress Bar - Logic for targetCount needed or passed as prop */}
-            {/* For optimization, better to move targetCount into store selector inside this component or pass it */}
-          </motion.div>
-        </div>
+        <motion.div
+          initial={{ opacity: 0, y: 4 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="mt-2 flex items-center gap-2 text-xs text-amber-400/60"
+        >
+          <span>Step {toArabicNumerals(sessionMode.currentStepIndex + 1)} of {toArabicNumerals(sessionMode.steps.length)}</span>
+          {sessionMode.steps[sessionMode.currentStepIndex].description && (
+            <>
+              <span className="opacity-40">•</span>
+              <span className="text-amber-300/40">{sessionMode.steps[sessionMode.currentStepIndex].description}</span>
+            </>
+          )}
+        </motion.div>
       )}
     </div>
   );
