@@ -18,6 +18,26 @@ const createDebouncedLocalStorage = (delayMs = 1000) => {
       const val = pendingWrites.get(name)!;
       localStorage.setItem(name, val);
       pendingWrites.delete(name);
+
+      // Trigger cloud sync asynchronously for the main state store
+      if (name === 'tasbeeh-storage') {
+        try {
+          const parsed = JSON.parse(val);
+          if (parsed && parsed.state) {
+            let deviceUuid = parsed.state.deviceUuid;
+            if (!deviceUuid) {
+              deviceUuid = 'device_' + Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+              parsed.state.deviceUuid = deviceUuid;
+              localStorage.setItem(name, JSON.stringify(parsed));
+            }
+            import('./supabaseSync').then(({ syncStateToCloud }) => {
+              syncStateToCloud(deviceUuid, parsed.state);
+            });
+          }
+        } catch (e) {
+          // Fail silently in background
+        }
+      }
     }
     if (timeouts.has(name)) {
       clearTimeout(timeouts.get(name));

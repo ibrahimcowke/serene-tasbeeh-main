@@ -5,6 +5,7 @@ import { useTasbeehStore, Dhikr } from '@/store/tasbeehStore';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger, SheetDescription } from '@/components/ui/sheet';
 import { Input } from '@/components/ui/input';
 import { z } from 'zod';
+import { speakArabic } from '@/lib/audioRecitations';
 
 interface DhikrSelectorProps {
   children: React.ReactNode;
@@ -36,6 +37,9 @@ export function DhikrSelector({ children }: DhikrSelectorProps) {
   const handleSelect = (dhikr: Dhikr) => {
     if (sessionMode.type === 'tasbih100') return; // Can't change dhikr during 100 session
     setDhikr(dhikr);
+    if (dhikr.arabic) {
+      speakArabic(dhikr.arabic);
+    }
   };
 
   const handleAddCustom = () => {

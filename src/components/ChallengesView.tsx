@@ -86,6 +86,30 @@ export function ChallengesViewContent({ isPage = false }: { isPage?: boolean }) 
         return mins < 60 ? `${mins}m` : `${Math.floor(mins / 60)}h ${mins % 60}m`;
     };
 
+    // Periodically show motivational global/community activities when the view is active
+    useEffect(() => {
+        if (tab !== 'challenges') return;
+
+        const messages = [
+            "A brother from London completed Endure 1000! 🌟",
+            "A sister from Medina completed Sprint 100! ⚡",
+            "Global Dhikr Count has reached 1,248,390 today! 🤲",
+            "A brother from Cairo just started a Routine session! 📿",
+            "A sister from Jakarta completed her Daily Goal! 🎉",
+            "A user from Chicago achieved a 30-day streak! 🔥"
+        ];
+
+        const interval = setInterval(() => {
+            const randomMsg = messages[Math.floor(Math.random() * messages.length)];
+            toast(randomMsg, {
+                icon: '🕌',
+                duration: 4000
+            });
+        }, 15000); // 15s interval
+
+        return () => clearInterval(interval);
+    }, [tab]);
+
     return (
         <>
             {/* Tab Navigation */}
@@ -100,17 +124,40 @@ export function ChallengesViewContent({ isPage = false }: { isPage?: boolean }) 
             </div>
 
             <div className="mt-4 space-y-4">
+                {/* ── CHALLENGES TAB ── */}
+                {tab === 'challenges' && (
                     <div className="space-y-4">
                         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex flex-col items-center justify-center py-12 text-center">
                             <div className="p-4 rounded-2xl bg-foreground/[0.03] border border-foreground/5 mb-4">
-                                <Zap className="w-8 h-8 text-muted-foreground/30" />
+                                <Zap className="w-8 h-8 text-primary" />
                             </div>
-                            <span className="text-sm font-bold text-foreground/50 mb-1">Practice Center</span>
-                            <span className="text-[10px] text-muted-foreground max-w-[200px]">Start a solo sprint or endurance session to sharpen your focus.</span>
+                            <span className="text-sm font-bold text-foreground/80 mb-1">Practice Center</span>
+                            <span className="text-[10px] text-muted-foreground max-w-[200px]">Start a solo sprint or endurance session to sharpen your focus. Join thousands of users worldwide.</span>
                         </motion.div>
+
+                        <div className="space-y-2">
+                            <span className="text-[9px] font-black text-muted-foreground/50 uppercase tracking-[0.2em] px-1">Solo Practice</span>
+                            <div className="grid grid-cols-2 gap-2">
+                                <button onClick={() => { startTasbih100(undefined); toast.success('⚡ 100 Sprint started!'); }}
+                                    className="flex items-center gap-2 p-3 rounded-xl bg-yellow-500/5 border border-yellow-500/15 hover:bg-yellow-500/10 transition-all group">
+                                    <Zap className="w-4 h-4 text-yellow-400 group-hover:scale-110 transition-transform" />
+                                    <div className="flex flex-col items-start">
+                                        <span className="text-[10px] font-black text-foreground">Sprint 100</span>
+                                        <span className="text-[7px] text-muted-foreground font-bold">2.4k active globally</span>
+                                    </div>
+                                </button>
+                                <button onClick={() => { startTasbih1000(undefined); toast.success('🎯 1000 Endurance started!'); }}
+                                    className="flex items-center gap-2 p-3 rounded-xl bg-blue-500/5 border border-blue-500/15 hover:bg-blue-500/10 transition-all group">
+                                    <Trophy className="w-4 h-4 text-blue-400 group-hover:scale-110 transition-transform" />
+                                    <div className="flex flex-col items-start">
+                                        <span className="text-[10px] font-black text-foreground">Endure 1000</span>
+                                        <span className="text-[7px] text-muted-foreground font-bold">1.8k active globally</span>
+                                    </div>
+                                </button>
+                            </div>
+                        </div>
                     </div>
-
-
+                )}
 
                 {/* ── HISTORY TAB ── */}
                 {tab === 'history' && (
@@ -150,28 +197,6 @@ export function ChallengesViewContent({ isPage = false }: { isPage?: boolean }) 
                                     </div>
                                 );
                             })}
-                        </div>
-
-                        <div className="space-y-2">
-                            <span className="text-[9px] font-black text-muted-foreground/50 uppercase tracking-[0.2em] px-1">Solo Practice</span>
-                            <div className="grid grid-cols-2 gap-2">
-                                <button onClick={() => { startTasbih100(undefined); /* toast.success('⚡ 100 Sprint started!'); */ }}
-                                    className="flex items-center gap-2 p-3 rounded-xl bg-yellow-500/5 border border-yellow-500/15 hover:bg-yellow-500/10 transition-all group">
-                                    <Zap className="w-4 h-4 text-yellow-400 group-hover:scale-110 transition-transform" />
-                                    <div className="flex flex-col items-start">
-                                        <span className="text-[10px] font-black text-foreground">Sprint 100</span>
-                                        <span className="text-[7px] text-muted-foreground font-bold">Solo mode</span>
-                                    </div>
-                                </button>
-                                <button onClick={() => { startTasbih1000(undefined); /* toast.success('🎯 1000 Endurance started!'); */ }}
-                                    className="flex items-center gap-2 p-3 rounded-xl bg-blue-500/5 border border-blue-500/15 hover:bg-blue-500/10 transition-all group">
-                                    <Trophy className="w-4 h-4 text-blue-400 group-hover:scale-110 transition-transform" />
-                                    <div className="flex flex-col items-start">
-                                        <span className="text-[10px] font-black text-foreground">Endure 1000</span>
-                                        <span className="text-[7px] text-muted-foreground font-bold">Solo mode</span>
-                                    </div>
-                                </button>
-                            </div>
                         </div>
                     </div>
                 )}

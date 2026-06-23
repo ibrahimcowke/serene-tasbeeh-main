@@ -25,6 +25,11 @@ const App = () => {
   useEffect(() => {
     registerPeriodicSync();
     
+    // Background Geolocation & Prayer Times Sync
+    import("./lib/prayerTimes").then(({ initPrayerTimeReminders }) => {
+      initPrayerTimeReminders().catch(() => {});
+    });
+
     // Resume AudioContext on first user interaction
     const handleGesture = () => {
       import("./lib/sound").then(({ SoundManager }) => {

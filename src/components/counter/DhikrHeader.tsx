@@ -1,6 +1,7 @@
 import { memo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTasbeehStore, defaultDhikrs } from '@/store/tasbeehStore';
+import { speakArabic } from '@/lib/audioRecitations';
 
 const toArabicNumerals = (n: number): string => {
   const d = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'];
@@ -32,6 +33,12 @@ export const DhikrHeader = memo(function DhikrHeader() {
     return null;
   })();
 
+  const handleRecite = () => {
+    if (currentDhikr.arabic) {
+      speakArabic(currentDhikr.arabic);
+    }
+  };
+
   return (
     <div className="text-center px-4 relative z-20 flex flex-col items-center gap-1">
       {/* Decorative top line */}
@@ -49,7 +56,8 @@ export const DhikrHeader = memo(function DhikrHeader() {
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 1.05, y: 6 }}
           transition={{ duration: 0.35, ease: 'easeOut' }}
-          className="font-arabic text-xl xs:text-2xl sm:text-3xl md:text-4xl leading-relaxed select-none"
+          onClick={handleRecite}
+          className="font-arabic text-xl xs:text-2xl sm:text-3xl md:text-4xl leading-relaxed cursor-pointer hover:opacity-85 select-none active:scale-95 transition-transform"
           style={{
             color: 'hsl(var(--counter-text))',
             textShadow: '0 0 30px hsl(var(--counter-glow) / 0.3), 0 2px 8px rgba(0,0,0,0.4)',
@@ -69,7 +77,8 @@ export const DhikrHeader = memo(function DhikrHeader() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.2 }}
-            className="text-primary/50 text-xs sm:text-sm tracking-wide italic font-light"
+            onClick={handleRecite}
+            className="text-primary/50 text-xs sm:text-sm tracking-wide italic font-light cursor-pointer hover:text-primary transition-colors"
           >
             {currentDhikr.transliteration}
           </motion.p>

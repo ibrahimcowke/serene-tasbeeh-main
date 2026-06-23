@@ -33,7 +33,7 @@ export function StatsView({ children }: StatsViewProps) {
 }
 
 export function StatsViewContent() {
-    const { dailyRecords: history, dailyGoal = 100, streakDays } = useTasbeehStore();
+    const { dailyRecords: history, dailyGoal = 100, streakDays, sessions = [] } = useTasbeehStore();
 
     // Calculate statistics
     const today = new Date().toISOString().split('T')[0];
@@ -72,6 +72,21 @@ export function StatsViewContent() {
     const averageDaily = history.length > 0 ? Math.round(totalAllTime / history.length) : 0;
     const maxInDay = Math.max(...history.map(h => h.totalCount), 0);
     const weekTotal = last7Days.reduce((sum, day) => sum + day.count, 0);
+
+    // Advanced analytics calculations
+    const averageSpeed = sessions.length > 0
+        ? Math.round(sessions.reduce((sum, s) => sum + s.avgSpeed, 0) / sessions.length)
+        : 0;
+
+    const totalDurationSeconds = sessions.reduce((sum, s) => sum + s.duration, 0);
+    const formatDuration = (totalSecs: number) => {
+        if (totalSecs < 60) return `${totalSecs}s`;
+        const mins = Math.floor(totalSecs / 60);
+        if (mins < 60) return `${mins}m`;
+        const hours = Math.floor(mins / 60);
+        return `${hours}h ${mins % 60}m`;
+    };
+    const totalDurationFormatted = formatDuration(totalDurationSeconds);
 
     const currentStreakDays = streakDays;
 
@@ -130,7 +145,9 @@ export function StatsViewContent() {
                         </CardHeader>
                         <CardContent>
                             <p className="text-3xl font-bold text-blue-500">{averageDaily}</p>
-                            <p className="text-xs text-muted-foreground mt-1">dhikr/day</p>
+                            <p className="text-xs text-muted-foreground mt-1">
+                                dhikr/day {averageSpeed > 0 ? `• ${averageSpeed} tpm` : ''}
+                            </p>
                         </CardContent>
                     </Card>
 
@@ -156,7 +173,9 @@ export function StatsViewContent() {
                         </CardHeader>
                         <CardContent>
                             <p className="text-3xl font-bold text-green-500">{totalAllTime.toLocaleString()}</p>
-                            <p className="text-xs text-muted-foreground mt-1">all time</p>
+                            <p className="text-xs text-muted-foreground mt-1">
+                                all time {totalDurationSeconds > 0 ? `• ${totalDurationFormatted}` : ''}
+                            </p>
                         </CardContent>
                     </Card>
                 </div>

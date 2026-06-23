@@ -5,8 +5,21 @@ import { Haptics, ImpactStyle } from '@capacitor/haptics';
 import { defaultRoutines } from '@/data/routines';
 import { debouncedStorage } from '@/lib/debouncedStorage';
 import { NotificationManager } from '@/lib/notifications';
+import { registerPlugin } from '@capacitor/core';
 
 const getTodayDate = () => new Date().toISOString().split('T')[0];
+
+const WidgetBridge = typeof window !== 'undefined' && (window as any).Capacitor?.isPluginAvailable('WidgetBridge')
+  ? registerPlugin<any>('WidgetBridge')
+  : null;
+
+const syncWidget = (count: number, dhikrName: string) => {
+  if (WidgetBridge) {
+    WidgetBridge.updateWidgetCount({ count, dhikr: dhikrName }).catch((err: any) => {
+      console.warn('Failed to update Android widget:', err);
+    });
+  }
+};
 
 export interface Dhikr {
   id: string;
@@ -43,6 +56,16 @@ export interface DayRecord {
   date: string;
   totalCount: number;
   counts: Record<string, number>;
+}
+
+export interface SessionRecord {
+  id: string;
+  date: string;
+  dhikrId: string;
+  count: number;
+  duration: number; // in seconds
+  avgSpeed: number; // taps per minute
+  timestamp: number;
 }
 
 export type CounterShape =
@@ -132,6 +155,10 @@ interface TasbeehState {
   startAutoCount: () => void;
   stopAutoCount: () => void;
   setAutoCountInterval: (ms: number) => void;
+
+  sessions: SessionRecord[];
+  deviceUuid: string;
+  saveActiveSession: () => void;
 
   increment: () => void;
   decrement: () => void;
@@ -258,22 +285,70 @@ export const useTasbeehStore = create<TasbeehState>()(
       ], lastCount: 0, lastDhikrId: '', canUndo: false,
       showCongrats: false, congratsData: null, totalHasanat: 0,
       autoCountActive: false, autoCountInterval: 1000,
+      sessions: [],
+      deviceUuid: '',
+
+      saveActiveSession: () => {
+        const state = get();
+        if (state.currentCount > 0 && state.sessionStartTime) {
+          const duration = Math.max(1, Math.round((Date.now() - state.sessionStartTime) / 1000));
+          const avgSpeed = Math.round((state.currentCount / duration) * 60);
+          const newSession: SessionRecord = {
+            id: `session_${Date.now()}`,
+            date: getTodayDate(),
+            dhikrId: state.currentDhikr.id,
+            count: state.currentCount,
+            duration,
+            avgSpeed,
+            timestamp: Date.now()
+          };
+          const updatedSessions = [newSession, ...state.sessions].slice(0, 50);
+          set({ sessions: updatedSessions, sessionStartTime: null });
+        } else {
+          set({ sessionStartTime: null });
+        }
+      },
 
       increment: () => {
         const state = get();
         const now = Date.now();
         const today = getTodayDate();
         const currentSettings = state.themeSettings[state.theme] || defaultThemeSettings;
-        if (currentSettings.hapticEnabled) {
-          try { Haptics.impact({ style: ImpactStyle.Light }); } catch { /* ignore on web */ }
-          if (navigator.vibrate) navigator.vibrate(currentSettings.vibrationIntensity || 50);
-        }
 
         const newCount = state.currentCount + 1;
         const newTotal = state.totalAllTime + 1;
         const newHasanat = state.totalHasanat + 10;
         const records = [...state.dailyRecords];
         const todayIdx = records.findIndex(r => r.date === today);
+
+        // Extended haptic vibration patterns at completion milestones
+        if (currentSettings.hapticEnabled) {
+          try {
+            if (newCount === 33) {
+              Haptics.vibrate({ duration: 120 });
+              setTimeout(() => { try { Haptics.vibrate({ duration: 120 }); } catch {} }, 250);
+            } else if (newCount === 99) {
+              Haptics.vibrate({ duration: 200 });
+              setTimeout(() => { try { Haptics.vibrate({ duration: 200 }); } catch {} }, 350);
+            } else if (newCount === 100) {
+              Haptics.vibrate({ duration: 400 });
+            } else {
+              Haptics.impact({ style: ImpactStyle.Light });
+            }
+          } catch { /* ignore on web */ }
+
+          if (navigator.vibrate) {
+            if (newCount === 33) {
+              navigator.vibrate([120, 100, 120]);
+            } else if (newCount === 99) {
+              navigator.vibrate([200, 100, 200]);
+            } else if (newCount === 100) {
+              navigator.vibrate(400);
+            } else {
+              navigator.vibrate(currentSettings.vibrationIntensity || 50);
+            }
+          }
+        }
 
         if (todayIdx > -1) {
           records[todayIdx] = { ...records[todayIdx], totalCount: records[todayIdx].totalCount + 1, counts: { ...records[todayIdx].counts, [state.currentDhikr.id]: (records[todayIdx].counts[state.currentDhikr.id] || 0) + 1 } };
@@ -298,14 +373,17 @@ export const useTasbeehStore = create<TasbeehState>()(
               phaseCounts: mode.phaseCounts.map((c, i) => i === mode.currentPhase ? newCount : c)
             };
             set({ currentCount: 0, currentDhikr: nextDhikr, targetCount: [33, 33, 33, 1][nextPhase], sessionMode: newSessionMode });
+            syncWidget(0, nextDhikr.transliteration);
             return;
           } else if (mode.currentPhase === 3 && newCount >= 1 && !mode.isComplete) {
              set({ currentCount: newCount, totalAllTime: newTotal, totalHasanat: newHasanat + 1000, dailyRecords: records, sessionStartTime: state.sessionStartTime || now, sessionMode: { ...mode, isComplete: true }, lastCount: state.currentCount, lastDhikrId: state.currentDhikr.id, canUndo: true });
+             get().saveActiveSession();
              get().triggerCongrats({
                title: "MashaAllah!",
                description: "You have completed the 100 Tasbeeh session. May Allah accept your dhikr.",
                hasanatEarned: 1000
              });
+             syncWidget(newCount, state.currentDhikr.transliteration);
              return;
           }
         } else if (sessionMode.type === 'tasbih1000') {
@@ -323,14 +401,17 @@ export const useTasbeehStore = create<TasbeehState>()(
               phaseCounts: mode.phaseCounts.map((c, i) => i === mode.currentPhase ? newCount : c)
             };
             set({ currentCount: 0, currentDhikr: nextDhikr, targetCount: [333, 333, 333, 1][nextPhase], sessionMode: newSessionMode });
+            syncWidget(0, nextDhikr.transliteration);
             return;
           } else if (mode.currentPhase === 3 && newCount >= 1 && !mode.isComplete) {
             set({ currentCount: newCount, totalAllTime: newTotal, totalHasanat: newHasanat + 10000, dailyRecords: records, sessionStartTime: state.sessionStartTime || now, sessionMode: { ...mode, isComplete: true }, lastCount: state.currentCount, lastDhikrId: state.currentDhikr.id, canUndo: true });
+            get().saveActiveSession();
             get().triggerCongrats({
               title: "MashaAllah!",
               description: "You have completed the 1000 Tasbeeh session. May Allah reward you immensely.",
               hasanatEarned: 10000
             });
+            syncWidget(newCount, state.currentDhikr.transliteration);
             return;
           }
         } else if (sessionMode.type === 'routine') {
@@ -347,9 +428,12 @@ export const useTasbeehStore = create<TasbeehState>()(
                 targetCount: nextStep.target,
                 sessionMode: { ...mode, currentStepIndex: nextIndex }
               });
+              syncWidget(0, nextDhikr.transliteration);
               return;
             } else if (!mode.isComplete) {
               set({ currentCount: newCount, totalAllTime: newTotal, totalHasanat: newHasanat + 1000, dailyRecords: records, sessionMode: { ...mode, isComplete: true } });
+              get().saveActiveSession();
+              syncWidget(newCount, state.currentDhikr.transliteration);
               return;
             }
           }
@@ -358,15 +442,23 @@ export const useTasbeehStore = create<TasbeehState>()(
         // Handle general completion if targetCount resides in any other session mode
         if (state.targetCount > 0 && newCount >= state.targetCount && sessionMode.type === 'free') {
           set({ currentCount: newCount, totalAllTime: newTotal, totalHasanat: newHasanat + (state.targetCount * 10), dailyRecords: records, sessionStartTime: state.sessionStartTime || now, sessionMode, lastCount: state.currentCount, lastDhikrId: state.currentDhikr.id, canUndo: true });
+          get().saveActiveSession();
+          syncWidget(newCount, state.currentDhikr.transliteration);
           return;
         }
 
         set({ currentCount: newCount, totalAllTime: newTotal, totalHasanat: newHasanat, dailyRecords: records, sessionStartTime: state.sessionStartTime || now, sessionMode, lastCount: state.currentCount, lastDhikrId: state.currentDhikr.id, canUndo: true });
+        syncWidget(newCount, state.currentDhikr.transliteration);
       },
 
-      decrement: () => set((state) => ({ currentCount: Math.max(0, state.currentCount - 1) })),
+      decrement: () => set((state) => {
+        const decCount = Math.max(0, state.currentCount - 1);
+        syncWidget(decCount, state.currentDhikr.transliteration);
+        return { currentCount: decCount };
+      }),
       reset: () => {
         const state = get();
+        state.saveActiveSession();
         const currentSettings = state.themeSettings[state.theme] || defaultThemeSettings;
         if (currentSettings.hapticEnabled) {
           try { Haptics.impact({ style: ImpactStyle.Heavy }); } catch { /* ignore */ }
@@ -374,11 +466,20 @@ export const useTasbeehStore = create<TasbeehState>()(
         }
         if (state.sessionMode.type === 'tasbih100') {
           set({ currentCount: 0, sessionStartTime: null, sessionMode: { type: 'tasbih100', currentPhase: 0, phaseCounts: [0, 0, 0, 0], isComplete: false, challengeId: state.sessionMode.challengeId }, currentDhikr: defaultDhikrs[0] });
+          syncWidget(0, defaultDhikrs[0].transliteration);
         } else if (state.sessionMode.type === 'tasbih1000') {
           set({ currentCount: 0, sessionStartTime: null, sessionMode: { type: 'tasbih1000', currentPhase: 0, phaseCounts: [0, 0, 0, 0], isComplete: false, challengeId: state.sessionMode.challengeId }, currentDhikr: defaultDhikrs[0], targetCount: 333 });
-        } else { set({ currentCount: 0, sessionStartTime: null }); }
+          syncWidget(0, defaultDhikrs[0].transliteration);
+        } else { 
+          set({ currentCount: 0, sessionStartTime: null }); 
+          syncWidget(0, state.currentDhikr.transliteration);
+        }
       },
-      setDhikr: (dhikr) => set({ currentDhikr: dhikr, currentCount: 0, sessionStartTime: null }),
+      setDhikr: (dhikr) => {
+        get().saveActiveSession();
+        set({ currentDhikr: dhikr, currentCount: 0, sessionStartTime: null });
+        syncWidget(0, dhikr.transliteration);
+      },
       setTarget: (target) => set((state) => ({ targetCount: target, sessionMode: { type: 'free' }, currentCount: state.sessionMode.type === 'free' ? state.currentCount : 0, sessionStartTime: state.sessionMode.type === 'free' ? state.sessionStartTime : null })),
       toggleTransliteration: () => set((state) => ({ showTransliteration: !state.showTransliteration })),
       setTheme: (theme) => set({ theme }),
@@ -387,7 +488,7 @@ export const useTasbeehStore = create<TasbeehState>()(
       addCustomDhikr: (dhikr) => set((state) => ({ customDhikrs: [...state.customDhikrs, { ...dhikr, id: `custom_${Date.now()}` }] })),
       removeCustomDhikr: (id) => set((state) => ({ customDhikrs: state.customDhikrs.filter(d => d.id !== id), currentDhikr: state.currentDhikr.id === id ? state.dhikrs[0] : state.currentDhikr })),
       toggleFavorite: (id) => set((state) => ({ favoriteDhikrIds: state.favoriteDhikrIds.includes(id) ? state.favoriteDhikrIds.filter(fid => fid !== id) : [...state.favoriteDhikrIds, id] })),
-      clearAllData: () => set({ currentCount: 0, dailyRecords: [], totalAllTime: 0, customDhikrs: [], sessionStartTime: null, streakDays: 0, lastActiveDate: null, longestStreak: 0, sessionMode: getDefaultSessionMode() }),
+      clearAllData: () => set({ currentCount: 0, dailyRecords: [], totalAllTime: 0, customDhikrs: [], sessions: [], sessionStartTime: null, streakDays: 0, lastActiveDate: null, longestStreak: 0, sessionMode: getDefaultSessionMode() }),
       resetSettings: () => set({ themeSettings: initialThemeSettings, theme: 'light', counterShape: 'minimal', showTransliteration: true }),
       setCounterShape: (shape) => set({ counterShape: shape }),
       setHadithSlideDuration: (duration) => set({ hadithSlideDuration: duration }),
@@ -409,12 +510,22 @@ export const useTasbeehStore = create<TasbeehState>()(
       setSoundType: (type) => set((state) => ({ themeSettings: { ...state.themeSettings, [state.theme]: { ...state.themeSettings[state.theme], soundType: type } } })),
       exportData: () => JSON.stringify({ dailyRecords: get().dailyRecords, totalAllTime: get().totalAllTime, customDhikrs: get().customDhikrs, streakDays: get().streakDays, settings: { counterShape: get().counterShape, target: get().targetCount, themeSettings: get().themeSettings } }),
       importData: (data) => { try { const p = JSON.parse(data); set(s => ({ ...s, ...p, theme: p.settings?.theme || s.theme, counterShape: p.settings?.counterShape || s.counterShape, themeSettings: p.settings?.themeSettings || s.themeSettings })); return true; } catch { return false; } },
-      startTasbih100: (challengeId) => set({ sessionMode: { type: 'tasbih100', currentPhase: 0, phaseCounts: [0, 0, 0, 0], isComplete: false, challengeId }, currentDhikr: defaultDhikrs[0], currentCount: 0, targetCount: 33, sessionStartTime: null }),
-      startTasbih1000: (challengeId) => set({ sessionMode: { type: 'tasbih1000', currentPhase: 0, phaseCounts: [0, 0, 0, 0], isComplete: false, challengeId }, currentDhikr: defaultDhikrs[0], currentCount: 0, targetCount: 333, sessionStartTime: null }),
+      startTasbih100: (challengeId) => {
+        get().saveActiveSession();
+        set({ sessionMode: { type: 'tasbih100', currentPhase: 0, phaseCounts: [0, 0, 0, 0], isComplete: false, challengeId }, currentDhikr: defaultDhikrs[0], currentCount: 0, targetCount: 33, sessionStartTime: Date.now() });
+        syncWidget(0, defaultDhikrs[0].transliteration);
+      },
+      startTasbih1000: (challengeId) => {
+        get().saveActiveSession();
+        set({ sessionMode: { type: 'tasbih1000', currentPhase: 0, phaseCounts: [0, 0, 0, 0], isComplete: false, challengeId }, currentDhikr: defaultDhikrs[0], currentCount: 0, targetCount: 333, sessionStartTime: Date.now() });
+        syncWidget(0, defaultDhikrs[0].transliteration);
+      },
       startRoutine: (routineId) => {
+        get().saveActiveSession();
         const r = defaultRoutines.find(rou => rou.id === routineId); if (!r) return;
         const step = r.steps[0]; const d = get().dhikrs.find(dh => dh.id === step.dhikrId) || defaultDhikrs[0];
-        set({ sessionMode: { type: 'routine', routineId, currentStepIndex: 0, steps: r.steps, isComplete: false }, currentDhikr: d, currentCount: 0, targetCount: step.target, sessionStartTime: null });
+        set({ sessionMode: { type: 'routine', routineId, currentStepIndex: 0, steps: r.steps, isComplete: false }, currentDhikr: d, currentCount: 0, targetCount: step.target, sessionStartTime: Date.now() });
+        syncWidget(0, d.transliteration);
       },
       nextRoutineStep: () => {
         const s = get(); if (s.sessionMode.type !== 'routine') return;
@@ -422,14 +533,22 @@ export const useTasbeehStore = create<TasbeehState>()(
         if (nIndex < s.sessionMode.steps.length) {
           const nStep = s.sessionMode.steps[nIndex]; const d = s.dhikrs.find(dh => dh.id === nStep.dhikrId) || defaultDhikrs[0];
           set({ sessionMode: { ...s.sessionMode, currentStepIndex: nIndex }, currentDhikr: d, currentCount: 0, targetCount: nStep.target });
-        } else { set({ sessionMode: { ...s.sessionMode, isComplete: true } }); }
+          syncWidget(0, d.transliteration);
+        } else { 
+          set({ sessionMode: { ...s.sessionMode, isComplete: true } }); 
+        }
       },
-      exitSessionMode: () => set({ sessionMode: getDefaultSessionMode(), currentCount: 0, sessionStartTime: null }),
+      exitSessionMode: () => {
+        get().saveActiveSession();
+        set({ sessionMode: getDefaultSessionMode(), currentCount: 0, sessionStartTime: null });
+        syncWidget(0, get().currentDhikr.transliteration);
+      },
       undo: () => {
         const s = get(); if (!s.canUndo) return;
         const d = s.dhikrs.find(dh => dh.id === s.lastDhikrId) || s.customDhikrs.find(dh => dh.id === s.lastDhikrId) || s.currentDhikr;
         set({ currentCount: s.lastCount, currentDhikr: d, canUndo: false });
         const settings = s.themeSettings[s.theme] || defaultThemeSettings; if (settings.hapticEnabled && navigator.vibrate) navigator.vibrate([20, 50, 20]);
+        syncWidget(s.lastCount, d.transliteration);
       },
       setAutoThemeSwitch: (e) => set({ autoThemeSwitch: e }),
       setShakeToReset: (e) => set({ shakeToReset: e }),
@@ -496,8 +615,10 @@ export const useTasbeehStore = create<TasbeehState>()(
         if (pool.length > 0) {
           const next = pool[Math.floor(Math.random() * pool.length)];
           set({ currentDhikr: next, currentCount: 0, sessionStartTime: null, sessionMode: getDefaultSessionMode() });
+          syncWidget(0, next.transliteration);
         } else {
           set({ currentCount: 0, sessionStartTime: null, sessionMode: getDefaultSessionMode() });
+          syncWidget(0, s.currentDhikr.transliteration);
         }
       },
       triggerCongrats: (data) => set((s) => ({ showCongrats: true, congratsData: data, totalHasanat: s.totalHasanat + data.hasanatEarned })),
@@ -534,6 +655,7 @@ export const useTasbeehStore = create<TasbeehState>()(
       },
       partialize: (state) => ({
         currentDhikr: state.currentDhikr, currentCount: state.currentCount, targetCount: state.targetCount, showTransliteration: state.showTransliteration, themeSettings: state.themeSettings, theme: state.theme, language: state.language, zenMode: state.zenMode, counterShape: state.counterShape, hadithSlideDuration: state.hadithSlideDuration, hadithSlidePosition: state.hadithSlidePosition, dhikrTextPosition: state.dhikrTextPosition, verticalOffset: state.verticalOffset, dhikrVerticalOffset: state.dhikrVerticalOffset, counterVerticalOffset: state.counterVerticalOffset, counterScale: state.counterScale, countFontSize: state.countFontSize, dailyRecords: state.dailyRecords, totalAllTime: state.totalAllTime, totalHasanat: state.totalHasanat, customDhikrs: state.customDhikrs, streakDays: state.streakDays, lastActiveDate: state.lastActiveDate, longestStreak: state.longestStreak, sessionMode: state.sessionMode, dailyGoal: state.dailyGoal, favoriteDhikrIds: state.favoriteDhikrIds, lastSeenVersion: state.lastSeenVersion, autoThemeSwitch: state.autoThemeSwitch, shakeToReset: state.shakeToReset, wakeLockEnabled: state.wakeLockEnabled, volumeButtonCounting: state.volumeButtonCounting, unlockedAchievements: state.unlockedAchievements, screenOffMode: state.screenOffMode, notificationPermission: state.notificationPermission, reminderEnabled: state.reminderEnabled, reminderTime: state.reminderTime, reminders: state.reminders, autoCountInterval: state.autoCountInterval,
+        sessions: state.sessions, deviceUuid: state.deviceUuid
       }),
     }
   )

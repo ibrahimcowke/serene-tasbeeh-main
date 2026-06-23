@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Sleek dark card color matching the app design system -->
+    <solid android:color="#E60A0F1C" />
+    
+    <!-- Subtle premium primary border glow -->
+    <stroke
+        android:width="1.5dp"
+        android:color="#3360A5FA" />
+        
+    <!-- Rounded corners -->
+    <corners android:radius="16dp" />
+</shape>
