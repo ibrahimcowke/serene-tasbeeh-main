@@ -1,5 +1,6 @@
 import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
+import { persist, createJSONStorage } from 'zustand/middleware';
+import { debouncedStorage } from '@/lib/debouncedStorage';
 
 export type NotificationType = 'join' | 'salam' | 'milestone' | 'challenge' | 'challenge_accepted';
 
@@ -71,6 +72,7 @@ export const useNotificationStore = create<NotificationState>()(
         }),
         {
             name: 'tasbeeh-notifications',
+            storage: createJSONStorage(() => debouncedStorage),
         }
     )
 );

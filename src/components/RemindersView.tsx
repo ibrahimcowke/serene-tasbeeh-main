@@ -42,6 +42,7 @@ export function RemindersView({ children }: RemindersViewProps) {
 }
 
 import { useTasbeehStore } from '@/store/tasbeehStore';
+import { NotificationManager } from '@/lib/notifications';
 
 export function RemindersContent() {
     const { 
@@ -62,6 +63,15 @@ export function RemindersContent() {
 
     // Request notification permission
     const requestNotificationPermission = async () => {
+        // Try native notification permission first
+        const nativeGranted = await NotificationManager.requestPermission();
+        if (nativeGranted) {
+            setNotificationsEnabled(true);
+            toast.success('Notifications enabled!');
+            return;
+        }
+
+        // Web fallback
         if ('Notification' in window) {
             const permission = await Notification.requestPermission();
             if (permission === 'granted') {
@@ -71,7 +81,7 @@ export function RemindersContent() {
                 toast.error('Notification permission denied');
             }
         } else {
-            toast.error('Notifications not supported in this browser');
+            toast.error('Notifications not supported on this device');
         }
     };
 

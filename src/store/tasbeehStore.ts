@@ -1,8 +1,10 @@
 import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
+import { persist, createJSONStorage } from 'zustand/middleware';
 import { counterShapes } from '@/lib/constants';
 import { Haptics, ImpactStyle } from '@capacitor/haptics';
 import { defaultRoutines } from '@/data/routines';
+import { debouncedStorage } from '@/lib/debouncedStorage';
+import { NotificationManager } from '@/lib/notifications';
 
 const getTodayDate = () => new Date().toISOString().split('T')[0];
 
@@ -125,6 +127,12 @@ interface TasbeehState {
   congratsData: { title: string; description: string; hasanatEarned: number } | null;
   totalHasanat: number;
 
+  autoCountActive: boolean;
+  autoCountInterval: number;
+  startAutoCount: () => void;
+  stopAutoCount: () => void;
+  setAutoCountInterval: (ms: number) => void;
+
   increment: () => void;
   decrement: () => void;
   reset: () => void;
@@ -237,6 +245,8 @@ const calculateStreakFromHistory = (records: DayRecord[]): number => {
   return streak;
 };
 
+let autoCountTimer: any = null;
+
 export const useTasbeehStore = create<TasbeehState>()(
   persist(
     (set, get) => ({
@@ -247,6 +257,7 @@ export const useTasbeehStore = create<TasbeehState>()(
         { id: '4', time: '21:00', label: 'Evening Dhikr', enabled: true, days: [0, 1, 2, 3, 4, 5, 6] },
       ], lastCount: 0, lastDhikrId: '', canUndo: false,
       showCongrats: false, congratsData: null, totalHasanat: 0,
+      autoCountActive: false, autoCountInterval: 1000,
 
       increment: () => {
         const state = get();
@@ -420,10 +431,65 @@ export const useTasbeehStore = create<TasbeehState>()(
         set({ currentCount: s.lastCount, currentDhikr: d, canUndo: false });
         const settings = s.themeSettings[s.theme] || defaultThemeSettings; if (settings.hapticEnabled && navigator.vibrate) navigator.vibrate([20, 50, 20]);
       },
-      setAutoThemeSwitch: (e) => set({ autoThemeSwitch: e }), setShakeToReset: (e) => set({ shakeToReset: e }), setWakeLockEnabled: (e) => set({ wakeLockEnabled: e }), setVolumeButtonCounting: (e) => set({ volumeButtonCounting: e }), setLastSeenVersion: (v) => set({ lastSeenVersion: v }), setNotificationPermission: (p) => set({ notificationPermission: p }), setReminderEnabled: (e) => set({ reminderEnabled: e }), setReminderTime: (t) => set({ reminderTime: t }),
-      addReminder: (r) => set((s) => ({ reminders: [...s.reminders, { ...r, id: Date.now().toString() }] })),
-      removeReminder: (id) => set((s) => ({ reminders: s.reminders.filter(r => r.id !== id) })),
-      toggleReminder: (id) => set((s) => ({ reminders: s.reminders.map(r => r.id === id ? { ...r, enabled: !r.enabled } : r) })),
+      setAutoThemeSwitch: (e) => set({ autoThemeSwitch: e }),
+      setShakeToReset: (e) => set({ shakeToReset: e }),
+      setWakeLockEnabled: (e) => set({ wakeLockEnabled: e }),
+      setVolumeButtonCounting: (e) => set({ volumeButtonCounting: e }),
+      setLastSeenVersion: (v) => set({ lastSeenVersion: v }),
+      setNotificationPermission: (p) => set({ notificationPermission: p }),
+      setReminderEnabled: (e) => {
+        set({ reminderEnabled: e });
+        NotificationManager.syncReminders(get().reminders, e);
+      },
+      setReminderTime: (t) => set({ reminderTime: t }),
+      addReminder: (r) => {
+        const id = Date.now().toString();
+        set((s) => {
+          const updated = [...s.reminders, { ...r, id }];
+          NotificationManager.syncReminders(updated, s.reminderEnabled);
+          return { reminders: updated };
+        });
+      },
+      removeReminder: (id) => {
+        set((s) => {
+          const updated = s.reminders.filter(rem => rem.id !== id);
+          NotificationManager.syncReminders(updated, s.reminderEnabled);
+          return { reminders: updated };
+        });
+      },
+      toggleReminder: (id) => {
+        set((s) => {
+          const updated = s.reminders.map(rem => rem.id === id ? { ...rem, enabled: !rem.enabled } : rem);
+          NotificationManager.syncReminders(updated, s.reminderEnabled);
+          return { reminders: updated };
+        });
+      },
+      startAutoCount: () => {
+        const state = get();
+        if (state.autoCountActive) return;
+        set({ autoCountActive: true });
+        const tick = () => {
+          if (get().autoCountActive) {
+            get().increment();
+            autoCountTimer = setTimeout(tick, get().autoCountInterval);
+          }
+        };
+        autoCountTimer = setTimeout(tick, state.autoCountInterval);
+      },
+      stopAutoCount: () => {
+        if (autoCountTimer) {
+          clearTimeout(autoCountTimer);
+          autoCountTimer = null;
+        }
+        set({ autoCountActive: false });
+      },
+      setAutoCountInterval: (ms: number) => {
+        set({ autoCountInterval: ms });
+        if (get().autoCountActive) {
+          get().stopAutoCount();
+          get().startAutoCount();
+        }
+      },
       switchDhikr: () => {
         const s = get();
         const pool = [...s.dhikrs, ...s.customDhikrs].filter(d => d.id !== s.currentDhikr.id);
@@ -445,6 +511,7 @@ export const useTasbeehStore = create<TasbeehState>()(
     }),
     {
       name: 'tasbeeh-storage',
+      storage: createJSONStorage(() => debouncedStorage),
       version: 2,
       migrate: (persistedState: any, version: number) => {
         let state = persistedState;
@@ -466,7 +533,7 @@ export const useTasbeehStore = create<TasbeehState>()(
         return state as TasbeehState;
       },
       partialize: (state) => ({
-        currentDhikr: state.currentDhikr, currentCount: state.currentCount, targetCount: state.targetCount, showTransliteration: state.showTransliteration, themeSettings: state.themeSettings, theme: state.theme, language: state.language, zenMode: state.zenMode, counterShape: state.counterShape, hadithSlideDuration: state.hadithSlideDuration, hadithSlidePosition: state.hadithSlidePosition, dhikrTextPosition: state.dhikrTextPosition, verticalOffset: state.verticalOffset, dhikrVerticalOffset: state.dhikrVerticalOffset, counterVerticalOffset: state.counterVerticalOffset, counterScale: state.counterScale, countFontSize: state.countFontSize, dailyRecords: state.dailyRecords, totalAllTime: state.totalAllTime, totalHasanat: state.totalHasanat, customDhikrs: state.customDhikrs, streakDays: state.streakDays, lastActiveDate: state.lastActiveDate, longestStreak: state.longestStreak, sessionMode: state.sessionMode, dailyGoal: state.dailyGoal, favoriteDhikrIds: state.favoriteDhikrIds, lastSeenVersion: state.lastSeenVersion, autoThemeSwitch: state.autoThemeSwitch, shakeToReset: state.shakeToReset, wakeLockEnabled: state.wakeLockEnabled, volumeButtonCounting: state.volumeButtonCounting, unlockedAchievements: state.unlockedAchievements, screenOffMode: state.screenOffMode, notificationPermission: state.notificationPermission, reminderEnabled: state.reminderEnabled, reminderTime: state.reminderTime, reminders: state.reminders,
+        currentDhikr: state.currentDhikr, currentCount: state.currentCount, targetCount: state.targetCount, showTransliteration: state.showTransliteration, themeSettings: state.themeSettings, theme: state.theme, language: state.language, zenMode: state.zenMode, counterShape: state.counterShape, hadithSlideDuration: state.hadithSlideDuration, hadithSlidePosition: state.hadithSlidePosition, dhikrTextPosition: state.dhikrTextPosition, verticalOffset: state.verticalOffset, dhikrVerticalOffset: state.dhikrVerticalOffset, counterVerticalOffset: state.counterVerticalOffset, counterScale: state.counterScale, countFontSize: state.countFontSize, dailyRecords: state.dailyRecords, totalAllTime: state.totalAllTime, totalHasanat: state.totalHasanat, customDhikrs: state.customDhikrs, streakDays: state.streakDays, lastActiveDate: state.lastActiveDate, longestStreak: state.longestStreak, sessionMode: state.sessionMode, dailyGoal: state.dailyGoal, favoriteDhikrIds: state.favoriteDhikrIds, lastSeenVersion: state.lastSeenVersion, autoThemeSwitch: state.autoThemeSwitch, shakeToReset: state.shakeToReset, wakeLockEnabled: state.wakeLockEnabled, volumeButtonCounting: state.volumeButtonCounting, unlockedAchievements: state.unlockedAchievements, screenOffMode: state.screenOffMode, notificationPermission: state.notificationPermission, reminderEnabled: state.reminderEnabled, reminderTime: state.reminderTime, reminders: state.reminders, autoCountInterval: state.autoCountInterval,
       }),
     }
   )

@@ -1,6 +1,6 @@
-import { memo, forwardRef } from 'react';
+import { memo, forwardRef, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { RotateCcw, Minus } from 'lucide-react';
+import { RotateCcw, Minus, Play, Pause } from 'lucide-react';
 import { useTasbeehStore } from '@/store/tasbeehStore';
 import { SettingsView } from '../SettingsView';
 import { UndoButton } from '../UndoButton';
@@ -10,8 +10,9 @@ const GlassButton = forwardRef<HTMLButtonElement, {
   onClick?: (e: React.MouseEvent) => void;
   disabled?: boolean;
   title?: string;
+  className?: string;
   children: React.ReactNode;
-}>(({ onClick, disabled, title, children }, ref) => (
+}>(({ onClick, disabled, title, className = "", children }, ref) => (
   <motion.button
     ref={ref}
     whileTap={{ scale: 0.92 }}
@@ -19,7 +20,7 @@ const GlassButton = forwardRef<HTMLButtonElement, {
     onClick={onClick}
     disabled={disabled}
     title={title}
-    className="w-11 h-11 sm:w-12 sm:h-12 rounded-full flex items-center justify-center disabled:opacity-30 transition-all"
+    className={`w-11 h-11 sm:w-12 sm:h-12 rounded-full flex items-center justify-center disabled:opacity-30 transition-all ${className}`}
     style={{
       background: 'rgba(255,255,255,0.05)',
       border: '1px solid hsl(var(--primary) / 0.25)',
@@ -38,11 +39,65 @@ export const CounterActions = memo(function CounterActions() {
   const decrement = useTasbeehStore(state => state.decrement);
   const reset = useTasbeehStore(state => state.reset);
 
+  const autoCountActive = useTasbeehStore(state => state.autoCountActive);
+  const autoCountInterval = useTasbeehStore(state => state.autoCountInterval);
+  const startAutoCount = useTasbeehStore(state => state.startAutoCount);
+  const stopAutoCount = useTasbeehStore(state => state.stopAutoCount);
+  const setAutoCountInterval = useTasbeehStore(state => state.setAutoCountInterval);
+
+  const speeds = [500, 1000, 1500, 2000, 3000];
+  const currentSpeedLabel = `${(autoCountInterval / 1000).toFixed(1)}s`;
+
+  const toggleAutoCount = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (autoCountActive) {
+      stopAutoCount();
+    } else {
+      startAutoCount();
+    }
+  };
+
+  const cycleSpeed = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    const idx = speeds.indexOf(autoCountInterval);
+    const nextIdx = idx === -1 ? 1 : (idx + 1) % speeds.length;
+    setAutoCountInterval(speeds[nextIdx]);
+  };
+
+  // Clean up auto-count on component unmount
+  useEffect(() => {
+    return () => {
+      stopAutoCount();
+    };
+  }, [stopAutoCount]);
 
   if (zenMode) return null;
 
   return (
     <div className="flex flex-row sm:flex-col items-center justify-center gap-3.5 sm:gap-3 shrink-0">
+      {/* Auto-Tapper Play/Pause */}
+      <GlassButton
+        onClick={toggleAutoCount}
+        title={autoCountActive ? "Pause Auto-Count" : "Start Auto-Count"}
+        className={autoCountActive ? "border-amber-500/50 shadow-[0_0_15px_rgba(245,158,11,0.25)]" : ""}
+      >
+        {autoCountActive ? (
+          <Pause className="w-4 h-4 text-amber-500 fill-current" />
+        ) : (
+          <Play className="w-4 h-4 text-primary/75 fill-current ml-0.5" />
+        )}
+      </GlassButton>
+
+      {/* Auto-Tapper Speed Selector */}
+      <GlassButton
+        onClick={cycleSpeed}
+        title={`Auto-Count Speed (Current: ${currentSpeedLabel})`}
+      >
+        <span className="text-[10px] font-bold tracking-tighter text-primary/75">
+          {currentSpeedLabel}
+        </span>
+      </GlassButton>
+
       <GlassButton
         onClick={(e) => { e.stopPropagation(); decrement(); }}
         disabled={currentCount === 0}
