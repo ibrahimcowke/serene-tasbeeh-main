@@ -119,7 +119,7 @@ export async function requestNotificationPermission() {
 }
 
 export async function sendLocalNotification(title: string, options?: NotificationOptions) {
-  if (Notification.permission !== 'granted') return;
+  if (typeof Notification === 'undefined' || Notification.permission !== 'granted') return;
 
   if ('serviceWorker' in navigator) {
     const registration = await navigator.serviceWorker.ready;

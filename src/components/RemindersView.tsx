@@ -212,7 +212,7 @@ export function RemindersContent() {
                                 Turn on notifications to receive dhikr reminders at scheduled times
                             </p>
                         )}
-                        {notificationsEnabled && Notification.permission !== 'granted' && (
+                        {notificationsEnabled && typeof Notification !== 'undefined' && Notification.permission !== 'granted' && (
                             <p className="text-sm text-amber-600">
                                 Please allow notifications in your browser settings
                             </p>
