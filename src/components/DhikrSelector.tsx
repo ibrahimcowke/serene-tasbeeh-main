@@ -77,7 +77,7 @@ export function DhikrSelector({ children }: DhikrSelectorProps) {
       <SheetTrigger asChild>
         {children}
       </SheetTrigger>
-      <SheetContent side="bottom" className="bg-sheet-bg rounded-t-3xl h-[80vh]">
+      <SheetContent side="bottom" className="bg-sheet-bg rounded-t-3xl h-[80vh] flex flex-col">
         <SheetDescription className="sr-only">
           Select or search for a specific dhikr to recite. You can also add your own custom dhikr.
         </SheetDescription>
