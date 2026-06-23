@@ -23,7 +23,7 @@ export function DhikrSelector({ children }: DhikrSelectorProps) {
 
   const allDhikrs = [...dhikrs, ...customDhikrs].filter(d => {
     const matchesSearch = d.transliteration.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      d.meaning.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      d.translation.toLowerCase().includes(searchQuery.toLowerCase()) ||
       d.arabic.includes(searchQuery);
     const matchesFilter = filterMode === 'all' || favoriteDhikrIds.includes(d.id);
     return matchesSearch && matchesFilter;
@@ -55,7 +55,7 @@ export function DhikrSelector({ children }: DhikrSelectorProps) {
     addCustomDhikr({
       arabic: result.data.arabic,
       transliteration: result.data.transliteration,
-      meaning: result.data.meaning,
+      translation: result.data.meaning,
     });
     setNewDhikr({ arabic: '', transliteration: '', meaning: '' });
     setErrors({});
@@ -134,7 +134,7 @@ export function DhikrSelector({ children }: DhikrSelectorProps) {
                       <Heart className="w-3 h-3 text-primary fill-current" />
                     )}
                   </div>
-                  <p className="text-sm text-muted-foreground leading-snug">{dhikr.meaning}</p>
+                  <p className="text-sm text-muted-foreground leading-snug">{dhikr.translation}</p>
                 </div>
 
                 <div className="flex items-center gap-2 pl-4">
