@@ -168,15 +168,12 @@ export function SettingsView({ children, defaultTab = 'themes' }: SettingsViewPr
                 <div className="space-y-1">
                   <p className="text-xs text-muted-foreground uppercase tracking-wide mb-3 px-1">Visual Theme</p>
                   <div className="grid grid-cols-2 gap-2 pb-2">
-                    {themes.map((t, index) => (
-                      <motion.button
+                    {themes.map((t) => (
+                      <button
                         key={t.id}
-                        initial={{ opacity: 0, scale: 0.95 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        transition={{ delay: index * 0.02 }}
                         onClick={() => setTheme(t.id)}
                         className={`
-                          p-3 rounded-2xl text-left border transition-all
+                          p-3 rounded-2xl text-left border transition-all active:scale-[0.98] duration-150
                           ${theme === t.id
                             ? 'bg-primary/10 border-primary shadow-sm'
                             : 'bg-card border-border hover:bg-secondary'
@@ -194,7 +191,7 @@ export function SettingsView({ children, defaultTab = 'themes' }: SettingsViewPr
                             <Check className="w-3 h-3 text-primary shrink-0" />
                           )}
                         </div>
-                      </motion.button>
+                      </button>
                     ))}
                   </div>
                 </div>
@@ -254,15 +251,12 @@ export function SettingsView({ children, defaultTab = 'themes' }: SettingsViewPr
                     <div key={category.title} className="space-y-2">
                       <p className="text-[11px] font-medium text-muted-foreground/70 px-1">{category.title}</p>
                       <div className="grid grid-cols-3 gap-2 pb-2">
-                        {counterShapes.filter(s => category.list.includes(s.id)).map((shape, index) => (
-                      <motion.button
+                        {counterShapes.filter(s => category.list.includes(s.id)).map((shape) => (
+                      <button
                         key={shape.id}
-                        initial={{ opacity: 0, scale: 0.95 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        transition={{ delay: index * 0.01 }}
                         onClick={() => setCounterShape(shape.id)}
                         className={`
-                          flex flex-col items-center justify-center p-3 rounded-2xl border transition-all
+                          flex flex-col items-center justify-center p-3 rounded-2xl border transition-all active:scale-[0.96] duration-150
                           ${counterShape === shape.id
                             ? 'bg-primary/10 border-primary shadow-sm'
                             : 'bg-card border-border hover:bg-secondary'
@@ -275,7 +269,7 @@ export function SettingsView({ children, defaultTab = 'themes' }: SettingsViewPr
                         <span className={`text-[10px] font-medium text-center truncate w-full ${counterShape === shape.id ? 'text-primary' : 'text-muted-foreground'}`}>
                           {shape.label}
                         </span>
-                      </motion.button>
+                      </button>
                         ))}
                       </div>
                     </div>
