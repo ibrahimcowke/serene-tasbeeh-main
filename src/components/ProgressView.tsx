@@ -1,10 +1,13 @@
 import * as React from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger, SheetDescription } from '@/components/ui/sheet';
-import { StatsViewContent } from './StatsView';
 import { AchievementsContent } from './AchievementsView';
 import { RemindersContent } from './RemindersView';
 import { BarChart3, Trophy, Bell } from 'lucide-react';
+
+const StatsViewContent = React.lazy(() =>
+  import('./StatsViewContent').then((m) => ({ default: m.StatsViewContent }))
+);
 
 interface ProgressViewProps {
     children: React.ReactNode;
@@ -43,7 +46,9 @@ export function ProgressView({ children }: ProgressViewProps) {
 
                     <div className="h-[calc(100%-80px)] overflow-y-auto pb-8">
                         <TabsContent value="stats" className="mt-0 h-full">
-                            <StatsViewContent />
+                            <React.Suspense fallback={<div className="h-40 flex items-center justify-center text-muted-foreground animate-pulse">Loading stats...</div>}>
+                                <StatsViewContent />
+                            </React.Suspense>
                         </TabsContent>
                         <TabsContent value="awards" className="mt-0 h-full">
                             <AchievementsContent />
@@ -57,3 +62,4 @@ export function ProgressView({ children }: ProgressViewProps) {
         </Sheet>
     );
 }
+
