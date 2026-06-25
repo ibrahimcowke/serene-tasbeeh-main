@@ -91,42 +91,26 @@ export const achievements: Achievement[] = [
         getProgress: (state) => Math.min(state.streakDays || 0, 30)
     },
     {
-        id: 'early_bird',
-        title: 'Fajr Warrior',
-        description: 'Completed a session during Fajr time (4am-6am).',
-        icon: Sunrise,
-        color: 'text-sky-400',
-        type: 'time',
+        id: 'friday_blessing',
+        title: 'Friday Blessing',
+        description: 'Completed a Dhikr session on a Friday (Jummah).',
+        icon: Heart,
+        color: 'text-rose-500',
+        type: 'count',
         target: 1,
-        condition: (state) => {
-            const now = new Date();
-            const hour = now.getHours();
-            return hour >= 4 && hour < 6 && state.currentCount > 0;
-        },
-        getProgress: (state) => {
-            const now = new Date();
-            const hour = now.getHours();
-            return (hour >= 4 && hour < 6 && state.currentCount > 0) ? 1 : 0;
-        }
+        condition: (state) => state.isFriday === true,
+        getProgress: (state) => (state.isFriday ? 1 : 0)
     },
-     { // This requires logic in store to check specifically on completion
-        id: 'night_owl',
-        title: 'Tahajjud Time',
-        description: 'Completed a session late at night (1am-3am).',
-        icon: Moon,
-        color: 'text-slate-400',
-        type: 'time',
+    {
+        id: 'goal_achiever',
+        title: 'Goal Achiever',
+        description: 'Reached your daily Dhikr goal.',
+        icon: Target,
+        color: 'text-emerald-500',
+        type: 'count',
         target: 1,
-        condition: (state) => {
-             const now = new Date();
-             const hour = now.getHours();
-             return hour >= 1 && hour < 3 && state.currentCount > 0;
-        },
-        getProgress: (state) => {
-            const now = new Date();
-            const hour = now.getHours();
-            return (hour >= 1 && hour < 3 && state.currentCount > 0) ? 1 : 0;
-        }
+        condition: (state) => state.dailyProgress >= 1,
+        getProgress: (state) => Math.min(state.dailyProgress || 0, 1)
     }
 ];
 

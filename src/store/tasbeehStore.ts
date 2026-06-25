@@ -658,10 +658,18 @@ export const useTasbeehStore = create<TasbeehState>()(
       },
       checkAchievements: () => {
         const state = get();
+        const today = getTodayDate();
+        const todayRecord = state.dailyRecords.find(r => r.date === today);
+        const todayCount = todayRecord ? todayRecord.totalCount : 0;
+        const dailyProgress = state.dailyGoal > 0 ? (todayCount / state.dailyGoal) : 0;
+        const isFriday = new Date().getDay() === 5;
+
         const stateProxy = {
           totalCount: state.totalAllTime,
           streakDays: state.streakDays || 0,
           currentCount: state.currentCount || 0,
+          dailyProgress,
+          isFriday,
         };
 
         const newlyUnlocked: string[] = [];

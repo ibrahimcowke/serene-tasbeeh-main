@@ -251,18 +251,26 @@ function BadgeDetailCard({
 }
 
 export function AchievementsContent() {
-    const { totalAllTime, unlockedAchievements, streakDays, currentCount } = useTasbeehStore();
+    const { totalAllTime, unlockedAchievements, streakDays, currentCount, dailyRecords, dailyGoal } = useTasbeehStore();
     const [selectedAchievement, setSelectedAchievement] = useState<Achievement | null>(null);
 
     const currentTotal = totalAllTime || 0;
     const currentLevel = getNextLevel(currentTotal);
     const unlockedIds = unlockedAchievements || [];
 
+    const todayStr = new Date().toISOString().split('T')[0];
+    const todayRecord = (dailyRecords || []).find(r => r.date === todayStr);
+    const todayCount = todayRecord ? todayRecord.totalCount : 0;
+    const dailyProgress = (dailyGoal || 100) > 0 ? (todayCount / (dailyGoal || 100)) : 0;
+    const isFriday = new Date().getDay() === 5;
+
     // State proxy for getProgress calls
     const stateProxy = {
         totalCount: currentTotal,
         streakDays: streakDays || 0,
         currentCount: currentCount || 0,
+        dailyProgress,
+        isFriday,
     };
 
     const recentlyUnlocked = achievements.filter((a) => unlockedIds.includes(a.id)).slice(-2);
