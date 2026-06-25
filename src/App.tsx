@@ -13,6 +13,7 @@ const Challenges = lazy(() => import("./pages/Challenges"));
 import { ThemeProvider } from "./components/ThemeProvider";
 import { CongratsPopup } from "./components/CongratsPopup";
 import { PWAInstallPrompt } from "./components/PWAInstallPrompt";
+import { PrayerTimesPermissionModal } from "./components/PrayerTimesPermissionModal";
 import { registerPeriodicSync } from "./lib/notifications";
 import { useTasbeehStore } from "./store/tasbeehStore";
 
@@ -72,6 +73,7 @@ const App = () => {
         <Sonner />
         <CongratsPopup />
         <PWAInstallPrompt />
+        <PrayerTimesPermissionModal />
         <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
           <Suspense fallback={<div className="h-dvh w-full flex items-center justify-center bg-background text-muted-foreground animate-pulse">Loading...</div>}>
             <Routes>

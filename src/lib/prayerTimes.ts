@@ -4,10 +4,16 @@ import { useTasbeehStore } from '@/store/tasbeehStore';
  * Requests geolocation coordinates and updates the default prayer reminders
  * to match local calculated prayer times using the free Aladhan API.
  */
-export async function initPrayerTimeReminders() {
+export async function initPrayerTimeReminders(force = false) {
   if (typeof window === 'undefined' || !('geolocation' in navigator)) {
     return;
   }
+
+  const syncEnabled = useTasbeehStore.getState().syncPrayerTimes;
+  if (!force && syncEnabled !== true) {
+    return;
+  }
+
 
   navigator.geolocation.getCurrentPosition(
     async (position) => {
