@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Bell, Plus, Trash2, Clock, Calendar as CalendarIcon } from 'lucide-react';
+import { Bell, Plus, Trash2, Clock, Calendar as CalendarIcon, Compass } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
@@ -43,6 +43,7 @@ export function RemindersView({ children }: RemindersViewProps) {
 
 import { useTasbeehStore } from '@/store/tasbeehStore';
 import { NotificationManager } from '@/lib/notifications';
+import { initPrayerTimeReminders } from '@/lib/prayerTimes';
 
 export function RemindersContent() {
     const { 
@@ -52,7 +53,25 @@ export function RemindersContent() {
         removeReminder: storeDeleteReminder,
         toggleReminder: storeToggleReminder,
         setReminderEnabled: setNotificationsEnabled,
+        syncPrayerTimes,
+        setSyncPrayerTimes,
     } = useTasbeehStore();
+
+    const handleLocationChange = async (checked: boolean) => {
+        if (checked) {
+            setSyncPrayerTimes(true);
+            try {
+                await initPrayerTimeReminders(true);
+                toast.success('Location enabled and prayer times synced!');
+            } catch (e) {
+                toast.error('Failed to sync location/prayer times.');
+                console.warn(e);
+            }
+        } else {
+            setSyncPrayerTimes(false);
+            toast.success('Location sync disabled');
+        }
+    };
 
     const [showAddForm, setShowAddForm] = useState(false);
     const [newReminder, setNewReminder] = useState({
@@ -215,6 +234,41 @@ export function RemindersContent() {
                         {notificationsEnabled && typeof Notification !== 'undefined' && Notification.permission !== 'granted' && (
                             <p className="text-sm text-amber-600">
                                 Please allow notifications in your browser settings
+                            </p>
+                        )}
+                    </CardContent>
+                </Card>
+
+                {/* Location / Prayer Time Sync Permission */}
+                <Card className="border-primary/20 bg-gradient-to-br from-primary/5 to-transparent">
+                    <CardHeader>
+                        <CardTitle className="flex items-center gap-2">
+                            <Compass className="w-5 h-5 text-primary" />
+                            Location Services
+                        </CardTitle>
+                        <CardDescription>
+                            Enable location to auto-sync prayer times
+                        </CardDescription>
+                    </CardHeader>
+                    <CardContent className="space-y-4">
+                        <div className="flex items-center justify-between">
+                            <Label htmlFor="location-sync" className="text-base">
+                                Sync Prayer Times
+                            </Label>
+                            <Switch
+                                id="location-sync"
+                                checked={syncPrayerTimes === true}
+                                onCheckedChange={handleLocationChange}
+                            />
+                        </div>
+                        {syncPrayerTimes !== true && (
+                            <p className="text-sm text-muted-foreground">
+                                Allow location access to calculate accurate Fajr, Dhuhr, Maghrib, and Isha timings.
+                            </p>
+                        )}
+                        {syncPrayerTimes === true && (
+                            <p className="text-sm text-muted-foreground">
+                                Geolocation coordinates are used to sync your prayer reminders locally.
                             </p>
                         )}
                     </CardContent>

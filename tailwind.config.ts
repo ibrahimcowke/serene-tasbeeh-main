@@ -18,7 +18,7 @@ export default {
       },
       fontFamily: {
         arabic: ['Madani', 'Uthmanic', 'IndoPak', 'Amiri', 'serif'],
-        sans: ['Inter', 'sans-serif'],
+        sans: ['Outfit', 'Inter', 'sans-serif'],
       },
       colors: {
         border: "hsl(var(--border) / <alpha-value>)",
