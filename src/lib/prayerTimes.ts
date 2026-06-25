@@ -1,7 +1,7 @@
 import { useTasbeehStore } from '@/store/tasbeehStore';
 
 /**
- * Silently requests geolocation coordinates and updates the default prayer reminders
+ * Requests geolocation coordinates and updates the default prayer reminders
  * to match local calculated prayer times using the free Aladhan API.
  */
 export async function initPrayerTimeReminders() {
@@ -55,13 +55,14 @@ export async function initPrayerTimeReminders() {
           }
         }
       } catch (e) {
-        console.warn('Silent prayer times geolocation sync failed:', e);
+        console.warn('Geolocation or prayer times sync failed:', e);
       }
     },
     (err) => {
-      // User denied location permission or location services are disabled; fail silently.
       console.log('Geolocation permission skipped or unavailable for prayer times.', err);
     },
     { enableHighAccuracy: false, timeout: 10000, maximumAge: 86400000 }
   );
 }
+
+
