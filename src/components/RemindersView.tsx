@@ -198,6 +198,43 @@ export function RemindersContent() {
                     <p className="text-muted-foreground">Set up dhikr reminders throughout the day</p>
                 </div>
 
+                {/* Quick Presets */}
+                <Card className="border-border/40 bg-card/50">
+                    <CardHeader className="pb-3">
+                        <CardTitle className="text-sm font-medium flex items-center gap-2">
+                            <Clock className="w-4 h-4 text-primary" />
+                            Quick Presets
+                        </CardTitle>
+                        <CardDescription>One-tap reminder presets</CardDescription>
+                    </CardHeader>
+                    <CardContent className="flex flex-wrap gap-2">
+                        {[
+                            { label: '🌅 Morning Adhkar', time: '05:30' },
+                            { label: '🌆 Evening Adhkar', time: '18:30' },
+                            { label: '🎯 Daily Goal', time: '21:00' },
+                        ].map((preset) => {
+                            const exists = reminders.some((r) => r.label === preset.label);
+                            return (
+                                <button
+                                    key={preset.label}
+                                    disabled={exists}
+                                    onClick={() => {
+                                        storeAddReminder({ time: preset.time, label: preset.label, enabled: true, days: [0,1,2,3,4,5,6] });
+                                        toast.success(`${preset.label} reminder added!`);
+                                    }}
+                                    className="px-3 py-1.5 rounded-full text-xs font-medium border transition-all disabled:opacity-40 disabled:cursor-not-allowed"
+                                    style={exists
+                                        ? { background: 'hsl(var(--primary) / 0.1)', borderColor: 'hsl(var(--primary) / 0.3)', color: 'hsl(var(--primary))' }
+                                        : { background: 'hsl(var(--card) / 0.6)', borderColor: 'hsl(var(--border) / 0.5)', color: 'hsl(var(--foreground) / 0.8)' }
+                                    }
+                                >
+                                    {exists ? '✓ ' : ''}{preset.label}
+                                </button>
+                            );
+                        })}
+                    </CardContent>
+                </Card>
+
                 {/* Notification Permission */}
                 <Card className="border-primary/20 bg-gradient-to-br from-primary/5 to-transparent">
                     <CardHeader>

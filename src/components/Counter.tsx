@@ -8,6 +8,8 @@ import { DhikrHeader } from './counter/DhikrHeader';
 import { CounterDisplay } from './counter/CounterDisplay';
 import { CounterActions } from './counter/CounterActions';
 import { CounterFooter } from './counter/CounterFooter';
+import { DateBanner } from './DateBanner';
+
 
 export const Counter = memo(function Counter() {
   const currentCount = useTasbeehStore(state => state.currentCount);
@@ -78,8 +80,9 @@ export const Counter = memo(function Counter() {
         }}
       />
 
-      {/* Top section: Dhikr label and text */}
+      {/* Top section: Hijri date banner + Dhikr label */}
       <div className="w-full flex flex-col items-center justify-center z-10 pt-2 sm:pt-4 animate-fade-in-down">
+        <DateBanner />
         <DhikrHeader />
       </div>
 

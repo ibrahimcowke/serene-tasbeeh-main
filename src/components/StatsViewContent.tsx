@@ -1,14 +1,14 @@
 import * as React from 'react';
 import { useTasbeehStore } from '@/store/tasbeehStore';
 import { motion } from 'framer-motion';
-import { TrendingUp, Target, Award, Flame, BarChart3 } from 'lucide-react';
+import { TrendingUp, Target, Award, Flame, BarChart3, Star } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { BarChart, Bar, XAxis, Tooltip, ResponsiveContainer, Cell, PieChart, Pie } from 'recharts';
 
 export function StatsViewContent() {
-    const { dailyRecords: history, dailyGoal = 100, streakDays, sessions = [] } = useTasbeehStore();
+    const { dailyRecords: history, dailyGoal = 100, streakDays, sessions = [], personalBest = 0 } = useTasbeehStore();
 
     // Calculate statistics
     const today = new Date().toISOString().split('T')[0];
@@ -150,6 +150,19 @@ export function StatsViewContent() {
                             <p className="text-xs text-muted-foreground mt-1">
                                 all time {totalDurationSeconds > 0 ? `• ${totalDurationFormatted}` : ''}
                             </p>
+                        </CardContent>
+                    </Card>
+
+                    <Card className="border-yellow-500/20 bg-gradient-to-br from-yellow-500/5 to-transparent col-span-2">
+                        <CardHeader className="pb-3">
+                            <CardTitle className="text-sm font-medium flex items-center gap-2">
+                                <Star className="w-4 h-4 text-yellow-500" />
+                                Personal Best Session
+                            </CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                            <p className="text-3xl font-bold text-yellow-500">{personalBest > 0 ? personalBest.toLocaleString() : '—'}</p>
+                            <p className="text-xs text-muted-foreground mt-1">{personalBest > 0 ? 'dhikr in a single session' : 'Complete a session to set a record'}</p>
                         </CardContent>
                     </Card>
                 </div>

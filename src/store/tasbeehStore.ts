@@ -161,7 +161,9 @@ interface TasbeehState {
 
   sessions: SessionRecord[];
   deviceUuid: string;
+  personalBest: number;
   saveActiveSession: () => void;
+
 
   increment: () => void;
   decrement: () => void;
@@ -292,6 +294,7 @@ export const useTasbeehStore = create<TasbeehState>()(
       autoCountActive: false, autoCountInterval: 1000,
       sessions: [],
       deviceUuid: '',
+      personalBest: 0,
 
       saveActiveSession: () => {
         const state = get();
@@ -308,7 +311,8 @@ export const useTasbeehStore = create<TasbeehState>()(
             timestamp: Date.now()
           };
           const updatedSessions = [newSession, ...state.sessions].slice(0, 50);
-          set({ sessions: updatedSessions, sessionStartTime: null });
+          const newPersonalBest = state.currentCount > state.personalBest ? state.currentCount : state.personalBest;
+          set({ sessions: updatedSessions, sessionStartTime: null, personalBest: newPersonalBest });
         } else {
           set({ sessionStartTime: null });
         }
