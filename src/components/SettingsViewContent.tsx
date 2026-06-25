@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Check, Download, Upload, Trash2, Zap, ExternalLink, ChevronRight, Bell, Wind } from 'lucide-react';
+import { Check, Download, Upload, Trash2, Zap, ExternalLink, ChevronRight, Bell, Wind, Shield } from 'lucide-react';
 import { useTasbeehStore } from '@/store/tasbeehStore';
 import { SheetHeader, SheetTitle, SheetDescription } from '@/components/ui/sheet';
 import { Switch } from '@/components/ui/switch';
@@ -482,6 +482,28 @@ export function SettingsViewContent({ defaultTab, setOpen }: SettingsViewContent
                       <a href="https://ibrahimcowke.netlify.app/" target="_blank" rel="noopener noreferrer" className="text-xs text-primary hover:underline flex items-center gap-1">
                         Visit Portfolio <ExternalLink className="w-3 h-3" />
                       </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="p-4 rounded-2xl bg-card border border-border/50 mt-4">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
+                      <Shield className="w-5 h-5 text-primary" />
+                    </div>
+                    <div>
+                      <p className="text-sm font-medium text-foreground">Privacy Policy</p>
+                      <button 
+                        onClick={() => {
+                          setOpen(false);
+                          navigate('/privacy');
+                        }} 
+                        className="text-xs text-primary hover:underline text-left flex items-center gap-1"
+                      >
+                        Read Privacy Policy <ExternalLink className="w-3 h-3" />
+                      </button>
                     </div>
                   </div>
                 </div>

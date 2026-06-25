@@ -163,7 +163,8 @@ export default defineConfig(({ mode }) => ({
   build: {
     // Reverting to default esbuild minification to fix production issue
     outDir: "dist",
-    sourcemap: false,
+    sourcemap: mode === "development",
+    minify: mode === "development" ? false : "esbuild",
     reportCompressedSize: false,
     chunkSizeWarningLimit: 1000,
     rollupOptions: {
