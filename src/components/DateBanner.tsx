@@ -1,18 +1,21 @@
 import { useTasbeehStore } from '@/store/tasbeehStore';
 import { useEffect } from 'react';
 import { Moon, Calendar, Sparkles } from 'lucide-react';
+import { getContext } from '@/lib/hijri';
 import { motion } from 'framer-motion';
 import { toast } from 'sonner';
 import { themes } from '@/lib/constants';
 
 export function DateBanner() {
-    const { dateContext, updateDateContext, theme } = useTasbeehStore();
+    const { theme } = useTasbeehStore();
 
     const currentThemeLabel = themes.find(t => t.id === theme)?.label || 'Unknown';
 
-    useEffect(() => {
-        updateDateContext();
-    }, []);
+    const context = getContext();
+    const dateContext = {
+        ...context,
+        hijriDate: `${context.hijri.day} ${context.hijri.monthName} ${context.hijri.year}`
+    };
 
     useEffect(() => {
         if (dateContext?.specialDayName) {
