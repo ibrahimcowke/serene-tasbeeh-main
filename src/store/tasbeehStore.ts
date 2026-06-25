@@ -217,6 +217,7 @@ interface TasbeehState {
   triggerCongrats: (data: { title: string; description: string; hasanatEarned: number }) => void;
   closeCongrats: () => void;
   updateStreak: () => void;
+  checkAchievements: () => void;
 }
 
 export const defaultDhikrs: Dhikr[] = [
@@ -386,6 +387,7 @@ export const useTasbeehStore = create<TasbeehState>()(
                hasanatEarned: 1000
              });
              syncWidget(newCount, state.currentDhikr.transliteration);
+             setTimeout(() => get().checkAchievements(), 50);
              return;
           }
         } else if (sessionMode.type === 'tasbih1000') {
@@ -414,6 +416,7 @@ export const useTasbeehStore = create<TasbeehState>()(
               hasanatEarned: 10000
             });
             syncWidget(newCount, state.currentDhikr.transliteration);
+            setTimeout(() => get().checkAchievements(), 50);
             return;
           }
         } else if (sessionMode.type === 'routine') {
@@ -436,6 +439,7 @@ export const useTasbeehStore = create<TasbeehState>()(
               set({ currentCount: newCount, totalAllTime: newTotal, totalHasanat: newHasanat + 1000, dailyRecords: records, sessionMode: { ...mode, isComplete: true } });
               get().saveActiveSession();
               syncWidget(newCount, state.currentDhikr.transliteration);
+              setTimeout(() => get().checkAchievements(), 50);
               return;
             }
           }
@@ -446,11 +450,13 @@ export const useTasbeehStore = create<TasbeehState>()(
           set({ currentCount: newCount, totalAllTime: newTotal, totalHasanat: newHasanat + (state.targetCount * 10), dailyRecords: records, sessionStartTime: state.sessionStartTime || now, sessionMode, lastCount: state.currentCount, lastDhikrId: state.currentDhikr.id, canUndo: true });
           get().saveActiveSession();
           syncWidget(newCount, state.currentDhikr.transliteration);
+          setTimeout(() => get().checkAchievements(), 50);
           return;
         }
 
         set({ currentCount: newCount, totalAllTime: newTotal, totalHasanat: newHasanat, dailyRecords: records, sessionStartTime: state.sessionStartTime || now, sessionMode, lastCount: state.currentCount, lastDhikrId: state.currentDhikr.id, canUndo: true });
         syncWidget(newCount, state.currentDhikr.transliteration);
+        setTimeout(() => get().checkAchievements(), 50);
       },
 
       decrement: () => set((state) => {
@@ -631,6 +637,45 @@ export const useTasbeehStore = create<TasbeehState>()(
         const yest = new Date(); yest.setDate(yest.getDate() - 1); const yestStr = yest.toISOString().split('T')[0];
         let nStreak = state.streakDays; if (state.lastActiveDate === yestStr) nStreak += 1; else if (state.lastActiveDate !== today) nStreak = 1;
         set({ streakDays: nStreak, lastActiveDate: today, longestStreak: Math.max(state.longestStreak, nStreak) });
+        setTimeout(() => get().checkAchievements(), 50);
+      },
+      checkAchievements: () => {
+        const state = get();
+        const stateProxy = {
+          totalCount: state.totalAllTime,
+          streakDays: state.streakDays || 0,
+          currentCount: state.currentCount || 0,
+        };
+
+        const newlyUnlocked: string[] = [];
+        const currentUnlocked = state.unlockedAchievements || [];
+
+        // Check each achievement condition
+        import('@/data/achievements').then(({ achievements }) => {
+          achievements.forEach((ach) => {
+            if (!currentUnlocked.includes(ach.id) && ach.condition(stateProxy)) {
+              newlyUnlocked.push(ach.id);
+            }
+          });
+
+          if (newlyUnlocked.length > 0) {
+            const updated = [...currentUnlocked, ...newlyUnlocked];
+            set({ unlockedAchievements: updated });
+            
+            // Show toast notifications for each new achievement
+            import('sonner').then(({ toast }) => {
+              newlyUnlocked.forEach((id) => {
+                const ach = achievements.find(a => a.id === id);
+                if (ach) {
+                  toast.success(`Award Unlocked: ${ach.title}! 🏆`, {
+                    description: ach.description,
+                    duration: 5000,
+                  });
+                }
+              });
+            }).catch(() => {});
+          }
+        }).catch(() => {});
       },
     }),
     {

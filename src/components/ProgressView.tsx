@@ -2,8 +2,7 @@ import * as React from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger, SheetDescription } from '@/components/ui/sheet';
 import { AchievementsContent } from './AchievementsView';
-import { RemindersContent } from './RemindersView';
-import { BarChart3, Trophy, Bell } from 'lucide-react';
+import { BarChart3, Trophy } from 'lucide-react';
 
 const StatsViewContent = React.lazy(() =>
   import('./StatsViewContent').then((m) => ({ default: m.StatsViewContent }))
@@ -21,7 +20,7 @@ export function ProgressView({ children }: ProgressViewProps) {
             </SheetTrigger>
             <SheetContent side="bottom" className="bg-sheet-bg rounded-t-3xl h-[85vh]">
                 <SheetDescription className="sr-only">
-                    View and start guided dhikr routines.
+                    View your stats and awards.
                 </SheetDescription>
                 <div className="sheet-handle" />
                 <SheetHeader className="text-left pb-4">
@@ -29,7 +28,7 @@ export function ProgressView({ children }: ProgressViewProps) {
                 </SheetHeader>
 
                 <Tabs defaultValue="stats" className="w-full h-full">
-                    <TabsList className="grid w-full grid-cols-3 mb-4">
+                    <TabsList className="grid w-full grid-cols-2 mb-4">
                         <TabsTrigger value="stats" className="flex items-center gap-2">
                             <BarChart3 className="w-4 h-4" />
                             Stats
@@ -37,10 +36,6 @@ export function ProgressView({ children }: ProgressViewProps) {
                         <TabsTrigger value="awards" className="flex items-center gap-2">
                             <Trophy className="w-4 h-4" />
                             Awards
-                        </TabsTrigger>
-                        <TabsTrigger value="alerts" className="flex items-center gap-2">
-                            <Bell className="w-4 h-4" />
-                            Alerts
                         </TabsTrigger>
                     </TabsList>
 
@@ -52,9 +47,6 @@ export function ProgressView({ children }: ProgressViewProps) {
                         </TabsContent>
                         <TabsContent value="awards" className="mt-0 h-full">
                             <AchievementsContent />
-                        </TabsContent>
-                        <TabsContent value="alerts" className="mt-0 h-full">
-                            <RemindersContent />
                         </TabsContent>
                     </div>
                 </Tabs>
