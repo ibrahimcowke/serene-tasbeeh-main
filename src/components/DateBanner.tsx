@@ -15,20 +15,13 @@ export function DateBanner() {
     }, []);
 
     useEffect(() => {
-        if (dateContext.specialDayName) {
-            //Simple check to avoid spamming? For now rely on component mount
-            //In a real app we'd track 'lastShown' in store
-            /*
-            toast.success(dateContext.specialDayName, {
-                description: "Today is a blessed day! May Allah accept your dhikr.",
-                icon: "✨",
-                duration: 5000
-            });
-            */
+        if (dateContext?.specialDayName) {
+            // toast suppressed to avoid spam
         }
-    }, [dateContext.specialDayName]);
+    }, [dateContext?.specialDayName]);
 
-    if (!dateContext.hijriDate) return null;
+    if (!dateContext?.hijriDate) return null;
+
 
     const isSpecial = dateContext.isJummah || dateContext.isWhiteDay || dateContext.isRamadan || dateContext.specialDayName;
 
