@@ -2,9 +2,11 @@ import { memo, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTasbeehStore, defaultThemeSettings } from '@/store/tasbeehStore';
 import { CounterVisuals } from '../CounterVisuals';
+import { useTranslation } from '@/lib/i18n';
 
 // Convert number to Arabic-Indic numerals
-const toArabicNumerals = (n: number): string => {
+const toArabicNumerals = (n: number | string, isRTL: boolean): string => {
+  if (!isRTL) return n.toString();
   const arabicDigits = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'];
   return n.toString().split('').map(d => arabicDigits[parseInt(d)] ?? d).join('');
 };
@@ -118,6 +120,7 @@ const TasbeehBeadRing = memo(({ beadPosition, roundCount, progress }: {
 TasbeehBeadRing.displayName = 'TasbeehBeadRing';
 
 export const CounterDisplay = memo(function CounterDisplay() {
+  const { isRTL } = useTranslation();
   const currentCount = useTasbeehStore(state => state.currentCount);
   const increment = useTasbeehStore(state => state.increment);
   const theme = useTasbeehStore(state => state.theme);
@@ -202,7 +205,7 @@ export const CounterDisplay = memo(function CounterDisplay() {
                   className="flex flex-col items-center"
                 >
                   <span
-                    className="font-arabic leading-none select-none"
+                    className={`${isRTL ? 'font-arabic' : 'counter-number'} leading-none select-none`}
                     style={{
                       fontSize: currentCount >= 1000 ? '1.8rem' : '2.6rem',
                       fontWeight: 700,
@@ -211,7 +214,7 @@ export const CounterDisplay = memo(function CounterDisplay() {
                       letterSpacing: '-0.02em',
                     }}
                   >
-                    {toArabicNumerals(currentCount)}
+                    {toArabicNumerals(currentCount, isRTL)}
                   </span>
 
                   {/* Round counter badge */}
@@ -219,14 +222,14 @@ export const CounterDisplay = memo(function CounterDisplay() {
                     <motion.span
                       initial={{ scale: 0, opacity: 0 }}
                       animate={{ scale: 1, opacity: 1 }}
-                      className="mt-0.5 font-arabic"
+                      className={`mt-0.5 ${isRTL ? 'font-arabic' : 'font-sans font-medium'}`}
                       style={{
                         fontSize: '0.85rem',
                         letterSpacing: '0.02em',
                         color: 'hsl(var(--counter-text) / 0.7)'
                       }}
                     >
-                      {toArabicNumerals(roundCount)} × ٣٣
+                      {toArabicNumerals(roundCount, isRTL)} {isRTL ? '× ٣٣' : '× 33'}
                     </motion.span>
                   )}
                 </motion.div>
@@ -282,15 +285,15 @@ export const CounterDisplay = memo(function CounterDisplay() {
               transition={{ duration: 0.35, ease: 'easeOut' }}
             />
           </div>
-          {/* Premium Arabic numerals text */}
+          {/* Premium numerals text */}
           <span
-            className="font-arabic text-xs sm:text-sm font-medium tracking-wider select-none shrink-0"
+            className={`${isRTL ? 'font-arabic' : 'font-sans font-medium'} text-xs sm:text-sm tracking-wider select-none shrink-0`}
             style={{
               color: 'hsl(var(--primary))',
               textShadow: '0 0 10px hsl(var(--primary) / 0.3)'
             }}
           >
-            {toArabicNumerals(currentCount)}/{toArabicNumerals(targetCount)}
+            {toArabicNumerals(currentCount, isRTL)}/{toArabicNumerals(targetCount, isRTL)}
           </span>
         </div>
       )}

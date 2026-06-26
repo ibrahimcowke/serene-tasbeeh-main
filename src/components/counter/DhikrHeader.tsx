@@ -2,13 +2,16 @@ import { memo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTasbeehStore, defaultDhikrs } from '@/store/tasbeehStore';
 import { speakArabic } from '@/lib/audioRecitations';
+import { useTranslation } from '@/lib/i18n';
 
-const toArabicNumerals = (n: number): string => {
+const toArabicNumerals = (n: number | string, isRTL: boolean): string => {
+  if (!isRTL) return n.toString();
   const d = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'];
   return n.toString().split('').map(c => d[parseInt(c)] ?? c).join('');
 };
 
 export const DhikrHeader = memo(function DhikrHeader() {
+  const { isRTL } = useTranslation();
   const currentDhikrId = useTasbeehStore(state => state.currentDhikr.id);
   const showTransliteration = useTasbeehStore(state => state.showTransliteration);
   const sessionMode = useTasbeehStore(state => state.sessionMode);
@@ -152,7 +155,10 @@ export const DhikrHeader = memo(function DhikrHeader() {
             </div>
           )}
           <p className="text-primary/50 text-[10px] tracking-wide">
-            Set {sessionMode.currentPhase + 1} / 8 • {toArabicNumerals(Math.floor(sessionMode.currentPhase * 125 + currentCount))}/١٠٠٠
+            {isRTL 
+              ? `المجموعة ${toArabicNumerals(sessionMode.currentPhase + 1, isRTL)} / ${toArabicNumerals(8, isRTL)} • ${toArabicNumerals(Math.floor(sessionMode.currentPhase * 125 + currentCount), isRTL)} / ${toArabicNumerals(1000, isRTL)}`
+              : `Set ${sessionMode.currentPhase + 1} / 8 • ${toArabicNumerals(Math.floor(sessionMode.currentPhase * 125 + currentCount), isRTL)} / 1000`
+            }
           </p>
         </div>
       )}
@@ -164,7 +170,12 @@ export const DhikrHeader = memo(function DhikrHeader() {
           animate={{ opacity: 1, y: 0 }}
           className="mt-2 flex items-center gap-2 text-xs text-primary/60"
         >
-          <span>Step {toArabicNumerals(sessionMode.currentStepIndex + 1)} of {toArabicNumerals(sessionMode.steps.length)}</span>
+          <span>
+            {isRTL
+              ? `الخطوة ${toArabicNumerals(sessionMode.currentStepIndex + 1, isRTL)} من ${toArabicNumerals(sessionMode.steps.length, isRTL)}`
+              : `Step ${sessionMode.currentStepIndex + 1} of ${sessionMode.steps.length}`
+            }
+          </span>
           {sessionMode.steps[sessionMode.currentStepIndex].description && (
             <>
               <span className="opacity-40">•</span>

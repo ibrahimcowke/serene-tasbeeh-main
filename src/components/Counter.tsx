@@ -10,7 +10,7 @@ import { CounterActions } from './counter/CounterActions';
 import { CounterFooter } from './counter/CounterFooter';
 import { DateBanner } from './DateBanner';
 import { SessionTimer } from './SessionTimer';
-import { NiyyahModal } from './NiyyahModal';
+import { HadithOfTheDayModal } from './HadithOfTheDay';
 import { MoodTracker } from './MoodTracker';
 import { useTranslation } from '@/lib/i18n';
 import { motion } from 'framer-motion';
@@ -56,21 +56,53 @@ export const Counter = memo(function Counter() {
   const volumeButtonCounting = useTasbeehStore(state => state.volumeButtonCounting);
   const sessionModeType = useTasbeehStore(state => state.sessionMode.type);
   const theme = useTasbeehStore(state => state.theme);
+  const zenMode = useTasbeehStore(state => state.zenMode);
   const currentSettings = useTasbeehStore(state => state.themeSettings[theme] || defaultThemeSettings);
 
   // New v2.1.0 states & actions
   const language = useTasbeehStore(state => state.language);
   const voiceAnnouncementsEnabled = useTasbeehStore(state => state.voiceAnnouncementsEnabled);
-  const niyyah = useTasbeehStore(state => state.niyyah);
   const sessions = useTasbeehStore(state => state.sessions);
 
-  const [showNiyyah, setShowNiyyah] = useState(false);
   const [showMood, setShowMood] = useState(false);
+  const [showWisdom, setShowWisdom] = useState(false);
   const [lastSessionId, setLastSessionId] = useState('');
   const [lastCount, setLastCount] = useState(0);
 
+  // Live Recitation Pace (BPM) States
+  const [bpm, setBpm] = useState(0);
+  const [lastTapTime, setLastTapTime] = useState<number | null>(null);
+
   const { t } = useTranslation();
   const prevCountRef = useRef(currentCount);
+
+  // Calculate recitation speed (BPM) on count change
+  useEffect(() => {
+    if (currentCount > 0) {
+      const now = Date.now();
+      if (lastTapTime) {
+        const diff = now - lastTapTime;
+        if (diff > 100 && diff < 4000) {
+          const currentBpm = Math.round(60000 / diff);
+          setBpm(currentBpm);
+        }
+      }
+      setLastTapTime(now);
+    } else {
+      setBpm(0);
+      setLastTapTime(null);
+    }
+  }, [currentCount]);
+
+  // Reset BPM to 0 if idle for more than 4 seconds
+  useEffect(() => {
+    if (bpm > 0) {
+      const timer = setTimeout(() => {
+        setBpm(0);
+      }, 4000);
+      return () => clearTimeout(timer);
+    }
+  }, [bpm, currentCount]);
 
   // Voice announcements on milestones
   useEffect(() => {
@@ -157,33 +189,35 @@ export const Counter = memo(function Counter() {
         <DateBanner />
         <DhikrHeader />
         
-        {/* Session Timer & Niyyah Pill Container */}
+        {/* Session Timer, Recitation Speed, & Wisdom Pills */}
         <div className="flex flex-wrap items-center justify-center gap-2 mt-2.5">
           <SessionTimer />
           
-          {niyyah ? (
-            <motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              onClick={() => setShowNiyyah(true)}
-              className="px-3 py-1 rounded-full text-[10px] sm:text-xs font-light tracking-wide cursor-pointer hover:bg-white/5 border border-primary/20 backdrop-blur-sm flex items-center gap-1.5"
-              style={{ color: 'hsl(var(--primary) / 0.85)' }}
-            >
-              <span>🤲</span>
-              <span>{t('counter.intention')}: "{niyyah}"</span>
-              <span className="opacity-40 text-[9px] ml-1">({t('general.edit')})</span>
-            </motion.div>
-          ) : (
-            <motion.button
-              whileHover={{ scale: 1.03 }}
-              whileTap={{ scale: 0.97 }}
-              onClick={() => setShowNiyyah(true)}
-              className="px-3 py-1 rounded-full text-[10px] font-medium tracking-wider uppercase bg-primary/10 border border-primary/20 text-primary/80 hover:bg-primary/15 transition-all flex items-center gap-1"
-            >
-              <span>🤲</span>
-              <span>{t('counter.set_intention')}</span>
-            </motion.button>
-          )}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="px-3 py-1 rounded-full text-[10px] sm:text-xs font-light tracking-wide border border-primary/20 backdrop-blur-sm flex items-center gap-1.5 transition-all"
+            style={{
+              background: bpm > 0 ? "hsl(var(--primary) / 0.12)" : "rgba(255,255,255,0.02)",
+              color: 'hsl(var(--primary) / 0.85)'
+            }}
+            title="Beads Per Minute (Recitation Speed)"
+          >
+            <span>{bpm > 0 ? '⚡' : '🧘'}</span>
+            <span>
+              {bpm > 0 ? `${bpm} ${t('counter.bpm')} • ${bpm < 45 ? t('counter.pace_meditative') : bpm <= 75 ? t('counter.pace_steady') : t('counter.pace_fast')}` : t('counter.pace_ready')}
+            </span>
+          </motion.div>
+
+          <motion.button
+            whileHover={{ scale: 1.03 }}
+            whileTap={{ scale: 0.97 }}
+            onClick={() => setShowWisdom(true)}
+            className="px-3 py-1 rounded-full text-[10px] sm:text-xs font-medium tracking-wide bg-primary/10 border border-primary/20 text-primary/80 hover:bg-primary/15 transition-all flex items-center gap-1.5 cursor-pointer animate-pulse"
+          >
+            <span>📖</span>
+            <span>{t('hadith.title')}</span>
+          </motion.button>
         </div>
       </div>
 
@@ -198,11 +232,10 @@ export const Counter = memo(function Counter() {
         <CounterFooter />
       </div>
 
-      {/* Niyyah Modal */}
-      <NiyyahModal
-        open={showNiyyah}
-        onClose={() => setShowNiyyah(false)}
-        onConfirm={() => setShowNiyyah(false)}
+      {/* Hadith/Wisdom Modal */}
+      <HadithOfTheDayModal
+        open={showWisdom}
+        onClose={() => setShowWisdom(false)}
       />
 
       {/* Mood Tracker */}

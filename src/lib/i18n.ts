@@ -162,6 +162,17 @@ const translations: Record<string, Record<Lang, string>> = {
   'general.loading': { en: 'Loading...', ar: 'جارٍ التحميل...' },
   'general.error': { en: 'Error', ar: 'خطأ' },
   'general.success': { en: 'Success', ar: 'نجاح' },
+  // --- Hadith & BPM ---
+  'hadith.title': { en: 'Spiritual Wisdom', ar: 'الحكمة الروحية' },
+  'hadith.next': { en: 'Next Quote', ar: 'الحكمة التالية' },
+  'hadith.copy': { en: 'Copy to Clipboard', ar: 'نسخ إلى الحافظة' },
+  'hadith.share': { en: 'Share Wisdom', ar: 'مشاركة الحكمة' },
+  'hadith.copied': { en: 'Copied!', ar: 'تم النسخ!' },
+  'counter.bpm': { en: 'Beads/Min', ar: 'تسبيحة/د' },
+  'counter.pace_ready': { en: 'Ready', ar: 'جاهز' },
+  'counter.pace_meditative': { en: 'Meditative', ar: 'متأنٍّ' },
+  'counter.pace_steady': { en: 'Steady', ar: 'منتظم' },
+  'counter.pace_fast': { en: 'Fast', ar: 'سريع' },
 };
 
 export function t(key: string, lang: Lang): string {

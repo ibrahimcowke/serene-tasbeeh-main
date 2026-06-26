@@ -9,6 +9,12 @@ import { asmaulHusna, AsmaulHusnaEntry } from '@/data/asmaulHusna';
 import { useTranslation } from '@/lib/i18n';
 import { toast } from 'sonner';
 
+const formatNumber = (n: number | string, isRTL: boolean): string => {
+  if (!isRTL) return n.toString();
+  const d = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'];
+  return n.toString().split('').map(c => d[parseInt(c)] ?? c).join('');
+};
+
 interface AsmaulHusnaViewProps {
   children: React.ReactNode;
 }
@@ -38,14 +44,14 @@ function NameCard({ entry, onCount }: { entry: AsmaulHusnaEntry; onCount: () => 
       <div className="px-4 py-3 flex items-start gap-3" dir={isRTL ? 'rtl' : 'ltr'}>
         {/* Number badge */}
         <div
-          className="shrink-0 w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold"
+          className={`shrink-0 w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold ${isRTL ? 'font-arabic' : 'font-sans'}`}
           style={{
             background: 'hsl(var(--primary) / 0.15)',
             color: 'hsl(var(--primary))',
             border: '1px solid hsl(var(--primary) / 0.3)',
           }}
         >
-          {entry.number}
+          {formatNumber(entry.number, isRTL)}
         </div>
 
         <div className="flex-1 min-w-0">
@@ -108,12 +114,12 @@ function NameCard({ entry, onCount }: { entry: AsmaulHusnaEntry; onCount: () => 
                 <Sparkles className="w-4 h-4" />
                 {t('names.count_this')}
                 {localCount > 0 && (
-                  <span
-                    className="ml-1 px-2 py-0.5 rounded-full text-xs font-bold"
-                    style={{ background: 'hsl(var(--primary))', color: 'hsl(var(--primary-foreground))' }}
-                  >
-                    {localCount}
-                  </span>
+                    <span
+                      className={`ml-1 px-2 py-0.5 rounded-full text-xs font-bold ${isRTL ? 'font-arabic' : 'font-sans'}`}
+                      style={{ background: 'hsl(var(--primary))', color: 'hsl(var(--primary-foreground))' }}
+                    >
+                      {formatNumber(localCount, isRTL)}
+                    </span>
                 )}
               </motion.button>
             </div>

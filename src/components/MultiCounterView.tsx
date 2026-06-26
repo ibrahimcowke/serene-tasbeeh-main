@@ -9,6 +9,12 @@ import { DhikrSelectorContent } from './DhikrSelectorContent';
 import { defaultDhikrs } from '@/store/tasbeehStore';
 import type { Dhikr } from '@/store/tasbeehStore';
 
+const formatNumber = (n: number | string, isRTL: boolean): string => {
+  if (!isRTL) return n.toString();
+  const d = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'];
+  return n.toString().split('').map(c => d[parseInt(c)] ?? c).join('');
+};
+
 interface CounterState {
   id: string;
   dhikr: Dhikr;
@@ -39,7 +45,7 @@ function SingleCounter({
   canRemove: boolean;
 }) {
   const [showSelector, setShowSelector] = useState(false);
-  const { t } = useTranslation();
+  const { t, isRTL } = useTranslation();
 
   return (
     <motion.div
@@ -139,8 +145,8 @@ function SingleCounter({
           transition={{ type: 'spring', stiffness: 300, damping: 20 }}
           className="flex-1 text-center"
         >
-          <p className="text-4xl font-bold tabular-nums" style={{ color: 'hsl(var(--primary))' }}>
-            {counter.count.toLocaleString()}
+          <p className={`${isRTL ? 'font-arabic' : 'font-sans'} text-4xl font-bold tabular-nums`} style={{ color: 'hsl(var(--primary))' }}>
+            {formatNumber(counter.count, isRTL)}
           </p>
         </motion.div>
 
@@ -222,10 +228,10 @@ export function MultiCounterView({ children }: MultiCounterViewProps) {
               key={total}
               initial={{ scale: 1.2 }}
               animate={{ scale: 1 }}
-              className="text-2xl font-bold tabular-nums"
+              className={`${isRTL ? 'font-arabic' : 'font-sans'} text-2xl font-bold tabular-nums`}
               style={{ color: 'hsl(var(--primary))' }}
             >
-              {total.toLocaleString()}
+              {formatNumber(total, isRTL)}
             </motion.span>
           </div>
         </div>
