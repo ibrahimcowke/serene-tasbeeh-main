@@ -7,5 +7,14 @@
     "*.css": "tailwindcss"
   },
   "java.jdt.ls.java.home": "C:\\Program Files\\Java\\jdk-17.0.18",
-  "java.configuration.updateBuildConfiguration": "interactive"
+  "java.configuration.updateBuildConfiguration": "automatic",
+  "java.import.gradle.java.home": "C:\\Program Files\\Android\\Android Studio\\jbr",
+  "java.import.gradle.wrapper.enabled": true,
+  "java.import.gradle.version": "9.3.1",
+  "java.import.exclusions": [
+    "**/node_modules/**",
+    "**/.git/**",
+    "**/dist/**",
+    "**/build/**"
+  ]
 }
