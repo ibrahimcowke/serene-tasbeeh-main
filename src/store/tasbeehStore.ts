@@ -79,7 +79,7 @@ export type CounterShape =
   | 'helix-strand' | 'cyber-hexagon' | 'glass-pill' | 'emerald-loop'
   | 'smart-ring' | 'moon-phase' | 'water-ripple' | 'sand-hourglass' | 'lantern-fanous'
   | 'digital-watch' | 'star-burst' | 'crystal-prism' | 'tally-clicker'
-  | 'cyber-3d' | 'crystal-iso' | 'neumorph' | 'sacred-star' | 'cyber-orbit';
+  | 'cyber-3d' | 'crystal-iso' | 'neumorph' | 'cyber-orbit' | 'green-tally' | 'retro-flip' | 'golden-mandala' | 'neon-wave' | 'steampunk-gear';
 
 export interface Reminder {
   id: string;

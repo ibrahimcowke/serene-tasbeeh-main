@@ -4,8 +4,12 @@ import { ThemeSettings, CounterShape } from '@/store/tasbeehStore';
 import { HaloRing } from './counter-shapes/HaloRing';
 import { BeadRing } from './counter-shapes/BeadRing';
 import { counterShapes } from '@/lib/constants';
-import { SacredStar } from './counter-shapes/SacredStar';
 import { CyberOrbit } from './counter-shapes/CyberOrbit';
+import { GreenTally } from './counter-shapes/GreenTally';
+import { RetroFlip } from './counter-shapes/RetroFlip';
+import { GoldenMandala } from './counter-shapes/GoldenMandala';
+import { NeonWave } from './counter-shapes/NeonWave';
+import { SteampunkGear } from './counter-shapes/SteampunkGear';
 
 import { VerticalCapsules } from './counter-shapes/VerticalCapsules';
 import { LuminousBeads } from './counter-shapes/LuminousBeads';
@@ -83,7 +87,7 @@ export const CounterNumber = memo(({
             transition={{ duration: 0.15, ease: [0.34, 1.56, 0.64, 1] }}
             className={`
   counter-number text-counter-text
-  ${['digital', 'vertical-capsules', 'tally-clicker', 'cyber-3d', 'crystal-iso', 'neumorph', 'digital-watch', 'retro-lcd'].includes(counterShape) ? 'hidden' : ''}
+  ${['digital', 'vertical-capsules', 'tally-clicker', 'cyber-3d', 'crystal-iso', 'neumorph', 'digital-watch', 'retro-lcd', 'green-tally', 'retro-flip'].includes(counterShape) ? 'hidden' : ''}
   ${counterShape === 'classic' ? 'font-mono text-5xl sm:text-6xl md:text-7xl tracking-widest bg-black/10 px-4 sm:px-6 py-2 rounded-lg inset-shadow mb-4' : 'text-5xl sm:text-6xl md:text-7xl lg:text-8xl'}
   ${counterShape === 'waveform' ? 'drop-shadow-md z-10' : ''}
   ${counterShape === 'modern-ring' ? 'font-sans font-light tracking-tighter drop-shadow-[0_0_15px_currentColor]' : ''}
@@ -94,7 +98,9 @@ export const CounterNumber = memo(({
   
   ${counterShape === 'animated-ripple' ? 'text-blue-200 font-light text-7xl tracking-widest drop-shadow-[0_0_10px_rgba(59,130,246,0.6)]' : ''}
   ${counterShape === 'bead-ring' ? 'text-amber-500 font-mono text-7xl font-bold tracking-wider drop-shadow-[0_0_10px_rgba(245,158,11,0.6)]' : ''}
-  ${counterShape === 'sacred-star' ? 'font-serif font-bold text-primary drop-shadow-[0_0_10px_rgba(251,191,36,0.6)]' : ''}
+  ${counterShape === 'golden-mandala' ? 'font-serif font-bold text-amber-100 drop-shadow-[0_0_12px_rgba(245,158,11,0.8)]' : ''}
+  ${counterShape === 'neon-wave' ? 'font-sans font-black text-white tracking-widest drop-shadow-[0_0_15px_#22d3ee]' : ''}
+  ${counterShape === 'steampunk-gear' ? 'font-serif font-extrabold text-[#3e2723] drop-shadow-[0_1px_1px_rgba(255,255,255,0.4)]' : ''}
   ${counterShape === 'cyber-orbit' ? 'font-mono font-medium text-primary tracking-wide drop-shadow-[0_0_10px_currentColor]' : ''}
   ${counterShape === 'helix-strand' ? 'text-cyan-400 font-mono tracking-widest drop-shadow-[0_0_10px_rgba(34,211,238,0.8)]' : ''}
   ${counterShape === 'cyber-hexagon' ? 'font-mono text-current font-bold tracking-widest drop-shadow-[0_0_10px_currentColor]' : ''}
@@ -214,8 +220,12 @@ export const CounterVisuals = memo(({
                         {counterShape === 'neumorph' && <Neumorph currentCount={currentCount} />}
                         {counterShape === 'vertical-capsules' && <VerticalCapsules currentCount={currentCount} />}
                         {counterShape === 'luminous-beads' && <LuminousBeads progress={progress} />}
-                        {counterShape === 'sacred-star' && <SacredStar currentCount={currentCount} />}
                         {counterShape === 'cyber-orbit' && <CyberOrbit currentCount={currentCount} />}
+                        {counterShape === 'green-tally' && <GreenTally currentCount={currentCount} />}
+                        {counterShape === 'retro-flip' && <RetroFlip currentCount={currentCount} />}
+                        {counterShape === 'golden-mandala' && <GoldenMandala currentCount={currentCount} />}
+                        {counterShape === 'neon-wave' && <NeonWave currentCount={currentCount} />}
+                        {counterShape === 'steampunk-gear' && <SteampunkGear currentCount={currentCount} />}
                 </div>
 
 
@@ -251,7 +261,7 @@ export const CounterVisuals = memo(({
 
         ${counterShape === 'animated-ripple' ? 'w-64 h-64 flex items-center justify-center bg-transparent z-10' : ''}
         ${counterShape === 'bead-ring' ? 'w-64 h-64 flex items-center justify-center bg-transparent z-10' : ''}
-        ${['helix-strand', 'cyber-hexagon', 'glass-pill', 'emerald-loop', 'smart-ring', 'moon-phase', 'water-ripple', 'sand-hourglass', 'lantern-fanous', 'star-burst', 'crystal-prism', 'tally-clicker', 'cyber-3d', 'crystal-iso', 'neumorph', 'sacred-star', 'cyber-orbit'].includes(counterShape) ? 'w-64 h-64 flex items-center justify-center bg-transparent z-10' : ''}
+        ${['helix-strand', 'cyber-hexagon', 'glass-pill', 'emerald-loop', 'smart-ring', 'moon-phase', 'water-ripple', 'sand-hourglass', 'lantern-fanous', 'star-burst', 'crystal-prism', 'tally-clicker', 'cyber-3d', 'crystal-iso', 'neumorph', 'cyber-orbit', 'green-tally', 'retro-flip', 'golden-mandala', 'neon-wave', 'steampunk-gear'].includes(counterShape) ? 'w-64 h-64 flex items-center justify-center bg-transparent z-10' : ''}
 
         flex items-center justify-center
         cursor-pointer

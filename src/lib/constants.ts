@@ -47,8 +47,12 @@ export const counterShapes = [
   { id: 'cyber-3d', label: 'Cyber 3D', icon: '💎', color: '#3b82f6', bg: 'rgba(59, 130, 246, 0.1)' },
   { id: 'crystal-iso', label: 'Crystal ISO', icon: '🕋', color: '#10b981', bg: 'rgba(16, 185, 129, 0.1)' },
   { id: 'neumorph', label: 'Neumorph', icon: '☁', color: '#94a3b8', bg: 'rgba(148, 163, 184, 0.1)' },
-  { id: 'sacred-star', label: 'Sacred Star', icon: '✵', color: '#fbbf24', bg: 'rgba(251, 191, 38, 0.1)' },
   { id: 'cyber-orbit', label: 'Cyber Orbit', icon: '🪐', color: '#22d3ee', bg: 'rgba(34, 211, 238, 0.1)' },
+  { id: 'green-tally', label: 'Green Tally', icon: '📟', color: '#10b981', bg: 'rgba(16, 185, 129, 0.1)' },
+  { id: 'retro-flip', label: 'Retro Flip', icon: '🎴', color: '#f97316', bg: 'rgba(249, 115, 22, 0.1)' },
+  { id: 'golden-mandala', label: 'Mandala', icon: '🔆', color: '#fbbf24', bg: 'rgba(251, 191, 36, 0.1)' },
+  { id: 'neon-wave', label: 'Neon Wave', icon: '🔮', color: '#d946ef', bg: 'rgba(217, 70, 239, 0.1)' },
+  { id: 'steampunk-gear', label: 'Steampunk', icon: '⚙️', color: '#b45309', bg: 'rgba(180, 83, 9, 0.1)' },
 ] as const;
 
 // Dashboard Layouts removed in favor of single default design
