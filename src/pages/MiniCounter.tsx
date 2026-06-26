@@ -3,6 +3,7 @@ import { useTasbeehStore } from '@/store/tasbeehStore';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Minus, Plus, RefreshCw, X } from 'lucide-react';
 import { ThemeProvider } from '@/components/ThemeProvider';
+import { ArrowKeyBackButton } from '@/components/ArrowKeyBackButton';
 
 export default function MiniCounter() {
     const {
@@ -38,7 +39,7 @@ export default function MiniCounter() {
 
                 {/* Header */}
                 <div className="absolute top-0 left-0 right-0 p-3 flex justify-between items-center bg-background/50 backdrop-blur-sm z-20 drag-handle">
-                    <span className="text-xs font-medium text-muted-foreground uppercase tracking-widest">Mini Mode</span>
+                    <ArrowKeyBackButton className="!px-3 !py-1 h-7 !rounded-lg !text-[10px]" to="/" label="Dashboard" />
                     <div className="flex gap-2">
                         <button onClick={reset} className="p-1.5 hover:bg-muted rounded-full transition-colors">
                             <RefreshCw className="w-3.5 h-3.5 text-muted-foreground" />

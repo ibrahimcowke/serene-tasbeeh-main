@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
-import { ArrowLeft, Shield, Lock, Eye, Database, Globe, Baby, FileText } from 'lucide-react';
+import { Shield, Lock, Eye, Database, Globe, Baby, FileText } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { ArrowKeyBackButton } from '@/components/ArrowKeyBackButton';
 
 export default function PrivacyPolicy() {
     const navigate = useNavigate();
@@ -48,21 +49,7 @@ export default function PrivacyPolicy() {
             {/* Header */}
             <header className="sticky top-0 z-50 w-full border-b bg-background/80 backdrop-blur-md">
                 <div className="container flex h-16 items-center px-4 max-w-2xl mx-auto">
-                    <motion.button
-                        whileHover={{ scale: 1.05, x: -3 }}
-                        whileTap={{ scale: 0.95 }}
-                        onClick={() => navigate("/")}
-                        className="mr-4 flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold border transition-all cursor-pointer backdrop-blur-md"
-                        style={{
-                            background: "rgba(255,255,255,0.05)",
-                            borderColor: "hsl(var(--primary) / 0.25)",
-                            boxShadow: "0 2px 10px rgba(0,0,0,0.15), inset 0 1px 1px rgba(255,255,255,0.05)",
-                            color: "hsl(var(--primary))",
-                        }}
-                    >
-                        <ArrowLeft className="w-3.5 h-3.5" />
-                        <span>Dashboard</span>
-                    </motion.button>
+                    <ArrowKeyBackButton className="mr-4" />
                     <h1 className="text-lg font-medium">Privacy Policy</h1>
                 </div>
             </header>
@@ -111,12 +98,7 @@ export default function PrivacyPolicy() {
                             <br />
                             Email us at <span className="text-primary font-medium">privacy@tasbeehly.com</span>
                         </p>
-                        <button
-                            onClick={() => navigate('/')}
-                            className="px-8 py-3 bg-primary text-primary-foreground rounded-2xl font-medium hover:opacity-90 transition-opacity"
-                        >
-                            Back to App
-                        </button>
+                        <ArrowKeyBackButton className="mx-auto" label="Back to App" />
                     </footer>
                 </motion.div>
             </main>
