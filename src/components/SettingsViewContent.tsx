@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Check, Download, Upload, Trash2, Zap, ExternalLink, ChevronRight, Bell, Wind, Shield } from 'lucide-react';
+import { Check, Download, Upload, Trash2, Zap, ExternalLink, ChevronRight, Bell, Wind, Shield, Cloud } from 'lucide-react';
 import { useTasbeehStore } from '@/store/tasbeehStore';
 import { SheetHeader, SheetTitle, SheetDescription } from '@/components/ui/sheet';
 import { Switch } from '@/components/ui/switch';
@@ -26,6 +26,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Label } from '@/components/ui/label';
 import { themes, counterShapes } from '@/lib/constants';
 import { RemindersView } from './RemindersView';
+import { LoginView } from './LoginView';
 
 interface SettingsViewContentProps {
   defaultTab: string;
@@ -468,6 +469,57 @@ export function SettingsViewContent({ defaultTab, setOpen }: SettingsViewContent
                     onValueChange={([val]) => setHadithSlideDuration(val)} 
                   />
                   <p className="text-[10px] text-muted-foreground">Time before showing the next guidance message</p>
+                </div>
+              </div>
+
+              <div className="p-4 rounded-2xl bg-card border border-border/50 mt-4 space-y-4">
+                <p className="text-xs text-muted-foreground uppercase tracking-wide px-1">Data Management</p>
+                <div className="space-y-2">
+                  <LoginView>
+                    <button className="w-full flex items-center justify-between p-3 rounded-xl hover:bg-primary/5 transition-colors border border-transparent hover:border-primary/20">
+                      <div className="flex items-center gap-3">
+                        <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
+                          <Cloud className="w-4 h-4 text-primary" />
+                        </div>
+                        <div className="text-left">
+                          <p className="text-sm font-medium text-foreground">Cloud Sync & Security</p>
+                          <p className="text-xs text-muted-foreground">Sign in to backup your data securely</p>
+                        </div>
+                      </div>
+                      <ChevronRight className="w-5 h-5 text-primary/50 transition-colors" />
+                    </button>
+                  </LoginView>
+
+                  <AlertDialog>
+                    <AlertDialogTrigger asChild>
+                      <button className="w-full flex items-center justify-between p-3 rounded-xl hover:bg-red-500/10 transition-colors border border-transparent hover:border-red-500/20 group">
+                        <div className="flex items-center gap-3">
+                          <div className="w-8 h-8 rounded-full bg-red-500/10 flex items-center justify-center group-hover:bg-red-500/20 transition-colors">
+                            <Trash2 className="w-4 h-4 text-red-500" />
+                          </div>
+                          <div className="text-left">
+                            <p className="text-sm font-medium text-red-500">Clear All Data</p>
+                            <p className="text-xs text-red-500/70">Permanently delete all records</p>
+                          </div>
+                        </div>
+                      </button>
+                    </AlertDialogTrigger>
+                    <AlertDialogContent className="w-[90vw] max-w-[400px] rounded-[2rem]">
+                      <AlertDialogHeader>
+                        <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                        <AlertDialogDescription>
+                          This action cannot be undone. This will permanently delete your
+                          entire dhikr history, routines, and reset all settings to default.
+                        </AlertDialogDescription>
+                      </AlertDialogHeader>
+                      <AlertDialogFooter>
+                        <AlertDialogCancel className="rounded-xl">Cancel</AlertDialogCancel>
+                        <AlertDialogAction onClick={() => { clearAllData(); setOpen(false); }} className="bg-red-500 hover:bg-red-600 rounded-xl">
+                          Delete Everything
+                        </AlertDialogAction>
+                      </AlertDialogFooter>
+                    </AlertDialogContent>
+                  </AlertDialog>
                 </div>
               </div>
 

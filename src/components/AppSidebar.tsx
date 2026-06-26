@@ -1,4 +1,4 @@
-import { BookOpen, Target, ClipboardList, Bell, BarChart3, History, HandPlatter, Library } from "lucide-react";
+import { BookOpen, Target, ClipboardList, Bell, BarChart3, History, HandPlatter, Library, Calendar } from "lucide-react";
 import {
     Sidebar,
     SidebarContent,
@@ -20,8 +20,8 @@ import { ProgressView } from "./ProgressView";
 import { RemindersView } from "./RemindersView";
 import { SettingsView } from "./SettingsView";
 import { DuaLibraryView } from "./DuaLibraryView";
+import { CalendarView } from "./CalendarView";
 import { useTasbeehStore } from "@/store/tasbeehStore";
-
 
 export function AppSidebar() {
     const startTasbih100 = useTasbeehStore((s) => s.startTasbih100);
@@ -129,6 +129,19 @@ export function AppSidebar() {
                                         </button>
                                     </SidebarMenuButton>
                                 </RemindersView>
+                            </SidebarMenuItem>
+
+                            <SidebarMenuItem>
+                                <CalendarView>
+                                    <SidebarMenuButton asChild tooltip="Calendar" size="lg">
+                                        <button className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-left transition-all"
+                                            style={{ color: "hsl(var(--sidebar-foreground) / 0.85)" }}
+                                        >
+                                            <Calendar className="w-4 h-4 text-primary/70 shrink-0" />
+                                            <span className="text-sm font-light tracking-wide">Calendar</span>
+                                        </button>
+                                    </SidebarMenuButton>
+                                </CalendarView>
                             </SidebarMenuItem>
 
 

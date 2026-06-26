@@ -6,30 +6,40 @@ export interface HijriDate {
 }
 
 export const getHijriDate = (date: Date = new Date()): HijriDate => {
-    const formatter = new Intl.DateTimeFormat('en-u-ca-islamic-umalqura-nu-latn', {
-        day: 'numeric',
-        month: 'numeric',
-        year: 'numeric',
-    });
-    
-    const parts = formatter.formatToParts(date);
-    const day = parseInt(parts.find(p => p.type === 'day')?.value || '0');
-    const month = parseInt(parts.find(p => p.type === 'month')?.value || '0');
-    const year = parseInt(parts.find(p => p.type === 'year')?.value || '0');
-
-    // Month names (0-indexed for array access usually, but let's keep it simple)
     const monthNames = [
         "Muharram", "Safar", "Rabi' al-Awwal", "Rabi' al-Thani",
         "Jumada al-Awwal", "Jumada al-Thani", "Rajab", "Sha'ban",
         "Ramadan", "Shawwal", "Dhu al-Qi'dah", "Dhu al-Hijjah"
     ];
 
-    return {
-        day,
-        month,
-        year,
-        monthName: monthNames[month - 1] || 'Unknown'
-    };
+    try {
+        const formatter = new Intl.DateTimeFormat('en-u-ca-islamic-umalqura-nu-latn', {
+            day: 'numeric',
+            month: 'numeric',
+            year: 'numeric',
+        });
+        
+        const parts = formatter.formatToParts(date);
+        const day = parseInt(parts.find(p => p.type === 'day')?.value || '0');
+        const month = parseInt(parts.find(p => p.type === 'month')?.value || '0');
+        const year = parseInt(parts.find(p => p.type === 'year')?.value || '0');
+
+        return {
+            day,
+            month,
+            year,
+            monthName: monthNames[month - 1] || 'Unknown'
+        };
+    } catch (e) {
+        console.warn("Islamic calendar not supported on this device's WebView.", e);
+        // Fallback to avoid crashing the app. 
+        return {
+            day: date.getDate(),
+            month: date.getMonth() + 1,
+            year: date.getFullYear(),
+            monthName: ''
+        };
+    }
 };
 
 export const getContext = () => {
