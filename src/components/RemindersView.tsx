@@ -55,6 +55,9 @@ export function RemindersContent() {
         setReminderEnabled: setNotificationsEnabled,
         syncPrayerTimes,
         setSyncPrayerTimes,
+        autoStartPostPrayerTasbeeh,
+        setAutoStartPostPrayerTasbeeh,
+        startTasbih100,
     } = useTasbeehStore();
 
     const handleLocationChange = async (checked: boolean) => {
@@ -113,13 +116,17 @@ export function RemindersContent() {
             const currentTime = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
             const currentDay = now.getDay();
 
-            reminders.forEach((reminder) => {
+             reminders.forEach((reminder) => {
                 if (
                     reminder.enabled &&
                     reminder.time === currentTime &&
                     reminder.days.includes(currentDay) &&
                     now.getSeconds() < 2 // Only trigger during the first 2 seconds of the minute
                 ) {
+                    if (autoStartPostPrayerTasbeeh) {
+                        startTasbih100();
+                    }
+
                     if ('serviceWorker' in navigator) {
                         navigator.serviceWorker.ready.then(registration => {
                             registration.showNotification('Serene Tasbeeh Reminder', {
@@ -272,6 +279,23 @@ export function RemindersContent() {
                             <p className="text-sm text-amber-600">
                                 Please allow notifications in your browser settings
                             </p>
+                        )}
+                        {notificationsEnabled && (
+                            <div className="flex items-center justify-between pt-3 border-t border-border/30">
+                                <div className="space-y-0.5 max-w-[80%]">
+                                    <Label htmlFor="auto-tasbih" className="text-sm font-medium">
+                                        After Prayer Auto-Tasbih
+                                    </Label>
+                                    <p className="text-xs text-muted-foreground">
+                                        Auto-start 100 Tasbeeh session when reminder triggers
+                                    </p>
+                                </div>
+                                <Switch
+                                    id="auto-tasbih"
+                                    checked={autoStartPostPrayerTasbeeh}
+                                    onCheckedChange={setAutoStartPostPrayerTasbeeh}
+                                />
+                            </div>
                         )}
                     </CardContent>
                 </Card>

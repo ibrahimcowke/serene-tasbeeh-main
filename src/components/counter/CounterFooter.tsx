@@ -1,5 +1,6 @@
 import { memo } from 'react';
-import { useTasbeehStore, defaultDhikrs } from '@/store/tasbeehStore';
+import { useTasbeehStore } from '@/store/tasbeehStore';
+import { useTranslation } from '@/lib/i18n';
 
 const toArabicNumerals = (n: number): string => {
   const d = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'];
@@ -9,13 +10,12 @@ const toArabicNumerals = (n: number): string => {
 export const CounterFooter = memo(function CounterFooter() {
   const currentCount = useTasbeehStore(state => state.currentCount);
   const targetCount = useTasbeehStore(state => state.targetCount);
-  const currentDhikrId = useTasbeehStore(state => state.currentDhikr.id);
+  const currentDhikr = useTasbeehStore(state => state.currentDhikr);
   const sessionMode = useTasbeehStore(state => state.sessionMode);
   const zenMode = useTasbeehStore(state => state.zenMode);
   const totalAllTime = useTasbeehStore(state => state.totalAllTime);
   const streakDays = useTasbeehStore(state => state.streakDays);
-
-  const currentDhikr = defaultDhikrs.find(d => d.id === currentDhikrId);
+  const { t } = useTranslation();
 
   const ROUND_SIZE = 33;
   const roundsDone = Math.floor(currentCount / ROUND_SIZE);
@@ -49,7 +49,9 @@ export const CounterFooter = memo(function CounterFooter() {
             >
               {toArabicNumerals(totalAllTime)}
             </span>
-            <span className="text-white/25 text-[9px] uppercase tracking-widest mt-0.5">total</span>
+            <span className="text-white/25 text-[9px] uppercase tracking-widest mt-0.5">
+              {t('counter.total')}
+            </span>
           </div>
 
           {/* Divider dot */}
@@ -69,7 +71,9 @@ export const CounterFooter = memo(function CounterFooter() {
             >
               {toArabicNumerals(roundsDone)}
             </span>
-            <span className="text-white/25 text-[9px] uppercase tracking-widest mt-0.5">rounds</span>
+            <span className="text-white/25 text-[9px] uppercase tracking-widest mt-0.5">
+              {t('counter.rounds')}
+            </span>
           </div>
 
           {/* Divider dot */}
@@ -89,7 +93,9 @@ export const CounterFooter = memo(function CounterFooter() {
             >
               {toArabicNumerals(streakDays)}
             </span>
-            <span className="text-white/25 text-[9px] uppercase tracking-widest mt-0.5">streak</span>
+            <span className="text-white/25 text-[9px] uppercase tracking-widest mt-0.5">
+              {t('counter.streak')}
+            </span>
           </div>
         </div>
       )}

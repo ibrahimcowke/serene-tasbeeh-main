@@ -1,4 +1,4 @@
-import { BookOpen, Target, ClipboardList, Bell, BarChart3, History, HandPlatter, Library, Calendar } from "lucide-react";
+import { BookOpen, Target, ClipboardList, Bell, BarChart3, History, HandPlatter, Library, Calendar, Compass, Star, Hash, Share2 } from "lucide-react";
 import {
     Sidebar,
     SidebarContent,
@@ -15,16 +15,21 @@ import { DhikrSelector } from "./DhikrSelector";
 import { TargetSelector } from "./TargetSelector";
 import { RoutinesView } from "./RoutinesView";
 import { HistoryView } from "./HistoryView";
-
 import { ProgressView } from "./ProgressView";
 import { RemindersView } from "./RemindersView";
 import { SettingsView } from "./SettingsView";
 import { DuaLibraryView } from "./DuaLibraryView";
 import { CalendarView } from "./CalendarView";
+import { QiblaCompass } from "./QiblaCompass";
+import { AsmaulHusnaView } from "./AsmaulHusnaView";
+import { MultiCounterView } from "./MultiCounterView";
+import { StatsShareCard } from "./StatsShareCard";
 import { useTasbeehStore } from "@/store/tasbeehStore";
+import { useTranslation } from "@/lib/i18n";
 
 export function AppSidebar() {
     const startTasbih100 = useTasbeehStore((s) => s.startTasbih100);
+    const { t } = useTranslation();
     return (
         <Sidebar collapsible="icon">
             {/* Header with brand */}
@@ -74,19 +79,19 @@ export function AppSidebar() {
                     <SidebarGroupLabel
                         className="text-sidebar-foreground/40 uppercase tracking-[0.25em] text-[9px] font-medium px-3 mb-1"
                     >
-                        Practice
+                        {t('sidebar.practice')}
                     </SidebarGroupLabel>
                     <SidebarGroupContent>
                         <SidebarMenu className="gap-0.5">
 
                             <SidebarMenuItem>
                                 <DhikrSelector>
-                                    <SidebarMenuButton asChild tooltip="Select Dhikr" size="lg">
+                                    <SidebarMenuButton asChild tooltip={t('sidebar.select_dhikr')} size="lg">
                                         <button className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-left transition-all group"
                                             style={{ color: "hsl(var(--sidebar-foreground) / 0.85)" }}
                                         >
                                             <BookOpen className="w-4 h-4 text-primary shrink-0" />
-                                            <span className="text-sm font-light tracking-wide">Select Dhikr</span>
+                                            <span className="text-sm font-light tracking-wide">{t('sidebar.select_dhikr')}</span>
                                         </button>
                                     </SidebarMenuButton>
                                 </DhikrSelector>
@@ -94,12 +99,12 @@ export function AppSidebar() {
 
                             <SidebarMenuItem>
                                 <TargetSelector>
-                                    <SidebarMenuButton asChild tooltip="Set Target" size="lg">
+                                    <SidebarMenuButton asChild tooltip={t('sidebar.set_target')} size="lg">
                                         <button className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-left transition-all"
                                             style={{ color: "hsl(var(--sidebar-foreground) / 0.85)" }}
                                         >
                                             <Target className="w-4 h-4 text-primary/70 shrink-0" />
-                                            <span className="text-sm font-light tracking-wide">Set Target</span>
+                                            <span className="text-sm font-light tracking-wide">{t('sidebar.set_target')}</span>
                                         </button>
                                     </SidebarMenuButton>
                                 </TargetSelector>
@@ -107,12 +112,12 @@ export function AppSidebar() {
 
                             <SidebarMenuItem>
                                 <RoutinesView>
-                                    <SidebarMenuButton asChild tooltip="Routines" size="lg">
+                                    <SidebarMenuButton asChild tooltip={t('nav.routines')} size="lg">
                                         <button className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-left transition-all"
                                             style={{ color: "hsl(var(--sidebar-foreground) / 0.85)" }}
                                         >
                                             <ClipboardList className="w-4 h-4 text-primary/70 shrink-0" />
-                                            <span className="text-sm font-light tracking-wide">Routines</span>
+                                            <span className="text-sm font-light tracking-wide">{t('nav.routines')}</span>
                                         </button>
                                     </SidebarMenuButton>
                                 </RoutinesView>
@@ -120,12 +125,12 @@ export function AppSidebar() {
 
                             <SidebarMenuItem>
                                 <RemindersView>
-                                    <SidebarMenuButton asChild tooltip="Reminders" size="lg">
+                                    <SidebarMenuButton asChild tooltip={t('nav.reminders')} size="lg">
                                         <button className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-left transition-all"
                                             style={{ color: "hsl(var(--sidebar-foreground) / 0.85)" }}
                                         >
                                             <Bell className="w-4 h-4 text-primary/70 shrink-0" />
-                                            <span className="text-sm font-light tracking-wide">Reminders</span>
+                                            <span className="text-sm font-light tracking-wide">{t('nav.reminders')}</span>
                                         </button>
                                     </SidebarMenuButton>
                                 </RemindersView>
@@ -133,12 +138,12 @@ export function AppSidebar() {
 
                             <SidebarMenuItem>
                                 <CalendarView>
-                                    <SidebarMenuButton asChild tooltip="Calendar" size="lg">
+                                    <SidebarMenuButton asChild tooltip={t('nav.calendar')} size="lg">
                                         <button className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-left transition-all"
                                             style={{ color: "hsl(var(--sidebar-foreground) / 0.85)" }}
                                         >
                                             <Calendar className="w-4 h-4 text-primary/70 shrink-0" />
-                                            <span className="text-sm font-light tracking-wide">Calendar</span>
+                                            <span className="text-sm font-light tracking-wide">{t('nav.calendar')}</span>
                                         </button>
                                     </SidebarMenuButton>
                                 </CalendarView>
@@ -146,29 +151,68 @@ export function AppSidebar() {
 
 
                             <SidebarMenuItem>
-                                <SidebarMenuButton asChild tooltip="After Prayer" size="lg">
+                                <SidebarMenuButton asChild tooltip={t('sidebar.after_prayer')} size="lg">
                                     <button
                                         className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-left transition-all"
                                         style={{ color: "hsl(var(--sidebar-foreground) / 0.85)" }}
                                         onClick={() => startTasbih100()}
                                     >
                                         <HandPlatter className="w-4 h-4 text-primary/70 shrink-0" />
-                                        <span className="text-sm font-light tracking-wide">After Prayer</span>
+                                        <span className="text-sm font-light tracking-wide">{t('sidebar.after_prayer')}</span>
                                     </button>
                                 </SidebarMenuButton>
                             </SidebarMenuItem>
 
                             <SidebarMenuItem>
                                 <DuaLibraryView>
-                                    <SidebarMenuButton asChild tooltip="Duas" size="lg">
+                                    <SidebarMenuButton asChild tooltip={t('nav.duas')} size="lg">
                                         <button className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-left transition-all"
                                             style={{ color: "hsl(var(--sidebar-foreground) / 0.85)" }}
                                         >
                                             <Library className="w-4 h-4 text-primary/70 shrink-0" />
-                                            <span className="text-sm font-light tracking-wide">Duas</span>
+                                            <span className="text-sm font-light tracking-wide">{t('nav.duas')}</span>
                                         </button>
                                     </SidebarMenuButton>
                                 </DuaLibraryView>
+                            </SidebarMenuItem>
+
+                            <SidebarMenuItem>
+                                <QiblaCompass>
+                                    <SidebarMenuButton asChild tooltip={t('nav.qibla')} size="lg">
+                                        <button className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-left transition-all"
+                                            style={{ color: "hsl(var(--sidebar-foreground) / 0.85)" }}
+                                        >
+                                            <Compass className="w-4 h-4 text-primary/70 shrink-0" />
+                                            <span className="text-sm font-light tracking-wide">{t('nav.qibla')}</span>
+                                        </button>
+                                    </SidebarMenuButton>
+                                </QiblaCompass>
+                            </SidebarMenuItem>
+
+                            <SidebarMenuItem>
+                                <AsmaulHusnaView>
+                                    <SidebarMenuButton asChild tooltip={t('nav.names')} size="lg">
+                                        <button className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-left transition-all"
+                                            style={{ color: "hsl(var(--sidebar-foreground) / 0.85)" }}
+                                        >
+                                            <Star className="w-4 h-4 text-primary/70 shrink-0" />
+                                            <span className="text-sm font-light tracking-wide">{t('nav.names')}</span>
+                                        </button>
+                                    </SidebarMenuButton>
+                                </AsmaulHusnaView>
+                            </SidebarMenuItem>
+
+                            <SidebarMenuItem>
+                                <MultiCounterView>
+                                    <SidebarMenuButton asChild tooltip={t('nav.multi')} size="lg">
+                                        <button className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-left transition-all"
+                                            style={{ color: "hsl(var(--sidebar-foreground) / 0.85)" }}
+                                        >
+                                            <Hash className="w-4 h-4 text-primary/70 shrink-0" />
+                                            <span className="text-sm font-light tracking-wide">{t('nav.multi')}</span>
+                                        </button>
+                                    </SidebarMenuButton>
+                                </MultiCounterView>
                             </SidebarMenuItem>
                         </SidebarMenu>
                     </SidebarGroupContent>
@@ -182,19 +226,19 @@ export function AppSidebar() {
                     <SidebarGroupLabel
                         className="text-sidebar-foreground/40 uppercase tracking-[0.25em] text-[9px] font-medium px-3 mb-1"
                     >
-                        Insights
+                        {t('sidebar.insights')}
                     </SidebarGroupLabel>
                     <SidebarGroupContent>
                         <SidebarMenu className="gap-0.5">
 
                             <SidebarMenuItem>
                                 <ProgressView>
-                                    <SidebarMenuButton asChild tooltip="Stats" size="lg">
+                                    <SidebarMenuButton asChild tooltip={t('nav.stats')} size="lg">
                                         <button className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-left transition-all"
                                             style={{ color: "hsl(var(--sidebar-foreground) / 0.85)" }}
                                         >
                                             <BarChart3 className="w-4 h-4 text-primary/70 shrink-0" />
-                                            <span className="text-sm font-light tracking-wide">Stats</span>
+                                            <span className="text-sm font-light tracking-wide">{t('nav.stats')}</span>
                                         </button>
                                     </SidebarMenuButton>
                                 </ProgressView>
@@ -202,15 +246,28 @@ export function AppSidebar() {
 
                             <SidebarMenuItem>
                                 <HistoryView>
-                                    <SidebarMenuButton asChild tooltip="History" size="lg">
+                                    <SidebarMenuButton asChild tooltip={t('nav.history')} size="lg">
                                         <button className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-left transition-all"
                                             style={{ color: "hsl(var(--sidebar-foreground) / 0.85)" }}
                                         >
                                             <History className="w-4 h-4 text-primary/70 shrink-0" />
-                                            <span className="text-sm font-light tracking-wide">History</span>
+                                            <span className="text-sm font-light tracking-wide">{t('nav.history')}</span>
                                         </button>
                                     </SidebarMenuButton>
                                 </HistoryView>
+                            </SidebarMenuItem>
+
+                            <SidebarMenuItem>
+                                <StatsShareCard>
+                                    <SidebarMenuButton asChild tooltip={t('share.title')} size="lg">
+                                        <button className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-left transition-all"
+                                            style={{ color: "hsl(var(--sidebar-foreground) / 0.85)" }}
+                                        >
+                                            <Share2 className="w-4 h-4 text-primary/70 shrink-0" />
+                                            <span className="text-sm font-light tracking-wide">{t('share.title')}</span>
+                                        </button>
+                                    </SidebarMenuButton>
+                                </StatsShareCard>
                             </SidebarMenuItem>
 
                         </SidebarMenu>
@@ -228,7 +285,7 @@ export function AppSidebar() {
             >
                 <SidebarMenuItem>
                     <SettingsView defaultTab="appearance">
-                        <SidebarMenuButton asChild tooltip="Settings" size="lg">
+                        <SidebarMenuButton asChild tooltip={t('nav.settings')} size="lg">
                             <button className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-left transition-all"
                                 style={{ color: "hsl(var(--sidebar-foreground) / 0.6)" }}
                             >
@@ -237,7 +294,7 @@ export function AppSidebar() {
                                     <circle cx="12" cy="12" r="3" />
                                     <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" />
                                 </svg>
-                                <span className="text-sm font-light tracking-wide">Settings</span>
+                                <span className="text-sm font-light tracking-wide">{t('nav.settings')}</span>
                             </button>
                         </SidebarMenuButton>
                     </SettingsView>

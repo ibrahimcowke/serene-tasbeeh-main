@@ -1,9 +1,10 @@
-﻿import { useState } from "react";
+import { useState } from "react";
 import { motion } from "framer-motion";
 import { Search, BookOpen, ChevronDown, ChevronUp } from "lucide-react";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger, SheetDescription } from "@/components/ui/sheet";
 import { Input } from "@/components/ui/input";
 import { duas, duaCategories, type Dua } from "@/data/duas";
+import { useTranslation } from "@/lib/i18n";
 
 interface DuaLibraryViewProps {
   children: React.ReactNode;
@@ -78,6 +79,7 @@ function DuaCard({ dua }: { dua: Dua }) {
 function DuaLibraryContent() {
   const [query, setQuery] = useState("");
   const [activeCategory, setActiveCategory] = useState("all");
+  const { t } = useTranslation();
 
   const filtered = duas.filter((d) => {
     const matchCat = activeCategory === "all" || d.category === activeCategory;
@@ -96,7 +98,7 @@ function DuaLibraryContent() {
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
         <Input
           className="pl-9 bg-card/60 border-border/40 rounded-xl text-sm"
-          placeholder="Search duas..."
+          placeholder={t('duas.search')}
           value={query}
           onChange={(e) => setQuery(e.target.value)}
         />
@@ -124,7 +126,7 @@ function DuaLibraryContent() {
             }
           >
             <span>{categoryIcons[cat.id]}</span>
-            {cat.label}
+            {t(`duas.category.${cat.id}`)}
           </button>
         ))}
       </div>
@@ -134,7 +136,7 @@ function DuaLibraryContent() {
         {filtered.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-16 gap-3 text-muted-foreground">
             <BookOpen className="w-10 h-10 opacity-30" />
-            <p className="text-sm">No duas found</p>
+            <p className="text-sm">{t('duas.empty')}</p>
           </div>
         ) : (
           filtered.map((dua) => <DuaCard key={dua.id} dua={dua} />)
@@ -145,16 +147,17 @@ function DuaLibraryContent() {
 }
 
 export function DuaLibraryView({ children }: DuaLibraryViewProps) {
+  const { t, isRTL } = useTranslation();
   return (
     <Sheet>
       <SheetTrigger asChild>{children}</SheetTrigger>
-      <SheetContent side="bottom" className="bg-sheet-bg rounded-t-3xl h-[88vh]">
+      <SheetContent side="bottom" className="bg-sheet-bg rounded-t-3xl h-[88vh]" dir={isRTL ? "rtl" : "ltr"}>
         <SheetDescription className="sr-only">
           Browse and read common Islamic duas.
         </SheetDescription>
         <div className="sheet-handle" />
         <SheetHeader className="text-left pb-4">
-          <SheetTitle className="text-lg font-medium">Dua Library</SheetTitle>
+          <SheetTitle className="text-lg font-medium">{t('duas.title')}</SheetTitle>
         </SheetHeader>
         <DuaLibraryContent />
       </SheetContent>

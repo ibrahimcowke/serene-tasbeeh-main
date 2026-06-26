@@ -2,18 +2,20 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { lazy, Suspense, useEffect } from "react";
 const Index = lazy(() => import("./pages/Index"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 const PrivacyPolicy = lazy(() => import("./pages/PrivacyPolicy"));
 const MiniCounter = lazy(() => import("./pages/MiniCounter"));
 const Challenges = lazy(() => import("./pages/Challenges"));
+const Welcome = lazy(() => import("./pages/Welcome"));
 
 import { ThemeProvider } from "./components/ThemeProvider";
 import { CongratsPopup } from "./components/CongratsPopup";
 import { PWAInstallPrompt } from "./components/PWAInstallPrompt";
 import { PrayerTimesPermissionModal } from "./components/PrayerTimesPermissionModal";
+import { AmbientSoundPlayer } from "./components/AmbientSoundPlayer";
 import { registerPeriodicSync } from "./lib/notifications";
 import { useTasbeehStore } from "./store/tasbeehStore";
 
@@ -23,6 +25,7 @@ import { StatusBar, Style } from '@capacitor/status-bar';
 import { Keyboard } from '@capacitor/keyboard';
 
 const App = () => {
+  const hasSeenWelcome = useTasbeehStore((s) => s.hasSeenWelcome);
   useEffect(() => {
     registerPeriodicSync();
     
@@ -74,10 +77,12 @@ const App = () => {
         <CongratsPopup />
         <PWAInstallPrompt />
         <PrayerTimesPermissionModal />
+        <AmbientSoundPlayer />
         <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
           <Suspense fallback={<div className="h-dvh w-full flex items-center justify-center bg-background text-muted-foreground animate-pulse">Loading...</div>}>
             <Routes>
-              <Route path="/" element={<Index />} />
+              <Route path="/welcome" element={<Welcome />} />
+              <Route path="/" element={hasSeenWelcome ? <Index /> : <Navigate to="/welcome" replace />} />
               <Route path="/mini" element={<MiniCounter />} />
               <Route path="/privacy" element={<PrivacyPolicy />} />
               <Route path="/challenges" element={<Challenges />} />

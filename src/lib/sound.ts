@@ -105,3 +105,157 @@ export class SoundManager {
     }
   }
 }
+
+// ─────────────────────────────────────────────
+// Ambient Sound Engine (v2.1.0)
+// ─────────────────────────────────────────────
+
+type AmbientType = 'none' | 'rain' | 'water' | 'masjid';
+
+class AmbientEngine {
+  private ctx: AudioContext | null = null;
+  private masterGain: GainNode | null = null;
+  private nodes: AudioNode[] = [];
+  private currentType: AmbientType = 'none';
+
+  private getCtx(): AudioContext {
+    if (!this.ctx) {
+      this.ctx = new (window.AudioContext || (window as any).webkitAudioContext)();
+    }
+    return this.ctx;
+  }
+
+  async play(type: AmbientType, volume: number = 0.3) {
+    if (type === 'none') { this.stop(); return; }
+    if (type === this.currentType && this.masterGain) {
+      this.masterGain.gain.setTargetAtTime(volume, this.getCtx().currentTime, 0.3);
+      return;
+    }
+    this.stop();
+    this.currentType = type;
+    const ctx = this.getCtx();
+    if (ctx.state === 'suspended') await ctx.resume();
+    this.masterGain = ctx.createGain();
+    this.masterGain.gain.setValueAtTime(0, ctx.currentTime);
+    this.masterGain.gain.linearRampToValueAtTime(volume, ctx.currentTime + 1.5);
+    this.masterGain.connect(ctx.destination);
+    if (type === 'rain') this.buildRain(ctx);
+    else if (type === 'water') this.buildWater(ctx);
+    else if (type === 'masjid') this.buildMasjid(ctx);
+  }
+
+  setVolume(volume: number) {
+    if (this.masterGain && this.ctx) {
+      this.masterGain.gain.setTargetAtTime(volume, this.ctx.currentTime, 0.3);
+    }
+  }
+
+  stop() {
+    if (this.masterGain && this.ctx) {
+      this.masterGain.gain.setTargetAtTime(0, this.ctx.currentTime, 0.5);
+      const nodesToClean = [...this.nodes];
+      const gainToClean = this.masterGain;
+      setTimeout(() => {
+        nodesToClean.forEach((n) => { try { n.disconnect(); } catch {} });
+        try { gainToClean.disconnect(); } catch {}
+      }, 1500);
+    }
+    this.nodes = [];
+    this.masterGain = null;
+    this.currentType = 'none';
+  }
+
+  private buildRain(ctx: AudioContext) {
+    const bufferSize = ctx.sampleRate * 4;
+    const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+    const data = buffer.getChannelData(0);
+    for (let i = 0; i < bufferSize; i++) data[i] = Math.random() * 2 - 1;
+    const source = ctx.createBufferSource();
+    source.buffer = buffer;
+    source.loop = true;
+    const lpf = ctx.createBiquadFilter();
+    lpf.type = 'lowpass';
+    lpf.frequency.value = 2200;
+    lpf.Q.value = 0.6;
+    const hpf = ctx.createBiquadFilter();
+    hpf.type = 'highpass';
+    hpf.frequency.value = 400;
+    const lfo = ctx.createOscillator();
+    const lfoGain = ctx.createGain();
+    lfo.frequency.value = 0.07;
+    lfoGain.gain.value = 0.08;
+    lfo.connect(lfoGain);
+    lfoGain.connect((this.masterGain as GainNode).gain);
+    lfo.start();
+    source.connect(lpf);
+    lpf.connect(hpf);
+    hpf.connect(this.masterGain!);
+    source.start();
+    this.nodes.push(source, lpf, hpf, lfo, lfoGain);
+  }
+
+  private buildWater(ctx: AudioContext) {
+    const mg = this.masterGain!;
+    const type = this.currentType;
+    const scheduleGurgle = () => {
+      if (this.currentType !== type || !this.masterGain) return;
+      const now = ctx.currentTime;
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      const startFreq = 300 + Math.random() * 400;
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(startFreq, now);
+      osc.frequency.exponentialRampToValueAtTime(startFreq * 0.5, now + 0.3 + Math.random() * 0.4);
+      gain.gain.setValueAtTime(0, now);
+      gain.gain.linearRampToValueAtTime(0.06, now + 0.05);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.5 + Math.random() * 0.5);
+      osc.connect(gain);
+      gain.connect(mg);
+      osc.start(now);
+      osc.stop(now + 1);
+      setTimeout(scheduleGurgle, 80 + Math.random() * 200);
+    };
+    const bufferSize = ctx.sampleRate * 2;
+    const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+    const data = buffer.getChannelData(0);
+    for (let i = 0; i < bufferSize; i++) data[i] = (Math.random() * 2 - 1) * 0.5;
+    const src = ctx.createBufferSource();
+    src.buffer = buffer;
+    src.loop = true;
+    const lpf = ctx.createBiquadFilter();
+    lpf.type = 'bandpass';
+    lpf.frequency.value = 800;
+    lpf.Q.value = 0.5;
+    src.connect(lpf);
+    lpf.connect(mg);
+    src.start();
+    this.nodes.push(src, lpf);
+    scheduleGurgle();
+  }
+
+  private buildMasjid(ctx: AudioContext) {
+    [55, 110, 220, 330].forEach((freq, i) => {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      const lfo = ctx.createOscillator();
+      const lfoGain = ctx.createGain();
+      osc.type = 'sine';
+      osc.frequency.value = freq;
+      lfo.frequency.value = 0.03 + i * 0.01;
+      lfoGain.gain.value = freq * 0.02;
+      lfo.connect(lfoGain);
+      lfoGain.connect(osc.frequency);
+      gain.gain.value = 0.015 / (i + 1);
+      osc.connect(gain);
+      gain.connect(this.masterGain!);
+      osc.start();
+      lfo.start();
+      this.nodes.push(osc, gain, lfo, lfoGain);
+    });
+  }
+
+  get isPlaying() { return this.currentType !== 'none'; }
+  get type() { return this.currentType; }
+}
+
+export const ambientEngine = new AmbientEngine();

@@ -1,4 +1,4 @@
-import { useEffect, memo } from 'react';
+import { useEffect, memo, useState, useRef } from 'react';
 import { useTasbeehStore, defaultThemeSettings } from '@/store/tasbeehStore';
 import { SoundManager } from '@/lib/sound';
 import { initShakeDetection, isShakeDetectionSupported } from '@/lib/shakeDetection';
@@ -9,7 +9,42 @@ import { CounterDisplay } from './counter/CounterDisplay';
 import { CounterActions } from './counter/CounterActions';
 import { CounterFooter } from './counter/CounterFooter';
 import { DateBanner } from './DateBanner';
+import { SessionTimer } from './SessionTimer';
+import { NiyyahModal } from './NiyyahModal';
+import { MoodTracker } from './MoodTracker';
+import { useTranslation } from '@/lib/i18n';
+import { motion } from 'framer-motion';
 
+
+const announceMilestone = (count: number, lang: string) => {
+  if (!('speechSynthesis' in window)) return;
+  
+  // Cancel any ongoing speech
+  try { window.speechSynthesis.cancel(); } catch {}
+
+  let text = '';
+  if (lang === 'ar') {
+    if (count === 33) text = 'ثلاثة وثلاثون';
+    else if (count === 99) text = 'تسعة وتسعون';
+    else if (count === 100) text = 'مائة';
+    else if (count === 500) text = 'خمسمائة';
+    else if (count === 1000) text = 'ألف';
+  } else {
+    if (count === 33) text = 'Thirty-three';
+    else if (count === 99) text = 'Ninety-nine';
+    else if (count === 100) text = 'One hundred';
+    else if (count === 500) text = 'Five hundred';
+    else if (count === 1000) text = 'One thousand';
+  }
+
+  if (text) {
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = lang === 'ar' ? 'ar-SA' : 'en-US';
+    utterance.pitch = 1.0;
+    utterance.rate = 0.95;
+    window.speechSynthesis.speak(utterance);
+  }
+};
 
 export const Counter = memo(function Counter() {
   const currentCount = useTasbeehStore(state => state.currentCount);
@@ -22,6 +57,43 @@ export const Counter = memo(function Counter() {
   const sessionModeType = useTasbeehStore(state => state.sessionMode.type);
   const theme = useTasbeehStore(state => state.theme);
   const currentSettings = useTasbeehStore(state => state.themeSettings[theme] || defaultThemeSettings);
+
+  // New v2.1.0 states & actions
+  const language = useTasbeehStore(state => state.language);
+  const voiceAnnouncementsEnabled = useTasbeehStore(state => state.voiceAnnouncementsEnabled);
+  const niyyah = useTasbeehStore(state => state.niyyah);
+  const sessions = useTasbeehStore(state => state.sessions);
+
+  const [showNiyyah, setShowNiyyah] = useState(false);
+  const [showMood, setShowMood] = useState(false);
+  const [lastSessionId, setLastSessionId] = useState('');
+  const [lastCount, setLastCount] = useState(0);
+
+  const { t } = useTranslation();
+  const prevCountRef = useRef(currentCount);
+
+  // Voice announcements on milestones
+  useEffect(() => {
+    if (voiceAnnouncementsEnabled && currentCount > 0) {
+      if ([33, 99, 100, 500, 1000].includes(currentCount)) {
+        announceMilestone(currentCount, language);
+      }
+    }
+  }, [currentCount, voiceAnnouncementsEnabled, language]);
+
+  // Intercept reset to show MoodTracker
+  useEffect(() => {
+    if (currentCount === 0 && prevCountRef.current > 0) {
+      // It was reset! Get the latest saved session
+      const latestSession = sessions[0];
+      if (latestSession && Date.now() - latestSession.timestamp < 5000) {
+        setLastSessionId(latestSession.id);
+        setLastCount(prevCountRef.current);
+        setShowMood(true);
+      }
+    }
+    prevCountRef.current = currentCount;
+  }, [currentCount, sessions]);
 
   // Sound
   useEffect(() => {
@@ -84,9 +156,38 @@ export const Counter = memo(function Counter() {
       <div className="w-full flex flex-col items-center justify-center z-10 pt-2 sm:pt-4 animate-fade-in-down">
         <DateBanner />
         <DhikrHeader />
+        
+        {/* Session Timer & Niyyah Pill Container */}
+        <div className="flex flex-wrap items-center justify-center gap-2 mt-2.5">
+          <SessionTimer />
+          
+          {niyyah ? (
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              onClick={() => setShowNiyyah(true)}
+              className="px-3 py-1 rounded-full text-[10px] sm:text-xs font-light tracking-wide cursor-pointer hover:bg-white/5 border border-primary/20 backdrop-blur-sm flex items-center gap-1.5"
+              style={{ color: 'hsl(var(--primary) / 0.85)' }}
+            >
+              <span>🤲</span>
+              <span>{t('counter.intention')}: "{niyyah}"</span>
+              <span className="opacity-40 text-[9px] ml-1">({t('general.edit')})</span>
+            </motion.div>
+          ) : (
+            <motion.button
+              whileHover={{ scale: 1.03 }}
+              whileTap={{ scale: 0.97 }}
+              onClick={() => setShowNiyyah(true)}
+              className="px-3 py-1 rounded-full text-[10px] font-medium tracking-wider uppercase bg-primary/10 border border-primary/20 text-primary/80 hover:bg-primary/15 transition-all flex items-center gap-1"
+            >
+              <span>🤲</span>
+              <span>{t('counter.set_intention')}</span>
+            </motion.button>
+          )}
+        </div>
       </div>
 
-      {/* Center: Bead ring + action buttons side by side on desktop, stacked and centered on mobile */}
+      {/* Center: Bead ring + action buttons */}
       <div className="relative flex flex-col sm:flex-row items-center justify-center w-full z-20 flex-1 gap-2 sm:gap-6 px-2">
         <CounterDisplay />
         <CounterActions />
@@ -96,6 +197,21 @@ export const Counter = memo(function Counter() {
       <div className="w-full flex flex-col items-center justify-center z-10 pb-2 animate-fade-in-up">
         <CounterFooter />
       </div>
+
+      {/* Niyyah Modal */}
+      <NiyyahModal
+        open={showNiyyah}
+        onClose={() => setShowNiyyah(false)}
+        onConfirm={() => setShowNiyyah(false)}
+      />
+
+      {/* Mood Tracker */}
+      <MoodTracker
+        open={showMood}
+        onClose={() => setShowMood(false)}
+        sessionId={lastSessionId}
+        countCompleted={lastCount}
+      />
     </div>
   );
 });

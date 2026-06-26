@@ -164,6 +164,35 @@ interface TasbeehState {
   personalBest: number;
   saveActiveSession: () => void;
 
+  // New v2.1.0 features
+  hasSeenWelcome: boolean;
+  setHasSeenWelcome: (seen: boolean) => void;
+
+  ambientSoundType: 'none' | 'rain' | 'water' | 'masjid';
+  ambientSoundVolume: number;
+  setAmbientSound: (type: 'none' | 'rain' | 'water' | 'masjid', volume?: number) => void;
+  setAmbientSoundVolume: (volume: number) => void;
+
+  niyyah: string;
+  setNiyyah: (text: string) => void;
+
+  sessionMoodRatings: { sessionId: string; mood: string; focus: number; timestamp: number }[];
+  addMoodRating: (rating: { sessionId: string; mood: string; focus: number }) => void;
+
+  voiceAnnouncementsEnabled: boolean;
+  setVoiceAnnouncements: (enabled: boolean) => void;
+
+  sessionTimerDuration: number; // seconds, 0 = disabled
+  sessionTimerActive: boolean;
+  setSessionTimerDuration: (seconds: number) => void;
+  setSessionTimerActive: (active: boolean) => void;
+
+  hapticPattern: 'default' | 'double' | 'triple';
+  setHapticPattern: (pattern: 'default' | 'double' | 'triple') => void;
+
+  autoStartPostPrayerTasbeeh: boolean;
+  setAutoStartPostPrayerTasbeeh: (enabled: boolean) => void;
+
 
   increment: () => void;
   decrement: () => void;
@@ -295,6 +324,17 @@ export const useTasbeehStore = create<TasbeehState>()(
       sessions: [],
       deviceUuid: '',
       personalBest: 0,
+      // v2.1.0 new state
+      hasSeenWelcome: false,
+      ambientSoundType: 'none',
+      ambientSoundVolume: 0.3,
+      niyyah: '',
+      sessionMoodRatings: [],
+      voiceAnnouncementsEnabled: false,
+      sessionTimerDuration: 0,
+      sessionTimerActive: false,
+      hapticPattern: 'default',
+      autoStartPostPrayerTasbeeh: false,
 
       saveActiveSession: () => {
         const state = get();
@@ -317,6 +357,18 @@ export const useTasbeehStore = create<TasbeehState>()(
           set({ sessionStartTime: null });
         }
       },
+
+      // v2.1.0 new actions
+      setHasSeenWelcome: (seen) => set({ hasSeenWelcome: seen }),
+      setAmbientSound: (type, volume) => set((s) => ({ ambientSoundType: type, ambientSoundVolume: volume ?? s.ambientSoundVolume })),
+      setAmbientSoundVolume: (volume) => set({ ambientSoundVolume: volume }),
+      setNiyyah: (text) => set({ niyyah: text }),
+      addMoodRating: (rating) => set((s) => ({ sessionMoodRatings: [{ ...rating, timestamp: Date.now() }, ...s.sessionMoodRatings].slice(0, 100) })),
+      setVoiceAnnouncements: (enabled) => set({ voiceAnnouncementsEnabled: enabled }),
+      setSessionTimerDuration: (seconds) => set({ sessionTimerDuration: seconds }),
+      setSessionTimerActive: (active) => set({ sessionTimerActive: active }),
+      setHapticPattern: (pattern) => set({ hapticPattern: pattern }),
+      setAutoStartPostPrayerTasbeeh: (enabled) => set({ autoStartPostPrayerTasbeeh: enabled }),
 
       increment: () => {
         const state = get();
@@ -722,11 +774,28 @@ export const useTasbeehStore = create<TasbeehState>()(
             congratsData: null
           };
         }
+        // v2.1.0 migration: inject new fields with defaults if missing
+        state = {
+          hasSeenWelcome: false,
+          ambientSoundType: 'none',
+          ambientSoundVolume: 0.3,
+          niyyah: '',
+          sessionMoodRatings: [],
+          voiceAnnouncementsEnabled: false,
+          sessionTimerDuration: 0,
+          sessionTimerActive: false,
+          hapticPattern: 'default',
+          autoStartPostPrayerTasbeeh: false,
+          ...state,
+        };
         return state as TasbeehState;
       },
       partialize: (state) => ({
         currentDhikr: state.currentDhikr, currentCount: state.currentCount, targetCount: state.targetCount, showTransliteration: state.showTransliteration, themeSettings: state.themeSettings, theme: state.theme, language: state.language, zenMode: state.zenMode, counterShape: state.counterShape, hadithSlideDuration: state.hadithSlideDuration, hadithSlidePosition: state.hadithSlidePosition, dhikrTextPosition: state.dhikrTextPosition, verticalOffset: state.verticalOffset, dhikrVerticalOffset: state.dhikrVerticalOffset, counterVerticalOffset: state.counterVerticalOffset, counterScale: state.counterScale, countFontSize: state.countFontSize, dailyRecords: state.dailyRecords, totalAllTime: state.totalAllTime, totalHasanat: state.totalHasanat, customDhikrs: state.customDhikrs, streakDays: state.streakDays, lastActiveDate: state.lastActiveDate, longestStreak: state.longestStreak, sessionMode: state.sessionMode, dailyGoal: state.dailyGoal, favoriteDhikrIds: state.favoriteDhikrIds, lastSeenVersion: state.lastSeenVersion, autoThemeSwitch: state.autoThemeSwitch, shakeToReset: state.shakeToReset, syncPrayerTimes: state.syncPrayerTimes, wakeLockEnabled: state.wakeLockEnabled, volumeButtonCounting: state.volumeButtonCounting, unlockedAchievements: state.unlockedAchievements, screenOffMode: state.screenOffMode, notificationPermission: state.notificationPermission, reminderEnabled: state.reminderEnabled, reminderTime: state.reminderTime, reminders: state.reminders, autoCountInterval: state.autoCountInterval,
-        sessions: state.sessions, deviceUuid: state.deviceUuid
+        sessions: state.sessions, deviceUuid: state.deviceUuid,
+        // v2.1.0 persisted fields
+        hasSeenWelcome: state.hasSeenWelcome, ambientSoundType: state.ambientSoundType, ambientSoundVolume: state.ambientSoundVolume, niyyah: state.niyyah, sessionMoodRatings: state.sessionMoodRatings, voiceAnnouncementsEnabled: state.voiceAnnouncementsEnabled, sessionTimerDuration: state.sessionTimerDuration, hapticPattern: state.hapticPattern,
+        autoStartPostPrayerTasbeeh: state.autoStartPostPrayerTasbeeh,
       }),
     }
   )

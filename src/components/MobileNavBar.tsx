@@ -1,10 +1,12 @@
 import { forwardRef } from 'react';
-import { BookOpen, Target, Bell, Grid } from "lucide-react";
+import { BookOpen, Target, Bell, Grid, Compass } from "lucide-react";
 import { DhikrSelector } from "./DhikrSelector";
 import { TargetSelector } from "./TargetSelector";
 import { RemindersView } from "./RemindersView";
+import { QiblaCompass } from "./QiblaCompass";
 import { useSidebar } from "@/components/ui/sidebar";
 import { motion } from "framer-motion";
+import { useTranslation } from "@/lib/i18n";
 
 // forwardRef so Radix UI dialogs (DhikrSelector, TargetSelector, RemindersView) can attach their ref
 const NavItem = forwardRef<HTMLButtonElement, {
@@ -25,6 +27,7 @@ NavItem.displayName = 'NavItem';
 
 export function MobileNavBar() {
   const { setOpenMobile } = useSidebar();
+  const { t } = useTranslation();
 
   return (
     <div
@@ -37,16 +40,20 @@ export function MobileNavBar() {
     >
       <div className="flex justify-around items-center h-14 px-2">
         <DhikrSelector>
-          <NavItem label="Dhikr" icon={BookOpen} />
+          <NavItem label={t('nav.dhikr')} icon={BookOpen} />
         </DhikrSelector>
 
         <TargetSelector>
-          <NavItem label="Target" icon={Target} />
+          <NavItem label={t('nav.target')} icon={Target} />
         </TargetSelector>
 
         <RemindersView>
-          <NavItem label="Reminders" icon={Bell} />
+          <NavItem label={t('nav.reminders')} icon={Bell} />
         </RemindersView>
+
+        <QiblaCompass>
+          <NavItem label={t('nav.qibla')} icon={Compass} />
+        </QiblaCompass>
 
         <motion.button
           whileTap={{ scale: 0.92 }}
@@ -54,7 +61,7 @@ export function MobileNavBar() {
           className="flex flex-col items-center justify-center w-full h-full gap-1 text-sidebar-foreground/40 hover:text-sidebar-foreground/80 transition-colors"
         >
           <Grid className="w-5 h-5" />
-          <span className="text-[9px] tracking-wider uppercase font-light">Menu</span>
+          <span className="text-[9px] tracking-wider uppercase font-light">{t('nav.menu')}</span>
         </motion.button>
       </div>
     </div>

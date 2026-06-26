@@ -1,0 +1,183 @@
+import { useTasbeehStore } from '@/store/tasbeehStore';
+
+type Lang = 'en' | 'ar';
+
+const translations: Record<string, Record<Lang, string>> = {
+  // --- Navigation ---
+  'nav.dhikr': { en: 'Dhikr', ar: 'ذكر' },
+  'nav.target': { en: 'Target', ar: 'الهدف' },
+  'nav.reminders': { en: 'Reminders', ar: 'التذكيرات' },
+  'nav.menu': { en: 'Menu', ar: 'القائمة' },
+  'nav.history': { en: 'History', ar: 'السجل' },
+  'nav.stats': { en: 'Stats', ar: 'الإحصاء' },
+  'nav.progress': { en: 'Progress', ar: 'التقدم' },
+  'nav.achievements': { en: 'Achievements', ar: 'الإنجازات' },
+  'nav.routines': { en: 'Routines', ar: 'الروتين' },
+  'nav.duas': { en: 'Duas', ar: 'الأدعية' },
+  // --- Dua Library ---
+  'duas.title': { en: 'Dua Library', ar: 'مكتبة الأدعية' },
+  'duas.search': { en: 'Search duas...', ar: 'ابحث عن الأدعية...' },
+  'duas.empty': { en: 'No duas found', ar: 'لم يتم العثور على أدعية' },
+  'duas.category.all': { en: 'All Duas', ar: 'كل الأدعية' },
+  'duas.category.morning': { en: 'Morning', ar: 'الصباح' },
+  'duas.category.evening': { en: 'Evening', ar: 'المساء' },
+  'duas.category.prayer': { en: 'After Prayer', ar: 'بعد الصلاة' },
+  'duas.category.protection': { en: 'Protection', ar: 'التحصين' },
+  'duas.category.gratitude': { en: 'Gratitude', ar: 'الحمد والشكر' },
+  'duas.category.general': { en: 'General', ar: 'عام' },
+  'nav.challenges': { en: 'Challenges', ar: 'التحديات' },
+  'nav.calendar': { en: 'Calendar', ar: 'التقويم' },
+  'nav.settings': { en: 'Settings', ar: 'الإعدادات' },
+  'nav.qibla': { en: 'Qibla', ar: 'القبلة' },
+  'nav.names': { en: '99 Names', ar: 'أسماء الله' },
+  'nav.multi': { en: 'Multi', ar: 'متعدد' },
+  'nav.ambient': { en: 'Ambient', ar: 'الأجواء' },
+  // --- Sidebar ---
+  'sidebar.practice': { en: 'Practice', ar: 'الممارسة' },
+  'sidebar.insights': { en: 'Insights', ar: 'التحليلات' },
+  'sidebar.after_prayer': { en: 'After Prayer', ar: 'بعد الصلاة' },
+  'sidebar.select_dhikr': { en: 'Select Dhikr', ar: 'اختر الذكر' },
+  'sidebar.set_target': { en: 'Set Target', ar: 'حدد الهدف' },
+  // --- Counter ---
+  'counter.reset': { en: 'Reset', ar: 'إعادة' },
+  'counter.undo': { en: 'Undo', ar: 'تراجع' },
+  'counter.target': { en: 'Target', ar: 'الهدف' },
+  'counter.daily_goal': { en: 'Daily Goal', ar: 'الهدف اليومي' },
+  'counter.set_intention': { en: 'Set Intention', ar: 'اضبط النية' },
+  'counter.intention': { en: 'Intention', ar: 'النية' },
+  'counter.total': { en: 'Total', ar: 'الإجمالي' },
+  'counter.rounds': { en: 'Rounds', ar: 'الجولات' },
+  'counter.streak': { en: 'Streak', ar: 'التتابع' },
+  'counter.session_timer': { en: 'Session Timer', ar: 'مؤقت الجلسة' },
+  'counter.voice_on': { en: 'Voice On', ar: 'الصوت مفعل' },
+  'counter.voice_off': { en: 'Voice Off', ar: 'الصوت معطل' },
+  'counter.start': { en: 'Start', ar: 'ابدأ' },
+  'counter.pause': { en: 'Pause', ar: 'إيقاف مؤقت' },
+  'counter.stop': { en: 'Stop', ar: 'إيقاف' },
+  // --- Settings ---
+  'settings.title': { en: 'Settings', ar: 'الإعدادات' },
+  'settings.themes': { en: 'Themes', ar: 'السمات' },
+  'settings.counter': { en: 'Counter', ar: 'العداد' },
+  'settings.behavior': { en: 'Behavior', ar: 'السلوك' },
+  'settings.data': { en: 'Data', ar: 'البيانات' },
+  'settings.language': { en: 'Language', ar: 'اللغة' },
+  'settings.language_en': { en: 'English', ar: 'الإنجليزية' },
+  'settings.language_ar': { en: 'Arabic', ar: 'العربية' },
+  'settings.haptic': { en: 'Haptic Feedback', ar: 'الاهتزاز' },
+  'settings.sound': { en: 'Sound Effects', ar: 'المؤثرات الصوتية' },
+  'settings.sound_type': { en: 'Sound Type', ar: 'نوع الصوت' },
+  'settings.breathing': { en: 'Breathing Guide', ar: 'دليل التنفس' },
+  'settings.shake': { en: 'Shake to Reset', ar: 'هز للإعادة' },
+  'settings.wake_lock': { en: 'Keep Screen On', ar: 'إبقاء الشاشة مضاءة' },
+  'settings.zen': { en: 'Zen Mode', ar: 'وضع التأمل' },
+  'settings.volume_buttons': { en: 'Volume Button Counting', ar: 'عد بأزرار الصوت' },
+  'settings.auto_theme': { en: 'Auto Theme by Time', ar: 'تغيير السمة تلقائياً' },
+  'settings.export': { en: 'Export Data', ar: 'تصدير البيانات' },
+  'settings.import': { en: 'Import Data', ar: 'استيراد البيانات' },
+  'settings.clear': { en: 'Clear All Data', ar: 'مسح جميع البيانات' },
+  'settings.ambient_sound': { en: 'Ambient Sound', ar: 'صوت الخلفية' },
+  'settings.ambient_none': { en: 'None', ar: 'بدون' },
+  'settings.ambient_rain': { en: 'Rain', ar: 'مطر' },
+  'settings.ambient_water': { en: 'Flowing Water', ar: 'ماء جاري' },
+  'settings.ambient_masjid': { en: 'Masjid', ar: 'مسجد' },
+  'settings.ambient_volume': { en: 'Volume', ar: 'مستوى الصوت' },
+  'settings.haptic_pattern': { en: 'Haptic Pattern', ar: 'نمط الاهتزاز' },
+  'settings.haptic_default': { en: 'Default', ar: 'افتراضي' },
+  'settings.haptic_double': { en: 'Double Tap', ar: 'نقرة مزدوجة' },
+  'settings.haptic_triple': { en: 'Triple', ar: 'ثلاثية' },
+  // --- Niyyah ---
+  'niyyah.title': { en: 'Set Your Intention', ar: 'اضبط نيتك' },
+  'niyyah.subtitle': { en: 'What is your intention for this dhikr session?', ar: 'ما نيتك لجلسة الذكر هذه؟' },
+  'niyyah.placeholder': { en: 'e.g. For the sake of Allah, seeking forgiveness...', ar: 'مثال: لوجه الله، طلبًا للمغفرة...' },
+  'niyyah.confirm': { en: 'Begin Session', ar: 'ابدأ الجلسة' },
+  'niyyah.skip': { en: 'Skip', ar: 'تخطى' },
+  // --- Mood Tracker ---
+  'mood.title': { en: 'How was your session?', ar: 'كيف كانت جلستك؟' },
+  'mood.focus': { en: 'Focus Level', ar: 'مستوى التركيز' },
+  'mood.peaceful': { en: 'Peaceful', ar: 'هادئ' },
+  'mood.distracted': { en: 'Distracted', ar: 'مشتت' },
+  'mood.connected': { en: 'Connected', ar: 'متصل' },
+  'mood.spiritual': { en: 'Spiritual', ar: 'روحاني' },
+  'mood.grateful': { en: 'Grateful', ar: 'ممتنان' },
+  'mood.save': { en: 'Save & Close', ar: 'حفظ وإغلاق' },
+  'mood.skip': { en: 'Skip', ar: 'تخطى' },
+  // --- Qibla ---
+  'qibla.title': { en: 'Qibla Direction', ar: 'اتجاه القبلة' },
+  'qibla.subtitle': { en: 'Point your device to find the Qibla', ar: 'حرك جهازك لإيجاد القبلة' },
+  'qibla.permission': { en: 'Allow compass access', ar: 'اسمح بالوصول للبوصلة' },
+  'qibla.calibrate': { en: 'Move phone in figure-8 to calibrate', ar: 'حرك الهاتف بشكل رقم 8 للمعايرة' },
+  'qibla.facing': { en: 'Facing Qibla', ar: 'مواجه القبلة' },
+  'qibla.bearing': { en: 'Bearing to Mecca', ar: 'الاتجاه نحو مكة' },
+  'qibla.degrees': { en: 'degrees', ar: 'درجة' },
+  'qibla.location_error': { en: 'Could not get location. Using default.', ar: 'تعذر الحصول على الموقع. استخدام الافتراضي.' },
+  // --- 99 Names ---
+  'names.title': { en: '99 Names of Allah', ar: 'أسماء الله الحسنى' },
+  'names.subtitle': { en: 'Asma ul Husna', ar: 'التسعة والتسعون اسماً' },
+  'names.count_this': { en: 'Count This Name', ar: 'عد هذا الاسم' },
+  'names.search': { en: 'Search names...', ar: 'ابحث عن اسم...' },
+  // --- Ambient Sound ---
+  'ambient.title': { en: 'Ambient Sound', ar: 'صوت الخلفية' },
+  'ambient.playing': { en: 'Playing', ar: 'يعزف' },
+  'ambient.stopped': { en: 'Stopped', ar: 'متوقف' },
+  // --- Multi Counter ---
+  'multi.title': { en: 'Multi Counter', ar: 'عداد متعدد' },
+  'multi.add_counter': { en: 'Add Counter', ar: 'إضافة عداد' },
+  'multi.total': { en: 'Total', ar: 'المجموع' },
+  'multi.remove': { en: 'Remove', ar: 'إزالة' },
+  // --- Share / Export ---
+  'share.title': { en: 'Share Stats', ar: 'مشاركة الإحصاء' },
+  'share.weekly': { en: 'Weekly Summary', ar: 'ملخص الأسبوع' },
+  'share.export_csv': { en: 'Export as CSV', ar: 'تصدير كـ CSV' },
+  'share.export_pdf': { en: 'Print / PDF', ar: 'طباعة / PDF' },
+  'share.total_dhikr': { en: 'Total Dhikr', ar: 'إجمالي الذكر' },
+  'share.streak': { en: 'Current Streak', ar: 'الرصيد الحالي' },
+  'share.best_day': { en: 'Best Day', ar: 'أفضل يوم' },
+  // --- Session Timer ---
+  'timer.title': { en: 'Session Timer', ar: 'مؤقت الجلسة' },
+  'timer.5min': { en: '5 Minutes', ar: '5 دقائق' },
+  'timer.10min': { en: '10 Minutes', ar: '10 دقائق' },
+  'timer.20min': { en: '20 Minutes', ar: '20 دقائق' },
+  'timer.custom': { en: 'Custom', ar: 'مخصص' },
+  'timer.done': { en: 'Session Complete!', ar: 'انتهت الجلسة!' },
+  'timer.counted': { en: 'You counted', ar: 'عددت' },
+  'timer.times': { en: 'times', ar: 'مرة' },
+  // --- Welcome ---
+  'welcome.tagline': { en: 'Your Spiritual Companion', ar: 'رفيقك الروحي' },
+  'welcome.slide1_title': { en: 'Count with Purpose', ar: 'اذكر بنية' },
+  'welcome.slide1_body': { en: 'Track your daily dhikr with a beautiful, distraction-free counter.', ar: 'تتبع ذكرك اليومي بعداد جميل بلا إشتتات.' },
+  'welcome.slide2_title': { en: 'Build Habits', ar: 'ابنِ العادات' },
+  'welcome.slide2_body': { en: 'Streaks, achievements, routines and reminders keep you consistent.', ar: 'السلاسل والإنجازات والروتين والتذكيرات تبقيك ثابتاً.' },
+  'welcome.slide3_title': { en: 'Stay Connected', ar: 'ابقَ متصلاً' },
+  'welcome.slide3_body': { en: 'Qibla compass, 99 Names, Dua library and prayer times — all offline.', ar: 'بوصلة القبلة، أسماء الله، مكتبة الأدعية وأوقات الصلاة — بدون إنترنت.' },
+  'welcome.choose_language': { en: 'Choose your language', ar: 'اختر لغتك' },
+  'welcome.get_started': { en: 'Get Started', ar: 'ابدأ الآن' },
+  'welcome.next': { en: 'Next', ar: 'التالي' },
+  // --- General ---
+  'general.close': { en: 'Close', ar: 'إغلاق' },
+  'general.save': { en: 'Save', ar: 'حفظ' },
+  'general.cancel': { en: 'Cancel', ar: 'إلغاء' },
+  'general.confirm': { en: 'Confirm', ar: 'تأكيد' },
+  'general.edit': { en: 'Edit', ar: 'تعديل' },
+  'general.days': { en: 'days', ar: 'أيام' },
+  'general.loading': { en: 'Loading...', ar: 'جارٍ التحميل...' },
+  'general.error': { en: 'Error', ar: 'خطأ' },
+  'general.success': { en: 'Success', ar: 'نجاح' },
+};
+
+export function t(key: string, lang: Lang): string {
+  const entry = translations[key];
+  if (!entry) return key;
+  return entry[lang] ?? entry['en'] ?? key;
+}
+
+export function useTranslation() {
+  const language = useTasbeehStore((s) => s.language);
+  const lang: Lang = (language === 'ar' ? 'ar' : 'en');
+  const isRTL = lang === 'ar';
+  return {
+    t: (key: string) => t(key, lang),
+    lang,
+    isRTL,
+    dir: isRTL ? 'rtl' : 'ltr',
+  } as const;
+}

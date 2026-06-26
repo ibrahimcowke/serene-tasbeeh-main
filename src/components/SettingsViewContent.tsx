@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Check, Download, Upload, Trash2, Zap, ExternalLink, ChevronRight, Bell, Wind, Shield, Cloud } from 'lucide-react';
+import { Check, Download, Upload, Trash2, Zap, ExternalLink, ChevronRight, Bell, Wind, Shield, Cloud, Globe, Volume2, Mic } from 'lucide-react';
 import { useTasbeehStore } from '@/store/tasbeehStore';
+import { useTranslation } from '@/lib/i18n';
 import { SheetHeader, SheetTitle, SheetDescription } from '@/components/ui/sheet';
 import { Switch } from '@/components/ui/switch';
 import {
@@ -74,7 +75,19 @@ export function SettingsViewContent({ defaultTab, setOpen }: SettingsViewContent
     volumeButtonCounting,
     setVolumeButtonCounting,
     setCounterShape,
+    // v2.1.0
+    language,
+    setLanguage,
+    ambientSoundType,
+    ambientSoundVolume,
+    setAmbientSound,
+    setAmbientSoundVolume,
+    voiceAnnouncementsEnabled,
+    setVoiceAnnouncements,
+    hapticPattern,
+    setHapticPattern,
   } = useTasbeehStore();
+  const { t } = useTranslation();
 
   const [importStatus, setImportStatus] = useState<'idle' | 'success' | 'error'>('idle');
 
@@ -392,6 +405,87 @@ export function SettingsViewContent({ defaultTab, setOpen }: SettingsViewContent
 
             {/* SYSTEM TAB */}
             <TabsContent value="system" className="space-y-6 mt-0 pb-10 px-4 overflow-x-hidden focus-visible:outline-none">
+              <div className="space-y-1">
+                <p className="text-xs text-muted-foreground uppercase tracking-wide mb-3 px-1">{t('settings.language')}</p>
+                <div className="p-4 rounded-2xl bg-card border border-border/50">
+                  <div className="grid grid-cols-2 gap-3">
+                    {[{ code: 'en', label: 'English', flag: '🇬🇧' }, { code: 'ar', label: 'العربية', flag: '🇸🇦' }].map((lang) => (
+                      <button
+                        key={lang.code}
+                        onClick={() => setLanguage(lang.code)}
+                        className={`flex items-center gap-3 p-3 rounded-xl border transition-all ${
+                          language === lang.code
+                            ? 'bg-primary/10 border-primary'
+                            : 'bg-background border-border'
+                        }`}
+                      >
+                        <span className="text-2xl">{lang.flag}</span>
+                        <span className={`text-sm font-medium ${language === lang.code ? 'text-primary' : 'text-foreground'}`}>{lang.label}</span>
+                        {language === lang.code && <Check className="w-4 h-4 text-primary ml-auto" />}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              <div className="space-y-1">
+                <p className="text-xs text-muted-foreground uppercase tracking-wide mb-3 px-1">{t('settings.ambient_sound')}</p>
+                <div className="p-4 rounded-2xl bg-card border border-border/50 space-y-4">
+                  <div className="grid grid-cols-4 gap-2">
+                    {[{key:'none',icon:'🔇',label:t('settings.ambient_none')},{key:'rain',icon:'🌧️',label:t('settings.ambient_rain')},{key:'water',icon:'💧',label:t('settings.ambient_water')},{key:'masjid',icon:'🕌',label:t('settings.ambient_masjid')}].map(({ key, icon, label }) => (
+                      <button
+                        key={key}
+                        onClick={() => setAmbientSound(key as any)}
+                        className={`flex flex-col items-center gap-1.5 py-3 rounded-xl border text-xs font-medium transition-all ${
+                          ambientSoundType === key ? 'bg-primary/10 border-primary text-primary' : 'bg-background border-border text-muted-foreground'
+                        }`}
+                      >
+                        <span className="text-lg">{icon}</span>
+                        <span>{label}</span>
+                      </button>
+                    ))}
+                  </div>
+                  {ambientSoundType !== 'none' && (
+                    <div className="space-y-2">
+                      <div className="flex items-center justify-between text-xs">
+                        <span className="text-muted-foreground">{t('settings.ambient_volume')}</span>
+                        <span className="font-mono text-primary">{Math.round(ambientSoundVolume * 100)}%</span>
+                      </div>
+                      <input type="range" min="0" max="1" step="0.05" value={ambientSoundVolume}
+                        onChange={(e) => setAmbientSoundVolume(parseFloat(e.target.value))}
+                        className="w-full accent-primary"
+                      />
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              <div className="p-4 rounded-2xl bg-card border border-border/50 space-y-4">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm font-medium text-foreground flex items-center gap-2"><Mic className="w-4 h-4 text-primary/70" />Voice Announcements</p>
+                    <p className="text-xs text-muted-foreground">Speak milestone counts (33, 100...)</p>
+                  </div>
+                  <Switch checked={voiceAnnouncementsEnabled} onCheckedChange={setVoiceAnnouncements} />
+                </div>
+              </div>
+
+              <div className="space-y-1">
+                <p className="text-xs text-muted-foreground uppercase tracking-wide mb-3 px-1">{t('settings.haptic_pattern')}</p>
+                <div className="p-4 rounded-2xl bg-card border border-border/50">
+                  <div className="grid grid-cols-3 gap-2">
+                    {[{key:'default',label:t('settings.haptic_default')},{key:'double',label:t('settings.haptic_double')},{key:'triple',label:t('settings.haptic_triple')}].map(({ key, label }) => (
+                      <button key={key} onClick={() => setHapticPattern(key as any)}
+                        className={`py-2.5 rounded-xl text-xs font-medium border transition-all ${
+                          hapticPattern === key ? 'bg-primary text-primary-foreground border-primary' : 'bg-background border-border text-muted-foreground'
+                        }`}>
+                        {label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
               <div className="space-y-1">
                 <p className="text-xs text-muted-foreground uppercase tracking-wide mb-3 px-1">Notifications</p>
                 <RemindersView>
