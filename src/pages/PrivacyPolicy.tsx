@@ -13,28 +13,28 @@ export default function PrivacyPolicy() {
         },
         {
             icon: Database,
-            title: "Data Collection and Use",
-            content: "We collect only data necessary for app functionality: your counts, streaks, and custom dhikrs. This data remains exclusively on your local device. We do not collect or request Personally Identifiable Information (PII) such as names, emails, or phone numbers."
+            title: "Data Collection & Google Drive",
+            content: "We collect only data necessary for app functionality: your counts, streaks, and custom dhikrs. By default, this data remains exclusively on your local device. If you choose to enable Google Drive Sync, a backup file named 'tasbeehly_backup.json' is created inside your personal Google Drive. We do not collect or request Personally Identifiable Information (PII) such as names, emails, or phone numbers."
         },
         {
             icon: Lock,
             title: "How Data is Protected",
-            content: "All data is stored locally on your device using standardized web storage mechanisms. We do not use cloud synchronization or remote servers, ensuring your data cannot be intercepted or breached remotely."
+            content: "All data is stored locally on your device. When using Google Drive Sync, data is transmitted directly from your device to Google's secure servers via HTTPS encryption. Because there is no centralized app database, your records cannot be accessed, shared, or breached globally."
         },
         {
             icon: Eye,
             title: "Third-Party Services",
-            content: "We do not sell, trade, or share data with advertisers, analytics companies, or third parties. The app operates completely offline without external tracking SDKs."
+            content: "We only connect to Google Drive REST API (v3) to facilitate backup and restore. Authorizing Google Drive only grants the app permission to access the files it creates itself ('drive.file' scope). It cannot access any other files, folders, or details in your Google Drive."
         },
         {
             icon: Globe,
             title: "Log Data, Cookies & PWA",
-            content: "As a Progressive Web App, we use local storage and service workers to ensure offline functionality. We do not collect Log Data or use tracking cookies across websites."
+            content: "As a Progressive Web App, we use local storage and service workers to ensure offline functionality. We do not collect Log Data, track user behavior, or use tracking cookies across websites."
         },
         {
             icon: Baby,
             title: "Children's Privacy",
-            content: "Our services are safe for all ages, but do not explicitly target anyone under 13. Since we do not collect any personal data, we therefore do not knowingly collect personal information from children under 13."
+            content: "Our services are safe for all ages. Since we do not collect any personal data, we do not knowingly collect personal information from children under 13."
         },
         {
             icon: FileText,
@@ -69,7 +69,7 @@ export default function PrivacyPolicy() {
                             <Shield className="w-8 h-8 text-primary" />
                         </div>
                         <h2 className="text-3xl font-bold tracking-tight">Your Privacy Matters</h2>
-                        <p className="text-muted-foreground italic">Last Updated: January 2026</p>
+                        <p className="text-muted-foreground italic">Last Updated: June 2026</p>
                     </div>
 
                     <div className="grid gap-8">
