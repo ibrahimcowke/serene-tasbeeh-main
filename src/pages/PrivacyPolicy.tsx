@@ -48,12 +48,21 @@ export default function PrivacyPolicy() {
             {/* Header */}
             <header className="sticky top-0 z-50 w-full border-b bg-background/80 backdrop-blur-md">
                 <div className="container flex h-16 items-center px-4 max-w-2xl mx-auto">
-                    <button
-                        onClick={() => navigate(-1)}
-                        className="mr-4 p-2 rounded-full hover:bg-secondary transition-colors"
+                    <motion.button
+                        whileHover={{ scale: 1.05, x: -3 }}
+                        whileTap={{ scale: 0.95 }}
+                        onClick={() => navigate("/")}
+                        className="mr-4 flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold border transition-all cursor-pointer backdrop-blur-md"
+                        style={{
+                            background: "rgba(255,255,255,0.05)",
+                            borderColor: "hsl(var(--primary) / 0.25)",
+                            boxShadow: "0 2px 10px rgba(0,0,0,0.15), inset 0 1px 1px rgba(255,255,255,0.05)",
+                            color: "hsl(var(--primary))",
+                        }}
                     >
-                        <ArrowLeft className="w-5 h-5" />
-                    </button>
+                        <ArrowLeft className="w-3.5 h-3.5" />
+                        <span>Dashboard</span>
+                    </motion.button>
                     <h1 className="text-lg font-medium">Privacy Policy</h1>
                 </div>
             </header>

@@ -2,8 +2,11 @@ import { ChallengesViewContent } from "@/components/ChallengesView";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/AppSidebar";
 import { motion } from "framer-motion";
+import { useNavigate } from "react-router-dom";
+import { ArrowLeft } from "lucide-react";
 
 const ChallengesPage = () => {
+    const navigate = useNavigate();
     return (
         <SidebarProvider>
             <div className="min-h-screen flex w-full bg-background overflow-hidden font-sans selection:bg-primary/20">
@@ -15,6 +18,24 @@ const ChallengesPage = () => {
                             animate={{ opacity: 1, y: 0 }}
                             className="max-w-4xl mx-auto"
                         >
+                            <div className="mb-6 flex items-center justify-between">
+                                <motion.button
+                                    whileHover={{ scale: 1.04, x: -3 }}
+                                    whileTap={{ scale: 0.96 }}
+                                    onClick={() => navigate("/")}
+                                    className="flex items-center gap-2 px-4 py-2 rounded-full text-xs font-semibold tracking-wide border transition-all cursor-pointer backdrop-blur-md"
+                                    style={{
+                                        background: "rgba(255,255,255,0.05)",
+                                        borderColor: "hsl(var(--primary) / 0.25)",
+                                        boxShadow: "0 4px 15px rgba(0,0,0,0.2), inset 0 1px 1px rgba(255,255,255,0.05)",
+                                        color: "hsl(var(--primary))",
+                                    }}
+                                >
+                                    <ArrowLeft className="w-4 h-4" />
+                                    <span>Dashboard</span>
+                                </motion.button>
+                            </div>
+
                             <div className="mb-8">
                                 <h1 className="text-3xl font-black text-foreground tracking-tight">Challenges Center</h1>
                                 <p className="text-muted-foreground font-medium">Complete solo sprints and endurance sessions to stay consistent and earn rewards.</p>
