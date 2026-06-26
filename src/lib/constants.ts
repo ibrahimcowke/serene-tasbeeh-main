@@ -11,6 +11,10 @@ export const themes = [
   { id: 'theme-desert-starlight', label: 'Desert Star', description: 'Sand beige & blue' },
   { id: 'theme-ramadan-lantern', label: 'Lantern Glow', description: 'Burgundy & amber' },
   { id: 'theme-rose-bloom', label: 'Rose Bloom', description: 'Sage green & rose' },
+  { id: 'theme-emerald-shine', label: 'Emerald Glow', description: 'Sacred green & gold shine' },
+  { id: 'theme-cyberpunk-zen', label: 'Cyber Zen', description: 'Neon cyan & obsidian' },
+  { id: 'theme-ocean-depth', label: 'Ocean Depth', description: 'Deep marine serenity' },
+  { id: 'theme-sakura-zen', label: 'Sakura Zen', description: 'Cherry blossom & sage' },
 ] as const;
 
 export const counterShapes = [
@@ -43,6 +47,8 @@ export const counterShapes = [
   { id: 'cyber-3d', label: 'Cyber 3D', icon: '💎', color: '#3b82f6', bg: 'rgba(59, 130, 246, 0.1)' },
   { id: 'crystal-iso', label: 'Crystal ISO', icon: '🕋', color: '#10b981', bg: 'rgba(16, 185, 129, 0.1)' },
   { id: 'neumorph', label: 'Neumorph', icon: '☁', color: '#94a3b8', bg: 'rgba(148, 163, 184, 0.1)' },
+  { id: 'sacred-star', label: 'Sacred Star', icon: '✵', color: '#fbbf24', bg: 'rgba(251, 191, 38, 0.1)' },
+  { id: 'cyber-orbit', label: 'Cyber Orbit', icon: '🪐', color: '#22d3ee', bg: 'rgba(34, 211, 238, 0.1)' },
 ] as const;
 
 // Dashboard Layouts removed in favor of single default design

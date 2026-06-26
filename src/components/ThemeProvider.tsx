@@ -29,7 +29,8 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
       'theme-midnight', 'theme-neon', 'theme-green', 'theme-cyberpunk',
       'theme-sunset', 'theme-forest', 'theme-oled', 'theme-biolum', 'theme-radar-tactical',
       'theme-steampunk', 'theme-crystal-depth', 'theme-mecca-night', 'theme-desert-starlight',
-      'theme-istanbul-sunset', 'theme-ramadan-lantern', 'theme-rose-bloom'
+      'theme-istanbul-sunset', 'theme-ramadan-lantern', 'theme-rose-bloom',
+      'theme-emerald-shine', 'theme-cyberpunk-zen', 'theme-ocean-depth'
     ];
     
     const isDark = darkThemes.includes(theme);

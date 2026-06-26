@@ -36,7 +36,8 @@ export interface Dhikr {
 export type ThemeType =
   | 'light' | 'theme-midnight' | 'theme-glass' | 'theme-sunset' | 'theme-forest'
   | 'theme-oled'
-  | 'theme-mecca-night' | 'theme-desert-starlight' | 'theme-ramadan-lantern' | 'theme-rose-bloom';
+  | 'theme-mecca-night' | 'theme-desert-starlight' | 'theme-ramadan-lantern' | 'theme-rose-bloom'
+  | 'theme-emerald-shine' | 'theme-cyberpunk-zen' | 'theme-ocean-depth' | 'theme-sakura-zen';
 
 export interface ThemeSettings {
   primary: string;
@@ -78,7 +79,7 @@ export type CounterShape =
   | 'helix-strand' | 'cyber-hexagon' | 'glass-pill' | 'emerald-loop'
   | 'smart-ring' | 'moon-phase' | 'water-ripple' | 'sand-hourglass' | 'lantern-fanous'
   | 'digital-watch' | 'star-burst' | 'crystal-prism' | 'tally-clicker'
-  | 'cyber-3d' | 'crystal-iso' | 'neumorph';
+  | 'cyber-3d' | 'crystal-iso' | 'neumorph' | 'sacred-star' | 'cyber-orbit';
 
 export interface Reminder {
   id: string;
@@ -281,6 +282,10 @@ export const initialThemeSettings: Record<string, ThemeSettings> = {
   'theme-desert-starlight': { ...defaultThemeSettings, primary: '#38bdf8', background: '#150f0d', card: '#221815', text: '#fef3c7', textMuted: '#d97706', border: '#3c2b27', accent: '#f59e0b', secondary: '#271c19' },
   'theme-ramadan-lantern': { ...defaultThemeSettings, primary: '#f59e0b', background: '#170705', card: '#260c09', text: '#fef3c7', textMuted: '#f59e0b', border: '#3f1510', accent: '#10b981', secondary: '#2a0d0a' },
   'theme-rose-bloom': { ...defaultThemeSettings, primary: '#f472b6', background: '#0a110e', card: '#15241f', text: '#fce7f3', textMuted: '#34d399', border: '#20362f', accent: '#10b981', secondary: '#131f1a' },
+  'theme-emerald-shine': { ...defaultThemeSettings, primary: '#fbbf24', background: '#021e10', card: '#05341c', text: '#e6fffa', textMuted: '#34d399', border: '#064e26', accent: '#fbbf24', secondary: '#032a17' },
+  'theme-cyberpunk-zen': { ...defaultThemeSettings, primary: '#22d3ee', background: '#050508', card: '#0e0e16', text: '#e2e8f0', textMuted: '#f43f5e', border: '#1e1b4b', accent: '#ec4899', secondary: '#131322' },
+  'theme-ocean-depth': { ...defaultThemeSettings, primary: '#06b6d4', background: '#040d1a', card: '#081930', text: '#e0f2fe', textMuted: '#06b6d4', border: '#0f2d54', accent: '#22d3ee', secondary: '#0b213f' },
+  'theme-sakura-zen': { ...defaultThemeSettings, primary: '#db2777', background: '#fff1f2', card: '#ffffff', text: '#4c0519', textMuted: '#db2777', border: '#e2e8f0', accent: '#10b981', secondary: '#ffe4e6' },
 };
 
 const getDefaultSessionMode = (): SessionMode => ({ type: 'free' });

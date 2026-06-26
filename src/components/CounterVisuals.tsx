@@ -4,6 +4,8 @@ import { ThemeSettings, CounterShape } from '@/store/tasbeehStore';
 import { HaloRing } from './counter-shapes/HaloRing';
 import { BeadRing } from './counter-shapes/BeadRing';
 import { counterShapes } from '@/lib/constants';
+import { SacredStar } from './counter-shapes/SacredStar';
+import { CyberOrbit } from './counter-shapes/CyberOrbit';
 
 import { VerticalCapsules } from './counter-shapes/VerticalCapsules';
 import { LuminousBeads } from './counter-shapes/LuminousBeads';
@@ -92,6 +94,8 @@ export const CounterNumber = memo(({
   
   ${counterShape === 'animated-ripple' ? 'text-blue-200 font-light text-7xl tracking-widest drop-shadow-[0_0_10px_rgba(59,130,246,0.6)]' : ''}
   ${counterShape === 'bead-ring' ? 'text-amber-500 font-mono text-7xl font-bold tracking-wider drop-shadow-[0_0_10px_rgba(245,158,11,0.6)]' : ''}
+  ${counterShape === 'sacred-star' ? 'font-serif font-bold text-primary drop-shadow-[0_0_10px_rgba(251,191,36,0.6)]' : ''}
+  ${counterShape === 'cyber-orbit' ? 'font-mono font-medium text-primary tracking-wide drop-shadow-[0_0_10px_currentColor]' : ''}
   ${counterShape === 'helix-strand' ? 'text-cyan-400 font-mono tracking-widest drop-shadow-[0_0_10px_rgba(34,211,238,0.8)]' : ''}
   ${counterShape === 'cyber-hexagon' ? 'font-mono text-current font-bold tracking-widest drop-shadow-[0_0_10px_currentColor]' : ''}
   ${counterShape === 'glass-pill' ? 'font-sans font-medium text-white tracking-widest text-6xl drop-shadow-md' : ''}
@@ -210,6 +214,8 @@ export const CounterVisuals = memo(({
                         {counterShape === 'neumorph' && <Neumorph currentCount={currentCount} />}
                         {counterShape === 'vertical-capsules' && <VerticalCapsules currentCount={currentCount} />}
                         {counterShape === 'luminous-beads' && <LuminousBeads progress={progress} />}
+                        {counterShape === 'sacred-star' && <SacredStar currentCount={currentCount} />}
+                        {counterShape === 'cyber-orbit' && <CyberOrbit currentCount={currentCount} />}
                 </div>
 
 
@@ -245,7 +251,7 @@ export const CounterVisuals = memo(({
 
         ${counterShape === 'animated-ripple' ? 'w-64 h-64 flex items-center justify-center bg-transparent z-10' : ''}
         ${counterShape === 'bead-ring' ? 'w-64 h-64 flex items-center justify-center bg-transparent z-10' : ''}
-        ${['helix-strand', 'cyber-hexagon', 'glass-pill', 'emerald-loop', 'smart-ring', 'moon-phase', 'water-ripple', 'sand-hourglass', 'lantern-fanous', 'star-burst', 'crystal-prism', 'tally-clicker', 'cyber-3d', 'crystal-iso', 'neumorph'].includes(counterShape) ? 'w-64 h-64 flex items-center justify-center bg-transparent z-10' : ''}
+        ${['helix-strand', 'cyber-hexagon', 'glass-pill', 'emerald-loop', 'smart-ring', 'moon-phase', 'water-ripple', 'sand-hourglass', 'lantern-fanous', 'star-burst', 'crystal-prism', 'tally-clicker', 'cyber-3d', 'crystal-iso', 'neumorph', 'sacred-star', 'cyber-orbit'].includes(counterShape) ? 'w-64 h-64 flex items-center justify-center bg-transparent z-10' : ''}
 
         flex items-center justify-center
         cursor-pointer
