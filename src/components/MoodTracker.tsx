@@ -177,32 +177,36 @@ export function MoodTracker({ open, onClose, sessionId, countCompleted }: MoodTr
   return (
     <AnimatePresence>
       {open && (
-        <>
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50"
-            style={{ background: 'rgba(0,0,0,0.6)', backdropFilter: 'blur(8px)' }}
+            className="absolute inset-0 bg-black/60 backdrop-blur-sm"
             onClick={onClose}
           />
 
           <motion.div
-            initial={{ opacity: 0, y: 60, scale: 0.95 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 40, scale: 0.95 }}
-            transition={{ type: 'spring', stiffness: 280, damping: 24 }}
-            className="fixed bottom-0 left-0 right-0 z-50 rounded-t-3xl px-6 pt-4 pb-10 max-h-[95vh] overflow-y-auto custom-overlay-open"
+            initial={{ opacity: 0, scale: 0.95, y: 15 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.95, y: 15 }}
+            transition={{ type: 'spring', stiffness: 300, damping: 25 }}
+            className="relative w-full max-w-md overflow-y-auto max-h-[90vh] rounded-[2rem] border border-border/40 p-6 shadow-2xl z-10 custom-overlay-open custom-scrollbar"
             dir={isRTL ? 'rtl' : 'ltr'}
             style={{
               background: 'hsl(var(--card))',
-              border: '1px solid hsl(var(--border) / 0.3)',
-              boxShadow: '0 -20px 60px rgba(0,0,0,0.4)',
+              boxShadow: '0 20px 60px rgba(0,0,0,0.4)',
             }}
           >
-            <div className="w-10 h-1 rounded-full bg-muted mx-auto mb-4" />
+            {/* Absolute close button */}
+            <button
+              onClick={onClose}
+              className="absolute top-5 right-5 rtl:right-auto rtl:left-5 p-1.5 rounded-full hover:bg-black/5 dark:hover:bg-white/5 transition-colors cursor-pointer text-muted-foreground/60 hover:text-foreground z-20"
+            >
+              <X className="w-4 h-4" />
+            </button>
 
-            <div className="flex items-center justify-between mb-5">
+            <div className="flex items-center justify-between mb-5 pr-8 rtl:pr-0 rtl:pl-8">
               <div className="flex items-center gap-2">
                 <div
                   className="w-9 h-9 rounded-xl flex items-center justify-center"
@@ -212,18 +216,15 @@ export function MoodTracker({ open, onClose, sessionId, countCompleted }: MoodTr
                 </div>
                 <div>
                   <h3 className="font-semibold text-base">{t('mood.title')}</h3>
-                  <p className="text-xs" style={{ color: 'hsl(var(--muted-foreground))' }}>
+                  <p className="text-xs font-medium" style={{ color: 'hsl(var(--muted-foreground))' }}>
                     {countCompleted} {t('timer.times')} — MashaAllah! 🤲
                   </p>
                 </div>
               </div>
-              <button onClick={onClose} style={{ color: 'hsl(var(--muted-foreground))' }}>
-                <X className="w-5 h-5" />
-              </button>
             </div>
 
             {/* Mood picker */}
-            <p className="text-xs font-medium mb-3" style={{ color: 'hsl(var(--muted-foreground))' }}>
+            <p className="text-xs font-semibold mb-3 text-muted-foreground">
               {isRTL ? "كيف تشعر الآن؟" : "How are you feeling right now?"}
             </p>
             <div className="flex gap-2 mb-5 flex-wrap">
@@ -245,15 +246,15 @@ export function MoodTracker({ open, onClose, sessionId, countCompleted }: MoodTr
               ))}
             </div>
 
-            {/* Dynamic Recommendation Card */}
+            {/* Dynamic Recommendation Card (Hardware accelerated, no janky height animation) */}
             <AnimatePresence mode="wait">
               {selectedMood && recommendations[selectedMood] && (
                 <motion.div
                   key={selectedMood}
-                  initial={{ opacity: 0, height: 0, scale: 0.95 }}
-                  animate={{ opacity: 1, height: 'auto', scale: 1 }}
-                  exit={{ opacity: 0, height: 0, scale: 0.95 }}
-                  transition={{ duration: 0.25 }}
+                  initial={{ opacity: 0, scale: 0.96 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.96 }}
+                  transition={{ duration: 0.15, ease: "easeOut" }}
                   className="mb-6 p-4 rounded-2xl border bg-primary/5 border-primary/20 backdrop-blur-md relative overflow-hidden shadow-lg shadow-primary/5 flex flex-col gap-3"
                 >
                   <div className="absolute top-0 right-0 w-24 h-24 bg-primary/10 rounded-full blur-2xl pointer-events-none" />
@@ -293,7 +294,7 @@ export function MoodTracker({ open, onClose, sessionId, countCompleted }: MoodTr
             </AnimatePresence>
 
             {/* Focus rating (stars) */}
-            <p className="text-xs font-medium mb-2" style={{ color: 'hsl(var(--muted-foreground))' }}>
+            <p className="text-xs font-medium mb-2 text-muted-foreground">
               {t('mood.focus')}
             </p>
             <div className="flex gap-2 mb-6">
@@ -343,7 +344,7 @@ export function MoodTracker({ open, onClose, sessionId, countCompleted }: MoodTr
               </motion.button>
             </div>
           </motion.div>
-        </>
+        </div>
       )}
     </AnimatePresence>
   );
