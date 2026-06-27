@@ -17,7 +17,7 @@ const NavItem = forwardRef<HTMLButtonElement, {
   <button
     ref={ref}
     onClick={onClick}
-    className="flex flex-col items-center justify-center w-full h-full gap-1 text-sidebar-foreground/40 hover:text-sidebar-foreground/80 active:text-primary transition-colors cursor-pointer bg-transparent border-none outline-none"
+    className="flex flex-col items-center justify-center w-full h-full gap-1 text-muted-foreground/60 hover:text-foreground active:text-primary transition-colors cursor-pointer bg-transparent border-none outline-none"
   >
     <Icon className="w-5 h-5" />
     <span className="text-[9px] tracking-wider uppercase font-light">{label}</span>
@@ -33,8 +33,8 @@ export function MobileNavBar() {
     <div
       className="lg:hidden fixed bottom-0 left-0 right-0 z-50 pb-safe"
       style={{
-        background: 'linear-gradient(to top, hsl(var(--sidebar) / 0.97) 0%, hsl(var(--sidebar) / 0.85) 100%)',
-        borderTop: '1px solid hsl(var(--sidebar-border) / 0.5)',
+        background: 'linear-gradient(to top, hsl(var(--card) / 0.97) 0%, hsl(var(--card) / 0.85) 100%)',
+        borderTop: '1px solid hsl(var(--border) / 0.5)',
         backdropFilter: 'blur(20px)',
       }}
     >
@@ -58,7 +58,7 @@ export function MobileNavBar() {
         <motion.button
           whileTap={{ scale: 0.92 }}
           onClick={() => setOpenMobile(true)}
-          className="flex flex-col items-center justify-center w-full h-full gap-1 text-sidebar-foreground/40 hover:text-sidebar-foreground/80 transition-colors"
+          className="flex flex-col items-center justify-center w-full h-full gap-1 text-muted-foreground/60 hover:text-foreground transition-colors"
         >
           <Grid className="w-5 h-5" />
           <span className="text-[9px] tracking-wider uppercase font-light">{t('nav.menu')}</span>
