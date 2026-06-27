@@ -64,7 +64,8 @@ export const Counter = memo(function Counter() {
   const voiceAnnouncementsEnabled = useTasbeehStore(state => state.voiceAnnouncementsEnabled);
   const sessions = useTasbeehStore(state => state.sessions);
 
-  const [showMood, setShowMood] = useState(false);
+  const showMood = useTasbeehStore(state => state.showMoodTracker);
+  const setShowMood = useTasbeehStore(state => state.setShowMoodTracker);
   const [showWisdom, setShowWisdom] = useState(false);
   const [lastSessionId, setLastSessionId] = useState('');
   const [lastCount, setLastCount] = useState(0);

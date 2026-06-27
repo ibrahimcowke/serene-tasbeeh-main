@@ -156,7 +156,7 @@ export function MoodTracker({ open, onClose, sessionId, countCompleted }: MoodTr
   }, [open, onClose]);
 
   const handleSave = () => {
-    if (selectedMood) {
+    if (selectedMood && sessionId) {
       addMoodRating({ sessionId, mood: selectedMood, focus });
     }
     onClose();
@@ -216,9 +216,15 @@ export function MoodTracker({ open, onClose, sessionId, countCompleted }: MoodTr
                 </div>
                 <div>
                   <h3 className="font-semibold text-base">{t('mood.title')}</h3>
-                  <p className="text-xs font-medium" style={{ color: 'hsl(var(--muted-foreground))' }}>
-                    {countCompleted} {t('timer.times')} — MashaAllah! 🤲
-                  </p>
+                  {countCompleted && countCompleted > 0 ? (
+                    <p className="text-xs font-medium text-primary">
+                      {countCompleted} {t('timer.times')} — MashaAllah! 🤲
+                    </p>
+                  ) : (
+                    <p className="text-xs font-medium text-muted-foreground">
+                      {isRTL ? "اختر مزاجك لبدء جلسة ذكر مخصصة" : "Select your mood to begin a custom session"}
+                    </p>
+                  )}
                 </div>
               </div>
             </div>

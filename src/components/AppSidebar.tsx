@@ -1,4 +1,4 @@
-import { BookOpen, Target, ClipboardList, Bell, BarChart3, History, HandPlatter, Library, Calendar, Compass, Star, Hash, Share2 } from "lucide-react";
+import { BookOpen, Target, ClipboardList, Bell, BarChart3, History, HandPlatter, Library, Calendar, Compass, Star, Hash, Share2, Smile } from "lucide-react";
 import {
     Sidebar,
     SidebarContent,
@@ -10,6 +10,7 @@ import {
     SidebarMenuButton,
     SidebarMenuItem,
     SidebarFooter,
+    useSidebar,
 } from "@/components/ui/sidebar";
 import { DhikrSelector } from "./DhikrSelector";
 import { TargetSelector } from "./TargetSelector";
@@ -30,6 +31,7 @@ import { useTranslation } from "@/lib/i18n";
 export function AppSidebar() {
     const startTasbih100 = useTasbeehStore((s) => s.startTasbih100);
     const { t } = useTranslation();
+    const { setOpenMobile } = useSidebar();
     return (
         <Sidebar collapsible="icon">
             {/* Header with brand */}
@@ -155,7 +157,10 @@ export function AppSidebar() {
                                     <button
                                         className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-left transition-all"
                                         style={{ color: "hsl(var(--sidebar-foreground) / 0.85)" }}
-                                        onClick={() => startTasbih100()}
+                                        onClick={() => {
+                                            startTasbih100();
+                                            setOpenMobile(false);
+                                        }}
                                     >
                                         <HandPlatter className="w-4 h-4 text-primary/70 shrink-0" />
                                         <span className="text-sm font-light tracking-wide">{t('sidebar.after_prayer')}</span>
@@ -213,6 +218,22 @@ export function AppSidebar() {
                                         </button>
                                     </SidebarMenuButton>
                                 </MultiCounterView>
+                            </SidebarMenuItem>
+
+                            <SidebarMenuItem>
+                                <SidebarMenuButton asChild tooltip={t('mood.title')} size="lg">
+                                    <button 
+                                        className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-left transition-all"
+                                        style={{ color: "hsl(var(--sidebar-foreground) / 0.85)" }}
+                                        onClick={() => {
+                                            useTasbeehStore.getState().setShowMoodTracker(true);
+                                            setOpenMobile(false);
+                                        }}
+                                    >
+                                        <Smile className="w-4 h-4 text-primary/70 shrink-0" />
+                                        <span className="text-sm font-light tracking-wide text-ellipsis overflow-hidden whitespace-nowrap">{t('mood.title')}</span>
+                                    </button>
+                                </SidebarMenuButton>
                             </SidebarMenuItem>
                         </SidebarMenu>
                     </SidebarGroupContent>

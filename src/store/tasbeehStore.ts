@@ -153,6 +153,8 @@ interface TasbeehState {
   showCongrats: boolean;
   congratsData: { title: string; description: string; hasanatEarned: number } | null;
   totalHasanat: number;
+  showMoodTracker: boolean;
+  setShowMoodTracker: (open: boolean) => void;
 
   autoCountActive: boolean;
   autoCountInterval: number;
@@ -324,7 +326,7 @@ export const useTasbeehStore = create<TasbeehState>()(
         { id: '3', time: '18:00', label: 'Maghrib Dhikr', enabled: true, days: [0, 1, 2, 3, 4, 5, 6] },
         { id: '4', time: '21:00', label: 'Evening Dhikr', enabled: true, days: [0, 1, 2, 3, 4, 5, 6] },
       ], lastCount: 0, lastDhikrId: '', canUndo: false,
-      showCongrats: false, congratsData: null, totalHasanat: 0,
+      showCongrats: false, congratsData: null, totalHasanat: 0, showMoodTracker: false,
       autoCountActive: false, autoCountInterval: 1000,
       sessions: [],
       deviceUuid: '',
@@ -374,6 +376,7 @@ export const useTasbeehStore = create<TasbeehState>()(
       setSessionTimerActive: (active) => set({ sessionTimerActive: active }),
       setHapticPattern: (pattern) => set({ hapticPattern: pattern }),
       setAutoStartPostPrayerTasbeeh: (enabled) => set({ autoStartPostPrayerTasbeeh: enabled }),
+      setShowMoodTracker: (open) => set({ showMoodTracker: open }),
 
       increment: () => {
         const state = get();
