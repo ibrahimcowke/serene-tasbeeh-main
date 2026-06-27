@@ -69,40 +69,8 @@ export const Counter = memo(function Counter() {
   const [lastSessionId, setLastSessionId] = useState('');
   const [lastCount, setLastCount] = useState(0);
 
-  // Live Recitation Pace (BPM) States
-  const [bpm, setBpm] = useState(0);
-  const [lastTapTime, setLastTapTime] = useState<number | null>(null);
-
   const { t } = useTranslation();
   const prevCountRef = useRef(currentCount);
-
-  // Calculate recitation speed (BPM) on count change
-  useEffect(() => {
-    if (currentCount > 0) {
-      const now = Date.now();
-      if (lastTapTime) {
-        const diff = now - lastTapTime;
-        if (diff > 100 && diff < 4000) {
-          const currentBpm = Math.round(60000 / diff);
-          setBpm(currentBpm);
-        }
-      }
-      setLastTapTime(now);
-    } else {
-      setBpm(0);
-      setLastTapTime(null);
-    }
-  }, [currentCount]);
-
-  // Reset BPM to 0 if idle for more than 4 seconds
-  useEffect(() => {
-    if (bpm > 0) {
-      const timer = setTimeout(() => {
-        setBpm(0);
-      }, 4000);
-      return () => clearTimeout(timer);
-    }
-  }, [bpm, currentCount]);
 
   // Voice announcements on milestones
   useEffect(() => {
@@ -189,25 +157,9 @@ export const Counter = memo(function Counter() {
         <DateBanner />
         <DhikrHeader />
         
-        {/* Session Timer, Recitation Speed, & Wisdom Pills */}
+        {/* Session Timer & Wisdom Pills */}
         <div className="flex flex-wrap items-center justify-center gap-2 mt-2.5">
           <SessionTimer />
-          
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            className="px-3 py-1 rounded-full text-[10px] sm:text-xs font-light tracking-wide border border-primary/20 backdrop-blur-sm flex items-center gap-1.5 transition-all"
-            style={{
-              background: bpm > 0 ? "hsl(var(--primary) / 0.12)" : "rgba(255,255,255,0.02)",
-              color: 'hsl(var(--primary) / 0.85)'
-            }}
-            title="Beads Per Minute (Recitation Speed)"
-          >
-            <span>{bpm > 0 ? '⚡' : '🧘'}</span>
-            <span>
-              {bpm > 0 ? `${bpm} ${t('counter.bpm')} • ${bpm < 45 ? t('counter.pace_meditative') : bpm <= 75 ? t('counter.pace_steady') : t('counter.pace_fast')}` : t('counter.pace_ready')}
-            </span>
-          </motion.div>
 
           <motion.button
             whileHover={{ scale: 1.03 }}
