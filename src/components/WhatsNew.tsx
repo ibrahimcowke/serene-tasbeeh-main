@@ -29,6 +29,16 @@ export const WhatsNew = () => {
         }, 500);
     };
 
+    // Close on ESC
+    useEffect(() => {
+        if (!isOpen) return;
+        const handleEsc = (e: KeyboardEvent) => {
+            if (e.key === 'Escape') handleClose();
+        };
+        window.addEventListener('keydown', handleEsc);
+        return () => window.removeEventListener('keydown', handleEsc);
+    }, [isOpen]);
+
     const features = [
         {
             title: "Quick Undo",
@@ -74,7 +84,7 @@ export const WhatsNew = () => {
     return (
         <AnimatePresence>
             {isOpen && (
-                <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+                <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 custom-overlay-open">
                     {/* Backdrop */}
                     <motion.div
                         initial={{ opacity: 0 }}

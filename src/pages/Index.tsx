@@ -54,7 +54,7 @@ const Index = () => {
               <div
                 className="relative z-50 flex items-center justify-end px-4 sm:px-6 pt-safe"
                 style={{
-                  height: '64px',
+                  height: 'calc(64px + env(safe-area-inset-top, 0px))',
                   background: 'linear-gradient(to bottom, hsl(var(--background) / 0.95) 0%, transparent 100%)',
                 }}
               >

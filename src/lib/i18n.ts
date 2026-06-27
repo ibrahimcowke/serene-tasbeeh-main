@@ -92,13 +92,14 @@ const translations: Record<string, Record<Lang, string>> = {
   'niyyah.confirm': { en: 'Begin Session', ar: 'ابدأ الجلسة' },
   'niyyah.skip': { en: 'Skip', ar: 'تخطى' },
   // --- Mood Tracker ---
-  'mood.title': { en: 'How was your session?', ar: 'كيف كانت جلستك؟' },
+  'mood.title': { en: 'How is your mood today?', ar: 'كيف تشعر اليوم؟' },
   'mood.focus': { en: 'Focus Level', ar: 'مستوى التركيز' },
   'mood.peaceful': { en: 'Peaceful', ar: 'هادئ' },
   'mood.distracted': { en: 'Distracted', ar: 'مشتت' },
   'mood.connected': { en: 'Connected', ar: 'متصل' },
   'mood.spiritual': { en: 'Spiritual', ar: 'روحاني' },
-  'mood.grateful': { en: 'Grateful', ar: 'ممتنان' },
+  'mood.grateful': { en: 'Grateful', ar: 'ممتن' },
+  'mood.repentant': { en: 'Regretful', ar: 'نادم / مقصر' },
   'mood.save': { en: 'Save & Close', ar: 'حفظ وإغلاق' },
   'mood.skip': { en: 'Skip', ar: 'تخطى' },
   // --- Qibla ---

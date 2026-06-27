@@ -1191,16 +1191,16 @@
 
 @layer utilities {
   .pb-safe {
-    padding-bottom: max(1rem, env(safe-area-inset-bottom));
+    padding-bottom: env(safe-area-inset-bottom, 0px);
   }
 
   .pt-safe {
-    padding-top: max(1rem, env(safe-area-inset-top));
+    padding-top: env(safe-area-inset-top, 0px);
   }
 
   .px-safe {
-    padding-left: max(1rem, env(safe-area-inset-left));
-    padding-right: max(1rem, env(safe-area-inset-right));
+    padding-left: env(safe-area-inset-left, 0px);
+    padding-right: env(safe-area-inset-right, 0px);
   }
 
   /* Screenshot Match Styles */

@@ -7,11 +7,22 @@ import { Button } from '@/components/ui/button';
 export const CongratsPopup: React.FC = memo(() => {
     const { showCongrats, congratsData, closeCongrats, reset, switchDhikr } = useTasbeehStore();
 
+    React.useEffect(() => {
+        if (!showCongrats) return;
+        const handleKeyDown = (e: KeyboardEvent) => {
+            if (e.key === 'Escape') {
+                closeCongrats();
+            }
+        };
+        window.addEventListener('keydown', handleKeyDown);
+        return () => window.removeEventListener('keydown', handleKeyDown);
+    }, [showCongrats, closeCongrats]);
+
     if (!showCongrats || !congratsData) return null;
 
     return (
         <AnimatePresence>
-            <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-background/60 backdrop-blur-sm">
+            <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-background/60 backdrop-blur-sm custom-overlay-open">
                 <motion.div
                     initial={{ opacity: 0, scale: 0.9, y: 20 }}
                     animate={{ opacity: 1, scale: 1, y: 0 }}
