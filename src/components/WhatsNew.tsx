@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, ArrowRight, Zap, Moon, Quote, RotateCcw, Clock, Sparkles } from 'lucide-react';
+import { X, ArrowRight, Zap, Sliders, LayoutGrid, RotateCcw, Clock, Sparkles } from 'lucide-react';
 import { useTasbeehStore } from '@/store/tasbeehStore';
 import { APP_VERSION } from '@/lib/constants';
 import { Button } from '@/components/ui/button';
@@ -41,33 +41,26 @@ export const WhatsNew = () => {
 
     const features = [
         {
-            title: "Quick Undo",
-            description: "Accidentally tapped? Use the new undo button to step back.",
-            icon: <RotateCcw className="w-8 h-8 text-orange-400" />,
-            color: "from-orange-500/20 to-orange-500/5"
+            title: "Faster Auto-Count Tapping",
+            description: "Cycle through even faster tapper speeds including 0.1s, 0.2s, 0.3s, and 0.4s intervals.",
+            icon: <Zap className="w-8 h-8 text-amber-500" />,
+            color: "from-amber-500/20 to-amber-500/5"
         },
         {
-            title: "Session Timer",
-            description: "Track your dhikr duration in real-time.",
-            icon: <Clock className="w-8 h-8 text-blue-400" />,
+            title: "Lag-Free Settings Panel",
+            description: "Upgraded sliders with local state dragging and useShallow subscriptions to make configuration completely smooth.",
+            icon: <Sliders className="w-8 h-8 text-blue-400" />,
             color: "from-blue-500/20 to-blue-500/5"
         },
         {
-            title: "Auto Theme",
-            description: "Automatically switches to dark mode at sunset.",
-            icon: <Moon className="w-8 h-8 text-indigo-400" />,
+            title: "Optimized Top Header",
+            description: "Aligned the calendar banner and sidebar toggle on a single line to save vertical space.",
+            icon: <LayoutGrid className="w-8 h-8 text-indigo-400" />,
             color: "from-indigo-500/20 to-indigo-500/5"
         },
-
         {
-            title: "Shake to Reset",
-            description: "Enable in settings to reset by shaking your device.",
-            icon: <Zap className="w-8 h-8 text-yellow-400" />,
-            color: "from-yellow-500/20 to-yellow-500/5"
-        },
-        {
-            title: "Dhikr of the Day",
-            description: "A daily recommended dhikr to keep you consistent.",
+            title: "Bottom Overlap Fixed",
+            description: "Expanded safe-area space at the bottom to ensure statistical logs and translations are never cut off by the navigation bar.",
             icon: <Sparkles className="w-8 h-8 text-purple-400" />,
             color: "from-purple-500/20 to-purple-500/5"
         }
