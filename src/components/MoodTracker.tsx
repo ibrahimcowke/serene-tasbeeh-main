@@ -238,7 +238,19 @@ export function MoodTracker({ open, onClose, sessionId, countCompleted }: MoodTr
                 <motion.button
                   key={key}
                   whileTap={{ scale: 0.92 }}
-                  onClick={() => setSelectedMood(key)}
+                  onClick={() => {
+                    setSelectedMood(key);
+                    if (recommendations[key]) {
+                      setDhikr({
+                        id: `rec_${Date.now()}`,
+                        arabic: recommendations[key].dhikr.arabic,
+                        transliteration: recommendations[key].dhikr.transliteration,
+                        translation: recommendations[key].dhikr.translation,
+                        isCustom: true
+                      });
+                      toast.success(isRTL ? "تم تحديث الذكر النشط!" : "Dhikr updated. Start reciting!");
+                    }
+                  }}
                   className={`flex flex-col items-center gap-1 px-4 py-3 rounded-xl border text-sm font-medium transition-all ${colorClass}`}
                   style={{
                     opacity: selectedMood && selectedMood !== key ? 0.4 : 1,

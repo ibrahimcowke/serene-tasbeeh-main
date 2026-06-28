@@ -79,7 +79,7 @@ const Index = () => {
             </RoutinesView>
 
             {/* Main counter area */}
-            <div className={`flex-1 min-h-0 w-full flex flex-col ${zenMode ? 'pt-0 pb-0' : 'pb-[calc(7.5rem+env(safe-area-inset-bottom,0px))] lg:pb-4'}`}>
+            <div className={`flex-1 min-h-0 w-full flex flex-col ${zenMode ? 'pt-0 pb-0' : 'pb-[calc(4.5rem+env(safe-area-inset-bottom,0px))] lg:pb-4'}`}>
               <div className="max-w-md mx-auto w-full h-full flex flex-col px-2 sm:px-4">
                 <Counter />
               </div>

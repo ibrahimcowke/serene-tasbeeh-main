@@ -12,17 +12,10 @@ const toArabicNumerals = (n: number | string, isRTL: boolean): string => {
 
 export const DhikrHeader = memo(function DhikrHeader() {
   const { isRTL } = useTranslation();
-  const currentDhikrId = useTasbeehStore(state => state.currentDhikr.id);
+  const currentDhikr = useTasbeehStore(state => state.currentDhikr);
   const showTransliteration = useTasbeehStore(state => state.showTransliteration);
   const sessionMode = useTasbeehStore(state => state.sessionMode);
   const currentCount = useTasbeehStore(state => state.currentCount);
-
-  const currentDhikr = defaultDhikrs.find(d => d.id === currentDhikrId) || {
-    id: currentDhikrId,
-    arabic: '',
-    transliteration: '',
-    translation: '',
-  };
 
   const totalProgress = (() => {
     if (sessionMode.type === 'tasbih100') {

@@ -25,7 +25,7 @@ export const CounterFooter = memo(function CounterFooter() {
     <div className="w-full flex flex-col items-center gap-3 pb-2">
       {/* Translation of dhikr */}
       {currentDhikr?.translation && (
-        <p className="text-white/25 text-[10px] sm:text-xs italic text-center px-6 max-w-xs leading-relaxed">
+        <p className="text-muted-foreground/60 text-[10px] sm:text-xs italic text-center px-6 max-w-xs leading-relaxed">
           "{currentDhikr.translation}"
         </p>
       )}
@@ -44,7 +44,7 @@ export const CounterFooter = memo(function CounterFooter() {
             >
               {toArabicNumerals(totalAllTime, isRTL)}
             </span>
-            <span className="text-white/25 text-[9px] uppercase tracking-widest mt-0.5">
+            <span className="text-muted-foreground/60 text-[9px] uppercase tracking-widest mt-0.5">
               {t('counter.total')}
             </span>
           </div>
@@ -66,7 +66,7 @@ export const CounterFooter = memo(function CounterFooter() {
             >
               {toArabicNumerals(roundsDone, isRTL)}
             </span>
-            <span className="text-white/25 text-[9px] uppercase tracking-widest mt-0.5">
+            <span className="text-muted-foreground/60 text-[9px] uppercase tracking-widest mt-0.5">
               {t('counter.rounds')}
             </span>
           </div>
@@ -88,7 +88,7 @@ export const CounterFooter = memo(function CounterFooter() {
             >
               {toArabicNumerals(streakDays, isRTL)}
             </span>
-            <span className="text-white/25 text-[9px] uppercase tracking-widest mt-0.5">
+            <span className="text-muted-foreground/60 text-[9px] uppercase tracking-widest mt-0.5">
               {t('counter.streak')}
             </span>
           </div>
