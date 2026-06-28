@@ -8,7 +8,6 @@ import { DhikrHeader } from './counter/DhikrHeader';
 import { CounterDisplay } from './counter/CounterDisplay';
 import { CounterActions } from './counter/CounterActions';
 import { CounterFooter } from './counter/CounterFooter';
-import { DateBanner } from './DateBanner';
 import { SessionTimer } from './SessionTimer';
 import { HadithOfTheDayModal } from './HadithOfTheDay';
 import { MoodTracker } from './MoodTracker';
@@ -153,9 +152,8 @@ export const Counter = memo(function Counter() {
         }}
       />
 
-      {/* Top section: Hijri date banner + Dhikr label */}
+      {/* Top section: Dhikr label */}
       <div className="w-full flex flex-col items-center justify-center z-10 pt-2 sm:pt-4 animate-fade-in-down">
-        <DateBanner />
         <DhikrHeader />
         
         {/* Session Timer & Wisdom Pills */}

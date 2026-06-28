@@ -1,7 +1,8 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Check, Download, Upload, Trash2, Zap, ExternalLink, ChevronRight, Bell, Wind, Shield, Cloud, Globe, Volume2, Mic } from 'lucide-react';
 import { useTasbeehStore } from '@/store/tasbeehStore';
+import { useShallow } from 'zustand/react/shallow';
 import { useTranslation } from '@/lib/i18n';
 import { SheetHeader, SheetTitle, SheetDescription } from '@/components/ui/sheet';
 import { Switch } from '@/components/ui/switch';
@@ -28,6 +29,14 @@ import { Label } from '@/components/ui/label';
 import { themes, counterShapes } from '@/lib/constants';
 import { RemindersView } from './RemindersView';
 import { LoginView } from './LoginView';
+
+const SHAPE_CATEGORIES = [
+  { title: 'Essential', list: ['plain', 'minimal', 'classic', 'beads', 'waveform'] },
+  { title: 'Luminous', list: ['luminous-ring', 'ring-light', 'halo-ring', 'luminous-beads', 'star-burst', 'golden-mandala'] },
+  { title: 'Modern', list: ['flower', 'modern-ring', 'animated-ripple', 'water-ripple', 'moon-phase', 'glass-pill', 'neumorph'] },
+  { title: 'Objects & 3D', list: ['vintage-wood', 'digital', 'bead-ring', 'sand-hourglass', 'lantern-fanous', 'digital-watch', 'tally-clicker', 'cyber-3d', 'crystal-iso', 'green-tally', 'retro-flip', 'steampunk-gear'] },
+  { title: 'Tech & Abstract', list: ['vertical-capsules', 'helix-strand', 'cyber-hexagon', 'emerald-loop', 'smart-ring', 'crystal-prism', 'cyber-orbit', 'neon-wave'] }
+];
 
 interface SettingsViewContentProps {
   defaultTab: string;
@@ -75,7 +84,6 @@ export function SettingsViewContent({ defaultTab, setOpen }: SettingsViewContent
     volumeButtonCounting,
     setVolumeButtonCounting,
     setCounterShape,
-    // v2.1.0
     language,
     setLanguage,
     ambientSoundType,
@@ -86,10 +94,74 @@ export function SettingsViewContent({ defaultTab, setOpen }: SettingsViewContent
     setVoiceAnnouncements,
     hapticPattern,
     setHapticPattern,
-  } = useTasbeehStore();
+  } = useTasbeehStore(useShallow(state => ({
+    theme: state.theme,
+    themeSettings: state.themeSettings,
+    counterShape: state.counterShape,
+    toggleHaptic: state.toggleHaptic,
+    toggleSound: state.toggleSound,
+    setFontScale: state.setFontScale,
+    setTheme: state.setTheme,
+    hadithSlideDuration: state.hadithSlideDuration,
+    setHadithSlideDuration: state.setHadithSlideDuration,
+    dhikrTextPosition: state.dhikrTextPosition,
+    setDhikrTextPosition: state.setDhikrTextPosition,
+    exportData: state.exportData,
+    importData: state.importData,
+    clearAllData: state.clearAllData,
+    verticalOffset: state.verticalOffset,
+    setVerticalOffset: state.setVerticalOffset,
+    dhikrVerticalOffset: state.dhikrVerticalOffset,
+    setDhikrVerticalOffset: state.setDhikrVerticalOffset,
+    counterVerticalOffset: state.counterVerticalOffset,
+    setCounterVerticalOffset: state.setCounterVerticalOffset,
+    counterScale: state.counterScale,
+    setCounterScale: state.setCounterScale,
+    zenMode: state.zenMode,
+    setZenMode: state.setZenMode,
+    breathingGuideEnabled: state.breathingGuideEnabled,
+    setBreathingGuide: state.setBreathingGuide,
+    breathingGuideSpeed: state.breathingGuideSpeed,
+    setBreathingGuideSpeed: state.setBreathingGuideSpeed,
+    autoThemeSwitch: state.autoThemeSwitch,
+    setAutoThemeSwitch: state.setAutoThemeSwitch,
+    shakeToReset: state.shakeToReset,
+    setShakeToReset: state.setShakeToReset,
+    wakeLockEnabled: state.wakeLockEnabled,
+    setWakeLockEnabled: state.setWakeLockEnabled,
+    volumeButtonCounting: state.volumeButtonCounting,
+    setVolumeButtonCounting: state.setVolumeButtonCounting,
+    setCounterShape: state.setCounterShape,
+    language: state.language,
+    setLanguage: state.setLanguage,
+    ambientSoundType: state.ambientSoundType,
+    ambientSoundVolume: state.ambientSoundVolume,
+    setAmbientSound: state.setAmbientSound,
+    setAmbientSoundVolume: state.setAmbientSoundVolume,
+    voiceAnnouncementsEnabled: state.voiceAnnouncementsEnabled,
+    setVoiceAnnouncements: state.setVoiceAnnouncements,
+    hapticPattern: state.hapticPattern,
+    setHapticPattern: state.setHapticPattern,
+  })));
   const { t } = useTranslation();
 
   const [importStatus, setImportStatus] = useState<'idle' | 'success' | 'error'>('idle');
+
+  // Local states for sliders to make dragging smooth
+  const [localVerticalOffset, setLocalVerticalOffset] = useState(verticalOffset);
+  const [localDhikrVerticalOffset, setLocalDhikrVerticalOffset] = useState(dhikrVerticalOffset);
+  const [localCounterVerticalOffset, setLocalCounterVerticalOffset] = useState(counterVerticalOffset);
+  const [localCounterScale, setLocalCounterScale] = useState(counterScale);
+  const [localBreathingSpeed, setLocalBreathingSpeed] = useState(breathingGuideSpeed);
+  const [localHadithSlideDuration, setLocalHadithSlideDuration] = useState(hadithSlideDuration);
+
+  // Synchronize local states when store state changes externally
+  useEffect(() => { setLocalVerticalOffset(verticalOffset); }, [verticalOffset]);
+  useEffect(() => { setLocalDhikrVerticalOffset(dhikrVerticalOffset); }, [dhikrVerticalOffset]);
+  useEffect(() => { setLocalCounterVerticalOffset(counterVerticalOffset); }, [counterVerticalOffset]);
+  useEffect(() => { setLocalCounterScale(counterScale); }, [counterScale]);
+  useEffect(() => { setLocalBreathingSpeed(breathingGuideSpeed); }, [breathingGuideSpeed]);
+  useEffect(() => { setLocalHadithSlideDuration(hadithSlideDuration); }, [hadithSlideDuration]);
 
   const handleExport = () => {
     const data = exportData();
@@ -230,13 +302,7 @@ export function SettingsViewContent({ defaultTab, setOpen }: SettingsViewContent
                 <p className="text-xs text-muted-foreground uppercase tracking-wide px-1">Counter Shape</p>
                 
                 {/* Categorized Shapes */}
-                {[
-                  { title: 'Essential', list: ['plain', 'minimal', 'classic', 'beads', 'waveform'] },
-                  { title: 'Luminous', list: ['luminous-ring', 'ring-light', 'halo-ring', 'luminous-beads', 'star-burst', 'golden-mandala'] },
-                  { title: 'Modern', list: ['flower', 'modern-ring', 'animated-ripple', 'water-ripple', 'moon-phase', 'glass-pill', 'neumorph'] },
-                  { title: 'Objects & 3D', list: ['vintage-wood', 'digital', 'bead-ring', 'sand-hourglass', 'lantern-fanous', 'digital-watch', 'tally-clicker', 'cyber-3d', 'crystal-iso', 'green-tally', 'retro-flip', 'steampunk-gear'] },
-                  { title: 'Tech & Abstract', list: ['vertical-capsules', 'helix-strand', 'cyber-hexagon', 'emerald-loop', 'smart-ring', 'crystal-prism', 'cyber-orbit', 'neon-wave'] }
-                ].map((category, catIndex) => (
+                {SHAPE_CATEGORIES.map((category, catIndex) => (
                   <div key={category.title} className="space-y-2">
                     <p className="text-[11px] font-medium text-muted-foreground/70 px-1">{category.title}</p>
                     <div className="grid grid-cols-3 gap-2 pb-2">
@@ -292,53 +358,57 @@ export function SettingsViewContent({ defaultTab, setOpen }: SettingsViewContent
                         <div>
                           <div className="flex items-center justify-between mb-3">
                             <p className="text-sm font-medium text-foreground">Global Position</p>
-                            <p className="text-xs text-muted-foreground">{verticalOffset > 0 ? `+${verticalOffset}px` : `${verticalOffset}px`}</p>
+                            <p className="text-xs text-muted-foreground">{localVerticalOffset > 0 ? `+${localVerticalOffset}px` : `${localVerticalOffset}px`}</p>
                           </div>
                           <Slider
                             min={-150}
                             max={150}
                             step={10}
-                            value={[verticalOffset]}
-                            onValueChange={([val]) => setVerticalOffset(val)}
+                            value={[localVerticalOffset]}
+                            onValueChange={([val]) => setLocalVerticalOffset(val)}
+                            onValueCommit={([val]) => setVerticalOffset(val)}
                           />
                         </div>
                         <div className="pt-4 border-t border-border/40">
                           <div className="flex items-center justify-between mb-3">
                             <p className="text-sm font-medium text-foreground">Dhikr Text</p>
-                            <p className="text-xs text-muted-foreground">{dhikrVerticalOffset > 0 ? `+${dhikrVerticalOffset}px` : `${dhikrVerticalOffset}px`}</p>
+                            <p className="text-xs text-muted-foreground">{localDhikrVerticalOffset > 0 ? `+${localDhikrVerticalOffset}px` : `${localDhikrVerticalOffset}px`}</p>
                           </div>
                           <Slider
                             min={-100}
                             max={100}
                             step={5}
-                            value={[dhikrVerticalOffset]}
-                            onValueChange={([val]) => setDhikrVerticalOffset(val)}
+                            value={[localDhikrVerticalOffset]}
+                            onValueChange={([val]) => setLocalDhikrVerticalOffset(val)}
+                            onValueCommit={([val]) => setDhikrVerticalOffset(val)}
                           />
                         </div>
                         <div className="pt-4 border-t border-border/40">
                           <div className="flex items-center justify-between mb-3">
                             <p className="text-sm font-medium text-foreground">Counter Position</p>
-                            <p className="text-xs text-muted-foreground">{counterVerticalOffset > 0 ? `+${counterVerticalOffset}px` : `${counterVerticalOffset}px`}</p>
+                            <p className="text-xs text-muted-foreground">{localCounterVerticalOffset > 0 ? `+${localCounterVerticalOffset}px` : `${localCounterVerticalOffset}px`}</p>
                           </div>
                           <Slider
                             min={-100}
                             max={100}
                             step={5}
-                            value={[counterVerticalOffset]}
-                            onValueChange={([val]) => setCounterVerticalOffset(val)}
+                            value={[localCounterVerticalOffset]}
+                            onValueChange={([val]) => setLocalCounterVerticalOffset(val)}
+                            onValueCommit={([val]) => setCounterVerticalOffset(val)}
                           />
                         </div>
                         <div className="pt-4 border-t border-border/40">
                           <div className="flex items-center justify-between mb-3">
                             <p className="text-sm font-medium text-foreground">Counter Size</p>
-                            <p className="text-xs text-muted-foreground">{Math.round(counterScale * 100)}%</p>
+                            <p className="text-xs text-muted-foreground">{Math.round(localCounterScale * 100)}%</p>
                           </div>
                           <Slider
                             min={0.5}
                             max={1.7}
                             step={0.05}
-                            value={[counterScale]}
-                            onValueChange={([val]) => setCounterScale(val)}
+                            value={[localCounterScale]}
+                            onValueChange={([val]) => setLocalCounterScale(val)}
+                            onValueCommit={([val]) => setCounterScale(val)}
                           />
                         </div>
                       </div>
@@ -371,9 +441,9 @@ export function SettingsViewContent({ defaultTab, setOpen }: SettingsViewContent
                         <div className="space-y-4 px-1">
                           <div className="flex justify-between items-center text-sm">
                             <Label className="font-medium">Breath Speed</Label>
-                            <span className="text-muted-foreground font-mono text-xs">{breathingGuideSpeed}s</span>
+                            <span className="text-muted-foreground font-mono text-xs">{localBreathingSpeed}s</span>
                           </div>
-                          <Slider min={2} max={8} step={0.5} value={[breathingGuideSpeed]} onValueChange={([val]) => setBreathingGuideSpeed(val)} />
+                          <Slider min={2} max={8} step={0.5} value={[localBreathingSpeed]} onValueChange={([val]) => setLocalBreathingSpeed(val)} onValueCommit={([val]) => setBreathingGuideSpeed(val)} />
                         </div>
                       </div>
                     </AccordionContent>
@@ -553,14 +623,15 @@ export function SettingsViewContent({ defaultTab, setOpen }: SettingsViewContent
                 <div className="space-y-3">
                   <div className="flex justify-between items-center text-sm">
                     <Label className="font-medium">Hadith Slide Delay</Label>
-                    <span className="text-muted-foreground font-mono text-xs">{hadithSlideDuration}s</span>
+                    <span className="text-muted-foreground font-mono text-xs">{localHadithSlideDuration}s</span>
                   </div>
                   <Slider 
                     min={3} 
                     max={20} 
                     step={1} 
-                    value={[hadithSlideDuration]} 
-                    onValueChange={([val]) => setHadithSlideDuration(val)} 
+                    value={[localHadithSlideDuration]} 
+                    onValueChange={([val]) => setLocalHadithSlideDuration(val)} 
+                    onValueCommit={([val]) => setHadithSlideDuration(val)} 
                   />
                   <p className="text-[10px] text-muted-foreground">Time before showing the next guidance message</p>
                 </div>

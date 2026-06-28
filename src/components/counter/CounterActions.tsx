@@ -45,7 +45,7 @@ export const CounterActions = memo(function CounterActions() {
   const stopAutoCount = useTasbeehStore(state => state.stopAutoCount);
   const setAutoCountInterval = useTasbeehStore(state => state.setAutoCountInterval);
 
-  const speeds = [500, 1000, 1500, 2000, 3000];
+  const speeds = [100, 200, 300, 400, 500, 1000, 1500, 2000, 3000];
   const currentSpeedLabel = `${(autoCountInterval / 1000).toFixed(1)}s`;
 
   const toggleAutoCount = (e: React.MouseEvent) => {

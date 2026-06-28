@@ -8,6 +8,7 @@ import { BreathingGuide } from '@/components/BreathingGuide';
 import { MobileNavBar } from '@/components/MobileNavBar';
 import { Counter } from '@/components/Counter';
 import { CongratsPopup } from '@/components/CongratsPopup';
+import { DateBanner } from '@/components/DateBanner';
 
 const Index = () => {
   const zenMode = useTasbeehStore((state) => state.zenMode);
@@ -52,14 +53,19 @@ const Index = () => {
             {/* Top navigation bar */}
             {!zenMode && (
               <div
-                className="relative z-50 flex items-center justify-end px-4 sm:px-6 pt-safe"
+                className="relative z-50 flex items-center justify-between px-4 sm:px-6 pt-safe gap-4"
                 style={{
                   height: 'calc(64px + env(safe-area-inset-top, 0px))',
                   background: 'linear-gradient(to bottom, hsl(var(--background) / 0.95) 0%, transparent 100%)',
                 }}
               >
+                {/* Date banner */}
+                <div className="flex-1 min-w-0 max-w-sm">
+                  <DateBanner className="px-0" />
+                </div>
+
                 {/* Sidebar trigger */}
-                <SidebarTrigger className="h-9 w-9 rounded-full flex items-center justify-center text-primary/80 hover:text-primary transition-colors"
+                <SidebarTrigger className="h-9 w-9 rounded-full flex items-center justify-center text-primary/80 hover:text-primary transition-colors shrink-0"
                   style={{
                     background: 'hsl(var(--foreground) / 0.05)',
                     border: '1px solid hsl(var(--primary) / 0.2)',
@@ -73,7 +79,7 @@ const Index = () => {
             </RoutinesView>
 
             {/* Main counter area */}
-            <div className={`flex-1 min-h-0 w-full flex flex-col ${zenMode ? 'pt-0 pb-0' : 'pb-24 lg:pb-4'}`}>
+            <div className={`flex-1 min-h-0 w-full flex flex-col ${zenMode ? 'pt-0 pb-0' : 'pb-[calc(7.5rem+env(safe-area-inset-bottom,0px))] lg:pb-4'}`}>
               <div className="max-w-md mx-auto w-full h-full flex flex-col px-2 sm:px-4">
                 <Counter />
               </div>

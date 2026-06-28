@@ -6,7 +6,7 @@ import { motion } from 'framer-motion';
 import { toast } from 'sonner';
 import { themes } from '@/lib/constants';
 
-export function DateBanner() {
+export function DateBanner({ className = "px-4" }: { className?: string }) {
     const { theme } = useTasbeehStore();
 
     const currentThemeLabel = themes.find(t => t.id === theme)?.label || 'Unknown';
@@ -32,7 +32,7 @@ export function DateBanner() {
         <motion.div
             initial={{ opacity: 0, y: -8 }}
             animate={{ opacity: 1, y: 0 }}
-            className="w-full px-4 mb-1"
+            className={`w-full mb-1 ${className}`}
         >
             <div className={`
                 flex items-center justify-between gap-2 px-3 py-1.5 rounded-xl border text-xs
