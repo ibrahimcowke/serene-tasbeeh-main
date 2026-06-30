@@ -92,16 +92,6 @@ export const VintageWoodVisuals = memo(() => (
   </div>
 ));
 
-export const AnimatedRippleVisuals = memo(() => (
-  <div className="absolute inset-0 flex items-center justify-center -z-10">
-      <div className="w-64 h-64 bg-blue-500/10 rounded-full flex items-center justify-center backdrop-blur-sm border border-blue-400/30">
-          {[...Array(3)].map((_, i) => (
-              <motion.div key={i} className="absolute inset-0 rounded-full border border-blue-400/50" animate={{ scale: [1, 1.5], opacity: [1, 0] }} transition={{ duration: 2, repeat: Infinity, delay: i * 0.6 }} />
-          ))}
-      </div>
-  </div>
-));
-
 export const BeadsDecorator = memo(() => (
   <div className="absolute inset-0 flex items-center justify-center -z-10 pointer-events-none">
     <svg className="w-[300px] h-[300px] -rotate-90">

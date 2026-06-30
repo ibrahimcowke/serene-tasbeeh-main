@@ -73,13 +73,11 @@ export interface SessionRecord {
 
 export type CounterShape =
   | 'plain' | 'minimal' | 'classic' | 'beads' | 'flower' | 'waveform' | 'digital'
-  | 'modern-ring' | 'vintage-wood' | 'luminous-ring' 
-  | 'ring-light' 
-  | 'animated-ripple' | 'bead-ring' | 'halo-ring' | 'vertical-capsules' | 'luminous-beads'
-  | 'helix-strand' | 'cyber-hexagon' | 'glass-pill' | 'emerald-loop'
-  | 'smart-ring' | 'moon-phase' | 'water-ripple' | 'sand-hourglass' | 'lantern-fanous'
+  | 'modern-ring' | 'vintage-wood' | 'ring-light' 
+  | 'bead-ring' | 'halo-ring' | 'vertical-capsules' | 'luminous-beads'
+  | 'emerald-loop' | 'smart-ring' | 'moon-phase'
   | 'digital-watch' | 'star-burst' | 'crystal-prism' | 'tally-clicker'
-  | 'cyber-3d' | 'crystal-iso' | 'neumorph' | 'cyber-orbit' | 'green-tally' | 'retro-flip' | 'golden-mandala' | 'neon-wave' | 'steampunk-gear' | 'retro-lcd' | 'sunset-horizon';
+  | 'neumorph' | 'green-tally' | 'retro-lcd' | 'sunset-horizon';
 
 export interface Reminder {
   id: string;
@@ -140,6 +138,7 @@ interface TasbeehState {
   longestStreak: number;
   unlockedAchievements: string[];
   screenOffMode: boolean;
+  setScreenOffMode: (enabled: boolean) => void;
   sessionStartTime: number | null;
   sessionMode: SessionMode;
   notificationPermission: NotificationPermission | 'not-supported';
@@ -569,6 +568,7 @@ export const useTasbeehStore = create<TasbeehState>()(
       setHadithSlideDuration: (duration) => set({ hadithSlideDuration: duration }),
       setHadithSlidePosition: (position) => set({ hadithSlidePosition: position }),
       setDeviceUuid: (uuid) => set({ deviceUuid: uuid }),
+      setScreenOffMode: (enabled) => set({ screenOffMode: enabled }),
       setDailyGoal: (goal) => set({ dailyGoal: goal }),
       setVerticalOffset: (offset) => set({ verticalOffset: offset }),
       setDhikrVerticalOffset: (offset) => set({ dhikrVerticalOffset: offset }),

@@ -33,10 +33,10 @@ import { GoogleLogin } from './GoogleLogin';
 
 const SHAPE_CATEGORIES = [
   { title: 'Essential', list: ['plain', 'minimal', 'classic', 'beads', 'waveform'] },
-  { title: 'Luminous', list: ['luminous-ring', 'ring-light', 'halo-ring', 'luminous-beads', 'star-burst', 'golden-mandala'] },
-  { title: 'Modern', list: ['flower', 'modern-ring', 'animated-ripple', 'water-ripple', 'moon-phase', 'glass-pill', 'neumorph', 'sunset-horizon'] },
-  { title: 'Objects & 3D', list: ['vintage-wood', 'digital', 'bead-ring', 'sand-hourglass', 'lantern-fanous', 'digital-watch', 'tally-clicker', 'cyber-3d', 'crystal-iso', 'green-tally', 'retro-flip', 'steampunk-gear', 'retro-lcd'] },
-  { title: 'Tech & Abstract', list: ['vertical-capsules', 'helix-strand', 'cyber-hexagon', 'emerald-loop', 'smart-ring', 'crystal-prism', 'cyber-orbit', 'neon-wave'] }
+  { title: 'Luminous', list: ['ring-light', 'halo-ring', 'luminous-beads', 'star-burst'] },
+  { title: 'Modern', list: ['flower', 'modern-ring', 'moon-phase', 'neumorph', 'sunset-horizon'] },
+  { title: 'Objects & 3D', list: ['vintage-wood', 'digital', 'bead-ring', 'digital-watch', 'tally-clicker', 'green-tally', 'retro-lcd'] },
+  { title: 'Tech & Abstract', list: ['vertical-capsules', 'emerald-loop', 'smart-ring', 'crystal-prism'] }
 ];
 
 interface SettingsViewContentProps {
@@ -84,6 +84,8 @@ export function SettingsViewContent({ defaultTab, setOpen }: SettingsViewContent
     setWakeLockEnabled,
     volumeButtonCounting,
     setVolumeButtonCounting,
+    screenOffMode,
+    setScreenOffMode,
     setCounterShape,
     language,
     setLanguage,
@@ -132,6 +134,8 @@ export function SettingsViewContent({ defaultTab, setOpen }: SettingsViewContent
     setWakeLockEnabled: state.setWakeLockEnabled,
     volumeButtonCounting: state.volumeButtonCounting,
     setVolumeButtonCounting: state.setVolumeButtonCounting,
+    screenOffMode: state.screenOffMode,
+    setScreenOffMode: state.setScreenOffMode,
     setCounterShape: state.setCounterShape,
     language: state.language,
     setLanguage: state.setLanguage,
@@ -610,6 +614,16 @@ export function SettingsViewContent({ defaultTab, setOpen }: SettingsViewContent
                     <p className="text-xs text-muted-foreground">Keep screen on during sessions</p>
                   </div>
                   <Switch checked={wakeLockEnabled} onCheckedChange={setWakeLockEnabled} />
+                </div>
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm font-medium text-foreground">Pocket Mode</p>
+                    <p className="text-xs text-muted-foreground">Turn screen black to save battery</p>
+                  </div>
+                  <Switch checked={screenOffMode} onCheckedChange={(val) => {
+                    setScreenOffMode(val);
+                    setOpen(false);
+                  }} />
                 </div>
                 <div className="flex items-center justify-between">
                   <div>

@@ -4,29 +4,16 @@ import { ThemeSettings, CounterShape } from '@/store/tasbeehStore';
 import { HaloRing } from './counter-shapes/HaloRing';
 import { BeadRing } from './counter-shapes/BeadRing';
 import { counterShapes } from '@/lib/constants';
-import { CyberOrbit } from './counter-shapes/CyberOrbit';
 import { GreenTally } from './counter-shapes/GreenTally';
-import { RetroFlip } from './counter-shapes/RetroFlip';
-import { GoldenMandala } from './counter-shapes/GoldenMandala';
-import { NeonWave } from './counter-shapes/NeonWave';
-import { SteampunkGear } from './counter-shapes/SteampunkGear';
 
 import { VerticalCapsules } from './counter-shapes/VerticalCapsules';
 import { LuminousBeads } from './counter-shapes/LuminousBeads';
-import { HelixStrand } from './counter-shapes/HelixStrand';
-import { CyberHexagon } from './counter-shapes/CyberHexagon';
-import { GlassPill } from './counter-shapes/GlassPill';
 import { SmartRing } from './counter-shapes/SmartRing';
 import { MoonPhase } from './counter-shapes/MoonPhase';
-import { WaterRipple } from './counter-shapes/WaterRipple';
-import { SandHourglass } from './counter-shapes/SandHourglass';
-import { LanternFanous } from './counter-shapes/LanternFanous';
 import { DigitalWatch } from './counter-shapes/DigitalWatch';
 import { StarBurst } from './counter-shapes/StarBurst';
 import { CrystalPrism } from './counter-shapes/CrystalPrism';
 import { TallyClicker } from './counter-shapes/TallyClicker';
-import { Cyber3D } from './counter-shapes/Cyber3D';
-import { CrystalISO } from './counter-shapes/CrystalISO';
 import { Neumorph } from './counter-shapes/Neumorph';
 import { SunsetHorizon } from './counter-shapes/SunsetHorizon';
 import { RetroLCD } from './counter-shapes/RetroLCD';
@@ -39,7 +26,6 @@ import {
     RingLightVisuals, 
     ModernRingVisuals, 
     VintageWoodVisuals, 
-    AnimatedRippleVisuals,
     BeadsDecorator,
     MinimalBorder,
     ClassicBody,
@@ -87,24 +73,15 @@ export const CounterNumber = memo(({
             transition={{ duration: 0.15, ease: [0.34, 1.56, 0.64, 1] }}
             className={`
   counter-number text-counter-text
-  ${['digital', 'vertical-capsules', 'tally-clicker', 'cyber-3d', 'crystal-iso', 'neumorph', 'digital-watch', 'retro-lcd', 'green-tally', 'retro-flip'].includes(counterShape) ? 'hidden' : ''}
+  ${['digital', 'vertical-capsules', 'tally-clicker', 'neumorph', 'digital-watch', 'retro-lcd', 'green-tally'].includes(counterShape) ? 'hidden' : ''}
   ${counterShape === 'classic' ? 'font-mono text-5xl sm:text-6xl md:text-7xl tracking-widest bg-black/10 px-4 sm:px-6 py-2 rounded-lg inset-shadow mb-4' : 'text-5xl sm:text-6xl md:text-7xl lg:text-8xl'}
   ${counterShape === 'waveform' ? 'drop-shadow-md z-10' : ''}
   ${counterShape === 'modern-ring' ? 'font-sans font-light tracking-tighter drop-shadow-[0_0_15px_currentColor]' : ''}
   ${counterShape === 'vintage-wood' ? 'font-serif text-[#d7ccc8] drop-shadow-[0_2px_2px_rgba(0,0,0,0.5)]' : ''}
-  ${counterShape === 'luminous-ring' ? 'text-current drop-shadow-[0_0_15px_currentColor] font-light' : ''}
   ${counterShape === 'ring-light' ? 'text-white/90 font-thin tracking-tighter drop-shadow-[0_0_20px_rgba(255,255,255,0.8)]' : ''}
   ${counterShape === 'halo-ring' ? 'text-emerald-400 font-bold drop-shadow-[0_0_10px_rgba(52,211,153,0.8)]' : ''}
   
-  ${counterShape === 'animated-ripple' ? 'text-blue-200 font-light text-7xl tracking-widest drop-shadow-[0_0_10px_rgba(59,130,246,0.6)]' : ''}
   ${counterShape === 'bead-ring' ? 'text-amber-500 font-mono text-7xl font-bold tracking-wider drop-shadow-[0_0_10px_rgba(245,158,11,0.6)]' : ''}
-  ${counterShape === 'golden-mandala' ? 'font-serif font-bold text-amber-100 drop-shadow-[0_0_12px_rgba(245,158,11,0.8)]' : ''}
-  ${counterShape === 'neon-wave' ? 'font-sans font-black text-white tracking-widest drop-shadow-[0_0_15px_#22d3ee]' : ''}
-  ${counterShape === 'steampunk-gear' ? 'font-serif font-extrabold text-[#3e2723] drop-shadow-[0_1px_1px_rgba(255,255,255,0.4)]' : ''}
-  ${counterShape === 'cyber-orbit' ? 'font-mono font-medium text-primary tracking-wide drop-shadow-[0_0_10px_currentColor]' : ''}
-  ${counterShape === 'helix-strand' ? 'text-cyan-400 font-mono tracking-widest drop-shadow-[0_0_10px_rgba(34,211,238,0.8)]' : ''}
-  ${counterShape === 'cyber-hexagon' ? 'font-mono text-current font-bold tracking-widest drop-shadow-[0_0_10px_currentColor]' : ''}
-  ${counterShape === 'glass-pill' ? 'font-sans font-medium text-white tracking-widest text-6xl drop-shadow-md' : ''}
   ${counterShape === 'emerald-loop' ? 'font-serif text-emerald-100 font-bold tracking-widest text-5xl drop-shadow-md' : ''}
   ${counterShape === 'smart-ring' ? 'font-sans font-light text-white tracking-tighter text-6xl drop-shadow-none' : ''}
   ${['moon-phase'].includes(counterShape) ? 'font-sans font-light text-white text-5xl drop-shadow-lg' : ''}
@@ -149,9 +126,7 @@ export const CounterVisuals = memo(({
                 <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-0">
                     {counterShape === 'classic' && <ClassicVisuals progress={progress} />}
 
-
-
-                    {['minimal', 'beads', 'flower', 'waveform', 'modern-ring', 'ring-light', 'luminous-ring'].includes(counterShape) && (
+                    {['minimal', 'beads', 'flower', 'waveform', 'modern-ring', 'ring-light'].includes(counterShape) && (
                         <CircularProgress progress={progress} />
                     )}
                 </div>
@@ -160,11 +135,7 @@ export const CounterVisuals = memo(({
 
                 {counterShape === 'ring-light' && <RingLightVisuals currentCount={currentCount} />}
 
-
-
                 {counterShape === 'classic' && <ClassicBody />}
-
-
 
                 {counterShape === 'beads' && <BeadsDecorator />}
 
@@ -172,64 +143,28 @@ export const CounterVisuals = memo(({
 
                 {counterShape === 'waveform' && <WaveformVisuals progress={progress} />}
 
-
-
                 {counterShape === 'digital' && <DigitalVisuals currentCount={currentCount} progress={progress} />}
 
                 {counterShape === 'modern-ring' && <ModernRingVisuals />}
 
                 {counterShape === 'vintage-wood' && <VintageWoodVisuals />}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                {counterShape === 'animated-ripple' && <AnimatedRippleVisuals />}
-
                 <div className="absolute inset-0 flex items-center justify-center pointer-events-none -z-10 scale-90">
                         {counterShape === 'halo-ring' && <HaloRing progress={progress} currentCount={currentCount} />}
                         {counterShape === 'bead-ring' && <BeadRing currentCount={currentCount} />}
-                        {counterShape === 'helix-strand' && <HelixStrand currentCount={currentCount} />}
-                        {counterShape === 'cyber-hexagon' && <CyberHexagon currentCount={currentCount} />}
-                        {counterShape === 'glass-pill' && <GlassPill currentCount={currentCount} />}
                         {counterShape === 'smart-ring' && <SmartRing currentCount={currentCount} />}
                         {counterShape === 'moon-phase' && <MoonPhase currentCount={currentCount} />}
-                        {counterShape === 'water-ripple' && <WaterRipple currentCount={currentCount} />}
-                        {counterShape === 'sand-hourglass' && <SandHourglass currentCount={currentCount} />}
-                        {counterShape === 'lantern-fanous' && <LanternFanous currentCount={currentCount} />}
                         {counterShape === 'digital-watch' && <DigitalWatch currentCount={currentCount} />}
                         {counterShape === 'star-burst' && <StarBurst currentCount={currentCount} />}
                         {counterShape === 'crystal-prism' && <CrystalPrism currentCount={currentCount} />}
                         {counterShape === 'tally-clicker' && <TallyClicker currentCount={currentCount} />}
-                        {counterShape === 'cyber-3d' && <Cyber3D currentCount={currentCount} />}
-                        {counterShape === 'crystal-iso' && <CrystalISO currentCount={currentCount} />}
                         {counterShape === 'neumorph' && <Neumorph currentCount={currentCount} />}
                         {counterShape === 'vertical-capsules' && <VerticalCapsules currentCount={currentCount} />}
                         {counterShape === 'luminous-beads' && <LuminousBeads progress={progress} />}
-                        {counterShape === 'cyber-orbit' && <CyberOrbit currentCount={currentCount} />}
                         {counterShape === 'green-tally' && <GreenTally currentCount={currentCount} />}
-                        {counterShape === 'retro-flip' && <RetroFlip currentCount={currentCount} />}
-                        {counterShape === 'golden-mandala' && <GoldenMandala currentCount={currentCount} />}
-                        {counterShape === 'neon-wave' && <NeonWave currentCount={currentCount} />}
-                        {counterShape === 'steampunk-gear' && <SteampunkGear currentCount={currentCount} />}
                         {counterShape === 'retro-lcd' && <RetroLCD progress={progress} currentCount={currentCount} />}
                         {counterShape === 'sunset-horizon' && <SunsetHorizon progress={progress} currentCount={currentCount} />}
                 </div>
-
 
                 {/* Global Aura Pulse Effekt - triggers on count change */}
                 <motion.div
@@ -260,10 +195,8 @@ export const CounterVisuals = memo(({
         ${counterShape === 'vertical-capsules' ? 'w-64 h-64 flex items-center justify-center bg-transparent z-10' : ''}
         ${counterShape === 'luminous-beads' ? 'w-64 h-64 rounded-full flex items-center justify-center bg-transparent z-10' : ''}
         
-
-        ${counterShape === 'animated-ripple' ? 'w-64 h-64 flex items-center justify-center bg-transparent z-10' : ''}
         ${counterShape === 'bead-ring' ? 'w-64 h-64 flex items-center justify-center bg-transparent z-10' : ''}
-        ${['helix-strand', 'cyber-hexagon', 'glass-pill', 'emerald-loop', 'smart-ring', 'moon-phase', 'water-ripple', 'sand-hourglass', 'lantern-fanous', 'star-burst', 'crystal-prism', 'tally-clicker', 'cyber-3d', 'crystal-iso', 'neumorph', 'cyber-orbit', 'green-tally', 'retro-flip', 'golden-mandala', 'neon-wave', 'steampunk-gear', 'luminous-ring', 'digital-watch', 'retro-lcd', 'sunset-horizon'].includes(counterShape) ? 'w-64 h-64 flex items-center justify-center bg-transparent z-10' : ''}
+        ${['emerald-loop', 'smart-ring', 'moon-phase', 'star-burst', 'crystal-prism', 'tally-clicker', 'neumorph', 'green-tally', 'digital-watch', 'retro-lcd', 'sunset-horizon'].includes(counterShape) ? 'w-64 h-64 flex items-center justify-center bg-transparent z-10' : ''}
 
         flex items-center justify-center
         cursor-pointer
