@@ -53,6 +53,8 @@ export const counterShapes = [
   { id: 'golden-mandala', label: 'Mandala', icon: '🔆', color: '#fbbf24', bg: 'rgba(251, 191, 36, 0.1)' },
   { id: 'neon-wave', label: 'Neon Wave', icon: '🔮', color: '#d946ef', bg: 'rgba(217, 70, 239, 0.1)' },
   { id: 'steampunk-gear', label: 'Steampunk', icon: '⚙️', color: '#b45309', bg: 'rgba(180, 83, 9, 0.1)' },
+  { id: 'retro-lcd', label: 'Retro LCD', icon: '📟', color: '#8b9b82', bg: 'rgba(139, 155, 130, 0.1)' },
+  { id: 'sunset-horizon', label: 'Sunset', icon: '🌅', color: '#f97316', bg: 'rgba(249, 115, 22, 0.1)' },
 ] as const;
 
 // Dashboard Layouts removed in favor of single default design

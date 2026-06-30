@@ -79,7 +79,7 @@ export type CounterShape =
   | 'helix-strand' | 'cyber-hexagon' | 'glass-pill' | 'emerald-loop'
   | 'smart-ring' | 'moon-phase' | 'water-ripple' | 'sand-hourglass' | 'lantern-fanous'
   | 'digital-watch' | 'star-burst' | 'crystal-prism' | 'tally-clicker'
-  | 'cyber-3d' | 'crystal-iso' | 'neumorph' | 'cyber-orbit' | 'green-tally' | 'retro-flip' | 'golden-mandala' | 'neon-wave' | 'steampunk-gear';
+  | 'cyber-3d' | 'crystal-iso' | 'neumorph' | 'cyber-orbit' | 'green-tally' | 'retro-flip' | 'golden-mandala' | 'neon-wave' | 'steampunk-gear' | 'retro-lcd' | 'sunset-horizon';
 
 export interface Reminder {
   id: string;
@@ -164,6 +164,7 @@ interface TasbeehState {
 
   sessions: SessionRecord[];
   deviceUuid: string;
+  setDeviceUuid: (uuid: string) => void;
   personalBest: number;
   saveActiveSession: () => void;
 
@@ -567,6 +568,7 @@ export const useTasbeehStore = create<TasbeehState>()(
       setCounterShape: (shape) => set({ counterShape: shape }),
       setHadithSlideDuration: (duration) => set({ hadithSlideDuration: duration }),
       setHadithSlidePosition: (position) => set({ hadithSlidePosition: position }),
+      setDeviceUuid: (uuid) => set({ deviceUuid: uuid }),
       setDailyGoal: (goal) => set({ dailyGoal: goal }),
       setVerticalOffset: (offset) => set({ verticalOffset: offset }),
       setDhikrVerticalOffset: (offset) => set({ dhikrVerticalOffset: offset }),

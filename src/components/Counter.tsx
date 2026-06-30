@@ -13,6 +13,7 @@ import { HadithOfTheDayModal } from './HadithOfTheDay';
 import { MoodTracker } from './MoodTracker';
 import { useTranslation } from '@/lib/i18n';
 import { motion } from 'framer-motion';
+import { HadithSlider } from './HadithSlider';
 
 
 const announceMilestone = (count: number, lang: string) => {
@@ -62,6 +63,8 @@ export const Counter = memo(function Counter() {
   const language = useTasbeehStore(state => state.language);
   const voiceAnnouncementsEnabled = useTasbeehStore(state => state.voiceAnnouncementsEnabled);
   const sessions = useTasbeehStore(state => state.sessions);
+  const currentDhikr = useTasbeehStore(state => state.currentDhikr);
+  const hadithSlidePosition = useTasbeehStore(state => state.hadithSlidePosition);
 
   const showMood = useTasbeehStore(state => state.showMoodTracker);
   const setShowMood = useTasbeehStore(state => state.setShowMoodTracker);
@@ -170,6 +173,11 @@ export const Counter = memo(function Counter() {
             <span>{t('hadith.title')}</span>
           </motion.button>
         </div>
+        {!zenMode && hadithSlidePosition === 'top' && (
+          <div className="w-full px-2 mt-2">
+            <HadithSlider dhikr={currentDhikr} />
+          </div>
+        )}
       </div>
 
       {/* Center: Bead ring + action buttons */}
@@ -179,7 +187,12 @@ export const Counter = memo(function Counter() {
       </div>
 
       {/* Bottom: Footer stats */}
-      <div className="w-full flex flex-col items-center justify-center z-10 pb-2 animate-fade-in-up">
+      <div className="w-full flex flex-col items-center justify-center z-10 pb-2 animate-fade-in-up gap-3">
+        {!zenMode && hadithSlidePosition === 'bottom' && (
+          <div className="w-full px-2">
+            <HadithSlider dhikr={currentDhikr} />
+          </div>
+        )}
         <CounterFooter />
       </div>
 

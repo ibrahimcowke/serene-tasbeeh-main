@@ -101,6 +101,71 @@ const App = () => {
     };
   }, []);
 
+  // Global visibilitychange and auth session sync listener
+  useEffect(() => {
+    // 1. Stop auto count when app is backgrounded / hidden
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === 'hidden') {
+        const store = useTasbeehStore.getState();
+        if (store.autoCountActive) {
+          store.stopAutoCount();
+        }
+      }
+    };
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+
+    // 2. Supabase auth session sync
+    let authSubscription: any = null;
+    import("./lib/supabaseSync").then(({ supabase, fetchStateFromCloud }) => {
+      if (!supabase) return;
+
+      // Check current session
+      supabase.auth.getSession().then(({ data: { session } }) => {
+        if (session?.user) {
+          const cloudUuid = `auth_user_${session.user.id}`;
+          const store = useTasbeehStore.getState();
+          if (store.deviceUuid !== cloudUuid) {
+            store.setDeviceUuid(cloudUuid);
+            fetchStateFromCloud(cloudUuid).then((cloudData) => {
+              if (cloudData && cloudData.totalAllTime > store.totalAllTime) {
+                useTasbeehStore.setState({
+                  ...cloudData,
+                  deviceUuid: cloudUuid
+                });
+              }
+            });
+          }
+        }
+      });
+
+      // Listen for auth changes
+      const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
+        const store = useTasbeehStore.getState();
+        if (session?.user) {
+          const cloudUuid = `auth_user_${session.user.id}`;
+          if (store.deviceUuid !== cloudUuid) {
+            store.setDeviceUuid(cloudUuid);
+            const cloudData = await fetchStateFromCloud(cloudUuid);
+            if (cloudData && cloudData.totalAllTime > store.totalAllTime) {
+              useTasbeehStore.setState({
+                ...cloudData,
+                deviceUuid: cloudUuid
+              });
+            }
+          }
+        }
+      });
+      authSubscription = subscription;
+    });
+
+    return () => {
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+      if (authSubscription) {
+        authSubscription.unsubscribe();
+      }
+    };
+  }, []);
+
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>

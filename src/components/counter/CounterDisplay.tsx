@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useTasbeehStore, defaultThemeSettings } from '@/store/tasbeehStore';
 import { CounterVisuals } from '../CounterVisuals';
 import { useTranslation } from '@/lib/i18n';
+import { SessionTimer } from '../SessionTimer';
 
 // Convert number to Arabic-Indic numerals
 const toArabicNumerals = (n: number | string, isRTL: boolean): string => {
@@ -297,6 +298,11 @@ export const CounterDisplay = memo(function CounterDisplay() {
           </span>
         </div>
       )}
+
+      {/* Session Timer */}
+      <div className="mt-3">
+        <SessionTimer />
+      </div>
     </div>
   );
 });

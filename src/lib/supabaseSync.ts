@@ -56,3 +56,27 @@ export async function syncStateToCloud(deviceUuid: string, payload: any) {
     console.warn('[Supabase Sync Network Exception] Sync deferred until online:', error);
   }
 }
+
+/**
+ * Fetches the user's synced payload from the database.
+ */
+export async function fetchStateFromCloud(deviceUuid: string) {
+  if (!supabase || !deviceUuid) return null;
+
+  try {
+    const { data, error } = await supabase
+      .from('user_sync')
+      .select('payload')
+      .eq('device_uuid', deviceUuid)
+      .maybeSingle();
+
+    if (error) {
+      console.warn('[Supabase Sync Warning] Failed to fetch remote record:', error.message);
+      return null;
+    }
+    return data?.payload || null;
+  } catch (error) {
+    console.warn('[Supabase Sync Network Exception] Failed to fetch remote record:', error);
+    return null;
+  }
+}

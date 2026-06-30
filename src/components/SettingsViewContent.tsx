@@ -29,12 +29,13 @@ import { Label } from '@/components/ui/label';
 import { themes, counterShapes } from '@/lib/constants';
 import { RemindersView } from './RemindersView';
 import { LoginView } from './LoginView';
+import { GoogleLogin } from './GoogleLogin';
 
 const SHAPE_CATEGORIES = [
   { title: 'Essential', list: ['plain', 'minimal', 'classic', 'beads', 'waveform'] },
   { title: 'Luminous', list: ['luminous-ring', 'ring-light', 'halo-ring', 'luminous-beads', 'star-burst', 'golden-mandala'] },
-  { title: 'Modern', list: ['flower', 'modern-ring', 'animated-ripple', 'water-ripple', 'moon-phase', 'glass-pill', 'neumorph'] },
-  { title: 'Objects & 3D', list: ['vintage-wood', 'digital', 'bead-ring', 'sand-hourglass', 'lantern-fanous', 'digital-watch', 'tally-clicker', 'cyber-3d', 'crystal-iso', 'green-tally', 'retro-flip', 'steampunk-gear'] },
+  { title: 'Modern', list: ['flower', 'modern-ring', 'animated-ripple', 'water-ripple', 'moon-phase', 'glass-pill', 'neumorph', 'sunset-horizon'] },
+  { title: 'Objects & 3D', list: ['vintage-wood', 'digital', 'bead-ring', 'sand-hourglass', 'lantern-fanous', 'digital-watch', 'tally-clicker', 'cyber-3d', 'crystal-iso', 'green-tally', 'retro-flip', 'steampunk-gear', 'retro-lcd'] },
   { title: 'Tech & Abstract', list: ['vertical-capsules', 'helix-strand', 'cyber-hexagon', 'emerald-loop', 'smart-ring', 'crystal-prism', 'cyber-orbit', 'neon-wave'] }
 ];
 
@@ -215,11 +216,12 @@ export function SettingsViewContent({ defaultTab, setOpen }: SettingsViewContent
       <div className="flex-1 overflow-hidden flex flex-col">
         <Tabs defaultValue={defaultTab === 'appearance' ? 'themes' : defaultTab} className="flex-1 flex flex-col h-full">
           <div className="px-6 pt-2 pb-4 shrink-0 bg-background/50 backdrop-blur-sm z-10">
-            <TabsList className="grid w-full grid-cols-4">
+            <TabsList className="grid w-full grid-cols-5">
               <TabsTrigger value="themes" className="text-xs">Themes</TabsTrigger>
               <TabsTrigger value="counter" className="text-xs">Counter</TabsTrigger>
               <TabsTrigger value="system" className="text-xs">Behavior</TabsTrigger>
               <TabsTrigger value="data" className="text-xs">Data</TabsTrigger>
+              <TabsTrigger value="account" className="text-xs">Account</TabsTrigger>
             </TabsList>
           </div>
 
@@ -768,6 +770,10 @@ export function SettingsViewContent({ defaultTab, setOpen }: SettingsViewContent
                   </AlertDialogFooter>
                 </AlertDialogContent>
               </AlertDialog>
+            </TabsContent>
+
+            <TabsContent value="account" className="space-y-6 mt-0 pb-6 px-4">
+              <GoogleLogin />
             </TabsContent>
           </div>
         </Tabs>

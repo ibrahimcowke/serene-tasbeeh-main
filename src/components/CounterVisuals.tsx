@@ -151,7 +151,7 @@ export const CounterVisuals = memo(({
 
 
 
-                    {['minimal', 'beads', 'flower', 'waveform', 'modern-ring', 'ring-light'].includes(counterShape) && (
+                    {['minimal', 'beads', 'flower', 'waveform', 'modern-ring', 'ring-light', 'luminous-ring'].includes(counterShape) && (
                         <CircularProgress progress={progress} />
                     )}
                 </div>
@@ -226,6 +226,8 @@ export const CounterVisuals = memo(({
                         {counterShape === 'golden-mandala' && <GoldenMandala currentCount={currentCount} />}
                         {counterShape === 'neon-wave' && <NeonWave currentCount={currentCount} />}
                         {counterShape === 'steampunk-gear' && <SteampunkGear currentCount={currentCount} />}
+                        {counterShape === 'retro-lcd' && <RetroLCD progress={progress} currentCount={currentCount} />}
+                        {counterShape === 'sunset-horizon' && <SunsetHorizon progress={progress} currentCount={currentCount} />}
                 </div>
 
 
@@ -261,7 +263,7 @@ export const CounterVisuals = memo(({
 
         ${counterShape === 'animated-ripple' ? 'w-64 h-64 flex items-center justify-center bg-transparent z-10' : ''}
         ${counterShape === 'bead-ring' ? 'w-64 h-64 flex items-center justify-center bg-transparent z-10' : ''}
-        ${['helix-strand', 'cyber-hexagon', 'glass-pill', 'emerald-loop', 'smart-ring', 'moon-phase', 'water-ripple', 'sand-hourglass', 'lantern-fanous', 'star-burst', 'crystal-prism', 'tally-clicker', 'cyber-3d', 'crystal-iso', 'neumorph', 'cyber-orbit', 'green-tally', 'retro-flip', 'golden-mandala', 'neon-wave', 'steampunk-gear'].includes(counterShape) ? 'w-64 h-64 flex items-center justify-center bg-transparent z-10' : ''}
+        ${['helix-strand', 'cyber-hexagon', 'glass-pill', 'emerald-loop', 'smart-ring', 'moon-phase', 'water-ripple', 'sand-hourglass', 'lantern-fanous', 'star-burst', 'crystal-prism', 'tally-clicker', 'cyber-3d', 'crystal-iso', 'neumorph', 'cyber-orbit', 'green-tally', 'retro-flip', 'golden-mandala', 'neon-wave', 'steampunk-gear', 'luminous-ring', 'digital-watch', 'retro-lcd', 'sunset-horizon'].includes(counterShape) ? 'w-64 h-64 flex items-center justify-center bg-transparent z-10' : ''}
 
         flex items-center justify-center
         cursor-pointer
