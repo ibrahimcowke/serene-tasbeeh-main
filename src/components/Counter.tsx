@@ -84,19 +84,9 @@ export const Counter = memo(function Counter() {
     }
   }, [currentCount, voiceAnnouncementsEnabled, language]);
 
-  // Intercept reset to show MoodTracker
   useEffect(() => {
-    if (currentCount === 0 && prevCountRef.current > 0) {
-      // It was reset! Get the latest saved session
-      const latestSession = sessions[0];
-      if (latestSession && Date.now() - latestSession.timestamp < 5000) {
-        setLastSessionId(latestSession.id);
-        setLastCount(prevCountRef.current);
-        setShowMood(true);
-      }
-    }
     prevCountRef.current = currentCount;
-  }, [currentCount, sessions]);
+  }, [currentCount]);
 
   // Sound
   useEffect(() => {
