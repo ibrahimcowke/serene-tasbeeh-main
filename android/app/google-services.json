@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "207821527708-0s0rkoeinpr1q25am7kn7ogr7sjae0q5.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.ibrahimcowke.tasbeehly",
+            "certificate_hash": "7efd135780adcf42d84f35b925247c6651645a50"
+          }
+        },
+        {
           "client_id": "207821527708-slddpn0mmr3r5phjn4q75inp21k7h9br.apps.googleusercontent.com",
           "client_type": 3
         }

@@ -25,8 +25,10 @@ export function GoogleLoginScreen({ onLoginSuccess }: { onLoginSuccess: () => vo
     const handleLogin = async () => {
         setSigningIn(true);
         try {
-            // Trigger Capacitor Native Google Sign-In
-            const result = await FirebaseAuthentication.signInWithGoogle();
+            // Trigger Capacitor Native Google Sign-In with Web Client ID
+            const result = await FirebaseAuthentication.signInWithGoogle({
+                webClientId: "207821527708-slddpn0mmr3r5phjn4q75inp21k7h9br.apps.googleusercontent.com"
+            });
             
             if (result.credential) {
                 // Exchange native token for Firebase Auth credential

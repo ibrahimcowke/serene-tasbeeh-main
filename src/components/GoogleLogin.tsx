@@ -34,7 +34,9 @@ export function GoogleLogin() {
     const handleLogin = async () => {
         setLoading(true);
         try {
-            const result = await FirebaseAuthentication.signInWithGoogle();
+            const result = await FirebaseAuthentication.signInWithGoogle({
+                webClientId: "207821527708-slddpn0mmr3r5phjn4q75inp21k7h9br.apps.googleusercontent.com"
+            });
             if (result.credential) {
                 const credential = GoogleAuthProvider.credential(result.credential.idToken);
                 await signInWithCredential(auth, credential);
