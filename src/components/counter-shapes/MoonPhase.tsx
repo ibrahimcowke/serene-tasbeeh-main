@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import { motion } from 'framer-motion';
 
 interface MoonPhaseProps {
@@ -17,7 +18,7 @@ export function MoonPhase({ currentCount }: MoonPhaseProps) {
         <div className="relative w-64 h-64 flex items-center justify-center">
             {/* Starfield Background */}
             <div className="absolute inset-0 rounded-full bg-slate-950 overflow-hidden shadow-2xl border border-slate-800">
-                {Array.from({ length: 20 }).map((_, i) => (
+                {useMemo(() => Array.from({ length: 20 }).map((_, i) => (
                     <motion.div
                         key={i}
                         className="absolute bg-white rounded-full"
@@ -31,7 +32,7 @@ export function MoonPhase({ currentCount }: MoonPhaseProps) {
                         animate={{ opacity: [0.2, 1, 0.2] }}
                         transition={{ duration: Math.random() * 3 + 2, repeat: Infinity }}
                     />
-                ))}
+                )), [])}
             </div>
 
             {/* The Moon */}

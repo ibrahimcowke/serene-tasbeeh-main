@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import { motion } from 'framer-motion';
 
 interface HaloRingProps {
@@ -59,7 +60,7 @@ export function HaloRing({ progress, currentCount }: HaloRingProps) {
 
                 {/* Center Particle Field */}
                 <div className="absolute inset-[80px] rounded-full bg-emerald-900/10 backdrop-blur-sm overflow-hidden">
-                    {Array.from({ length: 20 }).map((_, i) => (
+                    {useMemo(() => Array.from({ length: 20 }).map((_, i) => (
                         <motion.div
                             key={i}
                             className="absolute w-1 h-1 bg-emerald-400 rounded-full"
@@ -76,7 +77,7 @@ export function HaloRing({ progress, currentCount }: HaloRingProps) {
                                 delay: Math.random() * 2
                             }}
                         />
-                    ))}
+                    )), [])}
                 </div>
             </div>
         </div>

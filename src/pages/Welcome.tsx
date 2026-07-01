@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { useTasbeehStore } from '@/store/tasbeehStore';
@@ -75,8 +75,8 @@ export default function Welcome() {
       </div>
 
       {/* Stars overlay */}
-      <div className="absolute inset-0 z-1 pointer-events-none">
-        {[...Array(50)].map((_, i) => (
+      <div className="absolute inset-0 z-0 opacity-40">
+        {useMemo(() => [...Array(50)].map((_, i) => (
           <motion.div
             key={i}
             className="absolute rounded-full bg-white"
@@ -90,7 +90,7 @@ export default function Welcome() {
             animate={{ opacity: [0.1, 0.6, 0.1] }}
             transition={{ duration: 2 + Math.random() * 4, repeat: Infinity, delay: Math.random() * 3 }}
           />
-        ))}
+        )), [])}
       </div>
 
       {/* Content */}

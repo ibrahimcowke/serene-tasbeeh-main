@@ -153,7 +153,7 @@ export function GoogleLoginScreen({ onLoginSuccess }: { onLoginSuccess: () => vo
 
             {/* Stars overlay */}
             <div className="absolute inset-0 z-1 pointer-events-none">
-                {[...Array(50)].map((_, i) => (
+                {React.useMemo(() => [...Array(50)].map((_, i) => (
                     <motion.div
                         key={i}
                         className="absolute rounded-full bg-white"
@@ -167,7 +167,7 @@ export function GoogleLoginScreen({ onLoginSuccess }: { onLoginSuccess: () => vo
                         animate={{ opacity: [0.1, 0.6, 0.1] }}
                         transition={{ duration: 2 + Math.random() * 4, repeat: Infinity, delay: Math.random() * 3 }}
                     />
-                ))}
+                )), [])}
             </div>
 
             {/* Content */}

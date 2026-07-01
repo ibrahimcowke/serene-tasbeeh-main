@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import { useTasbeehStore } from '@/store/tasbeehStore';
 import { SidebarProvider, SidebarInset, SidebarTrigger } from '@/components/ui/sidebar';
 import { AppSidebar } from '@/components/AppSidebar';
@@ -7,7 +8,6 @@ import { WhatsNew } from '@/components/WhatsNew';
 import { BreathingGuide } from '@/components/BreathingGuide';
 import { MobileNavBar } from '@/components/MobileNavBar';
 import { Counter } from '@/components/Counter';
-import { CongratsPopup } from '@/components/CongratsPopup';
 import { DateBanner } from '@/components/DateBanner';
 
 const Index = () => {
@@ -34,7 +34,7 @@ const Index = () => {
             {/* Subtle starfield / particle overlay */}
             <div className="pointer-events-none absolute inset-0 z-0 overflow-hidden">
               {/* Static star dots */}
-              {[...Array(40)].map((_, i) => (
+              {useMemo(() => [...Array(40)].map((_, i) => (
                 <div
                   key={i}
                   className="absolute rounded-full"
@@ -47,7 +47,7 @@ const Index = () => {
                     backgroundColor: 'hsl(var(--primary))',
                   }}
                 />
-              ))}
+              )), [])}
             </div>
 
             {/* Top navigation bar */}
@@ -88,8 +88,6 @@ const Index = () => {
             {/* Bottom navigation */}
             {!zenMode && <MobileNavBar />}
 
-            {/* Congrats popup */}
-            <CongratsPopup />
 
             {/* Zen mode exit */}
             {zenMode && (
