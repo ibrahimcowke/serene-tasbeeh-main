@@ -14,25 +14,27 @@ export function MoonPhase({ currentCount }: MoonPhaseProps) {
     // Simplified visual representation: Clipping rect moving across
     const progress = (currentCount % 33) / 33;
 
+    const stars = useMemo(() => Array.from({ length: 20 }).map((_, i) => (
+        <motion.div
+            key={i}
+            className="absolute bg-white rounded-full"
+            style={{
+                width: Math.random() * 2 + 1,
+                height: Math.random() * 2 + 1,
+                top: `${Math.random() * 100}%`,
+                left: `${Math.random() * 100}%`,
+                opacity: Math.random()
+            }}
+            animate={{ opacity: [0.2, 1, 0.2] }}
+            transition={{ duration: Math.random() * 3 + 2, repeat: Infinity }}
+        />
+    )), []);
+
     return (
         <div className="relative w-64 h-64 flex items-center justify-center">
             {/* Starfield Background */}
             <div className="absolute inset-0 rounded-full bg-slate-950 overflow-hidden shadow-2xl border border-slate-800">
-                {useMemo(() => Array.from({ length: 20 }).map((_, i) => (
-                    <motion.div
-                        key={i}
-                        className="absolute bg-white rounded-full"
-                        style={{
-                            width: Math.random() * 2 + 1,
-                            height: Math.random() * 2 + 1,
-                            top: `${Math.random() * 100}%`,
-                            left: `${Math.random() * 100}%`,
-                            opacity: Math.random()
-                        }}
-                        animate={{ opacity: [0.2, 1, 0.2] }}
-                        transition={{ duration: Math.random() * 3 + 2, repeat: Infinity }}
-                    />
-                )), [])}
+                {stars}
             </div>
 
             {/* The Moon */}

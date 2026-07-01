@@ -14,6 +14,21 @@ const Index = () => {
   const zenMode = useTasbeehStore((state) => state.zenMode);
   const setZenMode = useTasbeehStore((state) => state.setZenMode);
 
+  const starfield = useMemo(() => [...Array(40)].map((_, i) => (
+    <div
+      key={i}
+      className="absolute rounded-full"
+      style={{
+        width: Math.random() * 1.5 + 0.5 + 'px',
+        height: Math.random() * 1.5 + 0.5 + 'px',
+        top: Math.random() * 100 + '%',
+        left: Math.random() * 100 + '%',
+        opacity: Math.random() * 0.2 + 0.05,
+        backgroundColor: 'hsl(var(--primary))',
+      }}
+    />
+  )), []);
+
   return (
     <>
       <SidebarProvider defaultOpen={false}>
@@ -34,20 +49,7 @@ const Index = () => {
             {/* Subtle starfield / particle overlay */}
             <div className="pointer-events-none absolute inset-0 z-0 overflow-hidden">
               {/* Static star dots */}
-              {useMemo(() => [...Array(40)].map((_, i) => (
-                <div
-                  key={i}
-                  className="absolute rounded-full"
-                  style={{
-                    width: Math.random() * 1.5 + 0.5 + 'px',
-                    height: Math.random() * 1.5 + 0.5 + 'px',
-                    top: Math.random() * 100 + '%',
-                    left: Math.random() * 100 + '%',
-                    opacity: Math.random() * 0.2 + 0.05,
-                    backgroundColor: 'hsl(var(--primary))',
-                  }}
-                />
-              )), [])}
+              {starfield}
             </div>
 
             {/* Top navigation bar */}

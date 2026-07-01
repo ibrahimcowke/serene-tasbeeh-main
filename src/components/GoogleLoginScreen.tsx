@@ -16,6 +16,22 @@ export function GoogleLoginScreen({ onLoginSuccess }: { onLoginSuccess: () => vo
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
 
+    const starfield = React.useMemo(() => [...Array(50)].map((_, i) => (
+        <motion.div
+            key={i}
+            className="absolute rounded-full bg-white"
+            style={{
+                width: Math.random() * 2 + 0.5 + 'px',
+                height: Math.random() * 2 + 0.5 + 'px',
+                top: Math.random() * 55 + '%',
+                left: Math.random() * 100 + '%',
+                opacity: Math.random() * 0.5 + 0.1,
+            }}
+            animate={{ opacity: [0.1, 0.6, 0.1] }}
+            transition={{ duration: 2 + Math.random() * 4, repeat: Infinity, delay: Math.random() * 3 }}
+        />
+    )), []);
+
     useEffect(() => {
         // Check if user is already logged in via Firebase
         const unsubscribe = auth.onAuthStateChanged((user) => {
@@ -153,21 +169,7 @@ export function GoogleLoginScreen({ onLoginSuccess }: { onLoginSuccess: () => vo
 
             {/* Stars overlay */}
             <div className="absolute inset-0 z-1 pointer-events-none">
-                {React.useMemo(() => [...Array(50)].map((_, i) => (
-                    <motion.div
-                        key={i}
-                        className="absolute rounded-full bg-white"
-                        style={{
-                            width: Math.random() * 2 + 0.5 + 'px',
-                            height: Math.random() * 2 + 0.5 + 'px',
-                            top: Math.random() * 55 + '%',
-                            left: Math.random() * 100 + '%',
-                            opacity: Math.random() * 0.5 + 0.1,
-                        }}
-                        animate={{ opacity: [0.1, 0.6, 0.1] }}
-                        transition={{ duration: 2 + Math.random() * 4, repeat: Infinity, delay: Math.random() * 3 }}
-                    />
-                )), [])}
+                {starfield}
             </div>
 
             {/* Content */}

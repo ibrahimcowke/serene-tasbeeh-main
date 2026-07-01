@@ -35,6 +35,22 @@ export default function Welcome() {
   const language = useTasbeehStore((s) => s.language);
   const { t, isRTL } = useTranslation();
 
+  const starfield = useMemo(() => [...Array(50)].map((_, i) => (
+    <motion.div
+      key={i}
+      className="absolute rounded-full bg-white"
+      style={{
+        width: Math.random() * 2 + 0.5 + 'px',
+        height: Math.random() * 2 + 0.5 + 'px',
+        top: Math.random() * 55 + '%',
+        left: Math.random() * 100 + '%',
+        opacity: Math.random() * 0.5 + 0.1,
+      }}
+      animate={{ opacity: [0.1, 0.6, 0.1] }}
+      transition={{ duration: 2 + Math.random() * 4, repeat: Infinity, delay: Math.random() * 3 }}
+    />
+  )), []);
+
   const handleGetStarted = () => {
     setHasSeenWelcome(true);
     navigate('/');
@@ -76,21 +92,7 @@ export default function Welcome() {
 
       {/* Stars overlay */}
       <div className="absolute inset-0 z-0 opacity-40">
-        {useMemo(() => [...Array(50)].map((_, i) => (
-          <motion.div
-            key={i}
-            className="absolute rounded-full bg-white"
-            style={{
-              width: Math.random() * 2 + 0.5 + 'px',
-              height: Math.random() * 2 + 0.5 + 'px',
-              top: Math.random() * 55 + '%',
-              left: Math.random() * 100 + '%',
-              opacity: Math.random() * 0.5 + 0.1,
-            }}
-            animate={{ opacity: [0.1, 0.6, 0.1] }}
-            transition={{ duration: 2 + Math.random() * 4, repeat: Infinity, delay: Math.random() * 3 }}
-          />
-        )), [])}
+        {starfield}
       </div>
 
       {/* Content */}

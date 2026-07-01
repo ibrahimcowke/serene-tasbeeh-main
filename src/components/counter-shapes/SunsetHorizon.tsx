@@ -7,6 +7,19 @@ interface SunsetHorizonProps {
 }
 
 export const SunsetHorizon: React.FC<SunsetHorizonProps> = ({ progress, currentCount }) => {
+    const stars = React.useMemo(() => [...Array(15)].map((_, i) => (
+        <motion.div
+            key={i}
+            className="absolute w-1 h-1 bg-white rounded-full"
+            style={{
+                top: `${Math.random() * 50}%`,
+                left: `${Math.random() * 100}%`
+            }}
+            animate={{ opacity: [0, 1, 0] }}
+            transition={{ duration: 2 + Math.random() * 3, repeat: Infinity, delay: Math.random() * 5 }}
+        />
+    )), []);
+
     return (
         <div className="absolute inset-0 flex items-center justify-center -z-10 rounded-full overflow-hidden bg-gradient-to-b from-blue-900 via-purple-900 to-orange-900 border-2 border-white/20">
             {/* Sky / Space */}
@@ -35,18 +48,7 @@ export const SunsetHorizon: React.FC<SunsetHorizonProps> = ({ progress, currentC
             </div>
 
             {/* Distant Stars */}
-            {React.useMemo(() => [...Array(15)].map((_, i) => (
-                <motion.div
-                    key={i}
-                    className="absolute w-1 h-1 bg-white rounded-full"
-                    style={{
-                        top: `${Math.random() * 50}%`,
-                        left: `${Math.random() * 100}%`
-                    }}
-                    animate={{ opacity: [0, 1, 0] }}
-                    transition={{ duration: 2 + Math.random() * 3, repeat: Infinity, delay: Math.random() * 5 }}
-                />
-            )), [])}
+            {stars}
         </div>
     );
 };

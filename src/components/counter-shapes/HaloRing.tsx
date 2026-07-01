@@ -7,6 +7,25 @@ interface HaloRingProps {
 }
 
 export function HaloRing({ progress, currentCount }: HaloRingProps) {
+    const particles = useMemo(() => Array.from({ length: 20 }).map((_, i) => (
+        <motion.div
+            key={i}
+            className="absolute w-1 h-1 bg-emerald-400 rounded-full"
+            initial={{ x: "50%", y: "50%", opacity: 0 }}
+            animate={{
+                x: `${Math.random() * 100}%`,
+                y: `${Math.random() * 100}%`,
+                opacity: [0, 1, 0],
+                scale: [0, 1.5, 0]
+            }}
+            transition={{
+                duration: 2 + Math.random() * 2,
+                repeat: Infinity,
+                delay: Math.random() * 2
+            }}
+        />
+    )), []);
+
     return (
         <div className="relative w-64 h-64 flex items-center justify-center -z-10">
             <div className="w-[256px] h-[256px] relative flex items-center justify-center">
@@ -60,24 +79,7 @@ export function HaloRing({ progress, currentCount }: HaloRingProps) {
 
                 {/* Center Particle Field */}
                 <div className="absolute inset-[80px] rounded-full bg-emerald-900/10 backdrop-blur-sm overflow-hidden">
-                    {useMemo(() => Array.from({ length: 20 }).map((_, i) => (
-                        <motion.div
-                            key={i}
-                            className="absolute w-1 h-1 bg-emerald-400 rounded-full"
-                            initial={{ x: "50%", y: "50%", opacity: 0 }}
-                            animate={{
-                                x: `${Math.random() * 100}%`,
-                                y: `${Math.random() * 100}%`,
-                                opacity: [0, 1, 0],
-                                scale: [0, 1.5, 0]
-                            }}
-                            transition={{
-                                duration: 2 + Math.random() * 2,
-                                repeat: Infinity,
-                                delay: Math.random() * 2
-                            }}
-                        />
-                    )), [])}
+                    {particles}
                 </div>
             </div>
         </div>
