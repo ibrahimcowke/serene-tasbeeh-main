@@ -9,6 +9,7 @@ import { motion } from 'framer-motion';
 export function GoogleLoginScreen({ onLoginSuccess }: { onLoginSuccess: () => void }) {
     const [loading, setLoading] = useState(true);
     const [signingIn, setSigningIn] = useState(false);
+    const [autoAttempted, setAutoAttempted] = useState(false);
 
     useEffect(() => {
         // Check if user is already logged in via Firebase
@@ -21,6 +22,13 @@ export function GoogleLoginScreen({ onLoginSuccess }: { onLoginSuccess: () => vo
 
         return () => unsubscribe();
     }, [onLoginSuccess]);
+
+    useEffect(() => {
+        if (!loading && !signingIn && !autoAttempted) {
+            setAutoAttempted(true);
+            handleLogin();
+        }
+    }, [loading, signingIn, autoAttempted]);
 
     const handleLogin = async () => {
         setSigningIn(true);
