@@ -121,7 +121,6 @@ export const CounterActions = memo(function CounterActions() {
         </GlassButton>
       </SettingsView>
 
-      <UndoButton />
     </div>
   );
 });
