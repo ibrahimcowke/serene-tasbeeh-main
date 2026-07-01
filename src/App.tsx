@@ -12,10 +12,10 @@ const Challenges = lazy(() => import("./pages/Challenges"));
 const Welcome = lazy(() => import("./pages/Welcome"));
 
 import { ThemeProvider } from "./components/ThemeProvider";
-import { CongratsPopup } from "./components/CongratsPopup";
-import { PWAInstallPrompt } from "./components/PWAInstallPrompt";
-import { PrayerTimesPermissionModal } from "./components/PrayerTimesPermissionModal";
-import { AmbientSoundPlayer } from "./components/AmbientSoundPlayer";
+const CongratsPopup = lazy(() => import("./components/CongratsPopup").then(m => ({ default: m.CongratsPopup })));
+const PWAInstallPrompt = lazy(() => import("./components/PWAInstallPrompt").then(m => ({ default: m.PWAInstallPrompt })));
+const PrayerTimesPermissionModal = lazy(() => import("./components/PrayerTimesPermissionModal").then(m => ({ default: m.PrayerTimesPermissionModal })));
+const AmbientSoundPlayer = lazy(() => import("./components/AmbientSoundPlayer").then(m => ({ default: m.AmbientSoundPlayer })));
 import { registerPeriodicSync } from "./lib/notifications";
 import { useTasbeehStore } from "./store/tasbeehStore";
 const GoogleLoginScreen = lazy(() => import("./components/GoogleLoginScreen").then(m => ({ default: m.GoogleLoginScreen })));
@@ -165,16 +165,20 @@ const App = () => {
         <ThemeProvider>
           <Toaster />
           <Sonner />
-          <CongratsPopup />
-          <PWAInstallPrompt />
-          <AmbientSoundPlayer />
+          <Suspense fallback={null}>
+            <CongratsPopup />
+            <PWAInstallPrompt />
+            <AmbientSoundPlayer />
+          </Suspense>
           {!isAuthenticated ? (
             <Suspense fallback={<div className="h-dvh w-full flex flex-col items-center justify-center bg-[#050210] text-muted-foreground"><div className="w-12 h-12 rounded-full border-t-2 border-primary animate-spin" /></div>}>
               <GoogleLoginScreen onLoginSuccess={() => setIsAuthenticated(true)} />
             </Suspense>
           ) : (
             <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
-              <PrayerTimesPermissionModal />
+              <Suspense fallback={null}>
+                <PrayerTimesPermissionModal />
+              </Suspense>
               <Suspense fallback={<div className="h-dvh w-full flex flex-col items-center justify-center bg-[#050210] text-muted-foreground"><div className="w-12 h-12 rounded-full border-t-2 border-primary animate-spin" /></div>}>
                 <Routes>
                   <Route path="/welcome" element={<Welcome />} />
