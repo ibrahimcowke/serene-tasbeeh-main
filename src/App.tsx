@@ -166,7 +166,7 @@ const App = () => {
           ) : (
             <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
               <PrayerTimesPermissionModal />
-              <Suspense fallback={<div className="h-dvh w-full flex items-center justify-center bg-background text-muted-foreground animate-pulse">Loading...</div>}>
+              <Suspense fallback={<div className="h-dvh w-full flex flex-col items-center justify-center bg-[#050210] text-muted-foreground"><div className="w-12 h-12 rounded-full border-t-2 border-primary animate-spin" /></div>}>
                 <Routes>
                   <Route path="/welcome" element={<Welcome />} />
                   <Route path="/" element={hasSeenWelcome ? <Index /> : <Navigate to="/welcome" replace />} />

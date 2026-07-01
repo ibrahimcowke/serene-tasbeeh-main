@@ -102,6 +102,7 @@ export const CounterActions = memo(function CounterActions() {
         onClick={(e) => { e.stopPropagation(); decrement(); }}
         disabled={currentCount === 0}
         title="Decrement"
+        className={currentCount === 0 ? "opacity-0 pointer-events-none" : ""}
       >
         <Minus className="w-4 h-4 text-primary/75" />
       </GlassButton>
@@ -113,6 +114,7 @@ export const CounterActions = memo(function CounterActions() {
         }}
         disabled={currentCount === 0}
         title="Reset"
+        className={currentCount === 0 ? "opacity-0 pointer-events-none" : ""}
       >
         <RotateCcw className="w-4 h-4 text-primary/75" />
       </GlassButton>
