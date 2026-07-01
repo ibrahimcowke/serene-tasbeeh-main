@@ -20,7 +20,7 @@ import { registerPeriodicSync } from "./lib/notifications";
 import { useTasbeehStore } from "./store/tasbeehStore";
 const GoogleLoginScreen = lazy(() => import("./components/GoogleLoginScreen").then(m => ({ default: m.GoogleLoginScreen })));
 import { useState } from "react";
-import { syncFromCloud, startCloudSync, stopCloudSync } from './lib/cloudSync';
+
 
 const queryClient = new QueryClient();
 
@@ -132,11 +132,16 @@ const App = () => {
           if (store.deviceUuid !== cloudUuid) {
             store.setDeviceUuid(cloudUuid);
           }
-          await syncFromCloud(user.uid);
-          startCloudSync(user.uid);
+          import("./lib/cloudSync").then(({ syncFromCloud, startCloudSync }) => {
+            syncFromCloud(user.uid).then(() => {
+              startCloudSync(user.uid);
+            });
+          });
         } else {
           setIsAuthenticated(false);
-          stopCloudSync();
+          import("./lib/cloudSync").then(({ stopCloudSync }) => {
+            stopCloudSync();
+          });
         }
       });
     };
@@ -148,7 +153,9 @@ const App = () => {
       if (unsubscribeAuth) {
         (unsubscribeAuth as () => void)();
       }
-      stopCloudSync();
+      import("./lib/cloudSync").then(({ stopCloudSync }) => {
+        stopCloudSync();
+      });
     };
   }, []);
 
