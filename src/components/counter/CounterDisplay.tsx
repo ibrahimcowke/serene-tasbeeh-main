@@ -299,10 +299,6 @@ export const CounterDisplay = memo(function CounterDisplay() {
         </div>
       )}
 
-      {/* Session Timer */}
-      <div className="mt-3">
-        <SessionTimer />
-      </div>
     </div>
   );
 });

@@ -134,7 +134,7 @@ export const Counter = memo(function Counter() {
   }, [volumeButtonCounting, increment, decrement]);
 
   return (
-    <div className="relative flex flex-col items-center justify-between h-full w-full overflow-hidden">
+    <div className="relative flex flex-col items-center justify-between min-h-full w-full">
 
       {/* Ambient background glows */}
       <div

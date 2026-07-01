@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { FirebaseAuthentication } from '@capacitor-firebase/authentication';
-import { signInWithCredential, GoogleAuthProvider, signInWithEmailAndPassword, createUserWithEmailAndPassword } from 'firebase/auth';
+import { signInWithCredential, GoogleAuthProvider, signInWithEmailAndPassword, createUserWithEmailAndPassword, sendPasswordResetEmail, sendEmailVerification } from 'firebase/auth';
 import { auth } from '../lib/firebase';
 import { Lock, Sparkles } from 'lucide-react';
 import { toast } from 'sonner';
@@ -11,8 +11,10 @@ export function GoogleLoginScreen({ onLoginSuccess }: { onLoginSuccess: () => vo
     const [signingIn, setSigningIn] = useState(false);
     const [autoAttempted, setAutoAttempted] = useState(false);
     const [isSignUp, setIsSignUp] = useState(false);
+    const [isForgotPassword, setIsForgotPassword] = useState(false);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
 
     useEffect(() => {
         // Check if user is already logged in via Firebase
@@ -56,15 +58,46 @@ export function GoogleLoginScreen({ onLoginSuccess }: { onLoginSuccess: () => vo
 
     const handleEmailAuth = async (e: React.FormEvent) => {
         e.preventDefault();
+        if (isForgotPassword) {
+            if (!email) {
+                toast.error("Please enter your email to reset password");
+                return;
+            }
+            setSigningIn(true);
+            try {
+                await sendPasswordResetEmail(auth, email);
+                toast.success("Password reset email sent! Please check your inbox.");
+                setIsForgotPassword(false);
+            } catch (error: any) {
+                console.error("Password Reset Error:", error);
+                toast.error(error.message || "Failed to send reset email");
+            } finally {
+                setSigningIn(false);
+            }
+            return;
+        }
+
         if (!email || !password) {
             toast.error("Please enter email and password");
             return;
         }
+        
+        if (isSignUp && password !== confirmPassword) {
+            toast.error("Passwords do not match");
+            return;
+        }
+
         setSigningIn(true);
         try {
             if (isSignUp) {
-                await createUserWithEmailAndPassword(auth, email, password);
-                toast.success("Account created successfully!");
+                const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+                try {
+                    await sendEmailVerification(userCredential.user);
+                    toast.success("Account created! Please check your email for a verification link.");
+                } catch (verifyError) {
+                    console.error("Verification Email Error:", verifyError);
+                    toast.success("Account created successfully!");
+                }
             } else {
                 await signInWithEmailAndPassword(auth, email, password);
                 toast.success("Signed in successfully!");
@@ -72,7 +105,17 @@ export function GoogleLoginScreen({ onLoginSuccess }: { onLoginSuccess: () => vo
             onLoginSuccess();
         } catch (error: any) {
             console.error("Email Auth Error:", error);
-            toast.error(error.message || "Authentication failed");
+            if (error.code === 'auth/email-already-in-use') {
+                toast.error("This email is already registered. Please switch to Sign In.");
+            } else if (error.code === 'auth/invalid-email') {
+                toast.error("Please enter a valid email address.");
+            } else if (error.code === 'auth/weak-password') {
+                toast.error("Password should be at least 6 characters.");
+            } else if (error.code === 'auth/wrong-password' || error.code === 'auth/user-not-found' || error.code === 'auth/invalid-credential') {
+                toast.error("Invalid email or password.");
+            } else {
+                toast.error(error.message || "Authentication failed");
+            }
             setSigningIn(false);
         }
     };
@@ -208,14 +251,39 @@ export function GoogleLoginScreen({ onLoginSuccess }: { onLoginSuccess: () => vo
                                 className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-[#fbbf24]/50 transition-all"
                                 required
                             />
-                            <input
-                                type="password"
-                                placeholder="Password"
-                                value={password}
-                                onChange={(e) => setPassword(e.target.value)}
-                                className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-[#fbbf24]/50 transition-all"
-                                required
-                            />
+                            {!isForgotPassword && (
+                                <input
+                                    type="password"
+                                    placeholder="Password"
+                                    value={password}
+                                    onChange={(e) => setPassword(e.target.value)}
+                                    className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-[#fbbf24]/50 transition-all"
+                                    required
+                                />
+                            )}
+                            {!isForgotPassword && isSignUp && (
+                                <input
+                                    type="password"
+                                    placeholder="Confirm Password"
+                                    value={confirmPassword}
+                                    onChange={(e) => setConfirmPassword(e.target.value)}
+                                    className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-[#fbbf24]/50 transition-all"
+                                    required
+                                />
+                            )}
+                            
+                            {!isForgotPassword && !isSignUp && (
+                                <div className="text-right">
+                                    <button
+                                        type="button"
+                                        onClick={() => setIsForgotPassword(true)}
+                                        className="text-xs text-[#fbbf24]/80 hover:text-[#fbbf24] transition-colors"
+                                    >
+                                        Forgot Password?
+                                    </button>
+                                </div>
+                            )}
+
                             <motion.button
                                 whileTap={{ scale: 0.97 }}
                                 type="submit"
@@ -225,7 +293,7 @@ export function GoogleLoginScreen({ onLoginSuccess }: { onLoginSuccess: () => vo
                                 {signingIn ? (
                                     <div className="w-5 h-5 border-2 border-white/50 border-t-transparent rounded-full animate-spin" />
                                 ) : (
-                                    isSignUp ? "Sign Up" : "Sign In"
+                                    isForgotPassword ? "Send Reset Link" : (isSignUp ? "Sign Up" : "Sign In")
                                 )}
                             </motion.button>
                         </form>
@@ -257,13 +325,23 @@ export function GoogleLoginScreen({ onLoginSuccess }: { onLoginSuccess: () => vo
                         </motion.button>
                         
                         <div className="text-center">
-                            <button
-                                type="button"
-                                onClick={() => setIsSignUp(!isSignUp)}
-                                className="text-sm text-white/70 hover:text-white transition-colors"
-                            >
-                                {isSignUp ? "Already have an account? Sign In" : "Don't have an account? Sign Up"}
-                            </button>
+                            {isForgotPassword ? (
+                                <button
+                                    type="button"
+                                    onClick={() => setIsForgotPassword(false)}
+                                    className="text-sm text-white/70 hover:text-white transition-colors"
+                                >
+                                    Back to Sign In
+                                </button>
+                            ) : (
+                                <button
+                                    type="button"
+                                    onClick={() => setIsSignUp(!isSignUp)}
+                                    className="text-sm text-white/70 hover:text-white transition-colors"
+                                >
+                                    {isSignUp ? "Already have an account? Sign In" : "Don't have an account? Sign Up"}
+                                </button>
+                            )}
                         </div>
                     </motion.div>
                 </div>
