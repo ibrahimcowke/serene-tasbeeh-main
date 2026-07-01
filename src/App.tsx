@@ -18,7 +18,7 @@ import { PrayerTimesPermissionModal } from "./components/PrayerTimesPermissionMo
 import { AmbientSoundPlayer } from "./components/AmbientSoundPlayer";
 import { registerPeriodicSync } from "./lib/notifications";
 import { useTasbeehStore } from "./store/tasbeehStore";
-import { GoogleLoginScreen } from "./components/GoogleLoginScreen";
+const GoogleLoginScreen = lazy(() => import("./components/GoogleLoginScreen").then(m => ({ default: m.GoogleLoginScreen })));
 import { useState } from "react";
 import { syncFromCloud, startCloudSync, stopCloudSync } from './lib/cloudSync';
 
@@ -162,7 +162,9 @@ const App = () => {
           <PWAInstallPrompt />
           <AmbientSoundPlayer />
           {!isAuthenticated ? (
-            <GoogleLoginScreen onLoginSuccess={() => setIsAuthenticated(true)} />
+            <Suspense fallback={<div className="h-dvh w-full flex flex-col items-center justify-center bg-[#050210] text-muted-foreground"><div className="w-12 h-12 rounded-full border-t-2 border-primary animate-spin" /></div>}>
+              <GoogleLoginScreen onLoginSuccess={() => setIsAuthenticated(true)} />
+            </Suspense>
           ) : (
             <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
               <PrayerTimesPermissionModal />

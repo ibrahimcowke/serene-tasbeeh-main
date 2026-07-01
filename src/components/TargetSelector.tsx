@@ -110,16 +110,16 @@ export function TargetSelector({ children }: TargetSelectorProps) {
         <SheetTrigger asChild>
           {children}
         </SheetTrigger>
-        <SheetContent side="bottom" className="bg-sheet-bg rounded-t-3xl">
+        <SheetContent side="bottom" className="bg-sheet-bg rounded-t-3xl max-h-[85vh] flex flex-col px-4 sm:px-6">
           <SheetDescription className="sr-only">
             Set a target count for your dhikr session or select a structured session mode.
           </SheetDescription>
-          <div className="sheet-handle" />
-          <SheetHeader className="text-left pb-4">
+          <div className="sheet-handle shrink-0" />
+          <SheetHeader className="text-left pb-4 shrink-0 mt-2">
             <SheetTitle className="text-lg font-medium">Set Target</SheetTitle>
           </SheetHeader>
 
-          <div className="space-y-4 pb-8">
+          <div className="space-y-4 pb-8 overflow-y-auto flex-1 min-h-0 pr-1 -mr-1">
             {/* 100 Session Mode */}
             <motion.button
               initial={{ opacity: 0, y: 10 }}
