@@ -176,7 +176,7 @@ export const Counter = memo(function Counter() {
       </div>
 
       {/* Center: Bead ring + action buttons */}
-      <div className="relative flex flex-col sm:flex-row items-center justify-center w-full z-20 flex-1 gap-2 sm:gap-6 px-2">
+      <div className="relative flex flex-col sm:flex-row items-center justify-center w-full z-20 flex-1 gap-1 sm:gap-4 px-2">
         <CounterDisplay />
         <CounterActions />
       </div>

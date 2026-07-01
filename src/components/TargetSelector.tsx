@@ -29,7 +29,7 @@ const presetTargets = [
 ];
 
 export function TargetSelector({ children }: TargetSelectorProps) {
-  const { targetCount, setTarget, startTasbih100, startTasbih1000, sessionMode } = useTasbeehStore();
+  const { targetCount, setTarget, startTasbih100, startTasbih1000, startLaIlahaWahdahu100, startAstaghfirullah100, sessionMode, currentDhikr } = useTasbeehStore();
   const [customValue, setCustomValue] = useState('');
   const [isOpen, setIsOpen] = useState(false);
   const [showWarning, setShowWarning] = useState(false);
@@ -86,6 +86,20 @@ export function TargetSelector({ children }: TargetSelectorProps) {
   const handleStart1000Session = () => {
     handleAction(() => {
       startTasbih1000();
+      setIsOpen(false);
+    });
+  };
+
+  const handleLaIlaha100 = () => {
+    handleAction(() => {
+      startLaIlahaWahdahu100();
+      setIsOpen(false);
+    });
+  };
+
+  const handleAstaghfirullah100 = () => {
+    handleAction(() => {
+      startAstaghfirullah100();
       setIsOpen(false);
     });
   };
@@ -160,6 +174,66 @@ export function TargetSelector({ children }: TargetSelectorProps) {
                   </div>
                 </div>
                 {sessionMode.type === 'tasbih1000' && (
+                  <Check className="text-primary w-5 h-5" />
+                )}
+              </div>
+            </motion.button>
+
+            {/* La Ilaha Illallah 100 */}
+            <motion.button
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.1 }}
+              onClick={handleLaIlaha100}
+              className={`
+                w-full p-4 rounded-2xl text-left
+                transition-all duration-200
+                ${targetCount === 100 && currentDhikr.id === 'la_ilaha_wahdahu' && sessionMode.type === 'free'
+                  ? 'bg-primary/10 border-2 border-primary'
+                  : 'bg-card border border-border hover:bg-secondary/50'}
+              `}
+            >
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-full bg-primary/15 flex items-center justify-center">
+                    <Sparkles className="w-5 h-5 text-primary" />
+                  </div>
+                  <div>
+                    <h3 className="font-semibold text-foreground">La Ilaha Illallah Wahdahu (100)</h3>
+                    <p className="text-xs text-muted-foreground">Special reward equivalent to 10 slaves</p>
+                  </div>
+                </div>
+                {targetCount === 100 && currentDhikr.id === 'la_ilaha_wahdahu' && sessionMode.type === 'free' && (
+                  <Check className="text-primary w-5 h-5" />
+                )}
+              </div>
+            </motion.button>
+
+            {/* Astaghfirullah 100 */}
+            <motion.button
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.15 }}
+              onClick={handleAstaghfirullah100}
+              className={`
+                w-full p-4 rounded-2xl text-left
+                transition-all duration-200
+                ${targetCount === 100 && currentDhikr.id === 'astaghfirullah_atubu' && sessionMode.type === 'free'
+                  ? 'bg-primary/10 border-2 border-primary'
+                  : 'bg-card border border-border hover:bg-secondary/50'}
+              `}
+            >
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-full bg-primary/15 flex items-center justify-center">
+                    <Sparkles className="w-5 h-5 text-primary" />
+                  </div>
+                  <div>
+                    <h3 className="font-semibold text-foreground">Astaghfirullah wa Atubu Ilayh (100)</h3>
+                    <p className="text-xs text-muted-foreground">Daily Sunnah of the Prophet ﷺ</p>
+                  </div>
+                </div>
+                {targetCount === 100 && currentDhikr.id === 'astaghfirullah_atubu' && sessionMode.type === 'free' && (
                   <Check className="text-primary w-5 h-5" />
                 )}
               </div>

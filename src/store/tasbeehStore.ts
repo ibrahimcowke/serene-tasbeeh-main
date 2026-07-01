@@ -233,6 +233,8 @@ export interface TasbeehState {
   importData: (data: string) => boolean;
   startTasbih100: (challengeId?: string) => void;
   startTasbih1000: (challengeId?: string) => void;
+  startLaIlahaWahdahu100: () => void;
+  startAstaghfirullah100: () => void;
   startRoutine: (routineId: string) => void;
   nextRoutineStep: () => void;
   exitSessionMode: () => void;
@@ -264,7 +266,9 @@ export const defaultDhikrs: Dhikr[] = [
   { id: 'la-ilaha-illallah', arabic: 'لَا إِلَٰهَ إِلَّا ٱللَّٰهُ', transliteration: 'La ilaha illallah', translation: 'There is no god but Allah', hadiths: [{ text: "أفضل الذكر لا إله إلا الله", source: "الترمذي" }] },
   { id: 'allahuma-sali', arabic: 'اللَّهُمَّ صَلِّ عَلَى سَيِّدِنَا مُحَمَّدٍ', transliteration: 'Allahumma Salli Ala Sayyidina Muhammad', translation: 'O Allah, send blessings upon our Master Muhammad', hadiths: [{ text: "من صلى علي واحدة صلى الله عليه عشرا", source: "مسلم" }] },
   { id: 'ayat_alkursi', arabic: 'آيَةُ الْكُرْسِيِّ', transliteration: 'Ayat al-Kursi', translation: 'The Throne Verse', hadiths: [{ text: "هي أعظم آية في كتاب الله", source: "مسلم" }] },
-  { id: '3_quls', arabic: 'الْمُعَوِّذَاتِ', transliteration: 'The 3 Quls', translation: 'Surah Ikhlas, Falaq, and Nas', hadiths: [{ text: "قل هو الله أحد تعدل ثلث القرآن", source: "البخاري" }] }
+  { id: '3_quls', arabic: 'الْمُعَوِّذَاتِ', transliteration: 'The 3 Quls', translation: 'Surah Ikhlas, Falaq, and Nas', hadiths: [{ text: "قل هو الله أحد تعدل ثلث القرآن", source: "البخاري" }] },
+  { id: 'la_ilaha_wahdahu', arabic: 'لَا إِلَٰهَ إِلَّا ٱللَّٰهُ وَحْدَهُ لَا شَرِيكَ لَهُ', transliteration: 'La ilaha illallah wahdahu', translation: 'None has the right to be worshipped but Allah alone', hadiths: [{ text: "من قال: لا إله إلا الله وحده لا شريك له... في يوم مائة مرة كانت له عدل عشر رقاب", source: "البخاري ومسلم" }] },
+  { id: 'astaghfirullah_atubu', arabic: 'أَسْتَغْفِرُ ٱللَّٰهَ وَأَتُوبُ إِلَيْهِ', transliteration: 'Astaghfirullah wa atubu ilayh', translation: 'I seek forgiveness from Allah and repent to Him', hadiths: [{ text: "إني لأستغفر الله وأتوب إليه في اليوم مائة مرة", source: "مسلم" }] }
 ];
 
 // Imported from data/routines.ts
@@ -610,6 +614,16 @@ export const useTasbeehStore = create<TasbeehState>()(
         get().saveActiveSession();
         set({ sessionMode: { type: 'tasbih1000', currentPhase: 0, phaseCounts: [0, 0, 0, 0], isComplete: false, challengeId }, currentDhikr: defaultDhikrs[0], currentCount: 0, targetCount: 333, sessionStartTime: Date.now() });
         syncWidget(0, defaultDhikrs[0].transliteration);
+      },
+      startLaIlahaWahdahu100: () => {
+        const dhikr = get().dhikrs.find(d => d.id === 'la_ilaha_wahdahu') || defaultDhikrs[8];
+        set({ sessionMode: { type: 'free' }, currentDhikr: dhikr, currentCount: 0, targetCount: 100, sessionStartTime: Date.now() });
+        syncWidget(0, dhikr.transliteration);
+      },
+      startAstaghfirullah100: () => {
+        const dhikr = get().dhikrs.find(d => d.id === 'astaghfirullah_atubu') || defaultDhikrs[9];
+        set({ sessionMode: { type: 'free' }, currentDhikr: dhikr, currentCount: 0, targetCount: 100, sessionStartTime: Date.now() });
+        syncWidget(0, dhikr.transliteration);
       },
       startRoutine: (routineId) => {
         get().saveActiveSession();

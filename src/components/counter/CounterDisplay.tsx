@@ -267,7 +267,7 @@ export const CounterDisplay = memo(function CounterDisplay() {
 
       {/* Progress indicator below the ring - redesigned for premium look on desktop and mobile */}
       {targetCount > 0 && (
-        <div className="mt-3 sm:mt-6 flex items-center justify-center gap-3 w-full max-w-[240px] sm:max-w-[280px]">
+        <div className="-mt-4 sm:-mt-2 relative z-30 flex items-center justify-center gap-3 w-full max-w-[240px] sm:max-w-[280px]">
           {/* Glassmorphic track with premium gradient fill */}
           <div
             className="h-1.5 flex-1 rounded-full backdrop-blur-sm overflow-hidden relative shadow-inner"
