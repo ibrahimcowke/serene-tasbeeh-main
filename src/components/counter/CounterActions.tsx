@@ -98,14 +98,7 @@ export const CounterActions = memo(function CounterActions() {
         </span>
       </GlassButton>
 
-      <GlassButton
-        onClick={(e) => { e.stopPropagation(); decrement(); }}
-        disabled={currentCount === 0}
-        title="Decrement"
-        className={currentCount === 0 ? "opacity-0 pointer-events-none" : ""}
-      >
-        <Minus className="w-4 h-4 text-primary/75" />
-      </GlassButton>
+
 
       <GlassButton
         onClick={(e) => {
