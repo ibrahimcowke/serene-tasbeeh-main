@@ -100,7 +100,7 @@ export type SessionMode =
   | { type: 'tasbih1000'; currentPhase: number; phaseCounts: number[]; isComplete: boolean; challengeId?: string }
   | { type: 'routine'; routineId: string; currentStepIndex: number; steps: RoutineStep[]; isComplete: boolean };
 
-interface TasbeehState {
+export interface TasbeehState {
   count: number;
   currentCount: number;
   targetCount: number;

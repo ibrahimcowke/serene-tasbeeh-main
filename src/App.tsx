@@ -20,6 +20,7 @@ import { registerPeriodicSync } from "./lib/notifications";
 import { useTasbeehStore } from "./store/tasbeehStore";
 import { GoogleLoginScreen } from "./components/GoogleLoginScreen";
 import { useState } from "react";
+import { syncFromCloud, startCloudSync, stopCloudSync } from './lib/cloudSync';
 
 const queryClient = new QueryClient();
 
@@ -131,8 +132,11 @@ const App = () => {
           if (store.deviceUuid !== cloudUuid) {
             store.setDeviceUuid(cloudUuid);
           }
+          await syncFromCloud(user.uid);
+          startCloudSync(user.uid);
         } else {
           setIsAuthenticated(false);
+          stopCloudSync();
         }
       });
     };
@@ -144,6 +148,7 @@ const App = () => {
       if (unsubscribeAuth) {
         (unsubscribeAuth as () => void)();
       }
+      stopCloudSync();
     };
   }, []);
 
@@ -155,12 +160,12 @@ const App = () => {
           <Sonner />
           <CongratsPopup />
           <PWAInstallPrompt />
-          <PrayerTimesPermissionModal />
           <AmbientSoundPlayer />
           {!isAuthenticated ? (
             <GoogleLoginScreen onLoginSuccess={() => setIsAuthenticated(true)} />
           ) : (
             <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
+              <PrayerTimesPermissionModal />
               <Suspense fallback={<div className="h-dvh w-full flex items-center justify-center bg-background text-muted-foreground animate-pulse">Loading...</div>}>
                 <Routes>
                   <Route path="/welcome" element={<Welcome />} />
