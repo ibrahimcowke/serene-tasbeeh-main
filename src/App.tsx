@@ -18,6 +18,8 @@ import { PrayerTimesPermissionModal } from "./components/PrayerTimesPermissionMo
 import { AmbientSoundPlayer } from "./components/AmbientSoundPlayer";
 import { registerPeriodicSync } from "./lib/notifications";
 import { useTasbeehStore } from "./store/tasbeehStore";
+import { GoogleLoginScreen } from "./components/GoogleLoginScreen";
+import { useState } from "react";
 
 const queryClient = new QueryClient();
 
@@ -27,6 +29,8 @@ import { App as CapApp } from '@capacitor/app';
 
 const App = () => {
   const hasSeenWelcome = useTasbeehStore((s) => s.hasSeenWelcome);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
   useEffect(() => {
     registerPeriodicSync();
     
@@ -114,54 +118,31 @@ const App = () => {
     };
     document.addEventListener('visibilitychange', handleVisibilityChange);
 
-    // 2. Supabase auth session sync
-    let authSubscription: any = null;
-    import("./lib/supabaseSync").then(({ supabase, fetchStateFromCloud }) => {
-      if (!supabase) return;
-
-      // Check current session
-      supabase.auth.getSession().then(({ data: { session } }) => {
-        if (session?.user) {
-          const cloudUuid = `auth_user_${session.user.id}`;
-          const store = useTasbeehStore.getState();
-          if (store.deviceUuid !== cloudUuid) {
-            store.setDeviceUuid(cloudUuid);
-            fetchStateFromCloud(cloudUuid).then((cloudData) => {
-              if (cloudData && cloudData.totalAllTime > store.totalAllTime) {
-                useTasbeehStore.setState({
-                  ...cloudData,
-                  deviceUuid: cloudUuid
-                });
-              }
-            });
-          }
-        }
-      });
-
-      // Listen for auth changes
-      const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
+    // 2. Firebase auth session sync
+    let unsubscribeAuth: (() => void) | null = null;
+    
+    const initAuth = async () => {
+      const { auth } = await import("./lib/firebase");
+      unsubscribeAuth = auth.onAuthStateChanged(async (user) => {
         const store = useTasbeehStore.getState();
-        if (session?.user) {
-          const cloudUuid = `auth_user_${session.user.id}`;
+        if (user) {
+          setIsAuthenticated(true);
+          const cloudUuid = `auth_user_${user.uid}`;
           if (store.deviceUuid !== cloudUuid) {
             store.setDeviceUuid(cloudUuid);
-            const cloudData = await fetchStateFromCloud(cloudUuid);
-            if (cloudData && cloudData.totalAllTime > store.totalAllTime) {
-              useTasbeehStore.setState({
-                ...cloudData,
-                deviceUuid: cloudUuid
-              });
-            }
           }
+        } else {
+          setIsAuthenticated(false);
         }
       });
-      authSubscription = subscription;
-    });
+    };
+
+    initAuth();
 
     return () => {
       document.removeEventListener('visibilitychange', handleVisibilityChange);
-      if (authSubscription) {
-        authSubscription.unsubscribe();
+      if (unsubscribeAuth) {
+        (unsubscribeAuth as () => void)();
       }
     };
   }, []);
@@ -176,19 +157,23 @@ const App = () => {
           <PWAInstallPrompt />
           <PrayerTimesPermissionModal />
           <AmbientSoundPlayer />
-          <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
-            <Suspense fallback={<div className="h-dvh w-full flex items-center justify-center bg-background text-muted-foreground animate-pulse">Loading...</div>}>
-              <Routes>
-                <Route path="/welcome" element={<Welcome />} />
-                <Route path="/" element={hasSeenWelcome ? <Index /> : <Navigate to="/welcome" replace />} />
-                <Route path="/mini" element={<MiniCounter />} />
-                <Route path="/privacy" element={<PrivacyPolicy />} />
-                <Route path="/challenges" element={<Challenges />} />
-                {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-                <Route path="*" element={<NotFound />} />
-              </Routes>
-            </Suspense>
-          </BrowserRouter>
+          {!isAuthenticated ? (
+            <GoogleLoginScreen onLoginSuccess={() => setIsAuthenticated(true)} />
+          ) : (
+            <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
+              <Suspense fallback={<div className="h-dvh w-full flex items-center justify-center bg-background text-muted-foreground animate-pulse">Loading...</div>}>
+                <Routes>
+                  <Route path="/welcome" element={<Welcome />} />
+                  <Route path="/" element={hasSeenWelcome ? <Index /> : <Navigate to="/welcome" replace />} />
+                  <Route path="/mini" element={<MiniCounter />} />
+                  <Route path="/privacy" element={<PrivacyPolicy />} />
+                  <Route path="/challenges" element={<Challenges />} />
+                  {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+                  <Route path="*" element={<NotFound />} />
+                </Routes>
+              </Suspense>
+            </BrowserRouter>
+          )}
         </ThemeProvider>
       </TooltipProvider>
     </QueryClientProvider>

@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "207821527708",
+    "project_id": "tasbeehly-baf66",
+    "storage_bucket": "tasbeehly-baf66.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:207821527708:android:8487ce2dd0cea512c62b59",
+        "android_client_info": {
+          "package_name": "com.ibrahimcowke.tasbeehly"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "207821527708-slddpn0mmr3r5phjn4q75inp21k7h9br.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAqSA89Q8StNiRX4509mGL7X1Nb6NT3nLw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "207821527708-slddpn0mmr3r5phjn4q75inp21k7h9br.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

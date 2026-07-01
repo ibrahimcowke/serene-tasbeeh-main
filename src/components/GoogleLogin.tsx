@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { supabase, fetchStateFromCloud } from '../lib/supabaseSync';
+import { FirebaseAuthentication } from '@capacitor-firebase/authentication';
+import { signInWithCredential, GoogleAuthProvider, signOut } from 'firebase/auth';
+import { auth } from '../lib/firebase';
 import { useTasbeehStore } from '../store/tasbeehStore';
 import { LogOut, RefreshCw, Cloud, Check } from 'lucide-react';
 import { toast } from 'sonner';
@@ -13,100 +15,44 @@ export function GoogleLogin() {
     const currentStoreState = useTasbeehStore();
 
     useEffect(() => {
-        if (!supabase) {
-            setLoading(false);
-            return;
-        }
-
-        // Get initial session
-        supabase.auth.getSession().then(({ data: { session } }) => {
-            setUser(session?.user ?? null);
-            setLoading(false);
-        });
-
-        // Listen for auth changes
-        const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
-            setUser(session?.user ?? null);
+        // Observe Firebase Auth state
+        const unsubscribe = auth.onAuthStateChanged(async (currentUser) => {
+            setUser(currentUser);
             setLoading(false);
             
-            if (session?.user) {
-                const cloudUuid = `auth_user_${session.user.id}`;
+            if (currentUser) {
+                const cloudUuid = `auth_user_${currentUser.uid}`;
                 if (deviceUuid !== cloudUuid) {
                     setDeviceUuid(cloudUuid);
-                    // Fetch and sync data
-                    try {
-                        setSyncing(true);
-                        const cloudData = await fetchStateFromCloud(cloudUuid);
-                        if (cloudData) {
-                            // Merge/Restore state if cloud counts are higher
-                            if (cloudData.totalAllTime > currentStoreState.totalAllTime) {
-                                useTasbeehStore.setState({
-                                    ...cloudData,
-                                    deviceUuid: cloudUuid
-                                });
-                                toast.success("Restored your counts & progress from Google Cloud.");
-                            }
-                        }
-                    } catch (e) {
-                        console.error(e);
-                    } finally {
-                        setSyncing(false);
-                    }
                 }
             }
         });
 
-        return () => subscription.unsubscribe();
-    }, [deviceUuid, setDeviceUuid, currentStoreState.totalAllTime]);
+        return () => unsubscribe();
+    }, [deviceUuid, setDeviceUuid]);
 
     const handleLogin = async () => {
-        if (!supabase) {
-            toast.info("Google login is simulated in development.", {
-                description: "Connect VITE_SUPABASE_URL & VITE_SUPABASE_ANON_KEY to enable live OAuth."
-            });
-            // Simulated user for developer sandbox
-            const mockUser = {
-                email: "servant@dhikr.app",
-                user_metadata: {
-                    full_name: "Abdullah",
-                    avatar_url: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=100&h=100&q=80"
-                }
-            };
-            setUser(mockUser);
-            const mockUuid = "auth_user_mock_12345";
-            setDeviceUuid(mockUuid);
-            return;
-        }
-
+        setLoading(true);
         try {
-            setLoading(true);
-            const { error } = await supabase.auth.signInWithOAuth({
-                provider: 'google',
-                options: {
-                    redirectTo: window.location.origin
-                }
-            });
-            if (error) throw error;
+            const result = await FirebaseAuthentication.signInWithGoogle();
+            if (result.credential) {
+                const credential = GoogleAuthProvider.credential(result.credential.idToken);
+                await signInWithCredential(auth, credential);
+                toast.success("Successfully logged in.");
+            } else {
+                throw new Error("No credential returned.");
+            }
         } catch (e: any) {
-            toast.error("Failed to start Google login: " + e.message);
+            console.error("Login error:", e);
+            toast.error("Failed to start Google login: " + (e.message || e));
             setLoading(false);
         }
     };
 
     const handleLogout = async () => {
-        if (!supabase) {
-            setUser(null);
-            const newUuid = 'device_' + Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
-            setDeviceUuid(newUuid);
-            toast.success("Logged out successfully.");
-            return;
-        }
-
+        setLoading(true);
         try {
-            setLoading(true);
-            const { error } = await supabase.auth.signOut();
-            if (error) throw error;
-            
+            await signOut(auth);
             const newUuid = 'device_' + Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
             setDeviceUuid(newUuid);
             toast.success("Logged out successfully.");
@@ -125,8 +71,8 @@ export function GoogleLogin() {
     }
 
     if (user) {
-        const name = user.user_metadata?.full_name || user.email?.split('@')[0] || "User";
-        const avatar = user.user_metadata?.avatar_url;
+        const name = user.displayName || user.email?.split('@')[0] || "User";
+        const avatar = user.photoURL;
 
         return (
             <div className="bg-card/45 backdrop-blur-md border border-primary/15 rounded-2xl p-4 sm:p-5 flex flex-col gap-4 shadow-xl text-start">

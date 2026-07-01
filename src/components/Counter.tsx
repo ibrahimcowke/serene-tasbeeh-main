@@ -173,11 +173,6 @@ export const Counter = memo(function Counter() {
             <span>{t('hadith.title')}</span>
           </motion.button>
         </div>
-        {!zenMode && hadithSlidePosition === 'top' && (
-          <div className="w-full px-2 mt-2">
-            <HadithSlider dhikr={currentDhikr} />
-          </div>
-        )}
       </div>
 
       {/* Center: Bead ring + action buttons */}
@@ -188,11 +183,6 @@ export const Counter = memo(function Counter() {
 
       {/* Bottom: Footer stats */}
       <div className="w-full flex flex-col items-center justify-center z-10 pb-2 animate-fade-in-up gap-3">
-        {!zenMode && hadithSlidePosition === 'bottom' && (
-          <div className="w-full px-2">
-            <HadithSlider dhikr={currentDhikr} />
-          </div>
-        )}
         <CounterFooter />
       </div>
 
