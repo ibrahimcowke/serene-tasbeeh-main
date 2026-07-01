@@ -124,19 +124,7 @@ function SingleCounter({
 
       {/* Count display + controls */}
       <div className="p-4 flex items-center justify-between gap-4">
-        <motion.button
-          whileTap={{ scale: 0.85 }}
-          onClick={onDecrement}
-          disabled={counter.count === 0}
-          className="w-11 h-11 rounded-full flex items-center justify-center transition-all"
-          style={{
-            background: 'hsl(var(--card))',
-            border: '1px solid hsl(var(--border) / 0.5)',
-            color: counter.count === 0 ? 'hsl(var(--muted-foreground) / 0.3)' : 'hsl(var(--foreground))',
-          }}
-        >
-          <Minus className="w-5 h-5" />
-        </motion.button>
+
 
         <motion.div
           key={counter.count}

@@ -77,13 +77,7 @@ export default function MiniCounter() {
                     </button>
 
                     <div className="flex gap-4 mt-6">
-                        <button
-                            onClick={decrement}
-                            disabled={currentCount === 0}
-                            className="p-3 rounded-full bg-muted/50 hover:bg-muted border border-border transition-colors disabled:opacity-30"
-                        >
-                            <Minus className="w-4 h-4" />
-                        </button>
+
                         <button
                             onClick={increment}
                             className="p-3 rounded-full bg-primary text-primary-foreground hover:bg-primary/90 shadow-lg shadow-primary/20 transition-all hover:scale-105 active:scale-95"
