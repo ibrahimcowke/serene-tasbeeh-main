@@ -31,3 +31,10 @@
 
 # Keep system attributes
 -keepattributes *Annotation*,Signature,InnerClasses,EnclosingMethod
+
+# Suppress missing Facebook auth warnings from Firebase Auth
+-dontwarn com.facebook.CallbackManager$Factory
+-dontwarn com.facebook.CallbackManager
+-dontwarn com.facebook.FacebookCallback
+-dontwarn com.facebook.login.LoginManager
+-dontwarn com.facebook.login.widget.LoginButton
