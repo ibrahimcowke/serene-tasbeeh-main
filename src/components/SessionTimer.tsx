@@ -20,6 +20,7 @@ export function SessionTimer() {
     stopAutoCount,
     reset,
     saveActiveSession,
+    language
   } = useTasbeehStore();
 
   const [elapsedSeconds, setElapsedSeconds] = useState(0);
@@ -61,13 +62,21 @@ export function SessionTimer() {
     return () => clearInterval(interval);
   }, [sessionStartTime, sessionTimerDuration, sessionTimerActive, currentCount, stopAutoCount, setSessionTimerActive, saveActiveSession, reset]);
 
+  const toArabicNums = (str: string) => {
+    if (language === 'ar') {
+      const arabicNumbers = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'];
+      return str.replace(/[0-9]/g, w => arabicNumbers[+w]);
+    }
+    return str;
+  };
+
   // Formatter helper
   const getDisplayTime = () => {
     if (sessionTimerDuration > 0 && sessionTimerActive) {
       const remaining = Math.max(0, sessionTimerDuration - elapsedSeconds);
-      return formatSessionTime(remaining);
+      return toArabicNums(formatSessionTime(remaining));
     }
-    return formatSessionTime(elapsedSeconds);
+    return toArabicNums(formatSessionTime(elapsedSeconds));
   };
 
   const handleSelectPreset = (seconds: number) => {
@@ -127,7 +136,7 @@ export function SessionTimer() {
                       : 'bg-background border-border text-foreground hover:bg-muted'
                   }`}
                 >
-                  <span>{p.label}</span>
+                  <span>{toArabicNums(p.label)}</span>
                   {sessionTimerDuration === p.val && <Check className="w-4 h-4 text-primary" />}
                 </button>
               ))}
@@ -137,7 +146,7 @@ export function SessionTimer() {
             <div className="space-y-3 p-4 rounded-2xl bg-card border border-border/40">
               <div className="flex justify-between items-center text-sm font-medium">
                 <span>{t('timer.custom') || 'Custom'}</span>
-                <span className="text-primary font-mono">{customVal} min</span>
+                <span className="text-primary font-mono">{toArabicNums(customVal.toString())} min</span>
               </div>
               <Slider
                 min={1}

@@ -7,6 +7,10 @@ const config: CapacitorConfig = {
   plugins: {
     FirebaseAuthentication: {
       providers: ["google.com"]
+    },
+    LocalNotifications: {
+      smallIcon: "ic_stat_tasbeehly",
+      iconColor: "#4CAF50"
     }
   }
 };

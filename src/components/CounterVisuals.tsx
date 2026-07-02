@@ -1,6 +1,6 @@
 import { memo } from 'react';
 import { motion } from 'framer-motion';
-import { ThemeSettings, CounterShape } from '@/store/tasbeehStore';
+import { ThemeSettings, CounterShape, useTasbeehStore } from '@/store/tasbeehStore';
 import { HaloRing } from './counter-shapes/HaloRing';
 import { BeadRing } from './counter-shapes/BeadRing';
 import { counterShapes } from '@/lib/constants';
@@ -60,6 +60,8 @@ export const CounterNumber = memo(({
 }) => {
     const shapeData = counterShapes.find(s => s.id === counterShape);
     const shapeColor = shapeData?.color || 'currentColor';
+    const language = useTasbeehStore(state => state.language);
+    const displayCount = language === 'ar' ? currentCount.toLocaleString('ar-EG') : currentCount;
 
     return (
         <motion.span
@@ -91,7 +93,7 @@ export const CounterNumber = memo(({
                 color: shapeColor
             }}
         >
-            {currentCount}
+            {displayCount}
         </motion.span>
     );
 });

@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { Power, Fingerprint } from 'lucide-react';
 
 export function ScreenOffMode() {
-    const { screenOffMode, setScreenOffMode, increment, currentCount, currentDhikr, themeSettings, theme } = useTasbeehStore();
+    const { screenOffMode, setScreenOffMode, increment, currentCount, currentDhikr, themeSettings, theme, language } = useTasbeehStore();
     const [touched, setTouched] = useState(false);
 
     useEffect(() => {
@@ -39,7 +39,7 @@ export function ScreenOffMode() {
             >
                 {/* Very dim UI elements */}
                 <div className="absolute top-10 w-full text-center opacity-20 pointer-events-none">
-                    <p className="font-mono text-4xl font-bold text-neutral-700">{currentCount}</p>
+                    <p className="font-mono text-4xl font-bold text-neutral-700">{language === 'ar' ? currentCount.toLocaleString('ar-EG') : currentCount}</p>
                 </div>
 
                 {/* Feedback Indicator */}

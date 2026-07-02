@@ -12,7 +12,8 @@ export default function MiniCounter() {
         decrement,
         reset,
         currentDhikr,
-        theme
+        theme,
+        language
     } = useTasbeehStore();
 
     // Reset body style but don't touch theme class here
@@ -71,7 +72,7 @@ export default function MiniCounter() {
                         className="w-32 h-32 rounded-full bg-primary/10 border-4 border-primary/20 flex items-center justify-center relative active:scale-95 transition-all duration-100 group shadow-lg shadow-primary/5 hover:border-primary/30 hover:bg-primary/15"
                     >
                         <span className="text-4xl font-mono font-bold text-primary tabular-nums">
-                            {currentCount}
+                            {language === 'ar' ? currentCount.toLocaleString('ar-EG') : currentCount}
                         </span>
                         <div className="absolute inset-0 rounded-full bg-primary/5 opacity-0 group-hover:opacity-100 blur-xl transition-opacity" />
                     </button>

@@ -4,4 +4,5 @@
     <string name="title_activity_main">Tasbeehly</string>
     <string name="package_name">com.ibrahimcowke.tasbeehly</string>
     <string name="custom_url_scheme">com.ibrahimcowke.tasbeehly</string>
+    <string name="default_web_client_id">207821527708-slddpn0mmr3r5phjn4q75inp21k7h9br.apps.googleusercontent.com</string>
 </resources>
