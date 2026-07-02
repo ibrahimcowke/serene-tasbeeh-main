@@ -8,6 +8,20 @@ export interface Reminder {
   days: number[]; // 0-6 (0 = Sunday, ..., 6 = Saturday)
 }
 
+
+
+const ENGAGING_MESSAGES = [
+  "Do not forget to say Alhamdulilaah 🌟",
+  "A mindful moment for Dhikr awaits you ✨",
+  "Nourish your soul, it's time for Tasbeeh 📿",
+  "Even a single SubhanAllah weighs heavy on the scales! ⚖️",
+  "Take a deep breath and remember Allah 🌿",
+  "Your daily spiritual boost is ready 💫",
+  "Keep your tongue moist with the remembrance of Allah 💧",
+  "Time to collect some Hasanat! 🏆",
+  "A few moments of Dhikr can brighten your whole day ☀️"
+];
+
 export const NotificationManager = {
   /**
    * Request native OS permission to display notifications.
@@ -66,10 +80,12 @@ export const NotificationManager = {
           const capacitorWeekday = day + 1;
           const notificationId = (baseId % 10000) + day * 10000;
 
+          const randomMessage = ENGAGING_MESSAGES[Math.floor(Math.random() * ENGAGING_MESSAGES.length)];
+
           scheduleList.push({
             id: notificationId,
-            title: 'Serene Tasbeeh Reminder',
-            body: reminder.label || 'Time for your dhikr connection',
+            title: reminder.label || 'Serene Tasbeeh',
+            body: randomMessage,
             schedule: {
               on: {
                 weekday: capacitorWeekday,

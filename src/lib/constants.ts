@@ -1,4 +1,4 @@
-export const APP_VERSION = '2.1.1';
+export const APP_VERSION = '2.1.3';
 
 export const themes = [
   { id: 'light', label: 'Light', description: 'Warm and calm' },
@@ -9,12 +9,6 @@ export const themes = [
   { id: 'theme-oled', label: 'OLED', description: 'True black power saver' },
   { id: 'theme-mecca-night', label: 'Mecca Night', description: 'Deep purple & gold' },
   { id: 'theme-desert-starlight', label: 'Desert Star', description: 'Sand beige & blue' },
-  { id: 'theme-ramadan-lantern', label: 'Lantern Glow', description: 'Burgundy & amber' },
-  { id: 'theme-rose-bloom', label: 'Rose Bloom', description: 'Sage green & rose' },
-  { id: 'theme-emerald-shine', label: 'Emerald Glow', description: 'Sacred green & gold shine' },
-  { id: 'theme-cyberpunk-zen', label: 'Cyber Zen', description: 'Neon cyan & obsidian' },
-  { id: 'theme-ocean-depth', label: 'Ocean Depth', description: 'Deep marine serenity' },
-  { id: 'theme-sakura-zen', label: 'Sakura Zen', description: 'Cherry blossom & sage' },
 ] as const;
 
 export const counterShapes = [

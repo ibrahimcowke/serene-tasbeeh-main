@@ -80,7 +80,7 @@ export function GoogleLogin() {
             <div className="bg-card/45 backdrop-blur-md border border-primary/15 rounded-2xl p-4 sm:p-5 flex flex-col gap-4 shadow-xl text-start">
                 <div className="flex items-center gap-3.5">
                     {avatar ? (
-                        <img src={avatar} alt={name} className="w-11 h-11 rounded-full border border-primary/20 shadow-md" />
+                        <img src={avatar} alt={name} className="w-11 h-11 rounded-full border border-primary/20 shadow-md" referrerPolicy="no-referrer" />
                     ) : (
                         <div className="w-11 h-11 rounded-full bg-primary/15 border border-primary/20 flex items-center justify-center text-primary text-base font-bold shadow-md">
                             {name[0].toUpperCase()}

@@ -22,10 +22,10 @@ export const CounterFooter = memo(function CounterFooter() {
   const roundsDone = Math.floor(currentCount / ROUND_SIZE);
 
   return (
-    <div className="w-full flex flex-col items-center gap-3 pb-2">
+    <div className="w-full flex flex-col items-center gap-5 pb-2">
       {/* Translation of dhikr */}
       {currentDhikr?.translation && (
-        <p className="text-muted-foreground/60 text-[10px] sm:text-xs italic text-center px-6 max-w-xs leading-relaxed">
+        <p className="text-muted-foreground/60 text-[10px] sm:text-xs italic text-center px-6 max-w-xs leading-relaxed mt-2">
           "{currentDhikr.translation}"
         </p>
       )}

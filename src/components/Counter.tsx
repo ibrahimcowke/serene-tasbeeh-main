@@ -172,7 +172,7 @@ export const Counter = memo(function Counter() {
       </div>
 
       {/* Bottom: Footer stats */}
-      <div className="w-full flex flex-col items-center justify-center z-10 pb-2 animate-fade-in-up gap-3">
+      <div className="w-full flex flex-col items-center justify-center z-10 pb-2 animate-fade-in-up gap-3 mt-6">
         <CounterFooter />
       </div>
 

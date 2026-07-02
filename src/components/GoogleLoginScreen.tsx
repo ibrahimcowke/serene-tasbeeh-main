@@ -35,7 +35,13 @@ export function GoogleLoginScreen({ onLoginSuccess }: { onLoginSuccess: () => vo
         // Check if user is already logged in via Firebase
         const unsubscribe = auth.onAuthStateChanged((user) => {
             if (user) {
-                onLoginSuccess();
+                const isEmailAuth = user.providerData.some(p => p.providerId === 'password');
+                if (isEmailAuth && !user.emailVerified) {
+                    auth.signOut();
+                    toast.error("Please verify your email address to continue.");
+                } else {
+                    onLoginSuccess();
+                }
             }
             setLoading(false);
         });
@@ -104,13 +110,23 @@ export function GoogleLoginScreen({ onLoginSuccess }: { onLoginSuccess: () => vo
                 const userCredential = await createUserWithEmailAndPassword(auth, email, password);
                 try {
                     await sendEmailVerification(userCredential.user);
-                    toast.success("Account created! Please check your email for a verification link.");
+                    toast.success("Account created! Please check your email (and spam folder) for a verification link.");
                 } catch (verifyError) {
                     console.error("Verification Email Error:", verifyError);
-                    toast.success("Account created successfully!");
+                    toast.error("Account created, but failed to send verification email.");
                 }
+                await auth.signOut(); // Sign out so they must verify
+                setIsSignUp(false); // Switch to sign-in view
+                setSigningIn(false);
+                return;
             } else {
-                await signInWithEmailAndPassword(auth, email, password);
+                const userCredential = await signInWithEmailAndPassword(auth, email, password);
+                if (!userCredential.user.emailVerified) {
+                    await auth.signOut();
+                    toast.error("Please verify your email first. Check your inbox (or spam folder) for the link.");
+                    setSigningIn(false);
+                    return;
+                }
                 toast.success("Signed in successfully!");
             }
             onLoginSuccess();

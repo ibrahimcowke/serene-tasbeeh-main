@@ -60,6 +60,13 @@ export const syncFromCloud = async (uid: string) => {
       if (data.dailyGoal !== undefined) newState.dailyGoal = data.dailyGoal;
       if (data.hasSeenWelcome !== undefined) newState.hasSeenWelcome = data.hasSeenWelcome;
       if (data.syncPrayerTimes !== undefined) newState.syncPrayerTimes = data.syncPrayerTimes;
+      if (data.sessions !== undefined) newState.sessions = data.sessions;
+      if (data.unlockedAchievements !== undefined) newState.unlockedAchievements = data.unlockedAchievements;
+      if (data.totalHasanat !== undefined) newState.totalHasanat = data.totalHasanat;
+      if (data.personalBest !== undefined) newState.personalBest = data.personalBest;
+      if (data.customDhikrs !== undefined) newState.customDhikrs = data.customDhikrs;
+      if (data.favoriteDhikrIds !== undefined) newState.favoriteDhikrIds = data.favoriteDhikrIds;
+      if (data.reminders !== undefined) newState.reminders = data.reminders;
       
       // Update the local state
       if (Object.keys(newState).length > 0) {
@@ -91,6 +98,13 @@ const syncToCloud = async (uid: string, state: TasbeehState) => {
       dailyGoal: state.dailyGoal,
       hasSeenWelcome: state.hasSeenWelcome,
       syncPrayerTimes: state.syncPrayerTimes,
+      sessions: state.sessions,
+      unlockedAchievements: state.unlockedAchievements,
+      totalHasanat: state.totalHasanat,
+      personalBest: state.personalBest,
+      customDhikrs: state.customDhikrs,
+      favoriteDhikrIds: state.favoriteDhikrIds,
+      reminders: state.reminders,
       lastSyncedAt: new Date().toISOString()
     };
 

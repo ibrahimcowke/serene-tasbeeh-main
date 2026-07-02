@@ -220,12 +220,11 @@ export function SettingsViewContent({ defaultTab, setOpen }: SettingsViewContent
       <div className="flex-1 overflow-hidden flex flex-col">
         <Tabs defaultValue={defaultTab === 'appearance' ? 'themes' : defaultTab} className="flex-1 flex flex-col h-full">
           <div className="px-6 pt-2 pb-4 shrink-0 bg-background/50 backdrop-blur-sm z-10">
-            <TabsList className="grid w-full grid-cols-5">
+            <TabsList className="grid w-full grid-cols-4">
               <TabsTrigger value="themes" className="text-xs">Themes</TabsTrigger>
               <TabsTrigger value="counter" className="text-xs">Counter</TabsTrigger>
               <TabsTrigger value="system" className="text-xs">Behavior</TabsTrigger>
               <TabsTrigger value="data" className="text-xs">Data</TabsTrigger>
-              <TabsTrigger value="account" className="text-xs">Account</TabsTrigger>
             </TabsList>
           </div>
 
@@ -337,146 +336,7 @@ export function SettingsViewContent({ defaultTab, setOpen }: SettingsViewContent
                 ))}
               </div>
 
-              <div className="space-y-1">
-                <div className="flex items-center justify-between p-4 rounded-2xl bg-card border border-border/50">
-                  <div className="space-y-0.5">
-                    <label className="text-sm font-medium">Zen Mode focus</label>
-                    <p className="text-xs text-muted-foreground">Hide sidebars for complete focus</p>
-                  </div>
-                  <Switch
-                    checked={zenMode}
-                    onCheckedChange={(checked) => {
-                      setZenMode(checked);
-                      if (checked) setOpen(false);
-                    }}
-                  />
-                </div>
-              </div>
 
-              <div className="bg-card rounded-2xl p-1 mt-2 border border-border/50">
-                <Accordion type="single" collapsible className="w-full">
-                  <AccordionItem value="advanced-layout" className="border-none">
-                    <AccordionTrigger className="px-4 py-3 text-sm font-medium hover:no-underline hover:bg-secondary/50 rounded-xl transition-colors">
-                      Positioning & Scale
-                    </AccordionTrigger>
-                    <AccordionContent className="px-4 pb-4">
-                      <div className="space-y-6 pt-4">
-                        <div>
-                          <div className="flex items-center justify-between mb-3">
-                            <p className="text-sm font-medium text-foreground">Global Position</p>
-                            <p className="text-xs text-muted-foreground">{localVerticalOffset > 0 ? `+${localVerticalOffset}px` : `${localVerticalOffset}px`}</p>
-                          </div>
-                          <Slider
-                            min={-150}
-                            max={150}
-                            step={10}
-                            value={[localVerticalOffset]}
-                            onValueChange={([val]) => setLocalVerticalOffset(val)}
-                            onValueCommit={([val]) => setVerticalOffset(val)}
-                          />
-                        </div>
-                        <div className="pt-4 border-t border-border/40">
-                          <div className="flex items-center justify-between mb-3">
-                            <p className="text-sm font-medium text-foreground">Dhikr Text</p>
-                            <p className="text-xs text-muted-foreground">{localDhikrVerticalOffset > 0 ? `+${localDhikrVerticalOffset}px` : `${localDhikrVerticalOffset}px`}</p>
-                          </div>
-                          <Slider
-                            min={-100}
-                            max={100}
-                            step={5}
-                            value={[localDhikrVerticalOffset]}
-                            onValueChange={([val]) => setLocalDhikrVerticalOffset(val)}
-                            onValueCommit={([val]) => setDhikrVerticalOffset(val)}
-                          />
-                        </div>
-                        <div className="pt-4 border-t border-border/40">
-                          <div className="flex items-center justify-between mb-3">
-                            <p className="text-sm font-medium text-foreground">Counter Position</p>
-                            <p className="text-xs text-muted-foreground">{localCounterVerticalOffset > 0 ? `+${localCounterVerticalOffset}px` : `${localCounterVerticalOffset}px`}</p>
-                          </div>
-                          <Slider
-                            min={-100}
-                            max={100}
-                            step={5}
-                            value={[localCounterVerticalOffset]}
-                            onValueChange={([val]) => setLocalCounterVerticalOffset(val)}
-                            onValueCommit={([val]) => setCounterVerticalOffset(val)}
-                          />
-                        </div>
-                        <div className="pt-4 border-t border-border/40">
-                          <div className="flex items-center justify-between mb-3">
-                            <p className="text-sm font-medium text-foreground">Counter Size</p>
-                            <p className="text-xs text-muted-foreground">{Math.round(localCounterScale * 100)}%</p>
-                          </div>
-                          <Slider
-                            min={0.5}
-                            max={1.7}
-                            step={0.05}
-                            value={[localCounterScale]}
-                            onValueChange={([val]) => setLocalCounterScale(val)}
-                            onValueCommit={([val]) => setCounterScale(val)}
-                          />
-                        </div>
-                      </div>
-                    </AccordionContent>
-                  </AccordionItem>
-                  <AccordionItem value="mindfulness" className="border-none">
-                    <AccordionTrigger className="hover:no-underline py-4 px-4 rounded-xl transition-all hover:bg-secondary/50">
-                      <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-2xl bg-indigo-100 dark:bg-indigo-900/30 flex items-center justify-center text-indigo-600 dark:text-indigo-400">
-                          <Wind className="w-5 h-5" />
-                        </div>
-                        <div className="text-left">
-                          <p className="font-semibold text-foreground text-[15px]">Mindfulness</p>
-                          <p className="text-[13px] text-muted-foreground">Breathing guide settings</p>
-                        </div>
-                      </div>
-                    </AccordionTrigger>
-                    <AccordionContent className="pt-2 pb-6 px-4">
-                      <div className="space-y-6">
-                        <div className="flex items-center justify-between p-3.5 rounded-2xl bg-zinc-50 dark:bg-zinc-900/50 border border-zinc-100 dark:border-zinc-800/50">
-                          <div className="space-y-0.5">
-                            <Label className="text-sm font-medium">Breathing Guide</Label>
-                            <p className="text-xs text-zinc-500">Subtle pulse for focus</p>
-                          </div>
-                          <Switch
-                            checked={breathingGuideEnabled}
-                            onCheckedChange={setBreathingGuide}
-                          />
-                        </div>
-                        <div className="space-y-4 px-1">
-                          <div className="flex justify-between items-center text-sm">
-                            <Label className="font-medium">Breath Speed</Label>
-                            <span className="text-muted-foreground font-mono text-xs">{localBreathingSpeed}s</span>
-                          </div>
-                          <Slider min={2} max={8} step={0.5} value={[localBreathingSpeed]} onValueChange={([val]) => setLocalBreathingSpeed(val)} onValueCommit={([val]) => setBreathingGuideSpeed(val)} />
-                        </div>
-                      </div>
-                    </AccordionContent>
-                  </AccordionItem>
-                </Accordion>
-              </div>
-
-              <div className="p-4 rounded-2xl bg-card border border-border/50">
-                <p className="text-sm font-medium mb-3">Dhikr Text Position</p>
-                <div className="grid grid-cols-2 gap-2">
-                  {[
-                    { id: 'top', label: 'Top' },
-                    { id: 'above-counter', label: 'Above Counter' },
-                    { id: 'below-counter', label: 'Below Counter' },
-                    { id: 'bottom', label: 'Bottom' },
-                    { id: 'none', label: 'Hidden' }
-                  ].map((pos) => (
-                    <button
-                      key={pos.id}
-                      onClick={() => setDhikrTextPosition(pos.id as any)}
-                      className={`py-2 px-2 rounded-lg text-xs font-medium border transition-colors ${dhikrTextPosition === pos.id ? 'bg-primary text-primary-foreground border-primary' : 'bg-background border-border hover:bg-muted'}`}
-                    >
-                      {pos.label}
-                    </button>
-                  ))}
-                </div>
-              </div>
             </TabsContent>
 
             {/* SYSTEM TAB */}
@@ -536,15 +396,7 @@ export function SettingsViewContent({ defaultTab, setOpen }: SettingsViewContent
                 </div>
               </div>
 
-              <div className="p-4 rounded-2xl bg-card border border-border/50 space-y-4">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm font-medium text-foreground flex items-center gap-2"><Mic className="w-4 h-4 text-primary/70" />Voice Announcements</p>
-                    <p className="text-xs text-muted-foreground">Speak milestone counts (33, 100...)</p>
-                  </div>
-                  <Switch checked={voiceAnnouncementsEnabled} onCheckedChange={setVoiceAnnouncements} />
-                </div>
-              </div>
+
 
               <div className="space-y-1">
                 <p className="text-xs text-muted-foreground uppercase tracking-wide mb-3 px-1">{t('settings.haptic_pattern')}</p>
@@ -634,24 +486,7 @@ export function SettingsViewContent({ defaultTab, setOpen }: SettingsViewContent
                 </div>
               </div>
 
-              <div className="p-4 rounded-2xl bg-card border border-border/50 space-y-4">
-                <p className="text-xs text-muted-foreground uppercase tracking-wide px-1">Display Preferences</p>
-                <div className="space-y-3">
-                  <div className="flex justify-between items-center text-sm">
-                    <Label className="font-medium">Hadith Slide Delay</Label>
-                    <span className="text-muted-foreground font-mono text-xs">{localHadithSlideDuration}s</span>
-                  </div>
-                  <Slider 
-                    min={3} 
-                    max={20} 
-                    step={1} 
-                    value={[localHadithSlideDuration]} 
-                    onValueChange={([val]) => setLocalHadithSlideDuration(val)} 
-                    onValueCommit={([val]) => setHadithSlideDuration(val)} 
-                  />
-                  <p className="text-[10px] text-muted-foreground">Time before showing the next guidance message</p>
-                </div>
-              </div>
+
 
               <div className="p-4 rounded-2xl bg-card border border-border/50 mt-4 space-y-4">
                 <p className="text-xs text-muted-foreground uppercase tracking-wide px-1">Data Management</p>
@@ -746,6 +581,11 @@ export function SettingsViewContent({ defaultTab, setOpen }: SettingsViewContent
             {/* DATA TAB */}
             <TabsContent value="data" className="space-y-6 mt-0 pb-6 px-4">
               <div className="space-y-1">
+                <p className="text-xs text-muted-foreground uppercase tracking-wide mb-3 px-1">Account</p>
+                <GoogleLogin />
+              </div>
+
+              <div className="space-y-1 mt-4">
                 <p className="text-xs text-muted-foreground uppercase tracking-wide mb-3 px-1">Data Management</p>
                 <button onClick={handleExport} className="w-full flex items-center gap-3 p-4 rounded-2xl bg-card border border-border/50 hover:bg-secondary transition-colors text-left mb-2">
                   <Download className="w-5 h-5 text-muted-foreground" />
@@ -784,10 +624,6 @@ export function SettingsViewContent({ defaultTab, setOpen }: SettingsViewContent
                   </AlertDialogFooter>
                 </AlertDialogContent>
               </AlertDialog>
-            </TabsContent>
-
-            <TabsContent value="account" className="space-y-6 mt-0 pb-6 px-4">
-              <GoogleLogin />
             </TabsContent>
           </div>
         </Tabs>
