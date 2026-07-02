@@ -94,7 +94,7 @@ export function SessionTimer() {
           >
             {isCountdown ? <Timer className="w-3 h-3 animate-pulse" /> : <Clock className="w-3 h-3" />}
             <span className="font-mono tabular-nums">
-              {isCountdown ? `${getDisplayTime()} remaining` : (currentCount > 0 ? getDisplayTime() : 'Set Timer')}
+              {isCountdown ? `${getDisplayTime()} remaining` : (currentCount > 0 ? getDisplayTime() : (t('timer.off') || 'Off'))}
             </span>
           </motion.button>
         </SheetTrigger>
@@ -116,7 +116,7 @@ export function SessionTimer() {
                 { label: t('timer.5min') || '5 Minutes', val: 300 },
                 { label: t('timer.10min') || '10 Minutes', val: 600 },
                 { label: t('timer.20min') || '20 Minutes', val: 1200 },
-                { label: t('settings.ambient_none') || 'No Timer', val: 0 },
+                { label: t('timer.off') || 'Off', val: 0 },
               ].map((p) => (
                 <button
                   key={p.val}

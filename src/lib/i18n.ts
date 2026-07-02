@@ -142,6 +142,7 @@ const translations: Record<string, Record<Lang, string>> = {
   'timer.done': { en: 'Session Complete!', ar: 'انتهت الجلسة!' },
   'timer.counted': { en: 'You counted', ar: 'عددت' },
   'timer.times': { en: 'times', ar: 'مرة' },
+  'timer.off': { en: 'Off', ar: 'إيقاف' },
   // --- Welcome ---
   'welcome.tagline': { en: 'Your Spiritual Companion', ar: 'رفيقك الروحي' },
   'welcome.slide1_title': { en: 'Count with Purpose', ar: 'اذكر بنية' },

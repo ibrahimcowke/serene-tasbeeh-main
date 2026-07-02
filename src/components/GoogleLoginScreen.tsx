@@ -9,7 +9,6 @@ import { motion } from 'framer-motion';
 export function GoogleLoginScreen({ onLoginSuccess }: { onLoginSuccess: () => void }) {
     const [loading, setLoading] = useState(true);
     const [signingIn, setSigningIn] = useState(false);
-    const [autoAttempted, setAutoAttempted] = useState(false);
     const [isSignUp, setIsSignUp] = useState(false);
     const [isForgotPassword, setIsForgotPassword] = useState(false);
     const [email, setEmail] = useState('');
@@ -44,26 +43,22 @@ export function GoogleLoginScreen({ onLoginSuccess }: { onLoginSuccess: () => vo
         return () => unsubscribe();
     }, [onLoginSuccess]);
 
-    useEffect(() => {
-        if (!loading && !signingIn && !autoAttempted) {
-            setAutoAttempted(true);
-            handleLogin();
-        }
-    }, [loading, signingIn, autoAttempted]);
-
     const handleLogin = async () => {
         setSigningIn(true);
         try {
             // Trigger Capacitor Native Google Sign-In
             const result = await FirebaseAuthentication.signInWithGoogle();
             
-            if (result.credential) {
-                // Exchange native token for Firebase Auth credential
+            if (result.credential?.idToken) {
+                // Exchange native token for Firebase Auth credential (usually needed for Web)
                 const credential = GoogleAuthProvider.credential(result.credential.idToken);
                 await signInWithCredential(auth, credential);
                 onLoginSuccess();
+            } else if (result.user) {
+                // On Native Android/iOS, the plugin natively authenticates and syncs with JS SDK
+                onLoginSuccess();
             } else {
-                throw new Error("No credential returned from Google Sign-In.");
+                throw new Error("No user or credential returned from Google Sign-In.");
             }
         } catch (e: any) {
             console.error("Firebase Login Error: ", e);
