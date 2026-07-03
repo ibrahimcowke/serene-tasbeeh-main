@@ -1,4 +1,4 @@
-import { doc, getDoc, setDoc } from 'firebase/firestore';
+import { doc, getDoc, setDoc, deleteDoc } from 'firebase/firestore';
 import { db } from './firebase';
 import { useTasbeehStore, TasbeehState } from '@/store/tasbeehStore';
 
@@ -111,5 +111,17 @@ const syncToCloud = async (uid: string, state: TasbeehState) => {
     await setDoc(userDocRef, dataToSave, { merge: true });
   } catch (error) {
     console.error('Error saving data to cloud:', error);
+  }
+};
+
+export const deleteCloudAccount = async (uid: string) => {
+  try {
+    stopCloudSync();
+    const userDocRef = doc(db, 'users', uid);
+    await deleteDoc(userDocRef);
+    console.log('Successfully deleted user data from cloud.');
+  } catch (error) {
+    console.error('Error deleting user data from cloud:', error);
+    throw error;
   }
 };

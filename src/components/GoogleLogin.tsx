@@ -62,6 +62,42 @@ export function GoogleLogin() {
         }
     };
 
+    const handleDeleteAccount = async () => {
+        const currentUser = auth.currentUser;
+        if (!currentUser) return;
+        
+        const confirmDelete = window.confirm(
+            "Are you absolutely sure you want to delete your cloud account?\n\nThis will permanently delete all your backup data in the cloud. This action cannot be undone."
+        );
+        if (!confirmDelete) return;
+
+        setLoading(true);
+        try {
+            const uid = currentUser.uid;
+            
+            // 1. Delete from Firestore
+            const { deleteCloudAccount } = await import('../lib/cloudSync');
+            await deleteCloudAccount(uid);
+            
+            // 2. Delete Auth user
+            await currentUser.delete();
+            
+            // 3. Reset local UUID to create a fresh guest account session
+            const newUuid = 'device_' + Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+            setDeviceUuid(newUuid);
+            
+            toast.success("Your account and cloud data have been permanently deleted.");
+        } catch (e: any) {
+            console.error("Delete account error:", e);
+            if (e.code === 'auth/requires-recent-login') {
+                toast.error("Please sign out, sign back in, and then immediately request deletion (security timeout requirement).");
+            } else {
+                toast.error("Failed to delete account: " + e.message);
+            }
+            setLoading(false);
+        }
+    };
+
     if (loading) {
         return (
             <div className="flex items-center justify-center p-6 bg-card/25 backdrop-blur-md rounded-2xl border border-border/20">
@@ -118,10 +154,12 @@ export function GoogleLogin() {
                 <div className="h-px bg-border/30" />
 
                 <div className="flex items-center justify-between text-[11px] text-muted-foreground">
-                    <div className="flex items-center gap-1">
-                        <Check className="w-3 h-3 text-emerald-400" />
-                        <span>Backup Active</span>
-                    </div>
+                    <button
+                        onClick={handleDeleteAccount}
+                        className="text-muted-foreground hover:text-red-500 transition-colors cursor-pointer font-medium"
+                    >
+                        Delete Account
+                    </button>
                     <button
                         onClick={handleLogout}
                         className="flex items-center gap-1.5 text-muted-foreground hover:text-destructive hover:font-medium transition-colors cursor-pointer"

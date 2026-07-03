@@ -6,7 +6,14 @@
   "files.associations": {
     "*.css": "tailwindcss"
   },
-  "java.jdt.ls.java.home": "C:\\Program Files\\Java\\jdk-17.0.18",
+  "java.jdt.ls.java.home": "C:\\Program Files\\Android\\Android Studio\\jbr",
+  "java.configuration.runtimes": [
+    {
+      "name": "JavaSE-17",
+      "path": "C:\\Program Files\\Java\\jdk-17.0.18",
+      "default": true
+    }
+  ],
   "java.configuration.updateBuildConfiguration": "automatic",
   "java.import.gradle.java.home": "C:\\Program Files\\Android\\Android Studio\\jbr",
   "java.import.gradle.wrapper.enabled": true,
