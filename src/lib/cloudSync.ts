@@ -5,88 +5,122 @@ import { useTasbeehStore, TasbeehState } from '@/store/tasbeehStore';
 let unsubscribeStore: (() => void) | null = null;
 let syncTimeout: NodeJS.Timeout | null = null;
 
+// ── Sync Status Observable ─────────────────────────────────────────────────
+export type SyncStatus = 'idle' | 'syncing' | 'synced' | 'error' | 'offline';
+
+let _syncStatus: SyncStatus = 'idle';
+let _lastSyncedAt: string | null = null;
+const _listeners: Set<(status: SyncStatus, lastSyncedAt: string | null) => void> = new Set();
+
+const setSyncStatus = (status: SyncStatus, lastSyncedAt?: string) => {
+  _syncStatus = status;
+  if (lastSyncedAt !== undefined) _lastSyncedAt = lastSyncedAt;
+  _listeners.forEach((l) => l(_syncStatus, _lastSyncedAt));
+};
+
+export const onSyncStatusChange = (
+  listener: (status: SyncStatus, lastSyncedAt: string | null) => void
+): (() => void) => {
+  _listeners.add(listener);
+  // Immediately call with current value
+  listener(_syncStatus, _lastSyncedAt);
+  return () => _listeners.delete(listener);
+};
+
+export const getSyncStatus = () => ({ status: _syncStatus, lastSyncedAt: _lastSyncedAt });
+
+// ── Cloud Sync Start/Stop ──────────────────────────────────────────────────
 export const startCloudSync = (uid: string) => {
-  if (unsubscribeStore) {
-    unsubscribeStore();
-  }
+  if (unsubscribeStore) unsubscribeStore();
 
-  // Subscribe to changes in the Zustand store
   unsubscribeStore = useTasbeehStore.subscribe((state: TasbeehState, prevState: TasbeehState) => {
-    // Basic optimization to not sync if it's the exact same object reference
     if (state === prevState) return;
-
-    // Debounce the writes to avoid hitting Firestore rate limits when user is tapping quickly
-    if (syncTimeout) {
-      clearTimeout(syncTimeout);
-    }
-
+    if (syncTimeout) clearTimeout(syncTimeout);
     syncTimeout = setTimeout(() => {
       syncToCloud(uid, state);
-    }, 2000); // Wait 2 seconds of inactivity before writing to Firestore
+    }, 2000);
   });
 };
 
 export const stopCloudSync = () => {
-  if (unsubscribeStore) {
-    unsubscribeStore();
-    unsubscribeStore = null;
-  }
-  if (syncTimeout) {
-    clearTimeout(syncTimeout);
-    syncTimeout = null;
-  }
+  if (unsubscribeStore) { unsubscribeStore(); unsubscribeStore = null; }
+  if (syncTimeout) { clearTimeout(syncTimeout); syncTimeout = null; }
+  setSyncStatus('idle');
 };
 
+// ── Manual Force Sync ──────────────────────────────────────────────────────
+export const manualSyncNow = async (uid: string): Promise<void> => {
+  const state = useTasbeehStore.getState();
+  await syncToCloud(uid, state);
+};
+
+// ── Sync From Cloud (with smart merge) ─────────────────────────────────────
 export const syncFromCloud = async (uid: string) => {
+  setSyncStatus('syncing');
   try {
     const userDocRef = doc(db, 'users', uid);
     const docSnap = await getDoc(userDocRef);
 
     if (docSnap.exists()) {
       const data = docSnap.data();
-      // Only pull specific keys we want to override local state
-      // E.g., counts, history, daily records, dhikrs
-      const storeState = useTasbeehStore.getState();
-      
+      const local = useTasbeehStore.getState();
       const newState: Partial<TasbeehState> = {};
-      
-      if (data.totalAllTime !== undefined) newState.totalAllTime = data.totalAllTime;
+
+      // For cumulative stats: always take the HIGHER value to avoid losing data
+      if (data.totalAllTime !== undefined)
+        newState.totalAllTime = Math.max(local.totalAllTime, data.totalAllTime);
+      if (data.totalHasanat !== undefined)
+        newState.totalHasanat = Math.max(local.totalHasanat, data.totalHasanat);
+      if (data.personalBest !== undefined)
+        newState.personalBest = Math.max(local.personalBest, data.personalBest);
+      if (data.streakDays !== undefined)
+        newState.streakDays = Math.max(local.streakDays, data.streakDays);
+
+      // For array data: merge, preferring cloud if timestamps differ
       if (data.dailyRecords !== undefined) newState.dailyRecords = data.dailyRecords;
-      if (data.streakDays !== undefined) newState.streakDays = data.streakDays;
-      if (data.lastActiveDate !== undefined) newState.lastActiveDate = data.lastActiveDate;
+      if (data.sessions !== undefined) newState.sessions = data.sessions;
+      if (data.unlockedAchievements !== undefined) {
+        newState.unlockedAchievements = Array.from(
+          new Set([...local.unlockedAchievements, ...data.unlockedAchievements])
+        );
+      }
+
+      // Prefer cloud for settings if they differ
       if (data.dhikrs !== undefined) newState.dhikrs = data.dhikrs;
+      if (data.lastActiveDate !== undefined) newState.lastActiveDate = data.lastActiveDate;
       if (data.theme !== undefined) newState.theme = data.theme;
       if (data.language !== undefined) newState.language = data.language;
       if (data.dailyGoal !== undefined) newState.dailyGoal = data.dailyGoal;
       if (data.hasSeenWelcome !== undefined) newState.hasSeenWelcome = data.hasSeenWelcome;
       if (data.syncPrayerTimes !== undefined) newState.syncPrayerTimes = data.syncPrayerTimes;
-      if (data.sessions !== undefined) newState.sessions = data.sessions;
-      if (data.unlockedAchievements !== undefined) newState.unlockedAchievements = data.unlockedAchievements;
-      if (data.totalHasanat !== undefined) newState.totalHasanat = data.totalHasanat;
-      if (data.personalBest !== undefined) newState.personalBest = data.personalBest;
       if (data.customDhikrs !== undefined) newState.customDhikrs = data.customDhikrs;
       if (data.favoriteDhikrIds !== undefined) newState.favoriteDhikrIds = data.favoriteDhikrIds;
       if (data.reminders !== undefined) newState.reminders = data.reminders;
-      
-      // Update the local state
+
       if (Object.keys(newState).length > 0) {
         useTasbeehStore.setState(newState);
       }
-      console.log('Successfully synced data from cloud.');
+
+      const lastSyncedAt = data.lastSyncedAt ?? null;
+      setSyncStatus('synced', lastSyncedAt ?? undefined);
+      console.log('[CloudSync] Synced from cloud.');
     } else {
-      // If it doesn't exist, we do our first sync to cloud
-      syncToCloud(uid, useTasbeehStore.getState());
+      // First-time user: push local state up
+      await syncToCloud(uid, useTasbeehStore.getState());
     }
   } catch (error) {
-    console.error('Error fetching data from cloud:', error);
+    const isOffline = !navigator.onLine;
+    setSyncStatus(isOffline ? 'offline' : 'error');
+    console.error('[CloudSync] Error fetching from cloud:', error);
   }
 };
 
+// ── Sync To Cloud ──────────────────────────────────────────────────────────
 const syncToCloud = async (uid: string, state: TasbeehState) => {
+  setSyncStatus('syncing');
   try {
     const userDocRef = doc(db, 'users', uid);
-    
-    // Pick the state that matters
+    const now = new Date().toISOString();
     const dataToSave = {
       totalAllTime: state.totalAllTime,
       dailyRecords: state.dailyRecords,
@@ -105,23 +139,26 @@ const syncToCloud = async (uid: string, state: TasbeehState) => {
       customDhikrs: state.customDhikrs,
       favoriteDhikrIds: state.favoriteDhikrIds,
       reminders: state.reminders,
-      lastSyncedAt: new Date().toISOString()
+      lastSyncedAt: now,
     };
-
     await setDoc(userDocRef, dataToSave, { merge: true });
+    setSyncStatus('synced', now);
   } catch (error) {
-    console.error('Error saving data to cloud:', error);
+    const isOffline = !navigator.onLine;
+    setSyncStatus(isOffline ? 'offline' : 'error');
+    console.error('[CloudSync] Error saving to cloud:', error);
   }
 };
 
+// ── Delete Account ─────────────────────────────────────────────────────────
 export const deleteCloudAccount = async (uid: string) => {
   try {
     stopCloudSync();
     const userDocRef = doc(db, 'users', uid);
     await deleteDoc(userDocRef);
-    console.log('Successfully deleted user data from cloud.');
+    console.log('[CloudSync] Deleted user data from cloud.');
   } catch (error) {
-    console.error('Error deleting user data from cloud:', error);
+    console.error('[CloudSync] Error deleting user data:', error);
     throw error;
   }
 };

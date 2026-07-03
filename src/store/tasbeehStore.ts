@@ -196,6 +196,9 @@ export interface TasbeehState {
   autoStartPostPrayerTasbeeh: boolean;
   setAutoStartPostPrayerTasbeeh: (enabled: boolean) => void;
 
+  lazyDayRecoveryEnabled: boolean;
+  setLazyDayRecoveryEnabled: (enabled: boolean) => void;
+
 
   increment: () => void;
   decrement: () => void;
@@ -346,6 +349,7 @@ export const useTasbeehStore = create<TasbeehState>()(
       sessionTimerActive: false,
       hapticPattern: 'default',
       autoStartPostPrayerTasbeeh: false,
+      lazyDayRecoveryEnabled: true,
 
       saveActiveSession: () => {
         const state = get();
@@ -380,6 +384,7 @@ export const useTasbeehStore = create<TasbeehState>()(
       setSessionTimerActive: (active) => set({ sessionTimerActive: active }),
       setHapticPattern: (pattern) => set({ hapticPattern: pattern }),
       setAutoStartPostPrayerTasbeeh: (enabled) => set({ autoStartPostPrayerTasbeeh: enabled }),
+      setLazyDayRecoveryEnabled: (enabled) => set({ lazyDayRecoveryEnabled: enabled }),
       setShowMoodTracker: (open) => set({ showMoodTracker: open }),
 
       increment: () => {

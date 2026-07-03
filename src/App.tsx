@@ -18,6 +18,7 @@ const PrayerTimesPermissionModal = lazy(() => import("./components/PrayerTimesPe
 const AmbientSoundPlayer = lazy(() => import("./components/AmbientSoundPlayer").then(m => ({ default: m.AmbientSoundPlayer })));
 import { registerPeriodicSync } from "./lib/notifications";
 import { useTasbeehStore } from "./store/tasbeehStore";
+import { scheduleLazyDayNotification, cancelLazyDayNotification } from "./lib/lazyDayRecovery";
 const GoogleLoginScreen = lazy(() => import("./components/GoogleLoginScreen").then(m => ({ default: m.GoogleLoginScreen })));
 import { useState } from "react";
 
@@ -30,7 +31,17 @@ import { App as CapApp } from '@capacitor/app';
 
 const App = () => {
   const hasSeenWelcome = useTasbeehStore((s) => s.hasSeenWelcome);
+  const lazyDayRecoveryEnabled = useTasbeehStore((s) => s.lazyDayRecoveryEnabled);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  // Schedule or cancel Lazy Day Recovery notification
+  useEffect(() => {
+    if (lazyDayRecoveryEnabled) {
+      scheduleLazyDayNotification();
+    } else {
+      cancelLazyDayNotification();
+    }
+  }, [lazyDayRecoveryEnabled]);
 
   useEffect(() => {
     registerPeriodicSync();

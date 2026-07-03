@@ -9,6 +9,7 @@ import { BreathingGuide } from '@/components/BreathingGuide';
 import { MobileNavBar } from '@/components/MobileNavBar';
 import { Counter } from '@/components/Counter';
 import { DateBanner } from '@/components/DateBanner';
+import { LazyDayBanner } from '@/components/LazyDayBanner';
 
 const Index = () => {
   const zenMode = useTasbeehStore((state) => state.zenMode);
@@ -79,6 +80,9 @@ const Index = () => {
             <RoutinesView>
               <span />
             </RoutinesView>
+
+            {/* Lazy Day Recovery Banner */}
+            {!zenMode && <LazyDayBanner />}
 
             {/* Main counter area */}
             <div className={`flex-1 min-h-0 w-full flex flex-col overflow-y-auto`}>
