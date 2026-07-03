@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { Check, Sparkles } from 'lucide-react';
 import { useTasbeehStore } from '@/store/tasbeehStore';
@@ -44,6 +44,20 @@ export function TargetSelector({ children }: TargetSelectorProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [showWarning, setShowWarning] = useState(false);
   const [pendingAction, setPendingAction] = useState<(() => void) | null>(null);
+
+  const allPresets = useMemo(() => {
+    const standard = [...presetTargets];
+    const isCustom = targetCount > 0 && !standard.some(p => p.value === targetCount) && sessionMode.type === 'free';
+    if (isCustom) {
+      standard.push({
+        value: targetCount,
+        label: String(targetCount),
+        description: 'Custom Goal'
+      });
+    }
+    return standard;
+  }, [targetCount, sessionMode.type]);
+
 
   const handleAction = (action: () => void) => {
     // Check if we are in a structured session and it is NOT complete
@@ -253,7 +267,7 @@ export function TargetSelector({ children }: TargetSelectorProps) {
             <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider px-1">Quick Presets</p>
 
             <div className="grid grid-cols-2 gap-3">
-              {presetTargets.map((preset, index) => (
+              {allPresets.map((preset, index) => (
                 <motion.button
                   key={preset.value}
                   initial={{ opacity: 0, scale: 0.95 }}
