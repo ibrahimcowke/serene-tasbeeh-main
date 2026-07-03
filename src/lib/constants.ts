@@ -1,4 +1,5 @@
-export const APP_VERSION = '2.1.3';
+export const APP_VERSION = '2.2.0';
+
 
 export const themes = [
   { id: 'light', label: 'Light', description: 'Warm and calm' },
