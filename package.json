@@ -102,5 +102,10 @@
     "workbox-precaching": "^7.4.0",
     "workbox-routing": "^7.4.0",
     "workbox-strategies": "^7.4.0"
+  },
+  "overrides": {
+    "minimatch": "^3.1.5",
+    "tar": "^7.5.19",
+    "uuid": "^11.1.1"
   }
 }
