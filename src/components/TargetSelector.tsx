@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Check, Sparkles } from 'lucide-react';
 import { useTasbeehStore } from '@/store/tasbeehStore';
+import { useShallow } from 'zustand/react/shallow';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger, SheetDescription } from '@/components/ui/sheet';
 import { Input } from '@/components/ui/input';
 import {
@@ -29,7 +30,16 @@ const presetTargets = [
 ];
 
 export function TargetSelector({ children }: TargetSelectorProps) {
-  const { targetCount, setTarget, startTasbih100, startTasbih1000, startLaIlahaWahdahu100, startAstaghfirullah100, sessionMode, currentDhikr } = useTasbeehStore();
+  const { targetCount, setTarget, startTasbih100, startTasbih1000, startLaIlahaWahdahu100, startAstaghfirullah100, sessionMode, currentDhikr } = useTasbeehStore(useShallow(state => ({
+    targetCount: state.targetCount,
+    setTarget: state.setTarget,
+    startTasbih100: state.startTasbih100,
+    startTasbih1000: state.startTasbih1000,
+    startLaIlahaWahdahu100: state.startLaIlahaWahdahu100,
+    startAstaghfirullah100: state.startAstaghfirullah100,
+    sessionMode: state.sessionMode,
+    currentDhikr: state.currentDhikr
+  })));
   const [customValue, setCustomValue] = useState('');
   const [isOpen, setIsOpen] = useState(false);
   const [showWarning, setShowWarning] = useState(false);

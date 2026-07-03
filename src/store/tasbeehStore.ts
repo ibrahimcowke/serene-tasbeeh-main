@@ -391,7 +391,7 @@ export const useTasbeehStore = create<TasbeehState>()(
         const newCount = state.currentCount + 1;
         const newTotal = state.totalAllTime + 1;
         const newHasanat = state.totalHasanat + 10;
-        const records = [...state.dailyRecords];
+        let records = state.dailyRecords;
         const todayIdx = records.findIndex(r => r.date === today);
 
         // Extended haptic vibration patterns at completion milestones
@@ -424,9 +424,11 @@ export const useTasbeehStore = create<TasbeehState>()(
         }
 
         if (todayIdx > -1) {
-          records[todayIdx] = { ...records[todayIdx], totalCount: records[todayIdx].totalCount + 1, counts: { ...records[todayIdx].counts, [state.currentDhikr.id]: (records[todayIdx].counts[state.currentDhikr.id] || 0) + 1 } };
+          // Mutate in place to avoid expensive array cloning on every tap
+          records[todayIdx].totalCount += 1;
+          records[todayIdx].counts[state.currentDhikr.id] = (records[todayIdx].counts[state.currentDhikr.id] || 0) + 1;
         } else {
-          records.push({ date: today, totalCount: 1, counts: { [state.currentDhikr.id]: 1 } });
+          records = [...records, { date: today, totalCount: 1, counts: { [state.currentDhikr.id]: 1 } }];
           setTimeout(() => get().updateStreak(), 0);
         }
 

@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { useTasbeehStore } from '@/store/tasbeehStore';
+import { useShallow } from 'zustand/react/shallow';
 import { motion } from 'framer-motion';
 import { TrendingUp, Target, Award, Flame, BarChart3, Star } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -8,7 +9,13 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { BarChart, Bar, XAxis, Tooltip, ResponsiveContainer, Cell, PieChart, Pie } from 'recharts';
 
 export function StatsViewContent() {
-    const { dailyRecords: history, dailyGoal = 100, streakDays, sessions = [], personalBest = 0 } = useTasbeehStore();
+    const { dailyRecords: history, dailyGoal = 100, streakDays, sessions = [], personalBest = 0 } = useTasbeehStore(useShallow(state => ({
+        dailyRecords: state.dailyRecords,
+        dailyGoal: state.dailyGoal,
+        streakDays: state.streakDays,
+        sessions: state.sessions,
+        personalBest: state.personalBest
+    })));
 
     // Calculate statistics
     const today = new Date().toISOString().split('T')[0];

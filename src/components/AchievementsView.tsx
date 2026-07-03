@@ -1,4 +1,5 @@
 import { useTasbeehStore } from '@/store/tasbeehStore';
+import { useShallow } from 'zustand/react/shallow';
 import { achievements, getNextLevel, Achievement } from '@/data/achievements';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger, SheetDescription } from '@/components/ui/sheet';
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -251,7 +252,14 @@ function BadgeDetailCard({
 }
 
 export function AchievementsContent() {
-    const { totalAllTime, unlockedAchievements, streakDays, currentCount, dailyRecords, dailyGoal } = useTasbeehStore();
+    const { totalAllTime, unlockedAchievements, streakDays, currentCount, dailyRecords, dailyGoal } = useTasbeehStore(useShallow(state => ({
+        totalAllTime: state.totalAllTime,
+        unlockedAchievements: state.unlockedAchievements,
+        streakDays: state.streakDays,
+        currentCount: state.currentCount,
+        dailyRecords: state.dailyRecords,
+        dailyGoal: state.dailyGoal
+    })));
     const [selectedAchievement, setSelectedAchievement] = useState<Achievement | null>(null);
 
     const currentTotal = totalAllTime || 0;

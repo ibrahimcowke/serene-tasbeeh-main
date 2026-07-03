@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Share2, Download, FileText } from 'lucide-react';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger, SheetDescription } from '@/components/ui/sheet';
 import { useTasbeehStore } from '@/store/tasbeehStore';
+import { useShallow } from 'zustand/react/shallow';
 import { useTranslation } from '@/lib/i18n';
 
 interface StatsShareCardProps {
@@ -40,7 +41,13 @@ function getWeeklyTotal(dailyRecords: { date: string; totalCount: number; counts
 export function StatsShareCard({ children }: StatsShareCardProps) {
   const [open, setOpen] = useState(false);
   const cardRef = useRef<HTMLDivElement>(null);
-  const { dailyRecords, streakDays, totalAllTime, dhikrs, currentDhikr } = useTasbeehStore();
+  const { dailyRecords, streakDays, totalAllTime, dhikrs, currentDhikr } = useTasbeehStore(useShallow(state => ({
+    dailyRecords: state.dailyRecords,
+    streakDays: state.streakDays,
+    totalAllTime: state.totalAllTime,
+    dhikrs: state.dhikrs,
+    currentDhikr: state.currentDhikr
+  })));
   const { t, isRTL } = useTranslation();
 
   const { total, bestDay, bestDayDate, topDhikrId } = getWeeklyTotal(dailyRecords);

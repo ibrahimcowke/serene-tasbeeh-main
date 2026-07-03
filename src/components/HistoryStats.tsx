@@ -3,9 +3,19 @@ import { motion } from 'framer-motion';
 import { Flame, BarChart3, Gem, Target } from 'lucide-react';
 import { BarChart, Bar, XAxis, Tooltip, ResponsiveContainer } from 'recharts';
 import { useTasbeehStore } from '@/store/tasbeehStore';
+import { useShallow } from 'zustand/react/shallow';
 
 export function HistoryStats() {
-  const { dailyRecords, totalAllTime, totalHasanat, dhikrs, customDhikrs, streakDays, longestStreak, dailyGoal } = useTasbeehStore();
+  const { dailyRecords, totalAllTime, totalHasanat, dhikrs, customDhikrs, streakDays, longestStreak, dailyGoal } = useTasbeehStore(useShallow(state => ({
+    dailyRecords: state.dailyRecords,
+    totalAllTime: state.totalAllTime,
+    totalHasanat: state.totalHasanat,
+    dhikrs: state.dhikrs,
+    customDhikrs: state.customDhikrs,
+    streakDays: state.streakDays,
+    longestStreak: state.longestStreak,
+    dailyGoal: state.dailyGoal
+  })));
   const allDhikrs = [...dhikrs, ...customDhikrs];
 
   const stats = useMemo(() => {

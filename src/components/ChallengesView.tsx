@@ -4,6 +4,7 @@ import { Swords, Trophy, Zap, Target, Users, Send, Check, X, Flame, Star, Timer,
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription, SheetTrigger } from '@/components/ui/sheet';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useTasbeehStore } from '@/store/tasbeehStore';
+import { useShallow } from 'zustand/react/shallow';
 import { getMuslimAvatarUrl } from '@/lib/avatarUtils';
 import { toast } from 'sonner';
 
@@ -74,7 +75,11 @@ export function ChallengesView({ children }: { children: ReactNode }) {
 }
 
 export function ChallengesViewContent({ isPage = false }: { isPage?: boolean }) {
-    const { startTasbih100, startTasbih1000, totalAllTime } = useTasbeehStore();
+    const { startTasbih100, startTasbih1000, totalAllTime } = useTasbeehStore(useShallow(state => ({
+        startTasbih100: state.startTasbih100,
+        startTasbih1000: state.startTasbih1000,
+        totalAllTime: state.totalAllTime
+    })));
     const [tab, setTab] = useState<'challenges' | 'history'>('challenges');
     const [completedCount, setCompletedCount] = useState(0);
 

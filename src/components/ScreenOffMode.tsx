@@ -1,10 +1,20 @@
 import { useTasbeehStore } from '@/store/tasbeehStore';
+import { useShallow } from 'zustand/react/shallow';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useEffect, useState } from 'react';
 import { Power, Fingerprint } from 'lucide-react';
 
 export function ScreenOffMode() {
-    const { screenOffMode, setScreenOffMode, increment, currentCount, currentDhikr, themeSettings, theme, language } = useTasbeehStore();
+    const { screenOffMode, setScreenOffMode, increment, currentCount, currentDhikr, themeSettings, theme, language } = useTasbeehStore(useShallow(state => ({
+        screenOffMode: state.screenOffMode,
+        setScreenOffMode: state.setScreenOffMode,
+        increment: state.increment,
+        currentCount: state.currentCount,
+        currentDhikr: state.currentDhikr,
+        themeSettings: state.themeSettings,
+        theme: state.theme,
+        language: state.language
+    })));
     const [touched, setTouched] = useState(false);
 
     useEffect(() => {

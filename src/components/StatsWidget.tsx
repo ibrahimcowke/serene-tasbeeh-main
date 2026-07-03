@@ -1,4 +1,5 @@
 import { useTasbeehStore } from '@/store/tasbeehStore';
+import { useShallow } from 'zustand/react/shallow';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Flame, Target, Trophy, TrendingUp, Sparkles } from 'lucide-react';
 import { useEffect, useState } from 'react';
@@ -9,7 +10,13 @@ interface StatsWidgetProps {
 }
 
 export function StatsWidget({ mini }: StatsWidgetProps) {
-    const { dailyRecords, dailyGoal, streakDays, zenMode, totalAllTime } = useTasbeehStore();
+    const { dailyRecords, dailyGoal, streakDays, zenMode, totalAllTime } = useTasbeehStore(useShallow(state => ({
+        dailyRecords: state.dailyRecords,
+        dailyGoal: state.dailyGoal,
+        streakDays: state.streakDays,
+        zenMode: state.zenMode,
+        totalAllTime: state.totalAllTime
+    })));
     const [todayCount, setTodayCount] = useState(0);
 
     useEffect(() => {

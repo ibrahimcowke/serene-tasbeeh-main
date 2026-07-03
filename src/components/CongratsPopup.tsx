@@ -1,11 +1,18 @@
 import React, { memo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTasbeehStore } from '@/store/tasbeehStore';
+import { useShallow } from 'zustand/react/shallow';
 import { Trophy, Star, X, CheckCircle2, RefreshCw, Settings2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 export const CongratsPopup: React.FC = memo(() => {
-    const { showCongrats, congratsData, closeCongrats, reset, switchDhikr } = useTasbeehStore();
+    const { showCongrats, congratsData, closeCongrats, reset, switchDhikr } = useTasbeehStore(useShallow(state => ({
+        showCongrats: state.showCongrats,
+        congratsData: state.congratsData,
+        closeCongrats: state.closeCongrats,
+        reset: state.reset,
+        switchDhikr: state.switchDhikr
+    })));
 
     React.useEffect(() => {
         if (!showCongrats) return;

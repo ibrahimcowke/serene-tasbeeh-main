@@ -1,4 +1,5 @@
 import { useTasbeehStore } from '@/store/tasbeehStore';
+import { useShallow } from 'zustand/react/shallow';
 import { defaultRoutines } from '@/data/routines';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger, SheetDescription } from '@/components/ui/sheet';
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -12,7 +13,11 @@ interface RoutinesViewProps {
 
 export function RoutinesView({ children }: RoutinesViewProps) {
     const [open, setOpen] = useState(false);
-    const { startRoutine, sessionMode, currentDhikr } = useTasbeehStore();
+    const { startRoutine, sessionMode, currentDhikr } = useTasbeehStore(useShallow(state => ({
+        startRoutine: state.startRoutine,
+        sessionMode: state.sessionMode,
+        currentDhikr: state.currentDhikr
+    })));
 
     const handleStartRoutine = (routineId: string) => {
         startRoutine(routineId);
