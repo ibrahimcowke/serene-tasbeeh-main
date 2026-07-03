@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, ArrowRight, Zap, Sliders, LayoutGrid, RotateCcw, Clock, Sparkles } from 'lucide-react';
+import { X, ArrowRight, Zap, Sliders, LayoutGrid, RotateCcw, Clock, Sparkles, Cloud, Bell, Moon } from 'lucide-react';
 import { useTasbeehStore } from '@/store/tasbeehStore';
 import { APP_VERSION } from '@/lib/constants';
 import { Button } from '@/components/ui/button';
@@ -41,30 +41,31 @@ export const WhatsNew = () => {
 
     const features = [
         {
-            title: "Faster Auto-Count Tapping",
-            description: "Cycle through even faster tapper speeds including 0.1s, 0.2s, 0.3s, and 0.4s intervals.",
-            icon: <Zap className="w-8 h-8 text-amber-500" />,
-            color: "from-amber-500/20 to-amber-500/5"
+            title: "Cloud Sync & Backup",
+            description: "Sync your sessions, daily records, achievements, streaks, and settings securely to the cloud with automatic max-value merging.",
+            icon: <Cloud className="w-8 h-8 text-sky-400" />,
+            color: "from-sky-500/20 to-sky-500/5"
         },
         {
-            title: "Lag-Free Settings Panel",
-            description: "Upgraded sliders with local state dragging and useShallow subscriptions to make configuration completely smooth.",
-            icon: <Sliders className="w-8 h-8 text-blue-400" />,
-            color: "from-blue-500/20 to-blue-500/5"
-        },
-        {
-            title: "Optimized Top Header",
-            description: "Aligned the calendar banner and sidebar toggle on a single line to save vertical space.",
-            icon: <LayoutGrid className="w-8 h-8 text-indigo-400" />,
+            title: "Reminders Redesign",
+            description: "Enjoy alarm-clock style rows, inline editing, repeat shortcuts, next-fire countdowns, and linked dhikr quick shortcuts.",
+            icon: <Bell className="w-8 h-8 text-indigo-400" />,
             color: "from-indigo-500/20 to-indigo-500/5"
         },
         {
-            title: "Bottom Overlap Fixed",
-            description: "Expanded safe-area space at the bottom to ensure statistical logs and translations are never cut off by the navigation bar.",
+            title: "Smart Suggestions",
+            description: "Personalized suggestions at the top of your reminders feed based on your last 30 days of dhikr tapper activity.",
             icon: <Sparkles className="w-8 h-8 text-purple-400" />,
             color: "from-purple-500/20 to-purple-500/5"
+        },
+        {
+            title: "Lazy Day Recovery",
+            description: "Receive an evening recovery nudge at 8:30 PM if you haven't started your dhikr yet, with a handy quick-start banner.",
+            icon: <Moon className="w-8 h-8 text-amber-500" />,
+            color: "from-amber-500/20 to-amber-500/5"
         }
     ];
+
 
     const nextSlide = () => {
         if (currentIndex < features.length - 1) {
