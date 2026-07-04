@@ -2,14 +2,14 @@ import { initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
 import { getFirestore } from 'firebase/firestore';
 
-// Your web app's Firebase configuration, sourced from google-services.json
+// Web app Firebase configuration (from Firebase Console → Project Settings → Web app)
 const firebaseConfig = {
-  apiKey: "AIzaSyAqSA89Q8StNiRX4509mGL7X1Nb6NT3nLw",
+  apiKey: "AIzaSyC8ScwH9TOOIP0Td9DSiJigeGojB7KAODE",
   authDomain: "tasbeehly-baf66.firebaseapp.com",
   projectId: "tasbeehly-baf66",
   storageBucket: "tasbeehly-baf66.firebasestorage.app",
   messagingSenderId: "207821527708",
-  appId: "1:207821527708:android:8487ce2dd0cea512c62b59"
+  appId: "1:207821527708:web:c431a44b23fbb438c62b59"
 };
 
 // Initialize Firebase
