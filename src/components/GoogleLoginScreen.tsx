@@ -55,9 +55,19 @@ export function GoogleLoginScreen({ onLoginSuccess }: { onLoginSuccess: () => vo
             // Trigger Capacitor Native Google Sign-In
             const result = await FirebaseAuthentication.signInWithGoogle();
             
-            if (result.credential?.idToken) {
+            let idToken = result.credential?.idToken;
+            if (!idToken && (result.credential || result.user)) {
+                try {
+                    const tokenResult = await FirebaseAuthentication.getIdToken();
+                    idToken = tokenResult.token;
+                } catch (tokenError) {
+                    console.error("Failed to fetch ID token: ", tokenError);
+                }
+            }
+
+            if (idToken) {
                 // Exchange native token for Firebase Auth credential (usually needed for Web)
-                const credential = GoogleAuthProvider.credential(result.credential.idToken);
+                const credential = GoogleAuthProvider.credential(idToken);
                 await signInWithCredential(auth, credential);
                 onLoginSuccess();
             } else if (result.user) {

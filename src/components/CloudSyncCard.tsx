@@ -75,14 +75,25 @@ export function CloudSyncCard() {
         setLoading(true);
         try {
             const result = await FirebaseAuthentication.signInWithGoogle();
-            if (result.credential) {
-                const credential = GoogleAuthProvider.credential(result.credential.idToken);
+            
+            let idToken = result.credential?.idToken;
+            if (!idToken && (result.credential || result.user)) {
+                try {
+                    const tokenResult = await FirebaseAuthentication.getIdToken();
+                    idToken = tokenResult.token;
+                } catch (tokenError) {
+                    console.error("Failed to fetch ID token: ", tokenError);
+                }
+            }
+
+            if (idToken) {
+                const credential = GoogleAuthProvider.credential(idToken);
                 await signInWithCredential(auth, credential);
                 toast.success('Signed in successfully!');
             } else if (result.user) {
                 toast.success('Signed in successfully!');
             } else {
-                throw new Error('No credential returned.');
+                throw new Error('No credential or ID token returned.');
             }
         } catch (e: any) {
             toast.error('Google Sign-In failed: ' + (e.message || e));
