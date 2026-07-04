@@ -148,8 +148,11 @@ export const CounterDisplay = memo(function CounterDisplay() {
   const countControls = useAnimationControls();
   const rippleRef = useRef<HTMLDivElement>(null);
   const glowRef = useRef<HTMLDivElement>(null);
+  const mountedRef = useRef(false);
 
   useEffect(() => {
+    // Skip the very first mount — only animate on actual taps
+    if (!mountedRef.current) { mountedRef.current = true; return; }
     // Re-play the count bounce without unmounting/remounting
     countControls.start({ scale: [1.25, 1], opacity: [0, 1], y: [-4, 0],
       transition: { duration: 0.18, ease: [0.34, 1.56, 0.64, 1] } });
