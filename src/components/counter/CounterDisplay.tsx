@@ -1,5 +1,5 @@
-import { memo, useMemo } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { memo, useMemo, useRef, useEffect } from 'react';
+import { motion, useAnimationControls } from 'framer-motion';
 import { useTasbeehStore, defaultThemeSettings } from '@/store/tasbeehStore';
 import { CounterVisuals } from '../CounterVisuals';
 import { useTranslation } from '@/lib/i18n';
@@ -144,9 +144,23 @@ export const CounterDisplay = memo(function CounterDisplay() {
 
   const handleTap = () => increment();
 
-  // For display in center: show round # if completed rounds > 0, else show bead position
-  const centerDisplay = currentCount;
-  const roundLabel = roundCount > 0 ? `× ${roundCount}` : '';
+  // Perf: animate without remounting via animation controls + CSS restart trick
+  const countControls = useAnimationControls();
+  const rippleRef = useRef<HTMLDivElement>(null);
+  const glowRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    // Re-play the count bounce without unmounting/remounting
+    countControls.start({ scale: [1.25, 1], opacity: [0, 1], y: [-4, 0],
+      transition: { duration: 0.18, ease: [0.34, 1.56, 0.64, 1] } });
+    // Restart CSS animations on persistent divs (no DOM mutation)
+    [rippleRef.current, glowRef.current].forEach(el => {
+      if (!el) return;
+      el.style.animation = 'none';
+      void el.offsetHeight; // force reflow
+      el.style.animation = '';
+    });
+  }, [currentCount]);
 
   return (
     <div className="flex flex-col items-center justify-center w-full py-2">
@@ -157,16 +171,11 @@ export const CounterDisplay = memo(function CounterDisplay() {
           className="relative cursor-pointer select-none"
           style={{ width: 'min(78vw, 40vh, 320px)', height: 'min(78vw, 40vh, 320px)' }}
         >
-          {/* Outer ambient glow */}
-          <motion.div
-            key={currentCount}
-            className="absolute inset-0 rounded-full pointer-events-none"
-            style={{
-              background: 'radial-gradient(circle, var(--bead-glow, rgba(217,119,6,0.12)) 0%, transparent 70%)',
-            }}
-            initial={{ scale: 0.8, opacity: 0 }}
-            animate={{ scale: 1.2, opacity: 0 }}
-            transition={{ duration: 0.6, ease: 'easeOut' }}
+          {/* Outer ambient glow — CSS animation restart, no DOM remount */}
+          <div
+            ref={glowRef}
+            className="absolute inset-0 rounded-full pointer-events-none counter-tap-glow"
+            style={{ background: 'radial-gradient(circle, var(--bead-glow, rgba(217,119,6,0.12)) 0%, transparent 70%)' }}
           />
 
           {/* Bead ring */}
@@ -195,57 +204,41 @@ export const CounterDisplay = memo(function CounterDisplay() {
                 `,
               }}
             >
-              {/* Main count number */}
-              <AnimatePresence mode="popLayout">
-                <motion.div
-                  key={currentCount}
-                  initial={{ scale: 1.4, opacity: 0, y: -4 }}
-                  animate={{ scale: 1, opacity: 1, y: 0 }}
-                  exit={{ scale: 0.7, opacity: 0, y: 4 }}
-                  transition={{ duration: 0.18, ease: [0.34, 1.56, 0.64, 1] }}
-                  className="flex flex-col items-center"
+              {/* Main count number — animation controls, no remount */}
+              <motion.div animate={countControls} className="flex flex-col items-center">
+                <span
+                  className={`${isRTL ? 'font-arabic' : 'counter-number'} leading-none select-none`}
+                  style={{
+                    fontSize: currentCount >= 1000 ? '1.8rem' : '2.6rem',
+                    fontWeight: 700,
+                    color: 'hsl(var(--counter-text))',
+                    textShadow: '0 0 20px hsl(var(--counter-glow) / 0.5), 0 2px 8px rgba(0,0,0,0.4)',
+                    letterSpacing: '-0.02em',
+                  }}
                 >
-                  <span
-                    className={`${isRTL ? 'font-arabic' : 'counter-number'} leading-none select-none`}
-                    style={{
-                      fontSize: currentCount >= 1000 ? '1.8rem' : '2.6rem',
-                      fontWeight: 700,
-                      color: 'hsl(var(--counter-text))',
-                      textShadow: '0 0 20px hsl(var(--counter-glow) / 0.5), 0 2px 8px rgba(0,0,0,0.4)',
-                      letterSpacing: '-0.02em',
-                    }}
-                  >
-                    {toArabicNumerals(currentCount, isRTL)}
-                  </span>
+                  {toArabicNumerals(currentCount, isRTL)}
+                </span>
 
-                  {/* Round counter badge */}
-                  {roundCount > 0 && (
-                    <motion.span
-                      initial={{ scale: 0, opacity: 0 }}
-                      animate={{ scale: 1, opacity: 1 }}
-                      className={`mt-0.5 ${isRTL ? 'font-arabic' : 'font-sans font-medium'}`}
-                      style={{
-                        fontSize: '0.85rem',
-                        letterSpacing: '0.02em',
-                        color: 'hsl(var(--counter-text) / 0.7)'
-                      }}
-                    >
-                      {toArabicNumerals(roundCount, isRTL)} {isRTL ? '× ٣٣' : '× 33'}
-                    </motion.span>
-                  )}
-                </motion.div>
-              </AnimatePresence>
+                {/* Round counter badge */}
+                {roundCount > 0 && (
+                  <motion.span
+                    initial={{ scale: 0, opacity: 0 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    className={`mt-0.5 ${isRTL ? 'font-arabic' : 'font-sans font-medium'}`}
+                    style={{ fontSize: '0.85rem', letterSpacing: '0.02em', color: 'hsl(var(--counter-text) / 0.7)' }}
+                  >
+                    {toArabicNumerals(roundCount, isRTL)} {isRTL ? '× ٣٣' : '× 33'}
+                  </motion.span>
+                )}
+              </motion.div>
             </motion.div>
           </div>
 
-          {/* Tap ripple effect */}
-          <motion.div
-            key={`ripple-${currentCount}`}
-            className="absolute inset-0 rounded-full pointer-events-none"
+          {/* Tap ripple — CSS animation restart, no DOM remount */}
+          <div
+            ref={rippleRef}
+            className="absolute inset-0 rounded-full pointer-events-none counter-tap-ripple"
             style={{ border: '1px solid hsl(var(--primary) / 0.5)' }}
-            initial={{ scale: 0.6, opacity: 0.7 }}
-            animate={{ scale: 1.15, opacity: 0 }}
-            transition={{ duration: 0.5, ease: 'easeOut' }}
           />
         </motion.div>
       ) : (

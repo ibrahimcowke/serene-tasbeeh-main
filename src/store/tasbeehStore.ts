@@ -324,6 +324,17 @@ const calculateStreakFromHistory = (records: DayRecord[]): number => {
 
 let autoCountTimer: any = null;
 
+// Perf: debounce widget IPC calls so Android bridge isn't hit on every tap
+let _widgetSyncTimer: any = null;
+const debouncedSyncWidget = (count: number, dhikrName: string) => {
+  if (_widgetSyncTimer) clearTimeout(_widgetSyncTimer);
+  _widgetSyncTimer = setTimeout(() => { syncWidget(count, dhikrName); _widgetSyncTimer = null; }, 400);
+};
+
+// Perf: only run achievement checks every N taps to avoid per-tap loops
+let _tapCount = 0;
+const ACHIEVEMENT_CHECK_EVERY = 10;
+
 export const useTasbeehStore = create<TasbeehState>()(
   persist(
     (set, get) => ({
@@ -532,8 +543,9 @@ export const useTasbeehStore = create<TasbeehState>()(
         }
 
         set({ currentCount: newCount, totalAllTime: newTotal, totalHasanat: newHasanat, dailyRecords: records, sessionStartTime: state.sessionStartTime || now, sessionMode, lastCount: state.currentCount, lastDhikrId: state.currentDhikr.id, canUndo: true });
-        syncWidget(newCount, state.currentDhikr.transliteration);
-        get().checkAchievements();
+        debouncedSyncWidget(newCount, state.currentDhikr.transliteration);
+        _tapCount++;
+        if (_tapCount % ACHIEVEMENT_CHECK_EVERY === 0) get().checkAchievements();
       },
 
       decrement: () => set((state) => {

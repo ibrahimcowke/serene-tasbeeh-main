@@ -62,7 +62,6 @@ export const Counter = memo(function Counter() {
   // New v2.1.0 states & actions
   const language = useTasbeehStore(state => state.language);
   const voiceAnnouncementsEnabled = useTasbeehStore(state => state.voiceAnnouncementsEnabled);
-  const sessions = useTasbeehStore(state => state.sessions);
   const currentDhikr = useTasbeehStore(state => state.currentDhikr);
   const hadithSlidePosition = useTasbeehStore(state => state.hadithSlidePosition);
 
@@ -71,6 +70,11 @@ export const Counter = memo(function Counter() {
   const [showWisdom, setShowWisdom] = useState(false);
   const [lastSessionId, setLastSessionId] = useState('');
   const [lastCount, setLastCount] = useState(0);
+
+  // Memoize SVG pattern — avoid recomputing the data-URI string every render
+  const geomPattern = useMemo(() =>
+    `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='${(currentSettings.primary || '#d97706').replace('#', '%23')}' fill-opacity='1'%3E%3Cpath d='M30 0l30 17.32v34.64L30 60 0 51.96V17.32L30 0zm0 4L4 19.2v26.4L30 56l26-10.4V19.2L30 4z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`
+  , [currentSettings.primary]);
 
   const { t } = useTranslation();
   const prevCountRef = useRef(currentCount);
@@ -137,12 +141,9 @@ export const Counter = memo(function Counter() {
         }}
       />
 
-      {/* Subtle geometric pattern overlay */}
       <div
         className="pointer-events-none absolute inset-0 z-0 opacity-[0.025]"
-        style={{
-          backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='${(currentSettings.primary || '#d97706').replace('#', '%23')}' fill-opacity='1'%3E%3Cpath d='M30 0l30 17.32v34.64L30 60 0 51.96V17.32L30 0zm0 4L4 19.2v26.4L30 56l26-10.4V19.2L30 4z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
-        }}
+        style={{ backgroundImage: geomPattern }}
       />
 
       {/* Top section: Dhikr label */}

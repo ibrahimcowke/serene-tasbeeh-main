@@ -1170,6 +1170,18 @@
   .animate-completion {
     animation: gentle-glow 1.5s ease-in-out infinite;
   }
+
+  /* Counter tap animations — replayed via JS restart trick, no DOM remount */
+  @keyframes counter-tap-glow {
+    from { transform: scale(0.8); opacity: 0.5; }
+    to   { transform: scale(1.2); opacity: 0; }
+  }
+  @keyframes counter-tap-ripple {
+    from { transform: scale(0.6); opacity: 0.7; }
+    to   { transform: scale(1.15); opacity: 0; }
+  }
+  .counter-tap-glow   { animation: counter-tap-glow   0.6s ease-out forwards; }
+  .counter-tap-ripple { animation: counter-tap-ripple 0.5s ease-out forwards; }
 }
 
 @layer utilities {
