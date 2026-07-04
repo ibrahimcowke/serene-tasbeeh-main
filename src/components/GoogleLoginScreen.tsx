@@ -53,7 +53,11 @@ export function GoogleLoginScreen({ onLoginSuccess }: { onLoginSuccess: () => vo
         setSigningIn(true);
         try {
             // Trigger Capacitor Native Google Sign-In
-            const result = await FirebaseAuthentication.signInWithGoogle();
+            // webClientId (client_type 3) is required to receive a valid idToken from Google
+            const WEB_CLIENT_ID = '207821527708-slddpn0mmr3r5phjn4q75inp21k7h9br.apps.googleusercontent.com';
+            const result = await FirebaseAuthentication.signInWithGoogle({
+                customParameters: [{ key: 'client_id', value: WEB_CLIENT_ID }]
+            });
             
             let idToken = result.credential?.idToken;
             if (!idToken && (result.credential || result.user)) {
