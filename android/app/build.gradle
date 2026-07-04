@@ -1,6 +1,7 @@
 apply plugin: 'com.android.application'
 
 android {
+    ndkVersion = "28.2.13676358"
     namespace = "com.ibrahimcowke.tasbeehly"
     compileSdk = rootProject.ext.compileSdkVersion
     defaultConfig {

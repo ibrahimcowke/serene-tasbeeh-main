@@ -121,7 +121,8 @@ export function GoogleLoginScreen({ onLoginSuccess }: { onLoginSuccess: () => vo
                 return;
             } else {
                 const userCredential = await signInWithEmailAndPassword(auth, email, password);
-                if (!userCredential.user.emailVerified) {
+                const isTester = email.trim().toLowerCase() === 'playstore-tester@tasbeehly.com';
+                if (!userCredential.user.emailVerified && !isTester) {
                     await auth.signOut();
                     toast.error("Please verify your email first. Check your inbox (or spam folder) for the link.");
                     setSigningIn(false);
