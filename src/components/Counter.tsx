@@ -1,4 +1,4 @@
-import { useEffect, memo, useState, useRef } from 'react';
+import { useEffect, memo, useState, useRef, useMemo } from 'react';
 import { useTasbeehStore, defaultThemeSettings } from '@/store/tasbeehStore';
 import { SoundManager } from '@/lib/sound';
 import { initShakeDetection, isShakeDetectionSupported } from '@/lib/shakeDetection';

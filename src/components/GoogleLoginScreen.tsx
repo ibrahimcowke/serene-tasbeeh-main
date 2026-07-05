@@ -1,19 +1,25 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { FirebaseAuthentication } from '@capacitor-firebase/authentication';
 import { signInWithCredential, GoogleAuthProvider, signInWithEmailAndPassword, createUserWithEmailAndPassword, sendPasswordResetEmail, sendEmailVerification } from 'firebase/auth';
 import { auth } from '../lib/firebase';
-import { Lock, Sparkles } from 'lucide-react';
+import { Lock } from 'lucide-react';
 import { toast } from 'sonner';
 import { motion } from 'framer-motion';
+import { Link } from 'react-router-dom';
 
 export function GoogleLoginScreen({ onLoginSuccess }: { onLoginSuccess: () => void }) {
-    const [loading, setLoading] = useState(true);
     const [signingIn, setSigningIn] = useState(false);
     const [isSignUp, setIsSignUp] = useState(false);
     const [isForgotPassword, setIsForgotPassword] = useState(false);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
+
+    const handleContinueAsGuest = () => {
+        localStorage.setItem('tasbeehly_guest_mode', 'true');
+        window.dispatchEvent(new Event('guest-mode-change'));
+        toast.info("Continuing in Offline Guest Mode");
+    };
 
     const starfield = React.useMemo(() => [...Array(50)].map((_, i) => (
         <motion.div
@@ -30,24 +36,6 @@ export function GoogleLoginScreen({ onLoginSuccess }: { onLoginSuccess: () => vo
             transition={{ duration: 2 + Math.random() * 4, repeat: Infinity, delay: Math.random() * 3 }}
         />
     )), []);
-
-    useEffect(() => {
-        // Check if user is already logged in via Firebase
-        const unsubscribe = auth.onAuthStateChanged((user) => {
-            if (user) {
-                const isEmailAuth = user.providerData.some(p => p.providerId === 'password');
-                if (isEmailAuth && !user.emailVerified) {
-                    auth.signOut();
-                    toast.error("Please verify your email address to continue.");
-                } else {
-                    onLoginSuccess();
-                }
-            }
-            setLoading(false);
-        });
-
-        return () => unsubscribe();
-    }, [onLoginSuccess]);
 
     const handleLogin = async () => {
         setSigningIn(true);
@@ -161,14 +149,6 @@ export function GoogleLoginScreen({ onLoginSuccess }: { onLoginSuccess: () => vo
             setSigningIn(false);
         }
     };
-
-    if (loading) {
-        return (
-            <div className="h-dvh w-full flex flex-col items-center justify-center bg-[#050210] text-muted-foreground">
-                <div className="w-12 h-12 rounded-full border-t-2 border-primary animate-spin" />
-            </div>
-        );
-    }
 
     return (
         <div
@@ -370,6 +350,28 @@ export function GoogleLoginScreen({ onLoginSuccess }: { onLoginSuccess: () => vo
                                     {isSignUp ? "Already have an account? Sign In" : "Don't have an account? Sign Up"}
                                 </button>
                             )}
+                        </div>
+
+                        {!isForgotPassword && (
+                            <div className="text-center pt-2">
+                                <button
+                                    type="button"
+                                    onClick={handleContinueAsGuest}
+                                    className="text-sm font-semibold text-[#fbbf24] hover:text-[#fbbf24]/80 transition-colors cursor-pointer"
+                                    style={{ fontFamily: "'Outfit', sans-serif" }}
+                                >
+                                    Continue as Guest (Offline Mode)
+                                </button>
+                            </div>
+                        )}
+
+                        <div className="text-center pt-4 border-t border-white/10">
+                            <Link
+                                to="/privacy"
+                                className="text-xs text-white/40 hover:text-white/70 transition-colors underline underline-offset-4"
+                            >
+                                Privacy Policy
+                            </Link>
                         </div>
                     </motion.div>
                 </div>

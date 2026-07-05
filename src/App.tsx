@@ -19,6 +19,7 @@ const AmbientSoundPlayer = lazy(() => import("./components/AmbientSoundPlayer").
 import { registerPeriodicSync } from "./lib/notifications";
 import { useTasbeehStore } from "./store/tasbeehStore";
 import { scheduleLazyDayNotification, cancelLazyDayNotification } from "./lib/lazyDayRecovery";
+import { ErrorBoundary } from "./components/ErrorBoundary";
 const GoogleLoginScreen = lazy(() => import("./components/GoogleLoginScreen").then(m => ({ default: m.GoogleLoginScreen })));
 import { useState } from "react";
 
@@ -29,10 +30,26 @@ import { StatusBar, Style } from '@capacitor/status-bar';
 import { Keyboard } from '@capacitor/keyboard';
 import { App as CapApp } from '@capacitor/app';
 
+// Auth states: null = still checking, true = authenticated, false = not authenticated
+type AuthState = null | boolean;
+
+const LoadingScreen = () => (
+  <div className="h-dvh w-full flex flex-col items-center justify-center bg-[#050210]">
+    <div
+      className="w-12 h-12 rounded-full border-2 border-transparent animate-spin"
+      style={{ borderTopColor: '#fbbf24', borderRightColor: 'rgba(251,191,36,0.3)' }}
+    />
+  </div>
+);
+
 const App = () => {
   const hasSeenWelcome = useTasbeehStore((s) => s.hasSeenWelcome);
   const lazyDayRecoveryEnabled = useTasbeehStore((s) => s.lazyDayRecoveryEnabled);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  // null = still checking Firebase auth state (avoid flashing login screen)
+  const [authState, setAuthState] = useState<AuthState>(null);
+  const [isGuest, setIsGuest] = useState(() => {
+    return localStorage.getItem('tasbeehly_guest_mode') === 'true';
+  });
 
   // Schedule or cancel Lazy Day Recovery notification
   useEffect(() => {
@@ -42,6 +59,14 @@ const App = () => {
       cancelLazyDayNotification();
     }
   }, [lazyDayRecoveryEnabled]);
+
+  useEffect(() => {
+    const handleGuestChange = () => {
+      setIsGuest(localStorage.getItem('tasbeehly_guest_mode') === 'true');
+    };
+    window.addEventListener('guest-mode-change', handleGuestChange);
+    return () => window.removeEventListener('guest-mode-change', handleGuestChange);
+  }, []);
 
   useEffect(() => {
     registerPeriodicSync();
@@ -117,7 +142,7 @@ const App = () => {
     };
   }, []);
 
-  // Global visibilitychange and auth session sync listener
+  // Single source of truth: Firebase auth state listener lives ONLY here in App.tsx
   useEffect(() => {
     // 1. Stop auto count when app is backgrounded / hidden
     const handleVisibilityChange = () => {
@@ -138,7 +163,17 @@ const App = () => {
       unsubscribeAuth = auth.onAuthStateChanged(async (user) => {
         const store = useTasbeehStore.getState();
         if (user) {
-          setIsAuthenticated(true);
+          // Block unverified email/password accounts
+          const isEmailAuth = user.providerData.some(p => p.providerId === 'password');
+          if (isEmailAuth && !user.emailVerified) {
+            await auth.signOut();
+            setAuthState(false);
+            return;
+          }
+          setAuthState(true);
+          localStorage.removeItem('tasbeehly_guest_mode');
+          setIsGuest(false);
+
           const cloudUuid = `auth_user_${user.uid}`;
           if (store.deviceUuid !== cloudUuid) {
             store.setDeviceUuid(cloudUuid);
@@ -149,7 +184,7 @@ const App = () => {
             });
           });
         } else {
-          setIsAuthenticated(false);
+          setAuthState(false);
           import("./lib/cloudSync").then(({ stopCloudSync }) => {
             stopCloudSync();
           });
@@ -170,6 +205,8 @@ const App = () => {
     };
   }, []);
 
+  const showMainApp = authState === true || isGuest;
+
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
@@ -181,27 +218,40 @@ const App = () => {
             <PWAInstallPrompt />
             <AmbientSoundPlayer />
           </Suspense>
-          {!isAuthenticated ? (
-            <Suspense fallback={<div className="h-dvh w-full flex flex-col items-center justify-center bg-[#050210] text-muted-foreground"><div className="w-12 h-12 rounded-full border-t-2 border-primary animate-spin" /></div>}>
-              <GoogleLoginScreen onLoginSuccess={() => setIsAuthenticated(true)} />
-            </Suspense>
+          {authState === null ? (
+            // Firebase is still determining auth state — show spinner instead of flashing login screen
+            <LoadingScreen />
           ) : (
-            <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
-              <Suspense fallback={null}>
-                <PrayerTimesPermissionModal />
-              </Suspense>
-              <Suspense fallback={<div className="h-dvh w-full flex flex-col items-center justify-center bg-[#050210] text-muted-foreground"><div className="w-12 h-12 rounded-full border-t-2 border-primary animate-spin" /></div>}>
-                <Routes>
-                  <Route path="/welcome" element={<Welcome />} />
-                  <Route path="/" element={hasSeenWelcome ? <Index /> : <Navigate to="/welcome" replace />} />
-                  <Route path="/mini" element={<MiniCounter />} />
-                  <Route path="/privacy" element={<PrivacyPolicy />} />
-                  <Route path="/challenges" element={<Challenges />} />
-                  {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-                  <Route path="*" element={<NotFound />} />
-                </Routes>
-              </Suspense>
-            </BrowserRouter>
+            // Render the App routes wrapped in BrowserRouter
+            <ErrorBoundary>
+              <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
+                <Suspense fallback={null}>
+                  <PrayerTimesPermissionModal />
+                </Suspense>
+                <Suspense fallback={<LoadingScreen />}>
+                  <Routes>
+                    {/* Privacy Policy is always publicly accessible */}
+                    <Route path="/privacy" element={<PrivacyPolicy />} />
+                    
+                    {showMainApp ? (
+                      <>
+                        <Route path="/welcome" element={<Welcome />} />
+                        <Route path="/" element={hasSeenWelcome ? <Index /> : <Navigate to="/welcome" replace />} />
+                        <Route path="/mini" element={<MiniCounter />} />
+                        <Route path="/challenges" element={<Challenges />} />
+                        <Route path="*" element={<NotFound />} />
+                      </>
+                    ) : (
+                      <>
+                        <Route path="*" element={
+                          <GoogleLoginScreen onLoginSuccess={() => setAuthState(true)} />
+                        } />
+                      </>
+                    )}
+                  </Routes>
+                </Suspense>
+              </BrowserRouter>
+            </ErrorBoundary>
           )}
         </ThemeProvider>
       </TooltipProvider>
@@ -210,3 +260,4 @@ const App = () => {
 };
 
 export default App;
+
