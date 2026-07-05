@@ -2,10 +2,20 @@ import React, { useState } from 'react';
 import { FirebaseAuthentication } from '@capacitor-firebase/authentication';
 import { signInWithCredential, GoogleAuthProvider, signInWithEmailAndPassword, createUserWithEmailAndPassword, sendPasswordResetEmail, sendEmailVerification } from 'firebase/auth';
 import { auth } from '../lib/firebase';
-import { Lock } from 'lucide-react';
+import { Lock, AlertTriangle } from 'lucide-react';
 import { toast } from 'sonner';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+} from '@/components/ui/alert-dialog';
 
 export function GoogleLoginScreen({ onLoginSuccess }: { onLoginSuccess: () => void }) {
     const [signingIn, setSigningIn] = useState(false);
@@ -14,11 +24,17 @@ export function GoogleLoginScreen({ onLoginSuccess }: { onLoginSuccess: () => vo
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
+    const [showGuestWarning, setShowGuestWarning] = useState(false);
 
     const handleContinueAsGuest = () => {
+        setShowGuestWarning(true);
+    };
+
+    const confirmContinueAsGuest = () => {
         localStorage.setItem('tasbeehly_guest_mode', 'true');
         window.dispatchEvent(new Event('guest-mode-change'));
         toast.info("Continuing in Offline Guest Mode");
+        setShowGuestWarning(false);
     };
 
     const starfield = React.useMemo(() => [...Array(50)].map((_, i) => (
@@ -376,6 +392,34 @@ export function GoogleLoginScreen({ onLoginSuccess }: { onLoginSuccess: () => vo
                     </motion.div>
                 </div>
             </div>
+
+            <AlertDialog open={showGuestWarning} onOpenChange={setShowGuestWarning}>
+                <AlertDialogContent className="w-[90vw] max-w-[400px] rounded-[2rem] bg-card border border-border/80 text-foreground">
+                    <AlertDialogHeader className="flex flex-col items-center text-center space-y-3">
+                        <div className="w-12 h-12 rounded-2xl bg-amber-500/10 flex items-center justify-center border border-amber-500/20 text-amber-500 animate-pulse">
+                            <AlertTriangle className="w-6 h-6" />
+                        </div>
+                        <AlertDialogTitle className="text-lg font-bold tracking-tight text-foreground" style={{ fontFamily: "'Outfit', sans-serif" }}>
+                            Proceed as Guest?
+                        </AlertDialogTitle>
+                        <AlertDialogDescription className="text-sm text-muted-foreground leading-relaxed">
+                            Offline guest mode does **not** sync your progress to the cloud. 
+                            If you uninstall the app or clear system storage, all your dhikrs, counts, streaks, and achievements will be permanently lost.
+                        </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter className="flex-row gap-2 mt-4 sm:flex-row sm:justify-center">
+                        <AlertDialogCancel className="flex-1 rounded-xl border border-border/60 hover:bg-muted text-foreground/80">
+                            Cancel
+                        </AlertDialogCancel>
+                        <AlertDialogAction
+                            onClick={confirmContinueAsGuest}
+                            className="flex-1 rounded-xl bg-amber-500 hover:bg-amber-600 text-black font-semibold shadow-md shadow-amber-500/10"
+                        >
+                            Proceed Offline
+                        </AlertDialogAction>
+                    </AlertDialogFooter>
+                </AlertDialogContent>
+            </AlertDialog>
         </div>
     );
 }
