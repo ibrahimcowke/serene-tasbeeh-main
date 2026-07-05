@@ -195,9 +195,10 @@ export function GoogleLoginScreen({ onLoginSuccess }: { onLoginSuccess: () => vo
             </div>
 
             {/* Content */}
-            <div className="relative z-10 flex flex-col h-full">
-                {/* App brand at top */}
-                <div className="flex flex-col items-center pt-16 pb-4">
+            <div className="relative z-10 flex flex-col h-full overflow-y-auto touch-pan-y pt-safe pb-safe px-safe scrollbar-none">
+                <div className="flex-1 flex flex-col justify-between py-6 max-w-md mx-auto w-full">
+                    {/* App brand at top */}
+                    <div className="flex flex-col items-center py-4">
                     <motion.div
                         initial={{ scale: 0, rotate: -90 }}
                         animate={{ scale: 1, rotate: 0 }}
@@ -249,7 +250,7 @@ export function GoogleLoginScreen({ onLoginSuccess }: { onLoginSuccess: () => vo
                 </div>
 
                 {/* Main content area */}
-                <div className="flex-1 flex flex-col justify-end pb-16 px-6">
+                <div className="flex-1 flex flex-col justify-center px-6 py-4">
                     <motion.div
                         initial={{ opacity: 0, y: 30 }}
                         animate={{ opacity: 1, y: 0 }}
@@ -392,6 +393,7 @@ export function GoogleLoginScreen({ onLoginSuccess }: { onLoginSuccess: () => vo
                     </motion.div>
                 </div>
             </div>
+        </div>
 
             <AlertDialog open={showGuestWarning} onOpenChange={setShowGuestWarning}>
                 <AlertDialogContent className="w-[90vw] max-w-[400px] rounded-[2rem] bg-card border border-border/80 text-foreground">
