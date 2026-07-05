@@ -198,19 +198,19 @@ export function GoogleLoginScreen({ onLoginSuccess }: { onLoginSuccess: () => vo
             <div className="relative z-10 flex flex-col h-full overflow-y-auto touch-pan-y pt-safe pb-safe px-safe scrollbar-none">
                 <div className="flex-1 flex flex-col justify-between py-6 max-w-md mx-auto w-full">
                     {/* App brand at top */}
-                    <div className="flex flex-col items-center py-4">
+                    <div className="flex flex-col items-center py-2 shrink-0">
                     <motion.div
                         initial={{ scale: 0, rotate: -90 }}
                         animate={{ scale: 1, rotate: 0 }}
                         transition={{ type: 'spring', stiffness: 200, damping: 15, delay: 0.2 }}
-                        className="w-20 h-20 rounded-2xl flex items-center justify-center mb-5"
+                        className="w-14 h-14 rounded-2xl flex items-center justify-center mb-2"
                         style={{
                             background: 'linear-gradient(135deg, rgba(251,191,36,0.18) 0%, rgba(167,139,250,0.1) 100%)',
                             border: '1px solid rgba(251,191,36,0.35)',
-                            boxShadow: '0 0 40px rgba(251,191,36,0.25), 0 0 80px rgba(139,92,246,0.15)',
+                            boxShadow: '0 0 30px rgba(251,191,36,0.2), 0 0 60px rgba(139,92,246,0.1)',
                         }}
                     >
-                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none">
+                        <svg width="36" height="36" viewBox="0 0 24 24" fill="none">
                             <circle cx="12" cy="12" r="8" stroke="rgba(251,191,36,0.5)" strokeWidth="0.6" strokeDasharray="2 2.2" fill="none" />
                             {[0,1,2,3,4,5,6,7,8,9,10].map((i) => {
                                 const angle = (i / 11) * 2 * Math.PI - Math.PI / 2;
@@ -228,7 +228,7 @@ export function GoogleLoginScreen({ onLoginSuccess }: { onLoginSuccess: () => vo
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.4 }}
-                        className="text-4xl font-bold tracking-tight mb-1"
+                        className="text-2xl font-bold tracking-tight mb-0.5"
                         style={{
                             background: 'linear-gradient(135deg, #fbbf24, #f472b6, #a78bfa)',
                             WebkitBackgroundClip: 'text',
@@ -242,7 +242,7 @@ export function GoogleLoginScreen({ onLoginSuccess }: { onLoginSuccess: () => vo
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         transition={{ delay: 0.6 }}
-                        className="text-sm tracking-widest animate-pulse"
+                        className="text-xs tracking-widest animate-pulse"
                         style={{ color: 'rgba(251,191,36,0.6)' }}
                     >
                         Spiritual Journey Sync
@@ -252,28 +252,28 @@ export function GoogleLoginScreen({ onLoginSuccess }: { onLoginSuccess: () => vo
                 {/* Main content area */}
                 <div className="flex-1 flex flex-col justify-center px-6 py-4">
                     <motion.div
-                        initial={{ opacity: 0, y: 30 }}
+                        initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.4, delay: 0.5 }}
-                        className="space-y-6 w-full max-w-md mx-auto"
+                        className="space-y-4 w-full max-w-md mx-auto"
                     >
-                        <div className="text-center space-y-2">
-                            <h2 className="text-2xl font-bold text-white flex items-center justify-center gap-2" style={{ fontFamily: "'Outfit', sans-serif" }}>
-                                <Lock className="w-5 h-5 text-[#fbbf24] animate-pulse" />
+                        <div className="text-center space-y-1">
+                            <h2 className="text-xl font-bold text-white flex items-center justify-center gap-2" style={{ fontFamily: "'Outfit', sans-serif" }}>
+                                <Lock className="w-4 h-4 text-[#fbbf24] animate-pulse" />
                                 App Protected
                             </h2>
-                            <p className="text-white/60 text-sm leading-relaxed max-w-xs mx-auto">
+                            <p className="text-white/60 text-xs leading-relaxed max-w-xs mx-auto">
                                 Please sign in to sync your Tasbeeh counts, streaks, and custom dhikrs automatically.
                             </p>
                         </div>
 
-                        <form onSubmit={handleEmailAuth} className="space-y-4">
+                        <form onSubmit={handleEmailAuth} className="space-y-3">
                             <input
                                 type="email"
                                 placeholder="Email address"
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
-                                className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-[#fbbf24]/50 transition-all"
+                                className="w-full px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-[#fbbf24]/50 transition-all text-sm"
                                 required
                             />
                             {!isForgotPassword && (
@@ -282,7 +282,7 @@ export function GoogleLoginScreen({ onLoginSuccess }: { onLoginSuccess: () => vo
                                     placeholder="Password"
                                     value={password}
                                     onChange={(e) => setPassword(e.target.value)}
-                                    className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-[#fbbf24]/50 transition-all"
+                                    className="w-full px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-[#fbbf24]/50 transition-all text-sm"
                                     required
                                 />
                             )}
@@ -292,7 +292,7 @@ export function GoogleLoginScreen({ onLoginSuccess }: { onLoginSuccess: () => vo
                                     placeholder="Confirm Password"
                                     value={confirmPassword}
                                     onChange={(e) => setConfirmPassword(e.target.value)}
-                                    className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-[#fbbf24]/50 transition-all"
+                                    className="w-full px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-[#fbbf24]/50 transition-all text-sm"
                                     required
                                 />
                             )}
@@ -313,19 +313,19 @@ export function GoogleLoginScreen({ onLoginSuccess }: { onLoginSuccess: () => vo
                                 whileTap={{ scale: 0.97 }}
                                 type="submit"
                                 disabled={signingIn}
-                                className="w-full py-3 rounded-xl font-semibold text-white/90 bg-white/10 border border-white/20 hover:bg-white/20 transition-all flex items-center justify-center"
+                                className="w-full py-2.5 rounded-xl font-semibold text-white/90 bg-white/10 border border-white/20 hover:bg-white/20 transition-all flex items-center justify-center text-sm"
                             >
                                 {signingIn ? (
-                                    <div className="w-5 h-5 border-2 border-white/50 border-t-transparent rounded-full animate-spin" />
+                                    <div className="w-4 h-4 border-2 border-white/50 border-t-transparent rounded-full animate-spin" />
                                 ) : (
                                     isForgotPassword ? "Send Reset Link" : (isSignUp ? "Sign Up" : "Sign In")
                                 )}
                             </motion.button>
                         </form>
 
-                        <div className="flex items-center justify-between text-sm text-white/50">
+                        <div className="flex items-center justify-between text-xs text-white/50">
                             <div className="h-px bg-white/10 flex-1" />
-                            <span className="px-4">OR</span>
+                            <span className="px-3">OR</span>
                             <div className="h-px bg-white/10 flex-1" />
                         </div>
 
@@ -334,7 +334,7 @@ export function GoogleLoginScreen({ onLoginSuccess }: { onLoginSuccess: () => vo
                             onClick={handleLogin}
                             disabled={signingIn}
                             type="button"
-                            className="w-full py-4 rounded-2xl font-semibold text-base flex items-center justify-center gap-3 transition-all cursor-pointer shadow-[0_8px_32px_rgba(251,191,36,0.25)] border border-[#fbbf24]/40"
+                            className="w-full py-3 rounded-2xl font-semibold text-sm flex items-center justify-center gap-3 transition-all cursor-pointer shadow-[0_6px_24px_rgba(251,191,36,0.2)] border border-[#fbbf24]/40"
                             style={{
                                 background: 'linear-gradient(135deg, #fbbf24, #f59e0b)',
                                 color: '#1a0a2e',
@@ -354,7 +354,7 @@ export function GoogleLoginScreen({ onLoginSuccess }: { onLoginSuccess: () => vo
                                 <button
                                     type="button"
                                     onClick={() => setIsForgotPassword(false)}
-                                    className="text-sm text-white/70 hover:text-white transition-colors"
+                                    className="text-xs text-white/70 hover:text-white transition-colors"
                                 >
                                     Back to Sign In
                                 </button>
@@ -362,7 +362,7 @@ export function GoogleLoginScreen({ onLoginSuccess }: { onLoginSuccess: () => vo
                                 <button
                                     type="button"
                                     onClick={() => setIsSignUp(!isSignUp)}
-                                    className="text-sm text-white/70 hover:text-white transition-colors"
+                                    className="text-xs text-white/70 hover:text-white transition-colors"
                                 >
                                     {isSignUp ? "Already have an account? Sign In" : "Don't have an account? Sign Up"}
                                 </button>
@@ -370,11 +370,11 @@ export function GoogleLoginScreen({ onLoginSuccess }: { onLoginSuccess: () => vo
                         </div>
 
                         {!isForgotPassword && (
-                            <div className="text-center pt-2">
+                            <div className="text-center pt-1.5">
                                 <button
                                     type="button"
                                     onClick={handleContinueAsGuest}
-                                    className="text-sm font-semibold text-[#fbbf24] hover:text-[#fbbf24]/80 transition-colors cursor-pointer"
+                                    className="text-xs font-semibold text-[#fbbf24] hover:text-[#fbbf24]/80 transition-colors cursor-pointer"
                                     style={{ fontFamily: "'Outfit', sans-serif" }}
                                 >
                                     Continue as Guest (Offline Mode)
@@ -382,10 +382,10 @@ export function GoogleLoginScreen({ onLoginSuccess }: { onLoginSuccess: () => vo
                             </div>
                         )}
 
-                        <div className="text-center pt-4 border-t border-white/10">
+                        <div className="text-center pt-3 border-t border-white/10">
                             <Link
                                 to="/privacy"
-                                className="text-xs text-white/40 hover:text-white/70 transition-colors underline underline-offset-4"
+                                className="text-[11px] text-white/40 hover:text-white/70 transition-colors underline underline-offset-4"
                             >
                                 Privacy Policy
                             </Link>
