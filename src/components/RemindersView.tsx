@@ -26,36 +26,42 @@ interface RemindersViewProps {
 }
 
 export function RemindersView({ children }: RemindersViewProps) {
+    const [open, setOpen] = useState(false);
+
     return (
-        <Sheet>
+        <Sheet open={open} onOpenChange={setOpen}>
             <SheetTrigger asChild>{children}</SheetTrigger>
             <SheetContent side="bottom" className="bg-sheet-bg rounded-t-3xl h-[92vh] p-0 overflow-hidden flex flex-col">
                 <SheetDescription className="sr-only">
                     Configure and manage your dhikr reminders with smart suggestions.
                 </SheetDescription>
-                {/* Handle */}
-                <div className="flex justify-center pt-3 pb-1 shrink-0">
-                    <div className="w-10 h-1 rounded-full bg-muted-foreground/30" />
-                </div>
-                {/* Sticky header */}
-                <SheetHeader className="px-5 pb-3 shrink-0 border-b border-border/20">
-                    <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-2.5">
-                            <div
-                                className="w-8 h-8 rounded-xl flex items-center justify-center"
-                                style={{
-                                    background: 'hsl(var(--primary) / 0.12)',
-                                    border: '1px solid hsl(var(--primary) / 0.2)',
-                                }}
-                            >
-                                <Bell size={15} className="text-primary" />
-                            </div>
-                            <SheetTitle className="text-base font-semibold">Reminders</SheetTitle>
+                {open && (
+                    <>
+                        {/* Handle */}
+                        <div className="flex justify-center pt-3 pb-1 shrink-0">
+                            <div className="w-10 h-1 rounded-full bg-muted-foreground/30" />
                         </div>
-                        <AddReminderButton />
-                    </div>
-                </SheetHeader>
-                <RemindersContent />
+                        {/* Sticky header */}
+                        <SheetHeader className="px-5 pb-3 shrink-0 border-b border-border/20">
+                            <div className="flex items-center justify-between">
+                                <div className="flex items-center gap-2.5">
+                                    <div
+                                        className="w-8 h-8 rounded-xl flex items-center justify-center"
+                                        style={{
+                                            background: 'hsl(var(--primary) / 0.12)',
+                                            border: '1px solid hsl(var(--primary) / 0.2)',
+                                        }}
+                                    >
+                                        <Bell size={15} className="text-primary" />
+                                    </div>
+                                    <SheetTitle className="text-base font-semibold">Reminders</SheetTitle>
+                                </div>
+                                <AddReminderButton />
+                            </div>
+                        </SheetHeader>
+                        <RemindersContent />
+                    </>
+                )}
             </SheetContent>
         </Sheet>
     );

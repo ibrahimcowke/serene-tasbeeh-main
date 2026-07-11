@@ -148,18 +148,24 @@ function DuaLibraryContent() {
 
 export function DuaLibraryView({ children }: DuaLibraryViewProps) {
   const { t, isRTL } = useTranslation();
+  const [open, setOpen] = useState(false);
+
   return (
-    <Sheet>
+    <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger asChild>{children}</SheetTrigger>
       <SheetContent side="bottom" className="bg-sheet-bg rounded-t-3xl h-[88vh]" dir={isRTL ? "rtl" : "ltr"}>
         <SheetDescription className="sr-only">
           Browse and read common Islamic duas.
         </SheetDescription>
-        <div className="sheet-handle" />
-        <SheetHeader className="text-left pb-4">
-          <SheetTitle className="text-lg font-medium">{t('duas.title')}</SheetTitle>
-        </SheetHeader>
-        <DuaLibraryContent />
+        {open && (
+          <>
+            <div className="sheet-handle" />
+            <SheetHeader className="text-left pb-4">
+              <SheetTitle className="text-lg font-medium">{t('duas.title')}</SheetTitle>
+            </SheetHeader>
+            <DuaLibraryContent />
+          </>
+        )}
       </SheetContent>
     </Sheet>
   );

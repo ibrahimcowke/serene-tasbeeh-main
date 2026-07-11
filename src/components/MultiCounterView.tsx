@@ -192,68 +192,72 @@ export function MultiCounterView({ children }: MultiCounterViewProps) {
       <SheetTrigger asChild>{children}</SheetTrigger>
       <SheetContent side="bottom" className="bg-sheet-bg rounded-t-3xl h-[90vh] flex flex-col" dir={isRTL ? 'rtl' : 'ltr'}>
         <SheetDescription className="sr-only">Count multiple dhikrs simultaneously.</SheetDescription>
-        <div className="sheet-handle mx-auto mt-3 mb-1 bg-muted shrink-0 w-10 h-1 rounded-full" />
-        <SheetHeader className="text-left px-6 pt-2 pb-3 shrink-0">
-          <SheetTitle className="text-lg font-medium flex items-center gap-2">
-            <Hash className="w-5 h-5" style={{ color: 'hsl(var(--primary))' }} />
-            {t('multi.title')}
-          </SheetTitle>
-        </SheetHeader>
+        {open && (
+          <>
+            <div className="sheet-handle mx-auto mt-3 mb-1 bg-muted shrink-0 w-10 h-1 rounded-full" />
+            <SheetHeader className="text-left px-6 pt-2 pb-3 shrink-0">
+              <SheetTitle className="text-lg font-medium flex items-center gap-2">
+                <Hash className="w-5 h-5" style={{ color: 'hsl(var(--primary))' }} />
+                {t('multi.title')}
+              </SheetTitle>
+            </SheetHeader>
 
-        {/* Total */}
-        <div className="px-6 pb-3 shrink-0">
-          <div
-            className="flex items-center justify-between px-5 py-3 rounded-xl"
-            style={{
-              background: 'linear-gradient(135deg, hsl(var(--primary) / 0.1), hsl(var(--accent) / 0.06))',
-              border: '1px solid hsl(var(--primary) / 0.2)',
-            }}
-          >
-            <span className="text-sm font-medium" style={{ color: 'hsl(var(--muted-foreground))' }}>
-              {t('multi.total')}
-            </span>
-            <motion.span
-              key={total}
-              initial={{ scale: 1.2 }}
-              animate={{ scale: 1 }}
-              className={`${isRTL ? 'font-arabic' : 'font-sans'} text-2xl font-bold tabular-nums`}
-              style={{ color: 'hsl(var(--primary))' }}
-            >
-              {formatNumber(total, isRTL)}
-            </motion.span>
-          </div>
-        </div>
-
-        <ScrollArea className="flex-1 px-6">
-          <div className="space-y-3 pb-4">
-            {counters.map((counter) => (
-              <SingleCounter
-                key={counter.id}
-                counter={counter}
-                onIncrement={() => handleIncrement(counter.id)}
-                onDecrement={() => handleDecrement(counter.id)}
-                onChangeDhikr={(d) => handleChangeDhikr(counter.id, d)}
-                onRemove={() => handleRemove(counter.id)}
-                canRemove={counters.length > 1}
-              />
-            ))}
-
-            {counters.length < 4 && (
-              <motion.button
-                whileTap={{ scale: 0.96 }}
-                onClick={handleAdd}
-                className="w-full py-3 rounded-2xl text-sm font-medium flex items-center justify-center gap-2 border-dashed border-2 transition-colors"
+            {/* Total */}
+            <div className="px-6 pb-3 shrink-0">
+              <div
+                className="flex items-center justify-between px-5 py-3 rounded-xl"
                 style={{
-                  borderColor: 'hsl(var(--primary) / 0.3)',
-                  color: 'hsl(var(--primary) / 0.7)',
+                  background: 'linear-gradient(135deg, hsl(var(--primary) / 0.1), hsl(var(--accent) / 0.06))',
+                  border: '1px solid hsl(var(--primary) / 0.2)',
                 }}
               >
-                <Plus className="w-4 h-4" />
-                {t('multi.add_counter')}
-              </motion.button>
-            )}
-          </div>
-        </ScrollArea>
+                <span className="text-sm font-medium" style={{ color: 'hsl(var(--muted-foreground))' }}>
+                  {t('multi.total')}
+                </span>
+                <motion.span
+                  key={total}
+                  initial={{ scale: 1.2 }}
+                  animate={{ scale: 1 }}
+                  className={`${isRTL ? 'font-arabic' : 'font-sans'} text-2xl font-bold tabular-nums`}
+                  style={{ color: 'hsl(var(--primary))' }}
+                >
+                  {formatNumber(total, isRTL)}
+                </motion.span>
+              </div>
+            </div>
+
+            <ScrollArea className="flex-1 px-6">
+              <div className="space-y-3 pb-4">
+                {counters.map((counter) => (
+                  <SingleCounter
+                    key={counter.id}
+                    counter={counter}
+                    onIncrement={() => handleIncrement(counter.id)}
+                    onDecrement={() => handleDecrement(counter.id)}
+                    onChangeDhikr={(d) => handleChangeDhikr(counter.id, d)}
+                    onRemove={() => handleRemove(counter.id)}
+                    canRemove={counters.length > 1}
+                  />
+                ))}
+
+                {counters.length < 4 && (
+                  <motion.button
+                    whileTap={{ scale: 0.96 }}
+                    onClick={handleAdd}
+                    className="w-full py-3 rounded-2xl text-sm font-medium flex items-center justify-center gap-2 border-dashed border-2 transition-colors"
+                    style={{
+                      borderColor: 'hsl(var(--primary) / 0.3)',
+                      color: 'hsl(var(--primary) / 0.7)',
+                    }}
+                  >
+                    <Plus className="w-4 h-4" />
+                    {t('multi.add_counter')}
+                  </motion.button>
+                )}
+              </div>
+            </ScrollArea>
+          </>
+        )}
       </SheetContent>
     </Sheet>
   );

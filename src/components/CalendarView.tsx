@@ -7,8 +7,10 @@ interface CalendarViewProps {
 }
 
 export function CalendarView({ children }: CalendarViewProps) {
+    const [open, setOpen] = React.useState(false);
+
     return (
-        <Sheet>
+        <Sheet open={open} onOpenChange={setOpen}>
             <SheetTrigger asChild>
                 {children}
             </SheetTrigger>
@@ -16,14 +18,18 @@ export function CalendarView({ children }: CalendarViewProps) {
                 <SheetDescription className="sr-only">
                     View your Hijri streak calendar.
                 </SheetDescription>
-                <div className="sheet-handle" />
-                <SheetHeader className="text-left pb-4">
-                    <SheetTitle className="text-lg font-medium">Calendar</SheetTitle>
-                </SheetHeader>
+                {open && (
+                    <>
+                        <div className="sheet-handle" />
+                        <SheetHeader className="text-left pb-4">
+                            <SheetTitle className="text-lg font-medium">Calendar</SheetTitle>
+                        </SheetHeader>
 
-                <div className="h-[calc(100%-40px)] overflow-y-auto pb-8">
-                    <StreakCalendar />
-                </div>
+                        <div className="h-[calc(100%-40px)] overflow-y-auto pb-8">
+                            <StreakCalendar />
+                        </div>
+                    </>
+                )}
             </SheetContent>
         </Sheet>
     );

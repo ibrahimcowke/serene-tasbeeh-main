@@ -157,55 +157,59 @@ export function AsmaulHusnaView({ children }: AsmaulHusnaViewProps) {
       <SheetTrigger asChild>{children}</SheetTrigger>
       <SheetContent side="bottom" className="bg-sheet-bg rounded-t-3xl h-[90vh] flex flex-col" dir={isRTL ? 'rtl' : 'ltr'}>
         <SheetDescription className="sr-only">Browse and count the 99 Names of Allah.</SheetDescription>
-        <div className="sheet-handle mx-auto mt-3 mb-1 bg-muted shrink-0 w-10 h-1 rounded-full" />
-        <SheetHeader className="text-left px-6 pt-2 pb-3 shrink-0">
-          <SheetTitle className="text-lg font-medium flex items-center gap-2">
-            <Star className="w-5 h-5" style={{ color: 'hsl(var(--primary))' }} />
-            {t('names.title')}
-          </SheetTitle>
-          <p className="text-xs" style={{ color: 'hsl(var(--muted-foreground))' }}>
-            {t('names.subtitle')}
-          </p>
-        </SheetHeader>
+        {open && (
+          <>
+            <div className="sheet-handle mx-auto mt-3 mb-1 bg-muted shrink-0 w-10 h-1 rounded-full" />
+            <SheetHeader className="text-left px-6 pt-2 pb-3 shrink-0">
+              <SheetTitle className="text-lg font-medium flex items-center gap-2">
+                <Star className="w-5 h-5" style={{ color: 'hsl(var(--primary))' }} />
+                {t('names.title')}
+              </SheetTitle>
+              <p className="text-xs" style={{ color: 'hsl(var(--muted-foreground))' }}>
+                {t('names.subtitle')}
+              </p>
+            </SheetHeader>
 
-        {/* Search */}
-        <div className="px-6 pb-3 shrink-0">
-          <div className="relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4" style={{ color: 'hsl(var(--muted-foreground))' }} />
-            <Input
-              placeholder={t('names.search')}
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              className="pl-10 rounded-xl"
-              style={{ background: 'hsl(var(--card) / 0.6)' }}
-            />
-          </div>
-        </div>
+            {/* Search */}
+            <div className="px-6 pb-3 shrink-0">
+              <div className="relative">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4" style={{ color: 'hsl(var(--muted-foreground))' }} />
+                <Input
+                  placeholder={t('names.search')}
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                  className="pl-10 rounded-xl"
+                  style={{ background: 'hsl(var(--card) / 0.6)' }}
+                />
+              </div>
+            </div>
 
-        {/* Stats bar */}
-        <div className="px-6 pb-3 shrink-0">
-          <div
-            className="flex items-center gap-3 px-4 py-2 rounded-xl"
-            style={{
-              background: 'hsl(var(--primary) / 0.08)',
-              border: '1px solid hsl(var(--primary) / 0.2)',
-            }}
-          >
-            <Sparkles className="w-4 h-4 shrink-0" style={{ color: 'hsl(var(--primary))' }} />
-            <p className="text-xs" style={{ color: 'hsl(var(--muted-foreground))' }}>
-              {filtered.length} / 99 names — Tap a name to expand, then count
-            </p>
-          </div>
-        </div>
+            {/* Stats bar */}
+            <div className="px-6 pb-3 shrink-0">
+              <div
+                className="flex items-center gap-3 px-4 py-2 rounded-xl"
+                style={{
+                  background: 'hsl(var(--primary) / 0.08)',
+                  border: '1px solid hsl(var(--primary) / 0.2)',
+                }}
+              >
+                <Sparkles className="w-4 h-4 shrink-0" style={{ color: 'hsl(var(--primary))' }} />
+                <p className="text-xs" style={{ color: 'hsl(var(--muted-foreground))' }}>
+                  {filtered.length} / 99 names — Tap a name to expand, then count
+                </p>
+              </div>
+            </div>
 
-        {/* List */}
-        <ScrollArea className="flex-1 px-6">
-          <div className="space-y-3 pb-8">
-            {filtered.map((entry) => (
-              <NameCard key={entry.number} entry={entry} onCount={handleCount} />
-            ))}
-          </div>
-        </ScrollArea>
+            {/* List */}
+            <ScrollArea className="flex-1 px-6">
+              <div className="space-y-3 pb-8">
+                {filtered.map((entry) => (
+                  <NameCard key={entry.number} entry={entry} onCount={handleCount} />
+                ))}
+              </div>
+            </ScrollArea>
+          </>
+        )}
       </SheetContent>
     </Sheet>
   );
