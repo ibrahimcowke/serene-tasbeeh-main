@@ -77,7 +77,7 @@ export type CounterShape =
   | 'bead-ring' | 'halo-ring' | 'vertical-capsules' | 'luminous-beads'
   | 'emerald-loop' | 'smart-ring' | 'moon-phase'
   | 'digital-watch' | 'star-burst' | 'crystal-prism' | 'tally-clicker'
-  | 'neumorph' | 'green-tally' | 'retro-lcd' | 'sunset-horizon';
+  | 'neumorph' | 'green-tally' | 'retro-lcd' | 'sunset-horizon' | 'crystal-orbit';
 
 export interface Reminder {
   id: string;

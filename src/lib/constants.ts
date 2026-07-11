@@ -35,6 +35,7 @@ export const counterShapes = [
   { id: 'green-tally', label: 'Green Tally', icon: '📟', color: '#10b981', bg: 'rgba(16, 185, 129, 0.1)' },
   { id: 'retro-lcd', label: 'Retro LCD', icon: '📟', color: '#8b9b82', bg: 'rgba(139, 155, 130, 0.1)' },
   { id: 'sunset-horizon', label: 'Sunset', icon: '🌅', color: '#f97316', bg: 'rgba(249, 115, 22, 0.1)' },
+  { id: 'crystal-orbit', label: 'Crystal Orbit', icon: '💎', color: '#3b82f6', bg: 'rgba(59, 130, 246, 0.1)' },
 ] as const;
 
 // Dashboard Layouts removed in favor of single default design

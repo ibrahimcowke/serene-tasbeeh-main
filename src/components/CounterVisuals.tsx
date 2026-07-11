@@ -18,6 +18,7 @@ import { Neumorph } from './counter-shapes/Neumorph';
 import { SunsetHorizon } from './counter-shapes/SunsetHorizon';
 import { RetroLCD } from './counter-shapes/RetroLCD';
 import { DigitalVisuals } from './counter-shapes/DigitalVisuals';
+import { CrystalOrbit } from './counter-shapes/CrystalOrbit';
 import { 
     ClassicVisuals, 
     CircularProgress, 
@@ -75,7 +76,7 @@ export const CounterNumber = memo(({
             transition={{ duration: 0.15, ease: [0.34, 1.56, 0.64, 1] }}
             className={`
   counter-number text-counter-text
-  ${['digital', 'vertical-capsules', 'tally-clicker', 'neumorph', 'digital-watch', 'retro-lcd', 'green-tally'].includes(counterShape) ? 'hidden' : ''}
+  ${['digital', 'vertical-capsules', 'tally-clicker', 'neumorph', 'digital-watch', 'retro-lcd', 'green-tally', 'crystal-orbit'].includes(counterShape) ? 'hidden' : ''}
   ${counterShape === 'classic' ? 'font-mono text-5xl sm:text-6xl md:text-7xl tracking-widest bg-black/10 px-4 sm:px-6 py-2 rounded-lg inset-shadow mb-4' : 'text-5xl sm:text-6xl md:text-7xl lg:text-8xl'}
   ${counterShape === 'waveform' ? 'drop-shadow-md z-10' : ''}
   ${counterShape === 'modern-ring' ? 'font-sans font-light tracking-tighter drop-shadow-[0_0_15px_currentColor]' : ''}
@@ -166,6 +167,7 @@ export const CounterVisuals = memo(({
                         {counterShape === 'green-tally' && <GreenTally currentCount={currentCount} />}
                         {counterShape === 'retro-lcd' && <RetroLCD progress={progress} currentCount={currentCount} />}
                         {counterShape === 'sunset-horizon' && <SunsetHorizon progress={progress} currentCount={currentCount} />}
+                        {counterShape === 'crystal-orbit' && <CrystalOrbit progress={progress} currentCount={currentCount} />}
                 </div>
 
                 {/* Global Aura Pulse Effekt - triggers on count change */}
@@ -198,7 +200,7 @@ export const CounterVisuals = memo(({
         ${counterShape === 'luminous-beads' ? 'w-64 h-64 rounded-full flex items-center justify-center bg-transparent z-10' : ''}
         
         ${counterShape === 'bead-ring' ? 'w-64 h-64 flex items-center justify-center bg-transparent z-10' : ''}
-        ${['emerald-loop', 'smart-ring', 'moon-phase', 'star-burst', 'crystal-prism', 'tally-clicker', 'neumorph', 'green-tally', 'digital-watch', 'retro-lcd', 'sunset-horizon'].includes(counterShape) ? 'w-64 h-64 flex items-center justify-center bg-transparent z-10' : ''}
+        ${['emerald-loop', 'smart-ring', 'moon-phase', 'star-burst', 'crystal-prism', 'tally-clicker', 'neumorph', 'green-tally', 'digital-watch', 'retro-lcd', 'sunset-horizon', 'crystal-orbit'].includes(counterShape) ? 'w-64 h-64 flex items-center justify-center bg-transparent z-10' : ''}
 
         flex items-center justify-center
         cursor-pointer
