@@ -18,6 +18,17 @@ interface CrystalOrbitProps {
 export const CrystalOrbit = memo(function CrystalOrbit({ progress, currentCount }: CrystalOrbitProps) {
   const { isRTL } = useTranslation();
   const language = useTasbeehStore(state => state.language);
+  const theme = useTasbeehStore(state => state.theme);
+
+  // On light/glass themes the background is bright — use dark ink for legibility
+  const isLightTheme = theme === 'light' || theme === 'theme-glass';
+  const counterColor = isLightTheme ? '#0f172a' : '#f8fafc';
+  const counterShadow = isLightTheme
+    ? '0 1px 4px rgba(0,0,0,0.15)'
+    : '0 0 15px rgba(255,255,255,0.25), 0 2px 10px rgba(0,0,0,0.3)';
+  const badgeColor = isLightTheme ? 'rgba(0,0,0,0.55)' : 'rgba(255,255,255,0.65)';
+  const badgeBg = isLightTheme ? 'rgba(0,0,0,0.06)' : 'rgba(255,255,255,0.05)';
+  const badgeBorder = isLightTheme ? 'rgba(0,0,0,0.12)' : 'rgba(255,255,255,0.10)';
   
   const ROUND_SIZE = 33;
   const beadPosition = currentCount % ROUND_SIZE;
@@ -234,8 +245,8 @@ export const CrystalOrbit = memo(function CrystalOrbit({ progress, currentCount 
           style={{
             fontSize: currentCount >= 1000 ? '2rem' : '2.8rem',
             fontWeight: 800,
-            color: '#f8fafc',
-            textShadow: '0 0 15px rgba(255, 255, 255, 0.25), 0 2px 10px rgba(0, 0, 0, 0.3)',
+            color: counterColor,
+            textShadow: counterShadow,
             letterSpacing: '-0.02em',
           }}
         >
@@ -244,10 +255,12 @@ export const CrystalOrbit = memo(function CrystalOrbit({ progress, currentCount 
 
         {roundCount > 0 && (
           <span
-            className={`mt-1.5 px-2 py-0.5 rounded-full text-[9px] sm:text-[10px] tracking-wide font-medium backdrop-blur-sm bg-white/5 border border-white/10`}
-            style={{ 
-              color: 'rgba(255, 255, 255, 0.65)',
-              textShadow: '0 1px 2px rgba(0,0,0,0.2)' 
+            className={`mt-1.5 px-2 py-0.5 rounded-full text-[9px] sm:text-[10px] tracking-wide font-medium backdrop-blur-sm border`}
+            style={{
+              color: badgeColor,
+              background: badgeBg,
+              borderColor: badgeBorder,
+              textShadow: isLightTheme ? 'none' : '0 1px 2px rgba(0,0,0,0.2)'
             }}
           >
             {toArabicNumerals(roundCount, isRTL)} {isRTL ? '× ٣٣' : '× 33'}
