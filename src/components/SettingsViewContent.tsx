@@ -33,7 +33,7 @@ import { GoogleLogin } from './GoogleLogin';
 
 const SHAPE_CATEGORIES = [
   { title: 'Essential', list: ['plain', 'minimal', 'classic', 'beads', 'waveform'] },
-  { title: 'Luminous', list: ['ring-light', 'halo-ring', 'luminous-beads', 'star-burst'] },
+  { title: 'Luminous', list: ['ring-light', 'halo-ring', 'luminous-beads', 'star-burst', 'crystal-orbit'] },
   { title: 'Modern', list: ['flower', 'modern-ring', 'moon-phase', 'neumorph', 'sunset-horizon'] },
   { title: 'Objects & 3D', list: ['vintage-wood', 'digital', 'bead-ring', 'digital-watch', 'tally-clicker', 'green-tally', 'retro-lcd'] },
   { title: 'Tech & Abstract', list: ['vertical-capsules', 'emerald-loop', 'smart-ring', 'crystal-prism'] }
