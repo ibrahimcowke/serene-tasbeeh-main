@@ -160,6 +160,10 @@ export default defineConfig(({ mode }) => ({
       "@": path.resolve(__dirname, "./src"),
     },
   },
+  esbuild: mode === "production" ? {
+    drop: ["console", "debugger"],
+    legalComments: "none",
+  } : {},
   build: {
     // Reverting to default esbuild minification to fix production issue
     outDir: "dist",

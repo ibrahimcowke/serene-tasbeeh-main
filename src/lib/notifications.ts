@@ -24,6 +24,22 @@ const ENGAGING_MESSAGES = [
 
 export const NotificationManager = {
   /**
+   * Check permission status without prompting.
+   * Returns 'granted', 'denied', or 'prompt'.
+   */
+  async checkPermission(): Promise<'granted' | 'denied' | 'prompt'> {
+    try {
+      const check = await LocalNotifications.checkPermissions();
+      return check.display;
+    } catch (e) {
+      if ('Notification' in window) {
+        return Notification.permission as 'granted' | 'denied' | 'prompt';
+      }
+      return 'denied';
+    }
+  },
+
+  /**
    * Request native OS permission to display notifications.
    * Returns true if permission was granted, false otherwise.
    */

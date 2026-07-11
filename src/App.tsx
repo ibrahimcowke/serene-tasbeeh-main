@@ -16,12 +16,13 @@ const CongratsPopup = lazy(() => import("./components/CongratsPopup").then(m => 
 const PWAInstallPrompt = lazy(() => import("./components/PWAInstallPrompt").then(m => ({ default: m.PWAInstallPrompt })));
 const PrayerTimesPermissionModal = lazy(() => import("./components/PrayerTimesPermissionModal").then(m => ({ default: m.PrayerTimesPermissionModal })));
 const AmbientSoundPlayer = lazy(() => import("./components/AmbientSoundPlayer").then(m => ({ default: m.AmbientSoundPlayer })));
-import { registerPeriodicSync } from "./lib/notifications";
+import { registerPeriodicSync, NotificationManager } from "./lib/notifications";
 import { useTasbeehStore } from "./store/tasbeehStore";
 import { scheduleLazyDayNotification, cancelLazyDayNotification } from "./lib/lazyDayRecovery";
 import { ErrorBoundary } from "./components/ErrorBoundary";
 const GoogleLoginScreen = lazy(() => import("./components/GoogleLoginScreen").then(m => ({ default: m.GoogleLoginScreen })));
 import { useState } from "react";
+import { toast } from "sonner";
 
 
 const queryClient = new QueryClient();
@@ -59,6 +60,56 @@ const App = () => {
       cancelLazyDayNotification();
     }
   }, [lazyDayRecoveryEnabled]);
+
+  // Suggest notifications after 2 minutes of app usage if not enabled yet
+  useEffect(() => {
+    const suggestNotifications = async () => {
+      const store = useTasbeehStore.getState();
+      
+      // If reminders are already enabled in the store, no need to suggest
+      if (store.reminderEnabled) return;
+
+      // If we already suggested in this session/ever, do not suggest again
+      const hasSuggested = localStorage.getItem('tasbeehly_notif_suggested');
+      if (hasSuggested === 'true') return;
+
+      // Check permission status
+      const permission = await NotificationManager.checkPermission();
+      if (permission === 'granted') return;
+
+      toast("Don't miss your daily Dhikr!", {
+        description: "Enable reminders and daily notifications to keep up with your goals.",
+        action: {
+          label: "Enable",
+          onClick: async () => {
+            const granted = await NotificationManager.requestPermission();
+            if (granted) {
+              store.setReminderEnabled(true);
+              toast.success("Notifications and reminders enabled!");
+            } else {
+              if ('Notification' in window) {
+                const webPermission = await Notification.requestPermission();
+                if (webPermission === 'granted') {
+                  store.setReminderEnabled(true);
+                  toast.success("Notifications and reminders enabled!");
+                  return;
+                }
+              }
+              toast.error("Permission denied. You can enable them later in Settings.");
+            }
+          }
+        },
+        duration: 8000,
+      });
+
+      // Mark as suggested so we don't prompt again
+      localStorage.setItem('tasbeehly_notif_suggested', 'true');
+    };
+
+    const timer = setTimeout(suggestNotifications, 120000); // 2 minutes
+
+    return () => clearTimeout(timer);
+  }, []);
 
   useEffect(() => {
     const handleGuestChange = () => {

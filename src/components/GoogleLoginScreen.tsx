@@ -59,9 +59,31 @@ export function GoogleLoginScreen({ onLoginSuccess }: { onLoginSuccess: () => vo
             // Trigger Capacitor Native Google Sign-In
             // webClientId (client_type 3) is required to receive a valid idToken from Google
             const WEB_CLIENT_ID = '207821527708-slddpn0mmr3r5phjn4q75inp21k7h9br.apps.googleusercontent.com';
-            const result = await FirebaseAuthentication.signInWithGoogle({
-                customParameters: [{ key: 'client_id', value: WEB_CLIENT_ID }]
-            });
+            const result = await (async () => {
+                try {
+                    return await FirebaseAuthentication.signInWithGoogle({
+                        customParameters: [{ key: 'client_id', value: WEB_CLIENT_ID }]
+                    });
+                } catch (googleError: any) {
+                    const errorStr = (googleError?.message || String(googleError)).toLowerCase();
+                    const isCancel = errorStr.includes('cancel') || errorStr.includes('popup-closed-by-user');
+                    
+                    if (!isCancel) {
+                        console.warn("Google Sign-In via Credential Manager failed. Retrying with legacy flow...", googleError);
+                        try {
+                            return await FirebaseAuthentication.signInWithGoogle({
+                                customParameters: [{ key: 'client_id', value: WEB_CLIENT_ID }],
+                                useCredentialManager: false
+                            });
+                        } catch (retryError) {
+                            console.error("Legacy Google Sign-In also failed: ", retryError);
+                            throw retryError;
+                        }
+                    } else {
+                        throw googleError;
+                    }
+                }
+            })();
             
             let idToken = result.credential?.idToken;
             if (!idToken && (result.credential || result.user)) {
