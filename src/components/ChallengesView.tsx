@@ -75,13 +75,16 @@ export function ChallengesView({ children }: { children: ReactNode }) {
 }
 
 export function ChallengesViewContent({ isPage = false }: { isPage?: boolean }) {
-    const { startTasbih100, startTasbih1000, totalAllTime } = useTasbeehStore(useShallow(state => ({
+    const { startTasbih100, startTasbih1000, totalAllTime, setDailyGoal, setTarget } = useTasbeehStore(useShallow(state => ({
         startTasbih100: state.startTasbih100,
         startTasbih1000: state.startTasbih1000,
-        totalAllTime: state.totalAllTime
+        totalAllTime: state.totalAllTime,
+        setDailyGoal: state.setDailyGoal,
+        setTarget: state.setTarget
     })));
     const [tab, setTab] = useState<'challenges' | 'history'>('challenges');
     const [completedCount, setCompletedCount] = useState(0);
+    const [customTarget, setCustomTarget] = useState(100);
 
     const activeChallenges: any[] = [];
     const invites: any[] = [];
@@ -144,20 +147,63 @@ export function ChallengesViewContent({ isPage = false }: { isPage?: boolean }) 
                             <span className="text-[9px] font-black text-muted-foreground/50 uppercase tracking-[0.2em] px-1">Solo Practice</span>
                             <div className="grid grid-cols-2 gap-2">
                                 <button onClick={() => { startTasbih100(undefined); toast.success('⚡ 100 Sprint started!'); }}
-                                    className="flex items-center gap-2 p-3 rounded-xl bg-yellow-500/5 border border-yellow-500/15 hover:bg-yellow-500/10 transition-all group">
-                                    <Zap className="w-4 h-4 text-yellow-400 group-hover:scale-110 transition-transform" />
+                                    className="flex items-center gap-2 p-3 rounded-xl bg-yellow-500/5 border border-yellow-500/15 hover:bg-yellow-500/10 transition-all group text-left">
+                                    <Zap className="w-4 h-4 text-yellow-400 group-hover:scale-110 transition-transform shrink-0" />
                                     <div className="flex flex-col items-start">
                                         <span className="text-[10px] font-black text-foreground">Sprint 100</span>
                                         <span className="text-[7px] text-muted-foreground font-bold">2.4k active globally</span>
                                     </div>
                                 </button>
                                 <button onClick={() => { startTasbih1000(undefined); toast.success('🎯 1000 Endurance started!'); }}
-                                    className="flex items-center gap-2 p-3 rounded-xl bg-blue-500/5 border border-blue-500/15 hover:bg-blue-500/10 transition-all group">
-                                    <Trophy className="w-4 h-4 text-blue-400 group-hover:scale-110 transition-transform" />
+                                    className="flex items-center gap-2 p-3 rounded-xl bg-blue-500/5 border border-blue-500/15 hover:bg-blue-500/10 transition-all group text-left">
+                                    <Trophy className="w-4 h-4 text-blue-400 group-hover:scale-110 transition-transform shrink-0" />
                                     <div className="flex flex-col items-start">
                                         <span className="text-[10px] font-black text-foreground">Endure 1000</span>
                                         <span className="text-[7px] text-muted-foreground font-bold">1.8k active globally</span>
                                     </div>
+                                </button>
+                            </div>
+                        </div>
+
+                        {/* Seasonal Events */}
+                        <div className="space-y-2">
+                            <span className="text-[9px] font-black text-muted-foreground/50 uppercase tracking-[0.2em] px-1">Seasonal Events</span>
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                                <button onClick={() => { setDailyGoal(100); toast.success('🌙 Ramadan Challenge Active: Daily goal set to 100!'); }}
+                                    className="flex items-center gap-3 p-3.5 rounded-xl bg-purple-500/5 border border-purple-500/15 hover:bg-purple-500/10 transition-all text-left">
+                                    <div className="p-2 rounded-lg bg-purple-500/10 text-purple-400">🕌</div>
+                                    <div>
+                                        <span className="text-[10px] font-black text-foreground">Ramadan Challenge</span>
+                                        <p className="text-[8px] text-muted-foreground">Maintain a 30-day streak during the holy month</p>
+                                    </div>
+                                </button>
+                                <button onClick={() => { setDailyGoal(1000); toast.success('🕋 Dhul Hijjah Challenge Active: Daily goal set to 1000!'); }}
+                                    className="flex items-center gap-3 p-3.5 rounded-xl bg-emerald-500/5 border border-emerald-500/15 hover:bg-emerald-500/10 transition-all text-left">
+                                    <div className="p-2 rounded-lg bg-emerald-500/10 text-emerald-400">🕋</div>
+                                    <div>
+                                        <span className="text-[10px] font-black text-foreground">Dhul Hijjah Devotion</span>
+                                        <p className="text-[8px] text-muted-foreground">10,000 total dhikr in first 10 days</p>
+                                    </div>
+                                </button>
+                            </div>
+                        </div>
+
+                        {/* Custom Challenge */}
+                        <div className="space-y-2.5 p-4 rounded-2xl bg-foreground/[0.02] border border-foreground/5">
+                            <span className="text-[9px] font-black text-muted-foreground/50 uppercase tracking-[0.2em]">Custom Challenge</span>
+                            <div className="flex gap-2">
+                                <input 
+                                    type="number" 
+                                    value={customTarget}
+                                    onChange={(e) => setCustomTarget(Math.max(1, parseInt(e.target.value) || 0))}
+                                    className="flex-1 px-3 py-2 rounded-xl bg-foreground/5 border border-border/20 text-xs text-foreground focus:outline-none"
+                                    placeholder="Enter target count"
+                                />
+                                <button 
+                                    onClick={() => { setTarget(customTarget); toast.success(`🎯 Custom Challenge started! Target: ${customTarget}`); }}
+                                    className="px-4 py-2 rounded-xl bg-primary text-primary-foreground text-[10px] font-black uppercase tracking-wider hover:bg-primary/95 transition-all"
+                                >
+                                    Start
                                 </button>
                             </div>
                         </div>

@@ -6,7 +6,7 @@ import { auth } from '../lib/firebase';
 import { useTasbeehStore } from '../store/tasbeehStore';
 import {
     Cloud, RefreshCw, LogOut, Download, Upload, Wifi, WifiOff,
-    CheckCircle2, AlertCircle, Loader2, Trash2
+    CheckCircle2, AlertCircle, Loader2, Trash2, FileText, Camera, History
 } from 'lucide-react';
 import { toast } from 'sonner';
 import {
@@ -181,6 +181,116 @@ export function CloudSyncCard() {
         toast.success('Backup exported!');
     };
 
+    const handlePdfExport = () => {
+        const printWindow = window.open('', '_blank');
+        if (!printWindow) {
+            toast.error('Pop-up blocked. Please allow popups for PDF export.');
+            return;
+        }
+
+        const dailyRows = storeState.dailyRecords.map((r: any) => `
+            <tr>
+                <td style="border: 1px solid #ddd; padding: 8px;">${r.date}</td>
+                <td style="border: 1px solid #ddd; padding: 8px; font-weight: bold;">${r.totalCount.toLocaleString()}</td>
+            </tr>
+        `).join('');
+
+        const html = `
+            <html>
+            <head>
+                <title>Serene Tasbeeh Progress Report</title>
+                <style>
+                    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; color: #1f2937; padding: 40px; }
+                    h1 { color: #d97706; margin-bottom: 5px; }
+                    .date { color: #6b7280; font-size: 12px; margin-bottom: 25px; }
+                    .stats { display: flex; gap: 15px; margin-bottom: 30px; }
+                    .card { border: 1px solid #e5e7eb; padding: 15px; border-radius: 12px; flex: 1; background: #f9fafb; }
+                    .card h3 { margin: 0 0 5px 0; font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; color: #4b5563; }
+                    .card p { margin: 0; font-size: 20px; font-weight: 800; color: #111827; }
+                    table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+                    th { background-color: #f3f4f6; text-align: left; border: 1px solid #e5e7eb; padding: 10px; font-size: 12px; color: #374151; }
+                    td { border: 1px solid #e5e7eb; padding: 10px; font-size: 12px; }
+                </style>
+            </head>
+            <body>
+                <h1>Tasbeehly Spiritual Progress Report</h1>
+                <p class="date">Report generated on: ${new Date().toLocaleDateString()}</p>
+                <div class="stats">
+                    <div class="card">
+                        <h3>Total Recitations</h3>
+                        <p>${storeState.totalAllTime.toLocaleString()}</p>
+                    </div>
+                    <div class="card">
+                        <h3>Current Streak</h3>
+                        <p>${storeState.streakDays} Days</p>
+                    </div>
+                    <div class="card">
+                        <h3>Longest Streak</h3>
+                        <p>${storeState.longestStreak} Days</p>
+                    </div>
+                </div>
+                <h2>Daily Recitation Log</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Dhikr Count</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${dailyRows}
+                    </tbody>
+                </table>
+                <script>
+                    window.onload = function() {
+                        window.print();
+                    }
+                </script>
+            </body>
+            </html>
+        `;
+
+        printWindow.document.write(html);
+        printWindow.document.close();
+    };
+
+    // Snapshot versioning states
+    const [snapshots, setSnapshots] = useState<{ id: string; timestamp: number; label: string; data: string }[]>(() => {
+        const saved = localStorage.getItem('tasbeehly_snapshots');
+        return saved ? JSON.parse(saved) : [];
+    });
+    const [showSnapshots, setShowSnapshots] = useState(false);
+
+    const handleCreateSnapshot = () => {
+        const dataStr = useTasbeehStore.getState().exportData();
+        const newSnap = {
+            id: `snap_${Date.now()}`,
+            timestamp: Date.now(),
+            label: `Snapshot ${snapshots.length + 1}`,
+            data: dataStr
+        };
+        const updated = [newSnap, ...snapshots].slice(0, 10);
+        setSnapshots(updated);
+        localStorage.setItem('tasbeehly_snapshots', JSON.stringify(updated));
+        toast.success('Snapshot created!');
+    };
+
+    const handleRestoreSnapshot = (data: string) => {
+        const success = useTasbeehStore.getState().importData(data);
+        if (success) {
+            toast.success('Restored data from snapshot successfully!');
+        } else {
+            toast.error('Failed to restore snapshot.');
+        }
+    };
+
+    const handleDeleteSnapshot = (id: string) => {
+        const updated = snapshots.filter(s => s.id !== id);
+        setSnapshots(updated);
+        localStorage.setItem('tasbeehly_snapshots', JSON.stringify(updated));
+        toast.success('Snapshot deleted.');
+    };
+
     const handleDeleteAccount = async () => {
         if (!confirmDelete) { setConfirmDelete(true); return; }
         const currentUser = auth.currentUser;
@@ -348,10 +458,77 @@ export function CloudSyncCard() {
                 {/* Export */}
                 <ActionButton
                     icon={<Download size={13} />}
-                    label="Export"
+                    label="JSON Export"
                     onClick={handleExport}
                 />
+
+                {/* PDF Export */}
+                <ActionButton
+                    icon={<FileText size={13} />}
+                    label="PDF Report"
+                    onClick={handlePdfExport}
+                />
+
+                {/* Snapshots Toggle */}
+                <ActionButton
+                    icon={<History size={13} />}
+                    label="Snapshots"
+                    onClick={() => setShowSnapshots(!showSnapshots)}
+                />
             </div>
+
+            {/* Collapsible Snapshots Panel */}
+            <AnimatePresence>
+                {showSnapshots && (
+                    <motion.div
+                        initial={{ opacity: 0, height: 0 }}
+                        animate={{ opacity: 1, height: "auto" }}
+                        exit={{ opacity: 0, height: 0 }}
+                        className="border-t border-border/20 bg-foreground/[0.02] p-4 space-y-3"
+                    >
+                        <div className="flex justify-between items-center">
+                            <span className="text-[10px] font-bold text-muted-foreground uppercase">Data Snapshots ({snapshots.length}/10)</span>
+                            <button
+                                onClick={handleCreateSnapshot}
+                                className="text-[10px] text-primary hover:underline font-bold flex items-center gap-1 cursor-pointer"
+                            >
+                                <Camera size={11} /> Take Snapshot
+                            </button>
+                        </div>
+
+                        {snapshots.length === 0 ? (
+                            <p className="text-[10px] text-muted-foreground text-center py-4 border border-dashed border-border/30 rounded-xl">
+                                No snapshots saved yet.
+                            </p>
+                        ) : (
+                            <div className="space-y-1.5 max-h-36 overflow-y-auto pr-1">
+                                {snapshots.map((snap) => (
+                                    <div key={snap.id} className="flex justify-between items-center p-2 rounded-xl bg-card border border-border/30 text-[10px]">
+                                        <div className="flex flex-col gap-0.5">
+                                            <span className="font-bold text-foreground">{snap.label}</span>
+                                            <span className="text-[8px] text-muted-foreground">{new Date(snap.timestamp).toLocaleString()}</span>
+                                        </div>
+                                        <div className="flex gap-2">
+                                            <button
+                                                onClick={() => handleRestoreSnapshot(snap.data)}
+                                                className="text-primary hover:underline font-bold cursor-pointer"
+                                            >
+                                                Restore
+                                            </button>
+                                            <button
+                                                onClick={() => handleDeleteSnapshot(snap.id)}
+                                                className="text-rose-500 hover:underline font-bold cursor-pointer"
+                                            >
+                                                Delete
+                                            </button>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        )}
+                    </motion.div>
+                )}
+            </AnimatePresence>
 
             {/* Footer */}
             <div className="px-4 pb-3.5 flex items-center justify-between border-t border-border/20 pt-2.5">

@@ -262,13 +262,14 @@ export function RemindersContent() {
         lazyDayRecoveryEnabled,
         setLazyDayRecoveryEnabled,
         sessions,
+        sessionMoodRatings,
     } = useTasbeehStore();
 
     const [settingsOpen, setSettingsOpen] = useState(false);
 
     const suggestions = useMemo(
-        () => getSmartSuggestions(sessions, reminders),
-        [sessions, reminders]
+        () => getSmartSuggestions(sessions, reminders, sessionMoodRatings),
+        [sessions, reminders, sessionMoodRatings]
     );
 
     const handleLocationChange = async (checked: boolean) => {

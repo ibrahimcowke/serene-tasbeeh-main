@@ -6,7 +6,7 @@ import { TrendingUp, Target, Award, Flame, BarChart3, Star } from 'lucide-react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { BarChart, Bar, XAxis, Tooltip, ResponsiveContainer, Cell, PieChart, Pie } from 'recharts';
+import { BarChart, Bar, XAxis, Tooltip, ResponsiveContainer, Cell, PieChart, Pie, LineChart, Line } from 'recharts';
 
 export function StatsViewContent() {
     const { dailyRecords: history, dailyGoal = 100, streakDays, sessions = [], personalBest = 0 } = useTasbeehStore(useShallow(state => ({
@@ -48,6 +48,48 @@ export function StatsViewContent() {
             count: record?.totalCount || 0,
         };
     }).reverse();
+
+    // Last 90 days data
+    const last90Days = Array.from({ length: 90 }, (_, i) => {
+        const date = new Date();
+        date.setDate(date.getDate() - i);
+        const dateStr = date.toISOString().split('T')[0];
+        const record = history.find(h => h.date === dateStr);
+        return {
+            date: dateStr,
+            day: date.getDate(),
+            count: record?.totalCount || 0,
+        };
+    }).reverse();
+
+    // All-time most used dhikr distribution data
+    const dhikrTotals: Record<string, number> = {};
+    (sessions || []).forEach(s => {
+      dhikrTotals[s.dhikrId] = (dhikrTotals[s.dhikrId] || 0) + s.count;
+    });
+    const pieData = Object.entries(dhikrTotals).map(([id, count]) => {
+      const name = id.charAt(0).toUpperCase() + id.slice(1).replace(/-/g, ' ');
+      return { name, value: count };
+    }).sort((a, b) => b.value - a.value).slice(0, 5);
+
+    // Mood ↔ Count Correlation data
+    const moodRatings = useTasbeehStore.getState().sessionMoodRatings || [];
+    const moodStats: Record<string, { totalCount: number; sessionCount: number }> = {};
+    moodRatings.forEach(r => {
+      const sess = (sessions || []).find(s => s.id === r.sessionId);
+      if (sess) {
+        if (!moodStats[r.mood]) {
+          moodStats[r.mood] = { totalCount: 0, sessionCount: 0 };
+        }
+        moodStats[r.mood].totalCount += sess.count;
+        moodStats[r.mood].sessionCount += 1;
+      }
+    });
+    const moodCorrelation = Object.entries(moodStats).map(([mood, stats]) => ({
+      mood: mood.charAt(0).toUpperCase() + mood.slice(1),
+      avgCount: Math.round(stats.totalCount / stats.sessionCount),
+      sessions: stats.sessionCount
+    })).sort((a, b) => b.avgCount - a.avgCount);
 
     const totalAllTime = history.reduce((sum, record) => sum + record.totalCount, 0);
     const averageDaily = history.length > 0 ? Math.round(totalAllTime / history.length) : 0;
@@ -274,62 +316,212 @@ export function StatsViewContent() {
                         </Card>
                     </TabsContent>
 
-                    <TabsContent value="distribution" className="space-y-4">
+                    <TabsContent value="week" className="space-y-4">
                         <Card className="border-none bg-card/50 shadow-none">
                             <CardHeader className="pb-2">
-                                <CardTitle className="text-base font-semibold">Dhikr Distribution</CardTitle>
+                                <CardTitle className="text-base font-semibold">Weekly Overview</CardTitle>
                                 <CardDescription>
-                                    Today's recitation mix
+                                    Total this week: {weekTotal.toLocaleString()} dhikr
                                 </CardDescription>
                             </CardHeader>
                             <CardContent>
                                 <div className="h-48 w-full mt-4">
                                     <ResponsiveContainer width="100%" height="100%">
-                                        <PieChart>
-                                            <Pie
-                                                data={Object.entries(todayRecord?.counts || {}).map(([id, count]) => ({
-                                                    name: id.charAt(0).toUpperCase() + id.slice(1).replace(/-/g, ' '),
-                                                    value: count
-                                                }))}
-                                                cx="50%"
-                                                cy="50%"
-                                                innerRadius={45}
-                                                outerRadius={65}
-                                                paddingAngle={8}
-                                                dataKey="value"
-                                                animationBegin={0}
-                                                animationDuration={1000}
-                                            >
-                                                {(Object.entries(todayRecord?.counts || {})).map((entry, index) => (
-                                                    <Cell key={`cell-${index}`} fill={`hsl(var(--primary) / ${0.3 + (index * 0.15)})`} className="stroke-background border-2" />
-                                                ))}
-                                            </Pie>
-                                            <Tooltip 
+                                        <BarChart data={last7Days}>
+                                            <XAxis 
+                                                dataKey="day" 
+                                                stroke="currentColor" 
+                                                fontSize={10} 
+                                                tickLine={false} 
+                                                axisLine={false}
+                                                className="text-muted-foreground"
+                                            />
+                                            <Tooltip
                                                 contentStyle={{ 
                                                     backgroundColor: 'hsl(var(--card))', 
                                                     borderRadius: '12px', 
                                                     border: '1px solid hsl(var(--border))',
+                                                    boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1)',
                                                     fontSize: '12px'
                                                 }}
+                                                itemStyle={{ color: 'hsl(var(--foreground))' }}
+                                                cursor={{ fill: 'hsl(var(--primary)/0.1)', radius: 8 }}
                                             />
-                                        </PieChart>
+                                            <Bar 
+                                                dataKey="count" 
+                                                radius={[4, 4, 0, 0]}
+                                                className="fill-primary"
+                                            >
+                                                {last7Days.map((entry, index) => (
+                                                    <Cell 
+                                                        key={`cell-${index}`} 
+                                                        fill={entry.date === today ? 'hsl(var(--primary))' : 'hsl(var(--primary)/0.3)'} 
+                                                    />
+                                                ))}
+                                            </Bar>
+                                        </BarChart>
                                     </ResponsiveContainer>
                                 </div>
                             </CardContent>
                         </Card>
                     </TabsContent>
 
-                    <TabsContent value="activity" className="space-y-4">
+                    <TabsContent value="month" className="space-y-6">
                         <Card className="border-none bg-card/50 shadow-none">
                             <CardHeader className="pb-2">
-                                <CardTitle className="text-base font-semibold">Daily Intensity</CardTitle>
+                                <CardTitle className="text-base font-semibold">30-Day Recitations</CardTitle>
                                 <CardDescription>
-                                    Your consistency over the last month
+                                    Monthly daily breakdown
                                 </CardDescription>
                             </CardHeader>
                             <CardContent>
-                                <div className="grid grid-cols-7 gap-1.5 mt-4">
-                                    {last30Days.map((day, i) => {
+                                <div className="h-40 w-full mt-2">
+                                    <ResponsiveContainer width="100%" height="100%">
+                                        <BarChart data={last30Days}>
+                                            <Tooltip
+                                                contentStyle={{ 
+                                                    backgroundColor: 'hsl(var(--card))', 
+                                                    borderRadius: '12px', 
+                                                    border: '1px solid hsl(var(--border))',
+                                                    fontSize: '12px'
+                                                }}
+                                                itemStyle={{ color: 'hsl(var(--foreground))' }}
+                                                cursor={{ fill: 'hsl(var(--primary)/0.1)', radius: 4 }}
+                                            />
+                                            <Bar 
+                                                dataKey="count" 
+                                                radius={[2, 2, 0, 0]}
+                                                className="fill-primary"
+                                            >
+                                                {last30Days.map((entry, index) => (
+                                                    <Cell 
+                                                        key={`cell-${index}`} 
+                                                        fill={entry.date === today ? 'hsl(var(--primary))' : 'hsl(var(--primary)/0.2)'} 
+                                                    />
+                                                ))}
+                                            </Bar>
+                                        </BarChart>
+                                    </ResponsiveContainer>
+                                </div>
+                            </CardContent>
+                        </Card>
+
+                        <Card className="border-none bg-card/50 shadow-none">
+                            <CardHeader className="pb-2">
+                                <CardTitle className="text-base font-semibold">90-Day Trend</CardTitle>
+                                <CardDescription>
+                                    Long-term progress line
+                                </CardDescription>
+                            </CardHeader>
+                            <CardContent>
+                                <div className="h-40 w-full mt-2">
+                                    <ResponsiveContainer width="100%" height="100%">
+                                        <LineChart data={last90Days}>
+                                            <Tooltip
+                                                contentStyle={{ 
+                                                    backgroundColor: 'hsl(var(--card))', 
+                                                    borderRadius: '12px', 
+                                                    border: '1px solid hsl(var(--border))',
+                                                    fontSize: '12px'
+                                                }}
+                                                itemStyle={{ color: 'hsl(var(--foreground))' }}
+                                            />
+                                            <Line 
+                                                type="monotone" 
+                                                dataKey="count" 
+                                                stroke="hsl(var(--primary))" 
+                                                strokeWidth={2}
+                                                dot={false}
+                                            />
+                                        </LineChart>
+                                    </ResponsiveContainer>
+                                </div>
+                            </CardContent>
+                        </Card>
+                    </TabsContent>
+
+                    <TabsContent value="distribution" className="space-y-6">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <Card className="border-none bg-card/50 shadow-none">
+                                <CardHeader className="pb-2">
+                                    <CardTitle className="text-sm font-semibold">Today's Focus</CardTitle>
+                                </CardHeader>
+                                <CardContent>
+                                    <div className="h-40 w-full flex items-center justify-center">
+                                        {Object.keys(todayRecord?.counts || {}).length === 0 ? (
+                                            <p className="text-xs text-muted-foreground">No dhikr recited today</p>
+                                        ) : (
+                                            <ResponsiveContainer width="100%" height="100%">
+                                                <PieChart>
+                                                    <Pie
+                                                        data={Object.entries(todayRecord?.counts || {}).map(([id, count]) => ({
+                                                            name: id.charAt(0).toUpperCase() + id.slice(1).replace(/-/g, ' '),
+                                                            value: count
+                                                        }))}
+                                                        cx="50%"
+                                                        cy="50%"
+                                                        innerRadius={35}
+                                                        outerRadius={55}
+                                                        paddingAngle={6}
+                                                        dataKey="value"
+                                                    >
+                                                        {(Object.entries(todayRecord?.counts || {})).map((entry, index) => (
+                                                            <Cell key={`cell-${index}`} fill={`hsl(var(--primary) / ${0.3 + (index * 0.15)})`} className="stroke-background border" />
+                                                        ))}
+                                                    </Pie>
+                                                    <Tooltip contentStyle={{ backgroundColor: 'hsl(var(--card))', borderRadius: '8px', border: '1px solid hsl(var(--border))', fontSize: '10px' }} />
+                                                </PieChart>
+                                            </ResponsiveContainer>
+                                        )}
+                                    </div>
+                                </CardContent>
+                            </Card>
+
+                            <Card className="border-none bg-card/50 shadow-none">
+                                <CardHeader className="pb-2">
+                                    <CardTitle className="text-sm font-semibold">All-Time Focus</CardTitle>
+                                </CardHeader>
+                                <CardContent>
+                                    <div className="h-40 w-full flex items-center justify-center">
+                                        {pieData.length === 0 ? (
+                                            <p className="text-xs text-muted-foreground">No sessions recorded yet</p>
+                                        ) : (
+                                            <ResponsiveContainer width="100%" height="100%">
+                                                <PieChart>
+                                                    <Pie
+                                                        data={pieData}
+                                                        cx="50%"
+                                                        cy="50%"
+                                                        innerRadius={35}
+                                                        outerRadius={55}
+                                                        paddingAngle={6}
+                                                        dataKey="value"
+                                                    >
+                                                        {pieData.map((entry, index) => (
+                                                            <Cell key={`cell-${index}`} fill={`hsl(var(--primary) / ${0.3 + (index * 0.15)})`} className="stroke-background border" />
+                                                        ))}
+                                                    </Pie>
+                                                    <Tooltip contentStyle={{ backgroundColor: 'hsl(var(--card))', borderRadius: '8px', border: '1px solid hsl(var(--border))', fontSize: '10px' }} />
+                                                </PieChart>
+                                            </ResponsiveContainer>
+                                        )}
+                                    </div>
+                                </CardContent>
+                            </Card>
+                        </div>
+                    </TabsContent>
+
+                    <TabsContent value="activity" className="space-y-6">
+                        <Card className="border-none bg-card/50 shadow-none">
+                            <CardHeader className="pb-2">
+                                <CardTitle className="text-base font-semibold">90-Day Heatmap</CardTitle>
+                                <CardDescription>
+                                    Consistency and intensity grid
+                                </CardDescription>
+                            </CardHeader>
+                            <CardContent>
+                                <div className="grid grid-cols-10 sm:grid-cols-15 gap-1.5 mt-4">
+                                    {last90Days.map((day, i) => {
                                         const intensity = day.count === 0 ? 0 
                                             : day.count < dailyGoal / 2 ? 1 
                                             : day.count < dailyGoal ? 2 
@@ -340,10 +532,10 @@ export function StatsViewContent() {
                                                 key={day.date}
                                                 initial={{ scale: 0 }}
                                                 animate={{ scale: 1 }}
-                                                transition={{ delay: i * 0.01 }}
+                                                transition={{ delay: i * 0.003 }}
                                                 className={`
-                                                    aspect-square rounded-sm border border-white/5
-                                                    ${intensity === 0 ? 'bg-muted/20' : ''}
+                                                    aspect-square rounded-[3px] border border-white/5
+                                                    ${intensity === 0 ? 'bg-muted/10' : ''}
                                                     ${intensity === 1 ? 'bg-primary/20' : ''}
                                                     ${intensity === 2 ? 'bg-primary/50' : ''}
                                                     ${intensity === 3 ? 'bg-primary' : ''}
@@ -354,9 +546,43 @@ export function StatsViewContent() {
                                     })}
                                 </div>
                                 <div className="flex justify-between items-center mt-4 text-[10px] text-muted-foreground uppercase tracking-widest font-medium px-1">
-                                    <span>{last30Days[0].date}</span>
+                                    <span>{last90Days[0].date}</span>
                                     <span>Today</span>
                                 </div>
+                            </CardContent>
+                        </Card>
+
+                        {/* Mood & Focus Insights */}
+                        <Card className="border-none bg-card/50 shadow-none">
+                            <CardHeader className="pb-2">
+                                <CardTitle className="text-base font-semibold">Mood & Focus Insights</CardTitle>
+                                <CardDescription>
+                                    Average dhikr count per session by mood
+                                </CardDescription>
+                            </CardHeader>
+                            <CardContent>
+                                {moodCorrelation.length === 0 ? (
+                                    <p className="text-xs text-muted-foreground text-center py-6">
+                                        Recite dhikr and log your mood to see correlation insights.
+                                    </p>
+                                ) : (
+                                    <div className="space-y-3 mt-2">
+                                        {moodCorrelation.map((item) => (
+                                            <div key={item.mood} className="space-y-1">
+                                                <div className="flex justify-between text-xs font-medium">
+                                                    <span>{item.mood}</span>
+                                                    <span className="text-primary">{item.avgCount} dhikr / session</span>
+                                                </div>
+                                                <div className="h-1.5 w-full bg-muted/30 rounded-full overflow-hidden">
+                                                    <div 
+                                                        className="h-full bg-primary rounded-full"
+                                                        style={{ width: `${Math.min(100, (item.avgCount / 100) * 100)}%` }}
+                                                    />
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                )}
                             </CardContent>
                         </Card>
                     </TabsContent>

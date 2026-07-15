@@ -52,14 +52,57 @@ function hasNearbyReminder(time: string, reminders: Reminder[]): boolean {
  */
 export function getSmartSuggestions(
   sessions: SessionRecord[],
-  existingReminders: Reminder[]
+  existingReminders: Reminder[],
+  moodRatings: { sessionId: string; mood: string; focus: number; timestamp: number }[] = []
 ): SmartSuggestion[] {
+  const suggestions: SmartSuggestion[] = [];
+
+  // 1. Mood-based nudges (highest priority)
+  if (moodRatings && moodRatings.length > 0) {
+    const lastRating = moodRatings[0];
+    if (lastRating.mood === 'repentant') {
+      suggestions.push({
+        time: '18:15',
+        label: 'Forgiveness (Istighfar)',
+        reason: 'Suggested because your logged mood was Repentant recently',
+        confidence: 0.95,
+      });
+    } else if (lastRating.mood === 'distracted') {
+      suggestions.push({
+        time: '12:45',
+        label: 'Focus & Refuge Dhikr',
+        reason: 'Recalling your intention to bring focus back',
+        confidence: 0.9,
+      });
+    }
+  }
+
+  // 2. Variety Nudges
+  if (sessions && sessions.length >= 4) {
+    const last4 = sessions.slice(0, 4);
+    const uniqueDhikrs = new Set(last4.map((s) => s.dhikrId));
+    if (uniqueDhikrs.size === 1) {
+      suggestions.push({
+        time: '09:15',
+        label: '99 Names Meditation',
+        reason: 'Try Allah\'s Names to diversify your daily remembrance',
+        confidence: 0.85,
+      });
+    }
+  }
+
   const thirtyDaysAgo = Date.now() - 30 * 24 * 60 * 60 * 1000;
   const recent = sessions.filter((s) => s.timestamp >= thirtyDaysAgo);
 
   if (recent.length < 3) {
     // Not enough data — return Islamic defaults filtered against existing reminders
-    return ISLAMIC_DEFAULTS.filter((s) => !hasNearbyReminder(s.time, existingReminders)).slice(0, 3);
+    const defaults = ISLAMIC_DEFAULTS.filter((s) => !hasNearbyReminder(s.time, existingReminders));
+    defaults.forEach((d) => {
+      if (suggestions.length < 3 && !suggestions.some((s) => s.time === d.time)) {
+        suggestions.push(d);
+      }
+    });
+    return suggestions.slice(0, 3);
   }
 
   // Bucket sessions by hour-of-day
@@ -75,7 +118,6 @@ export function getSmartSuggestions(
     .sort((a, b) => b.count - a.count);
 
   const maxCount = sortedHours[0]?.count || 1;
-  const suggestions: SmartSuggestion[] = [];
 
   for (const { hour, count } of sortedHours) {
     if (suggestions.length >= 3) break;
@@ -113,5 +155,5 @@ export function getSmartSuggestions(
     }
   }
 
-  return suggestions;
+  return suggestions.slice(0, 3);
 }

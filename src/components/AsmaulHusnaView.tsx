@@ -19,7 +19,7 @@ interface AsmaulHusnaViewProps {
   children: React.ReactNode;
 }
 
-function NameCard({ entry, onCount }: { entry: AsmaulHusnaEntry; onCount: () => void }) {
+function NameCard({ entry, onCount, onMeditate }: { entry: AsmaulHusnaEntry; onCount: () => void; onMeditate?: () => void }) {
   const [expanded, setExpanded] = useState(false);
   const [localCount, setLocalCount] = useState(0);
   const { isRTL } = useTranslation();
@@ -97,31 +97,42 @@ function NameCard({ entry, onCount }: { entry: AsmaulHusnaEntry; onCount: () => 
               background: 'hsl(var(--primary) / 0.03)',
             }}
           >
-            <div className="px-4 py-3 space-y-3">
-              <p className="text-sm leading-relaxed" style={{ color: 'hsl(var(--muted-foreground))' }}>
+            <div className="px-4 py-3 space-y-2.5">
+              <p className="text-xs leading-relaxed" style={{ color: 'hsl(var(--muted-foreground))' }}>
                 {entry.brief}
               </p>
-              <motion.button
-                whileTap={{ scale: 0.95 }}
-                onClick={handleCount}
-                className="w-full py-2.5 rounded-xl text-sm font-medium flex items-center justify-center gap-2 transition-all"
-                style={{
-                  background: 'hsl(var(--primary) / 0.15)',
-                  color: 'hsl(var(--primary))',
-                  border: '1px solid hsl(var(--primary) / 0.3)',
-                }}
-              >
-                <Sparkles className="w-4 h-4" />
-                {t('names.count_this')}
-                {localCount > 0 && (
-                    <span
-                      className={`ml-1 px-2 py-0.5 rounded-full text-xs font-bold ${isRTL ? 'font-arabic' : 'font-sans'}`}
-                      style={{ background: 'hsl(var(--primary))', color: 'hsl(var(--primary-foreground))' }}
-                    >
-                      {formatNumber(localCount, isRTL)}
-                    </span>
-                )}
-              </motion.button>
+              
+              <div className="grid grid-cols-2 gap-2 mt-1">
+                <motion.button
+                  whileTap={{ scale: 0.95 }}
+                  onClick={handleCount}
+                  className="py-2.5 rounded-xl text-xs font-semibold flex items-center justify-center gap-1.5 transition-all"
+                  style={{
+                    background: 'hsl(var(--primary) / 0.15)',
+                    color: 'hsl(var(--primary))',
+                    border: '1px solid hsl(var(--primary) / 0.3)',
+                  }}
+                >
+                  <Sparkles className="w-3.5 h-3.5" />
+                  {t('names.count_this')}
+                  {localCount > 0 && (
+                      <span
+                        className={`ml-1 px-2 py-0.5 rounded-full text-[10px] font-bold ${isRTL ? 'font-arabic' : 'font-sans'}`}
+                        style={{ background: 'hsl(var(--primary))', color: 'hsl(var(--primary-foreground))' }}
+                      >
+                        {formatNumber(localCount, isRTL)}
+                      </span>
+                  )}
+                </motion.button>
+
+                <motion.button
+                  whileTap={{ scale: 0.95 }}
+                  onClick={(e) => { e.stopPropagation(); onMeditate?.(); }}
+                  className="py-2.5 rounded-xl text-xs font-black uppercase tracking-wider flex items-center justify-center gap-1.5 transition-all bg-primary text-primary-foreground cursor-pointer"
+                >
+                  Meditate
+                </motion.button>
+              </div>
             </div>
           </motion.div>
         )}
@@ -134,7 +145,32 @@ export function AsmaulHusnaView({ children }: AsmaulHusnaViewProps) {
   const [open, setOpen] = useState(false);
   const [search, setSearch] = useState('');
   const increment = useTasbeehStore((s) => s.increment);
+  const setDhikr = useTasbeehStore((s) => s.setDhikr);
   const { t, isRTL } = useTranslation();
+
+  const getDayOfYear = () => {
+    const now = new Date();
+    const start = new Date(now.getFullYear(), 0, 0);
+    const diff = now.getTime() - start.getTime();
+    const oneDay = 1000 * 60 * 60 * 24;
+    return Math.floor(diff / oneDay);
+  };
+
+  const nameOfTheDay = useMemo(() => {
+    return asmaulHusna[getDayOfYear() % asmaulHusna.length];
+  }, []);
+
+  const handleMeditate = (entry: AsmaulHusnaEntry) => {
+    setDhikr({
+      id: `name_${entry.number}`,
+      arabic: entry.arabic,
+      translation: entry.meaning,
+      transliteration: entry.transliteration,
+      category: 'names'
+    });
+    toast.success(`${entry.transliteration} loaded into counter! 📿`);
+    setOpen(false);
+  };
 
   const filtered = useMemo(() => {
     const q = search.toLowerCase();
@@ -170,6 +206,36 @@ export function AsmaulHusnaView({ children }: AsmaulHusnaViewProps) {
               </p>
             </SheetHeader>
 
+            {/* Name of the Day widget */}
+            {!search && (
+              <div className="px-6 pb-4 shrink-0">
+                <div
+                  className="rounded-2xl p-4 border relative overflow-hidden bg-gradient-to-br from-primary/10 via-primary/5 to-transparent"
+                  style={{ borderColor: 'hsl(var(--primary) / 0.3)' }}
+                >
+                  <div className="flex justify-between items-start gap-4">
+                    <div>
+                      <span className="text-[9px] font-black uppercase tracking-widest text-primary">Name of the Day</span>
+                      <h3 className="text-sm font-bold text-foreground mt-0.5">{nameOfTheDay.transliteration}</h3>
+                      <p className="text-[11px] text-muted-foreground mt-1 leading-normal">{nameOfTheDay.meaning}</p>
+                    </div>
+                    <p 
+                      className="font-arabic text-3xl text-primary"
+                      style={{ fontFamily: "'Amiri', 'Traditional Arabic', serif", direction: 'rtl' }}
+                    >
+                      {nameOfTheDay.arabic}
+                    </p>
+                  </div>
+                  <button
+                    onClick={() => handleMeditate(nameOfTheDay)}
+                    className="w-full py-2 rounded-xl text-xs font-black uppercase tracking-wider bg-primary text-primary-foreground mt-3 hover:bg-primary/95 transition-all cursor-pointer"
+                  >
+                    Meditate with this Name
+                  </button>
+                </div>
+              </div>
+            )}
+
             {/* Search */}
             <div className="px-6 pb-3 shrink-0">
               <div className="relative">
@@ -204,7 +270,7 @@ export function AsmaulHusnaView({ children }: AsmaulHusnaViewProps) {
             <ScrollArea className="flex-1 px-6">
               <div className="space-y-3 pb-8">
                 {filtered.map((entry) => (
-                  <NameCard key={entry.number} entry={entry} onCount={handleCount} />
+                  <NameCard key={entry.number} entry={entry} onCount={handleCount} onMeditate={() => handleMeditate(entry)} />
                 ))}
               </div>
             </ScrollArea>

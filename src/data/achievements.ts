@@ -111,6 +111,94 @@ export const achievements: Achievement[] = [
         target: 1,
         condition: (state) => state.dailyProgress >= 1,
         getProgress: (state) => Math.min(state.dailyProgress || 0, 1)
+    },
+    {
+        id: 'dawn_seeker',
+        title: 'Dawn Seeker',
+        description: 'Completed a Dhikr session before 6:00 AM.',
+        icon: Sunrise,
+        color: 'text-amber-400',
+        type: 'time',
+        target: 1,
+        condition: (state) => state.isDawn === true,
+        getProgress: (state) => (state.isDawn ? 1 : 0)
+    },
+    {
+        id: 'night_owl',
+        title: 'Night Owl',
+        description: 'Completed a Dhikr session after 11:00 PM.',
+        icon: Moon,
+        color: 'text-sky-300',
+        type: 'time',
+        target: 1,
+        condition: (state) => state.isNight === true,
+        getProgress: (state) => (state.isNight ? 1 : 0)
+    },
+    {
+        id: 'fifty_kilo',
+        title: 'Grand Guardian',
+        description: 'Reached 50,000 total Dhikr.',
+        icon: Crown,
+        color: 'text-yellow-600',
+        type: 'count',
+        target: 50000,
+        condition: (state) => state.totalCount >= 50000,
+        getProgress: (state) => Math.min(state.totalCount || 0, 50000)
+    },
+    {
+        id: 'hundred_kilo',
+        title: 'Divine Connection',
+        description: 'Reached 100,000 total Dhikr.',
+        icon: Trophy,
+        color: 'text-rose-400',
+        type: 'count',
+        target: 100000,
+        condition: (state) => state.totalCount >= 100000,
+        getProgress: (state) => Math.min(state.totalCount || 0, 100000)
+    },
+    {
+        id: 'lightning_round',
+        title: 'Lightning Round',
+        description: 'Recited with average speed of 60+ taps/min.',
+        icon: Zap,
+        color: 'text-cyan-400',
+        type: 'count',
+        target: 1,
+        condition: (state) => state.maxSpeed >= 60,
+        getProgress: (state) => (state.maxSpeed >= 60 ? 1 : 0)
+    },
+    {
+        id: 'polyglot',
+        title: 'Diverse Remembrance',
+        description: 'Recited 5 or more different Dhikrs.',
+        icon: Medal,
+        color: 'text-pink-400',
+        type: 'count',
+        target: 5,
+        condition: (state) => (state.distinctDhikrsCount || 0) >= 5,
+        getProgress: (state) => Math.min(state.distinctDhikrsCount || 0, 5)
+    },
+    {
+        id: 'faithful',
+        title: 'Faithful Devotee',
+        description: 'Maintained a 7-day streak on the same Dhikr.',
+        icon: Target,
+        color: 'text-emerald-400',
+        type: 'streak',
+        target: 7,
+        condition: (state) => (state.sameDhikrStreak || 0) >= 7,
+        getProgress: (state) => Math.min(state.sameDhikrStreak || 0, 7)
+    },
+    {
+        id: 'time_investor',
+        title: 'Spiritual Hours',
+        description: 'Dedicated more than 1 hour in total sessions.',
+        icon: Trophy,
+        color: 'text-indigo-400',
+        type: 'time',
+        target: 3600,
+        condition: (state) => (state.totalDuration || 0) >= 3600,
+        getProgress: (state) => Math.min(state.totalDuration || 0, 3600)
     }
 ];
 

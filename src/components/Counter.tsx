@@ -8,12 +8,15 @@ import { DhikrHeader } from './counter/DhikrHeader';
 import { CounterDisplay } from './counter/CounterDisplay';
 import { CounterActions } from './counter/CounterActions';
 import { CounterFooter } from './counter/CounterFooter';
-import { SessionTimer } from './SessionTimer';
-import { HadithOfTheDayModal } from './HadithOfTheDay';
+import { WisdomModal } from './WisdomModal';
+import { NiyyahModal } from './NiyyahModal';
+import { PostPrayerFlow } from './PostPrayerFlow';
 import { MoodTracker } from './MoodTracker';
 import { useTranslation } from '@/lib/i18n';
 import { motion } from 'framer-motion';
 import { HadithSlider } from './HadithSlider';
+import { HandPlatter } from 'lucide-react';
+import { SessionTimer } from './SessionTimer';
 
 
 const announceMilestone = (count: number, lang: string) => {
@@ -64,10 +67,13 @@ export const Counter = memo(function Counter() {
   const voiceAnnouncementsEnabled = useTasbeehStore(state => state.voiceAnnouncementsEnabled);
   const currentDhikr = useTasbeehStore(state => state.currentDhikr);
   const hadithSlidePosition = useTasbeehStore(state => state.hadithSlidePosition);
+  const niyyah = useTasbeehStore(state => state.niyyah);
+  const startTasbih100 = useTasbeehStore(state => state.startTasbih100);
 
   const showMood = useTasbeehStore(state => state.showMoodTracker);
   const setShowMood = useTasbeehStore(state => state.setShowMoodTracker);
   const [showWisdom, setShowWisdom] = useState(false);
+  const [showNiyyah, setShowNiyyah] = useState(false);
   const [lastSessionId, setLastSessionId] = useState('');
   const [lastCount, setLastCount] = useState(0);
 
@@ -154,6 +160,31 @@ export const Counter = memo(function Counter() {
         <div className="flex flex-wrap items-center justify-center gap-2 mt-2.5">
           <SessionTimer />
 
+          {/* Intention Pill */}
+          <motion.button
+            whileHover={{ scale: 1.03 }}
+            whileTap={{ scale: 0.97 }}
+            onClick={() => setShowNiyyah(true)}
+            className="px-3 py-1 rounded-full text-[10px] sm:text-xs font-medium tracking-wide bg-primary/10 border border-primary/20 text-primary/80 hover:bg-primary/15 transition-all flex items-center gap-1.5 cursor-pointer"
+          >
+            <span>❤️</span>
+            <span>{niyyah ? 'Intention Set' : 'Set Intention'}</span>
+          </motion.button>
+
+          {/* Post-Prayer Flow Launcher */}
+          {sessionModeType === 'free' && (
+            <motion.button
+              whileHover={{ scale: 1.03 }}
+              whileTap={{ scale: 0.97 }}
+              onClick={() => startTasbih100()}
+              className="px-3 py-1 rounded-full text-[10px] sm:text-xs font-medium tracking-wide bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 hover:bg-emerald-500/15 transition-all flex items-center gap-1.5 cursor-pointer"
+            >
+              <HandPlatter className="w-3.5 h-3.5" />
+              <span>Post-Prayer Flow</span>
+            </motion.button>
+          )}
+
+          {/* Wisdom Pill */}
           <motion.button
             whileHover={{ scale: 1.03 }}
             whileTap={{ scale: 0.97 }}
@@ -177,10 +208,16 @@ export const Counter = memo(function Counter() {
         <CounterFooter />
       </div>
 
-      {/* Hadith/Wisdom Modal */}
-      <HadithOfTheDayModal
+      {/* Wisdom Modal */}
+      <WisdomModal
         open={showWisdom}
         onClose={() => setShowWisdom(false)}
+      />
+
+      {/* Niyyah Modal */}
+      <NiyyahModal
+        open={showNiyyah}
+        onClose={() => setShowNiyyah(false)}
       />
 
       {/* Mood Tracker */}
@@ -190,6 +227,9 @@ export const Counter = memo(function Counter() {
         sessionId={lastSessionId}
         countCompleted={lastCount}
       />
+
+      {/* Guided Post-Prayer Flow Overlay */}
+      <PostPrayerFlow />
     </div>
   );
 });

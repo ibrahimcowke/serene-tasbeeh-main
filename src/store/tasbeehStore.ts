@@ -199,6 +199,14 @@ export interface TasbeehState {
   lazyDayRecoveryEnabled: boolean;
   setLazyDayRecoveryEnabled: (enabled: boolean) => void;
 
+  niyyahPresets: string[];
+  dedicatedCounts: Record<string, number>;
+  customRoutines: any[];
+  favoriteDuaIds: string[];
+  addCustomRoutine: (routine: any) => void;
+  removeCustomRoutine: (id: string) => void;
+  toggleFavoriteDua: (id: string) => void;
+  incrementDedicatedCount: (name: string, count: number) => void;
 
   increment: () => void;
   decrement: () => void;
@@ -361,6 +369,17 @@ export const useTasbeehStore = create<TasbeehState>()(
       hapticPattern: 'default',
       autoStartPostPrayerTasbeeh: false,
       lazyDayRecoveryEnabled: true,
+      niyyahPresets: [
+        'For seeking forgiveness (Maghfirah)',
+        'For inner peace and patience (Sabr)',
+        'For gratitude (Shukr)',
+        'For protection and well-being',
+        'For parents and family',
+        'For the Muslim Ummah'
+      ],
+      dedicatedCounts: {},
+      customRoutines: [],
+      favoriteDuaIds: [],
 
       saveActiveSession: () => {
         const state = get();
@@ -397,6 +416,14 @@ export const useTasbeehStore = create<TasbeehState>()(
       setAutoStartPostPrayerTasbeeh: (enabled) => set({ autoStartPostPrayerTasbeeh: enabled }),
       setLazyDayRecoveryEnabled: (enabled) => set({ lazyDayRecoveryEnabled: enabled }),
       setShowMoodTracker: (open) => set({ showMoodTracker: open }),
+
+      addCustomRoutine: (routine) => set((s) => ({ customRoutines: [...s.customRoutines, { ...routine, id: `custom_routine_${Date.now()}` }] })),
+      removeCustomRoutine: (id) => set((s) => ({ customRoutines: s.customRoutines.filter(r => r.id !== id) })),
+      toggleFavoriteDua: (id) => set((s) => ({ favoriteDuaIds: s.favoriteDuaIds.includes(id) ? s.favoriteDuaIds.filter(fid => fid !== id) : [...s.favoriteDuaIds, id] })),
+      incrementDedicatedCount: (name, count) => set((s) => {
+        const current = s.dedicatedCounts[name] || 0;
+        return { dedicatedCounts: { ...s.dedicatedCounts, [name]: current + count } };
+      }),
 
       increment: () => {
         const state = get();
@@ -646,8 +673,8 @@ export const useTasbeehStore = create<TasbeehState>()(
       },
       startRoutine: (routineId) => {
         get().saveActiveSession();
-        const r = defaultRoutines.find(rou => rou.id === routineId); if (!r) return;
-        const step = r.steps[0]; const d = get().dhikrs.find(dh => dh.id === step.dhikrId) || defaultDhikrs[0];
+        const r = defaultRoutines.find(rou => rou.id === routineId) || get().customRoutines.find(rou => rou.id === routineId); if (!r) return;
+        const step = r.steps[0]; const d = get().dhikrs.find(dh => dh.id === step.dhikrId) || get().customDhikrs.find(dh => dh.id === step.dhikrId) || defaultDhikrs[0];
         set({ sessionMode: { type: 'routine', routineId, currentStepIndex: 0, steps: r.steps, isComplete: false }, currentDhikr: d, currentCount: 0, targetCount: step.target, sessionStartTime: Date.now() });
         syncWidget(0, d.transliteration);
       },
@@ -763,12 +790,31 @@ export const useTasbeehStore = create<TasbeehState>()(
         const dailyProgress = state.dailyGoal > 0 ? (todayCount / state.dailyGoal) : 0;
         const isFriday = new Date().getDay() === 5;
 
+        // Extended statistics for achievements
+        const totalDuration = (state.sessions || []).reduce((sum, s) => sum + s.duration, 0);
+        const maxSpeed = Math.max(...(state.sessions || []).map(s => s.avgSpeed), 0);
+        const distinctDhikrsCount = new Set((state.sessions || []).map(s => s.dhikrId)).size;
+        
+        let sameDhikrStreak = 0;
+        if (state.sessions && state.sessions.length > 0) {
+          const sessionsSorted = [...state.sessions].sort((a, b) => b.timestamp - a.timestamp);
+          const lastDhikr = sessionsSorted[0].dhikrId;
+          const lastDhikrDates = new Set(sessionsSorted.filter(s => s.dhikrId === lastDhikr).map(s => s.date));
+          sameDhikrStreak = lastDhikrDates.size;
+        }
+
         const stateProxy = {
           totalCount: state.totalAllTime,
           streakDays: state.streakDays || 0,
           currentCount: state.currentCount || 0,
           dailyProgress,
           isFriday,
+          isDawn: new Date().getHours() >= 4 && new Date().getHours() < 6,
+          isNight: new Date().getHours() >= 23 || new Date().getHours() < 4,
+          maxSpeed,
+          distinctDhikrsCount,
+          sameDhikrStreak,
+          totalDuration,
         };
 
         const newlyUnlocked: string[] = [];
@@ -829,6 +875,17 @@ export const useTasbeehStore = create<TasbeehState>()(
           sessionTimerActive: false,
           hapticPattern: 'default',
           autoStartPostPrayerTasbeeh: false,
+          niyyahPresets: [
+            'For seeking forgiveness (Maghfirah)',
+            'For inner peace and patience (Sabr)',
+            'For gratitude (Shukr)',
+            'For protection and well-being',
+            'For parents and family',
+            'For the Muslim Ummah'
+          ],
+          dedicatedCounts: {},
+          customRoutines: [],
+          favoriteDuaIds: [],
           ...state,
         };
         return state as TasbeehState;
@@ -839,6 +896,10 @@ export const useTasbeehStore = create<TasbeehState>()(
         // v2.1.0 persisted fields
         hasSeenWelcome: state.hasSeenWelcome, ambientSoundType: state.ambientSoundType, ambientSoundVolume: state.ambientSoundVolume, niyyah: state.niyyah, sessionMoodRatings: state.sessionMoodRatings, voiceAnnouncementsEnabled: state.voiceAnnouncementsEnabled, sessionTimerDuration: state.sessionTimerDuration, hapticPattern: state.hapticPattern,
         autoStartPostPrayerTasbeeh: state.autoStartPostPrayerTasbeeh,
+        niyyahPresets: state.niyyahPresets,
+        dedicatedCounts: state.dedicatedCounts,
+        customRoutines: state.customRoutines,
+        favoriteDuaIds: state.favoriteDuaIds,
       }),
     }
   )

@@ -1,10 +1,12 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Search, BookOpen, ChevronDown, ChevronUp } from "lucide-react";
+import { Search, BookOpen, ChevronDown, ChevronUp, Heart, Sparkles } from "lucide-react";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger, SheetDescription } from "@/components/ui/sheet";
 import { Input } from "@/components/ui/input";
 import { duas, duaCategories, type Dua } from "@/data/duas";
 import { useTranslation } from "@/lib/i18n";
+import { useTasbeehStore } from "@/store/tasbeehStore";
+import { toast } from "sonner";
 
 interface DuaLibraryViewProps {
   children: React.ReactNode;
@@ -22,6 +24,29 @@ const categoryIcons: Record<string, string> = {
 
 function DuaCard({ dua }: { dua: Dua }) {
   const [expanded, setExpanded] = useState(false);
+  const favoriteDuaIds = useTasbeehStore((s) => s.favoriteDuaIds) || [];
+  const toggleFavoriteDua = useTasbeehStore((s) => s.toggleFavoriteDua);
+  const setDhikr = useTasbeehStore((s) => s.setDhikr);
+
+  const isFavorited = favoriteDuaIds.includes(dua.id);
+
+  const handleFavorite = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    toggleFavoriteDua(dua.id);
+    toast.success(isFavorited ? 'Removed from favorites' : 'Added to favorites!');
+  };
+
+  const handleSetAsDhikr = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setDhikr({
+      id: dua.id,
+      arabic: dua.arabic,
+      translation: dua.translation,
+      transliteration: dua.transliteration,
+      category: dua.category
+    });
+    toast.success('Dua loaded into counter! 📿');
+  };
 
   return (
     <motion.div
@@ -46,7 +71,13 @@ function DuaCard({ dua }: { dua: Dua }) {
             {dua.transliteration}
           </p>
         </div>
-        <div className="shrink-0 pt-1">
+        <div className="shrink-0 pt-1 flex items-center gap-2">
+          <button 
+            onClick={handleFavorite}
+            className="p-1 hover:bg-white/5 rounded-full transition-colors cursor-pointer text-muted-foreground/60 hover:text-foreground"
+          >
+            <Heart className={`w-3.5 h-3.5 ${isFavorited ? 'text-rose-500 fill-rose-500' : ''}`} />
+          </button>
           {expanded ? (
             <ChevronUp className="w-4 h-4 text-muted-foreground" />
           ) : (
@@ -60,15 +91,22 @@ function DuaCard({ dua }: { dua: Dua }) {
           initial={{ opacity: 0, height: 0 }}
           animate={{ opacity: 1, height: "auto" }}
           exit={{ opacity: 0, height: 0 }}
-          className="px-4 pb-4 border-t border-border/30 pt-3 space-y-2"
+          className="px-4 pb-4 border-t border-border/30 pt-3 space-y-3"
         >
           <p className="text-sm text-foreground/90 leading-relaxed">
             {dua.translation}
           </p>
-          <div className="flex items-center gap-2">
+          
+          <div className="flex items-center justify-between gap-2 pt-1">
             <span className="text-xs px-2 py-0.5 rounded-full bg-primary/10 text-primary border border-primary/20 font-medium">
               {dua.source}
             </span>
+            <button
+              onClick={handleSetAsDhikr}
+              className="text-[10px] px-3 py-1.5 rounded-xl bg-primary text-primary-foreground hover:bg-primary/95 transition-all font-black uppercase tracking-wider cursor-pointer"
+            >
+              Set as Dhikr
+            </button>
           </div>
         </motion.div>
       )}
