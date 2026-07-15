@@ -106,7 +106,7 @@ const App = () => {
       localStorage.setItem('tasbeehly_notif_suggested', 'true');
     };
 
-    const timer = setTimeout(suggestNotifications, 120000); // 2 minutes
+    const timer = setTimeout(suggestNotifications, 60000); // 1 minute
 
     return () => clearTimeout(timer);
   }, []);
