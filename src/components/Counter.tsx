@@ -10,7 +10,6 @@ import { CounterActions } from './counter/CounterActions';
 import { CounterFooter } from './counter/CounterFooter';
 import { WisdomModal } from './WisdomModal';
 import { NiyyahModal } from './NiyyahModal';
-import { PostPrayerFlow } from './PostPrayerFlow';
 import { MoodTracker } from './MoodTracker';
 import { useTranslation } from '@/lib/i18n';
 import { motion } from 'framer-motion';
@@ -171,18 +170,6 @@ export const Counter = memo(function Counter() {
             <span>{niyyah ? 'Intention Set' : 'Set Intention'}</span>
           </motion.button>
 
-          {/* Post-Prayer Flow Launcher */}
-          {sessionModeType === 'free' && (
-            <motion.button
-              whileHover={{ scale: 1.03 }}
-              whileTap={{ scale: 0.97 }}
-              onClick={() => startTasbih100()}
-              className="px-3 py-1 rounded-full text-[10px] sm:text-xs font-medium tracking-wide bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 hover:bg-emerald-500/15 transition-all flex items-center gap-1.5 cursor-pointer"
-            >
-              <HandPlatter className="w-3.5 h-3.5" />
-              <span>Post-Prayer Flow</span>
-            </motion.button>
-          )}
 
           {/* Wisdom Pill */}
           <motion.button
@@ -228,8 +215,6 @@ export const Counter = memo(function Counter() {
         countCompleted={lastCount}
       />
 
-      {/* Guided Post-Prayer Flow Overlay */}
-      <PostPrayerFlow />
     </div>
   );
 });

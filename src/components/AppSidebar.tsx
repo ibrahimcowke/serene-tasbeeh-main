@@ -156,21 +156,6 @@ export function AppSidebar() {
                             </SidebarMenuItem>
 
 
-                            <SidebarMenuItem>
-                                <SidebarMenuButton asChild tooltip={t('sidebar.after_prayer')} size="lg">
-                                    <button
-                                        className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-left transition-all"
-                                        style={{ color: "hsl(var(--sidebar-foreground) / 0.85)" }}
-                                        onClick={() => {
-                                            startTasbih100();
-                                            setOpenMobile(false);
-                                        }}
-                                    >
-                                        <HandPlatter className="w-4 h-4 text-primary/70 shrink-0" />
-                                        <span className="text-sm font-light tracking-wide">{t('sidebar.after_prayer')}</span>
-                                    </button>
-                                </SidebarMenuButton>
-                            </SidebarMenuItem>
 
                             <SidebarMenuItem>
                                 <DuaLibraryView>
