@@ -36,15 +36,15 @@ export const CounterFooter = memo(function CounterFooter() {
           {/* All time count */}
           <div className="flex flex-col items-center">
             <span
-              className={`${isRTL ? 'font-arabic' : 'font-sans'} text-sm font-semibold animate-fade-in-up`}
+              className={`${isRTL ? 'font-arabic' : 'font-sans'} text-lg font-bold animate-fade-in-up`}
               style={{
-                color: 'hsl(var(--primary) / 0.8)',
-                textShadow: '0 0 10px hsl(var(--primary) / 0.3)'
+                color: 'hsl(var(--primary))',
+                textShadow: '0 0 12px hsl(var(--primary) / 0.4)'
               }}
             >
               {toArabicNumerals(totalAllTime, isRTL)}
             </span>
-            <span className="text-muted-foreground/60 text-[9px] uppercase tracking-widest mt-0.5">
+            <span className="text-foreground/75 text-[10px] font-semibold uppercase tracking-wider mt-1">
               {t('counter.total')}
             </span>
           </div>
@@ -52,21 +52,21 @@ export const CounterFooter = memo(function CounterFooter() {
           {/* Divider dot */}
           <div
             className="w-1 h-1 rounded-full"
-            style={{ backgroundColor: 'hsl(var(--primary) / 0.2)' }}
+            style={{ backgroundColor: 'hsl(var(--primary) / 0.4)' }}
           />
 
           {/* Current session rounds */}
           <div className="flex flex-col items-center">
             <span
-              className={`${isRTL ? 'font-arabic' : 'font-sans'} text-sm font-semibold`}
+              className={`${isRTL ? 'font-arabic' : 'font-sans'} text-lg font-bold`}
               style={{
-                color: 'hsl(var(--primary) / 0.8)',
-                textShadow: '0 0 10px hsl(var(--primary) / 0.3)'
+                color: 'hsl(var(--primary))',
+                textShadow: '0 0 12px hsl(var(--primary) / 0.4)'
               }}
             >
               {toArabicNumerals(roundsDone, isRTL)}
             </span>
-            <span className="text-muted-foreground/60 text-[9px] uppercase tracking-widest mt-0.5">
+            <span className="text-foreground/75 text-[10px] font-semibold uppercase tracking-wider mt-1">
               {t('counter.rounds')}
             </span>
           </div>
@@ -74,21 +74,21 @@ export const CounterFooter = memo(function CounterFooter() {
           {/* Divider dot */}
           <div
             className="w-1 h-1 rounded-full"
-            style={{ backgroundColor: 'hsl(var(--primary) / 0.2)' }}
+            style={{ backgroundColor: 'hsl(var(--primary) / 0.4)' }}
           />
 
           {/* Streak */}
           <div className="flex flex-col items-center">
             <span
-              className={`${isRTL ? 'font-arabic' : 'font-sans'} text-sm font-semibold`}
+              className={`${isRTL ? 'font-arabic' : 'font-sans'} text-lg font-bold`}
               style={{
-                color: 'hsl(var(--primary) / 0.8)',
-                textShadow: '0 0 10px hsl(var(--primary) / 0.3)'
+                color: 'hsl(var(--primary))',
+                textShadow: '0 0 12px hsl(var(--primary) / 0.4)'
               }}
             >
               {toArabicNumerals(streakDays, isRTL)}
             </span>
-            <span className="text-muted-foreground/60 text-[9px] uppercase tracking-widest mt-0.5">
+            <span className="text-foreground/75 text-[10px] font-semibold uppercase tracking-wider mt-1">
               {t('counter.streak')}
             </span>
           </div>
