@@ -23,11 +23,8 @@ import { DuaLibraryView } from "./DuaLibraryView";
 import { CalendarView } from "./CalendarView";
 import { QiblaCompass } from "./QiblaCompass";
 import { AsmaulHusnaView } from "./AsmaulHusnaView";
-import { MultiCounterView } from "./MultiCounterView";
 import { StatsShareCard } from "./StatsShareCard";
 import { DhikrPlannerView } from "./DhikrPlannerView";
-import { BreathingSessionSheet } from "./BreathingSessionSheet";
-import { GroupCircleView } from "./GroupCircleView";
 import { AiCompanionView } from "./AiCompanionView";
 import { useTasbeehStore } from "@/store/tasbeehStore";
 import { useTranslation } from "@/lib/i18n";
@@ -196,18 +193,6 @@ export function AppSidebar() {
                                 </AsmaulHusnaView>
                             </SidebarMenuItem>
 
-                            <SidebarMenuItem>
-                                <MultiCounterView>
-                                    <SidebarMenuButton asChild tooltip={t('nav.multi')} size="lg">
-                                        <button className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-left transition-all"
-                                            style={{ color: "hsl(var(--sidebar-foreground) / 0.85)" }}
-                                        >
-                                            <Hash className="w-4 h-4 text-primary/70 shrink-0" />
-                                            <span className="text-sm font-light tracking-wide">{t('nav.multi')}</span>
-                                        </button>
-                                    </SidebarMenuButton>
-                                </MultiCounterView>
-                            </SidebarMenuItem>
 
                             <SidebarMenuItem>
                                 <SidebarMenuButton asChild tooltip={t('mood.title')} size="lg">
@@ -238,31 +223,6 @@ export function AppSidebar() {
                                 </DhikrPlannerView>
                             </SidebarMenuItem>
 
-                            <SidebarMenuItem>
-                                <BreathingSessionSheet>
-                                    <SidebarMenuButton asChild tooltip="Breathing Session" size="lg">
-                                        <button className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-left transition-all"
-                                            style={{ color: "hsl(var(--sidebar-foreground) / 0.85)" }}
-                                        >
-                                            <Wind className="w-4 h-4 text-primary/70 shrink-0" />
-                                            <span className="text-sm font-light tracking-wide">Guided Breathing</span>
-                                        </button>
-                                    </SidebarMenuButton>
-                                </BreathingSessionSheet>
-                            </SidebarMenuItem>
-
-                            <SidebarMenuItem>
-                                <GroupCircleView>
-                                    <SidebarMenuButton asChild tooltip="Group Circle" size="lg">
-                                        <button className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-left transition-all"
-                                            style={{ color: "hsl(var(--sidebar-foreground) / 0.85)" }}
-                                        >
-                                            <Users className="w-4 h-4 text-primary/70 shrink-0" />
-                                            <span className="text-sm font-light tracking-wide">Group Circle</span>
-                                        </button>
-                                    </SidebarMenuButton>
-                                </GroupCircleView>
-                            </SidebarMenuItem>
 
                             <SidebarMenuItem>
                                 <AiCompanionView>
