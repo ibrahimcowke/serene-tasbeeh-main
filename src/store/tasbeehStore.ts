@@ -37,7 +37,8 @@ export type ThemeType =
   | 'light' | 'theme-midnight' | 'theme-glass' | 'theme-sunset' | 'theme-forest'
   | 'theme-oled'
   | 'theme-mecca-night' | 'theme-desert-starlight' | 'theme-ramadan-lantern' | 'theme-rose-bloom'
-  | 'theme-emerald-shine' | 'theme-cyberpunk-zen' | 'theme-ocean-depth' | 'theme-sakura-zen';
+  | 'theme-emerald-shine' | 'theme-cyberpunk-zen' | 'theme-ocean-depth' | 'theme-sakura-zen'
+  | 'theme-nordic-aurora' | 'theme-cosmic-nebula' | 'theme-solar-flare';
 
 export interface ThemeSettings {
   primary: string;
@@ -303,6 +304,9 @@ export const initialThemeSettings: Record<string, ThemeSettings> = {
   'theme-cyberpunk-zen': { ...defaultThemeSettings, primary: '#22d3ee', background: '#050508', card: '#0e0e16', text: '#e2e8f0', textMuted: '#f43f5e', border: '#1e1b4b', accent: '#ec4899', secondary: '#131322' },
   'theme-ocean-depth': { ...defaultThemeSettings, primary: '#06b6d4', background: '#040d1a', card: '#081930', text: '#e0f2fe', textMuted: '#06b6d4', border: '#0f2d54', accent: '#22d3ee', secondary: '#0b213f' },
   'theme-sakura-zen': { ...defaultThemeSettings, primary: '#db2777', background: '#fff1f2', card: '#ffffff', text: '#4c0519', textMuted: '#db2777', border: '#e2e8f0', accent: '#10b981', secondary: '#ffe4e6' },
+  'theme-nordic-aurora': { ...defaultThemeSettings, primary: '#10b981', background: '#070e1b', card: '#0d172a', text: '#e2e8f0', textMuted: '#94a3b8', border: '#1e293b', accent: '#818cf8', secondary: '#0f1d36' },
+  'theme-cosmic-nebula': { ...defaultThemeSettings, primary: '#8b5cf6', background: '#030206', card: '#0d0b14', text: '#faf5ff', textMuted: '#a78bfa', border: '#231c30', accent: '#ec4899', secondary: '#171223' },
+  'theme-solar-flare': { ...defaultThemeSettings, primary: '#f97316', background: '#0a0908', card: '#141210', text: '#fffbeb', textMuted: '#f59e0b', border: '#27221d', accent: '#fbbf24', secondary: '#1d1a16' },
 };
 
 const getDefaultSessionMode = (): SessionMode => ({ type: 'free' });

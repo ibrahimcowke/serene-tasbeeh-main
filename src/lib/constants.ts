@@ -10,6 +10,9 @@ export const themes = [
   { id: 'theme-oled', label: 'OLED', description: 'True black power saver' },
   { id: 'theme-mecca-night', label: 'Mecca Night', description: 'Deep purple & gold' },
   { id: 'theme-desert-starlight', label: 'Desert Star', description: 'Sand beige & blue' },
+  { id: 'theme-nordic-aurora', label: 'Nordic Aurora', description: 'Polar blue & neon green' },
+  { id: 'theme-cosmic-nebula', label: 'Cosmic Nebula', description: 'Space black & magenta' },
+  { id: 'theme-solar-flare', label: 'Solar Flare', description: 'Volcanic orange & gold' },
 ] as const;
 
 export const counterShapes = [
