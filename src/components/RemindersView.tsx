@@ -413,8 +413,8 @@ export function RemindersContent() {
                             {notificationsEnabled && (
                                 <SettingRow
                                     icon={<Sparkles size={14} className="text-primary" />}
-                                    title="Auto-Start Tasbih"
-                                    description="Auto-start 100 Tasbeeh when reminder fires"
+                                    title={<span>Auto-Start <strong className="font-extrabold text-primary">Tasbeeh</strong></span>}
+                                    description={<span>Auto-start 100 <strong className="font-bold text-foreground">Tasbeeh</strong> when reminder fires</span>}
                                     checked={autoStartPostPrayerTasbeeh}
                                     onCheckedChange={setAutoStartPostPrayerTasbeeh}
                                 />
@@ -488,8 +488,8 @@ function SettingRow({
     icon, title, description, checked, onCheckedChange,
 }: {
     icon: React.ReactNode;
-    title: string;
-    description: string;
+    title: React.ReactNode;
+    description: React.ReactNode;
     checked: boolean;
     onCheckedChange: (v: boolean) => void;
 }) {
