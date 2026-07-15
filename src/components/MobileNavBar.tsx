@@ -7,7 +7,6 @@ import { QiblaCompass } from "./QiblaCompass";
 import { useSidebar } from "@/components/ui/sidebar";
 import { motion } from "framer-motion";
 import { useTranslation } from "@/lib/i18n";
-
 // forwardRef so Radix UI dialogs (DhikrSelector, TargetSelector, RemindersView) can attach their ref
 const NavItem = forwardRef<HTMLButtonElement, {
   label: string;
@@ -17,13 +16,11 @@ const NavItem = forwardRef<HTMLButtonElement, {
   <motion.button
     ref={ref}
     onClick={onClick}
-    whileTap={{ scale: 0.93 }}
-    className="flex flex-col items-center justify-center w-full h-full gap-1 text-muted-foreground/70 hover:text-primary active:text-primary transition-all duration-200 cursor-pointer bg-transparent border-none outline-none group"
+    whileTap={{ scale: 0.95 }}
+    className="flex flex-col items-center justify-center w-full h-full gap-1 text-primary cursor-pointer bg-transparent border-none outline-none group"
   >
-    <div className="p-2 rounded-xl group-hover:bg-primary/10 group-active:bg-primary/20 transition-all duration-300">
-      <Icon className="w-5 h-5 group-hover:scale-110 transition-transform duration-300 text-foreground/80 group-hover:text-primary group-active:text-primary" />
-    </div>
-    <span className="text-[9px] tracking-wider uppercase font-semibold opacity-70 group-hover:opacity-100 group-hover:text-primary transition-all">{label}</span>
+    <Icon className="w-5 h-5 text-primary/90 group-hover:text-primary transition-colors" />
+    <span className="text-[9px] tracking-wider uppercase font-semibold text-primary/80 group-hover:text-primary transition-colors">{label}</span>
   </motion.button>
 ));
 NavItem.displayName = 'NavItem';
@@ -34,14 +31,15 @@ export function MobileNavBar() {
 
   return (
     <div
-      className="lg:hidden fixed bottom-6 left-4 right-4 z-50 max-w-md mx-auto rounded-[2rem] border border-white/[0.08] shadow-[0_12px_40px_rgba(0,0,0,0.45),inset_0_1px_1px_rgba(255,255,255,0.15)] overflow-hidden"
+      className="lg:hidden fixed bottom-0 left-0 right-0 z-50 pb-safe"
       style={{
-        background: 'linear-gradient(135deg, hsl(var(--card) / 0.85) 0%, hsl(var(--card) / 0.65) 100%)',
-        backdropFilter: 'blur(24px)',
-        WebkitBackdropFilter: 'blur(24px)',
+        background: 'hsl(var(--card) / 0.95)',
+        borderTop: '1px solid hsl(var(--border) / 0.5)',
+        backdropFilter: 'blur(16px)',
+        WebkitBackdropFilter: 'blur(16px)',
       }}
     >
-      <div className="flex justify-around items-center h-16 px-3">
+      <div className="flex justify-around items-center h-14 px-2">
         <DhikrSelector>
           <NavItem label={t('nav.dhikr')} icon={BookOpen} />
         </DhikrSelector>
@@ -59,14 +57,12 @@ export function MobileNavBar() {
         </QiblaCompass>
 
         <motion.button
-          whileTap={{ scale: 0.93 }}
+          whileTap={{ scale: 0.95 }}
           onClick={() => setOpenMobile(true)}
-          className="flex flex-col items-center justify-center w-full h-full gap-1 text-muted-foreground/70 hover:text-primary transition-all duration-200 group"
+          className="flex flex-col items-center justify-center w-full h-full gap-1 text-primary group"
         >
-          <div className="p-2 rounded-xl group-hover:bg-primary/10 group-active:bg-primary/20 transition-all duration-300">
-            <Grid className="w-5 h-5 group-hover:scale-110 transition-transform duration-300 text-foreground/80 group-hover:text-primary group-active:text-primary" />
-          </div>
-          <span className="text-[9px] tracking-wider uppercase font-semibold opacity-70 group-hover:opacity-100 group-hover:text-primary transition-all">{t('nav.menu')}</span>
+          <Grid className="w-5 h-5 text-primary/90 group-hover:text-primary transition-colors" />
+          <span className="text-[9px] tracking-wider uppercase font-semibold text-primary/80 group-hover:text-primary transition-colors">{t('nav.menu')}</span>
         </motion.button>
       </div>
     </div>
