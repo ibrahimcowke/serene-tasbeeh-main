@@ -118,6 +118,7 @@ export interface TasbeehState {
   showTransliteration: boolean;
   counterShape: CounterShape;
   countFontSize: number;
+  dhikrFontSize: number;
   dhikrTextPosition: 'top' | 'middle' | 'bottom' | 'none';
   verticalOffset: number;
   dhikrVerticalOffset: number;
@@ -232,6 +233,7 @@ export interface TasbeehState {
   setCounterVerticalOffset: (offset: number) => void;
   setCounterScale: (scale: number) => void;
   setCountFontSize: (scale: number) => void;
+  setDhikrFontSize: (scale: number) => void;
   setDhikrTextPosition: (pos: 'top' | 'middle' | 'bottom' | 'none') => void;
   setZenMode: (enabled: boolean) => void;
   setBreathingGuide: (enabled: boolean) => void;
@@ -350,7 +352,7 @@ const ACHIEVEMENT_CHECK_EVERY = 10;
 export const useTasbeehStore = create<TasbeehState>()(
   persist(
     (set, get) => ({
-      count: 0, currentCount: 0, targetCount: 33, totalAllTime: 0, dailyRecords: [], dailyGoal: 100, dhikrs: defaultDhikrs, customDhikrs: [], currentDhikr: defaultDhikrs[0], favoriteDhikrIds: [], theme: 'theme-midnight', themeSettings: initialThemeSettings, language: 'en', showTransliteration: true, counterShape: 'bead-ring', countFontSize: 1, dhikrTextPosition: 'middle', verticalOffset: 0, dhikrVerticalOffset: 0, counterVerticalOffset: 0, counterScale: 1, zenMode: false, autoThemeSwitch: false, shakeToReset: false, syncPrayerTimes: null, wakeLockEnabled: true, volumeButtonCounting: false, lastSeenVersion: '0.0.0', hadithSlideDuration: 8, hadithSlidePosition: 'bottom', breathingGuideEnabled: false, breathingGuideSpeed: 4, streakDays: 0, lastActiveDate: null, longestStreak: 0, unlockedAchievements: [], screenOffMode: false, sessionStartTime: null, sessionMode: getDefaultSessionMode(), notificationPermission: 'default', reminderEnabled: false, reminderTime: '18:00', reminders: [
+      count: 0, currentCount: 0, targetCount: 33, totalAllTime: 0, dailyRecords: [], dailyGoal: 100, dhikrs: defaultDhikrs, customDhikrs: [], currentDhikr: defaultDhikrs[0], favoriteDhikrIds: [], theme: 'theme-midnight', themeSettings: initialThemeSettings, language: 'en', showTransliteration: true, counterShape: 'bead-ring', countFontSize: 1, dhikrFontSize: 1, dhikrTextPosition: 'middle', verticalOffset: 0, dhikrVerticalOffset: 0, counterVerticalOffset: 0, counterScale: 1, zenMode: false, autoThemeSwitch: false, shakeToReset: false, syncPrayerTimes: null, wakeLockEnabled: true, volumeButtonCounting: false, lastSeenVersion: '0.0.0', hadithSlideDuration: 8, hadithSlidePosition: 'bottom', breathingGuideEnabled: false, breathingGuideSpeed: 4, streakDays: 0, lastActiveDate: null, longestStreak: 0, unlockedAchievements: [], screenOffMode: false, sessionStartTime: null, sessionMode: getDefaultSessionMode(), notificationPermission: 'default', reminderEnabled: false, reminderTime: '18:00', reminders: [
         { id: '1', time: '06:00', label: 'Fajr Dhikr', enabled: true, days: [0, 1, 2, 3, 4, 5, 6] },
         { id: '2', time: '13:00', label: 'Dhuhr Dhikr', enabled: true, days: [0, 1, 2, 3, 4, 5, 6] },
         { id: '3', time: '18:00', label: 'Maghrib Dhikr', enabled: true, days: [0, 1, 2, 3, 4, 5, 6] },
@@ -629,6 +631,7 @@ export const useTasbeehStore = create<TasbeehState>()(
       setCounterVerticalOffset: (offset) => set({ counterVerticalOffset: offset }),
       setCounterScale: (scale) => set({ counterScale: scale }),
       setCountFontSize: (scale) => set({ countFontSize: scale }),
+      setDhikrFontSize: (scale) => set({ dhikrFontSize: scale }),
       setDhikrTextPosition: (pos) => set({ dhikrTextPosition: pos }),
       setZenMode: (enabled) => set({ zenMode: enabled }),
       setBreathingGuide: (enabled) => set({ breathingGuideEnabled: enabled }),
@@ -895,7 +898,7 @@ export const useTasbeehStore = create<TasbeehState>()(
         return state as TasbeehState;
       },
       partialize: (state) => ({
-        currentDhikr: state.currentDhikr, currentCount: state.currentCount, targetCount: state.targetCount, showTransliteration: state.showTransliteration, themeSettings: state.themeSettings, theme: state.theme, language: state.language, zenMode: state.zenMode, counterShape: state.counterShape, hadithSlideDuration: state.hadithSlideDuration, hadithSlidePosition: state.hadithSlidePosition, dhikrTextPosition: state.dhikrTextPosition, verticalOffset: state.verticalOffset, dhikrVerticalOffset: state.dhikrVerticalOffset, counterVerticalOffset: state.counterVerticalOffset, counterScale: state.counterScale, countFontSize: state.countFontSize, dailyRecords: state.dailyRecords, totalAllTime: state.totalAllTime, totalHasanat: state.totalHasanat, customDhikrs: state.customDhikrs, streakDays: state.streakDays, lastActiveDate: state.lastActiveDate, longestStreak: state.longestStreak, sessionMode: state.sessionMode, dailyGoal: state.dailyGoal, favoriteDhikrIds: state.favoriteDhikrIds, lastSeenVersion: state.lastSeenVersion, autoThemeSwitch: state.autoThemeSwitch, shakeToReset: state.shakeToReset, syncPrayerTimes: state.syncPrayerTimes, wakeLockEnabled: state.wakeLockEnabled, volumeButtonCounting: state.volumeButtonCounting, unlockedAchievements: state.unlockedAchievements, screenOffMode: state.screenOffMode, notificationPermission: state.notificationPermission, reminderEnabled: state.reminderEnabled, reminderTime: state.reminderTime, reminders: state.reminders, autoCountInterval: state.autoCountInterval,
+        currentDhikr: state.currentDhikr, currentCount: state.currentCount, targetCount: state.targetCount, showTransliteration: state.showTransliteration, themeSettings: state.themeSettings, theme: state.theme, language: state.language, zenMode: state.zenMode, counterShape: state.counterShape, hadithSlideDuration: state.hadithSlideDuration, hadithSlidePosition: state.hadithSlidePosition, dhikrTextPosition: state.dhikrTextPosition, verticalOffset: state.verticalOffset, dhikrVerticalOffset: state.dhikrVerticalOffset, counterVerticalOffset: state.counterVerticalOffset, counterScale: state.counterScale, countFontSize: state.countFontSize, dhikrFontSize: state.dhikrFontSize, dailyRecords: state.dailyRecords, totalAllTime: state.totalAllTime, totalHasanat: state.totalHasanat, customDhikrs: state.customDhikrs, streakDays: state.streakDays, lastActiveDate: state.lastActiveDate, longestStreak: state.longestStreak, sessionMode: state.sessionMode, dailyGoal: state.dailyGoal, favoriteDhikrIds: state.favoriteDhikrIds, lastSeenVersion: state.lastSeenVersion, autoThemeSwitch: state.autoThemeSwitch, shakeToReset: state.shakeToReset, syncPrayerTimes: state.syncPrayerTimes, wakeLockEnabled: state.wakeLockEnabled, volumeButtonCounting: state.volumeButtonCounting, unlockedAchievements: state.unlockedAchievements, screenOffMode: state.screenOffMode, notificationPermission: state.notificationPermission, reminderEnabled: state.reminderEnabled, reminderTime: state.reminderTime, reminders: state.reminders, autoCountInterval: state.autoCountInterval,
         sessions: state.sessions, deviceUuid: state.deviceUuid,
         // v2.1.0 persisted fields
         hasSeenWelcome: state.hasSeenWelcome, ambientSoundType: state.ambientSoundType, ambientSoundVolume: state.ambientSoundVolume, niyyah: state.niyyah, sessionMoodRatings: state.sessionMoodRatings, voiceAnnouncementsEnabled: state.voiceAnnouncementsEnabled, sessionTimerDuration: state.sessionTimerDuration, hapticPattern: state.hapticPattern,

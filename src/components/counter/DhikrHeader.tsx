@@ -16,6 +16,7 @@ export const DhikrHeader = memo(function DhikrHeader() {
   const showTransliteration = useTasbeehStore(state => state.showTransliteration);
   const sessionMode = useTasbeehStore(state => state.sessionMode);
   const currentCount = useTasbeehStore(state => state.currentCount);
+  const dhikrFontSize = useTasbeehStore(state => state.dhikrFontSize || 1);
 
   const totalProgress = (() => {
     if (sessionMode.type === 'tasbih100') {
@@ -53,11 +54,12 @@ export const DhikrHeader = memo(function DhikrHeader() {
           exit={{ opacity: 0, scale: 1.05, y: 6 }}
           transition={{ duration: 0.35, ease: 'easeOut' }}
           onClick={handleRecite}
-          className="font-arabic text-xl xs:text-2xl sm:text-3xl md:text-4xl leading-relaxed cursor-pointer hover:opacity-85 select-none active:scale-95 transition-transform"
+          className="font-arabic leading-relaxed cursor-pointer hover:opacity-85 select-none active:scale-95 transition-transform"
           style={{
             color: 'hsl(var(--counter-text))',
             textShadow: '0 0 30px hsl(var(--counter-glow) / 0.3), 0 2px 8px rgba(0,0,0,0.4)',
             fontWeight: 400,
+            fontSize: `calc(${dhikrFontSize} * 2.2rem)`,
           }}
         >
           {currentDhikr.arabic}
@@ -74,7 +76,10 @@ export const DhikrHeader = memo(function DhikrHeader() {
             exit={{ opacity: 0 }}
             transition={{ duration: 0.2 }}
             onClick={handleRecite}
-            className="text-primary/50 text-xs sm:text-sm tracking-wide italic font-light cursor-pointer hover:text-primary transition-colors"
+            className="text-primary/50 tracking-wide italic font-light cursor-pointer hover:text-primary transition-colors"
+            style={{
+              fontSize: `calc(${dhikrFontSize} * 0.85rem)`,
+            }}
           >
             {currentDhikr.transliteration}
           </motion.p>

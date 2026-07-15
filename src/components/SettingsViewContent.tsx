@@ -97,6 +97,10 @@ export function SettingsViewContent({ defaultTab, setOpen }: SettingsViewContent
     setVoiceAnnouncements,
     hapticPattern,
     setHapticPattern,
+    countFontSize,
+    setCountFontSize,
+    dhikrFontSize,
+    setDhikrFontSize,
   } = useTasbeehStore(useShallow(state => ({
     theme: state.theme,
     themeSettings: state.themeSettings,
@@ -120,6 +124,10 @@ export function SettingsViewContent({ defaultTab, setOpen }: SettingsViewContent
     setCounterVerticalOffset: state.setCounterVerticalOffset,
     counterScale: state.counterScale,
     setCounterScale: state.setCounterScale,
+    countFontSize: state.countFontSize,
+    setCountFontSize: state.setCountFontSize,
+    dhikrFontSize: state.dhikrFontSize,
+    setDhikrFontSize: state.setDhikrFontSize,
     zenMode: state.zenMode,
     setZenMode: state.setZenMode,
     breathingGuideEnabled: state.breathingGuideEnabled,
@@ -277,25 +285,68 @@ export function SettingsViewContent({ defaultTab, setOpen }: SettingsViewContent
 
               <div className="space-y-1">
                 <p className="text-xs text-muted-foreground uppercase tracking-wide mb-3">Typography</p>
-                <div className="p-4 rounded-2xl bg-card mb-2">
-                  <div className="flex items-center justify-between mb-3">
+                <div className="p-4 rounded-2xl bg-card mb-2 space-y-4">
+                  {/* App general size */}
+                  <div className="space-y-2">
                     <p className="text-sm font-medium text-foreground">App Font Size</p>
+                    <div className="grid grid-cols-3 gap-2">
+                      {[0.8, 1, 1.2].map((scale) => (
+                        <button
+                          key={scale}
+                          onClick={() => setFontScale(scale as 0.8 | 1 | 1.2)}
+                          className={`
+                                py-2 px-3 rounded-lg text-xs font-medium border transition-colors
+                                ${currentSettings.fontScale === scale
+                              ? 'bg-primary text-primary-foreground border-primary'
+                              : 'bg-background border-border hover:bg-muted'}
+                            `}
+                        >
+                          {scale === 0.8 ? 'Small' : scale === 1 ? 'Normal' : 'Large'}
+                        </button>
+                      ))}
+                    </div>
                   </div>
-                  <div className="grid grid-cols-3 gap-2">
-                    {[0.8, 1, 1.2].map((scale) => (
-                      <button
-                        key={scale}
-                        onClick={() => setFontScale(scale as 0.8 | 1 | 1.2)}
-                        className={`
-                              py-2 px-3 rounded-lg text-xs font-medium border transition-colors
-                              ${currentSettings.fontScale === scale
-                            ? 'bg-primary text-primary-foreground border-primary'
-                            : 'bg-background border-border hover:bg-muted'}
-                          `}
-                      >
-                        {scale === 0.8 ? 'Small' : scale === 1 ? 'Normal' : 'Large'}
-                      </button>
-                    ))}
+
+                  {/* Dhikr text size */}
+                  <div className="space-y-2 pt-2 border-t border-border/30">
+                    <p className="text-sm font-medium text-foreground">Dhikr Text Size</p>
+                    <div className="grid grid-cols-4 gap-2">
+                      {[0.85, 1, 1.2, 1.4].map((scale) => (
+                        <button
+                          key={scale}
+                          onClick={() => setDhikrFontSize(scale)}
+                          className={`
+                                py-2 px-1 rounded-lg text-xs font-medium border transition-colors
+                                ${dhikrFontSize === scale
+                              ? 'bg-primary text-primary-foreground border-primary'
+                              : 'bg-background border-border hover:bg-muted'}
+                            `}
+                        >
+                          {scale === 0.85 ? 'Small' : scale === 1 ? 'Normal' : scale === 1.2 ? 'Large' : 'X-Large'}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Counter count text size */}
+                  <div className="space-y-2 pt-2 border-t border-border/30">
+                    <p className="text-sm font-medium text-foreground">Counter Digit Size</p>
+                    <div className="grid grid-cols-4 gap-2">
+                      {[0.85, 1, 1.15, 1.3].map((scale) => (
+                        <button
+                          key={scale}
+                          onClick={() => setCountFontSize(scale)}
+                          className={`
+                                py-2 px-1 rounded-lg text-xs font-medium border transition-colors
+                                ${countFontSize === scale
+                              ? 'bg-primary text-primary-foreground border-primary'
+                              : 'bg-background border-border hover:bg-muted'}
+                            `}
+                        >
+                          {scale === 0.85 ? 'Small' : scale === 1 ? 'Normal' : scale === 1.15 ? 'Large' : 'X-Large'}
+                        </button>
+                      ))}
+                    </div>
                   </div>
                 </div>
               </div>
