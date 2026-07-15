@@ -4,7 +4,6 @@ import { ThemeSettings, CounterShape, useTasbeehStore } from '@/store/tasbeehSto
 import { HaloRing } from './counter-shapes/HaloRing';
 import { BeadRing } from './counter-shapes/BeadRing';
 import { counterShapes } from '@/lib/constants';
-import { GreenTally } from './counter-shapes/GreenTally';
 
 import { VerticalCapsules } from './counter-shapes/VerticalCapsules';
 import { LuminousBeads } from './counter-shapes/LuminousBeads';
@@ -16,9 +15,11 @@ import { CrystalPrism } from './counter-shapes/CrystalPrism';
 import { TallyClicker } from './counter-shapes/TallyClicker';
 import { Neumorph } from './counter-shapes/Neumorph';
 import { SunsetHorizon } from './counter-shapes/SunsetHorizon';
-import { RetroLCD } from './counter-shapes/RetroLCD';
 import { DigitalVisuals } from './counter-shapes/DigitalVisuals';
 import { CrystalOrbit } from './counter-shapes/CrystalOrbit';
+import { AuroraGlow } from './counter-shapes/AuroraGlow';
+import { DiamondPrism } from './counter-shapes/DiamondPrism';
+import { GoldenSpiral } from './counter-shapes/GoldenSpiral';
 import { 
     ClassicVisuals, 
     CircularProgress, 
@@ -26,7 +27,6 @@ import {
     WaveformVisuals, 
     RingLightVisuals, 
     ModernRingVisuals, 
-    VintageWoodVisuals, 
     BeadsDecorator,
     MinimalBorder,
     ClassicBody,
@@ -76,11 +76,10 @@ export const CounterNumber = memo(({
             transition={{ duration: 0.15, ease: [0.34, 1.56, 0.64, 1] }}
             className={`
   counter-number text-counter-text
-  ${['digital', 'vertical-capsules', 'tally-clicker', 'neumorph', 'digital-watch', 'retro-lcd', 'green-tally', 'crystal-orbit'].includes(counterShape) ? 'hidden' : ''}
+  ${['digital', 'vertical-capsules', 'tally-clicker', 'neumorph', 'digital-watch', 'crystal-orbit', 'aurora-glow', 'diamond-prism', 'golden-spiral'].includes(counterShape) ? 'hidden' : ''}
   ${counterShape === 'classic' ? 'font-mono text-5xl sm:text-6xl md:text-7xl tracking-widest bg-black/10 px-4 sm:px-6 py-2 rounded-lg inset-shadow mb-4' : 'text-5xl sm:text-6xl md:text-7xl lg:text-8xl'}
   ${counterShape === 'waveform' ? 'drop-shadow-md z-10' : ''}
   ${counterShape === 'modern-ring' ? 'font-sans font-light tracking-tighter drop-shadow-[0_0_15px_currentColor]' : ''}
-  ${counterShape === 'vintage-wood' ? 'font-serif text-[#d7ccc8] drop-shadow-[0_2px_2px_rgba(0,0,0,0.5)]' : ''}
   ${counterShape === 'ring-light' ? 'text-white/90 font-thin tracking-tighter drop-shadow-[0_0_20px_rgba(255,255,255,0.8)]' : ''}
   ${counterShape === 'halo-ring' ? 'text-emerald-400 font-bold drop-shadow-[0_0_10px_rgba(52,211,153,0.8)]' : ''}
   
@@ -150,8 +149,6 @@ export const CounterVisuals = memo(({
 
                 {counterShape === 'modern-ring' && <ModernRingVisuals />}
 
-                {counterShape === 'vintage-wood' && <VintageWoodVisuals />}
-
                 <div className="absolute inset-0 flex items-center justify-center pointer-events-none -z-10 scale-90">
                         {counterShape === 'halo-ring' && <HaloRing progress={progress} currentCount={currentCount} />}
                         {counterShape === 'bead-ring' && <BeadRing currentCount={currentCount} />}
@@ -164,10 +161,11 @@ export const CounterVisuals = memo(({
                         {counterShape === 'neumorph' && <Neumorph currentCount={currentCount} />}
                         {counterShape === 'vertical-capsules' && <VerticalCapsules currentCount={currentCount} />}
                         {counterShape === 'luminous-beads' && <LuminousBeads progress={progress} />}
-                        {counterShape === 'green-tally' && <GreenTally currentCount={currentCount} />}
-                        {counterShape === 'retro-lcd' && <RetroLCD progress={progress} currentCount={currentCount} />}
                         {counterShape === 'sunset-horizon' && <SunsetHorizon progress={progress} currentCount={currentCount} />}
                         {counterShape === 'crystal-orbit' && <CrystalOrbit progress={progress} currentCount={currentCount} />}
+                        {counterShape === 'aurora-glow' && <AuroraGlow progress={progress} currentCount={currentCount} />}
+                        {counterShape === 'diamond-prism' && <DiamondPrism progress={progress} currentCount={currentCount} />}
+                        {counterShape === 'golden-spiral' && <GoldenSpiral progress={progress} currentCount={currentCount} />}
                 </div>
 
                 {/* Global Aura Pulse Effekt - triggers on count change */}
@@ -193,14 +191,13 @@ export const CounterVisuals = memo(({
         ${counterShape === 'waveform' ? 'w-64 h-64 rounded-full flex items-center justify-center backdrop-blur-sm' : ''}
         ${counterShape === 'digital' ? 'w-64 h-64 flex items-center justify-center bg-transparent z-10' : ''}
         ${counterShape === 'modern-ring' ? 'w-64 h-64 rounded-full bg-background/80 backdrop-blur-xl border border-primary/50 shadow-[0_0_30px_rgba(var(--primary),0.2)]' : ''}
-        ${counterShape === 'vintage-wood' ? 'w-64 h-64 bg-transparent shadow-none border-0 flex items-center justify-center' : ''}
         ${counterShape === 'halo-ring' ? 'w-64 h-64 rounded-full flex items-center justify-center bg-transparent z-10' : ''}
 
         ${counterShape === 'vertical-capsules' ? 'w-64 h-64 flex items-center justify-center bg-transparent z-10' : ''}
         ${counterShape === 'luminous-beads' ? 'w-64 h-64 rounded-full flex items-center justify-center bg-transparent z-10' : ''}
         
         ${counterShape === 'bead-ring' ? 'w-64 h-64 flex items-center justify-center bg-transparent z-10' : ''}
-        ${['emerald-loop', 'smart-ring', 'moon-phase', 'star-burst', 'crystal-prism', 'tally-clicker', 'neumorph', 'green-tally', 'digital-watch', 'retro-lcd', 'sunset-horizon', 'crystal-orbit'].includes(counterShape) ? 'w-64 h-64 flex items-center justify-center bg-transparent z-10' : ''}
+        ${['emerald-loop', 'smart-ring', 'moon-phase', 'star-burst', 'crystal-prism', 'tally-clicker', 'neumorph', 'digital-watch', 'sunset-horizon', 'crystal-orbit', 'aurora-glow', 'diamond-prism', 'golden-spiral'].includes(counterShape) ? 'w-64 h-64 flex items-center justify-center bg-transparent z-10' : ''}
 
         flex items-center justify-center
         cursor-pointer
@@ -211,7 +208,6 @@ export const CounterVisuals = memo(({
         ${showCompletion && (counterShape === 'minimal' || counterShape === 'plain') ? 'animate-completion' : ''}
         ${!showCompletion && (counterShape === 'minimal' || counterShape === 'plain') ? 'counter-glow' : ''}
         ${counterShape === 'beads' ? 'hover:scale-105 active:scale-95' : ''}
-        ${counterShape === 'vintage-wood' ? 'active:scale-[0.98] transition-transform' : ''}
       `}
                 whileTap={{ scale: 0.97 }}
                 transition={{ duration: 0.1 }}

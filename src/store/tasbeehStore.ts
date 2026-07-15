@@ -73,11 +73,11 @@ export interface SessionRecord {
 
 export type CounterShape =
   | 'plain' | 'minimal' | 'classic' | 'beads' | 'flower' | 'waveform' | 'digital'
-  | 'modern-ring' | 'vintage-wood' | 'ring-light' 
+  | 'modern-ring' | 'ring-light' 
   | 'bead-ring' | 'halo-ring' | 'vertical-capsules' | 'luminous-beads'
   | 'emerald-loop' | 'smart-ring' | 'moon-phase'
   | 'digital-watch' | 'star-burst' | 'crystal-prism' | 'tally-clicker'
-  | 'neumorph' | 'green-tally' | 'retro-lcd' | 'sunset-horizon' | 'crystal-orbit';
+  | 'neumorph' | 'sunset-horizon' | 'crystal-orbit' | 'aurora-glow' | 'diamond-prism' | 'golden-spiral';
 
 export interface Reminder {
   id: string;

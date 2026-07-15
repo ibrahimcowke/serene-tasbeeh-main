@@ -21,7 +21,6 @@ export const counterShapes = [
   { id: 'waveform', label: 'Wave', icon: '〰', color: '#2dd4bf', bg: 'rgba(45, 212, 191, 0.1)' },
   { id: 'digital', label: 'Digit', icon: '88', color: '#4ade80', bg: 'rgba(74, 222, 128, 0.1)' },
   { id: 'modern-ring', label: 'Ring', icon: '○', color: '#38bdf8', bg: 'rgba(56, 189, 248, 0.1)' },
-  { id: 'vintage-wood', label: 'Wood', icon: '▧', color: '#a8a29e', bg: 'rgba(168, 162, 158, 0.1)' },
   { id: 'ring-light', label: 'Light', icon: '⭕', color: '#f43f5e', bg: 'rgba(244, 63, 94, 0.1)' },
   { id: 'bead-ring', label: 'Bead Ring', icon: '📿', color: '#f59e0b', bg: 'rgba(245, 158, 11, 0.1)' },
   { id: 'halo-ring', label: 'Halo', icon: '💫', color: '#eab308', bg: 'rgba(234, 179, 8, 0.1)' },
@@ -32,10 +31,11 @@ export const counterShapes = [
   { id: 'digital-watch', label: 'Watch', icon: '⌚', color: '#2dd4bf', bg: 'rgba(45, 212, 191, 0.1)' },
   { id: 'tally-clicker', label: 'Tally 3D', icon: '🖱️', color: '#71717a', bg: 'rgba(113, 113, 122, 0.1)' },
   { id: 'neumorph', label: 'Neumorph', icon: '☁', color: '#94a3b8', bg: 'rgba(148, 163, 184, 0.1)' },
-  { id: 'green-tally', label: 'Green Tally', icon: '📟', color: '#10b981', bg: 'rgba(16, 185, 129, 0.1)' },
-  { id: 'retro-lcd', label: 'Retro LCD', icon: '📟', color: '#8b9b82', bg: 'rgba(139, 155, 130, 0.1)' },
   { id: 'sunset-horizon', label: 'Sunset', icon: '🌅', color: '#f97316', bg: 'rgba(249, 115, 22, 0.1)' },
   { id: 'crystal-orbit', label: 'Crystal Orbit', icon: '💎', color: '#3b82f6', bg: 'rgba(59, 130, 246, 0.1)' },
+  { id: 'aurora-glow', label: 'Aurora', icon: '🌌', color: '#a855f7', bg: 'rgba(168, 85, 247, 0.1)' },
+  { id: 'diamond-prism', label: 'Diamond', icon: '💎', color: '#06b6d4', bg: 'rgba(6, 182, 212, 0.1)' },
+  { id: 'golden-spiral', label: 'Spiral', icon: '🌀', color: '#fbbf24', bg: 'rgba(251, 191, 36, 0.1)' },
 ] as const;
 
 // Dashboard Layouts removed in favor of single default design

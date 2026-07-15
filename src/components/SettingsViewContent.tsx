@@ -33,10 +33,10 @@ import { GoogleLogin } from './GoogleLogin';
 
 const SHAPE_CATEGORIES = [
   { title: 'Essential', list: ['plain', 'minimal', 'classic', 'beads', 'waveform'] },
-  { title: 'Luminous', list: ['ring-light', 'halo-ring', 'luminous-beads', 'star-burst', 'crystal-orbit'] },
+  { title: 'Luminous', list: ['ring-light', 'halo-ring', 'luminous-beads', 'star-burst', 'crystal-orbit', 'aurora-glow'] },
   { title: 'Modern', list: ['flower', 'modern-ring', 'moon-phase', 'neumorph', 'sunset-horizon'] },
-  { title: 'Objects & 3D', list: ['vintage-wood', 'digital', 'bead-ring', 'digital-watch', 'tally-clicker', 'green-tally', 'retro-lcd'] },
-  { title: 'Tech & Abstract', list: ['vertical-capsules', 'emerald-loop', 'smart-ring', 'crystal-prism'] }
+  { title: 'Objects & 3D', list: ['digital', 'bead-ring', 'digital-watch', 'tally-clicker', 'diamond-prism'] },
+  { title: 'Tech & Abstract', list: ['vertical-capsules', 'emerald-loop', 'smart-ring', 'crystal-prism', 'golden-spiral'] }
 ];
 
 interface SettingsViewContentProps {
