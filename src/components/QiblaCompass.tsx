@@ -137,8 +137,8 @@ export function QiblaCompass({ children }: QiblaCompassProps) {
           <>
             <div className="sheet-handle mx-auto mt-3 mb-1 bg-muted shrink-0 w-10 h-1 rounded-full" />
             <SheetHeader className="text-center px-6 pt-2 pb-4 shrink-0">
-              <SheetTitle className="text-lg font-medium flex items-center justify-center gap-2">
-                <Compass className="w-5 h-5 text-primary" />
+              <SheetTitle className="text-lg font-bold flex items-center justify-center gap-2">
+                <Compass className="w-5 h-5 text-primary animate-pulse" />
                 {t('qibla.title')}
               </SheetTitle>
               <p className="text-xs text-center text-muted-foreground">
@@ -154,10 +154,10 @@ export function QiblaCompass({ children }: QiblaCompassProps) {
                   className="absolute inset-0 rounded-full"
                   style={{
                     background: 'conic-gradient(from 0deg, hsl(var(--primary) / 0.05), hsl(var(--primary) / 0.15), hsl(var(--primary) / 0.05))',
-                    border: '2px solid hsl(var(--primary) / 0.2)',
+                    border: '2px solid hsl(var(--primary) / 0.25)',
                   }}
                 />
-                {/* Cardinal directions */}
+                {/* Cardinal directions (highly visible, bold, and solid colors) */}
                 {[
                   { label: 'N', deg: 0 }, { label: 'E', deg: 90 },
                   { label: 'S', deg: 180 }, { label: 'W', deg: 270 },
@@ -168,12 +168,13 @@ export function QiblaCompass({ children }: QiblaCompassProps) {
                   return (
                     <span
                       key={label}
-                      className="absolute text-[10px] font-bold"
+                      className="absolute text-xs sm:text-sm font-black tracking-widest"
                       style={{
                         left: `${x}px`,
                         top: `${y}px`,
                         transform: 'translate(-50%, -50%)',
-                        color: label === 'N' ? 'hsl(var(--primary))' : 'hsl(var(--foreground) / 0.5)',
+                        color: label === 'N' ? 'hsl(var(--primary))' : 'hsl(var(--foreground))',
+                        textShadow: '0 1px 3px rgba(0,0,0,0.6)',
                       }}
                     >
                       {label}
@@ -186,13 +187,13 @@ export function QiblaCompass({ children }: QiblaCompassProps) {
                   className="absolute inset-4 rounded-full flex items-center justify-center"
                   style={{
                     background: 'hsl(var(--card) / 0.95)',
-                    boxShadow: 'inset 0 2px 8px rgba(0,0,0,0.12), 0 4px 16px rgba(0,0,0,0.08)',
-                    border: '1px solid hsl(var(--border) / 0.4)',
+                    boxShadow: 'inset 0 2px 8px rgba(0,0,0,0.15), 0 4px 16px rgba(0,0,0,0.1)',
+                    border: '1px solid hsl(var(--border) / 0.5)',
                   }}
                   animate={{ rotate: deviceHeading !== null ? -deviceHeading : 0 }}
                   transition={{ type: 'spring', stiffness: 80, damping: 15 }}
                 >
-                  {/* Qibla arrow indicator (Themed) */}
+                  {/* Qibla arrow indicator (Themed & bold) */}
                   {qiblaBearing !== null && (
                     <motion.div
                       className="absolute w-full h-full flex flex-col items-center pt-2"
@@ -203,12 +204,15 @@ export function QiblaCompass({ children }: QiblaCompassProps) {
                         style={{ 
                           transform: 'translateY(-4px)',
                           borderBottomColor: 'hsl(var(--primary))',
-                          filter: 'drop-shadow(0 0 8px hsl(var(--primary) / 0.6))'
+                          filter: 'drop-shadow(0 0 8px hsl(var(--primary) / 0.8))'
                         }}
                       />
                       <span 
-                        className="text-[10px] font-bold mt-1 uppercase tracking-wider"
-                        style={{ color: 'hsl(var(--primary))' }}
+                        className="text-xs font-black mt-1 uppercase tracking-widest"
+                        style={{ 
+                          color: 'hsl(var(--primary))',
+                          textShadow: '0 1px 2px rgba(0,0,0,0.4)'
+                        }}
                       >
                         Qibla
                       </span>
@@ -231,10 +235,10 @@ export function QiblaCompass({ children }: QiblaCompassProps) {
                   className="flex flex-col items-center justify-center px-2 py-2.5 rounded-2xl"
                   style={{ background: 'hsl(var(--card) / 0.6)', border: '1px solid hsl(var(--border) / 0.4)' }}
                 >
-                  <p className="text-[9px] uppercase tracking-wider font-semibold text-muted-foreground text-center">
+                  <p className="text-[10px] sm:text-xs uppercase tracking-wider font-bold text-muted-foreground/90 text-center">
                     Device Heading
                   </p>
-                  <p className="text-base font-bold font-mono text-foreground mt-1">
+                  <p className="text-base sm:text-lg font-black font-mono text-foreground mt-1">
                     {deviceHeading !== null ? `${Math.round(deviceHeading)}°` : '—'}
                   </p>
                 </div>
@@ -243,10 +247,10 @@ export function QiblaCompass({ children }: QiblaCompassProps) {
                   className="flex flex-col items-center justify-center px-2 py-2.5 rounded-2xl"
                   style={{ background: 'hsl(var(--card) / 0.6)', border: '1px solid hsl(var(--border) / 0.4)' }}
                 >
-                  <p className="text-[9px] uppercase tracking-wider font-semibold text-muted-foreground text-center">
+                  <p className="text-[10px] sm:text-xs uppercase tracking-wider font-bold text-muted-foreground/90 text-center">
                     Qibla Angle
                   </p>
-                  <p className="text-base font-bold font-mono text-foreground mt-1">
+                  <p className="text-base sm:text-lg font-black font-mono text-foreground mt-1">
                     {qiblaBearing !== null ? `${Math.round(qiblaBearing)}°` : '—'}
                   </p>
                 </div>
@@ -255,20 +259,20 @@ export function QiblaCompass({ children }: QiblaCompassProps) {
                   className="flex flex-col items-center justify-center px-2 py-2.5 rounded-2xl"
                   style={{ background: 'hsl(var(--card) / 0.6)', border: '1px solid hsl(var(--border) / 0.4)' }}
                 >
-                  <p className="text-[9px] uppercase tracking-wider font-semibold text-muted-foreground text-center">
+                  <p className="text-[10px] sm:text-xs uppercase tracking-wider font-bold text-muted-foreground/90 text-center">
                     Distance
                   </p>
-                  <p className="text-base font-bold font-mono text-foreground mt-1 flex items-baseline gap-0.5">
+                  <p className="text-base sm:text-lg font-black font-mono text-foreground mt-1 flex items-baseline gap-0.5">
                     {distanceKm !== null ? distanceKm : '—'}
-                    <span className="text-[10px] text-muted-foreground">km</span>
+                    <span className="text-xs text-muted-foreground">km</span>
                   </p>
                 </div>
               </div>
 
               {/* GPS coordinates */}
               {coordinates && (
-                <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[10px] font-medium text-muted-foreground bg-muted/10 border border-border/20">
-                  <MapPin size={11} className="text-primary shrink-0" />
+                <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold text-foreground/95 bg-muted/20 border border-border/30">
+                  <MapPin size={12} className="text-primary shrink-0" />
                   <span>
                     GPS: {coordinates.lat.toFixed(4)}°N, {coordinates.lng.toFixed(4)}°E
                   </span>
@@ -285,7 +289,7 @@ export function QiblaCompass({ children }: QiblaCompassProps) {
                     className="flex items-center gap-2 px-6 py-3 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-600 dark:text-emerald-400"
                   >
                     <Navigation className="w-4 h-4" />
-                    <span className="text-sm font-medium">
+                    <span className="text-sm font-bold">
                       {t('qibla.facing')} 🕋
                     </span>
                   </motion.div>
@@ -297,11 +301,11 @@ export function QiblaCompass({ children }: QiblaCompassProps) {
                 className="w-full max-w-sm p-3.5 rounded-2xl text-left space-y-2 mt-1"
                 style={{ background: 'hsl(var(--card) / 0.35)', border: '1px solid hsl(var(--border) / 0.2)' }}
               >
-                <p className="text-[11px] font-bold text-foreground/90 uppercase tracking-wide flex items-center gap-1.5">
-                  <Info size={12} className="text-primary" />
+                <p className="text-xs sm:text-sm font-black text-foreground/95 uppercase tracking-wide flex items-center gap-1.5">
+                  <Info size={13} className="text-primary" />
                   Compass Guide & Calibration
                 </p>
-                <ul className="list-disc pl-4 space-y-1 text-[10px] text-muted-foreground leading-relaxed">
+                <ul className="list-disc pl-4 space-y-1 text-xs text-foreground/80 leading-relaxed font-medium">
                   <li>Hold your device <strong>flat</strong> in your palm parallel to the ground.</li>
                   <li>Rotate your phone in a <strong>figure-8 motion</strong> to calibrate sensors.</li>
                   <li>Keep away from magnetic covers, metal keys, or electronic devices.</li>
@@ -309,13 +313,13 @@ export function QiblaCompass({ children }: QiblaCompassProps) {
               </div>
 
               {locationError && (
-                <p className="text-[10px] text-center text-amber-600 dark:text-amber-500/80">
+                <p className="text-xs font-semibold text-center text-amber-600 dark:text-amber-500">
                   ⚠️ {t('qibla.location_error')}
                 </p>
               )}
 
               {permissionState === 'pending' && (
-                <p className="text-xs text-center text-muted-foreground animate-pulse">
+                <p className="text-xs text-center text-muted-foreground animate-pulse font-medium">
                   {t('qibla.calibrate')}
                 </p>
               )}
