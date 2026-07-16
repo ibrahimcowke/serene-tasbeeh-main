@@ -35,7 +35,7 @@ export const CounterFooter = memo(function CounterFooter({ hideStats = false }: 
       )}
 
       {/* Bottom stats strip */}
-      {!zenMode && !hideStats && (
+      {!zenMode && !hideStats && sessionMode.type !== 'tasbih100' && sessionMode.type !== 'tasbih1000' && (
         <div className="flex items-center gap-5 sm:gap-8">
           {/* All time count */}
           <div className="flex flex-col items-center">

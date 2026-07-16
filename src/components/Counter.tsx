@@ -207,12 +207,12 @@ export const Counter = memo(function Counter({ className = "" }: { className?: s
       </div>
 
       {/* Center: Bead ring + action buttons */}
-      <div className={`relative flex ${isShortScreen ? 'flex-row' : 'flex-col'} sm:flex-row items-center justify-center w-full z-20 flex-1 gap-2 sm:gap-6 px-2`}>
+      <div className={`relative flex ${(isShortScreen && sessionModeType !== 'tasbih100' && sessionModeType !== 'tasbih1000') ? 'flex-row' : 'flex-col'} sm:flex-row items-center justify-center w-full z-20 flex-1 gap-2 sm:gap-6 px-2`}>
         <div className="flex flex-col items-center justify-center">
           <CounterDisplay />
           <CounterActions />
         </div>
-        {isShortScreen && (
+        {(isShortScreen && sessionModeType !== 'tasbih100' && sessionModeType !== 'tasbih1000') && (
           <div className="flex flex-col justify-center items-center gap-5 pl-3 border-l border-primary/15 min-w-[70px]">
             {/* All time count */}
             <div className="flex flex-col items-center">
