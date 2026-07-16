@@ -98,12 +98,13 @@ export const Counter = memo(function Counter({ className = "" }: { className?: s
   const [isShortScreen, setIsShortScreen] = useState(false);
   useEffect(() => {
     const checkSize = () => {
-      setIsShortScreen(window.innerHeight < 760 && window.innerWidth < 768);
+      const heightThreshold = sessionModeType !== 'free' ? 820 : 760;
+      setIsShortScreen(window.innerHeight < heightThreshold && window.innerWidth < 768);
     };
     checkSize();
     window.addEventListener('resize', checkSize);
     return () => window.removeEventListener('resize', checkSize);
-  }, [currentCount]);
+  }, [currentCount, sessionModeType]);
 
   // Voice announcements on milestones
   useEffect(() => {
