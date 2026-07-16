@@ -1,8 +1,9 @@
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Compass, MapPin, Navigation, RefreshCw } from 'lucide-react';
+import { Compass, MapPin, Navigation, RefreshCw, Info } from 'lucide-react';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger, SheetDescription } from '@/components/ui/sheet';
 import { useTranslation } from '@/lib/i18n';
+import { Haptics, ImpactStyle } from '@capacitor/haptics';
 
 interface QiblaCompassProps {
   children: React.ReactNode;
@@ -38,9 +39,11 @@ export function QiblaCompass({ children }: QiblaCompassProps) {
   const [deviceHeading, setDeviceHeading] = useState<number | null>(null);
   const [qiblaBearing, setQiblaBearing] = useState<number | null>(null);
   const [distanceKm, setDistanceKm] = useState<string | null>(null);
+  const [coordinates, setCoordinates] = useState<{ lat: number; lng: number } | null>(null);
   const [locationError, setLocationError] = useState(false);
   const [permissionState, setPermissionState] = useState<'pending' | 'granted' | 'denied'>('pending');
   const headingRef = useRef(0);
+  const lastFacingRef = useRef(false);
   const { t, isRTL } = useTranslation();
 
   useEffect(() => {
@@ -53,11 +56,13 @@ export function QiblaCompass({ children }: QiblaCompassProps) {
         const dist = distance(pos.coords.latitude, pos.coords.longitude);
         setQiblaBearing(bearing);
         setDistanceKm(dist);
+        setCoordinates({ lat: pos.coords.latitude, lng: pos.coords.longitude });
       },
       () => {
         // Fallback: use Mecca as reference with a default city (Istanbul)
         setQiblaBearing(calcQiblaBearing(41.0082, 28.9784));
         setDistanceKm('~2500');
+        setCoordinates({ lat: 41.0082, lng: 28.9784 });
         setLocationError(true);
       },
       { timeout: 8000 }
@@ -104,6 +109,24 @@ export function QiblaCompass({ children }: QiblaCompassProps) {
     : 0;
 
   const isFacingQibla = Math.abs(((needleRotation % 360) + 360) % 360) < 15 || Math.abs(((needleRotation % 360) + 360) % 360 - 360) < 15;
+
+  // Haptic feedback when device aligns with Qibla direction
+  useEffect(() => {
+    if (isFacingQibla && deviceHeading !== null) {
+      if (!lastFacingRef.current) {
+        try {
+          Haptics.impact({ style: ImpactStyle.Medium });
+        } catch {
+          if ('vibrate' in navigator) {
+            navigator.vibrate(100);
+          }
+        }
+        lastFacingRef.current = true;
+      }
+    } else {
+      lastFacingRef.current = false;
+    }
+  }, [isFacingQibla, deviceHeading]);
 
   return (
     <Sheet open={open} onOpenChange={setOpen}>
@@ -194,32 +217,54 @@ export function QiblaCompass({ children }: QiblaCompassProps) {
               </div>
 
               {/* Angle display */}
-              <div className="flex gap-4">
+              <div className="grid grid-cols-3 gap-2.5 w-full max-w-sm">
                 <div
-                  className="flex flex-col items-center px-4 py-2 rounded-2xl min-w-[100px]"
+                  className="flex flex-col items-center justify-center px-2 py-2.5 rounded-2xl"
                   style={{ background: 'hsl(var(--card)/0.6)', border: '1px solid hsl(var(--border)/0.4)' }}
                 >
-                  <p className="text-[10px] uppercase tracking-wider" style={{ color: 'hsl(var(--muted-foreground))' }}>
-                    {t('qibla.heading')}
+                  <p className="text-[9px] uppercase tracking-wider font-semibold text-muted-foreground text-center">
+                    Device Heading
                   </p>
-                  <p className="text-xl font-bold font-mono text-foreground mt-0.5">
+                  <p className="text-base font-bold font-mono text-foreground mt-1">
                     {deviceHeading !== null ? `${Math.round(deviceHeading)}°` : '—'}
                   </p>
                 </div>
 
                 <div
-                  className="flex flex-col items-center px-4 py-2 rounded-2xl min-w-[100px]"
+                  className="flex flex-col items-center justify-center px-2 py-2.5 rounded-2xl"
                   style={{ background: 'hsl(var(--card)/0.6)', border: '1px solid hsl(var(--border)/0.4)' }}
                 >
-                  <p className="text-[10px] uppercase tracking-wider" style={{ color: 'hsl(var(--muted-foreground))' }}>
-                    {t('qibla.distance')}
+                  <p className="text-[9px] uppercase tracking-wider font-semibold text-muted-foreground text-center">
+                    Qibla Angle
                   </p>
-                  <p className="text-xl font-bold font-mono text-foreground mt-0.5 flex items-baseline gap-0.5">
+                  <p className="text-base font-bold font-mono text-foreground mt-1">
+                    {qiblaBearing !== null ? `${Math.round(qiblaBearing)}°` : '—'}
+                  </p>
+                </div>
+
+                <div
+                  className="flex flex-col items-center justify-center px-2 py-2.5 rounded-2xl"
+                  style={{ background: 'hsl(var(--card)/0.6)', border: '1px solid hsl(var(--border)/0.4)' }}
+                >
+                  <p className="text-[9px] uppercase tracking-wider font-semibold text-muted-foreground text-center">
+                    Distance
+                  </p>
+                  <p className="text-base font-bold font-mono text-foreground mt-1 flex items-baseline gap-0.5">
                     {distanceKm !== null ? distanceKm : '—'}
-                    <span className="text-xs" style={{ color: 'hsl(var(--muted-foreground))' }}>km</span>
+                    <span className="text-[10px] text-muted-foreground">km</span>
                   </p>
                 </div>
               </div>
+
+              {/* GPS coordinates */}
+              {coordinates && (
+                <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[10px] font-medium text-muted-foreground bg-muted/10 border border-border/20">
+                  <MapPin size={11} className="text-primary shrink-0" />
+                  <span>
+                    GPS: {coordinates.lat.toFixed(4)}°N, {coordinates.lng.toFixed(4)}°E
+                  </span>
+                </div>
+              )}
 
               {/* Facing Qibla indicator */}
               <AnimatePresence>
@@ -242,8 +287,24 @@ export function QiblaCompass({ children }: QiblaCompassProps) {
                 )}
               </AnimatePresence>
 
+              {/* Calibrate / Sensor advice panel */}
+              <div 
+                className="w-full max-w-sm p-3.5 rounded-2xl text-left space-y-2 mt-1"
+                style={{ background: 'hsl(var(--card)/0.35)', border: '1px solid hsl(var(--border)/0.2)' }}
+              >
+                <p className="text-[11px] font-bold text-foreground/90 uppercase tracking-wide flex items-center gap-1.5">
+                  <Info size={12} className="text-primary" />
+                  Compass Guide & Calibration
+                </p>
+                <ul className="list-disc pl-4 space-y-1 text-[10px] text-muted-foreground leading-relaxed">
+                  <li>Hold your device <strong>flat</strong> in your palm parallel to the ground.</li>
+                  <li>Rotate your phone in a <strong>figure-8 motion</strong> to calibrate sensors.</li>
+                  <li>Keep away from magnetic covers, metal keys, or electronic devices.</li>
+                </ul>
+              </div>
+
               {locationError && (
-                <p className="text-xs text-center" style={{ color: 'hsl(var(--muted-foreground))' }}>
+                <p className="text-[10px] text-center text-amber-500/80">
                   ⚠️ {t('qibla.location_error')}
                 </p>
               )}
