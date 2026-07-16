@@ -85,6 +85,31 @@ function AddReminderButton() {
         { label: 'Weekends', days: [0, 6] },
     ];
 
+    const QUICK_TAGS = [
+        { label: 'Morning Adhkar', time: '05:30' },
+        { label: 'Evening Adhkar', time: '18:30' },
+        { label: 'Fajr', time: '05:00' },
+        { label: 'Dhuhr', time: '12:30' },
+        { label: 'Asr', time: '15:45' },
+        { label: 'Maghrib', time: '18:15' },
+        { label: 'Isha', time: '19:45' },
+        { label: 'Night/Bedtime', time: '22:00' },
+    ];
+
+    const adjustTime = (current: string, minutes: number) => {
+        const [h, m] = current.split(':').map(Number);
+        const date = new Date();
+        date.setHours(h, m, 0, 0);
+        date.setMinutes(date.getMinutes() + minutes);
+        const hoursStr = String(date.getHours()).padStart(2, '0');
+        const minStr = String(date.getMinutes()).padStart(2, '0');
+        return `${hoursStr}:${minStr}`;
+    };
+
+    const handleAdjustTime = (minutes: number) => {
+        setForm((prev) => ({ ...prev, time: adjustTime(prev.time, minutes) }));
+    };
+
     const handleAdd = () => {
         if (!form.label.trim()) { toast.error('Please enter a reminder label'); return; }
         if (form.days.length === 0) { toast.error('Select at least one day'); return; }
@@ -133,7 +158,7 @@ function AddReminderButton() {
                             animate={{ opacity: 1, y: 0 }}
                             exit={{ opacity: 0, y: 40 }}
                             transition={{ type: 'spring', stiffness: 320, damping: 30 }}
-                            className="fixed inset-x-4 bottom-6 z-50 rounded-3xl p-5 shadow-2xl space-y-4"
+                            className="fixed inset-x-4 bottom-6 z-50 rounded-3xl p-5 shadow-2xl space-y-4 max-h-[85vh] overflow-y-auto"
                             style={{
                                 background: 'hsl(var(--card))',
                                 border: '1px solid hsl(var(--border) / 0.4)',
@@ -148,24 +173,72 @@ function AddReminderButton() {
                             </div>
 
                             {/* Time picker */}
-                            <div className="flex items-center gap-3">
-                                <Clock size={16} className="text-primary shrink-0" />
-                                <input
-                                    type="time"
-                                    value={form.time}
-                                    onChange={(e) => setForm({ ...form, time: e.target.value })}
-                                    className="flex-1 rounded-xl px-3 py-2 text-2xl font-bold tabular-nums bg-transparent border border-border/40 text-foreground focus:outline-none focus:border-primary/50"
-                                />
+                            <div className="space-y-2">
+                                <div className="flex items-center gap-3">
+                                    <Clock size={16} className="text-primary shrink-0" />
+                                    <input
+                                        type="time"
+                                        value={form.time}
+                                        onChange={(e) => setForm({ ...form, time: e.target.value })}
+                                        className="flex-1 rounded-xl px-3 py-2 text-2xl font-bold tabular-nums bg-transparent border border-border/40 text-foreground focus:outline-none focus:border-primary/50"
+                                    />
+                                </div>
+                                {/* Quick adjust buttons */}
+                                <div className="grid grid-cols-4 gap-1.5">
+                                    <button
+                                        type="button"
+                                        onClick={() => handleAdjustTime(-60)}
+                                        className="py-1 px-2 text-[10px] font-semibold rounded-lg border border-border/30 bg-muted/20 text-muted-foreground hover:bg-muted/40 transition-colors"
+                                    >
+                                        -1h
+                                    </button>
+                                    <button
+                                        type="button"
+                                        onClick={() => handleAdjustTime(-15)}
+                                        className="py-1 px-2 text-[10px] font-semibold rounded-lg border border-border/30 bg-muted/20 text-muted-foreground hover:bg-muted/40 transition-colors"
+                                    >
+                                        -15m
+                                    </button>
+                                    <button
+                                        type="button"
+                                        onClick={() => handleAdjustTime(15)}
+                                        className="py-1 px-2 text-[10px] font-semibold rounded-lg border border-border/30 bg-muted/20 text-muted-foreground hover:bg-muted/40 transition-colors"
+                                    >
+                                        +15m
+                                    </button>
+                                    <button
+                                        type="button"
+                                        onClick={() => handleAdjustTime(60)}
+                                        className="py-1 px-2 text-[10px] font-semibold rounded-lg border border-border/30 bg-muted/20 text-muted-foreground hover:bg-muted/40 transition-colors"
+                                    >
+                                        +1h
+                                    </button>
+                                </div>
                             </div>
 
                             {/* Label */}
-                            <input
-                                type="text"
-                                placeholder="Label (e.g. Morning Adhkar)"
-                                value={form.label}
-                                onChange={(e) => setForm({ ...form, label: e.target.value })}
-                                className="w-full rounded-xl px-3 py-2.5 text-sm bg-transparent border border-border/40 text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary/50"
-                            />
+                            <div className="space-y-2">
+                                <input
+                                    type="text"
+                                    placeholder="Label (e.g. Morning Adhkar)"
+                                    value={form.label}
+                                    onChange={(e) => setForm({ ...form, label: e.target.value })}
+                                    className="w-full rounded-xl px-3 py-2.5 text-sm bg-transparent border border-border/40 text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary/50"
+                                />
+                                {/* Quick Presets / Tags */}
+                                <div className="flex gap-1.5 flex-wrap pt-0.5">
+                                    {QUICK_TAGS.map((tag) => (
+                                        <button
+                                            key={tag.label}
+                                            type="button"
+                                            onClick={() => setForm({ ...form, label: tag.label, time: tag.time })}
+                                            className="px-2 py-1 rounded-lg text-[10px] font-medium border border-border/30 bg-muted/10 text-foreground/80 hover:bg-primary/10 hover:border-primary/30 transition-colors"
+                                        >
+                                            {tag.label} ({tag.time})
+                                        </button>
+                                    ))}
+                                </div>
+                            </div>
 
                             {/* Repeat shortcuts */}
                             <div className="space-y-2">
@@ -176,6 +249,7 @@ function AddReminderButton() {
                                         return (
                                             <button
                                                 key={s.label}
+                                                type="button"
                                                 onClick={() => setForm({ ...form, days: s.days })}
                                                 className="px-3 py-1 rounded-full text-xs font-medium border transition-all"
                                                 style={{
@@ -188,22 +262,16 @@ function AddReminderButton() {
                                             </button>
                                         );
                                     })}
-                                    {/* Custom */}
-                                    <button
-                                        onClick={() => {}}
-                                        className="px-3 py-1 rounded-full text-xs font-medium border border-border/40 text-muted-foreground"
-                                    >
-                                        Custom
-                                    </button>
                                 </div>
 
                                 {/* Day pills */}
-                                <div className="flex gap-1.5">
+                                <div className="flex gap-1.5 flex-wrap">
                                     {DAY_NAMES.map((d, i) => {
                                         const active = form.days.includes(i);
                                         return (
                                             <button
                                                 key={i}
+                                                type="button"
                                                 onClick={() =>
                                                     setForm({
                                                         ...form,
@@ -529,10 +597,25 @@ function ReminderCard({ reminder, index, onToggle, onDelete }: {
     const [editing, setEditing] = useState(false);
     const [editLabel, setEditLabel] = useState(reminder.label);
     const [editTime, setEditTime] = useState(reminder.time);
-    const updateReminder = useTasbeehStore((s) => s.removeReminder);
-    const addReminder = useTasbeehStore((s) => s.addReminder);
+    const [editDays, setEditDays] = useState<number[]>(reminder.days);
+    
+    const storeUpdateReminder = useTasbeehStore((s) => s.updateReminder);
 
     const DAY_NAMES = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'];
+
+    const adjustTime = (current: string, minutes: number) => {
+        const [h, m] = current.split(':').map(Number);
+        const date = new Date();
+        date.setHours(h, m, 0, 0);
+        date.setMinutes(date.getMinutes() + minutes);
+        const hoursStr = String(date.getHours()).padStart(2, '0');
+        const minStr = String(date.getMinutes()).padStart(2, '0');
+        return `${hoursStr}:${minStr}`;
+    };
+
+    const handleAdjustTime = (minutes: number) => {
+        setEditTime((prev) => adjustTime(prev, minutes));
+    };
 
     const nextFireTime = useMemo(() => {
         if (!reminder.enabled) return null;
@@ -556,9 +639,13 @@ function ReminderCard({ reminder, index, onToggle, onDelete }: {
 
     const saveEdit = () => {
         if (!editLabel.trim()) { toast.error('Label cannot be empty'); return; }
-        // Delete old, add updated
-        updateReminder(reminder.id);
-        addReminder({ time: editTime, label: editLabel.trim(), enabled: reminder.enabled, days: reminder.days });
+        if (editDays.length === 0) { toast.error('Select at least one day'); return; }
+        
+        storeUpdateReminder(reminder.id, {
+            time: editTime,
+            label: editLabel.trim(),
+            days: editDays
+        });
         setEditing(false);
         toast.success('Reminder updated');
     };
@@ -598,13 +685,47 @@ function ReminderCard({ reminder, index, onToggle, onDelete }: {
                         animate={{ opacity: 1 }}
                         className="space-y-3"
                     >
-                        <input
-                            type="time"
-                            value={editTime}
-                            onChange={(e) => setEditTime(e.target.value)}
-                            className="w-full rounded-xl px-3 py-2 text-2xl font-bold tabular-nums bg-transparent border border-border/40 text-foreground focus:outline-none focus:border-primary/50"
-                            autoFocus
-                        />
+                        <div className="space-y-1.5">
+                            <input
+                                type="time"
+                                value={editTime}
+                                onChange={(e) => setEditTime(e.target.value)}
+                                className="w-full rounded-xl px-3 py-2 text-2xl font-bold tabular-nums bg-transparent border border-border/40 text-foreground focus:outline-none focus:border-primary/50"
+                                autoFocus
+                            />
+                            {/* Quick adjust buttons */}
+                            <div className="grid grid-cols-4 gap-1.5">
+                                <button
+                                    type="button"
+                                    onClick={() => handleAdjustTime(-60)}
+                                    className="py-1 px-2 text-[10px] font-semibold rounded-lg border border-border/30 bg-muted/20 text-muted-foreground hover:bg-muted/40 transition-colors"
+                                >
+                                    -1h
+                                </button>
+                                <button
+                                    type="button"
+                                    onClick={() => handleAdjustTime(-15)}
+                                    className="py-1 px-2 text-[10px] font-semibold rounded-lg border border-border/30 bg-muted/20 text-muted-foreground hover:bg-muted/40 transition-colors"
+                                >
+                                    -15m
+                                </button>
+                                <button
+                                    type="button"
+                                    onClick={() => handleAdjustTime(15)}
+                                    className="py-1 px-2 text-[10px] font-semibold rounded-lg border border-border/30 bg-muted/20 text-muted-foreground hover:bg-muted/40 transition-colors"
+                                >
+                                    +15m
+                                </button>
+                                <button
+                                    type="button"
+                                    onClick={() => handleAdjustTime(60)}
+                                    className="py-1 px-2 text-[10px] font-semibold rounded-lg border border-border/30 bg-muted/20 text-muted-foreground hover:bg-muted/40 transition-colors"
+                                >
+                                    +1h
+                                </button>
+                            </div>
+                        </div>
+                        
                         <input
                             type="text"
                             value={editLabel}
@@ -612,7 +733,37 @@ function ReminderCard({ reminder, index, onToggle, onDelete }: {
                             className="w-full rounded-xl px-3 py-2 text-sm bg-transparent border border-border/40 text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary/50"
                             placeholder="Reminder label"
                         />
-                        <div className="flex gap-2">
+
+                        {/* Repeat Days in Edit Mode */}
+                        <div className="space-y-1">
+                            <p className="text-[10px] text-muted-foreground font-semibold uppercase">Repeat Days</p>
+                            <div className="flex gap-1.5 flex-wrap">
+                                {DAY_NAMES.map((d, i) => {
+                                    const active = editDays.includes(i);
+                                    return (
+                                        <button
+                                            key={i}
+                                            type="button"
+                                            onClick={() =>
+                                                setEditDays(active
+                                                    ? editDays.filter((x) => x !== i)
+                                                    : [...editDays, i]
+                                                )
+                                            }
+                                            className="w-7 h-7 rounded-full text-[10px] font-semibold flex items-center justify-center transition-all"
+                                            style={{
+                                                background: active ? 'hsl(var(--primary))' : 'hsl(var(--border) / 0.3)',
+                                                color: active ? 'hsl(var(--primary-foreground))' : 'hsl(var(--foreground) / 0.6)',
+                                            }}
+                                        >
+                                            {d}
+                                        </button>
+                                    );
+                                })}
+                            </div>
+                        </div>
+
+                        <div className="flex gap-2 pt-1">
                             <motion.button
                                 whileTap={{ scale: 0.96 }}
                                 onClick={saveEdit}
@@ -622,7 +773,13 @@ function ReminderCard({ reminder, index, onToggle, onDelete }: {
                                 <Check size={12} /> Save
                             </motion.button>
                             <button
-                                onClick={() => { setEditing(false); setEditLabel(reminder.label); setEditTime(reminder.time); }}
+                                type="button"
+                                onClick={() => {
+                                    setEditing(false);
+                                    setEditLabel(reminder.label);
+                                    setEditTime(reminder.time);
+                                    setEditDays(reminder.days);
+                                }}
                                 className="flex-1 py-2 rounded-xl text-xs font-semibold border border-border/40 text-muted-foreground"
                             >
                                 Cancel

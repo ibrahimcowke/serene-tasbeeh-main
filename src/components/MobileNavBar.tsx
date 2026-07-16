@@ -34,7 +34,7 @@ export function MobileNavBar() {
       className="lg:hidden fixed bottom-0 left-0 right-0 z-50 pb-safe"
       style={{
         background: 'hsl(var(--card) / 0.95)',
-        borderTop: '1px solid hsl(var(--border) / 0.5)',
+        borderTop: '1px solid hsl(var(--primary) / 0.25)',
         backdropFilter: 'blur(16px)',
         WebkitBackdropFilter: 'blur(16px)',
       }}

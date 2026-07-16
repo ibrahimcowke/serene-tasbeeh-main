@@ -13,6 +13,7 @@ import { DigitalWatch } from './counter-shapes/DigitalWatch';
 import { StarBurst } from './counter-shapes/StarBurst';
 import { CrystalPrism } from './counter-shapes/CrystalPrism';
 import { TallyClicker } from './counter-shapes/TallyClicker';
+import { DigitalTally } from './counter-shapes/DigitalTally';
 import { Neumorph } from './counter-shapes/Neumorph';
 import { SunsetHorizon } from './counter-shapes/SunsetHorizon';
 import { DigitalVisuals } from './counter-shapes/DigitalVisuals';
@@ -113,6 +114,20 @@ export const CounterVisuals = memo(({
 }: CounterVisualsProps) => {
     const shapeData = counterShapes.find(s => s.id === counterShape);
     const shapeColor = shapeData?.color || 'hsl(var(--original-primary))';
+
+    if (counterShape === 'digital-tally') {
+        return (
+            <motion.div
+                className="relative flex items-center justify-center w-[min(80vw,50vh)] h-[min(80vw,50vh)] sm:w-[300px] sm:h-[300px] max-w-[320px] max-h-[320px]"
+                style={{
+                    transform: `translateY(${counterVerticalOffset}px) scale(${counterScale})`,
+                    color: shapeColor
+                }}
+            >
+                <DigitalTally currentCount={currentCount} />
+            </motion.div>
+        );
+    }
 
     return (
         <motion.div

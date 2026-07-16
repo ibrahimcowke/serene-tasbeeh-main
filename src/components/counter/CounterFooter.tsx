@@ -8,7 +8,11 @@ const toArabicNumerals = (n: number, isRTL: boolean): string => {
   return n.toString().split('').map(c => d[parseInt(c)] ?? c).join('');
 };
 
-export const CounterFooter = memo(function CounterFooter() {
+interface CounterFooterProps {
+  hideStats?: boolean;
+}
+
+export const CounterFooter = memo(function CounterFooter({ hideStats = false }: CounterFooterProps) {
   const currentCount = useTasbeehStore(state => state.currentCount);
   const targetCount = useTasbeehStore(state => state.targetCount);
   const currentDhikr = useTasbeehStore(state => state.currentDhikr);
@@ -22,7 +26,7 @@ export const CounterFooter = memo(function CounterFooter() {
   const roundsDone = Math.floor(currentCount / ROUND_SIZE);
 
   return (
-    <div className="w-full flex flex-col items-center gap-5 pb-2">
+    <div className="w-full flex flex-col items-center gap-3 sm:gap-5 pb-2">
       {/* Translation of dhikr */}
       {currentDhikr?.translation && (
         <p className="text-muted-foreground/60 text-[10px] sm:text-xs italic text-center px-6 max-w-xs leading-relaxed mt-2">
@@ -31,7 +35,7 @@ export const CounterFooter = memo(function CounterFooter() {
       )}
 
       {/* Bottom stats strip */}
-      {!zenMode && (
+      {!zenMode && !hideStats && (
         <div className="flex items-center gap-5 sm:gap-8">
           {/* All time count */}
           <div className="flex flex-col items-center">

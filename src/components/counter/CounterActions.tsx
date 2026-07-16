@@ -107,7 +107,7 @@ export const CounterActions = memo(function CounterActions() {
         }}
         disabled={currentCount === 0}
         title="Reset"
-        className={currentCount === 0 ? "opacity-0 pointer-events-none" : ""}
+        className={currentCount === 0 ? "opacity-30 pointer-events-none" : ""}
       >
         <RotateCcw className="w-4 h-4 text-primary/75" />
       </GlassButton>

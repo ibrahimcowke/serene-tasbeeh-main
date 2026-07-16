@@ -77,7 +77,7 @@ export type CounterShape =
   | 'modern-ring' | 'ring-light' 
   | 'bead-ring' | 'halo-ring' | 'vertical-capsules' | 'luminous-beads'
   | 'emerald-loop' | 'smart-ring' | 'moon-phase'
-  | 'digital-watch' | 'star-burst' | 'crystal-prism' | 'tally-clicker'
+  | 'digital-watch' | 'star-burst' | 'crystal-prism' | 'tally-clicker' | 'digital-tally'
   | 'neumorph' | 'sunset-horizon' | 'crystal-orbit' | 'aurora-glow' | 'diamond-prism' | 'golden-spiral';
 
 export interface Reminder {
@@ -265,6 +265,7 @@ export interface TasbeehState {
   addReminder: (reminder: Omit<Reminder, 'id'>) => void;
   removeReminder: (id: string) => void;
   toggleReminder: (id: string) => void;
+  updateReminder: (id: string, reminder: Partial<Omit<Reminder, 'id'>>) => void;
   switchDhikr: () => void;
   triggerCongrats: (data: { title: string; description: string; hasanatEarned: number }) => void;
   closeCongrats: () => void;
@@ -738,6 +739,13 @@ export const useTasbeehStore = create<TasbeehState>()(
       toggleReminder: (id) => {
         set((s) => {
           const updated = s.reminders.map(rem => rem.id === id ? { ...rem, enabled: !rem.enabled } : rem);
+          NotificationManager.syncReminders(updated, s.reminderEnabled);
+          return { reminders: updated };
+        });
+      },
+      updateReminder: (id, r) => {
+        set((s) => {
+          const updated = s.reminders.map(rem => rem.id === id ? { ...rem, ...r } : rem);
           NotificationManager.syncReminders(updated, s.reminderEnabled);
           return { reminders: updated };
         });

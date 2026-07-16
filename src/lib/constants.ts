@@ -1,4 +1,4 @@
-export const APP_VERSION = '2.4.0';
+export const APP_VERSION = '2.5.0';
 
 
 export const themes = [
@@ -33,6 +33,7 @@ export const counterShapes = [
   { id: 'moon-phase', label: 'Moon', icon: '🌙', color: '#94a3b8', bg: 'rgba(148, 163, 184, 0.1)' },
   { id: 'digital-watch', label: 'Watch', icon: '⌚', color: '#2dd4bf', bg: 'rgba(45, 212, 191, 0.1)' },
   { id: 'tally-clicker', label: 'Tally 3D', icon: '🖱️', color: '#71717a', bg: 'rgba(113, 113, 122, 0.1)' },
+  { id: 'digital-tally', label: 'Tally Digital', icon: '📟', color: '#ec4899', bg: 'rgba(236, 72, 153, 0.1)' },
   { id: 'neumorph', label: 'Neumorph', icon: '☁', color: '#94a3b8', bg: 'rgba(148, 163, 184, 0.1)' },
   { id: 'sunset-horizon', label: 'Sunset', icon: '🌅', color: '#f97316', bg: 'rgba(249, 115, 22, 0.1)' },
   { id: 'crystal-orbit', label: 'Crystal Orbit', icon: '💎', color: '#3b82f6', bg: 'rgba(59, 130, 246, 0.1)' },

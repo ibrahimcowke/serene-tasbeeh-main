@@ -30,7 +30,7 @@ export const NotificationManager = {
   async checkPermission(): Promise<'granted' | 'denied' | 'prompt'> {
     try {
       const check = await LocalNotifications.checkPermissions();
-      return check.display;
+      return check.display === 'prompt-with-rationale' ? 'prompt' : check.display;
     } catch (e) {
       if ('Notification' in window) {
         return Notification.permission as 'granted' | 'denied' | 'prompt';

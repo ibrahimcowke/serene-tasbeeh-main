@@ -99,11 +99,8 @@ const Index = () => {
             {/* Lazy Day Recovery Banner */}
             {!zenMode && <LazyDayBanner />}
 
-            {/* Main counter area */}
             <div className={`flex-1 min-h-0 w-full flex flex-col overflow-y-auto`}>
-              <div className={`max-w-md mx-auto w-full min-h-full flex flex-col px-2 sm:px-4 ${zenMode ? 'pt-0 pb-0' : 'pb-[calc(6rem+env(safe-area-inset-bottom,0px))] lg:pb-4'}`}>
-                <Counter />
-              </div>
+              <Counter className={`max-w-md mx-auto min-h-full px-2 sm:px-4 ${zenMode ? 'pt-0 pb-0' : 'pb-[calc(5.5rem+env(safe-area-inset-bottom,0px))]'}`} />
             </div>
 
             {/* Bottom navigation */}

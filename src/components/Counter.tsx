@@ -48,7 +48,13 @@ const announceMilestone = (count: number, lang: string) => {
   }
 };
 
-export const Counter = memo(function Counter() {
+const toArabicNumerals = (n: number, isRTL: boolean): string => {
+  if (!isRTL) return n.toString();
+  const d = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'];
+  return n.toString().split('').map(c => d[parseInt(c)] ?? c).join('');
+};
+
+export const Counter = memo(function Counter({ className = "" }: { className?: string }) {
   const currentCount = useTasbeehStore(state => state.currentCount);
   const reset = useTasbeehStore(state => state.reset);
   const increment = useTasbeehStore(state => state.increment);
@@ -81,8 +87,23 @@ export const Counter = memo(function Counter() {
     `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='${(currentSettings.primary || '#d97706').replace('#', '%23')}' fill-opacity='1'%3E%3Cpath d='M30 0l30 17.32v34.64L30 60 0 51.96V17.32L30 0zm0 4L4 19.2v26.4L30 56l26-10.4V19.2L30 4z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`
   , [currentSettings.primary]);
 
-  const { t } = useTranslation();
+  const { t, isRTL } = useTranslation();
   const prevCountRef = useRef(currentCount);
+
+  const totalAllTime = useTasbeehStore(state => state.totalAllTime);
+  const streakDays = useTasbeehStore(state => state.streakDays);
+  const ROUND_SIZE = 33;
+  const roundsDone = Math.floor(currentCount / ROUND_SIZE);
+
+  const [isShortScreen, setIsShortScreen] = useState(false);
+  useEffect(() => {
+    const checkSize = () => {
+      setIsShortScreen(window.innerHeight < 760 && window.innerWidth < 768);
+    };
+    checkSize();
+    window.addEventListener('resize', checkSize);
+    return () => window.removeEventListener('resize', checkSize);
+  }, [currentCount]);
 
   // Voice announcements on milestones
   useEffect(() => {
@@ -133,7 +154,7 @@ export const Counter = memo(function Counter() {
   }, [volumeButtonCounting, increment, decrement]);
 
   return (
-    <div className="relative flex flex-col items-center justify-between min-h-full w-full">
+    <div className={`relative flex flex-col items-center justify-between w-full ${className}`}>
 
       {/* Ambient background glows */}
       <div
@@ -156,7 +177,7 @@ export const Counter = memo(function Counter() {
         <DhikrHeader />
         
         {/* Session Timer & Wisdom Pills */}
-        <div className="flex flex-wrap items-center justify-center gap-2 mt-2.5">
+        <div className="flex flex-wrap items-center justify-center gap-2 mt-1.5 sm:mt-2.5">
           <SessionTimer />
 
           {/* Intention Pill */}
@@ -185,14 +206,67 @@ export const Counter = memo(function Counter() {
       </div>
 
       {/* Center: Bead ring + action buttons */}
-      <div className="relative flex flex-col sm:flex-row items-center justify-center w-full z-20 flex-1 gap-1 sm:gap-4 px-2">
-        <CounterDisplay />
-        <CounterActions />
+      <div className={`relative flex ${isShortScreen ? 'flex-row' : 'flex-col'} sm:flex-row items-center justify-center w-full z-20 flex-1 gap-2 sm:gap-6 px-2`}>
+        <div className="flex flex-col items-center justify-center">
+          <CounterDisplay />
+          <CounterActions />
+        </div>
+        {isShortScreen && (
+          <div className="flex flex-col justify-center items-center gap-5 pl-3 border-l border-primary/15 min-w-[70px]">
+            {/* All time count */}
+            <div className="flex flex-col items-center">
+              <span
+                className={`${isRTL ? 'font-arabic' : 'font-sans'} text-sm font-bold`}
+                style={{
+                  color: 'hsl(var(--primary))',
+                  textShadow: '0 0 10px hsl(var(--primary) / 0.4)'
+                }}
+              >
+                {toArabicNumerals(totalAllTime, isRTL)}
+              </span>
+              <span className="text-foreground/60 text-[8px] font-semibold uppercase tracking-wider text-center">
+                {t('counter.total')}
+              </span>
+            </div>
+
+            {/* Current session rounds */}
+            <div className="flex flex-col items-center">
+              <span
+                className={`${isRTL ? 'font-arabic' : 'font-sans'} text-sm font-bold`}
+                style={{
+                  color: 'hsl(var(--primary))',
+                  textShadow: '0 0 10px hsl(var(--primary) / 0.4)'
+                }}
+              >
+                {toArabicNumerals(roundsDone, isRTL)}
+              </span>
+              <span className="text-foreground/60 text-[8px] font-semibold uppercase tracking-wider text-center">
+                {t('counter.rounds')}
+              </span>
+            </div>
+
+            {/* Streak */}
+            <div className="flex flex-col items-center">
+              <span
+                className={`${isRTL ? 'font-arabic' : 'font-sans'} text-sm font-bold`}
+                style={{
+                  color: 'hsl(var(--primary))',
+                  textShadow: '0 0 10px hsl(var(--primary) / 0.4)'
+                }}
+              >
+                {toArabicNumerals(streakDays, isRTL)}
+              </span>
+              <span className="text-foreground/60 text-[8px] font-semibold uppercase tracking-wider text-center">
+                {t('counter.streak')}
+              </span>
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Bottom: Footer stats */}
-      <div className="w-full flex flex-col items-center justify-center z-10 pb-2 animate-fade-in-up gap-3 mt-6">
-        <CounterFooter />
+      <div className="w-full flex flex-col items-center justify-center z-10 pb-3 sm:pb-2 animate-fade-in-up gap-3 mt-3 sm:mt-6">
+        <CounterFooter hideStats={isShortScreen} />
       </div>
 
       {/* Wisdom Modal */}
