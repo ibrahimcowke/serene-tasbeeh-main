@@ -279,7 +279,7 @@ export const defaultDhikrs: Dhikr[] = [
   { id: 'allahuakbar', arabic: 'ٱللَّٰهُ أَكْبَرُ', transliteration: 'Allahu Akbar', translation: 'Allah is the Greatest', hadiths: [{ text: "أحب الكلام إلى الله أربع: سبحان الله، والحمد لله، ولا إله إلا الله، والله أكبر", source: "مسلم" }] },
   { id: 'astaghfirullah', arabic: 'أَسْتَغْفِرُ ٱللَّٰهَ', transliteration: 'Astaghfirullah', translation: 'I seek forgiveness from Allah', hadiths: [{ text: "من لزم الاستغفار جعل الله له من كل هم فرجا، ومن كل ضيق مخرجا", source: "أبو داود" }] },
   { id: 'la-ilaha-illallah', arabic: 'لَا إِلَٰهَ إِلَّا ٱللَّٰهُ', transliteration: 'La ilaha illallah', translation: 'There is no god but Allah', hadiths: [{ text: "أفضل الذكر لا إله إلا الله", source: "الترمذي" }] },
-  { id: 'allahuma-sali', arabic: 'اللَّهُمَّ صَلِّ عَلَى سَيِّدِنَا مُحَمَّدٍ', transliteration: 'Allahumma Salli Ala Sayyidina Muhammad', translation: 'O Allah, send blessings upon our Master Muhammad', hadiths: [{ text: "من صلى علي واحدة صلى الله عليه عشرا", source: "مسلم" }] },
+  { id: 'allahuma-sali', arabic: 'اللَّهُمَّ صَلِّ عَلَى مُحَمَّدٍ صَلَّى اللّٰهُ عَلَيْهِ وَسَلَّمَ', transliteration: 'Allahumma Salli Ala Muhammad (SCW)', translation: 'O Allah, send blessings upon Muhammad (SCW)', hadiths: [{ text: "من صلى علي واحدة صلى الله عليه عشرا", source: "مسلم" }] },
   { id: 'ayat_alkursi', arabic: 'آيَةُ الْكُرْسِيِّ', transliteration: 'Ayat al-Kursi', translation: 'The Throne Verse', hadiths: [{ text: "هي أعظم آية في كتاب الله", source: "مسلم" }] },
   { id: '3_quls', arabic: 'الْمُعَوِّذَاتِ', transliteration: 'The 3 Quls', translation: 'Surah Ikhlas, Falaq, and Nas', hadiths: [{ text: "قل هو الله أحد تعدل ثلث القرآن", source: "البخاري" }] },
   { id: 'la_ilaha_wahdahu', arabic: 'لَا إِلَٰهَ إِلَّا ٱللَّٰهُ وَحْدَهُ لَا شَرِيكَ لَهُ', transliteration: 'La ilaha illallah wahdahu', translation: 'None has the right to be worshipped but Allah alone', hadiths: [{ text: "من قال: لا إله إلا الله وحده لا شريك له... في يوم مائة مرة كانت له عدل عشر رقاب", source: "البخاري ومسلم" }] },
@@ -517,9 +517,7 @@ export const useTasbeehStore = create<TasbeehState>()(
           const phaseTarget = [333, 333, 333, 1][mode.currentPhase];
           if (newCount >= phaseTarget && mode.currentPhase < 3) {
             const nextPhase = mode.currentPhase + 1;
-            const ritualDhikrIds = ['subahanallah', 'alhamdulillah', 'allahuakbar', 'la-ilaha-illallah'];
-            const nextDhikrId = ritualDhikrIds[nextPhase];
-            const nextDhikr = state.dhikrs.find(d => d.id === nextDhikrId) || defaultDhikrs[0];
+            const nextDhikr = state.dhikrs.find(d => d.id === 'allahuma-sali') || defaultDhikrs[5];
 
             const newSessionMode: SessionMode = {
               ...mode,
@@ -666,8 +664,9 @@ export const useTasbeehStore = create<TasbeehState>()(
       },
       startTasbih1000: (challengeId) => {
         get().saveActiveSession();
-        set({ sessionMode: { type: 'tasbih1000', currentPhase: 0, phaseCounts: [0, 0, 0, 0], isComplete: false, challengeId }, currentDhikr: defaultDhikrs[0], currentCount: 0, targetCount: 333, sessionStartTime: Date.now() });
-        syncWidget(0, defaultDhikrs[0].transliteration);
+        const dhikr = get().dhikrs.find(d => d.id === 'allahuma-sali') || defaultDhikrs[5];
+        set({ sessionMode: { type: 'tasbih1000', currentPhase: 0, phaseCounts: [0, 0, 0, 0], isComplete: false, challengeId }, currentDhikr: dhikr, currentCount: 0, targetCount: 333, sessionStartTime: Date.now() });
+        syncWidget(0, dhikr.transliteration);
       },
       startLaIlahaWahdahu100: () => {
         const dhikr = get().dhikrs.find(d => d.id === 'la_ilaha_wahdahu') || defaultDhikrs[8];

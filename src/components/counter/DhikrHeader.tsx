@@ -24,7 +24,7 @@ export const DhikrHeader = memo(function DhikrHeader() {
       return ((completed + currentCount) / 100) * 100;
     }
     if (sessionMode.type === 'tasbih1000') {
-      const completed = sessionMode.currentPhase * 125;
+      const completed = [0, 333, 666, 999][sessionMode.currentPhase] || 0;
       return ((completed + currentCount) / 1000) * 100;
     }
     return null;
@@ -154,8 +154,8 @@ export const DhikrHeader = memo(function DhikrHeader() {
           )}
           <p className="text-primary/50 text-[10px] tracking-wide">
             {isRTL 
-              ? `المجموعة ${toArabicNumerals(sessionMode.currentPhase + 1, isRTL)} / ${toArabicNumerals(8, isRTL)} • ${toArabicNumerals(Math.floor(sessionMode.currentPhase * 125 + currentCount), isRTL)} / ${toArabicNumerals(1000, isRTL)}`
-              : `Set ${sessionMode.currentPhase + 1} / 8 • ${toArabicNumerals(Math.floor(sessionMode.currentPhase * 125 + currentCount), isRTL)} / 1000`
+              ? `المجموعة ${toArabicNumerals(sessionMode.currentPhase + 1, isRTL)} / ${toArabicNumerals(4, isRTL)} • ${toArabicNumerals(Math.floor(([0, 333, 666, 999][sessionMode.currentPhase] || 0) + currentCount), isRTL)} / ${toArabicNumerals(1000, isRTL)}`
+              : `Set ${sessionMode.currentPhase + 1} / 4 • ${toArabicNumerals(Math.floor(([0, 333, 666, 999][sessionMode.currentPhase] || 0) + currentCount), isRTL)} / 1000`
             }
           </p>
         </div>
