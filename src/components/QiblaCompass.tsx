@@ -157,30 +157,6 @@ export function QiblaCompass({ children }: QiblaCompassProps) {
                     border: '2px solid hsl(var(--primary) / 0.25)',
                   }}
                 />
-                {/* Cardinal directions (highly visible, bold, and solid colors) */}
-                {[
-                  { label: 'N', deg: 0 }, { label: 'E', deg: 90 },
-                  { label: 'S', deg: 180 }, { label: 'W', deg: 270 },
-                ].map(({ label, deg }) => {
-                  const rad = toRad(deg - 90);
-                  const x = 128 + 110 * Math.cos(rad);
-                  const y = 128 + 110 * Math.sin(rad);
-                  return (
-                    <span
-                      key={label}
-                      className="absolute text-xs sm:text-sm font-black tracking-widest"
-                      style={{
-                        left: `${x}px`,
-                        top: `${y}px`,
-                        transform: 'translate(-50%, -50%)',
-                        color: label === 'N' ? 'hsl(var(--primary))' : 'hsl(var(--foreground))',
-                        textShadow: '0 1px 3px rgba(0,0,0,0.6)',
-                      }}
-                    >
-                      {label}
-                    </span>
-                  );
-                })}
 
                 {/* Compass dial */}
                 <motion.div
@@ -193,6 +169,31 @@ export function QiblaCompass({ children }: QiblaCompassProps) {
                   animate={{ rotate: deviceHeading !== null ? -deviceHeading : 0 }}
                   transition={{ type: 'spring', stiffness: 80, damping: 15 }}
                 >
+                  {/* Cardinal directions (rendered inside the rotating dial so they are on top of card background and visible) */}
+                  {[
+                    { label: 'N', deg: 0 }, { label: 'E', deg: 90 },
+                    { label: 'S', deg: 180 }, { label: 'W', deg: 270 },
+                  ].map(({ label, deg }) => {
+                    const rad = toRad(deg - 90);
+                    const x = 112 + 82 * Math.cos(rad); // 82px radius fits perfectly inside the 112px dial
+                    const y = 112 + 82 * Math.sin(rad);
+                    return (
+                      <span
+                        key={label}
+                        className="absolute text-xs sm:text-sm font-black tracking-widest select-none"
+                        style={{
+                          left: `${x}px`,
+                          top: `${y}px`,
+                          transform: 'translate(-50%, -50%)',
+                          color: label === 'N' ? 'hsl(var(--primary))' : 'hsl(var(--foreground))',
+                          textShadow: '0 1px 2px rgba(0,0,0,0.2)',
+                        }}
+                      >
+                        {label}
+                      </span>
+                    );
+                  })}
+
                   {/* Qibla arrow indicator (Themed & bold) */}
                   {qiblaBearing !== null && (
                     <motion.div
