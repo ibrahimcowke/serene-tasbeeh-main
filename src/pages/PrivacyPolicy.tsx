@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { Shield, Lock, Database, Baby, FileText, Users, Cloud, WifiOff, Trash2 } from 'lucide-react';
+import { Shield, Lock, Database, Baby, FileText, Users, Cloud, WifiOff, Trash2, Bot, Sliders } from 'lucide-react';
 import { ArrowKeyBackButton } from '@/components/ArrowKeyBackButton';
 
 export default function PrivacyPolicy() {
@@ -8,6 +8,16 @@ export default function PrivacyPolicy() {
             icon: Shield,
             title: "Our Commitment",
             content: "Tasbeehly is designed with a 'privacy-first' philosophy. We believe your spiritual practice is deeply personal. This policy complies with Google Play Store standards and explains how we collect, secure, and sync your data."
+        },
+        {
+            icon: Bot,
+            title: "AI Dhikr Companion & API Keys",
+            content: "The AI Dhikr Companion operates with absolute respect for your privacy. Your secure Google AI Studio Gemini API Key and chat history are stored exclusively in your device's local storage. Chat requests are sent directly to Google's Gemini API endpoints and are never transmitted to, stored on, or processed by our servers."
+        },
+        {
+            icon: Sliders,
+            title: "Device Controls & Speech Synthesis",
+            content: "For a physical counting experience and optional audio guidance, the app integrates volume key counting and Text-To-Speech (TTS) capabilities. These features are processed completely offline, utilizing your local device's hardware and system APIs. No keystrokes or audio data are logged or shared."
         },
         {
             icon: Users,
@@ -143,7 +153,7 @@ export default function PrivacyPolicy() {
                         <p className="text-xs text-muted-foreground leading-relaxed">
                             Questions about our privacy practices?
                             <br />
-                            Email us at <span className="text-primary font-medium hover:underline cursor-pointer">privacy@tasbeehly.com</span>
+                            Email us at <span className="text-primary font-medium hover:underline cursor-pointer">koorbobillin@gmail.com</span>
                         </p>
                         <ArrowKeyBackButton className="mx-auto mt-2" label="Back to App" />
                     </footer>

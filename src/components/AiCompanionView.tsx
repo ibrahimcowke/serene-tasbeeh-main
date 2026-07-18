@@ -1,6 +1,6 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Sparkles, X, Send, Key, AlertCircle, Play } from 'lucide-react';
+import { Sparkles, X, Send, Key, AlertCircle, Play, Volume2, VolumeX, Trash2 } from 'lucide-react';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger, SheetDescription } from '@/components/ui/sheet';
 import { useTasbeehStore } from '@/store/tasbeehStore';
 import { toast } from 'sonner';
@@ -29,16 +29,51 @@ export function AiCompanionView({ children }: AiCompanionViewProps) {
   const [loading, setLoading] = useState(false);
   const [apiKey, setApiKey] = useState(() => localStorage.getItem('tasbeehly_gemini_api_key') || '');
   const [showKeyInput, setShowKeyInput] = useState(false);
+  const [speakingIndex, setSpeakingIndex] = useState<number | null>(null);
 
   const dhikrs = useTasbeehStore((s) => s.dhikrs);
   const setDhikr = useTasbeehStore((s) => s.setDhikr);
 
-  const [messages, setMessages] = useState<ChatMessage[]>([
-    { 
-      sender: 'ai', 
-      text: "As-salamu alaykum. I am your Dhikr Companion. Tell me how you feel today (e.g., anxious, grateful, seeking forgiveness, stressed) and I will suggest the best remembrance for your heart." 
+  const [messages, setMessages] = useState<ChatMessage[]>(() => {
+    const saved = localStorage.getItem('tasbeehly_ai_companion_history');
+    if (saved) {
+      try {
+        return JSON.parse(saved);
+      } catch (e) {
+        console.error('Failed to parse saved chat history:', e);
+      }
     }
-  ]);
+    return [
+      { 
+        sender: 'ai', 
+        text: "As-salamu alaykum. I am your Dhikr Companion. Tell me how you feel today (e.g., anxious, grateful, seeking forgiveness, stressed) and I will suggest the best remembrance for your heart." 
+      }
+    ];
+  });
+
+  // Save messages to local storage whenever they change
+  useEffect(() => {
+    localStorage.setItem('tasbeehly_ai_companion_history', JSON.stringify(messages));
+  }, [messages]);
+
+  // Cancel any active SpeechSynthesis on component unmount
+  useEffect(() => {
+    return () => {
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+      }
+    };
+  }, []);
+
+  // Cancel speech when sheet is closed
+  useEffect(() => {
+    if (!open) {
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+      }
+      setSpeakingIndex(null);
+    }
+  }, [open]);
 
   const handleSaveApiKey = () => {
     localStorage.setItem('tasbeehly_gemini_api_key', apiKey.trim());
@@ -46,51 +81,115 @@ export function AiCompanionView({ children }: AiCompanionViewProps) {
     setShowKeyInput(false);
   };
 
+  const handleClearHistory = () => {
+    if (window.confirm('Are you sure you want to clear your chat history?')) {
+      const initialGreeting: ChatMessage[] = [
+        { 
+          sender: 'ai', 
+          text: "As-salamu alaykum. I am your Dhikr Companion. Tell me how you feel today (e.g., anxious, grateful, seeking forgiveness, stressed) and I will suggest the best remembrance for your heart." 
+        }
+      ];
+      setMessages(initialGreeting);
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+      }
+      setSpeakingIndex(null);
+      toast.success('Chat history cleared!');
+    }
+  };
+
   const handleStartCounting = (rec: NonNullable<ChatMessage['recommendation']>) => {
-    const selected = dhikrs.find(d => d.id === rec.dhikrId) || dhikrs[0];
+    let targetId = rec.dhikrId;
+    // Map API or fallback return value 'salawat' to 'allahuma-sali'
+    if (targetId === 'salawat') {
+      targetId = 'allahuma-sali';
+    }
+    const selected = dhikrs.find(d => d.id === targetId) || dhikrs[0];
     setDhikr(selected);
     toast.success(`${rec.transliteration} loaded in counter! 📿`);
     setOpen(false);
   };
 
+  const handleSpeech = (msg: ChatMessage, index: number) => {
+    if (!('speechSynthesis' in window)) {
+      toast.error('Text-to-speech is not supported on this device.');
+      return;
+    }
+
+    if (speakingIndex === index) {
+      window.speechSynthesis.cancel();
+      setSpeakingIndex(null);
+      return;
+    }
+
+    window.speechSynthesis.cancel();
+
+    // Build the text to be spoken (skipping Arabic characters as they may sound garbled in English engines)
+    let speakText = msg.text;
+    if (msg.recommendation) {
+      speakText += `. Recommended remembrance: ${msg.recommendation.transliteration}. Meaning: ${msg.recommendation.translation}.`;
+    }
+    if (msg.hadith) {
+      speakText += ` Hadith: ${msg.hadith}`;
+    }
+    if (msg.story) {
+      speakText += ` Story: ${msg.story}`;
+    }
+
+    const utterance = new SpeechSynthesisUtterance(speakText);
+    utterance.lang = 'en-US';
+    utterance.onend = () => {
+      setSpeakingIndex(null);
+    };
+    utterance.onerror = () => {
+      setSpeakingIndex(null);
+    };
+
+    setSpeakingIndex(index);
+    window.speechSynthesis.speak(utterance);
+  };
+
   const offlineFallback = (query: string): ChatMessage => {
     const q = query.toLowerCase();
     
+    // 1. Prayer/Salah
     if (q.includes('prayer') || q.includes('salah') || q.includes('namaz') || q.includes('time') || q.includes('fajr') || q.includes('dhuhr') || q.includes('asr') || q.includes('maghrib') || q.includes('isha')) {
       const cached = localStorage.getItem('tasbeehly_prayer_times_cache');
+      let text = "Prayer is the connection between the servant and the Creator. Keeping watch over prayer times brings discipline and peace to the soul.";
       if (cached) {
         try {
           const parsed = JSON.parse(cached);
           if (parsed && parsed.times && parsed.times.length > 0) {
             const next = getNextPrayer(parsed.times);
             const timesList = parsed.times.map((t: any) => `${t.label}: ${t.time}`).join('\n• ');
-            let text = `Here are today's local prayer times:\n\n• ${timesList}`;
+            text = `Here are today's local prayer times:\n\n• ${timesList}`;
             if (next) {
               text += `\n\nNext prayer is ${next.prayer.label} in about ${next.minutesUntil} minutes (${next.prayer.time}).`;
             }
-            return {
-              sender: 'ai',
-              text: text,
-              recommendation: {
-                dhikrId: 'subahanallah',
-                arabic: 'سُبْحَانَ ٱللَّٰهِ',
-                transliteration: 'Subhan-Allah',
-                translation: 'Glory be to Allah'
-              }
-            };
           }
         } catch {}
       }
       return {
         sender: 'ai',
-        text: "I couldn't find your local prayer times. Please go to the Reminders tab and toggle 'Sync Prayer Times' with location permissions to enable them offline.",
+        text: text,
+        hadith: "The likeness of the five daily prayers is that of a deep river flowing past the door of one of you in which he bathes five times a day.",
+        story: "A busy merchant committed to praying every Salah at its prime time, finding his stress dissolved and his daily affairs blessed with ease.",
+        recommendation: {
+          dhikrId: 'subahanallah',
+          arabic: 'سُبْحَانَ ٱللَّٰهِ',
+          transliteration: 'Subhan-Allah',
+          translation: 'Glory be to Allah'
+        }
       };
     }
 
+    // 2. Forgiveness/Repentance
     if (q.includes('forgive') || q.includes('sorry') || q.includes('sin') || q.includes('mistake') || q.includes('repent')) {
       return {
         sender: 'ai',
         text: "Seeking forgiveness cleanses the heart and opens the doors of mercy. Reciting 'Astaghfirullah' helps lift the burden of guilt.",
+        hadith: "If anyone constantly seeks pardon (from Allah), Allah will appoint for him a way out of every distress, and a relief from every anxiety.",
+        story: "A young man carrying years of secret guilt began making constant Istighfar daily, eventually finding deep internal peace and a corrected path.",
         recommendation: {
           dhikrId: 'astaghfirullah',
           arabic: 'أَسْتَغْفِرُ ٱللَّٰهَ',
@@ -100,10 +199,13 @@ export function AiCompanionView({ children }: AiCompanionViewProps) {
       };
     }
     
+    // 3. Anxiety/Stress/Sadness
     if (q.includes('anxious') || q.includes('worry') || q.includes('scared') || q.includes('fear') || q.includes('stress') || q.includes('sad')) {
       return {
         sender: 'ai',
         text: "Verily, in the remembrance of Allah do hearts find rest. When facing hardships or anxiety, declare Allah's ultimate sovereignty.",
+        hadith: "How wonderful is the affair of the believer, for there is good for him in every matter... If he is afflicted with adversity he is patient, and it is good for him.",
+        story: "During a period of severe financial distress, a father kept reciting 'La ilaha illallah' continuously, finding the calmness to navigate the storm until relief arrived.",
         recommendation: {
           dhikrId: 'la-ilaha-illallah',
           arabic: 'لَا إِلَٰهَ إِلَّا ٱللَّٰهُ',
@@ -113,10 +215,13 @@ export function AiCompanionView({ children }: AiCompanionViewProps) {
       };
     }
 
+    // 4. Gratitude
     if (q.includes('thank') || q.includes('grateful') || q.includes('happy') || q.includes('bless') || q.includes('good')) {
       return {
         sender: 'ai',
         text: "If you are grateful, I will surely increase you. Reciting 'Alhamdulillah' multiplies blessings and anchors joy in gratitude.",
+        hadith: "Allah is pleased with His servant who says: 'Alhamdulillah' when he takes a bite of food and when he takes a drink.",
+        story: "A farmer who lost half his crop thanked Allah for the half that remained; his gratitude sustained his family and the next harvest was doubled.",
         recommendation: {
           dhikrId: 'alhamdulillah',
           arabic: 'ٱلْحَمْدُ لِلَّٰهِ',
@@ -126,10 +231,60 @@ export function AiCompanionView({ children }: AiCompanionViewProps) {
       };
     }
 
+    // 5. Tired/Weakness
+    if (q.includes('tired') || q.includes('weak') || q.includes('exhausted') || q.includes('lazy')) {
+      return {
+        sender: 'ai',
+        text: "When physical or mental exhaustion takes over, calling upon Allah's absolute power restores strength and determination.",
+        hadith: "Shall I not direct you to something better than what you have requested? When you go to bed, say 'SubhanAllah' 33 times, 'Alhamdulillah' 33 times, and 'Allahu Akbar' 34 times.",
+        story: "Fatima (r.a.) went to the Prophet ﷺ seeking a helper due to exhaustion from work, and he advised her to recite these words, giving her unmatched energy.",
+        recommendation: {
+          dhikrId: 'allahuakbar',
+          arabic: 'ٱللَّٰهُ أَكْبَرُ',
+          transliteration: 'Allahu Akbar',
+          translation: 'Allah is the Greatest'
+        }
+      };
+    }
+
+    // 6. Allahu Akbar (Greatness/Power)
+    if (q.includes('great') || q.includes('power') || q.includes('allahuakbar') || q.includes('majesty')) {
+      return {
+        sender: 'ai',
+        text: "Declaring 'Allahu Akbar' reminds us that Allah is greater than any obstacle, challenge, or giant task in our lives.",
+        hadith: "The most beloved speech to Allah consists of four words: SubhanAllah, Alhamdulillah, La ilaha illallah, and Allahu Akbar.",
+        story: "A traveler facing a terrifying mountain pass repeatedly declared Allah's greatness, finding the courage to cross safely as his fears diminished.",
+        recommendation: {
+          dhikrId: 'allahuakbar',
+          arabic: 'ٱللَّٰهُ أَكْبَرُ',
+          transliteration: 'Allahu Akbar',
+          translation: 'Allah is the Greatest'
+        }
+      };
+    }
+
+    // 7. Salawat (Prophet/Muhammad)
+    if (q.includes('salawat') || q.includes('prophet') || q.includes('muhammad') || q.includes('peace') || q.includes('messenger')) {
+      return {
+        sender: 'ai',
+        text: "Sending blessings upon the Prophet ﷺ is a key to having your worries removed and your sins forgiven.",
+        hadith: "Whoever sends blessings upon me once, Allah will send blessings upon him tenfold.",
+        story: "Ubayy ibn Ka'b asked if he should dedicate all his supplications to sending blessings upon the Prophet, and the Prophet ﷺ said: 'Then your worries will be sufficient and your sins forgiven.'",
+        recommendation: {
+          dhikrId: 'allahuma-sali',
+          arabic: 'اللَّهُمَّ صَلِّ عَلَى مُحَمَّدٍ',
+          transliteration: 'Allahumma Salli Ala Muhammad (SCW)',
+          translation: 'O Allah, send blessings upon Muhammad (SCW)'
+        }
+      };
+    }
+
     // Default fallback
     return {
       sender: 'ai',
       text: "Exalting Allah brings tranquility to the soul. Reciting 'SubhanAllah' praises His infinite perfection above all concerns.",
+      hadith: "Two words are light on the tongue, heavy in the scale, and beloved to the Most Merciful: Subhan-Allahi wa bihamdihi, Subhan-Allahil-Azim.",
+      story: "A fisherman facing a silent sea began praising Allah repeatedly, finding quiet contentment and eventually returning with a bountiful catch.",
       recommendation: {
         dhikrId: 'subahanallah',
         arabic: 'سُبْحَانَ ٱللَّٰهِ',
@@ -147,12 +302,14 @@ export function AiCompanionView({ children }: AiCompanionViewProps) {
     setLoading(true);
 
     if (!apiKey.trim()) {
-      // Offline fallback & privacy message
+      // Offline fallback
       setTimeout(() => {
         const reply = offlineFallback(userText);
         setMessages(prev => [...prev, {
           sender: 'ai',
           text: `🔒 Note: To protect your privacy, Tasbeehly does not store global API keys. To enable the live AI Dhikr Companion, tap the key icon 🔑 in the top-right and paste your secure Google AI Studio API key (saved locally on your device only).\n\nHere is your offline recommendation:\n\n${reply.text}`,
+          hadith: reply.hadith,
+          story: reply.story,
           recommendation: reply.recommendation
         }]);
         setLoading(false);
@@ -266,13 +423,22 @@ export function AiCompanionView({ children }: AiCompanionViewProps) {
                   <Sparkles className="w-5 h-5 text-primary" />
                   AI Companion
                 </SheetTitle>
-                <button
-                  onClick={() => setShowKeyInput(!showKeyInput)}
-                  className="p-2 hover:bg-white/5 rounded-xl transition-colors cursor-pointer text-muted-foreground/60 hover:text-foreground"
-                  title="Configure API Key"
-                >
-                  <Key size={16} />
-                </button>
+                <div className="flex items-center gap-1">
+                  <button
+                    onClick={handleClearHistory}
+                    className="p-2 hover:bg-white/5 rounded-xl transition-colors cursor-pointer text-muted-foreground/60 hover:text-destructive"
+                    title="Clear Chat History"
+                  >
+                    <Trash2 size={16} />
+                  </button>
+                  <button
+                    onClick={() => setShowKeyInput(!showKeyInput)}
+                    className="p-2 hover:bg-white/5 rounded-xl transition-colors cursor-pointer text-muted-foreground/60 hover:text-foreground"
+                    title="Configure API Key"
+                  >
+                    <Key size={16} />
+                  </button>
+                </div>
               </div>
             </SheetHeader>
 
@@ -312,7 +478,7 @@ export function AiCompanionView({ children }: AiCompanionViewProps) {
                   className={`flex ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}
                 >
                   <div 
-                    className={`max-w-[85%] p-4 rounded-2xl border text-xs leading-relaxed space-y-3 ${
+                    className={`max-w-[85%] p-4 rounded-2xl border text-xs leading-relaxed space-y-3 relative group ${
                       msg.sender === 'user' 
                         ? 'bg-primary text-primary-foreground border-primary/20 rounded-tr-none' 
                         : 'bg-card text-foreground border-border/20 rounded-tl-none'
@@ -352,6 +518,19 @@ export function AiCompanionView({ children }: AiCompanionViewProps) {
                         >
                           <Play size={10} className="fill-current" />
                           Start Reciting
+                        </button>
+                      </div>
+                    )}
+
+                    {/* TTS Trigger Icon (AI messages only) */}
+                    {msg.sender === 'ai' && (
+                      <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity flex gap-1">
+                        <button
+                          onClick={() => handleSpeech(msg, idx)}
+                          className="p-1 hover:bg-foreground/5 rounded-lg text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
+                          title={speakingIndex === idx ? "Stop Voice" : "Listen Response"}
+                        >
+                          {speakingIndex === idx ? <VolumeX size={14} /> : <Volume2 size={14} />}
                         </button>
                       </div>
                     )}

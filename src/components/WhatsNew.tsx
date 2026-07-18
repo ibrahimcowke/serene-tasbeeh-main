@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, ArrowRight, Zap, Sliders, Sparkles, Bell } from 'lucide-react';
+import { X, ArrowRight, Zap, Sliders, Sparkles, Bell, Bot, Volume2 } from 'lucide-react';
 import { useTasbeehStore } from '@/store/tasbeehStore';
 import { APP_VERSION } from '@/lib/constants';
 import { Button } from '@/components/ui/button';
@@ -40,6 +40,18 @@ export const WhatsNew = () => {
     }, [isOpen]);
 
     const features = [
+        {
+            title: "AI Dhikr Companion",
+            description: "Chat with an intelligent offline or online companion for personal emotional recommendations, audio feedback, and tailored dhikrs.",
+            icon: <Bot className="w-8 h-8 text-indigo-400" />,
+            color: "from-indigo-500/20 to-indigo-500/5"
+        },
+        {
+            title: "Volume Button Counting",
+            description: "Press physical volume keys to count dhikrs on-the-go without needing to look at or tap the screen.",
+            icon: <Volume2 className="w-8 h-8 text-rose-400" />,
+            color: "from-rose-500/20 to-rose-500/5"
+        },
         {
             title: "Crystal Orbit Shape",
             description: "A stunning new counter shape — 33 crystal glass beads in a circular orbit with sapphire blue, gold bloom, and a frosted-glass center display.",
