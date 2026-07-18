@@ -1,6 +1,6 @@
 import { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Search, Star, ChevronDown, ChevronUp, Sparkles } from 'lucide-react';
+import { Search, Star, ChevronDown, ChevronUp, Sparkles, Brain, Share2 } from 'lucide-react';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger, SheetDescription } from '@/components/ui/sheet';
 import { Input } from '@/components/ui/input';
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -8,6 +8,7 @@ import { useTasbeehStore } from '@/store/tasbeehStore';
 import { asmaulHusna, AsmaulHusnaEntry } from '@/data/asmaulHusna';
 import { useTranslation } from '@/lib/i18n';
 import { toast } from 'sonner';
+import { AsmaulHusnaQuiz } from './AsmaulHusnaQuiz';
 
 const formatNumber = (n: number | string, isRTL: boolean): string => {
   if (!isRTL) return n.toString();
@@ -205,6 +206,18 @@ export function AsmaulHusnaView({ children }: AsmaulHusnaViewProps) {
                 {t('names.subtitle')}
               </p>
             </SheetHeader>
+
+            {/* Quiz Mode entry */}
+            <div className="px-6 pb-2 shrink-0">
+              <AsmaulHusnaQuiz>
+                <button className="flex items-center gap-2 w-full py-2.5 px-4 rounded-xl border text-xs font-black uppercase tracking-wider transition-all hover:bg-primary/10 cursor-pointer"
+                  style={{ color: 'hsl(var(--primary))', borderColor: 'hsl(var(--primary)/0.25)', background: 'hsl(var(--primary)/0.05)' }}
+                >
+                  <Brain className="w-4 h-4" />
+                  Quiz Mode — Test Your Knowledge
+                </button>
+              </AsmaulHusnaQuiz>
+            </div>
 
             {/* Name of the Day widget */}
             {!search && (

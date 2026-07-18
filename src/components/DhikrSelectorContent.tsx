@@ -1,10 +1,11 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Check, Plus, Trash2, Heart, Search } from 'lucide-react';
+import { Check, Plus, Trash2, Heart, Search, Share2 } from 'lucide-react';
 import { useTasbeehStore, Dhikr } from '@/store/tasbeehStore';
 import { SheetHeader, SheetTitle, SheetDescription } from '@/components/ui/sheet';
 import { z } from 'zod';
 import { speakArabic } from '@/lib/audioRecitations';
+import { DhikrShareCard } from './DhikrShareCard';
 
 const customDhikrSchema = z.object({
   arabic: z.string().trim().min(1, 'Arabic text is required').max(100, 'Too long'),
@@ -31,6 +32,7 @@ export function DhikrSelectorContent({ setOpen }: DhikrSelectorContentProps) {
 
   const [showAddForm, setShowAddForm] = useState(false);
   const [newDhikr, setNewDhikr] = useState({ arabic: '', transliteration: '', meaning: '' });
+  const [shareDhikr, setShareDhikr] = useState<Dhikr | null>(null);
   const [errors, setErrors] = useState<Record<string, string>>({});
 
   const handleSelect = (dhikr: Dhikr) => {
@@ -149,6 +151,12 @@ export function DhikrSelectorContent({ setOpen }: DhikrSelectorContentProps) {
                     >
                       <Heart className={`w-4 h-4 ${favoriteDhikrIds.includes(dhikr.id) ? 'text-primary fill-current' : 'text-muted-foreground'}`} />
                     </button>
+                    <button
+                      onClick={(e) => { e.stopPropagation(); setShareDhikr(dhikr); }}
+                      className="p-2 rounded-full hover:bg-primary/5 text-muted-foreground hover:text-primary transition-colors"
+                    >
+                      <Share2 className="w-4 h-4" />
+                    </button>
                     {'isCustom' in dhikr && (
                       <button
                         onClick={(e) => handleDeleteCustom(dhikr.id, e)}
@@ -239,6 +247,15 @@ export function DhikrSelectorContent({ setOpen }: DhikrSelectorContentProps) {
           )}
         </div>
       </div>
+      {shareDhikr && (
+        <DhikrShareCard
+          dhikrId={shareDhikr.id}
+          arabic={shareDhikr.arabic}
+          transliteration={shareDhikr.transliteration}
+          translation={shareDhikr.translation}
+          onClose={() => setShareDhikr(null)}
+        />
+      )}
     </>
   );
 }

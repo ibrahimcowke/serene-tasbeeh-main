@@ -182,6 +182,33 @@ export const DhikrHeader = memo(function DhikrHeader() {
           )}
         </motion.div>
       )}
+      {/* Salatul Tasbeeh indicator */}
+      {sessionMode.type === 'salatul-tasbeeh' && (
+        <div className="flex flex-col items-center mt-2 gap-1.5">
+          <div className="flex justify-center gap-1.5">
+            {[1, 2, 3, 4].map((rakah) => (
+              <div
+                key={rakah}
+                className={`w-2.5 h-1 rounded-full transition-all duration-500 ${
+                  rakah < sessionMode.rakah
+                    ? 'bg-green-500'
+                    : rakah === sessionMode.rakah
+                    ? 'bg-primary animate-pulse w-4'
+                    : 'bg-white/15'
+                }`}
+              />
+            ))}
+          </div>
+          <div className="flex items-center gap-1.5 text-[10px] font-bold text-primary bg-primary/10 border border-primary/20 px-3 py-1 rounded-full">
+            <span>Rak'ah {sessionMode.rakah}/4</span>
+            <span className="opacity-40">•</span>
+            <span>{['Qiyam', 'Ruku', "I'tidal", 'Sujud', 'Jalsah'][sessionMode.phase]}</span>
+            <span className="opacity-40">•</span>
+            <span className="font-black tabular-nums">{currentCount}/10</span>
+          </div>
+        </div>
+      )}
     </div>
+
   );
 });

@@ -78,6 +78,8 @@ export function SettingsViewContent({ defaultTab, setOpen }: SettingsViewContent
     setBreathingGuideSpeed,
     autoThemeSwitch,
     setAutoThemeSwitch,
+    autoThemeDawnDusk,
+    setAutoThemeDawnDusk,
     shakeToReset,
     setShakeToReset,
     wakeLockEnabled,
@@ -136,6 +138,8 @@ export function SettingsViewContent({ defaultTab, setOpen }: SettingsViewContent
     setBreathingGuideSpeed: state.setBreathingGuideSpeed,
     autoThemeSwitch: state.autoThemeSwitch,
     setAutoThemeSwitch: state.setAutoThemeSwitch,
+    autoThemeDawnDusk: state.autoThemeDawnDusk,
+    setAutoThemeDawnDusk: state.setAutoThemeDawnDusk,
     shakeToReset: state.shakeToReset,
     setShakeToReset: state.setShakeToReset,
     wakeLockEnabled: state.wakeLockEnabled,
@@ -281,6 +285,16 @@ export function SettingsViewContent({ defaultTab, setOpen }: SettingsViewContent
                     onCheckedChange={setAutoThemeSwitch}
                   />
                 </div>
+                <div className="flex items-center justify-between border-t border-border/50 pt-4">
+                  <div>
+                    <p className="text-sm font-medium text-foreground">Dawn/Dusk Theme Schedule</p>
+                    <p className="text-xs text-muted-foreground">Light at Fajr, Midnight at Maghrib</p>
+                  </div>
+                  <Switch
+                    checked={autoThemeDawnDusk}
+                    onCheckedChange={setAutoThemeDawnDusk}
+                  />
+                </div>
               </div>
 
               <div className="space-y-1">
@@ -395,20 +409,29 @@ export function SettingsViewContent({ defaultTab, setOpen }: SettingsViewContent
               <div className="space-y-1">
                 <p className="text-xs text-muted-foreground uppercase tracking-wide mb-3 px-1">{t('settings.language')}</p>
                 <div className="p-4 rounded-2xl bg-card border border-border/50">
-                  <div className="grid grid-cols-2 gap-3">
-                    {[{ code: 'en', label: 'English', flag: '🇬🇧' }, { code: 'ar', label: 'العربية', flag: '🇸🇦' }].map((lang) => (
+                  <div className="grid grid-cols-3 gap-2">
+                    {[
+                      { code: 'en', label: 'English',    flag: '🇬🇧' },
+                      { code: 'ar', label: 'العربية',    flag: '🇸🇦' },
+                      { code: 'hi', label: 'हिन्दी',      flag: '🇮🇳' },
+                      { code: 'ur', label: 'اردو',       flag: '🇵🇰' },
+                      { code: 'tr', label: 'Türkçe',    flag: '🇹🇷' },
+                      { code: 'ms', label: 'Melayu',    flag: '🇲🇾' },
+                      { code: 'id', label: 'Indonesia', flag: '🇮🇩' },
+                      { code: 'fr', label: 'Français',  flag: '🇫🇷' },
+                      { code: 'so', label: 'Soomaali',  flag: '🇸🇴' },
+                    ].map((lang) => (
                       <button
                         key={lang.code}
                         onClick={() => setLanguage(lang.code)}
-                        className={`flex items-center gap-3 p-3 rounded-xl border transition-all ${
+                        className={`flex flex-col items-center gap-1 p-2.5 rounded-xl border transition-all ${
                           language === lang.code
                             ? 'bg-primary/10 border-primary'
-                            : 'bg-background border-border'
+                            : 'bg-background border-border hover:border-primary/30'
                         }`}
                       >
-                        <span className="text-2xl">{lang.flag}</span>
-                        <span className={`text-sm font-medium ${language === lang.code ? 'text-primary' : 'text-foreground'}`}>{lang.label}</span>
-                        {language === lang.code && <Check className="w-4 h-4 text-primary ml-auto" />}
+                        <span className="text-xl">{lang.flag}</span>
+                        <span className={`text-[10px] font-medium leading-tight text-center ${language === lang.code ? 'text-primary' : 'text-foreground'}`}>{lang.label}</span>
                       </button>
                     ))}
                   </div>

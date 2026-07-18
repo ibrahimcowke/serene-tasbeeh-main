@@ -6,7 +6,7 @@ import { useTasbeehStore } from '@/store/tasbeehStore';
 import { useShallow } from 'zustand/react/shallow';
 
 export function HistoryStats() {
-  const { dailyRecords, totalAllTime, totalHasanat, dhikrs, customDhikrs, streakDays, longestStreak, dailyGoal } = useTasbeehStore(useShallow(state => ({
+  const { dailyRecords, totalAllTime, totalHasanat, dhikrs, customDhikrs, streakDays, longestStreak, dailyGoal, sessions, sessionNotes } = useTasbeehStore(useShallow(state => ({
     dailyRecords: state.dailyRecords,
     totalAllTime: state.totalAllTime,
     totalHasanat: state.totalHasanat,
@@ -14,7 +14,9 @@ export function HistoryStats() {
     customDhikrs: state.customDhikrs,
     streakDays: state.streakDays,
     longestStreak: state.longestStreak,
-    dailyGoal: state.dailyGoal
+    dailyGoal: state.dailyGoal,
+    sessions: state.sessions || [],
+    sessionNotes: state.sessionNotes || {}
   })));
   const allDhikrs = [...dhikrs, ...customDhikrs];
 
@@ -368,6 +370,23 @@ export function HistoryStats() {
                     </span>
                   ))}
                 </div>
+                {(() => {
+                  const daySessions = sessions.filter(s => s.date === record.date);
+                  const dayNotes = daySessions.map(s => sessionNotes[s.id]).filter(Boolean);
+                  if (dayNotes.length === 0) return null;
+                  return (
+                    <div className="mt-3 pt-2.5 border-t border-border/20 space-y-1">
+                      <p className="text-[9px] font-bold text-muted-foreground/60 uppercase tracking-wider">Reflections / Notes</p>
+                      <div className="space-y-1.5 pl-1">
+                        {dayNotes.map((note, noteIdx) => (
+                          <p key={noteIdx} className="text-xs text-muted-foreground/80 italic border-l-2 border-primary/30 pl-2">
+                            “{note}”
+                          </p>
+                        ))}
+                      </div>
+                    </div>
+                  );
+                })()}
               </motion.div>
             ))}
           </div>

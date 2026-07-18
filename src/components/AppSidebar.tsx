@@ -1,4 +1,4 @@
-import { BookOpen, Target, ClipboardList, Bell, BarChart3, History, HandPlatter, Library, Calendar, Compass, Star, Hash, Share2, Smile, Users, Sparkles, Wind } from "lucide-react";
+import { BookOpen, Target, ClipboardList, Bell, BarChart3, BarChart2, History, HandPlatter, Library, Calendar, Compass, Star, Hash, Share2, Smile, Users, Sparkles, Wind, Clock, Moon, ScrollText } from "lucide-react";
 import {
     Sidebar,
     SidebarContent,
@@ -26,14 +26,22 @@ import { AsmaulHusnaView } from "./AsmaulHusnaView";
 import { StatsShareCard } from "./StatsShareCard";
 import { DhikrPlannerView } from "./DhikrPlannerView";
 import { AiCompanionView } from "./AiCompanionView";
+import { PrayerTimesView } from "./PrayerTimesView";
+import { SalatulTasbeehView } from "./SalatulTasbeehView";
+import { WeeklyReportView } from "./WeeklyReportView";
 import { useTasbeehStore } from "@/store/tasbeehStore";
 import { useTranslation } from "@/lib/i18n";
+import { AnimatePresence } from "framer-motion";
+import { useState } from "react";
+import { BedtimeModeView } from "./BedtimeModeView";
 
 export function AppSidebar() {
     const startTasbih100 = useTasbeehStore((s) => s.startTasbih100);
     const { t } = useTranslation();
     const { setOpenMobile } = useSidebar();
+    const [showBedtime, setShowBedtime] = useState(false);
     return (
+      <>
         <Sidebar collapsible="icon">
             {/* Header with brand */}
             <SidebarHeader
@@ -223,6 +231,45 @@ export function AppSidebar() {
                                 </DhikrPlannerView>
                             </SidebarMenuItem>
 
+                            <SidebarMenuItem>
+                                <PrayerTimesView>
+                                    <SidebarMenuButton asChild tooltip="Prayer Times" size="lg">
+                                        <button className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-left transition-all"
+                                            style={{ color: "hsl(var(--sidebar-foreground) / 0.85)" }}
+                                        >
+                                            <Clock className="w-4 h-4 text-primary/70 shrink-0" />
+                                            <span className="text-sm font-light tracking-wide">Prayer Times</span>
+                                        </button>
+                                    </SidebarMenuButton>
+                                </PrayerTimesView>
+                            </SidebarMenuItem>
+
+                            <SidebarMenuItem>
+                                <SalatulTasbeehView>
+                                    <SidebarMenuButton asChild tooltip="Salatul Tasbeeh" size="lg">
+                                        <button className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-left transition-all"
+                                            style={{ color: "hsl(var(--sidebar-foreground) / 0.85)" }}
+                                        >
+                                            <BookOpen className="w-4 h-4 text-primary/70 shrink-0" />
+                                            <span className="text-sm font-light tracking-wide">Salatul Tasbeeh</span>
+                                        </button>
+                                    </SidebarMenuButton>
+                                </SalatulTasbeehView>
+                            </SidebarMenuItem>
+
+                            <SidebarMenuItem>
+                                <SidebarMenuButton asChild tooltip="Bedtime Dhikr" size="lg">
+                                    <button
+                                        className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-left transition-all"
+                                        style={{ color: "hsl(var(--sidebar-foreground) / 0.85)" }}
+                                        onClick={() => { setShowBedtime(true); setOpenMobile(false); }}
+                                    >
+                                        <Moon className="w-4 h-4 text-primary/70 shrink-0" />
+                                        <span className="text-sm font-light tracking-wide">Bedtime Dhikr</span>
+                                    </button>
+                                </SidebarMenuButton>
+                            </SidebarMenuItem>
+
 
                             <SidebarMenuItem>
                                 <AiCompanionView>
@@ -292,6 +339,20 @@ export function AppSidebar() {
                                 </StatsShareCard>
                             </SidebarMenuItem>
 
+                            <SidebarMenuItem>
+                                <WeeklyReportView>
+                                    <SidebarMenuButton asChild tooltip="Weekly Report" size="lg">
+                                        <button className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-left transition-all"
+                                            style={{ color: "hsl(var(--sidebar-foreground) / 0.85)" }}
+                                        >
+                                            <BarChart2 className="w-4 h-4 text-primary/70 shrink-0" />
+                                            <span className="text-sm font-light tracking-wide">Weekly Report</span>
+                                        </button>
+                                    </SidebarMenuButton>
+                                </WeeklyReportView>
+                            </SidebarMenuItem>
+
+
                         </SidebarMenu>
                     </SidebarGroupContent>
                 </SidebarGroup>
@@ -323,5 +384,12 @@ export function AppSidebar() {
                 </SidebarMenuItem>
             </SidebarFooter>
         </Sidebar>
+
+        <AnimatePresence>
+            {showBedtime && (
+                <BedtimeModeView onClose={() => setShowBedtime(false)} />
+            )}
+        </AnimatePresence>
+      </>
     );
 }

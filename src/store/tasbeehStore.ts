@@ -95,11 +95,20 @@ export interface RoutineStep {
   description?: string;
 }
 
+export interface KhatmEntry {
+  id: string;
+  type: 'quran' | 'yasin' | 'kahf' | 'hizbulBahr' | 'custom';
+  label: string;
+  completedAt: number; // timestamp
+  note?: string;
+}
+
 export type SessionMode =
   | { type: 'free' }
   | { type: 'tasbih100'; currentPhase: number; phaseCounts: number[]; isComplete: boolean; challengeId?: string }
   | { type: 'tasbih1000'; currentPhase: number; phaseCounts: number[]; isComplete: boolean; challengeId?: string }
-  | { type: 'routine'; routineId: string; currentStepIndex: number; steps: RoutineStep[]; isComplete: boolean };
+  | { type: 'routine'; routineId: string; currentStepIndex: number; steps: RoutineStep[]; isComplete: boolean }
+  | { type: 'salatul-tasbeeh'; rakah: number; phase: number; phaseTarget: number; totalCompleted: number; isComplete: boolean };
 
 export interface TasbeehState {
   count: number;
@@ -200,6 +209,18 @@ export interface TasbeehState {
 
   lazyDayRecoveryEnabled: boolean;
   setLazyDayRecoveryEnabled: (enabled: boolean) => void;
+
+  autoThemeDawnDusk: boolean;
+  setAutoThemeDawnDusk: (enabled: boolean) => void;
+
+  khatmLog: KhatmEntry[];
+  addKhatm: (entry: Omit<KhatmEntry, 'id' | 'completedAt'>) => void;
+  removeKhatm: (id: string) => void;
+
+  sessionNotes: Record<string, string>;
+  setSessionNote: (sessionId: string, note: string) => void;
+
+  startSalatulTasbeeh: () => void;
 
   niyyahPresets: string[];
   dedicatedCounts: Record<string, number>;
@@ -354,10 +375,11 @@ export const useTasbeehStore = create<TasbeehState>()(
   persist(
     (set, get) => ({
       count: 0, currentCount: 0, targetCount: 33, totalAllTime: 0, dailyRecords: [], dailyGoal: 100, dhikrs: defaultDhikrs, customDhikrs: [], currentDhikr: defaultDhikrs[0], favoriteDhikrIds: [], theme: 'theme-midnight', themeSettings: initialThemeSettings, language: 'en', showTransliteration: true, counterShape: 'bead-ring', countFontSize: 1, dhikrFontSize: 1, dhikrTextPosition: 'middle', verticalOffset: 0, dhikrVerticalOffset: 0, counterVerticalOffset: 0, counterScale: 1, zenMode: false, autoThemeSwitch: false, shakeToReset: false, syncPrayerTimes: null, wakeLockEnabled: true, volumeButtonCounting: false, lastSeenVersion: '0.0.0', hadithSlideDuration: 8, hadithSlidePosition: 'bottom', breathingGuideEnabled: false, breathingGuideSpeed: 4, streakDays: 0, lastActiveDate: null, longestStreak: 0, unlockedAchievements: [], screenOffMode: false, sessionStartTime: null, sessionMode: getDefaultSessionMode(), notificationPermission: 'default', reminderEnabled: false, reminderTime: '18:00', reminders: [
-        { id: '1', time: '06:00', label: 'Fajr Dhikr', enabled: true, days: [0, 1, 2, 3, 4, 5, 6] },
-        { id: '2', time: '13:00', label: 'Dhuhr Dhikr', enabled: true, days: [0, 1, 2, 3, 4, 5, 6] },
-        { id: '3', time: '18:00', label: 'Maghrib Dhikr', enabled: true, days: [0, 1, 2, 3, 4, 5, 6] },
-        { id: '4', time: '21:00', label: 'Evening Dhikr', enabled: true, days: [0, 1, 2, 3, 4, 5, 6] },
+        { id: '1', time: '05:00', label: 'Fajr Dhikr', enabled: true, days: [0, 1, 2, 3, 4, 5, 6] },
+        { id: '2', time: '12:30', label: 'Dhuhr Dhikr', enabled: true, days: [0, 1, 2, 3, 4, 5, 6] },
+        { id: '3', time: '15:45', label: 'Asr Dhikr', enabled: true, days: [0, 1, 2, 3, 4, 5, 6] },
+        { id: '4', time: '18:15', label: 'Maghrib Dhikr', enabled: true, days: [0, 1, 2, 3, 4, 5, 6] },
+        { id: '5', time: '20:00', label: 'Isha Dhikr', enabled: true, days: [0, 1, 2, 3, 4, 5, 6] },
       ], lastCount: 0, lastDhikrId: '', canUndo: false,
       showCongrats: false, congratsData: null, totalHasanat: 0, showMoodTracker: false,
       autoCountActive: false, autoCountInterval: 1000,
@@ -387,6 +409,10 @@ export const useTasbeehStore = create<TasbeehState>()(
       dedicatedCounts: {},
       customRoutines: [],
       favoriteDuaIds: [],
+      // new feature state
+      autoThemeDawnDusk: false,
+      khatmLog: [],
+      sessionNotes: {},
 
       saveActiveSession: () => {
         const state = get();
@@ -423,6 +449,31 @@ export const useTasbeehStore = create<TasbeehState>()(
       setAutoStartPostPrayerTasbeeh: (enabled) => set({ autoStartPostPrayerTasbeeh: enabled }),
       setLazyDayRecoveryEnabled: (enabled) => set({ lazyDayRecoveryEnabled: enabled }),
       setShowMoodTracker: (open) => set({ showMoodTracker: open }),
+      setAutoThemeDawnDusk: (enabled) => set({ autoThemeDawnDusk: enabled }),
+      addKhatm: (entry) => set((s) => ({
+        khatmLog: [{ ...entry, id: `khatm_${Date.now()}`, completedAt: Date.now() }, ...s.khatmLog]
+      })),
+      removeKhatm: (id) => set((s) => ({ khatmLog: s.khatmLog.filter(k => k.id !== id) })),
+      setSessionNote: (sessionId, note) => set((s) => ({ sessionNotes: { ...s.sessionNotes, [sessionId]: note } })),
+
+      startSalatulTasbeeh: () => {
+        const state = get();
+        const subhanallah = state.dhikrs.find(d => d.id === 'subahanallah') || defaultDhikrs[0];
+        set({
+          currentDhikr: subhanallah,
+          targetCount: 10,
+          currentCount: 0,
+          sessionStartTime: Date.now(),
+          sessionMode: {
+            type: 'salatul-tasbeeh',
+            rakah: 1,
+            phase: 0, // 0=Qiyam,1=Ruku,2=I'tidal,3=Sujud1,4=Jalsah,5=Sujud2 (6 phases, 10 each = 60/rakah × 4 = 240 total, then La ilaha at end)
+            phaseTarget: 10,
+            totalCompleted: 0,
+            isComplete: false
+          }
+        });
+      },
 
       addCustomRoutine: (routine) => set((s) => ({ customRoutines: [...s.customRoutines, { ...routine, id: `custom_routine_${Date.now()}` }] })),
       removeCustomRoutine: (id) => set((s) => ({ customRoutines: s.customRoutines.filter(r => r.id !== id) })),
@@ -538,6 +589,33 @@ export const useTasbeehStore = create<TasbeehState>()(
             syncWidget(newCount, state.currentDhikr.transliteration);
             get().checkAchievements();
             return;
+          }
+        } else if (sessionMode.type === 'salatul-tasbeeh') {
+          const mode = sessionMode;
+          if (newCount >= mode.phaseTarget && !mode.isComplete) {
+            const PHASE_LABELS = ['Qiyam','Ruku',"I'tidal",'Sujud','Jalsah'];
+            const nextPhase = mode.phase + 1;
+            const totalNow = mode.totalCompleted + newCount;
+            // Each rak'ah = 5 phases × 10 = 50 dhikrs; 4 rak'ahs = 200 total
+            if (nextPhase < 5) {
+              set({ currentCount: 0, sessionMode: { ...mode, phase: nextPhase, totalCompleted: totalNow } });
+              return;
+            } else {
+              // End of rak'ah
+              const nextRakah = mode.rakah + 1;
+              if (nextRakah <= 4) {
+                set({ currentCount: 0, sessionMode: { ...mode, rakah: nextRakah, phase: 0, totalCompleted: totalNow } });
+                return;
+              } else {
+                // Full completion!
+                set({ currentCount: newCount, totalAllTime: newTotal, totalHasanat: newHasanat + 2000, dailyRecords: records, sessionStartTime: state.sessionStartTime || now, sessionMode: { ...mode, isComplete: true, totalCompleted: totalNow }, lastCount: state.currentCount, lastDhikrId: state.currentDhikr.id, canUndo: true });
+                get().saveActiveSession();
+                get().triggerCongrats({ title: 'Salatul Tasbeeh Complete!', description: 'You have completed all 4 rak\'ahs (200 dhikr). May Allah accept your prayer.', hasanatEarned: 2000 });
+                syncWidget(newCount, state.currentDhikr.transliteration);
+                get().checkAchievements();
+                return;
+              }
+            }
           }
         } else if (sessionMode.type === 'routine') {
           const mode = sessionMode;
@@ -914,6 +992,10 @@ export const useTasbeehStore = create<TasbeehState>()(
         dedicatedCounts: state.dedicatedCounts,
         customRoutines: state.customRoutines,
         favoriteDuaIds: state.favoriteDuaIds,
+        // New features persisted fields
+        autoThemeDawnDusk: state.autoThemeDawnDusk,
+        khatmLog: state.khatmLog,
+        sessionNotes: state.sessionNotes,
       }),
     }
   )

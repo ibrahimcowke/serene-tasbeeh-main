@@ -1,4 +1,4 @@
-import React, { memo } from 'react';
+import React, { memo, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTasbeehStore } from '@/store/tasbeehStore';
 import { useShallow } from 'zustand/react/shallow';
@@ -6,24 +6,41 @@ import { Trophy, Star, X, CheckCircle2, RefreshCw, Settings2 } from 'lucide-reac
 import { Button } from '@/components/ui/button';
 
 export const CongratsPopup: React.FC = memo(() => {
-    const { showCongrats, congratsData, closeCongrats, reset, switchDhikr } = useTasbeehStore(useShallow(state => ({
+    const { showCongrats, congratsData, closeCongrats, reset, switchDhikr, setSessionNote, sessions } = useTasbeehStore(useShallow(state => ({
         showCongrats: state.showCongrats,
         congratsData: state.congratsData,
         closeCongrats: state.closeCongrats,
         reset: state.reset,
-        switchDhikr: state.switchDhikr
+        switchDhikr: state.switchDhikr,
+        setSessionNote: state.setSessionNote,
+        sessions: state.sessions
     })));
+
+    const [note, setNote] = React.useState('');
+
+    React.useEffect(() => {
+        if (showCongrats) {
+            setNote('');
+        }
+    }, [showCongrats]);
+
+    const handleClose = useCallback(() => {
+        if (note.trim() && sessions[0]) {
+            setSessionNote(sessions[0].id, note.trim());
+        }
+        closeCongrats();
+    }, [note, sessions, setSessionNote, closeCongrats]);
 
     React.useEffect(() => {
         if (!showCongrats) return;
         const handleKeyDown = (e: KeyboardEvent) => {
             if (e.key === 'Escape') {
-                closeCongrats();
+                handleClose();
             }
         };
         window.addEventListener('keydown', handleKeyDown);
         return () => window.removeEventListener('keydown', handleKeyDown);
-    }, [showCongrats, closeCongrats]);
+    }, [showCongrats, handleClose]);
 
     if (!showCongrats || !congratsData) return null;
 
@@ -88,10 +105,25 @@ export const CongratsPopup: React.FC = memo(() => {
                             </div>
                         </motion.div>
 
+                        {/* Session Note */}
+                        <div className="w-full text-left space-y-1">
+                            <label className="text-[9px] uppercase tracking-widest text-muted-foreground/60 font-black px-1">
+                                Reflections / Notes
+                            </label>
+                            <textarea
+                                value={note}
+                                onChange={(e) => setNote(e.target.value)}
+                                placeholder="Write down your thoughts or realizations..."
+                                rows={2}
+                                className="w-full px-3.5 py-2.5 rounded-2xl bg-foreground/5 border border-border/10 text-xs text-foreground placeholder:text-muted-foreground/30 resize-none focus:outline-none focus:border-primary/40 focus:ring-1 focus:ring-primary/40"
+                            />
+                        </div>
+
                         {/* Actions */}
                         <div className="w-full flex flex-col gap-3">
                             <Button
                                 onClick={() => {
+                                    if (note.trim() && sessions[0]) setSessionNote(sessions[0].id, note.trim());
                                     reset();
                                     closeCongrats();
                                 }}
@@ -104,6 +136,7 @@ export const CongratsPopup: React.FC = memo(() => {
                             <Button
                                 variant="outline"
                                 onClick={() => {
+                                    if (note.trim() && sessions[0]) setSessionNote(sessions[0].id, note.trim());
                                     switchDhikr();
                                     closeCongrats();
                                 }}
@@ -117,7 +150,7 @@ export const CongratsPopup: React.FC = memo(() => {
 
                     {/* Close button */}
                     <button
-                        onClick={closeCongrats}
+                        onClick={handleClose}
                         className="absolute top-4 right-4 p-2 text-muted-foreground/40 hover:text-foreground transition-colors"
                     >
                         <X className="w-5 h-5" />

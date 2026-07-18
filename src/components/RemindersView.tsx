@@ -334,6 +334,25 @@ export function RemindersContent() {
     } = useTasbeehStore();
 
     const [settingsOpen, setSettingsOpen] = useState(false);
+    const [localPrayerTimes, setLocalPrayerTimes] = useState<{ label: string; time: string }[]>([]);
+
+    useEffect(() => {
+        if (syncPrayerTimes) {
+            const cached = localStorage.getItem('tasbeehly_prayer_times_cache');
+            if (cached) {
+                try {
+                    const parsed = JSON.parse(cached);
+                    if (parsed && parsed.times) {
+                        setLocalPrayerTimes(parsed.times);
+                    }
+                } catch (e) {
+                    console.error(e);
+                }
+            }
+        } else {
+            setLocalPrayerTimes([]);
+        }
+    }, [syncPrayerTimes, reminders]);
 
     const suggestions = useMemo(
         () => getSmartSuggestions(sessions, reminders, sessionMoodRatings),
@@ -344,13 +363,25 @@ export function RemindersContent() {
         if (checked) {
             setSyncPrayerTimes(true);
             try {
-                await initPrayerTimeReminders(true);
-                toast.success('Prayer times synced!');
+                const success = await initPrayerTimeReminders(true);
+                if (success) {
+                    toast.success('Prayer times synced!');
+                    const cached = localStorage.getItem('tasbeehly_prayer_times_cache');
+                    if (cached) {
+                        const parsed = JSON.parse(cached);
+                        if (parsed && parsed.times) setLocalPrayerTimes(parsed.times);
+                    }
+                } else {
+                    toast.error('Failed to sync. Please enable location permissions.');
+                    setSyncPrayerTimes(false);
+                }
             } catch {
                 toast.error('Failed to sync prayer times.');
+                setSyncPrayerTimes(false);
             }
         } else {
             setSyncPrayerTimes(false);
+            setLocalPrayerTimes([]);
             toast.success('Location sync disabled');
         }
     };
@@ -476,6 +507,21 @@ export function RemindersContent() {
                                 checked={syncPrayerTimes === true}
                                 onCheckedChange={handleLocationChange}
                             />
+
+                            {syncPrayerTimes && localPrayerTimes.length > 0 && (
+                                <motion.div 
+                                    initial={{ opacity: 0, height: 0 }}
+                                    animate={{ opacity: 1, height: 'auto' }}
+                                    className="px-4 py-2 bg-primary/5 border border-primary/10 rounded-2xl flex flex-wrap justify-between gap-1 text-[11px] text-muted-foreground mt-1 mb-2"
+                                >
+                                    {localPrayerTimes.map(pt => (
+                                        <div key={pt.label} className="flex gap-1 items-center">
+                                            <span className="font-semibold text-foreground">{pt.label}:</span>
+                                            <span className="tabular-nums">{pt.time}</span>
+                                        </div>
+                                    ))}
+                                </motion.div>
+                            )}
 
                             {/* Auto Tasbih */}
                             {notificationsEnabled && (

@@ -168,16 +168,23 @@ export default function Welcome() {
                   <p className="text-sm text-white/40">اختر لغتك / Choose your language</p>
                 </div>
 
-                <div className="grid grid-cols-2 gap-3">
+                <div className="grid grid-cols-3 gap-2">
                   {[
-                    { code: 'en', label: 'English', native: 'English', flag: '🇬🇧' },
-                    { code: 'ar', label: 'Arabic', native: 'العربية', flag: '🇸🇦' },
+                    { code: 'en', label: 'English',    native: 'English',  flag: '🇬🇧' },
+                    { code: 'ar', label: 'Arabic',     native: 'العربية',  flag: '🇸🇦' },
+                    { code: 'hi', label: 'Hindi',      native: 'हिन्दी',    flag: '🇮🇳' },
+                    { code: 'ur', label: 'Urdu',       native: 'اردو',     flag: '🇵🇰' },
+                    { code: 'tr', label: 'Turkish',    native: 'Türkçe',   flag: '🇹🇷' },
+                    { code: 'ms', label: 'Malay',      native: 'Melayu',   flag: '🇲🇾' },
+                    { code: 'id', label: 'Indonesian', native: 'Indonesia',flag: '🇮🇩' },
+                    { code: 'fr', label: 'French',     native: 'Français', flag: '🇫🇷' },
+                    { code: 'so', label: 'Somali',     native: 'Soomaali', flag: '🇸🇴' },
                   ].map((lang) => (
                     <motion.button
                       key={lang.code}
                       whileTap={{ scale: 0.95 }}
                       onClick={() => setLanguage(lang.code)}
-                      className="flex flex-col items-center gap-2 p-5 rounded-2xl transition-all"
+                      className="flex flex-col items-center gap-1 p-3.5 rounded-2xl transition-all"
                       style={{
                         background: language === lang.code
                           ? 'linear-gradient(135deg, rgba(251,191,36,0.2), rgba(167,139,250,0.2))'
@@ -186,12 +193,12 @@ export default function Welcome() {
                         boxShadow: language === lang.code ? '0 0 20px rgba(251,191,36,0.15)' : 'none',
                       }}
                     >
-                      <span className="text-3xl">{lang.flag}</span>
-                      <span className="text-white font-medium text-sm">{lang.native}</span>
+                      <span className="text-2xl">{lang.flag}</span>
+                      <span className="text-white font-medium text-[11px] leading-tight text-center">{lang.native}</span>
                       {language === lang.code && (
                         <motion.div
                           layoutId="lang-check"
-                          className="w-2 h-2 rounded-full"
+                          className="w-1.5 h-1.5 rounded-full mt-1"
                           style={{ background: 'rgb(251,191,36)' }}
                         />
                       )}

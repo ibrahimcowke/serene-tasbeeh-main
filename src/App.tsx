@@ -20,6 +20,7 @@ import { registerPeriodicSync, NotificationManager } from "./lib/notifications";
 import { useTasbeehStore } from "./store/tasbeehStore";
 import { scheduleLazyDayNotification, cancelLazyDayNotification } from "./lib/lazyDayRecovery";
 import { ErrorBoundary } from "./components/ErrorBoundary";
+import { startAutoThemeScheduler, stopAutoThemeScheduler } from "./lib/autoThemeScheduler";
 const GoogleLoginScreen = lazy(() => import("./components/GoogleLoginScreen").then(m => ({ default: m.GoogleLoginScreen })));
 import { useState } from "react";
 import { toast } from "sonner";
@@ -52,6 +53,8 @@ const App = () => {
     return localStorage.getItem('tasbeehly_guest_mode') === 'true';
   });
 
+  const autoThemeDawnDusk = useTasbeehStore((s) => s.autoThemeDawnDusk);
+
   // Schedule or cancel Lazy Day Recovery notification
   useEffect(() => {
     if (lazyDayRecoveryEnabled) {
@@ -60,6 +63,16 @@ const App = () => {
       cancelLazyDayNotification();
     }
   }, [lazyDayRecoveryEnabled]);
+
+  // Auto Fajr/Maghrib theme switching
+  useEffect(() => {
+    if (autoThemeDawnDusk) {
+      startAutoThemeScheduler();
+    } else {
+      stopAutoThemeScheduler();
+    }
+    return () => stopAutoThemeScheduler();
+  }, [autoThemeDawnDusk]);
 
   // Suggest notifications after 2 minutes of app usage if not enabled yet
   useEffect(() => {
