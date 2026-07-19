@@ -177,23 +177,23 @@
   .theme-nord-midnight {
     color-scheme: dark;
     /* Nord Midnight - Deep Navy Aurora */
-    --background: 217 29% 8%;
+    --background: 225 50% 10%;
     --foreground: 218 32% 91%;
 
-    --card: 217 25% 12%;
+    --card: 225 40% 15%;
     --card-foreground: 218 32% 91%;
 
-    --popover: 217 25% 11%;
+    --popover: 225 40% 14%;
     --popover-foreground: 218 32% 91%;
 
     /* Aurora Green */
     --primary: 92 28% 65%;
-    --primary-foreground: 217 29% 6%;
+    --primary-foreground: 225 50% 6%;
 
-    --secondary: 217 22% 16%;
+    --secondary: 225 30% 20%;
     --secondary-foreground: 218 32% 85%;
 
-    --muted: 217 20% 20%;
+    --muted: 225 25% 23%;
     --muted-foreground: 218 15% 60%;
 
     --accent: 311 20% 63%;
@@ -202,19 +202,19 @@
     --destructive: 354 70% 54%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 217 20% 16%;
-    --input: 217 20% 16%;
+    --border: 225 30% 20%;
+    --input: 225 30% 20%;
     --ring: 92 28% 65%;
 
-    --counter-bg: 217 25% 11%;
+    --counter-bg: 225 40% 14%;
     --counter-ring: 92 28% 65%;
     --counter-text: 92 28% 85%;
     --counter-glow: 92 28% 65%;
 
     --arabic-text: 218 32% 91%;
-    --progress-track: 217 20% 16%;
+    --progress-track: 225 30% 20%;
     --progress-fill: 92 28% 65%;
-    --sheet-bg: 217 25% 10%;
+    --sheet-bg: 225 40% 13%;
 
     /* Sidebar theme variables */
     --sidebar: 217 29% 5%;
@@ -313,23 +313,23 @@
   .theme-sunset {
     color-scheme: dark;
     /* Sunset Gradients */
-    --background: 20 50% 10%;
+    --background: 5 45% 11%;
     --foreground: 20 30% 95%;
 
-    --card: 20 40% 15%;
+    --card: 5 35% 17%;
     --card-foreground: 20 30% 95%;
 
-    --popover: 20 40% 15%;
+    --popover: 5 35% 15%;
     --popover-foreground: 20 30% 95%;
 
     /* Warm Orange */
     --primary: 25 90% 60%;
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 20 30% 20%;
+    --secondary: 5 25% 23%;
     --secondary-foreground: 20 30% 90%;
 
-    --muted: 20 30% 25%;
+    --muted: 5 25% 22%;
     --muted-foreground: 20 20% 70%;
 
     --accent: 320 60% 55%;
@@ -339,19 +339,19 @@
     --destructive: 0 80% 60%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 20 30% 25%;
-    --input: 20 30% 25%;
+    --border: 5 25% 22%;
+    --input: 5 25% 22%;
     --ring: 25 90% 60%;
 
-    --counter-bg: 20 40% 12%;
+    --counter-bg: 5 35% 15%;
     --counter-ring: 25 90% 60%;
     --counter-text: 25 100% 85%;
     --counter-glow: 25 90% 50%;
 
     --arabic-text: 20 30% 95%;
-    --progress-track: 20 30% 25%;
+    --progress-track: 5 25% 22%;
     --progress-fill: 25 90% 60%;
-    --sheet-bg: 20 40% 12%;
+    --sheet-bg: 5 35% 14%;
 
     /* Bead Ring Theme Styling */
     --bead-filled-start: #ffedd5;
@@ -371,23 +371,23 @@
   .theme-forest {
     color-scheme: dark;
     /* Deep Forest */
-    --background: 150 40% 8%;
+    --background: 145 45% 10%;
     --foreground: 120 20% 90%;
 
-    --card: 150 30% 12%;
+    --card: 145 35% 16%;
     --card-foreground: 120 20% 90%;
 
-    --popover: 150 30% 12%;
+    --popover: 145 35% 14%;
     --popover-foreground: 120 20% 90%;
 
     /* Nature Green */
     --primary: 140 50% 50%;
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 150 30% 16%;
+    --secondary: 145 25% 21%;
     --secondary-foreground: 120 20% 90%;
 
-    --muted: 150 30% 20%;
+    --muted: 145 25% 20%;
     --muted-foreground: 150 20% 70%;
 
     --accent: 35 40% 50%;
@@ -397,19 +397,19 @@
     --destructive: 0 70% 60%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 150 30% 20%;
-    --input: 150 30% 20%;
+    --border: 145 25% 20%;
+    --input: 145 25% 20%;
     --ring: 140 50% 50%;
 
-    --counter-bg: 150 30% 10%;
+    --counter-bg: 145 35% 14%;
     --counter-ring: 140 50% 50%;
     --counter-text: 140 60% 85%;
     --counter-glow: 140 50% 40%;
 
     --arabic-text: 120 20% 90%;
-    --progress-track: 150 30% 20%;
+    --progress-track: 145 25% 20%;
     --progress-fill: 140 50% 50%;
-    --sheet-bg: 150 30% 10%;
+    --sheet-bg: 145 35% 13%;
 
     /* Bead Ring Theme Styling */
     --bead-filled-start: #dcfce7;
@@ -486,44 +486,44 @@
   .theme-dracula-evolved {
     color-scheme: dark;
     /* Dracula Evolved - Vampire Velvet */
-    --background: 263 13% 9%;
+    --background: 345 50% 11%;
     --foreground: 60 30% 96%;
 
-    --card: 263 11% 14%;
+    --card: 345 40% 17%;
     --card-foreground: 60 30% 96%;
 
-    --popover: 263 11% 12%;
+    --popover: 345 40% 15%;
     --popover-foreground: 60 30% 96%;
 
     /* Vampire Red */
     --primary: 350 80% 59%;
-    --primary-foreground: 263 13% 6%;
+    --primary-foreground: 345 50% 6%;
 
-    --secondary: 263 10% 19%;
+    --secondary: 345 30% 22%;
     --secondary-foreground: 60 20% 85%;
 
-    --muted: 263 8% 22%;
+    --muted: 345 30% 21%;
     --muted-foreground: 263 6% 65%;
 
     --accent: 259 93% 78%;
-    --accent-foreground: 263 13% 6%;
+    --accent-foreground: 345 50% 6%;
 
     --destructive: 0 84% 60%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 263 10% 19%;
-    --input: 263 10% 19%;
+    --border: 345 30% 21%;
+    --input: 345 30% 21%;
     --ring: 350 80% 59%;
 
-    --counter-bg: 263 11% 12%;
+    --counter-bg: 345 40% 15%;
     --counter-ring: 350 80% 59%;
     --counter-text: 350 80% 85%;
     --counter-glow: 350 80% 59%;
 
     --arabic-text: 60 30% 96%;
-    --progress-track: 263 10% 19%;
+    --progress-track: 345 30% 22%;
     --progress-fill: 350 80% 59%;
-    --sheet-bg: 263 11% 11%;
+    --sheet-bg: 345 40% 14%;
 
     /* Sidebar theme variables */
     --sidebar: 263 13% 7%;
@@ -552,22 +552,22 @@
 
   .theme-desert-starlight {
     color-scheme: dark;
-    --background: 35 25% 7%;
+    --background: 35 25% 12%;
     --foreground: 45 25% 88%;
 
-    --card: 35 20% 10%;
+    --card: 35 20% 18%;
     --card-foreground: 45 25% 88%;
 
-    --popover: 35 20% 9%;
+    --popover: 35 20% 16%;
     --popover-foreground: 45 25% 88%;
 
     --primary: 197 85% 55%;
     --primary-foreground: 35 25% 5%;
 
-    --secondary: 35 15% 13%;
+    --secondary: 35 15% 24%;
     --secondary-foreground: 45 20% 80%;
 
-    --muted: 35 12% 18%;
+    --muted: 35 15% 22%;
     --muted-foreground: 35 10% 55%;
 
     --accent: 38 85% 55%;
@@ -576,19 +576,19 @@
     --destructive: 0 70% 60%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 35 15% 16%;
-    --input: 35 15% 16%;
+    --border: 35 15% 22%;
+    --input: 35 15% 22%;
     --ring: 197 85% 55%;
 
-    --counter-bg: 35 20% 9%;
+    --counter-bg: 35 20% 16%;
     --counter-ring: 197 85% 55%;
     --counter-text: 197 90% 85%;
     --counter-glow: 197 85% 50%;
 
     --arabic-text: 45 25% 88%;
-    --progress-track: 35 12% 18%;
+    --progress-track: 35 15% 22%;
     --progress-fill: 197 85% 55%;
-    --sheet-bg: 35 20% 9%;
+    --sheet-bg: 35 20% 15%;
 
     /* Sidebar theme variables */
     --sidebar: 35 25% 5%;
@@ -988,55 +988,55 @@
   .theme-nord-deep {
     color-scheme: dark;
     /* Nord Deep - Nordic Frost */
-    --background: 220 20% 12%;
+    --background: 215 35% 15%;
     --foreground: 210 20% 95%;
 
-    --card: 220 20% 16%;
+    --card: 215 30% 21%;
     --card-foreground: 210 20% 95%;
 
-    --popover: 220 20% 14%;
+    --popover: 215 30% 19%;
     --popover-foreground: 210 20% 95%;
 
     /* Frost Cyan */
     --primary: 193 43% 67%;
-    --primary-foreground: 220 20% 10%;
+    --primary-foreground: 215 35% 8%;
 
-    --secondary: 220 16% 22%;
+    --secondary: 215 25% 26%;
     --secondary-foreground: 210 20% 90%;
 
-    --muted: 220 15% 26%;
+    --muted: 215 20% 30%;
     --muted-foreground: 218 12% 65%;
 
     /* Frost Blue */
     --accent: 210 34% 63%;
-    --accent-foreground: 220 20% 10%;
+    --accent-foreground: 215 35% 8%;
 
     /* Aurora Red */
     --destructive: 354 70% 54%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 220 15% 20%;
-    --input: 220 15% 20%;
+    --border: 215 25% 24%;
+    --input: 215 25% 24%;
     --ring: 193 43% 67%;
 
-    --counter-bg: 220 20% 15%;
+    --counter-bg: 215 30% 19%;
     --counter-ring: 193 43% 67%;
     --counter-text: 193 43% 85%;
     --counter-glow: 193 43% 67%;
 
     --arabic-text: 210 20% 95%;
-    --progress-track: 220 15% 20%;
+    --progress-track: 215 25% 24%;
     --progress-fill: 193 43% 67%;
-    --sheet-bg: 220 20% 14%;
+    --sheet-bg: 215 30% 18%;
 
     /* Sidebar theme variables */
-    --sidebar: 220 20% 8%;
+    --sidebar: 215 35% 10%;
     --sidebar-foreground: 210 20% 75%;
     --sidebar-primary: 193 43% 67%;
-    --sidebar-primary-foreground: 220 20% 8%;
-    --sidebar-accent: 220 20% 13%;
+    --sidebar-primary-foreground: 215 35% 8%;
+    --sidebar-accent: 215 30% 15%;
     --sidebar-accent-foreground: 210 20% 85%;
-    --sidebar-border: 220 15% 15%;
+    --sidebar-border: 215 25% 17%;
     --sidebar-ring: 193 43% 67%;
 
     /* Bead Ring Theme Styling */
@@ -1123,54 +1123,54 @@
   .theme-cyber-twilight {
     color-scheme: dark;
     /* Cyber Twilight - Synthwave Eclipse */
-    --background: 256 47% 9%;
+    --background: 260 55% 13%;
     --foreground: 300 100% 95%;
 
-    --card: 256 35% 14%;
+    --card: 260 40% 19%;
     --card-foreground: 300 100% 95%;
 
-    --popover: 256 35% 12%;
+    --popover: 260 40% 17%;
     --popover-foreground: 300 100% 95%;
 
     /* Synthwave Pink */
     --primary: 326 100% 74%;
-    --primary-foreground: 256 47% 6%;
+    --primary-foreground: 260 55% 6%;
 
-    --secondary: 256 25% 19%;
+    --secondary: 260 30% 25%;
     --secondary-foreground: 300 100% 85%;
 
-    --muted: 256 20% 22%;
+    --muted: 260 30% 24%;
     --muted-foreground: 256 12% 65%;
 
     /* Neon Cyan */
     --accent: 180 100% 50%;
-    --accent-foreground: 256 47% 6%;
+    --accent-foreground: 260 55% 6%;
 
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 256 25% 20%;
-    --input: 256 25% 20%;
+    --border: 260 30% 24%;
+    --input: 260 30% 24%;
     --ring: 326 100% 74%;
 
-    --counter-bg: 256 35% 12%;
+    --counter-bg: 260 40% 17%;
     --counter-ring: 326 100% 74%;
     --counter-text: 326 100% 90%;
     --counter-glow: 326 100% 74%;
 
     --arabic-text: 300 100% 95%;
-    --progress-track: 256 25% 20%;
+    --progress-track: 260 30% 24%;
     --progress-fill: 326 100% 74%;
-    --sheet-bg: 256 35% 11%;
+    --sheet-bg: 260 40% 16%;
 
     /* Sidebar theme variables */
-    --sidebar: 256 47% 6%;
+    --sidebar: 260 55% 8%;
     --sidebar-foreground: 300 100% 80%;
     --sidebar-primary: 326 100% 74%;
-    --sidebar-primary-foreground: 256 47% 6%;
-    --sidebar-accent: 256 35% 10%;
+    --sidebar-primary-foreground: 260 55% 8%;
+    --sidebar-accent: 260 40% 12%;
     --sidebar-accent-foreground: 300 100% 90%;
-    --sidebar-border: 256 25% 15%;
+    --sidebar-border: 260 30% 18%;
     --sidebar-ring: 326 100% 74%;
 
     /* Bead Ring Theme Styling */
@@ -1191,23 +1191,23 @@
   .theme-espresso-dark {
     color-scheme: dark;
     /* Espresso Dark - Café Noir */
-    --background: 24 23% 6%;
+    --background: 22 30% 11%;
     --foreground: 30 52% 90%;
 
-    --card: 24 18% 10%;
+    --card: 22 25% 17%;
     --card-foreground: 30 52% 90%;
 
-    --popover: 24 18% 9%;
+    --popover: 22 25% 15%;
     --popover-foreground: 30 52% 90%;
 
     /* Warm Caramel */
     --primary: 30 52% 72%;
-    --primary-foreground: 24 23% 4%;
+    --primary-foreground: 22 30% 6%;
 
-    --secondary: 24 14% 15%;
+    --secondary: 22 20% 22%;
     --secondary-foreground: 30 40% 80%;
 
-    --muted: 24 12% 18%;
+    --muted: 22 20% 21%;
     --muted-foreground: 30 20% 60%;
 
     /* Roasted Coffee */
@@ -1217,28 +1217,28 @@
     --destructive: 0 80% 50%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 24 14% 15%;
-    --input: 24 14% 15%;
+    --border: 22 20% 21%;
+    --input: 22 20% 21%;
     --ring: 30 52% 72%;
 
-    --counter-bg: 24 18% 9%;
+    --counter-bg: 22 25% 15%;
     --counter-ring: 30 52% 72%;
     --counter-text: 30 52% 85%;
     --counter-glow: 30 52% 72%;
 
     --arabic-text: 30 52% 90%;
-    --progress-track: 24 14% 15%;
+    --progress-track: 22 20% 22%;
     --progress-fill: 30 52% 72%;
-    --sheet-bg: 24 18% 9%;
+    --sheet-bg: 22 25% 14%;
 
     /* Sidebar theme variables */
-    --sidebar: 24 23% 4%;
+    --sidebar: 22 30% 6%;
     --sidebar-foreground: 30 50% 80%;
     --sidebar-primary: 30 52% 72%;
-    --sidebar-primary-foreground: 24 23% 4%;
-    --sidebar-accent: 24 18% 7%;
+    --sidebar-primary-foreground: 22 30% 6%;
+    --sidebar-accent: 22 25% 10%;
     --sidebar-accent-foreground: 30 52% 90%;
-    --sidebar-border: 24 14% 11%;
+    --sidebar-border: 22 20% 13%;
     --sidebar-ring: 30 52% 72%;
 
     /* Bead Ring Theme Styling */
