@@ -6,6 +6,7 @@ export interface Reminder {
   label: string;
   enabled: boolean;
   days: number[]; // 0-6 (0 = Sunday, ..., 6 = Saturday)
+  soundType?: 'default' | 'subhanallah' | 'alhamdulillah' | 'astaghfirullah' | 'salawat';
 }
 
 
@@ -76,6 +77,23 @@ export const NotificationManager = {
         return;
       }
 
+      // Create notification channels for custom sounds on Android
+      try {
+        const customSounds = ['subhanallah', 'alhamdulillah', 'astaghfirullah', 'salawat'];
+        for (const sound of customSounds) {
+          await LocalNotifications.createChannel({
+            id: `channel_${sound}`,
+            name: `${sound.charAt(0).toUpperCase() + sound.slice(1)} Voice Reminder`,
+            description: `Spoken ${sound} voice alert`,
+            sound: sound, // android resource name in res/raw (no extension)
+            importance: 4, // HIGH
+            visibility: 1 // PUBLIC
+          });
+        }
+      } catch (channelErr) {
+        console.warn('[NativeReminders] Channel creation failed (might be on Web/iOS):', channelErr);
+      }
+
       const scheduleList = [];
 
       // 2. Schedule each active reminder
@@ -98,6 +116,13 @@ export const NotificationManager = {
 
           const randomMessage = ENGAGING_MESSAGES[Math.floor(Math.random() * ENGAGING_MESSAGES.length)];
 
+          const soundType = reminder.soundType || 'default';
+          const isCustomSound = soundType !== 'default';
+          const isAndroid = typeof window !== 'undefined' && (window as any).Capacitor?.getPlatform() === 'android';
+          const soundFile = isCustomSound 
+            ? (isAndroid ? soundType : `${soundType}.mp3`) 
+            : 'default';
+
           scheduleList.push({
             id: notificationId,
             title: reminder.label || 'Serene Tasbeeh',
@@ -111,7 +136,8 @@ export const NotificationManager = {
               repeats: true,
               allowWhileIdle: true // Ensures notifications fire in Doze mode/background
             },
-            sound: 'default',
+            channelId: isCustomSound ? `channel_${soundType}` : undefined,
+            sound: soundFile,
             actionTypeId: '',
             extra: null
           });

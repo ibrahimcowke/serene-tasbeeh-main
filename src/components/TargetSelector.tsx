@@ -1,5 +1,6 @@
 import { useState, useMemo } from 'react';
 import { motion } from 'framer-motion';
+import { useTranslation } from '@/lib/i18n';
 import { Check, Sparkles } from 'lucide-react';
 import { useTasbeehStore } from '@/store/tasbeehStore';
 import { useShallow } from 'zustand/react/shallow';
@@ -30,6 +31,7 @@ const presetTargets = [
 ];
 
 export function TargetSelector({ children }: TargetSelectorProps) {
+  const { t } = useTranslation();
   const { targetCount, setTarget, startTasbih100, startTasbih1000, startLaIlahaWahdahu100, startAstaghfirullah100, sessionMode, currentDhikr } = useTasbeehStore(useShallow(state => ({
     targetCount: state.targetCount,
     setTarget: state.setTarget,
@@ -333,7 +335,7 @@ export function TargetSelector({ children }: TargetSelectorProps) {
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel onClick={cancelAction}>Continue Session</AlertDialogCancel>
+            <AlertDialogCancel onClick={cancelAction}>{t('general.cancel')}</AlertDialogCancel>
             <AlertDialogAction onClick={confirmAction}>Reset & Change</AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

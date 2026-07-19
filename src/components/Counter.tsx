@@ -189,7 +189,7 @@ export const Counter = memo(function Counter({ className = "" }: { className?: s
             className="px-3 py-1 rounded-full text-[10px] sm:text-xs font-medium tracking-wide bg-primary/10 border border-primary/20 text-primary/80 hover:bg-primary/15 transition-all flex items-center gap-1.5 cursor-pointer"
           >
             <span>❤️</span>
-            <span>{niyyah ? 'Intention Set' : 'Set Intention'}</span>
+            <span>{niyyah ? t('niyyah.intention_set') : t('niyyah.set_intention')}</span>
           </motion.button>
 
 

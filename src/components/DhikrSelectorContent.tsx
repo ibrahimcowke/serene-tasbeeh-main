@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
+import { useTranslation } from '@/lib/i18n';
 import { Check, Plus, Trash2, Heart, Search, Share2 } from 'lucide-react';
 import { useTasbeehStore, Dhikr } from '@/store/tasbeehStore';
 import { SheetHeader, SheetTitle, SheetDescription } from '@/components/ui/sheet';
@@ -18,6 +19,7 @@ interface DhikrSelectorContentProps {
 }
 
 export function DhikrSelectorContent({ setOpen }: DhikrSelectorContentProps) {
+  const { t } = useTranslation();
   const { dhikrs, customDhikrs, currentDhikr, setDhikr, addCustomDhikr, removeCustomDhikr, sessionMode, favoriteDhikrIds, toggleFavorite } = useTasbeehStore();
   const [searchQuery, setSearchQuery] = useState('');
   const [filterMode, setFilterMode] = useState<'all' | 'favorites'>('all');
@@ -240,7 +242,7 @@ export function DhikrSelectorContent({ setOpen }: DhikrSelectorContentProps) {
                   }}
                   className="flex-1 py-2.5 bg-secondary text-foreground rounded-xl font-medium text-sm"
                 >
-                  Cancel
+                  {t('general.cancel')}
                 </button>
               </div>
             </motion.div>

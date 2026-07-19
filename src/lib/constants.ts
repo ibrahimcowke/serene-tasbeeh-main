@@ -3,16 +3,17 @@ export const APP_VERSION = '2.7.0';
 
 export const themes = [
   { id: 'light', label: 'Light', description: 'Warm and calm' },
-  { id: 'theme-midnight', label: 'Midnight', description: 'Deep blue serenity' },
+  { id: 'theme-nord-deep', label: 'Nord Deep', description: 'Nordic Frost' },
+  { id: 'theme-nord-midnight', label: 'Nord Midnight', description: 'Deep Navy Aurora' },
+  { id: 'theme-blue-white', label: 'Blue Breeze', description: 'Sky blue & pure white' },
+  { id: 'theme-cyber-twilight', label: 'Cyber Twilight', description: 'Synthwave Eclipse' },
+  { id: 'theme-dracula-evolved', label: 'Dracula Evolved', description: 'Vampire Velvet' },
+  { id: 'theme-espresso-dark', label: 'Espresso Dark', description: 'Café Noir' },
   { id: 'theme-glass', label: 'Glass', description: 'Pure & icy morphism' },
   { id: 'theme-sunset', label: 'Sunset', description: 'Warm gradients' },
   { id: 'theme-forest', label: 'Forest', description: 'Deep nature greens' },
   { id: 'theme-oled', label: 'OLED', description: 'True black power saver' },
-  { id: 'theme-mecca-night', label: 'Mecca Night', description: 'Deep purple & gold' },
   { id: 'theme-desert-starlight', label: 'Desert Star', description: 'Sand beige & blue' },
-  { id: 'theme-nordic-aurora', label: 'Nordic Aurora', description: 'Polar blue & neon green' },
-  { id: 'theme-cosmic-nebula', label: 'Cosmic Nebula', description: 'Space black & magenta' },
-  { id: 'theme-solar-flare', label: 'Solar Flare', description: 'Volcanic orange & gold' },
 ] as const;
 
 export const counterShapes = [

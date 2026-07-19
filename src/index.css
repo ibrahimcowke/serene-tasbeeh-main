@@ -174,72 +174,71 @@
     --bead-imam: #10b981;
   }
 
-  .theme-midnight {
+  .theme-nord-midnight {
     color-scheme: dark;
-    /* Midnight Blue */
-    --background: 224 71% 4%;
-    --foreground: 213 31% 91%;
+    /* Nord Midnight - Deep Navy Aurora */
+    --background: 217 29% 8%;
+    --foreground: 218 32% 91%;
 
-    --card: 224 71% 7%;
-    --card-foreground: 213 31% 91%;
+    --card: 217 25% 12%;
+    --card-foreground: 218 32% 91%;
 
-    --popover: 224 71% 7%;
-    --popover-foreground: 213 31% 91%;
+    --popover: 217 25% 11%;
+    --popover-foreground: 218 32% 91%;
 
-    /* Deep Blue/Gold */
-    --primary: 43 100% 64%;
-    /* Gold */
-    --primary-foreground: 224 71% 4%;
+    /* Aurora Green */
+    --primary: 92 28% 65%;
+    --primary-foreground: 217 29% 6%;
 
-    --secondary: 224 71% 10%;
-    --secondary-foreground: 213 31% 91%;
+    --secondary: 217 22% 16%;
+    --secondary-foreground: 218 32% 85%;
 
-    --muted: 224 50% 15%;
-    --muted-foreground: 224 20% 60%;
+    --muted: 217 20% 20%;
+    --muted-foreground: 218 15% 60%;
 
-    --accent: 43 100% 64%;
-    --accent-foreground: 224 71% 4%;
+    --accent: 311 20% 63%;
+    --accent-foreground: 0 0% 100%;
 
-    --destructive: 0 84% 60%;
+    --destructive: 354 70% 54%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 224 50% 15%;
-    --input: 224 50% 15%;
-    --ring: 43 100% 64%;
+    --border: 217 20% 16%;
+    --input: 217 20% 16%;
+    --ring: 92 28% 65%;
 
-    --counter-bg: 224 71% 8%;
-    --counter-ring: 43 100% 64%;
-    --counter-text: 43 100% 90%;
-    --counter-glow: 43 100% 64%;
+    --counter-bg: 217 25% 11%;
+    --counter-ring: 92 28% 65%;
+    --counter-text: 92 28% 85%;
+    --counter-glow: 92 28% 65%;
 
-    --arabic-text: 213 31% 91%;
-    --progress-track: 224 50% 15%;
-    --progress-fill: 43 100% 64%;
-    --sheet-bg: 224 71% 6%;
+    --arabic-text: 218 32% 91%;
+    --progress-track: 217 20% 16%;
+    --progress-fill: 92 28% 65%;
+    --sheet-bg: 217 25% 10%;
 
-    /* Choco Midnight */
-    --choco-bg: #0a0f1d;
-    --choco-clay: #161e31;
-    --choco-inner: #05070a;
-    --choco-gold: #f59e0b;
-    --choco-gold-light: #fbbf24;
-    --choco-gold-dark: #b45309;
-    --choco-highlight: #232f4a;
-    --choco-shadow: #05070a;
+    /* Sidebar theme variables */
+    --sidebar: 217 29% 5%;
+    --sidebar-foreground: 218 20% 75%;
+    --sidebar-primary: 92 28% 65%;
+    --sidebar-primary-foreground: 217 29% 5%;
+    --sidebar-accent: 217 25% 9%;
+    --sidebar-accent-foreground: 218 32% 85%;
+    --sidebar-border: 217 20% 12%;
+    --sidebar-ring: 92 28% 65%;
 
     /* Bead Ring Theme Styling */
-    --bead-filled-start: #93c5fd;
-    --bead-filled-mid: #3b82f6;
-    --bead-filled-end: #1d4ed8;
-    --bead-current-start: #fef9c3;
-    --bead-current-mid: #fbbf24;
-    --bead-current-end: #f59e0b;
-    --bead-empty-start: rgba(255,255,255,0.12);
-    --bead-empty-end: rgba(255,255,255,0.02);
-    --bead-empty-border: rgba(255,255,255,0.08);
-    --bead-glow: rgba(59,130,246,0.5);
-    --bead-string: rgba(96,165,250,0.25);
-    --bead-imam: #fbbf24;
+    --bead-filled-start: #a3be8c;
+    --bead-filled-mid: #8fbcbb;
+    --bead-filled-end: #434c5e;
+    --bead-current-start: #ebcb8b;
+    --bead-current-mid: #d08770;
+    --bead-current-end: #bf616a;
+    --bead-empty-start: rgba(255,255,255,0.08);
+    --bead-empty-end: rgba(255,255,255,0.01);
+    --bead-empty-border: rgba(255,255,255,0.05);
+    --bead-glow: rgba(163,190,140,0.5);
+    --bead-string: rgba(163,190,140,0.25);
+    --bead-imam: #b48ead;
   }
 
 
@@ -484,69 +483,71 @@
     --bead-imam: #ffffff;
   }
 
-  .theme-mecca-night {
+  .theme-dracula-evolved {
     color-scheme: dark;
-    --background: 270 40% 6%;
-    --foreground: 45 30% 90%;
+    /* Dracula Evolved - Vampire Velvet */
+    --background: 263 13% 9%;
+    --foreground: 60 30% 96%;
 
-    --card: 270 30% 9%;
-    --card-foreground: 45 30% 90%;
+    --card: 263 11% 14%;
+    --card-foreground: 60 30% 96%;
 
-    --popover: 270 30% 8%;
-    --popover-foreground: 45 30% 90%;
+    --popover: 263 11% 12%;
+    --popover-foreground: 60 30% 96%;
 
-    --primary: 45 80% 60%;
-    --primary-foreground: 270 40% 5%;
+    /* Vampire Red */
+    --primary: 350 80% 59%;
+    --primary-foreground: 263 13% 6%;
 
-    --secondary: 270 25% 12%;
-    --secondary-foreground: 45 20% 80%;
+    --secondary: 263 10% 19%;
+    --secondary-foreground: 60 20% 85%;
 
-    --muted: 270 20% 16%;
-    --muted-foreground: 270 20% 60%;
+    --muted: 263 8% 22%;
+    --muted-foreground: 263 6% 65%;
 
-    --accent: 340 70% 60%;
-    --accent-foreground: 270 40% 5%;
+    --accent: 259 93% 78%;
+    --accent-foreground: 263 13% 6%;
 
-    --destructive: 0 70% 60%;
-    --destructive-foreground: 0 0% 100%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 210 40% 98%;
 
-    --border: 270 20% 15%;
-    --input: 270 20% 15%;
-    --ring: 45 80% 60%;
+    --border: 263 10% 19%;
+    --input: 263 10% 19%;
+    --ring: 350 80% 59%;
 
-    --counter-bg: 270 35% 8%;
-    --counter-ring: 45 80% 60%;
-    --counter-text: 45 90% 85%;
-    --counter-glow: 45 80% 50%;
+    --counter-bg: 263 11% 12%;
+    --counter-ring: 350 80% 59%;
+    --counter-text: 350 80% 85%;
+    --counter-glow: 350 80% 59%;
 
-    --arabic-text: 45 30% 90%;
-    --progress-track: 270 20% 15%;
-    --progress-fill: 45 80% 60%;
-    --sheet-bg: 270 30% 8%;
+    --arabic-text: 60 30% 96%;
+    --progress-track: 263 10% 19%;
+    --progress-fill: 350 80% 59%;
+    --sheet-bg: 263 11% 11%;
 
     /* Sidebar theme variables */
-    --sidebar: 270 40% 4%;
-    --sidebar-foreground: 45 25% 75%;
-    --sidebar-primary: 45 80% 60%;
-    --sidebar-primary-foreground: 270 40% 5%;
-    --sidebar-accent: 270 30% 8%;
-    --sidebar-accent-foreground: 45 30% 85%;
-    --sidebar-border: 270 20% 12%;
-    --sidebar-ring: 45 80% 60%;
+    --sidebar: 263 13% 7%;
+    --sidebar-foreground: 60 20% 75%;
+    --sidebar-primary: 350 80% 59%;
+    --sidebar-primary-foreground: 263 13% 7%;
+    --sidebar-accent: 263 11% 11%;
+    --sidebar-accent-foreground: 60 30% 85%;
+    --sidebar-border: 263 10% 15%;
+    --sidebar-ring: 350 80% 59%;
 
     /* Bead Ring Theme Styling */
-    --bead-filled-start: #ffe4e6;
-    --bead-filled-mid: #fb7185;
-    --bead-filled-end: #be123c;
-    --bead-current-start: #fef9c3;
-    --bead-current-mid: #fbbf24;
-    --bead-current-end: #d97706;
-    --bead-empty-start: rgba(255,255,255,0.12);
-    --bead-empty-end: rgba(255,255,255,0.02);
-    --bead-empty-border: rgba(255,255,255,0.08);
-    --bead-glow: rgba(251,113,133,0.3);
-    --bead-string: rgba(251,113,133,0.15);
-    --bead-imam: #fb7185;
+    --bead-filled-start: #ff5555;
+    --bead-filled-mid: #bd93f9;
+    --bead-filled-end: #282a36;
+    --bead-current-start: #ffb86c;
+    --bead-current-mid: #50fa7b;
+    --bead-current-end: #ff79c6;
+    --bead-empty-start: rgba(255,255,255,0.08);
+    --bead-empty-end: rgba(255,255,255,0.01);
+    --bead-empty-border: rgba(255,255,255,0.05);
+    --bead-glow: rgba(233,69,96,0.5);
+    --bead-string: rgba(233,69,96,0.25);
+    --bead-imam: #bd93f9;
   }
 
   .theme-desert-starlight {
@@ -984,157 +985,275 @@
     --bead-imam: #ec4899;
   }
 
-  .theme-nordic-aurora {
+  .theme-nord-deep {
     color-scheme: dark;
-    --background: 218 60% 7%;
-    --foreground: 214 32% 91%;
-    --card: 222 47% 11%;
-    --card-foreground: 214 32% 91%;
-    --popover: 222 47% 10%;
-    --popover-foreground: 214 32% 91%;
-    --primary: 158 82% 47%;
-    --primary-foreground: 218 60% 5%;
-    --secondary: 218 56% 14%;
-    --secondary-foreground: 214 20% 80%;
-    --muted: 218 30% 18%;
-    --muted-foreground: 218 15% 60%;
-    --accent: 234 89% 74%;
-    --accent-foreground: 218 60% 5%;
-    --destructive: 0 84% 60%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 217 33% 17%;
-    --input: 217 33% 17%;
-    --ring: 158 82% 47%;
-    --counter-bg: 222 47% 10%;
-    --counter-ring: 158 82% 47%;
-    --counter-text: 158 82% 85%;
-    --counter-glow: 158 82% 50%;
-    --arabic-text: 214 32% 91%;
-    --progress-track: 217 33% 17%;
-    --progress-fill: 158 82% 47%;
-    --sheet-bg: 222 47% 9%;
-    --sidebar: 218 60% 4%;
-    --sidebar-foreground: 214 20% 75%;
-    --sidebar-primary: 158 82% 47%;
-    --sidebar-primary-foreground: 218 60% 4%;
-    --sidebar-accent: 222 47% 8%;
-    --sidebar-accent-foreground: 214 32% 85%;
-    --sidebar-border: 217 33% 12%;
-    --sidebar-ring: 158 82% 47%;
-    --bead-filled-start: #34d399;
-    --bead-filled-mid: #10b981;
-    --bead-filled-end: #059669;
-    --bead-current-start: #a5f3fc;
-    --bead-current-mid: #06b6d4;
-    --bead-current-end: #0891b2;
+    /* Nord Deep - Nordic Frost */
+    --background: 220 20% 12%;
+    --foreground: 210 20% 95%;
+
+    --card: 220 20% 16%;
+    --card-foreground: 210 20% 95%;
+
+    --popover: 220 20% 14%;
+    --popover-foreground: 210 20% 95%;
+
+    /* Frost Cyan */
+    --primary: 193 43% 67%;
+    --primary-foreground: 220 20% 10%;
+
+    --secondary: 220 16% 22%;
+    --secondary-foreground: 210 20% 90%;
+
+    --muted: 220 15% 26%;
+    --muted-foreground: 218 12% 65%;
+
+    /* Frost Blue */
+    --accent: 210 34% 63%;
+    --accent-foreground: 220 20% 10%;
+
+    /* Aurora Red */
+    --destructive: 354 70% 54%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 220 15% 20%;
+    --input: 220 15% 20%;
+    --ring: 193 43% 67%;
+
+    --counter-bg: 220 20% 15%;
+    --counter-ring: 193 43% 67%;
+    --counter-text: 193 43% 85%;
+    --counter-glow: 193 43% 67%;
+
+    --arabic-text: 210 20% 95%;
+    --progress-track: 220 15% 20%;
+    --progress-fill: 193 43% 67%;
+    --sheet-bg: 220 20% 14%;
+
+    /* Sidebar theme variables */
+    --sidebar: 220 20% 8%;
+    --sidebar-foreground: 210 20% 75%;
+    --sidebar-primary: 193 43% 67%;
+    --sidebar-primary-foreground: 220 20% 8%;
+    --sidebar-accent: 220 20% 13%;
+    --sidebar-accent-foreground: 210 20% 85%;
+    --sidebar-border: 220 15% 15%;
+    --sidebar-ring: 193 43% 67%;
+
+    /* Bead Ring Theme Styling */
+    --bead-filled-start: #88c0d0;
+    --bead-filled-mid: #81a1c1;
+    --bead-filled-end: #5e81ac;
+    --bead-current-start: #ebcb8b;
+    --bead-current-mid: #d08770;
+    --bead-current-end: #bf616a;
     --bead-empty-start: rgba(255,255,255,0.1);
     --bead-empty-end: rgba(255,255,255,0.02);
     --bead-empty-border: rgba(255,255,255,0.06);
-    --bead-glow: rgba(16,185,129,0.5);
-    --bead-string: rgba(52,211,153,0.25);
-    --bead-imam: #06b6d4;
+    --bead-glow: rgba(136,192,208,0.5);
+    --bead-string: rgba(136,192,208,0.25);
+    --bead-imam: #ebcb8b;
   }
 
-  .theme-cosmic-nebula {
+  .theme-blue-white {
+    color-scheme: light;
+    /* Blue Breeze - Sky Blue & Pure White */
+    --background: 210 50% 98%;
+    --foreground: 220 50% 15%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 220 50% 15%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 220 50% 15%;
+
+    --primary: 210 100% 50%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 210 30% 92%;
+    --secondary-foreground: 220 50% 15%;
+
+    --muted: 210 20% 90%;
+    --muted-foreground: 210 15% 45%;
+
+    --accent: 210 80% 60%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 354 70% 54%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 210 30% 90%;
+    --input: 210 30% 90%;
+    --ring: 210 100% 50%;
+
+    --counter-bg: 0 0% 100%;
+    --counter-ring: 210 100% 50%;
+    --counter-text: 220 50% 15%;
+    --counter-glow: 210 100% 70%;
+
+    --arabic-text: 220 50% 15%;
+    --progress-track: 210 30% 92%;
+    --progress-fill: 210 100% 50%;
+    --sheet-bg: 0 0% 100%;
+
+    /* Sidebar theme variables */
+    --sidebar: 210 40% 96%;
+    --sidebar-foreground: 220 30% 25%;
+    --sidebar-primary: 210 100% 50%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 210 30% 90%;
+    --sidebar-accent-foreground: 220 50% 15%;
+    --sidebar-border: 210 30% 90%;
+    --sidebar-ring: 210 100% 50%;
+
+    /* Bead Ring Theme Styling */
+    --bead-filled-start: #60a5fa;
+    --bead-filled-mid: #3b82f6;
+    --bead-filled-end: #1d4ed8;
+    --bead-current-start: #ffffff;
+    --bead-current-mid: #f1f5f9;
+    --bead-current-end: #cbd5e1;
+    --bead-empty-start: rgba(96, 165, 250, 0.1);
+    --bead-empty-end: rgba(96, 165, 250, 0.02);
+    --bead-empty-border: rgba(96, 165, 250, 0.15);
+    --bead-glow: rgba(96, 165, 250, 0.5);
+    --bead-string: rgba(96, 165, 250, 0.25);
+    --bead-imam: #2563eb;
+  }
+
+  .theme-cyber-twilight {
     color-scheme: dark;
-    --background: 260 50% 3%;
-    --foreground: 270 100% 98%;
-    --card: 260 30% 6%;
-    --card-foreground: 270 100% 98%;
-    --popover: 260 30% 5%;
-    --popover-foreground: 270 100% 98%;
-    --primary: 258 90% 66%;
-    --primary-foreground: 260 50% 2%;
-    --secondary: 260 30% 10%;
-    --secondary-foreground: 270 50% 85%;
-    --muted: 260 20% 15%;
-    --muted-foreground: 260 10% 60%;
-    --accent: 340 82% 60%;
-    --accent-foreground: 270 100% 98%;
+    /* Cyber Twilight - Synthwave Eclipse */
+    --background: 256 47% 9%;
+    --foreground: 300 100% 95%;
+
+    --card: 256 35% 14%;
+    --card-foreground: 300 100% 95%;
+
+    --popover: 256 35% 12%;
+    --popover-foreground: 300 100% 95%;
+
+    /* Synthwave Pink */
+    --primary: 326 100% 74%;
+    --primary-foreground: 256 47% 6%;
+
+    --secondary: 256 25% 19%;
+    --secondary-foreground: 300 100% 85%;
+
+    --muted: 256 20% 22%;
+    --muted-foreground: 256 12% 65%;
+
+    /* Neon Cyan */
+    --accent: 180 100% 50%;
+    --accent-foreground: 256 47% 6%;
+
     --destructive: 0 84% 60%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 260 25% 15%;
-    --input: 260 25% 15%;
-    --ring: 258 90% 66%;
-    --counter-bg: 260 30% 5%;
-    --counter-ring: 258 90% 66%;
-    --counter-text: 258 90% 90%;
-    --counter-glow: 258 90% 60%;
-    --arabic-text: 270 100% 98%;
-    --progress-track: 260 25% 15%;
-    --progress-fill: 258 90% 66%;
-    --sheet-bg: 260 30% 5%;
-    --sidebar: 260 50% 2%;
-    --sidebar-foreground: 270 50% 80%;
-    --sidebar-primary: 258 90% 66%;
-    --sidebar-primary-foreground: 260 50% 2%;
-    --sidebar-accent: 260 30% 4%;
-    --sidebar-accent-foreground: 270 100% 90%;
-    --sidebar-border: 260 25% 10%;
-    --sidebar-ring: 258 90% 66%;
-    --bead-filled-start: #c084fc;
-    --bead-filled-mid: #a855f7;
-    --bead-filled-end: #7e22ce;
-    --bead-current-start: #f472b6;
-    --bead-current-mid: #ec4899;
-    --bead-current-end: #be123c;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 256 25% 20%;
+    --input: 256 25% 20%;
+    --ring: 326 100% 74%;
+
+    --counter-bg: 256 35% 12%;
+    --counter-ring: 326 100% 74%;
+    --counter-text: 326 100% 90%;
+    --counter-glow: 326 100% 74%;
+
+    --arabic-text: 300 100% 95%;
+    --progress-track: 256 25% 20%;
+    --progress-fill: 326 100% 74%;
+    --sheet-bg: 256 35% 11%;
+
+    /* Sidebar theme variables */
+    --sidebar: 256 47% 6%;
+    --sidebar-foreground: 300 100% 80%;
+    --sidebar-primary: 326 100% 74%;
+    --sidebar-primary-foreground: 256 47% 6%;
+    --sidebar-accent: 256 35% 10%;
+    --sidebar-accent-foreground: 300 100% 90%;
+    --sidebar-border: 256 25% 15%;
+    --sidebar-ring: 326 100% 74%;
+
+    /* Bead Ring Theme Styling */
+    --bead-filled-start: #ff79c6;
+    --bead-filled-mid: #bd93f9;
+    --bead-filled-end: #6272a4;
+    --bead-current-start: #8be9fd;
+    --bead-current-mid: #50fa7b;
+    --bead-current-end: #ffb86c;
     --bead-empty-start: rgba(255,255,255,0.08);
     --bead-empty-end: rgba(255,255,255,0.01);
     --bead-empty-border: rgba(255,255,255,0.05);
-    --bead-glow: rgba(168,85,247,0.5);
-    --bead-string: rgba(168,85,247,0.25);
-    --bead-imam: #ec4899;
+    --bead-glow: rgba(255,121,198,0.5);
+    --bead-string: rgba(255,121,198,0.25);
+    --bead-imam: #8be9fd;
   }
 
-  .theme-solar-flare {
+  .theme-espresso-dark {
     color-scheme: dark;
-    --background: 30 11% 4%;
-    --foreground: 45 100% 98%;
-    --card: 30 10% 7%;
-    --card-foreground: 45 100% 98%;
-    --popover: 30 10% 6%;
-    --popover-foreground: 45 100% 98%;
-    --primary: 25 95% 53%;
-    --primary-foreground: 30 11% 2%;
-    --secondary: 30 12% 10%;
-    --secondary-foreground: 45 60% 85%;
-    --muted: 30 8% 15%;
-    --muted-foreground: 30 6% 55%;
-    --accent: 45 93% 56%;
-    --accent-foreground: 30 11% 2%;
-    --destructive: 0 84% 60%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 30 12% 13%;
-    --input: 30 12% 13%;
-    --ring: 25 95% 53%;
-    --counter-bg: 30 10% 6%;
-    --counter-ring: 25 95% 53%;
-    --counter-text: 25 95% 90%;
-    --counter-glow: 25 95% 53%;
-    --arabic-text: 45 100% 98%;
-    --progress-track: 30 12% 13%;
-    --progress-fill: 25 95% 53%;
-    --sheet-bg: 30 10% 6%;
-    --sidebar: 30 11% 2%;
-    --sidebar-foreground: 45 50% 80%;
-    --sidebar-primary: 25 95% 53%;
-    --sidebar-primary-foreground: 30 11% 2%;
-    --sidebar-accent: 30 10% 5%;
-    --sidebar-accent-foreground: 45 100% 90%;
-    --sidebar-border: 30 12% 9%;
-    --sidebar-ring: 25 95% 53%;
-    --bead-filled-start: #fdba74;
-    --bead-filled-mid: #f97316;
-    --bead-filled-end: #c2410c;
-    --bead-current-start: #fde047;
-    --bead-current-mid: #ca8a04;
-    --bead-current-end: #854d0e;
+    /* Espresso Dark - Café Noir */
+    --background: 24 23% 6%;
+    --foreground: 30 52% 90%;
+
+    --card: 24 18% 10%;
+    --card-foreground: 30 52% 90%;
+
+    --popover: 24 18% 9%;
+    --popover-foreground: 30 52% 90%;
+
+    /* Warm Caramel */
+    --primary: 30 52% 72%;
+    --primary-foreground: 24 23% 4%;
+
+    --secondary: 24 14% 15%;
+    --secondary-foreground: 30 40% 80%;
+
+    --muted: 24 12% 18%;
+    --muted-foreground: 30 20% 60%;
+
+    /* Roasted Coffee */
+    --accent: 24 38% 36%;
+    --accent-foreground: 30 52% 90%;
+
+    --destructive: 0 80% 50%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 24 14% 15%;
+    --input: 24 14% 15%;
+    --ring: 30 52% 72%;
+
+    --counter-bg: 24 18% 9%;
+    --counter-ring: 30 52% 72%;
+    --counter-text: 30 52% 85%;
+    --counter-glow: 30 52% 72%;
+
+    --arabic-text: 30 52% 90%;
+    --progress-track: 24 14% 15%;
+    --progress-fill: 30 52% 72%;
+    --sheet-bg: 24 18% 9%;
+
+    /* Sidebar theme variables */
+    --sidebar: 24 23% 4%;
+    --sidebar-foreground: 30 50% 80%;
+    --sidebar-primary: 30 52% 72%;
+    --sidebar-primary-foreground: 24 23% 4%;
+    --sidebar-accent: 24 18% 7%;
+    --sidebar-accent-foreground: 30 52% 90%;
+    --sidebar-border: 24 14% 11%;
+    --sidebar-ring: 30 52% 72%;
+
+    /* Bead Ring Theme Styling */
+    --bead-filled-start: #e6ccb2;
+    --bead-filled-mid: #b08968;
+    --bead-filled-end: #7f5539;
+    --bead-current-start: #ede0d4;
+    --bead-current-mid: #ddb892;
+    --bead-current-end: #9c6644;
     --bead-empty-start: rgba(255,255,255,0.08);
     --bead-empty-end: rgba(255,255,255,0.01);
     --bead-empty-border: rgba(255,255,255,0.05);
-    --bead-glow: rgba(249,115,22,0.5);
-    --bead-string: rgba(249,115,22,0.25);
-    --bead-imam: #ca8a04;
+    --bead-glow: rgba(221,184,146,0.5);
+    --bead-string: rgba(221,184,146,0.25);
+    --bead-imam: #b08968;
   }
 }
 

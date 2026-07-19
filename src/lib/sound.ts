@@ -104,6 +104,22 @@ export class SoundManager {
       console.error('Completion sound failed', e);
     }
   }
+
+  private static activeAudio: HTMLAudioElement | null = null;
+
+  public static playVoiceReminder(type: 'subhanallah' | 'alhamdulillah' | 'astaghfirullah' | 'salawat' | string) {
+    try {
+      if (this.activeAudio) {
+        this.activeAudio.pause();
+        this.activeAudio = null;
+      }
+      const audio = new Audio(`/sounds/${type}.mp3`);
+      this.activeAudio = audio;
+      audio.play().catch((err) => console.warn('Failed to play voice preview:', err));
+    } catch (e) {
+      console.error('Failed to play voice reminder:', e);
+    }
+  }
 }
 
 // ─────────────────────────────────────────────

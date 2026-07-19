@@ -39,8 +39,8 @@ async function checkAndApplyTheme() {
     try { localStorage.setItem(SAVED_DARK_THEME_KEY, currentTheme); } catch {}
     store.setTheme('light');
   } else if (!shouldBeLight && currentTheme === 'light') {
-    // Restore the saved dark theme, or fall back to theme-midnight
-    let darkTheme = 'theme-midnight';
+    // Restore the saved dark theme, or fall back to theme-nord-midnight
+    let darkTheme = 'theme-nord-midnight';
     try {
       const saved = localStorage.getItem(SAVED_DARK_THEME_KEY);
       if (saved && saved !== 'light') darkTheme = saved;

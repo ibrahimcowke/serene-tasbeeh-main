@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useTranslation } from '@/lib/i18n';
 import { FirebaseAuthentication } from '@capacitor-firebase/authentication';
 import { signInWithCredential, GoogleAuthProvider, signInWithEmailAndPassword, createUserWithEmailAndPassword, sendPasswordResetEmail, sendEmailVerification } from 'firebase/auth';
 import { auth } from '../lib/firebase';
@@ -18,6 +19,7 @@ import {
 } from '@/components/ui/alert-dialog';
 
 export function GoogleLoginScreen({ onLoginSuccess }: { onLoginSuccess: () => void }) {
+    const { t } = useTranslation();
     const [signingIn, setSigningIn] = useState(false);
     const [isSignUp, setIsSignUp] = useState(false);
     const [isForgotPassword, setIsForgotPassword] = useState(false);
@@ -433,7 +435,7 @@ export function GoogleLoginScreen({ onLoginSuccess }: { onLoginSuccess: () => vo
                     </AlertDialogHeader>
                     <AlertDialogFooter className="flex-row gap-2 mt-4 sm:flex-row sm:justify-center">
                         <AlertDialogCancel className="flex-1 rounded-xl border border-border/60 hover:bg-muted text-foreground/80">
-                            Cancel
+                            {t('general.cancel')}
                         </AlertDialogCancel>
                         <AlertDialogAction
                             onClick={confirmContinueAsGuest}

@@ -2,16 +2,19 @@ import { useState, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence, useDragControls } from 'framer-motion';
 import {
     Bell, Plus, Trash2, Clock, Compass, ChevronDown, ChevronUp,
-    Check, Sparkles, Moon, Pencil, X, Settings2, ToggleLeft, ToggleRight
+    Check, Sparkles, Moon, Pencil, X, Settings2, ToggleLeft, ToggleRight,
+    Play, Volume2
 } from 'lucide-react';
 import { Switch } from '@/components/ui/switch';
 import { toast } from 'sonner';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger, SheetDescription } from '@/components/ui/sheet';
 import { useTasbeehStore } from '@/store/tasbeehStore';
+import { SoundManager } from '@/lib/sound';
 import { NotificationManager } from '@/lib/notifications';
 import { initPrayerTimeReminders } from '@/lib/prayerTimes';
 import { getSmartSuggestions } from '@/lib/smartReminders';
 import { SmartSuggestionCards } from './SmartSuggestionCards';
+import { useTranslation } from '@/lib/i18n';
 
 interface Reminder {
     id: string;
@@ -19,11 +22,20 @@ interface Reminder {
     label: string;
     enabled: boolean;
     days: number[];
+    soundType?: 'default' | 'subhanallah' | 'alhamdulillah' | 'astaghfirullah' | 'salawat';
 }
 
 interface RemindersViewProps {
     children: React.ReactNode;
 }
+
+const SOUND_OPTIONS = [
+    { value: 'default', label: '🔇 Default Sound', desc: 'System alert' },
+    { value: 'subhanallah', label: '🗣️ SubhanAllah', desc: 'Male voice (peaceful)' },
+    { value: 'alhamdulillah', label: '🗣️ Alhamdulillah', desc: 'Female voice (gentle)' },
+    { value: 'astaghfirullah', label: '🗣️ Astaghfirullah', desc: 'Male voice (quiet reminder)' },
+    { value: 'salawat', label: '🗣️ Salawat', desc: 'Spoken recitation' },
+] as const;
 
 export function RemindersView({ children }: RemindersViewProps) {
     const [open, setOpen] = useState(false);
@@ -76,7 +88,12 @@ function AddReminderButton() {
     const reminders = useTasbeehStore((s) => s.reminders);
     const reminderEnabled = useTasbeehStore((s) => s.reminderEnabled);
 
-    const [form, setForm] = useState({ time: '08:00', label: '', days: [0, 1, 2, 3, 4, 5, 6] });
+    const [form, setForm] = useState({ 
+        time: '08:00', 
+        label: '', 
+        days: [0, 1, 2, 3, 4, 5, 6], 
+        soundType: 'default' as 'default' | 'subhanallah' | 'alhamdulillah' | 'astaghfirullah' | 'salawat'
+    });
     const DAY_NAMES = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'];
 
     const REPEAT_SHORTCUTS = [
@@ -113,13 +130,13 @@ function AddReminderButton() {
     const handleAdd = () => {
         if (!form.label.trim()) { toast.error('Please enter a reminder label'); return; }
         if (form.days.length === 0) { toast.error('Select at least one day'); return; }
-        addReminder({ time: form.time, label: form.label.trim(), enabled: true, days: form.days });
+        addReminder({ time: form.time, label: form.label.trim(), enabled: true, days: form.days, soundType: form.soundType });
         // Sync native notifications
         NotificationManager.syncReminders(
             [...reminders, { id: 'new', ...form, enabled: true }],
             reminderEnabled
         );
-        setForm({ time: '08:00', label: '', days: [0, 1, 2, 3, 4, 5, 6] });
+        setForm({ time: '08:00', label: '', days: [0, 1, 2, 3, 4, 5, 6], soundType: 'default' });
         setOpen(false);
         toast.success('Reminder added!');
     };
@@ -290,6 +307,44 @@ function AddReminderButton() {
                                             </button>
                                         );
                                     })}
+                                </div>
+                            </div>
+
+                            {/* Sound Selector */}
+                            <div className="space-y-1.5">
+                                <p className="text-xs text-muted-foreground font-medium flex items-center gap-1">
+                                    <Volume2 size={12} className="text-primary" />
+                                    Reminder Voice Sound
+                                </p>
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5">
+                                    {SOUND_OPTIONS.map((opt) => (
+                                        <div
+                                            key={opt.value}
+                                            onClick={() => setForm({ ...form, soundType: opt.value })}
+                                            className="flex items-center justify-between p-2.5 rounded-xl border cursor-pointer transition-all"
+                                            style={{
+                                                background: form.soundType === opt.value ? 'hsl(var(--primary) / 0.1)' : 'hsl(var(--card) / 0.5)',
+                                                borderColor: form.soundType === opt.value ? 'hsl(var(--primary) / 0.6)' : 'hsl(var(--border) / 0.3)',
+                                            }}
+                                        >
+                                            <div className="flex-1 text-left min-w-0">
+                                                <p className="text-xs font-semibold text-foreground truncate">{opt.label}</p>
+                                                <p className="text-[9px] text-muted-foreground truncate">{opt.desc}</p>
+                                            </div>
+                                            {opt.value !== 'default' && (
+                                                <button
+                                                    type="button"
+                                                    onClick={(e) => {
+                                                        e.stopPropagation();
+                                                        SoundManager.playVoiceReminder(opt.value);
+                                                    }}
+                                                    className="p-1 rounded-full hover:bg-primary/20 text-primary transition-colors ml-1.5"
+                                                >
+                                                    <Play size={11} className="fill-primary text-primary" />
+                                                </button>
+                                            )}
+                                        </div>
+                                    ))}
                                 </div>
                             </div>
 
@@ -640,10 +695,12 @@ function ReminderCard({ reminder, index, onToggle, onDelete }: {
     onToggle: () => void;
     onDelete: () => void;
 }) {
+    const { t } = useTranslation();
     const [editing, setEditing] = useState(false);
     const [editLabel, setEditLabel] = useState(reminder.label);
     const [editTime, setEditTime] = useState(reminder.time);
     const [editDays, setEditDays] = useState<number[]>(reminder.days);
+    const [editSoundType, setEditSoundType] = useState(reminder.soundType || 'default');
     
     const storeUpdateReminder = useTasbeehStore((s) => s.updateReminder);
 
@@ -690,7 +747,8 @@ function ReminderCard({ reminder, index, onToggle, onDelete }: {
         storeUpdateReminder(reminder.id, {
             time: editTime,
             label: editLabel.trim(),
-            days: editDays
+            days: editDays,
+            soundType: editSoundType
         });
         setEditing(false);
         toast.success('Reminder updated');
@@ -809,6 +867,44 @@ function ReminderCard({ reminder, index, onToggle, onDelete }: {
                             </div>
                         </div>
 
+                        {/* Sound Selector */}
+                        <div className="space-y-1">
+                            <p className="text-[10px] text-muted-foreground font-semibold uppercase flex items-center gap-1">
+                                <Volume2 size={10} className="text-primary" />
+                                Reminder Sound
+                            </p>
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5">
+                                {SOUND_OPTIONS.map((opt) => (
+                                    <div
+                                        key={opt.value}
+                                        onClick={() => setEditSoundType(opt.value)}
+                                        className="flex items-center justify-between p-2 rounded-xl border cursor-pointer transition-all"
+                                        style={{
+                                            background: editSoundType === opt.value ? 'hsl(var(--primary) / 0.1)' : 'hsl(var(--card) / 0.5)',
+                                            borderColor: editSoundType === opt.value ? 'hsl(var(--primary) / 0.6)' : 'hsl(var(--border) / 0.3)',
+                                        }}
+                                    >
+                                        <div className="flex-1 text-left min-w-0">
+                                            <p className="text-[11px] font-semibold text-foreground truncate">{opt.label}</p>
+                                            <p className="text-[9px] text-muted-foreground truncate">{opt.desc}</p>
+                                        </div>
+                                        {opt.value !== 'default' && (
+                                            <button
+                                                type="button"
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    SoundManager.playVoiceReminder(opt.value);
+                                                }}
+                                                className="p-1 rounded-full hover:bg-primary/20 text-primary transition-colors ml-1"
+                                            >
+                                                <Play size={10} className="fill-primary text-primary" />
+                                            </button>
+                                        )}
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+
                         <div className="flex gap-2 pt-1">
                             <motion.button
                                 whileTap={{ scale: 0.96 }}
@@ -825,10 +921,11 @@ function ReminderCard({ reminder, index, onToggle, onDelete }: {
                                     setEditLabel(reminder.label);
                                     setEditTime(reminder.time);
                                     setEditDays(reminder.days);
+                                    setEditSoundType(reminder.soundType || 'default');
                                 }}
                                 className="flex-1 py-2 rounded-xl text-xs font-semibold border border-border/40 text-muted-foreground"
                             >
-                                Cancel
+                                {t('general.cancel')}
                             </button>
                         </div>
                     </motion.div>
@@ -858,6 +955,15 @@ function ReminderCard({ reminder, index, onToggle, onDelete }: {
                             <p className="text-sm font-medium text-foreground/80 mt-0.5 truncate">
                                 {reminder.label}
                             </p>
+
+                            {reminder.soundType && reminder.soundType !== 'default' && (
+                                <div className="mt-1">
+                                    <span className="text-[10px] bg-primary/10 border border-primary/20 text-primary font-medium px-2 py-0.5 rounded-full inline-flex items-center gap-1">
+                                        <Volume2 size={10} />
+                                        {reminder.soundType.charAt(0).toUpperCase() + reminder.soundType.slice(1)} Voice
+                                    </span>
+                                </div>
+                            )}
 
                             {/* Day pills */}
                             <div className="flex gap-1 mt-2 flex-wrap">

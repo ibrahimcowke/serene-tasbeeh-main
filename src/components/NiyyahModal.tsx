@@ -23,9 +23,9 @@ export function NiyyahModal({ open, onClose }: NiyyahModalProps) {
     setNiyyah(text);
     if (dedicatedTo.trim()) {
       // Save dedicated name/purpose in store state if needed or show a toast
-      toast.success(`Niyyah set: Reciting for "${dedicatedTo.trim()}"`);
+      toast.success(`${t('niyyah.toast_success')} (${dedicatedTo.trim()})`);
     } else {
-      toast.success('Intention (Niyyah) updated successfully.');
+      toast.success(t('niyyah.toast_success'));
     }
     onClose();
   };
@@ -49,9 +49,9 @@ export function NiyyahModal({ open, onClose }: NiyyahModalProps) {
 
           {/* Modal */}
           <motion.div
-            initial={{ opacity: 0, scale: 0.95, y: 15 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.95, y: 15 }}
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.95 }}
             transition={{ type: 'spring', duration: 0.4 }}
             className="relative w-full max-w-md overflow-hidden rounded-[2.5rem] border border-border/40 shadow-2xl z-10"
             style={{
@@ -63,7 +63,7 @@ export function NiyyahModal({ open, onClose }: NiyyahModalProps) {
             <div className="flex items-center justify-between px-6 py-4 border-b border-border/10">
               <div className="flex items-center gap-2 text-primary">
                 <Heart className="w-5 h-5 fill-current" />
-                <span className="text-sm font-bold uppercase tracking-wider">Set Intention (Niyyah)</span>
+                <span className="text-sm font-bold uppercase tracking-wider">{t('niyyah.modal_title')}</span>
               </div>
               <button 
                 onClick={onClose}
@@ -76,17 +76,17 @@ export function NiyyahModal({ open, onClose }: NiyyahModalProps) {
             {/* Body */}
             <div className="p-6 space-y-4 max-h-[70vh] overflow-y-auto">
               <p className="text-xs text-muted-foreground leading-relaxed">
-                Actions are judged by intentions. Setting a Niyyah before reciting helps bring focus and spiritual mindfulness.
+                {t('niyyah.desc')}
               </p>
 
               {/* Text Input */}
               <div className="space-y-1.5">
                 <label className="text-[11px] font-semibold text-foreground/80 uppercase tracking-wider flex items-center gap-1">
-                  <span>Custom Intention</span>
+                  <span>{t('niyyah.custom_label')}</span>
                 </label>
                 <textarea
                   className="w-full h-20 px-3.5 py-2.5 rounded-2xl bg-foreground/5 border border-border/20 text-sm focus:outline-none focus:border-primary/50 text-foreground resize-none"
-                  placeholder="E.g., Seeking Allah's pleasure, recovery from illness, relief from hardships..."
+                  placeholder={t('niyyah.custom_placeholder')}
                   value={text}
                   onChange={(e) => setText(e.target.value)}
                 />
@@ -96,12 +96,12 @@ export function NiyyahModal({ open, onClose }: NiyyahModalProps) {
               <div className="space-y-1.5">
                 <label className="text-[11px] font-semibold text-foreground/80 uppercase tracking-wider flex items-center gap-1">
                   <User className="w-3 h-3 text-primary" />
-                  <span>Dedicate to (Optional)</span>
+                  <span>{t('niyyah.dedicate_label')}</span>
                 </label>
                 <input
                   type="text"
                   className="w-full px-3.5 py-2 rounded-2xl bg-foreground/5 border border-border/20 text-sm focus:outline-none focus:border-primary/50 text-foreground"
-                  placeholder="E.g., Mother, Father, My Children, Self..."
+                  placeholder={t('niyyah.dedicate_placeholder')}
                   value={dedicatedTo}
                   onChange={(e) => setDedicatedTo(e.target.value)}
                 />
@@ -109,19 +109,23 @@ export function NiyyahModal({ open, onClose }: NiyyahModalProps) {
 
               {/* Presets List */}
               <div className="space-y-2">
-                <label className="text-[11px] font-semibold text-foreground/80 uppercase tracking-wider">Presets</label>
-                <div className="grid gap-2 max-h-48 overflow-y-auto pr-1">
+                <p className="text-[11px] font-semibold text-foreground/80 uppercase tracking-wider">
+                  Presets Intentions
+                </p>
+                <div className="grid grid-cols-1 gap-2 max-h-[24vh] overflow-y-auto pr-1">
                   {presets.map((preset) => {
                     const isSelected = text === preset;
                     return (
                       <button
                         key={preset}
                         onClick={() => handleSelectPreset(preset)}
-                        className="text-left px-4 py-2.5 rounded-xl border text-xs transition-all flex items-center justify-between gap-3 text-foreground/80 hover:bg-foreground/5"
-                        style={{
-                          background: isSelected ? 'hsl(var(--primary) / 0.1)' : 'transparent',
-                          borderColor: isSelected ? 'hsl(var(--primary) / 0.4)' : 'hsl(var(--border) / 0.3)'
-                        }}
+                        className={`
+                          flex items-center justify-between p-3 rounded-2xl border text-xs text-left transition-all active:scale-[0.98] duration-150 cursor-pointer
+                          ${isSelected 
+                            ? 'bg-primary/10 border-primary font-medium text-primary shadow-sm' 
+                            : 'bg-white/5 border-border/10 text-foreground/85 hover:bg-white/10'
+                          }
+                        `}
                       >
                         <span className="leading-normal">{preset}</span>
                         {isSelected && <Check className="w-3.5 h-3.5 text-primary shrink-0" />}
@@ -137,13 +141,13 @@ export function NiyyahModal({ open, onClose }: NiyyahModalProps) {
                   onClick={onClose}
                   className="flex-1 py-3 rounded-2xl text-xs font-semibold bg-white/5 border border-border/15 hover:bg-white/10 text-foreground transition-all cursor-pointer text-center"
                 >
-                  Cancel
+                  {t('general.cancel')}
                 </button>
                 <button
                   onClick={handleSave}
                   className="flex-1 py-3 rounded-2xl text-xs font-semibold bg-primary text-primary-foreground hover:bg-primary/95 transition-all cursor-pointer text-center shadow-lg"
                 >
-                  Save Intention
+                  {t('niyyah.save')}
                 </button>
               </div>
             </div>

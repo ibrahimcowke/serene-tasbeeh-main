@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
+import { useTranslation } from '@/lib/i18n';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FirebaseAuthentication } from '@capacitor-firebase/authentication';
 import { signInWithCredential, GoogleAuthProvider, signOut } from 'firebase/auth';
@@ -35,6 +36,7 @@ const STATUS_CONFIG: Record<SyncStatus, { icon: React.ReactNode; label: string; 
 };
 
 export function CloudSyncCard() {
+    const { t } = useTranslation();
     const [user, setUser] = useState<any>(null);
     const [loading, setLoading] = useState(true);
     const [syncing, setSyncing] = useState(false);
@@ -540,7 +542,7 @@ export function CloudSyncCard() {
                                 Yes, delete
                             </button>
                             <button onClick={() => setConfirmDelete(false)} className="text-[11px] text-muted-foreground">
-                                Cancel
+                                {t('general.cancel')}
                             </button>
                         </motion.div>
                     ) : (

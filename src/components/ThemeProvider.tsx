@@ -26,12 +26,10 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
 
     // Automatically apply Tailwind `.dark` for dark themes so Shadcn UI picks it up properly
     const darkThemes = [
-      'theme-midnight', 'theme-neon', 'theme-green', 'theme-cyberpunk',
-      'theme-sunset', 'theme-forest', 'theme-oled', 'theme-biolum', 'theme-radar-tactical',
-      'theme-steampunk', 'theme-crystal-depth', 'theme-mecca-night', 'theme-desert-starlight',
-      'theme-istanbul-sunset', 'theme-ramadan-lantern', 'theme-rose-bloom',
-      'theme-emerald-shine', 'theme-cyberpunk-zen', 'theme-ocean-depth',
-      'theme-nordic-aurora', 'theme-cosmic-nebula', 'theme-solar-flare'
+      'theme-nord-deep', 'theme-nord-midnight', 'theme-cyber-twilight', 'theme-dracula-evolved',
+      'theme-espresso-dark', 'theme-sunset', 'theme-forest', 'theme-oled', 'theme-desert-starlight',
+      'theme-ramadan-lantern', 'theme-rose-bloom', 'theme-emerald-shine', 'theme-cyberpunk-zen',
+      'theme-ocean-depth'
     ];
     
     const isDark = darkThemes.includes(theme);

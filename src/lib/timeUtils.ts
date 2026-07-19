@@ -13,10 +13,10 @@ export const isDaytime = (): boolean => {
 
 /**
  * Get recommended theme based on current time
- * Returns 'light' for daytime, 'theme-midnight' for nighttime
+ * Returns 'light' for daytime, 'theme-nord-midnight' for nighttime
  */
-export const getRecommendedTheme = (): 'light' | 'theme-midnight' => {
-  return isDaytime() ? 'light' : 'theme-midnight';
+export const getRecommendedTheme = (): 'light' | 'theme-nord-midnight' => {
+  return isDaytime() ? 'light' : 'theme-nord-midnight';
 };
 
 /**

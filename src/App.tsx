@@ -3,7 +3,7 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import { lazy, Suspense, useEffect } from "react";
+import { lazy, Suspense, useEffect, useState, useRef } from "react";
 const Index = lazy(() => import("./pages/Index"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 const PrivacyPolicy = lazy(() => import("./pages/PrivacyPolicy"));
@@ -18,11 +18,11 @@ const PrayerTimesPermissionModal = lazy(() => import("./components/PrayerTimesPe
 const AmbientSoundPlayer = lazy(() => import("./components/AmbientSoundPlayer").then(m => ({ default: m.AmbientSoundPlayer })));
 import { registerPeriodicSync, NotificationManager } from "./lib/notifications";
 import { useTasbeehStore } from "./store/tasbeehStore";
+import { SoundManager } from "./lib/sound";
 import { scheduleLazyDayNotification, cancelLazyDayNotification } from "./lib/lazyDayRecovery";
 import { ErrorBoundary } from "./components/ErrorBoundary";
 import { startAutoThemeScheduler, stopAutoThemeScheduler } from "./lib/autoThemeScheduler";
 const GoogleLoginScreen = lazy(() => import("./components/GoogleLoginScreen").then(m => ({ default: m.GoogleLoginScreen })));
-import { useState } from "react";
 import { toast } from "sonner";
 
 
@@ -44,7 +44,50 @@ const LoadingScreen = () => (
   </div>
 );
 
+const useForegroundReminders = () => {
+  const reminders = useTasbeehStore((s) => s.reminders);
+  const reminderEnabled = useTasbeehStore((s) => s.reminderEnabled);
+  const lastPlayedRef = useRef<string>('');
+
+  useEffect(() => {
+    if (!reminderEnabled) return;
+
+    const checkReminders = () => {
+      const now = new Date();
+      const currentDay = now.getDay(); // 0 = Sunday, ..., 6 = Saturday
+      const currentHour = String(now.getHours()).padStart(2, '0');
+      const currentMinute = String(now.getMinutes()).padStart(2, '0');
+      const currentTimeString = `${currentHour}:${currentMinute}`;
+      const playKey = `${currentTimeString}-${now.getDate()}`;
+
+      if (lastPlayedRef.current === playKey) return;
+
+      const activeReminder = reminders.find(
+        (r) => r.enabled && r.time === currentTimeString && r.days.includes(currentDay)
+      );
+
+      if (activeReminder) {
+        lastPlayedRef.current = playKey;
+        if (activeReminder.soundType && activeReminder.soundType !== 'default') {
+          SoundManager.playVoiceReminder(activeReminder.soundType);
+          toast(`Time for Dhikr: ${activeReminder.label}`, {
+            description: "A gentle spoken reminder to remember Allah.",
+            duration: 5000,
+          });
+        }
+      }
+    };
+
+    checkReminders();
+    const interval = setInterval(checkReminders, 15000);
+    return () => clearInterval(interval);
+  }, [reminders, reminderEnabled]);
+};
+
 const App = () => {
+  // Call foreground reminder hook
+  useForegroundReminders();
+
   const hasSeenWelcome = useTasbeehStore((s) => s.hasSeenWelcome);
   const lazyDayRecoveryEnabled = useTasbeehStore((s) => s.lazyDayRecoveryEnabled);
   // null = still checking Firebase auth state (avoid flashing login screen)

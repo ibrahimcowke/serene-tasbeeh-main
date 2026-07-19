@@ -1,5 +1,6 @@
 import { useTasbeehStore } from '@/store/tasbeehStore';
 import { useShallow } from 'zustand/react/shallow';
+import { useTranslation } from '@/lib/i18n';
 import { defaultRoutines } from '@/data/routines';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger, SheetDescription } from '@/components/ui/sheet';
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -13,6 +14,7 @@ interface RoutinesViewProps {
 }
 
 export function RoutinesView({ children }: RoutinesViewProps) {
+    const { t } = useTranslation();
     const [open, setOpen] = useState(false);
     const { startRoutine, sessionMode, customRoutines, addCustomRoutine, removeCustomRoutine, dhikrs } = useTasbeehStore(useShallow(state => ({
         startRoutine: state.startRoutine,
@@ -104,7 +106,7 @@ export function RoutinesView({ children }: RoutinesViewProps) {
                                     className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold bg-primary text-primary-foreground hover:bg-primary/90 transition-all cursor-pointer"
                                 >
                                     {isCreating ? <X size={13} /> : <Plus size={13} />}
-                                    {isCreating ? 'Cancel' : 'Create Custom'}
+                                    {isCreating ? t('general.cancel') : 'Create Custom'}
                                 </button>
                             </div>
                         </SheetHeader>

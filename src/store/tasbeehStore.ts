@@ -34,11 +34,10 @@ export interface Dhikr {
 }
 
 export type ThemeType =
-  | 'light' | 'theme-midnight' | 'theme-glass' | 'theme-sunset' | 'theme-forest'
-  | 'theme-oled'
-  | 'theme-mecca-night' | 'theme-desert-starlight' | 'theme-ramadan-lantern' | 'theme-rose-bloom'
-  | 'theme-emerald-shine' | 'theme-cyberpunk-zen' | 'theme-ocean-depth' | 'theme-sakura-zen'
-  | 'theme-nordic-aurora' | 'theme-cosmic-nebula' | 'theme-solar-flare';
+  | 'light' | 'theme-nord-deep' | 'theme-nord-midnight' | 'theme-cyber-twilight' | 'theme-dracula-evolved' | 'theme-espresso-dark'
+  | 'theme-glass' | 'theme-sunset' | 'theme-forest' | 'theme-oled'
+  | 'theme-desert-starlight' | 'theme-ramadan-lantern' | 'theme-rose-bloom'
+  | 'theme-emerald-shine' | 'theme-cyberpunk-zen' | 'theme-ocean-depth' | 'theme-sakura-zen' | 'theme-blue-white';
 
 export interface ThemeSettings {
   primary: string;
@@ -86,6 +85,7 @@ export interface Reminder {
   label: string;
   enabled: boolean;
   days: number[]; // 0-6 for Sunday-Saturday
+  soundType?: 'default' | 'subhanallah' | 'alhamdulillah' | 'astaghfirullah' | 'salawat';
 }
 
 export interface RoutineStep {
@@ -315,12 +315,16 @@ export const defaultThemeSettings: ThemeSettings = {
 
 export const initialThemeSettings: Record<string, ThemeSettings> = {
   light: { ...defaultThemeSettings, primary: '#3b82f6', background: '#f8fafc', card: '#ffffff', text: '#1e293b', textMuted: '#64748b', border: '#e2e8f0' },
-  'theme-midnight': { ...defaultThemeSettings },
+  'theme-nord-deep': { ...defaultThemeSettings, primary: '#88c0d0', background: '#1c212b', card: '#222935', text: '#eceff4', textMuted: '#d8dee9', border: '#2e3440', accent: '#81a1c1', secondary: '#2e3542' },
+  'theme-nord-midnight': { ...defaultThemeSettings, primary: '#a3be8c', background: '#0c0f15', card: '#121721', text: '#eceff4', textMuted: '#d8dee9', border: '#232936', accent: '#b48ead', secondary: '#1c2230' },
+  'theme-blue-white': { ...defaultThemeSettings, primary: '#3b82f6', background: '#f8fafc', card: '#ffffff', text: '#1e293b', textMuted: '#64748b', border: '#e2e8f0', accent: '#60a5fa', secondary: '#f1f5f9' },
+  'theme-cyber-twilight': { ...defaultThemeSettings, primary: '#ff79c6', background: '#110a21', card: '#241644', text: '#fde7ff', textMuted: '#a78bfa', border: '#322256', accent: '#00ffff', secondary: '#191132' },
+  'theme-dracula-evolved': { ...defaultThemeSettings, primary: '#e94560', background: '#141219', card: '#221f29', text: '#f8f8f2', textMuted: '#bd93f9', border: '#2f2c3a', accent: '#bd93f9', secondary: '#1a1820' },
+  'theme-espresso-dark': { ...defaultThemeSettings, primary: '#ddb892', background: '#120d0a', card: '#1d1712', text: '#f4ebe1', textMuted: '#b08968', border: '#2c241e', accent: '#7f5539', secondary: '#18120e' },
   'theme-glass': { ...defaultThemeSettings, primary: '#0ea5e9', background: '#f0f9ff', card: '#ffffff', text: '#0f172a', textMuted: '#64748b' },
   'theme-sunset': { ...defaultThemeSettings, primary: '#f97316', background: '#fff7ed', card: '#ffffff', text: '#431407', textMuted: '#9a3412' },
   'theme-forest': { ...defaultThemeSettings, primary: '#10b981', background: '#f0fdf4', card: '#ffffff', text: '#064e3b', textMuted: '#059669' },
   'theme-oled': { ...defaultThemeSettings, primary: '#ffffff', background: '#000000', card: '#000000', text: '#ffffff', textMuted: '#a3a3a3' },
-  'theme-mecca-night': { ...defaultThemeSettings, primary: '#fbbf24', background: '#0c0714', card: '#160d24', text: '#f3e8ff', textMuted: '#a78bfa', border: '#2e1c4a', accent: '#ec4899', secondary: '#1e112c' },
   'theme-desert-starlight': { ...defaultThemeSettings, primary: '#38bdf8', background: '#150f0d', card: '#221815', text: '#fef3c7', textMuted: '#d97706', border: '#3c2b27', accent: '#f59e0b', secondary: '#271c19' },
   'theme-ramadan-lantern': { ...defaultThemeSettings, primary: '#f59e0b', background: '#170705', card: '#260c09', text: '#fef3c7', textMuted: '#f59e0b', border: '#3f1510', accent: '#10b981', secondary: '#2a0d0a' },
   'theme-rose-bloom': { ...defaultThemeSettings, primary: '#f472b6', background: '#0a110e', card: '#15241f', text: '#fce7f3', textMuted: '#34d399', border: '#20362f', accent: '#10b981', secondary: '#131f1a' },
@@ -328,9 +332,6 @@ export const initialThemeSettings: Record<string, ThemeSettings> = {
   'theme-cyberpunk-zen': { ...defaultThemeSettings, primary: '#22d3ee', background: '#050508', card: '#0e0e16', text: '#e2e8f0', textMuted: '#f43f5e', border: '#1e1b4b', accent: '#ec4899', secondary: '#131322' },
   'theme-ocean-depth': { ...defaultThemeSettings, primary: '#06b6d4', background: '#040d1a', card: '#081930', text: '#e0f2fe', textMuted: '#06b6d4', border: '#0f2d54', accent: '#22d3ee', secondary: '#0b213f' },
   'theme-sakura-zen': { ...defaultThemeSettings, primary: '#db2777', background: '#fff1f2', card: '#ffffff', text: '#4c0519', textMuted: '#db2777', border: '#e2e8f0', accent: '#10b981', secondary: '#ffe4e6' },
-  'theme-nordic-aurora': { ...defaultThemeSettings, primary: '#10b981', background: '#070e1b', card: '#0d172a', text: '#e2e8f0', textMuted: '#94a3b8', border: '#1e293b', accent: '#818cf8', secondary: '#0f1d36' },
-  'theme-cosmic-nebula': { ...defaultThemeSettings, primary: '#8b5cf6', background: '#030206', card: '#0d0b14', text: '#faf5ff', textMuted: '#a78bfa', border: '#231c30', accent: '#ec4899', secondary: '#171223' },
-  'theme-solar-flare': { ...defaultThemeSettings, primary: '#f97316', background: '#0a0908', card: '#141210', text: '#fffbeb', textMuted: '#f59e0b', border: '#27221d', accent: '#fbbf24', secondary: '#1d1a16' },
 };
 
 const getDefaultSessionMode = (): SessionMode => ({ type: 'free' });
@@ -374,7 +375,7 @@ const ACHIEVEMENT_CHECK_EVERY = 10;
 export const useTasbeehStore = create<TasbeehState>()(
   persist(
     (set, get) => ({
-      count: 0, currentCount: 0, targetCount: 33, totalAllTime: 0, dailyRecords: [], dailyGoal: 100, dhikrs: defaultDhikrs, customDhikrs: [], currentDhikr: defaultDhikrs[0], favoriteDhikrIds: [], theme: 'theme-midnight', themeSettings: initialThemeSettings, language: 'en', showTransliteration: true, counterShape: 'bead-ring', countFontSize: 1, dhikrFontSize: 1, dhikrTextPosition: 'middle', verticalOffset: 0, dhikrVerticalOffset: 0, counterVerticalOffset: 0, counterScale: 1, zenMode: false, autoThemeSwitch: false, shakeToReset: false, syncPrayerTimes: null, wakeLockEnabled: true, volumeButtonCounting: false, lastSeenVersion: '0.0.0', hadithSlideDuration: 8, hadithSlidePosition: 'bottom', breathingGuideEnabled: false, breathingGuideSpeed: 4, streakDays: 0, lastActiveDate: null, longestStreak: 0, unlockedAchievements: [], screenOffMode: false, sessionStartTime: null, sessionMode: getDefaultSessionMode(), notificationPermission: 'default', reminderEnabled: false, reminderTime: '18:00', reminders: [
+      count: 0, currentCount: 0, targetCount: 33, totalAllTime: 0, dailyRecords: [], dailyGoal: 100, dhikrs: defaultDhikrs, customDhikrs: [], currentDhikr: defaultDhikrs[0], favoriteDhikrIds: [], theme: 'theme-nord-midnight', themeSettings: initialThemeSettings, language: 'en', showTransliteration: true, counterShape: 'bead-ring', countFontSize: 1, dhikrFontSize: 1, dhikrTextPosition: 'middle', verticalOffset: 0, dhikrVerticalOffset: 0, counterVerticalOffset: 0, counterScale: 1, zenMode: false, autoThemeSwitch: false, shakeToReset: false, syncPrayerTimes: null, wakeLockEnabled: true, volumeButtonCounting: false, lastSeenVersion: '0.0.0', hadithSlideDuration: 8, hadithSlidePosition: 'bottom', breathingGuideEnabled: false, breathingGuideSpeed: 4, streakDays: 0, lastActiveDate: null, longestStreak: 0, unlockedAchievements: [], screenOffMode: false, sessionStartTime: null, sessionMode: getDefaultSessionMode(), notificationPermission: 'default', reminderEnabled: false, reminderTime: '18:00', reminders: [
         { id: '1', time: '05:00', label: 'Fajr Dhikr', enabled: true, days: [0, 1, 2, 3, 4, 5, 6] },
         { id: '2', time: '12:30', label: 'Dhuhr Dhikr', enabled: true, days: [0, 1, 2, 3, 4, 5, 6] },
         { id: '3', time: '15:45', label: 'Asr Dhikr', enabled: true, days: [0, 1, 2, 3, 4, 5, 6] },

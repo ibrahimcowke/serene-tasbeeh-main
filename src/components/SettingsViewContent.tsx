@@ -225,7 +225,7 @@ export function SettingsViewContent({ defaultTab, setOpen }: SettingsViewContent
     <>
       <div className="sheet-handle mx-auto mt-3 mb-1 bg-muted shrink-0" />
       <SheetHeader className="text-left px-6 py-4 shrink-0">
-        <SheetTitle className="text-lg font-medium">Settings</SheetTitle>
+        <SheetTitle className="text-lg font-medium">{t('settings.title')}</SheetTitle>
         <SheetDescription className="sr-only">Configure app visuals, counter, and preferences</SheetDescription>
       </SheetHeader>
 
@@ -233,10 +233,10 @@ export function SettingsViewContent({ defaultTab, setOpen }: SettingsViewContent
         <Tabs defaultValue={defaultTab === 'appearance' ? 'themes' : defaultTab} className="flex-1 flex flex-col h-full">
           <div className="px-6 pt-2 pb-4 shrink-0 bg-background/50 backdrop-blur-sm z-10">
             <TabsList className="grid w-full grid-cols-4">
-              <TabsTrigger value="themes" className="text-xs">Themes</TabsTrigger>
-              <TabsTrigger value="counter" className="text-xs">Counter</TabsTrigger>
-              <TabsTrigger value="system" className="text-xs">Behavior</TabsTrigger>
-              <TabsTrigger value="data" className="text-xs">Data</TabsTrigger>
+              <TabsTrigger value="themes" className="text-xs">{t('settings.themes')}</TabsTrigger>
+              <TabsTrigger value="counter" className="text-xs">{t('settings.counter')}</TabsTrigger>
+              <TabsTrigger value="system" className="text-xs">{t('settings.behavior')}</TabsTrigger>
+              <TabsTrigger value="data" className="text-xs">{t('settings.data')}</TabsTrigger>
             </TabsList>
           </div>
 
@@ -244,15 +244,15 @@ export function SettingsViewContent({ defaultTab, setOpen }: SettingsViewContent
             {/* THEMES TAB */}
             <TabsContent value="themes" className="space-y-6 mt-0 pb-6 px-4 overflow-x-hidden">
               <div className="space-y-1">
-                <p className="text-xs text-muted-foreground uppercase tracking-wide mb-3 px-1">Visual Theme</p>
+                <p className="text-xs text-muted-foreground uppercase tracking-wide mb-3 px-1">{t('settings.visual_theme')}</p>
                 <div className="grid grid-cols-2 gap-2 pb-2">
-                  {themes.map((t) => (
+                  {themes.map((tItem) => (
                     <button
-                      key={t.id}
-                      onClick={() => setTheme(t.id)}
+                      key={tItem.id}
+                      onClick={() => setTheme(tItem.id)}
                       className={`
                         p-3 rounded-2xl text-left border transition-all active:scale-[0.98] duration-150
-                        ${theme === t.id
+                        ${theme === tItem.id
                           ? 'bg-primary/10 border-primary shadow-sm'
                           : 'bg-card border-border hover:bg-secondary'
                         }
@@ -260,12 +260,12 @@ export function SettingsViewContent({ defaultTab, setOpen }: SettingsViewContent
                     >
                       <div className="flex items-center justify-between gap-1">
                         <div className="overflow-hidden">
-                          <p className={`text-[13px] font-medium truncate ${theme === t.id ? 'text-primary' : 'text-foreground'}`}>
-                            {t.label}
+                          <p className={`text-[13px] font-medium truncate ${theme === tItem.id ? 'text-primary' : 'text-foreground'}`}>
+                            {t(`theme.${tItem.id}.label`)}
                           </p>
-                          <p className="text-[10px] text-muted-foreground truncate">{t.description}</p>
+                          <p className="text-[10px] text-muted-foreground truncate">{t(`theme.${tItem.id}.desc`)}</p>
                         </div>
-                        {theme === t.id && (
+                        {theme === tItem.id && (
                           <Check className="w-3 h-3 text-primary shrink-0" />
                         )}
                       </div>
@@ -277,8 +277,8 @@ export function SettingsViewContent({ defaultTab, setOpen }: SettingsViewContent
               <div className="p-4 rounded-2xl bg-card space-y-4">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm font-medium text-foreground">Auto Theme</p>
-                    <p className="text-xs text-muted-foreground">Switch light/dark based on time</p>
+                    <p className="text-sm font-medium text-foreground">{t('settings.auto_theme')}</p>
+                    <p className="text-xs text-muted-foreground">{t('settings.auto_theme_desc')}</p>
                   </div>
                   <Switch
                     checked={autoThemeSwitch}
@@ -287,8 +287,8 @@ export function SettingsViewContent({ defaultTab, setOpen }: SettingsViewContent
                 </div>
                 <div className="flex items-center justify-between border-t border-border/50 pt-4">
                   <div>
-                    <p className="text-sm font-medium text-foreground">Dawn/Dusk Theme Schedule</p>
-                    <p className="text-xs text-muted-foreground">Light at Fajr, Midnight at Maghrib</p>
+                    <p className="text-sm font-medium text-foreground">{t('settings.dawn_dusk_schedule')}</p>
+                    <p className="text-xs text-muted-foreground">{t('settings.dawn_dusk_desc')}</p>
                   </div>
                   <Switch
                     checked={autoThemeDawnDusk}
@@ -298,11 +298,11 @@ export function SettingsViewContent({ defaultTab, setOpen }: SettingsViewContent
               </div>
 
               <div className="space-y-1">
-                <p className="text-xs text-muted-foreground uppercase tracking-wide mb-3">Typography</p>
+                <p className="text-xs text-muted-foreground uppercase tracking-wide mb-3">{t('settings.typography')}</p>
                 <div className="p-4 rounded-2xl bg-card mb-2 space-y-4">
                   {/* App general size */}
                   <div className="space-y-2">
-                    <p className="text-sm font-medium text-foreground">App Font Size</p>
+                    <p className="text-sm font-medium text-foreground">{t('settings.app_font_size')}</p>
                     <div className="grid grid-cols-3 gap-2">
                       {[0.8, 1, 1.2].map((scale) => (
                         <button
@@ -315,7 +315,7 @@ export function SettingsViewContent({ defaultTab, setOpen }: SettingsViewContent
                               : 'bg-background border-border hover:bg-muted'}
                             `}
                         >
-                          {scale === 0.8 ? 'Small' : scale === 1 ? 'Normal' : 'Large'}
+                          {scale === 0.8 ? t('settings.size_small') : scale === 1 ? t('settings.size_normal') : t('settings.size_large')}
                         </button>
                       ))}
                     </div>
@@ -323,7 +323,7 @@ export function SettingsViewContent({ defaultTab, setOpen }: SettingsViewContent
 
                   {/* Dhikr text size */}
                   <div className="space-y-2 pt-2 border-t border-border/30">
-                    <p className="text-sm font-medium text-foreground">Dhikr Text Size</p>
+                    <p className="text-sm font-medium text-foreground">{t('settings.dhikr_font_size')}</p>
                     <div className="grid grid-cols-4 gap-2">
                       {[0.85, 1, 1.2, 1.4].map((scale) => (
                         <button
@@ -336,7 +336,7 @@ export function SettingsViewContent({ defaultTab, setOpen }: SettingsViewContent
                               : 'bg-background border-border hover:bg-muted'}
                             `}
                         >
-                          {scale === 0.85 ? 'Small' : scale === 1 ? 'Normal' : scale === 1.2 ? 'Large' : 'X-Large'}
+                          {scale === 0.85 ? t('settings.size_small') : scale === 1 ? t('settings.size_normal') : scale === 1.2 ? t('settings.size_large') : t('settings.size_xlarge')}
                         </button>
                       ))}
                     </div>
@@ -344,7 +344,7 @@ export function SettingsViewContent({ defaultTab, setOpen }: SettingsViewContent
 
                   {/* Counter count text size */}
                   <div className="space-y-2 pt-2 border-t border-border/30">
-                    <p className="text-sm font-medium text-foreground">Counter Digit Size</p>
+                    <p className="text-sm font-medium text-foreground">{t('settings.counter_digit_size')}</p>
                     <div className="grid grid-cols-4 gap-2">
                       {[0.85, 1, 1.15, 1.3].map((scale) => (
                         <button
@@ -357,7 +357,7 @@ export function SettingsViewContent({ defaultTab, setOpen }: SettingsViewContent
                               : 'bg-background border-border hover:bg-muted'}
                             `}
                         >
-                          {scale === 0.85 ? 'Small' : scale === 1 ? 'Normal' : scale === 1.15 ? 'Large' : 'X-Large'}
+                          {scale === 0.85 ? t('settings.size_small') : scale === 1 ? t('settings.size_normal') : scale === 1.15 ? t('settings.size_large') : t('settings.size_xlarge')}
                         </button>
                       ))}
                     </div>
@@ -369,12 +369,12 @@ export function SettingsViewContent({ defaultTab, setOpen }: SettingsViewContent
             {/* COUNTER TAB */}
             <TabsContent value="counter" className="space-y-6 mt-0 pb-10 px-4 overflow-x-hidden focus-visible:outline-none">
               <div className="space-y-4">
-                <p className="text-xs text-muted-foreground uppercase tracking-wide px-1">Counter Shape</p>
+                <p className="text-xs text-muted-foreground uppercase tracking-wide px-1">{t('settings.counter_shape')}</p>
                 
                 {/* Categorized Shapes */}
                 {SHAPE_CATEGORIES.map((category, catIndex) => (
                   <div key={category.title} className="space-y-2">
-                    <p className="text-[11px] font-medium text-muted-foreground/70 px-1">{category.title}</p>
+                    <p className="text-[11px] font-medium text-muted-foreground/70 px-1">{t('settings.shape_category.' + category.title.toLowerCase().replace(/[^a-z0-9]/g, ''))}</p>
                     <div className="grid grid-cols-3 gap-2 pb-2">
                       {counterShapes.filter(s => category.list.includes(s.id)).map((shape) => (
                     <button
@@ -392,7 +392,7 @@ export function SettingsViewContent({ defaultTab, setOpen }: SettingsViewContent
                         {shape.icon}
                       </span>
                       <span className={`text-[10px] font-medium text-center truncate w-full ${counterShape === shape.id ? 'text-primary' : 'text-muted-foreground'}`}>
-                        {shape.label}
+                        {t('shape.' + shape.id)}
                       </span>
                     </button>
                       ))}
@@ -489,7 +489,7 @@ export function SettingsViewContent({ defaultTab, setOpen }: SettingsViewContent
               </div>
 
               <div className="space-y-1">
-                <p className="text-xs text-muted-foreground uppercase tracking-wide mb-3 px-1">Notifications</p>
+                <p className="text-xs text-muted-foreground uppercase tracking-wide mb-3 px-1">{t('settings.notifications')}</p>
                 <RemindersView>
                   <button className="w-full flex items-center justify-between p-4 rounded-2xl bg-primary/10 border border-primary/20 hover:bg-primary/20 transition-all group">
                     <div className="flex items-center gap-3">
@@ -497,8 +497,8 @@ export function SettingsViewContent({ defaultTab, setOpen }: SettingsViewContent
                         <Bell className="w-5 h-5" />
                       </div>
                       <div className="text-left">
-                        <p className="text-sm font-semibold text-primary">Reminders & Alerts</p>
-                        <p className="text-xs text-primary/70">Schedule your dhikr sessions</p>
+                        <p className="text-sm font-semibold text-primary">{t('settings.reminders_alerts')}</p>
+                        <p className="text-xs text-primary/70">{t('settings.reminders_desc')}</p>
                       </div>
                     </div>
                     <ChevronRight className="w-5 h-5 text-primary/50 group-hover:text-primary transition-colors" />
@@ -507,19 +507,19 @@ export function SettingsViewContent({ defaultTab, setOpen }: SettingsViewContent
               </div>
 
               <div className="space-y-1">
-                <p className="text-xs text-muted-foreground uppercase tracking-wide mb-3 px-1">Interaction</p>
+                <p className="text-xs text-muted-foreground uppercase tracking-wide mb-3 px-1">{t('settings.interaction')}</p>
                 <div className="p-4 rounded-2xl bg-card border border-border/50 space-y-4">
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="text-sm font-medium text-foreground">Haptic feedback</p>
-                      <p className="text-xs text-muted-foreground">Vibrate on tap</p>
+                      <p className="text-sm font-medium text-foreground">{t('settings.haptic_feedback')}</p>
+                      <p className="text-xs text-muted-foreground">{t('settings.haptic_desc')}</p>
                     </div>
                     <Switch checked={currentSettings.hapticEnabled} onCheckedChange={toggleHaptic} />
                   </div>
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="text-sm font-medium text-foreground">Sound effects</p>
-                      <p className="text-xs text-muted-foreground">Play sound on tap</p>
+                      <p className="text-sm font-medium text-foreground">{t('settings.sound_effects')}</p>
+                      <p className="text-xs text-muted-foreground">{t('settings.sound_desc')}</p>
                     </div>
                     <Switch checked={currentSettings.soundEnabled} onCheckedChange={toggleSound} />
                   </div>
@@ -529,22 +529,22 @@ export function SettingsViewContent({ defaultTab, setOpen }: SettingsViewContent
               <div className="p-4 rounded-2xl bg-card border border-border/50 space-y-4">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm font-medium text-foreground">Shake to Reset</p>
-                    <p className="text-xs text-muted-foreground">Shake device to reset</p>
+                    <p className="text-sm font-medium text-foreground">{t('settings.shake_to_reset')}</p>
+                    <p className="text-xs text-muted-foreground">{t('settings.shake_desc')}</p>
                   </div>
                   <Switch checked={shakeToReset} onCheckedChange={setShakeToReset} />
                 </div>
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm font-medium text-foreground">Stay Awake</p>
-                    <p className="text-xs text-muted-foreground">Keep screen on during sessions</p>
+                    <p className="text-sm font-medium text-foreground">{t('settings.stay_awake')}</p>
+                    <p className="text-xs text-muted-foreground">{t('settings.stay_awake_desc')}</p>
                   </div>
                   <Switch checked={wakeLockEnabled} onCheckedChange={setWakeLockEnabled} />
                 </div>
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm font-medium text-foreground">Pocket Mode</p>
-                    <p className="text-xs text-muted-foreground">Turn screen black to save battery</p>
+                    <p className="text-sm font-medium text-foreground">{t('settings.pocket_mode')}</p>
+                    <p className="text-xs text-muted-foreground">{t('settings.pocket_mode_desc')}</p>
                   </div>
                   <Switch checked={screenOffMode} onCheckedChange={(val) => {
                     setScreenOffMode(val);
@@ -553,8 +553,8 @@ export function SettingsViewContent({ defaultTab, setOpen }: SettingsViewContent
                 </div>
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm font-medium text-foreground">Volume Buttons</p>
-                    <p className="text-xs text-muted-foreground">Use physical keys to count</p>
+                    <p className="text-sm font-medium text-foreground">{t('settings.volume_buttons')}</p>
+                    <p className="text-xs text-muted-foreground">{t('settings.volume_buttons_desc')}</p>
                   </div>
                   <Switch checked={volumeButtonCounting} onCheckedChange={setVolumeButtonCounting} />
                 </div>
@@ -563,7 +563,7 @@ export function SettingsViewContent({ defaultTab, setOpen }: SettingsViewContent
 
 
               <div className="p-4 rounded-2xl bg-card border border-border/50 mt-4 space-y-4">
-                <p className="text-xs text-muted-foreground uppercase tracking-wide px-1">Data Management</p>
+                <p className="text-xs text-muted-foreground uppercase tracking-wide px-1">{t('settings.data_management')}</p>
                 <div className="space-y-2">
                   <LoginView>
                     <button className="w-full flex items-center justify-between p-3 rounded-xl hover:bg-primary/5 transition-colors border border-transparent hover:border-primary/20">
@@ -572,8 +572,8 @@ export function SettingsViewContent({ defaultTab, setOpen }: SettingsViewContent
                           <Cloud className="w-4 h-4 text-primary" />
                         </div>
                         <div className="text-left">
-                          <p className="text-sm font-medium text-foreground">Cloud Sync & Security</p>
-                          <p className="text-xs text-muted-foreground">Sign in to backup your data securely</p>
+                          <p className="text-sm font-medium text-foreground">{t('settings.cloud_sync')}</p>
+                          <p className="text-xs text-muted-foreground">{t('settings.cloud_sync_desc')}</p>
                         </div>
                       </div>
                       <ChevronRight className="w-5 h-5 text-primary/50 transition-colors" />
@@ -588,24 +588,23 @@ export function SettingsViewContent({ defaultTab, setOpen }: SettingsViewContent
                             <Trash2 className="w-4 h-4 text-red-500" />
                           </div>
                           <div className="text-left">
-                            <p className="text-sm font-medium text-red-500">Clear All Data</p>
-                            <p className="text-xs text-red-500/70">Permanently delete all records</p>
+                            <p className="text-sm font-medium text-red-500">{t('settings.clear_data')}</p>
+                            <p className="text-xs text-red-500/70">{t('settings.clear_data_desc')}</p>
                           </div>
                         </div>
                       </button>
                     </AlertDialogTrigger>
                     <AlertDialogContent className="w-[90vw] max-w-[400px] rounded-[2rem]">
                       <AlertDialogHeader>
-                        <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                        <AlertDialogTitle>{t('settings.clear_confirm_title')}</AlertDialogTitle>
                         <AlertDialogDescription>
-                          This action cannot be undone. This will permanently delete your
-                          entire dhikr history, routines, and reset all settings to default.
+                          {t('settings.clear_confirm_desc')}
                         </AlertDialogDescription>
                       </AlertDialogHeader>
                       <AlertDialogFooter>
-                        <AlertDialogCancel className="rounded-xl">Cancel</AlertDialogCancel>
+                        <AlertDialogCancel className="rounded-xl">{t('general.cancel')}</AlertDialogCancel>
                         <AlertDialogAction onClick={() => { clearAllData(); setOpen(false); }} className="bg-red-500 hover:bg-red-600 rounded-xl">
-                          Delete Everything
+                          {t('settings.clear_confirm_action')}
                         </AlertDialogAction>
                       </AlertDialogFooter>
                     </AlertDialogContent>
@@ -620,9 +619,9 @@ export function SettingsViewContent({ defaultTab, setOpen }: SettingsViewContent
                       <Zap className="w-5 h-5 text-primary" />
                     </div>
                     <div>
-                      <p className="text-sm font-medium text-foreground">Developed by Ibrahim Cowke</p>
+                      <p className="text-sm font-medium text-foreground">{t('settings.developed_by')}</p>
                       <a href="https://ibrahimcowke.netlify.app/" target="_blank" rel="noopener noreferrer" className="text-xs text-primary hover:underline flex items-center gap-1">
-                        Visit Portfolio <ExternalLink className="w-3 h-3" />
+                        {t('settings.visit_portfolio')} <ExternalLink className="w-3 h-3" />
                       </a>
                     </div>
                   </div>
@@ -636,7 +635,7 @@ export function SettingsViewContent({ defaultTab, setOpen }: SettingsViewContent
                       <Shield className="w-5 h-5 text-primary" />
                     </div>
                     <div>
-                      <p className="text-sm font-medium text-foreground">Privacy Policy</p>
+                      <p className="text-sm font-medium text-foreground">{t('settings.privacy_policy')}</p>
                       <button 
                         onClick={() => {
                           setOpen(false);
@@ -644,7 +643,7 @@ export function SettingsViewContent({ defaultTab, setOpen }: SettingsViewContent
                         }} 
                         className="text-xs text-primary hover:underline text-left flex items-center gap-1"
                       >
-                        Read Privacy Policy <ExternalLink className="w-3 h-3" />
+                        {t('settings.read_privacy')} <ExternalLink className="w-3 h-3" />
                       </button>
                     </div>
                   </div>
@@ -655,24 +654,24 @@ export function SettingsViewContent({ defaultTab, setOpen }: SettingsViewContent
             {/* DATA TAB */}
             <TabsContent value="data" className="space-y-6 mt-0 pb-6 px-4">
               <div className="space-y-1">
-                <p className="text-xs text-muted-foreground uppercase tracking-wide mb-3 px-1">Account</p>
+                <p className="text-xs text-muted-foreground uppercase tracking-wide mb-3 px-1">{t('settings.account')}</p>
                 <GoogleLogin />
               </div>
 
               <div className="space-y-1 mt-4">
-                <p className="text-xs text-muted-foreground uppercase tracking-wide mb-3 px-1">Data Management</p>
+                <p className="text-xs text-muted-foreground uppercase tracking-wide mb-3 px-1">{t('settings.data_management')}</p>
                 <button onClick={handleExport} className="w-full flex items-center gap-3 p-4 rounded-2xl bg-card border border-border/50 hover:bg-secondary transition-colors text-left mb-2">
                   <Download className="w-5 h-5 text-muted-foreground" />
                   <div>
-                    <p className="text-sm font-medium text-foreground">Export backup</p>
-                    <p className="text-xs text-muted-foreground">Save data to a JSON file</p>
+                    <p className="text-sm font-medium text-foreground">{t('settings.export_backup')}</p>
+                    <p className="text-xs text-muted-foreground">{t('settings.export_desc')}</p>
                   </div>
                 </button>
                 <button onClick={handleImport} className="w-full flex items-center gap-3 p-4 rounded-2xl bg-card border border-border/50 hover:bg-secondary transition-colors text-left">
                   <Upload className="w-5 h-5 text-muted-foreground" />
                   <div>
-                    <p className="text-sm font-medium text-foreground">Import backup</p>
-                    <p className="text-xs text-muted-foreground">Restore from a JSON file</p>
+                    <p className="text-sm font-medium text-foreground">{t('settings.import_backup')}</p>
+                    <p className="text-xs text-muted-foreground">{t('settings.import_desc')}</p>
                   </div>
                 </button>
               </div>
@@ -682,19 +681,19 @@ export function SettingsViewContent({ defaultTab, setOpen }: SettingsViewContent
                   <button className="w-full flex items-center gap-3 p-4 rounded-2xl bg-red-500/5 hover:bg-red-500/10 transition-colors text-left border border-red-500/20 mt-4">
                     <Trash2 className="w-5 h-5 text-red-500" />
                     <div>
-                      <p className="text-sm font-medium text-red-500">Reset All Data</p>
-                      <p className="text-xs text-red-500/70">Permanently delete all progress</p>
+                      <p className="text-sm font-medium text-red-500">{t('settings.reset_data')}</p>
+                      <p className="text-xs text-red-500/70">{t('settings.reset_desc')}</p>
                     </div>
                   </button>
                 </AlertDialogTrigger>
                 <AlertDialogContent>
                   <AlertDialogHeader>
-                    <AlertDialogTitle>Are you sure?</AlertDialogTitle>
-                    <AlertDialogDescription>This will wipe all counts, streaks, and custom settings.</AlertDialogDescription>
+                    <AlertDialogTitle>{t('settings.reset_confirm_title')}</AlertDialogTitle>
+                    <AlertDialogDescription>{t('settings.reset_confirm_desc')}</AlertDialogDescription>
                   </AlertDialogHeader>
                   <AlertDialogFooter>
-                    <AlertDialogCancel>Cancel</AlertDialogCancel>
-                    <AlertDialogAction onClick={clearAllData} className="bg-red-500 hover:bg-red-600">Reset Everything</AlertDialogAction>
+                    <AlertDialogCancel>{t('general.cancel')}</AlertDialogCancel>
+                    <AlertDialogAction onClick={clearAllData} className="bg-red-500 hover:bg-red-600">{t('settings.reset_confirm_action')}</AlertDialogAction>
                   </AlertDialogFooter>
                 </AlertDialogContent>
               </AlertDialog>

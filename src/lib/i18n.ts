@@ -243,6 +243,184 @@ const translations: Record<string, Partial<Record<Lang, string>>> = {
   'settings.haptic_triple': {
     en: 'Triple', ar: 'ثلاثية', hi: 'तिहरा', ur: 'تہرا', tr: 'Üçlü', ms: 'Tiga Kali', id: 'Tiga Kali', fr: 'Triple', so: 'Saddexaad'
   },
+  'settings.visual_theme': {
+    en: 'Visual Theme', ar: 'سمة المظهر', hi: 'दृश्य थीम', ur: 'بصری تھیم', tr: 'Görsel Tema', ms: 'Tema Visual', id: 'Tema Visual', fr: 'Thème visuel', so: 'Qaabka Muuqda'
+  },
+  'settings.auto_theme_desc': {
+    en: 'Switch light/dark based on time', ar: 'تبديل الفاتح/الداكن حسب الوقت', hi: 'समय के आधार पर लाइट/डार्क स्विच करें', ur: 'وقت کے مطابق لائٹ/ڈارک تبدیل کریں', tr: 'Saate göre açık/koyu geçişi yap', ms: 'Tukar terang/gelap mengikut masa', id: 'Ganti terang/gelap berdasarkan waktu', fr: 'Changer clair/sombre selon l\'heure', so: 'U kala beddel iftiinka/madowga wakhtiga'
+  },
+  'settings.dawn_dusk_schedule': {
+    en: 'Dawn/Dusk Theme Schedule', ar: 'جدول سمة الفجر/الغروب', hi: 'भोर/सांझ थीम शेड्यूल', ur: 'فجر/مغرب تھیم کا شیڈول', tr: 'Şafak/Gün Batımı Tema Programı', ms: 'Jadual Tema Subuh/Senja', id: 'Jadwal Tema Fajar/Senja', fr: 'Calendrier aube/crépuscule', so: 'Jadwalka Qaabka Waaberiga/Makhribka'
+  },
+  'settings.dawn_dusk_desc': {
+    en: 'Light at Fajr, Midnight at Maghrib', ar: 'فاتح عند الفجر، داكن عند المغرب', hi: 'फ़ज्र पर लाइट, मग्रिब पर मिडनाइट', ur: 'فجر کے وقت لائٹ، مغرب के वक्त मडनाइट', tr: 'Fecr\'de açık, Akşam\'da gece yarısı', ms: 'Terang ketika Subuh, Gelap ketika Maghrib', id: 'Terang saat Fajar, Gelap saat Maghrib', fr: 'Clair au Fajr, sombre au Maghrib', so: 'Iftiin Fajr-ka, Madow Maghrib-ka'
+  },
+  'settings.typography': {
+    en: 'Typography', ar: 'الخطوط', hi: 'टाइपोग्राफी', ur: 'خطاطی', tr: 'Tipografi', ms: 'Tipografi', id: 'Tipografi', fr: 'Typographie', so: 'Qoraalka'
+  },
+  'settings.app_font_size': {
+    en: 'App Font Size', ar: 'حجم خط التطبيق', hi: 'ऐप फ़ॉन्ट आकार', ur: 'ایپ کا فونٹ سائز', tr: 'Uygulama Yazı Tipi Boyutu', ms: 'Saiz Fon Aplikasi', id: 'Ukuran Font Aplikasi', fr: 'Taille de police de l\'app', so: 'Xajmiga Farta App-ka'
+  },
+  'settings.dhikr_font_size': {
+    en: 'Dhikr Text Size', ar: 'حجم خط الذكر', hi: 'ज़िक्र फ़ॉन्ट आकार', ur: 'ذکر کا فونٹ سائز', tr: 'Zikir Yazı Tipi Boyutu', ms: 'Saiz Fon Zikir', id: 'Ukuran Font Zikir', fr: 'Taille de police du Dhikr', so: 'Xajmiga Farta Xususta'
+  },
+  'settings.counter_digit_size': {
+    en: 'Counter Digit Size', ar: 'حجم أرقام العداد', hi: 'काउंटर अंक आकार', ur: 'کاؤنٹر ہندسوں کا سائز', tr: 'Sayaç Hane Boyutu', ms: 'Saiz Digit Pembilang', id: 'Ukuran Digit Penghitung', fr: 'Taille des chiffres du compteur', so: 'Xajmiga Nambarada Tiriyaha'
+  },
+  'settings.size_small': {
+    en: 'Small', ar: 'صغير', hi: 'छोटा', ur: 'چھوٹا', tr: 'Küçük', ms: 'Kecil', id: 'Kecil', fr: 'Petit', so: 'Yar'
+  },
+  'settings.size_normal': {
+    en: 'Normal', ar: 'طبيعي', hi: 'सामान्य', ur: 'नारمل', tr: 'Normal', ms: 'Normal', id: 'Normal', fr: 'Normal', so: 'Dhexdhexaad'
+  },
+  'settings.size_large': {
+    en: 'Large', ar: 'كبير', hi: 'بड़ा', ur: 'بڑا', tr: 'Büyük', ms: 'Besar', id: 'Besar', fr: 'Grand', so: 'Wayn'
+  },
+  'settings.size_xlarge': {
+    en: 'X-Large', ar: 'كبير جداً', hi: 'बहुत बड़ा', ur: 'بہت بڑا', tr: 'Çok Büyük', ms: 'Sangat Besar', id: 'Sangat Besar', fr: 'Très grand', so: 'Aad u wayn'
+  },
+  'settings.counter_shape': {
+    en: 'Counter Shape', ar: 'شكل العداد', hi: 'काउंटر का आकार', ur: 'کاؤنٹر کی شکل', tr: 'Sayaç Şekli', ms: 'Bentuk Pembilang', id: 'Bentuk Penghitung', fr: 'Forme du compteur', so: 'Qaabka Tiriyaha'
+  },
+  'settings.shape_category.essential': {
+    en: 'Essential', ar: 'أساسي', hi: 'आवश्यक', ur: 'ضروری', tr: 'Temel', ms: 'Penting', id: 'Penting', fr: 'Essentiel', so: 'Muhiim'
+  },
+  'settings.shape_category.luminous': {
+    en: 'Luminous', ar: 'مضيء', hi: 'चमकीला', ur: 'روشن', tr: 'Işıltılı', ms: 'Bercahaya', id: 'Bercahaya', fr: 'Lumineux', so: 'Iftimaya'
+  },
+  'settings.shape_category.modern': {
+    en: 'Modern', ar: 'حديث', hi: 'आधुनिक', ur: 'جدید', tr: 'Modern', ms: 'Modern', id: 'Modern', fr: 'Moderne', so: 'Cusub'
+  },
+  'settings.shape_category.objects3d': {
+    en: 'Objects & 3D', ar: 'أشكال ثلاثية الأبعاد', hi: 'वस्तुएं और 3D', ur: 'اشیاء اور 3D', tr: 'Nesneler & 3D', ms: 'Objek & 3D', id: 'Objek & 3D', fr: 'Objets & 3D', so: 'Waxyaabo & 3D'
+  },
+  'settings.shape_category.techabstract': {
+    en: 'Tech & Abstract', ar: 'تقني ومجرد', hi: 'تقني ومجرد', ur: 'ٹیک اور خلاصہ', tr: 'Teknoloji & Soyut', ms: 'Teknologi & Abstrak', id: 'Teknologi & Abstrak', fr: 'Technique & Abstrait', so: 'Farsamo & Khayaali'
+  },
+  'settings.notifications': {
+    en: 'Notifications', ar: 'الإشعارات', hi: 'सूचनाएं', ur: 'نوٹیفیکیشنز', tr: 'Bildirimler', ms: 'Pemberitahuan', id: 'Notifikasi', fr: 'Notifications', so: 'Ogeysiisyada'
+  },
+  'settings.reminders_alerts': {
+    en: 'Reminders & Alerts', ar: 'التذكيرات والتنبيهات', hi: 'अनुस्मारक और अलर्ट', ur: 'یاد دہانی اور الرٹس', tr: 'Hatırlatıcılar & Uyarılar', ms: 'Peringatan & Isyarat', id: 'Pengingat & Peringatan', fr: 'Rappels & Alertes', so: 'Xusuusinta & Digniinta'
+  },
+  'settings.reminders_desc': {
+    en: 'Schedule your dhikr sessions', ar: 'جدول جلسات الذكر الخاصة بك', hi: 'अपने ज़िक्र सत्रों को शेड्यूल करें', ur: 'اپنے ذکر کے سیشنز کو شیڈول کریں', tr: 'Zikir oturumlarınızı planlayın', ms: 'Jadualkan sesi zikir anda', id: 'Jadwalkan sesi zikir Anda', fr: 'Planifiez vos sessions de dhikr', so: 'Jadwaleyso fasaladaada xususta'
+  },
+  'settings.interaction': {
+    en: 'Interaction', ar: 'التفاعل', hi: 'पारस्परिक क्रिया', ur: 'تعامل', tr: 'Etkileşim', ms: 'Interaksi', id: 'Interaksi', fr: 'Interaction', so: 'Wada-shaqaynta'
+  },
+  'settings.haptic_feedback': {
+    en: 'Haptic feedback', ar: 'الاهتزاز عند اللمس', hi: 'हैप्टिक फीडबैक', ur: 'ہیپٹک فیڈبیک', tr: 'Dokunsal geri bildirim', ms: 'Maklum balas haptik', id: 'Umpan balik haptic', fr: 'Retour haptique', so: 'Gariirka dareenka'
+  },
+  'settings.haptic_desc': {
+    en: 'Vibrate on tap', ar: 'الاهتزاز عند النقر', hi: 'टैप करने पर कंपन', ur: 'ٹیپ پر وائبریٹ', tr: 'Dokunulduğunda titret', ms: 'Bergetar apabila diketik', id: 'Bergetar saat diketuk', fr: 'Vibrer au toucher', so: 'Gariir marka la taabto'
+  },
+  'settings.sound_effects': {
+    en: 'Sound effects', ar: 'المؤثرات الصوتية', hi: 'ध्वनि प्रभाव', ur: 'آواز کے اثرات', tr: 'Ses efektleri', ms: 'Kesan bunyi', id: 'Efek suara', fr: 'Effets sonores', so: 'Saamaynta codka'
+  },
+  'settings.sound_desc': {
+    en: 'Play sound on tap', ar: 'تشغيل الصوت عند النقر', hi: 'टैप करने पर ध्वनि बजाएं', ur: 'ٹیپ پر آواز چلائیں', tr: 'Dokunulduğunda ses çal', ms: 'Mainkan bunyi apabila diketik', id: 'Mainkan suara saat diketuk', fr: 'Jouer un son au toucher', so: 'Daar codka marka la taabto'
+  },
+  'settings.shake_to_reset': {
+    en: 'Shake to Reset', ar: 'هز للإعادة', hi: 'हिलाकर रीसेट', ur: 'ہلائیں تو ری سيٹ', tr: 'Sıfırlamak için Salla', ms: 'Goncang untuk Tetap Semula', id: 'Kocok untuk Reset', fr: 'Secouer pour réinitialiser', so: 'Garaac si aad dib ugu dejiso'
+  },
+  'settings.shake_desc': {
+    en: 'Shake device to reset', ar: 'هز الهاتف لإعادة العداد', hi: 'रीसेट करने के लिए डिवाइस हिलाएं', ur: 'ری سیٹ کرنے کے لیے آلہ ہلائیں', tr: 'Sıfırlamak için cihazı salla', ms: 'Goncang peranti untuk menetap semula', id: 'Kocok perangkat untuk mereset', fr: 'Secouer l\'appareil pour réinitialiser', so: 'Rux qalabka si aad u dejiso'
+  },
+  'settings.stay_awake': {
+    en: 'Stay Awake', ar: 'إبقاء الشاشة مضاءة', hi: 'स्क्रीन चालू रखें', ur: 'اسکرین آن رکھیں', tr: 'Ekranı Açık Tut', ms: 'Pastikan Skrin Menyala', id: 'Jaga Layar Tetap Aktif', fr: 'Garder l\'écran allumé', so: 'Shaashada ha demin'
+  },
+  'settings.stay_awake_desc': {
+    en: 'Keep screen on during sessions', ar: 'إبقاء الشاشة مفعلة أثناء الجلسة', hi: 'सत्रों के दौरान स्क्रीन चालू रखें', ur: 'سیشنز के दौरान इसक्रिन आन रखें', tr: 'Oturumlar sırasında ekranı açık tut', ms: 'Pastikan skrin menyala semasa sesi', id: 'Jaga layar tetap menyala selama sesi', fr: 'Garder l\'écran allumé pendant les sessions', so: 'Shaashada daar inta fasalku socdo'
+  },
+  'settings.pocket_mode': {
+    en: 'Pocket Mode', ar: 'وضع الجيب', hi: 'पॉकेट मोड', ur: 'پاکٹ موڈ', tr: 'Cep Modu', ms: 'Mod Poket', id: 'Mode Saku', fr: 'Mode poche', so: 'Habka Jeebka'
+  },
+  'settings.pocket_mode_desc': {
+    en: 'Turn screen black to save battery', ar: 'إطفاء الشاشة لتوفير البطارية', hi: 'बैटरी बचाने के लिए स्क्रीन काली करें', ur: 'بیٹری بچانے کے لیے اسکرین کالی کریں', tr: 'Pil tasarrufu için ekranı karart', ms: 'Gelapkan skrin untuk jimat bateri', id: 'Ubah layar menjadi hitam untuk hemat bateri', fr: 'Éteindre l\'écran pour économiser la batterie', so: 'Shaashada madoweey si aad batteri u badbaadiso'
+  },
+  'settings.volume_buttons_desc': {
+    en: 'Use physical keys to count', ar: 'استخدم أزرار الصوت الفعلية للعد', hi: 'गिनने के लिए भौतिक कुंजियों का उपयोग करें', ur: 'گنتی کے لیے جسمانی بٹن استعمال کریں', tr: 'Saymak için fiziksel tuşları kullan', ms: 'Gunakan butang fizikal untuk mengira', id: 'Gunakan tombol fisik untuk menghitung', fr: 'Utiliser les touches physiques pour compter', so: 'Isticmaal badhamada qalabka si aad u tiriso'
+  },
+  'settings.data_management': {
+    en: 'Data Management', ar: 'إدارة البيانات', hi: 'डेटा प्रबंधन', ur: 'ڈیٹا مینजमेंट', tr: 'Veri Yönetimi', ms: 'Pengurusan Data', id: 'Pengelolaan Data', fr: 'Gestion des données', so: 'Maamulka Xogta'
+  },
+  'settings.cloud_sync': {
+    en: 'Cloud Sync & Security', ar: 'مزامنة السحاب والأمان', hi: 'क्लाउड सिंक और सुरक्षा', ur: 'کلاؤڈ سنک اور سیکیورٹی', tr: 'Bulut Senkronizasyonu & Güvenlik', ms: 'Penyelarasan Awan & Keselamatan', id: 'Sinkronisasi Awan & Keamanan', fr: 'Sync nuage & Sécurité', so: 'Isku-naxnaanta Cloud-ka'
+  },
+  'settings.cloud_sync_desc': {
+    en: 'Sign in to backup your data securely', ar: 'سجل الدخول لنسخ بياناتك احتياطيًا بأمان', hi: 'अपने डेटा को सुरक्षित रूप से बैकअप करने के लिए साइन इन करें', ur: 'اپنا ڈیٹا محفوظ طریقے سے بیک اپ کرنے کے لیے سائن ان کریں', tr: 'Verilerinizi güvenli bir şekilde yedeklemek için giriş yapın', ms: 'Log masuk untuk sandarkan data anda secara selamat', id: 'Masuk untuk mencadangkan data Anda dengan aman', fr: 'Connectez-vous pour sauvegarder vos données en toute sécurité', so: 'Gal si aad u kaydiso xogtaada si badbaado leh'
+  },
+  'settings.clear_data': {
+    en: 'Clear All Data', ar: 'مسح جميع البيانات', hi: 'सभी डेटा साफ़ करें', ur: 'تمام ڈیٹا صاف کریں', tr: 'Tüm Verileri Temizle', ms: 'Padam Semua Data', id: 'Hapus Semua Data', fr: 'Effacer toutes les données', so: 'Nadiifi Dhammaan Xogta'
+  },
+  'settings.clear_data_desc': {
+    en: 'Permanently delete all records', ar: 'حذف جميع السجلات نهائيًا', hi: 'सभी रिकॉर्ड स्थायी रूप से हटाएं', ur: 'تمام ریکارڈز مستقل طور پر حذف کریں', tr: 'Tüm kayıtları kalıcı olarak sil', ms: 'Padam semua rekod secara kekal', id: 'Hapus semua catatan secara permanen', fr: 'Supprimer définitivement tous les enregistrements', so: 'Tirtir dhammaan xogta si joogto ah'
+  },
+  'settings.clear_confirm_title': {
+    en: 'Are you absolutely sure?', ar: 'هل أنت متأكد تمامًا؟', hi: 'क्या आप पूरी तरह से आश्वस्त हैं?', ur: 'کیا آپ کو پورا یقین ہے؟', tr: 'Kullanıcı silinsin mi?', ms: 'Adakah anda benar-benar pasti?', id: 'Apakah Anda benar-benar yakin?', fr: 'Êtes-vous absolument sûr ?', so: 'Ma xaqiiqsadbaa?'
+  },
+  'settings.clear_confirm_desc': {
+    en: 'This action cannot be undone. This will permanently delete your entire dhikr history, routines, and reset all settings to default.', ar: 'لا يمكن التراجع عن هذا الإجراء. سيؤدي هذا إلى حذف سجل الأذكار والروتين بالكامل وإعادة ضبط الإعدادات.', hi: 'यह कार्रवाई पूर्ववत नहीं की जा सकती। यह आपके संपूर्ण ज़िक्र इतिहास, दिनचर्या को स्थायी रूप से हटा देगा और सभी सेटिंग्स को डिफ़ॉल्ट पर रीसेट कर देगा।', ur: 'یہ عمل واپس نہیں لیا جا سکتا۔ یہ آپ کے ذکر کی پوری تاریخ، روٹینز کو مستقل طور پر حذف کر دے گا اور تمام ترتیبات کو دوبارہ ترتیب دے گا۔', tr: 'Bu işlem geri alınamaz. Bu, tüm zikir geçmişinizi, rutinlerinizi kalıcı olarak silecek ve tüm ayarları varsayılana sıfırlayacaktır.', ms: 'Tindakan ini tidak boleh diundur. Ini akan memadamkan seluruh sejarah zikir, rutin anda secara kekal dan menetapkan semula semua tetapan.', id: 'Tindakan ini tidak dapat dibatalkan. Ini akan menghapus seluruh riwayat zikir, rutinitas Anda secara permanen dan mereset semua pengaturan.', fr: 'Cette action est irréversible. Cela supprimera définitivement tout votre historique de dhikr, vos routines et réinitialisera tous les paramètres par défaut.', so: 'Tallaabadan dib looma soo celin karo. Tani waxay tirtiri doontaa dhammaan taariikhdaada xususta, caadooyinkaaga oo waxay dib u dejin doontaa dhammaan settings-ka.'
+  },
+  'settings.clear_confirm_action': {
+    en: 'Delete Everything', ar: 'حذف كل شيء', hi: 'सब कुछ हटाएं', ur: 'سب کچھ حذف کریں', tr: 'Her Şeyi Sil', ms: 'Padam Semua', id: 'Hapus Semua', fr: 'Tout supprimer', so: 'Tirtir Dhammaan'
+  },
+  'settings.developed_by': {
+en: 'Developed by Ibrahim Cowke', ar: 'تطوير إبراهيم عوكى', hi: 'इब्राहिम काउके द्वारा विकसित', ur: 'ابراہیم عوکے کا تیار کردہ', tr: 'Ibrahim Cowke tarafından geliştirildi', ms: 'Dibangunkan oleh Ibrahim Cowke', id: 'Dikembangkan oleh Ibrahim Cowke', fr: 'Développé par Ibrahim Cowke', so: 'Waxaa ikhtiraacay Ibrahim Cowke'
+  },
+  'settings.visit_portfolio': {
+    en: 'Visit Portfolio', ar: 'زيارة موقع المطور', hi: 'पोर्टफोलियो पर जाएं', ur: 'پورٹ فولیو دیکھیں', tr: 'Portföyü Ziyaret Et', ms: 'Layari Portfolio', id: 'Kunjungi Portofolio', fr: 'Visiter le portfolio', so: 'Booqo Portfolio-ga'
+  },
+  'settings.privacy_policy': {
+    en: 'Privacy Policy', ar: 'سياسة الخصوصية', hi: 'गोपनीयता नीति', ur: 'رازداری की پالیسی', tr: 'Gizlilik Politikası', ms: 'Dasar Privasi', id: 'Kebijakan Privasi', fr: 'Politique de confidentialité', so: 'Shuruucda Qaanuunka'
+  },
+  'settings.read_privacy': {
+    en: 'Read Privacy Policy', ar: 'قراءة سياسة الخصوصية', hi: 'गोपनीयता नीति पढ़ें', ur: 'رازداری کی پالیسی پڑھیں', tr: 'Gizlilik Politikasını Oku', ms: 'Baca Dasar Privasi', id: 'Baca Kebijakan Privasi', fr: 'Lire la politique de confidentialité', so: 'Akhri Shuruucda Qaanuunka'
+  },
+  'settings.account': {
+    en: 'Account', ar: 'الحساب', hi: 'खाता', ur: 'اکاؤنٹ', tr: 'Hesap', ms: 'Akaun', id: 'Akun', fr: 'Compte', so: 'Koontada'
+  },
+  'settings.export_backup': {
+    en: 'Export backup', ar: 'تصدير نسخة احتياطية', hi: 'बैकअप निर्यात करें', ur: 'بیک اپ برآمد کریں', tr: 'Yedeği dışa aktar', ms: 'Eksport sandaran', id: 'Ekspor cadangan', fr: 'Exporter la sauvegarde', so: 'Dhoofinta keydka'
+  },
+  'settings.export_desc': {
+    en: 'Save data to a JSON file', ar: 'حفظ البيانات في ملف JSON', hi: 'डेटा को JSON फ़ाइल में सहेजें', ur: 'ڈیٹا को JSON फाइल में सुरक्षित करें', tr: 'Verileri bir JSON dosyasına kaydet', ms: 'Simpan data ke fail JSON', id: 'Simpan data ke file JSON', fr: 'Enregistrer les données dans un fichier JSON', so: 'Ku keydi xogta JSON file'
+  },
+  'settings.import_backup': {
+    en: 'Import backup', ar: 'استيراد نسخة احتياطية', hi: 'बैकअप आयात करें', ur: 'بیک اپ درآمد کریں', tr: 'Yedeği içe aktar', ms: 'Import sandaran', id: 'Impor cadangan', fr: 'Importer la sauvegarde', so: 'Soo keenista keydka'
+  },
+  'settings.import_desc': {
+    en: 'Restore from a JSON file', ar: 'استعادة البيانات من ملف JSON', hi: 'JSON फ़ाइल से पुनर्स्थापित करें', ur: 'JSON फाइल से बहाल करें', tr: 'Bir JSON dosyasından geri yükle', ms: 'Pulihkan dari fail JSON', id: 'Pulihkan dari file JSON', fr: 'Restaurer à partir d\'un fichier JSON', so: 'Dib u soo celi xogta JSON file'
+  },
+  'settings.reset_data': {
+    en: 'Reset All Data', ar: 'إعادة ضبط كل البيانات', hi: 'सभी डेटा रीसेट करें', ur: 'تمام ڈیٹا ری سیٹ کریں', tr: 'Tüm Verileri Sıfırla', ms: 'Tetap Semula Semua Data', id: 'Reset Semua Data', fr: 'Réinitialiser toutes les données', so: 'Dib u wada deji xogta'
+  },
+  'settings.reset_desc': {
+    en: 'Permanently delete all progress', ar: 'حذف جميع التقدم نهائيًا', hi: 'सभी प्रगति स्थायी रूप से हटाएं', ur: 'تمام پیشرفت مستقل طور पर حذف کریں', tr: 'Tüm ilerlemeyi kalıcı olarak sil', ms: 'Padam semua kemajuan secara kekal', id: 'Hapus semua kemajuan secara permanen', fr: 'Supprimer définitivement toute progression', so: 'Tirtir dhammaan horumarka si joogto ah'
+  },
+  'settings.reset_confirm_title': {
+    en: 'Are you sure?', ar: 'هل أنت متأكد؟', hi: 'क्या आपको यकीन है?', ur: 'کیا آپ को यकीन है؟', tr: 'Emin misiniz?', ms: 'Adakah anda pasti?', id: 'Apakah Anda yakin?', fr: 'Êtes-vous sûr ?', so: 'Ma hubtaa?'
+  },
+  'settings.reset_confirm_desc': {
+    en: 'This will wipe all counts, streaks, and custom settings.', ar: 'سيؤدي هذا إلى مسح العداد والتتابع والإعدادات المخصصة.', hi: 'इससे सभी गणनाएं, धाराएं और कस्टम सेटिंग्स मिट जाएंगी।', ur: 'اس سے تمام گنتی، سلسلے اور اپنی مرضی کے مطابق ترتیبات صاف ہو جائیں گی۔', tr: 'Bu, tüm sayımları, serileri ve özel ayarları silecektir.', ms: 'Ini akan menyapu semua kiraan, jujukan, dan tetapan tersuai.', id: 'Ini akan menghapus semua hitungan, beruntun, dan pengaturan khusus.', fr: 'Cela effacera tous les comptes, séries et paramètres personnalisés.', so: 'Tani waxay tirtiri doontaa dhammaan tirsiyada, caadooyinka, iyo settings-ka gaarka ah.'
+  },
+  'settings.reset_confirm_action': {
+    en: 'Reset Everything', ar: 'إعادة ضبط كل شيء', hi: 'सब कुछ रीसेट करें', ur: 'سب कुछ रीसेट करें', tr: 'Her Şeyi Sıfırla', ms: 'Tetap Semula Semua', id: 'Reset Semua', fr: 'Tout réinitialiser', so: 'Dib u deji Dhammaan'
+  },
+
+  // --- Themes & Descriptions ---
+  'theme.light.label': { en: 'Light', ar: 'فاتح', hi: 'लाइट', ur: 'لائٹ', tr: 'Açık', ms: 'Terang', id: 'Terang', fr: 'Clair', so: 'Iftiin' },
+  'theme.light.desc': { en: 'Warm and calm', ar: 'دافئ وهادئ', hi: 'गर्म और शांत', ur: 'گرم اور پرسكين', tr: 'Sıcak ve sakin', ms: 'Suam & tenang', id: 'Hangat & tenang', fr: 'Chaud et calme', so: 'Diiran oo degan' },
+  'theme.theme-nord-deep.label': { en: 'Nord Deep', ar: 'نورد العميق', hi: 'नॉर्ड डीप', ur: 'نورڈ ڈیپ', tr: 'Nord Derin', ms: 'Nord Deep', id: 'Nord Deep', fr: 'Nord Profond', so: 'Nord Wayn' },
+  'theme.theme-nord-deep.desc': { en: 'Nordic Frost', ar: 'الصقيع الإسكندنافي', hi: 'नॉर्डिक फ्रॉस्ट', ur: 'نورڈک فراسٹ', tr: 'Kuzey Ayazı', ms: 'Frost Nordik', id: 'Frost Nordik', fr: 'Givre Nordique', so: 'Barafka Nord-ka' },
+  'theme.theme-nord-midnight.label': { en: 'Nord Midnight', ar: 'نورد منتصف الليل', hi: 'नॉर्ड मिडनाइट', ur: 'نورڈ مڈنائٹ', tr: 'Nord Gece Yarısı', ms: 'Nord Tengah Malam', id: 'Nord Tengah Malam', fr: 'Nord Minuit', so: 'Nord Saq-dhexe' },
+  'theme.theme-nord-midnight.desc': { en: 'Deep Navy Aurora', ar: 'شفق قطبي بحري عميق', hi: 'गहरा नौसेना ऑरोरा', ur: 'گہرا نیوی اورورا', tr: 'Derin Lacivert Kutup Işıkları', ms: 'Aurora Navy Mendalam', id: 'Aurora Navy Mendalam', fr: 'Aurore Marine Profonde', so: 'Iftiinka Navy Wayn' },
+  'theme.theme-blue-white.label': { en: 'Blue Breeze', ar: 'نسيم أزرق', hi: 'नीली हवा', ur: 'نیلی ہوا', tr: 'Mavi Meltem', ms: 'Bayu Biru', id: 'Semilir Biru', fr: 'Brise Bleue', so: 'Dabayl Buluug ah' },
+  'theme.theme-blue-white.desc': { en: 'Sky blue & pure white', ar: 'سماء زرقاء وأبيض ناصع', hi: 'आकाश नीला और शुद्ध सफेद', ur: 'آسمان نیلا اور خالص سفید', tr: 'Gökyüzü mavisi & saf beyaz', ms: 'Biru langit & putih tulen', id: 'Biru langit & putih murni', fr: 'Bleu ciel & blanc pur', so: 'Buluug cirka & caddaan saafi ah' },
+  'theme.theme-cyber-twilight.label': { en: 'Cyber Twilight', ar: 'سايبر الشفق', hi: '사이बर ट्वाइलाइट', ur: 'سائبر ٹوائلائٹ', tr: 'Siber Alacakaranlık', ms: 'Cyber Twilight', id: 'Cyber Twilight', fr: 'Crépuscule Cyber', so: 'Cyber Twilight' },
+  'theme.theme-cyber-twilight.desc': { en: 'Synthwave Eclipse', ar: 'كسوف سينثويف', hi: 'सिंथवेव ग्रहण', ur: 'سنتھ ویو گرہن', tr: 'Synthwave Tutulması', ms: 'Gerhana Synthwave', id: 'Gerhana Synthwave', fr: 'Éclipse Synthwave', so: 'Synthwave Eclipse' },
+  'theme.theme-dracula-evolved.label': { en: 'Dracula Evolved', ar: 'دراكولا المطور', hi: 'د्रेकुला इवॉल्व्ड', ur: 'ڈریکولا ایوولود', tr: 'Gelişmiş Dracula', ms: 'Dracula Evolved', id: 'Dracula Evolved', fr: 'Dracula Évolué', so: 'Dracula Evolved' },
 
   // --- Niyyah ---
   'niyyah.title': {
@@ -260,6 +438,108 @@ const translations: Record<string, Partial<Record<Lang, string>>> = {
   'niyyah.skip': {
     en: 'Skip', ar: 'تخطى', hi: 'छोड़ें', ur: 'چھوڑیں', tr: 'Atla', ms: 'Langkau', id: 'Lewati', fr: 'Passer', so: 'Kicinso'
   },
+  'niyyah.set_intention': {
+    en: 'Set Intention', ar: 'ضبط النية', hi: 'नियत करें', ur: 'نیت کریں', tr: 'Niyet Et', ms: 'Set Niat', id: 'Atur Niat', fr: 'Définir l\'intention', so: 'Deji Niyada'
+  },
+  'niyyah.intention_set': {
+    en: 'Intention Set', ar: 'تم ضبط النية', hi: 'नियत सेट है', ur: 'نیت مقرر ہے', tr: 'Niyet Edildi', ms: 'Niat Ditetapkan', id: 'Niat Diatur', fr: 'Intention définie', so: 'Niyada waa la dejiyay'
+  },
+  'niyyah.modal_title': {
+    en: 'Set Intention (Niyyah)', ar: 'ضبط النية (نيّة)', hi: 'नियत (निय्याह) सेट करें', ur: 'نیت (نیت) کریں', tr: 'Niyet Belirle (Niyyah)', ms: 'Tetapkan Niat (Niat)', id: 'Atur Niat (Niat)', fr: 'Définir l\'intention (Niyyah)', so: 'Deji Niyada (Niyyah)'
+  },
+  'niyyah.desc': {
+    en: 'Actions are judged by intentions. Setting a Niyyah before reciting helps bring focus and spiritual mindfulness.',
+    ar: 'إنما الأعمال بالنيات. يساعد ضبط النية قبل التلاوة على جلب التركيز واليقظة الروحية.',
+    hi: 'कार्यों का निर्णय इरादों (नियत) से होता है। पाठ करने से पहले नियत करने से ध्यान और आध्यात्मिक जागरूकता आती है।',
+    ur: 'اعمال کا دارومدار نیتوں پر ہے۔ تلاوت سے پہلے نیت کرنے سے توجہ اور روحانیت حاصل ہوتی ہے۔',
+    tr: 'Ameller niyetlere göredir. Okumaya başlamadan önce niyet etmek, odaklanmayı ve manevi farkındalığı artırır.',
+    ms: 'Amalan dinilai berdasarkan niat. Menetapkan niat sebelum membaca membantu membawa fokus dan kesedaran rohani.',
+    id: 'Setiap amal dinilai berdasarkan niatnya. Menetapkan niat sebelum membaca membantu meningkatkan fokus dan kesadaran spiritual.',
+    fr: 'Les actions sont jugées selon les intentions. Définir une Niyyah avant de réciter aide à apporter de la concentration et de la pleine conscience spirituelle.',
+    so: 'Camalku wuxuu ku xiran yahay niyada. Inaad niyada dejsato inta aadan tirinta bilaabin waxay caawisaa diirada iyo xasilloonida ruuxiga ah.'
+  },
+  'niyyah.custom_label': {
+    en: 'Custom Intention', ar: 'نية مخصصة', hi: 'कस्टम नियत', ur: 'اپنی مرضی کی نیت', tr: 'Özel Niyet', ms: 'Niat Tersuai', id: 'Niat Kustom', fr: 'Intention personnalisée', so: 'Niyad Gaar ah'
+  },
+  'niyyah.custom_placeholder': {
+    en: "E.g., Seeking Allah's pleasure, recovery from illness, relief from hardships...",
+    ar: 'مثال: نيل رضا الله، الشفاء من المرض، الفرج من الكرب...',
+    hi: 'उदा. अल्लाह की रज़ा पाना, बीमारी से उबरना, कठिनाइयों से राहत...',
+    ur: 'مثال: اللہ کی رضا، بیماری سے شفا، پریشانیوں سے نجات...',
+    tr: 'örn. Allah rızası, hastalıktan şifa, zorluklardan kurtuluş...',
+    ms: 'Contoh: Mencari keredhaan Allah, sembuh dari penyakit, kelegaan dari kesusahan...',
+    id: 'Contoh: Mencari rida Allah, kesembuhan dari penyakit, kemudahan dari cobaan...',
+    fr: "Ex. Rechercher le plaisir d'Allah, guérir d'une maladie, soulagement des épreuves...",
+    so: 'Tusaale: Raadinta raalli ahaanshaha Alle, ka bogsashada xanuunka, fududeynta dhibaatooyinka...'
+  },
+  'niyyah.dedicate_label': {
+    en: 'Dedicate to (Optional)', ar: 'إهداء إلى (اختياري)', hi: 'समर्पित करें (वैकल्पिक)', ur: 'نامزد کریں (اختیاری)', tr: 'İthaf Et (İsteğe Bağlı)', ms: 'Didedikasikan kepada (Pilihan)', id: 'Didedikasikan untuk (Opsional)', fr: 'Dédier à (Optionnel)', so: 'U hibee (Ikhtiyaari)'
+  },
+  'niyyah.dedicate_placeholder': {
+    en: 'E.g., Mother, Father, My Children, Self...',
+    ar: 'مثال: أمي، أبي، أطفالي، نفسي...',
+    hi: 'उदा. माता, पिता, मेरे बच्चे, स्वयं...',
+    ur: 'مثال: والدہ، والد، میرے بچے، اپنی ذات...',
+    tr: 'örn. Annem, Babam, Çocuklarım, Kendim...',
+    ms: 'Contoh: Ibu, Bapa, Anak-anak, Diri Sendiri...',
+    id: 'Contoh: Ibu, Ayah, Anak-anakku, Diri Sendiri...',
+    fr: 'Ex. Mère, Père, Mes enfants, Soi-même...',
+    so: 'Tusaale: Hooyo, Aabo, Carruurtayda, Naftayda...'
+  },
+  'niyyah.save': {
+    en: 'Save Intention', ar: 'حفظ النية', hi: 'नियत सहेजें', ur: 'نیت محفوظ کریں', tr: 'Niyeti Kaydet', ms: 'Simpan Niat', id: 'Simpan Niat', fr: 'Enregistrer l\'intention', so: 'Kaydi Niyada'
+  },
+  'niyyah.toast_success': {
+    en: 'Intention (Niyyah) updated successfully.',
+    ar: 'تم تحديث النية بنجاح.',
+    hi: 'नियत (निय्याह) सफलतापूर्वक अपडेट हो गई है।',
+    ur: 'نیت کامیابی کے ساتھ اپ ڈیٹ ہو گئی۔',
+    tr: 'Niyet (Niyyah) başarıyla güncellendi.',
+    ms: 'Niat (Niat) berjaya dikemas kini.',
+    id: 'Niat (Niat) berhasil diperbarui.',
+    fr: 'Intention (Niyyah) mise à jour avec succès.',
+    so: 'Niyada waa la cusbooneysiiyay si guul leh.'
+  },
+
+  'theme.theme-espresso-dark.label': { en: 'Espresso Dark', ar: 'إسبريسو الداكن', hi: 'एस्प्रेसो डार्क', ur: 'ایسپریسو ڈارک', tr: 'Koyu Espresso', ms: 'Espresso Gelap', id: 'Espresso Gelap', fr: 'Espresso Sombre', so: 'Espresso Madow' },
+  'theme.theme-espresso-dark.desc': { en: 'Café Noir', ar: 'القهوة السوداء', hi: 'कैफे नोइर', ur: 'کافی نویر', tr: 'Siyah Kahve', ms: 'Kopi Hitam', id: 'Kopi Hitam', fr: 'Café Noir', so: 'Qaxwo Madow' },
+  'theme.theme-glass.label': { en: 'Glass', ar: 'زجاجي', hi: 'ग्लास', ur: 'شیشہ', tr: 'Cam', ms: 'Kaca', id: 'Kaca', fr: 'Verre', so: 'Galaas' },
+  'theme.theme-glass.desc': { en: 'Pure & icy morphism', ar: 'شكل نقي وجليدي', hi: 'शुद्ध और बर्फीला', ur: 'خالص اور برفیلا', tr: 'Saf & buzlu tasarım', ms: 'Morfisme tulen & ais', id: 'Morfisme murni & es', fr: 'Morphisme pur & glacé', so: 'Nadiif oo baraf ah' },
+  'theme.theme-sunset.label': { en: 'Sunset', ar: 'الغروب', hi: 'सूर्यास्त', ur: 'غروب آفتاب', tr: 'Gün Batımı', ms: 'Matahari Terbenam', id: 'Matahari Terbenam', fr: 'Coucher de soleil', so: 'Qorax dhaca' },
+  'theme.theme-sunset.desc': { en: 'Warm gradients', ar: 'تدرجات دافئة', hi: 'गर्म झुकाव', ur: 'گرم درجات', tr: 'Sıcak geçişler', ms: 'Gradien suam', id: 'Gradien hangat', fr: 'Dégradés chauds', so: 'Iftiimo diiran' },
+  'theme.theme-forest.label': { en: 'Forest', ar: 'الغابة', hi: 'वन', ur: 'جنگل', tr: 'Orman', ms: 'Hutan', id: 'Hutan', fr: 'Forêt', so: 'Kaynaha' },
+  'theme.theme-forest.desc': { en: 'Deep nature greens', ar: 'خضار الطبيعة العميقة', hi: 'गहरी प्रकृति का हरा', ur: 'گہرے قدرتی سبز', tr: 'Derin doğa yeşili', ms: 'Hijau alam mendalam', id: 'Hijau alam mendalam', fr: 'Verts nature profonds', so: 'Cagaarka duurka' },
+  'theme.theme-oled.label': { en: 'OLED', ar: 'شاشة أوليد', hi: 'OLED', ur: 'اولید', tr: 'OLED', ms: 'OLED', id: 'OLED', fr: 'OLED', so: 'OLED' },
+  'theme.theme-oled.desc': { en: 'True black power saver', ar: 'أسود حقيقي لحفظ البطارية', hi: 'सच्चा ब्लैक पावर सेवर', ur: 'سچا بلیک پاور سیور', tr: 'Gerçek siyah pil tasarrufu', ms: 'Penjimat kuasa hitam sebenar', id: 'Penghemat daya hitam murni', fr: 'Économiseur d\'énergie noir pur', so: 'Madow badbaadiya batteriga' },
+  'theme.theme-desert-starlight.label': { en: 'Desert Star', ar: 'نجم الصحراء', hi: 'रेगिस्तानी तारा', ur: 'صحرائی ستارہ', tr: 'Çöl Yıldızı', ms: 'Bintang Padang Pasir', id: 'Bintang Gurun', fr: 'Étoile du désert', so: 'Xiddigta Saxaraha' },
+  'theme.theme-desert-starlight.desc': { en: 'Sand beige & blue', ar: 'رمل بيج وأزرق', hi: 'रेत बेज और नीला', ur: 'ریت बेज और नीला', tr: 'Kum beji & mavi', ms: 'Beige pasir & biru', id: 'Krem pasir & biru', fr: 'Sable beige & bleu', so: 'Ciid cad oo buluug ah' },
+
+  // --- Shapes ---
+  'shape.plain': { en: 'Plain', ar: 'سادة', hi: 'सादा', ur: 'سادہ', tr: 'Sade', ms: 'Biasa', id: 'Biasa', fr: 'Simple', so: 'Cad' },
+  'shape.minimal': { en: 'Minimal', ar: 'بسيط', hi: 'न्यूनतम', ur: 'کم سے کم', tr: 'Minimal', ms: 'Minimal', id: 'Minimal', fr: 'Minimaliste', so: 'Yar' },
+  'shape.classic': { en: 'Classic', ar: 'كلاسيكي', hi: 'क्लासिक', ur: 'کلاسک', tr: 'Klasik', ms: 'Klasik', id: 'Klasik', fr: 'Classique', so: 'Hore' },
+  'shape.beads': { en: 'Beads', ar: 'خرزات', hi: 'मनके', ur: 'منکے', tr: 'Boncuklar', ms: 'Manik', id: 'Manik-manik', fr: 'Perles', so: 'Feeraha' },
+  'shape.flower': { en: 'Flower', ar: 'وردة', hi: 'फूल', ur: 'پھول', tr: 'Çiçek', ms: 'Bunga', id: 'Bunga', fr: 'Fleur', so: 'Ubax' },
+  'shape.waveform': { en: 'Wave', ar: 'موجة', hi: 'तरंग', ur: 'لہر', tr: 'Dalga', ms: 'Gelombang', id: 'Gelombang', fr: 'Vague', so: 'Mowjad' },
+  'shape.digital': { en: 'Digit', ar: 'رقمي', hi: 'डिजिटल', ur: 'ڈیजीटल', tr: 'Dijital', ms: 'Digit', id: 'Digit', fr: 'Digital', so: 'Tirada' },
+  'shape.modern-ring': { en: 'Ring', ar: 'حلقة', hi: 'रिंग', ur: 'انگوٹھی', tr: 'Halka', ms: 'Cincin', id: 'Cincin', fr: 'Anneau', so: 'Garaang' },
+  'shape.ring-light': { en: 'Light Ring', ar: 'حلقة مضيئة', hi: 'लाइट रिंग', ur: 'لائت رنگ', tr: 'Işık Halkası', ms: 'Cincin Cahaya', id: 'Cincin Cahaya', fr: 'Anneau lumineux', so: 'Garaang Iftiin' },
+  'shape.bead-ring': { en: 'Bead Ring', ar: 'حلقة الخرز', hi: 'मनका रिंग', ur: 'منكا رنگ', tr: 'Boncuk Halkası', ms: 'Cincin Manik', id: 'Cincin Manik', fr: 'Anneau de perles', so: 'Tasbiix Garaang' },
+  'shape.halo-ring': { en: 'Halo', ar: 'هالة', hi: 'हेलो', ur: 'ہالو', tr: 'Hale', ms: 'Halo', id: 'Halo', fr: 'Halo', so: 'Halo' },
+  'shape.vertical-capsules': { en: 'Capsule', ar: 'كبسولة', hi: 'कैप्सूल', ur: 'کیپسول', tr: 'Kapsül', ms: 'Kapsul', id: 'Kapsul', fr: 'Capsule', so: 'Kaabsal' },
+  'shape.luminous-beads': { en: 'LumiBeads', ar: 'خرز مضيء', hi: 'चमकदार मनके', ur: 'روشن منکے', tr: 'Işıklı Boncuklar', ms: 'Manik Bercahaya', id: 'Manik Bercahaya', fr: 'Perles lumineuses', so: 'Feero Iftiin' },
+  'shape.smart-ring': { en: 'Smart Ring', ar: 'حلقة ذكية', hi: 'स्मार्ट रिंग', ur: 'اسمارٹ رنگ', tr: 'Akıllı Halka', ms: 'Cincin Pintar', id: 'Cincin Pintar', fr: 'Anneau intelligent', so: 'Garaang Fariid' },
+  'shape.moon-phase': { en: 'Moon', ar: 'قمر', hi: 'चंद्रमा', ur: 'چاند', tr: 'Ay', ms: 'Bulan', id: 'Bulan', fr: 'Lune', so: 'Dayax' },
+  'shape.digital-watch': { en: 'Watch', ar: 'ساعة', hi: 'घड़ी', ur: 'گھड़ी', tr: 'Saat', ms: 'Jam', id: 'Jam', fr: 'Montre', so: 'Saacad' },
+  'shape.tally-clicker': { en: 'Tally 3D', ar: 'عداد ثلاثي الأبعاد', hi: 'टैली 3D', ur: 'ٹیلی 3D', tr: '3D Tally', ms: 'Tally 3D', id: 'Tally 3D', fr: 'Compteur 3D', so: 'Tiriye 3D' },
+  'shape.digital-tally': { en: 'Tally Digital', ar: 'عداد رقمي', hi: 'डिजिटल टैली', ur: 'ڈیجیٹل ٹیلی', tr: 'Dijital Tally', ms: 'Tally Digital', id: 'Tally Digital', fr: 'Compteur digital', so: 'Tiriye Tirada' },
+  'shape.neumorph': { en: 'Neumorph', ar: 'نيومورف', hi: 'न्यूमॉर्फ', ur: 'نیومورف', tr: 'Neumorph', ms: 'Neumorph', id: 'Neumorph', fr: 'Neumorphe', so: 'Neumorph' },
+  'shape.sunset-horizon': { en: 'Sunset Shape', ar: 'شكل الغروب', hi: 'सूर्यास्त आकार', ur: 'غروب آفتاب شکل', tr: 'Gün Batımı Şekli', ms: 'Bentuk Matahari Terbenam', id: 'Bentuk Matahari Terbenam', fr: 'Forme de coucher de soleil', so: 'Qaabka Qorax-dhaca' },
+  'shape.crystal-orbit': { en: 'Crystal Orbit', ar: 'مدار كريستالي', hi: 'كريستال مدار', tr: 'Kristal Yörünge', ms: 'Orbit Kristal', id: 'Orbit Kristal', fr: 'Orbite de cristal', so: 'Orbit Crystal' },
+  'shape.aurora-glow': { en: 'Aurora', ar: 'شفق قطبي', hi: 'ऑरोरा', ur: 'اورورا', tr: 'Kutup Işığı', ms: 'Aurora', id: 'Aurora', fr: 'Aurore', so: 'Aurora' },
+  'shape.diamond-prism': { en: 'Diamond', ar: 'ألماس', hi: 'हीरा', ur: 'ہیرا', tr: 'Elmas', ms: 'Intan', id: 'Berlian', fr: 'Diamant', so: 'Dheeman' },
+  'shape.golden-spiral': { en: 'Spiral', ar: 'حلزوني', hi: 'सर्पيل', ur: 'سرپل', tr: 'Spiral', ms: 'Spiral', id: 'Spiral', fr: 'Spirale', so: 'Spiral' },
+
 
   // --- Mood Tracker ---
   'mood.title': {
