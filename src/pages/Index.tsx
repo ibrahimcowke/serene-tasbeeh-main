@@ -94,7 +94,7 @@ const Index = () => {
             {!zenMode && <LazyDayBanner />}
 
             <div className={`flex-1 min-h-0 w-full flex flex-col overflow-y-auto`}>
-              <Counter className={`max-w-md mx-auto min-h-full px-2 sm:px-4 ${zenMode ? 'pt-0 pb-0' : 'pb-[calc(5.5rem+env(safe-area-inset-bottom,0px))]'}`} />
+              <Counter className={`max-w-md sm:max-w-xl mx-auto min-h-full px-2 sm:px-4 ${zenMode ? 'pt-0 pb-0' : 'pb-[calc(5.5rem+env(safe-area-inset-bottom,0px))]'}`} />
             </div>
 
             {/* Bottom navigation */}

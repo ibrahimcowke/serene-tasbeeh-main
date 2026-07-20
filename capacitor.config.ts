@@ -13,7 +13,8 @@ const config: CapacitorConfig = {
     },
     LocalNotifications: {
       smallIcon: "ic_stat_tasbeehly",
-      iconColor: "#cca633"
+      iconColor: "#cca633",
+      presentationOptions: ["badge", "sound", "banner", "list"]
     }
   }
 };

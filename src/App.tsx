@@ -28,6 +28,7 @@ import { toast } from "sonner";
 
 const queryClient = new QueryClient();
 
+import { Capacitor } from '@capacitor/core';
 import { StatusBar, Style } from '@capacitor/status-bar';
 import { Keyboard } from '@capacitor/keyboard';
 import { App as CapApp } from '@capacitor/app';
@@ -50,6 +51,9 @@ const useForegroundReminders = () => {
   const lastPlayedRef = useRef<string>('');
 
   useEffect(() => {
+    // Only run this polling check on web. On native platforms (Android/iOS),
+    // local notifications are natively presented with sound and banner at the exact scheduled time.
+    if (Capacitor.isNativePlatform()) return;
     if (!reminderEnabled) return;
 
     const checkReminders = () => {
