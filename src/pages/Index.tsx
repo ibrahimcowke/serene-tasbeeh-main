@@ -11,15 +11,13 @@ import { LazyDayBanner } from '@/components/LazyDayBanner';
 // Lazy-load overlay components — they are never shown on first paint
 const ScreenOffMode = lazy(() => import('@/components/ScreenOffMode').then(m => ({ default: m.ScreenOffMode })));
 const WhatsNew = lazy(() => import('@/components/WhatsNew').then(m => ({ default: m.WhatsNew })));
-const BreathingGuide = lazy(() => import('@/components/BreathingGuide').then(m => ({ default: m.BreathingGuide })));
 
 const Index = () => {
-  const { zenMode, setZenMode, screenOffMode, breathingGuideEnabled, lastSeenVersion } = useTasbeehStore(
+  const { zenMode, setZenMode, screenOffMode, lastSeenVersion } = useTasbeehStore(
     useShallow(state => ({
       zenMode: state.zenMode,
       setZenMode: state.setZenMode,
       screenOffMode: state.screenOffMode,
-      breathingGuideEnabled: state.breathingGuideEnabled,
       lastSeenVersion: state.lastSeenVersion,
     }))
   );
@@ -58,11 +56,7 @@ const Index = () => {
                 <ScreenOffMode />
               </Suspense>
             )}
-            {breathingGuideEnabled && (
-              <Suspense fallback={null}>
-                <BreathingGuide />
-              </Suspense>
-            )}
+
             <Suspense fallback={null}>
               <WhatsNew />
             </Suspense>

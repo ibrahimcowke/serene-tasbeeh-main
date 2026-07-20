@@ -34,6 +34,7 @@ import { useTranslation } from "@/lib/i18n";
 import { AnimatePresence } from "framer-motion";
 import { useState } from "react";
 import { BedtimeModeView } from "./BedtimeModeView";
+import { JourneyMapView } from "./JourneyMapView";
 
 export function AppSidebar() {
     const startTasbih100 = useTasbeehStore((s) => s.startTasbih100);
@@ -311,6 +312,19 @@ export function AppSidebar() {
                                         </button>
                                     </SidebarMenuButton>
                                 </ProgressView>
+                            </SidebarMenuItem>
+
+                            <SidebarMenuItem>
+                                <JourneyMapView>
+                                    <SidebarMenuButton asChild tooltip="Spiritual Journey" size="lg">
+                                        <button className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-left transition-all"
+                                            style={{ color: "hsl(var(--sidebar-foreground) / 0.85)" }}
+                                        >
+                                            <Compass className="w-4 h-4 text-primary/70 shrink-0" />
+                                            <span className="text-sm font-light tracking-wide">Spiritual Journey</span>
+                                        </button>
+                                    </SidebarMenuButton>
+                                </JourneyMapView>
                             </SidebarMenuItem>
 
                             <SidebarMenuItem>

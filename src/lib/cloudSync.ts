@@ -153,8 +153,6 @@ export const syncFromCloud = async (uid: string) => {
       if (data.dhikrTextPosition !== undefined) newState.dhikrTextPosition = data.dhikrTextPosition;
       if (data.hadithSlidePosition !== undefined) newState.hadithSlidePosition = data.hadithSlidePosition;
       if (data.hadithSlideDuration !== undefined) newState.hadithSlideDuration = data.hadithSlideDuration;
-      if (data.breathingGuideEnabled !== undefined) newState.breathingGuideEnabled = data.breathingGuideEnabled;
-      if (data.breathingGuideSpeed !== undefined) newState.breathingGuideSpeed = data.breathingGuideSpeed;
       if (data.ambientSoundType !== undefined) newState.ambientSoundType = data.ambientSoundType;
       if (data.ambientSoundVolume !== undefined) newState.ambientSoundVolume = data.ambientSoundVolume;
       if (data.voiceAnnouncementsEnabled !== undefined)
@@ -231,8 +229,6 @@ const syncToCloud = async (uid: string, state: TasbeehState) => {
       dhikrTextPosition:      state.dhikrTextPosition,
       hadithSlidePosition:    state.hadithSlidePosition,
       hadithSlideDuration:    state.hadithSlideDuration,
-      breathingGuideEnabled:  state.breathingGuideEnabled,
-      breathingGuideSpeed:    state.breathingGuideSpeed,
       ambientSoundType:       state.ambientSoundType,
       ambientSoundVolume:     state.ambientSoundVolume,
       voiceAnnouncementsEnabled: state.voiceAnnouncementsEnabled,

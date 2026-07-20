@@ -184,10 +184,7 @@ const translations: Record<string, Partial<Record<Lang, string>>> = {
     en: 'Sound Effects', ar: 'المؤثرات الصوتية', hi: 'ध्वनि प्रभाव', ur: 'आواز के اثرات', tr: 'Ses Efektleri', ms: 'Kesan Bunyi', id: 'Efek Suara', fr: 'Effets sonores', so: 'Codadka'
   },
   'settings.sound_type': {
-    en: 'Sound Type', ar: 'نوع الصوت', hi: 'ध्वनि प्रकार', ur: 'آواز کی قسم', tr: 'Ses Türü', ms: 'Jenis Bunyi', id: 'Jenis Suara', fr: 'Type de son', so: 'Nooca Codka'
-  },
-  'settings.breathing': {
-    en: 'Breathing Guide', ar: 'دليل التنفس', hi: 'श्वास मार्गदर्शिका', ur: 'سانس لینے की रहनुमाई', tr: 'Nefes Kılavuzu', ms: 'Panduan Pernafasan', id: 'Panduan Pernapasan', fr: 'Guide respiratoire', so: 'Hagaha Neefsashada'
+    en: 'Sound Type', ar: 'نوع الصوت', hi: 'ध्वनि प्रकार', ur: 'آواز की قسم', tr: 'Ses Türü', ms: 'Jenis Bunyi', id: 'Jenis Suara', fr: 'Type de son', so: 'Nooca Codka'
   },
   'settings.shake': {
     en: 'Shake to Reset', ar: 'هز للإعادة', hi: 'हिलाकर रीसेट', ur: 'ہلائیں تو ری سیٹ', tr: 'Sallamak için Sıfırla', ms: 'Goncang untuk Tetap Semula', id: 'Kocok untuk Reset', fr: 'Secouer pour réinitialiser', so: 'Garaaci si dib loo dejin'

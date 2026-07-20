@@ -86,6 +86,8 @@ export interface Reminder {
   enabled: boolean;
   days: number[]; // 0-6 for Sunday-Saturday
   soundType?: 'default' | 'subhanallah' | 'alhamdulillah' | 'astaghfirullah' | 'salawat';
+  relativeToPrayer?: 'fajr' | 'dhuhr' | 'asr' | 'maghrib' | 'isha';
+  offsetMinutes?: number;
 }
 
 export interface RoutineStep {
@@ -142,8 +144,6 @@ export interface TasbeehState {
   lastSeenVersion: string;
   hadithSlideDuration: number;
   hadithSlidePosition: 'top' | 'bottom' | 'none';
-  breathingGuideEnabled: boolean;
-  breathingGuideSpeed: number;
   streakDays: number;
   lastActiveDate: string | null;
   longestStreak: number;
@@ -220,6 +220,14 @@ export interface TasbeehState {
   sessionNotes: Record<string, string>;
   setSessionNote: (sessionId: string, note: string) => void;
 
+  journeyStage: number;
+  journeyProgress: Record<string, number>;
+  journeyPrestige: number;
+  incrementJourneyProgress: (amount: number) => void;
+  advanceJourneyStage: () => void;
+  prestigeJourney: () => void;
+  resetJourney: () => void;
+
   startSalatulTasbeeh: () => void;
 
   niyyahPresets: string[];
@@ -257,8 +265,6 @@ export interface TasbeehState {
   setDhikrFontSize: (scale: number) => void;
   setDhikrTextPosition: (pos: 'top' | 'middle' | 'bottom' | 'none') => void;
   setZenMode: (enabled: boolean) => void;
-  setBreathingGuide: (enabled: boolean) => void;
-  setBreathingGuideSpeed: (speed: number) => void;
   toggleHaptic: () => void;
   toggleSound: () => void;
   setVibrationIntensity: (intensity: number) => void;
@@ -375,7 +381,7 @@ const ACHIEVEMENT_CHECK_EVERY = 10;
 export const useTasbeehStore = create<TasbeehState>()(
   persist(
     (set, get) => ({
-      count: 0, currentCount: 0, targetCount: 33, totalAllTime: 0, dailyRecords: [], dailyGoal: 100, dhikrs: defaultDhikrs, customDhikrs: [], currentDhikr: defaultDhikrs[0], favoriteDhikrIds: [], theme: 'theme-nord-midnight', themeSettings: initialThemeSettings, language: 'en', showTransliteration: true, counterShape: 'bead-ring', countFontSize: 1, dhikrFontSize: 1, dhikrTextPosition: 'middle', verticalOffset: 0, dhikrVerticalOffset: 0, counterVerticalOffset: 0, counterScale: 1, zenMode: false, autoThemeSwitch: false, shakeToReset: false, syncPrayerTimes: null, wakeLockEnabled: true, volumeButtonCounting: false, lastSeenVersion: '0.0.0', hadithSlideDuration: 8, hadithSlidePosition: 'bottom', breathingGuideEnabled: false, breathingGuideSpeed: 4, streakDays: 0, lastActiveDate: null, longestStreak: 0, unlockedAchievements: [], screenOffMode: false, sessionStartTime: null, sessionMode: getDefaultSessionMode(), notificationPermission: 'default', reminderEnabled: false, reminderTime: '18:00', reminders: [
+      count: 0, currentCount: 0, targetCount: 33, totalAllTime: 0, dailyRecords: [], dailyGoal: 100, dhikrs: defaultDhikrs, customDhikrs: [], currentDhikr: defaultDhikrs[0], favoriteDhikrIds: [], theme: 'theme-nord-midnight', themeSettings: initialThemeSettings, language: 'en', showTransliteration: true, counterShape: 'bead-ring', countFontSize: 1, dhikrFontSize: 1, dhikrTextPosition: 'middle', verticalOffset: 0, dhikrVerticalOffset: 0, counterVerticalOffset: 0, counterScale: 1, zenMode: false, autoThemeSwitch: false, shakeToReset: false, syncPrayerTimes: null, wakeLockEnabled: true, volumeButtonCounting: false, lastSeenVersion: '0.0.0', hadithSlideDuration: 8, hadithSlidePosition: 'bottom', streakDays: 0, lastActiveDate: null, longestStreak: 0, unlockedAchievements: [], screenOffMode: false, sessionStartTime: null, sessionMode: getDefaultSessionMode(), notificationPermission: 'default', reminderEnabled: false, reminderTime: '18:00', reminders: [
         { id: '1', time: '05:00', label: 'Fajr Dhikr', enabled: true, days: [0, 1, 2, 3, 4, 5, 6] },
         { id: '2', time: '12:30', label: 'Dhuhr Dhikr', enabled: true, days: [0, 1, 2, 3, 4, 5, 6] },
         { id: '3', time: '15:45', label: 'Asr Dhikr', enabled: true, days: [0, 1, 2, 3, 4, 5, 6] },
@@ -414,6 +420,42 @@ export const useTasbeehStore = create<TasbeehState>()(
       autoThemeDawnDusk: false,
       khatmLog: [],
       sessionNotes: {},
+
+      journeyStage: 1,
+      journeyProgress: {},
+      journeyPrestige: 0,
+      incrementJourneyProgress: (amount: number) => {
+        set((s) => {
+          const activeDhikrs = ['astaghfirullah', 'alhamdulillah', 'subahanallah', 'allahuma-sali'];
+          const targetDhikr = activeDhikrs[s.journeyStage - 1] || 'subahanallah';
+          const currentProgress = s.journeyProgress[targetDhikr] || 0;
+          return {
+            journeyProgress: {
+              ...s.journeyProgress,
+              [targetDhikr]: currentProgress + amount
+            }
+          };
+        });
+      },
+      advanceJourneyStage: () => {
+        set((s) => ({
+          journeyStage: Math.min(s.journeyStage + 1, 4)
+        }));
+      },
+      prestigeJourney: () => {
+        set((s) => ({
+          journeyPrestige: s.journeyPrestige + 1,
+          journeyStage: 1,
+          journeyProgress: {}
+        }));
+      },
+      resetJourney: () => {
+        set({
+          journeyStage: 1,
+          journeyProgress: {},
+          journeyPrestige: 0
+        });
+      },
 
       saveActiveSession: () => {
         const state = get();
@@ -489,6 +531,13 @@ export const useTasbeehStore = create<TasbeehState>()(
         const now = Date.now();
         const today = getTodayDate();
         const currentSettings = state.themeSettings[state.theme] || defaultThemeSettings;
+
+        // Check and increment journey progress
+        const activeDhikrs = ['astaghfirullah', 'alhamdulillah', 'subahanallah', 'allahuma-sali'];
+        const targetDhikr = activeDhikrs[state.journeyStage - 1] || 'subahanallah';
+        if (state.currentDhikr.id === targetDhikr) {
+          get().incrementJourneyProgress(1);
+        }
 
         const newCount = state.currentCount + 1;
         const newTotal = state.totalAllTime + 1;
@@ -712,8 +761,6 @@ export const useTasbeehStore = create<TasbeehState>()(
       setDhikrFontSize: (scale) => set({ dhikrFontSize: scale }),
       setDhikrTextPosition: (pos) => set({ dhikrTextPosition: pos }),
       setZenMode: (enabled) => set({ zenMode: enabled }),
-      setBreathingGuide: (enabled) => set({ breathingGuideEnabled: enabled }),
-      setBreathingGuideSpeed: (speed) => set({ breathingGuideSpeed: speed }),
       toggleHaptic: () => set((state) => ({ themeSettings: { ...state.themeSettings, [state.theme]: { ...state.themeSettings[state.theme], hapticEnabled: !state.themeSettings[state.theme].hapticEnabled } } })),
       toggleSound: () => set((state) => ({ themeSettings: { ...state.themeSettings, [state.theme]: { ...state.themeSettings[state.theme], soundEnabled: !state.themeSettings[state.theme].soundEnabled } } })),
       setVibrationIntensity: (intensity) => set((state) => ({ themeSettings: { ...state.themeSettings, [state.theme]: { ...state.themeSettings[state.theme], vibrationIntensity: intensity } } })),

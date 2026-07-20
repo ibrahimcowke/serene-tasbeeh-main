@@ -116,12 +116,13 @@ export const NotificationManager = {
 
           const randomMessage = ENGAGING_MESSAGES[Math.floor(Math.random() * ENGAGING_MESSAGES.length)];
 
-          const soundType = reminder.soundType || 'default';
-          const isCustomSound = soundType !== 'default';
+          let soundType = reminder.soundType || 'default';
+          if (soundType === 'default') {
+            const voiceOptions = ['subhanallah', 'alhamdulillah', 'astaghfirullah', 'salawat'];
+            soundType = voiceOptions[Math.floor(Math.random() * voiceOptions.length)] as any;
+          }
           const isAndroid = typeof window !== 'undefined' && (window as any).Capacitor?.getPlatform() === 'android';
-          const soundFile = isCustomSound 
-            ? (isAndroid ? soundType : `${soundType}.mp3`) 
-            : 'default';
+          const soundFile = isAndroid ? soundType : `${soundType}.mp3`;
 
           scheduleList.push({
             id: notificationId,
@@ -136,7 +137,7 @@ export const NotificationManager = {
               repeats: true,
               allowWhileIdle: true // Ensures notifications fire in Doze mode/background
             },
-            channelId: isCustomSound ? `channel_${soundType}` : undefined,
+            channelId: `channel_${soundType}`,
             sound: soundFile,
             actionTypeId: '',
             extra: null

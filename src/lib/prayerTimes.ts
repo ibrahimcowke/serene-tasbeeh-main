@@ -134,6 +134,27 @@ export async function initPrayerTimeReminders(force = false): Promise<boolean> {
               }
             }
 
+            // Process dynamic prayer reminders
+            for (let i = 0; i < reminders.length; i++) {
+              const r = reminders[i];
+              if (r.relativeToPrayer) {
+                const prayerKey = r.relativeToPrayer.charAt(0).toUpperCase() + r.relativeToPrayer.slice(1);
+                const prayerTimeStr = timings[prayerKey];
+                if (prayerTimeStr) {
+                  const cleanTimeStr = prayerTimeStr.substring(0, 5);
+                  const [h, m] = cleanTimeStr.split(':').map(Number);
+                  const date = new Date();
+                  date.setHours(h, m, 0, 0);
+                  date.setMinutes(date.getMinutes() + (r.offsetMinutes || 0));
+                  const targetTimeStr = `${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}`;
+                  if (r.time !== targetTimeStr) {
+                    reminders[i] = { ...r, time: targetTimeStr };
+                    changed = true;
+                  }
+                }
+              }
+            }
+
             if (changed) {
               useTasbeehStore.setState({ reminders });
               // Sync updated reminders with Capacitor Notification engine if enabled

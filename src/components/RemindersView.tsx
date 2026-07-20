@@ -11,7 +11,7 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger, SheetDescri
 import { useTasbeehStore } from '@/store/tasbeehStore';
 import { SoundManager } from '@/lib/sound';
 import { NotificationManager } from '@/lib/notifications';
-import { initPrayerTimeReminders } from '@/lib/prayerTimes';
+import { initPrayerTimeReminders, getPrayerTimesForToday } from '@/lib/prayerTimes';
 import { getSmartSuggestions } from '@/lib/smartReminders';
 import { SmartSuggestionCards } from './SmartSuggestionCards';
 import { useTranslation } from '@/lib/i18n';
@@ -23,6 +23,8 @@ interface Reminder {
     enabled: boolean;
     days: number[];
     soundType?: 'default' | 'subhanallah' | 'alhamdulillah' | 'astaghfirullah' | 'salawat';
+    relativeToPrayer?: 'fajr' | 'dhuhr' | 'asr' | 'maghrib' | 'isha';
+    offsetMinutes?: number;
 }
 
 interface RemindersViewProps {
@@ -30,7 +32,7 @@ interface RemindersViewProps {
 }
 
 const SOUND_OPTIONS = [
-    { value: 'default', label: '🔇 Default Sound', desc: 'System alert' },
+    { value: 'default', label: '🔀 Auto Random Voice', desc: 'Random voice reminder' },
     { value: 'subhanallah', label: '🗣️ SubhanAllah', desc: 'Male voice (peaceful)' },
     { value: 'alhamdulillah', label: '🗣️ Alhamdulillah', desc: 'Female voice (gentle)' },
     { value: 'astaghfirullah', label: '🗣️ Astaghfirullah', desc: 'Male voice (quiet reminder)' },
@@ -92,7 +94,9 @@ function AddReminderButton() {
         time: '08:00', 
         label: '', 
         days: [0, 1, 2, 3, 4, 5, 6], 
-        soundType: 'default' as 'default' | 'subhanallah' | 'alhamdulillah' | 'astaghfirullah' | 'salawat'
+        soundType: 'default' as 'default' | 'subhanallah' | 'alhamdulillah' | 'astaghfirullah' | 'salawat',
+        relativeToPrayer: undefined as 'fajr' | 'dhuhr' | 'asr' | 'maghrib' | 'isha' | undefined,
+        offsetMinutes: 0
     });
     const DAY_NAMES = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'];
 
@@ -127,16 +131,52 @@ function AddReminderButton() {
         setForm((prev) => ({ ...prev, time: adjustTime(prev.time, minutes) }));
     };
 
-    const handleAdd = () => {
+    const handleAdd = async () => {
         if (!form.label.trim()) { toast.error('Please enter a reminder label'); return; }
         if (form.days.length === 0) { toast.error('Select at least one day'); return; }
-        addReminder({ time: form.time, label: form.label.trim(), enabled: true, days: form.days, soundType: form.soundType });
+        
+        let initialTime = form.time;
+        if (form.relativeToPrayer) {
+            try {
+                const times = await getPrayerTimesForToday();
+                const found = times.find(p => p.name === form.relativeToPrayer);
+                if (found) {
+                    const [h, m] = found.time.split(':').map(Number);
+                    const date = new Date();
+                    date.setHours(h, m, 0, 0);
+                    date.setMinutes(date.getMinutes() + form.offsetMinutes);
+                    initialTime = `${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}`;
+                }
+            } catch (e) {
+                console.warn(e);
+            }
+        }
+
+        const newReminderData = { 
+            time: initialTime, 
+            label: form.label.trim(), 
+            enabled: true, 
+            days: form.days, 
+            soundType: form.soundType,
+            relativeToPrayer: form.relativeToPrayer,
+            offsetMinutes: form.offsetMinutes
+        };
+
+        addReminder(newReminderData);
+
         // Sync native notifications
         NotificationManager.syncReminders(
-            [...reminders, { id: 'new', ...form, enabled: true }],
+            [...reminders, { id: 'new', ...newReminderData }],
             reminderEnabled
         );
-        setForm({ time: '08:00', label: '', days: [0, 1, 2, 3, 4, 5, 6], soundType: 'default' });
+        setForm({ 
+            time: '08:00', 
+            label: '', 
+            days: [0, 1, 2, 3, 4, 5, 6], 
+            soundType: 'default',
+            relativeToPrayer: undefined,
+            offsetMinutes: 0
+        });
         setOpen(false);
         toast.success('Reminder added!');
     };
@@ -189,49 +229,102 @@ function AddReminderButton() {
                                 </button>
                             </div>
 
-                            {/* Time picker */}
-                            <div className="space-y-2">
-                                <div className="flex items-center gap-3">
-                                    <Clock size={16} className="text-primary shrink-0" />
-                                    <input
-                                        type="time"
-                                        value={form.time}
-                                        onChange={(e) => setForm({ ...form, time: e.target.value })}
-                                        className="flex-1 rounded-xl px-3 py-2 text-2xl font-bold tabular-nums bg-transparent border border-border/40 text-foreground focus:outline-none focus:border-primary/50"
-                                    />
+                            {/* Anchor switch */}
+                            <div className="flex items-center justify-between p-3 rounded-xl border border-border/20 bg-muted/5">
+                                <div className="space-y-0.5 text-left">
+                                    <p className="text-xs font-semibold text-foreground">Anchor to Prayer Time</p>
+                                    <p className="text-[10px] text-muted-foreground">Adjusts dynamically based on local prayer times</p>
                                 </div>
-                                {/* Quick adjust buttons */}
-                                <div className="grid grid-cols-4 gap-1.5">
-                                    <button
-                                        type="button"
-                                        onClick={() => handleAdjustTime(-60)}
-                                        className="py-1 px-2 text-[10px] font-semibold rounded-lg border border-border/30 bg-muted/20 text-muted-foreground hover:bg-muted/40 transition-colors"
-                                    >
-                                        -1h
-                                    </button>
-                                    <button
-                                        type="button"
-                                        onClick={() => handleAdjustTime(-15)}
-                                        className="py-1 px-2 text-[10px] font-semibold rounded-lg border border-border/30 bg-muted/20 text-muted-foreground hover:bg-muted/40 transition-colors"
-                                    >
-                                        -15m
-                                    </button>
-                                    <button
-                                        type="button"
-                                        onClick={() => handleAdjustTime(15)}
-                                        className="py-1 px-2 text-[10px] font-semibold rounded-lg border border-border/30 bg-muted/20 text-muted-foreground hover:bg-muted/40 transition-colors"
-                                    >
-                                        +15m
-                                    </button>
-                                    <button
-                                        type="button"
-                                        onClick={() => handleAdjustTime(60)}
-                                        className="py-1 px-2 text-[10px] font-semibold rounded-lg border border-border/30 bg-muted/20 text-muted-foreground hover:bg-muted/40 transition-colors"
-                                    >
-                                        +1h
-                                    </button>
-                                </div>
+                                <Switch 
+                                    checked={!!form.relativeToPrayer} 
+                                    onCheckedChange={(checked) => setForm(f => ({ 
+                                        ...f, 
+                                        relativeToPrayer: checked ? 'maghrib' : undefined 
+                                    }))} 
+                                />
                             </div>
+
+                            {form.relativeToPrayer ? (
+                                <div className="space-y-3 p-3 rounded-xl border border-primary/20 bg-primary/5">
+                                    <div className="flex flex-col gap-1.5 text-left">
+                                        <label className="text-[10px] text-muted-foreground font-semibold uppercase">Select Prayer Anchor</label>
+                                        <div className="grid grid-cols-5 gap-1">
+                                            {(['fajr', 'dhuhr', 'asr', 'maghrib', 'isha'] as const).map(p => (
+                                                <button
+                                                    key={p}
+                                                    type="button"
+                                                    onClick={() => setForm(f => ({ ...f, relativeToPrayer: p }))}
+                                                    className={`py-1.5 rounded-lg text-[10px] font-semibold uppercase border transition-colors ${
+                                                        form.relativeToPrayer === p 
+                                                            ? 'border-primary bg-primary text-primary-foreground' 
+                                                            : 'border-border/30 bg-card/25 text-muted-foreground'
+                                                    }`}
+                                                >
+                                                    {p}
+                                                </button>
+                                            ))}
+                                        </div>
+                                    </div>
+                                    <div className="flex flex-col gap-1.5 text-left">
+                                        <label className="text-[10px] text-muted-foreground font-semibold uppercase">Offset (Minutes)</label>
+                                        <div className="flex items-center gap-3">
+                                            <input 
+                                                type="number" 
+                                                value={form.offsetMinutes} 
+                                                onChange={(e) => setForm(f => ({ ...f, offsetMinutes: Number(e.target.value) }))}
+                                                className="w-20 rounded-lg px-2.5 py-1.5 text-xs bg-transparent border border-border/40 text-foreground text-center focus:outline-none focus:border-primary/50"
+                                            />
+                                            <span className="text-[10px] text-muted-foreground">
+                                                {form.offsetMinutes < 0 ? `${Math.abs(form.offsetMinutes)} mins before` : `${form.offsetMinutes} mins after`} {form.relativeToPrayer}
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            ) : (
+                                /* Time picker */
+                                <div className="space-y-2">
+                                    <div className="flex items-center gap-3">
+                                        <Clock size={16} className="text-primary shrink-0" />
+                                        <input
+                                            type="time"
+                                            value={form.time}
+                                            onChange={(e) => setForm({ ...form, time: e.target.value })}
+                                            className="flex-1 rounded-xl px-3 py-2 text-2xl font-bold tabular-nums bg-transparent border border-border/40 text-foreground focus:outline-none focus:border-primary/50"
+                                        />
+                                    </div>
+                                    {/* Quick adjust buttons */}
+                                    <div className="grid grid-cols-4 gap-1.5">
+                                        <button
+                                            type="button"
+                                            onClick={() => handleAdjustTime(-60)}
+                                            className="py-1 px-2 text-[10px] font-semibold rounded-lg border border-border/30 bg-muted/20 text-muted-foreground hover:bg-muted/40 transition-colors"
+                                        >
+                                            -1h
+                                        </button>
+                                        <button
+                                            type="button"
+                                            onClick={() => handleAdjustTime(-15)}
+                                            className="py-1 px-2 text-[10px] font-semibold rounded-lg border border-border/30 bg-muted/20 text-muted-foreground hover:bg-muted/40 transition-colors"
+                                        >
+                                            -15m
+                                        </button>
+                                        <button
+                                            type="button"
+                                            onClick={() => handleAdjustTime(15)}
+                                            className="py-1 px-2 text-[10px] font-semibold rounded-lg border border-border/30 bg-muted/20 text-muted-foreground hover:bg-muted/40 transition-colors"
+                                        >
+                                            +15m
+                                        </button>
+                                        <button
+                                            type="button"
+                                            onClick={() => handleAdjustTime(60)}
+                                            className="py-1 px-2 text-[10px] font-semibold rounded-lg border border-border/30 bg-muted/20 text-muted-foreground hover:bg-muted/40 transition-colors"
+                                        >
+                                            +1h
+                                        </button>
+                                    </div>
+                                </div>
+                            )}
 
                             {/* Label */}
                             <div className="space-y-2">
@@ -331,18 +424,22 @@ function AddReminderButton() {
                                                 <p className="text-xs font-semibold text-foreground truncate">{opt.label}</p>
                                                 <p className="text-[9px] text-muted-foreground truncate">{opt.desc}</p>
                                             </div>
-                                            {opt.value !== 'default' && (
-                                                <button
-                                                    type="button"
-                                                    onClick={(e) => {
-                                                        e.stopPropagation();
+                                            <button
+                                                type="button"
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    if (opt.value === 'default') {
+                                                        const voiceOptions = ['subhanallah', 'alhamdulillah', 'astaghfirullah', 'salawat'];
+                                                        const randomVoice = voiceOptions[Math.floor(Math.random() * voiceOptions.length)];
+                                                        SoundManager.playVoiceReminder(randomVoice);
+                                                    } else {
                                                         SoundManager.playVoiceReminder(opt.value);
-                                                    }}
-                                                    className="p-1 rounded-full hover:bg-primary/20 text-primary transition-colors ml-1.5"
-                                                >
-                                                    <Play size={11} className="fill-primary text-primary" />
-                                                </button>
-                                            )}
+                                                    }
+                                                }}
+                                                className="p-1 rounded-full hover:bg-primary/20 text-primary transition-colors ml-1.5"
+                                            >
+                                                <Play size={11} className="fill-primary text-primary" />
+                                            </button>
                                         </div>
                                     ))}
                                 </div>
@@ -701,6 +798,8 @@ function ReminderCard({ reminder, index, onToggle, onDelete }: {
     const [editTime, setEditTime] = useState(reminder.time);
     const [editDays, setEditDays] = useState<number[]>(reminder.days);
     const [editSoundType, setEditSoundType] = useState(reminder.soundType || 'default');
+    const [editRelativeToPrayer, setEditRelativeToPrayer] = useState(reminder.relativeToPrayer);
+    const [editOffsetMinutes, setEditOffsetMinutes] = useState(reminder.offsetMinutes || 0);
     
     const storeUpdateReminder = useTasbeehStore((s) => s.updateReminder);
 
@@ -740,15 +839,34 @@ function ReminderCard({ reminder, index, onToggle, onDelete }: {
         return null;
     }, [reminder]);
 
-    const saveEdit = () => {
+    const saveEdit = async () => {
         if (!editLabel.trim()) { toast.error('Label cannot be empty'); return; }
         if (editDays.length === 0) { toast.error('Select at least one day'); return; }
         
+        let resolvedTime = editTime;
+        if (editRelativeToPrayer) {
+            try {
+                const times = await getPrayerTimesForToday();
+                const found = times.find(p => p.name === editRelativeToPrayer);
+                if (found) {
+                    const [h, m] = found.time.split(':').map(Number);
+                    const date = new Date();
+                    date.setHours(h, m, 0, 0);
+                    date.setMinutes(date.getMinutes() + editOffsetMinutes);
+                    resolvedTime = `${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}`;
+                }
+            } catch (e) {
+                console.warn(e);
+            }
+        }
+
         storeUpdateReminder(reminder.id, {
-            time: editTime,
+            time: resolvedTime,
             label: editLabel.trim(),
             days: editDays,
-            soundType: editSoundType
+            soundType: editSoundType,
+            relativeToPrayer: editRelativeToPrayer,
+            offsetMinutes: editOffsetMinutes
         });
         setEditing(false);
         toast.success('Reminder updated');
@@ -789,46 +907,97 @@ function ReminderCard({ reminder, index, onToggle, onDelete }: {
                         animate={{ opacity: 1 }}
                         className="space-y-3"
                     >
-                        <div className="space-y-1.5">
-                            <input
-                                type="time"
-                                value={editTime}
-                                onChange={(e) => setEditTime(e.target.value)}
-                                className="w-full rounded-xl px-3 py-2 text-2xl font-bold tabular-nums bg-transparent border border-border/40 text-foreground focus:outline-none focus:border-primary/50"
-                                autoFocus
-                            />
-                            {/* Quick adjust buttons */}
-                            <div className="grid grid-cols-4 gap-1.5">
-                                <button
-                                    type="button"
-                                    onClick={() => handleAdjustTime(-60)}
-                                    className="py-1 px-2 text-[10px] font-semibold rounded-lg border border-border/30 bg-muted/20 text-muted-foreground hover:bg-muted/40 transition-colors"
-                                >
-                                    -1h
-                                </button>
-                                <button
-                                    type="button"
-                                    onClick={() => handleAdjustTime(-15)}
-                                    className="py-1 px-2 text-[10px] font-semibold rounded-lg border border-border/30 bg-muted/20 text-muted-foreground hover:bg-muted/40 transition-colors"
-                                >
-                                    -15m
-                                </button>
-                                <button
-                                    type="button"
-                                    onClick={() => handleAdjustTime(15)}
-                                    className="py-1 px-2 text-[10px] font-semibold rounded-lg border border-border/30 bg-muted/20 text-muted-foreground hover:bg-muted/40 transition-colors"
-                                >
-                                    +15m
-                                </button>
-                                <button
-                                    type="button"
-                                    onClick={() => handleAdjustTime(60)}
-                                    className="py-1 px-2 text-[10px] font-semibold rounded-lg border border-border/30 bg-muted/20 text-muted-foreground hover:bg-muted/40 transition-colors"
-                                >
-                                    +1h
-                                </button>
+                        {/* Anchor Switch for Edit Mode */}
+                        <div className="flex items-center justify-between p-2.5 rounded-xl border border-border/20 bg-muted/5">
+                            <div className="space-y-0.5 text-left">
+                                <p className="text-[10px] font-semibold text-foreground">Anchor to Prayer Time</p>
+                                <p className="text-[8px] text-muted-foreground">Adjusts dynamically as prayer times change</p>
                             </div>
+                            <Switch 
+                                checked={!!editRelativeToPrayer} 
+                                onCheckedChange={(checked) => setEditRelativeToPrayer(checked ? 'maghrib' : undefined)} 
+                            />
                         </div>
+
+                        {editRelativeToPrayer ? (
+                            <div className="space-y-2 p-2.5 rounded-xl border border-primary/20 bg-primary/5">
+                                <div className="flex flex-col gap-1.5 text-left">
+                                    <label className="text-[8px] text-muted-foreground font-semibold uppercase">Prayer Anchor</label>
+                                    <div className="grid grid-cols-5 gap-1">
+                                        {(['fajr', 'dhuhr', 'asr', 'maghrib', 'isha'] as const).map(p => (
+                                            <button
+                                                key={p}
+                                                type="button"
+                                                onClick={() => setEditRelativeToPrayer(p)}
+                                                className={`py-1.5 rounded-lg text-[8px] font-semibold uppercase border transition-colors ${
+                                                    editRelativeToPrayer === p 
+                                                        ? 'border-primary bg-primary text-primary-foreground' 
+                                                        : 'border-border/30 bg-card/25 text-muted-foreground'
+                                                }`}
+                                            >
+                                                {p}
+                                            </button>
+                                        ))}
+                                    </div>
+                                </div>
+                                <div className="flex flex-col gap-1 text-left">
+                                    <label className="text-[8px] text-muted-foreground font-semibold uppercase">Offset (Minutes)</label>
+                                    <div className="flex items-center gap-2">
+                                        <input 
+                                            type="number" 
+                                            value={editOffsetMinutes} 
+                                            onChange={(e) => setEditOffsetMinutes(Number(e.target.value))}
+                                            className="w-16 rounded-lg px-2 py-1 text-[10px] bg-transparent border border-border/40 text-foreground text-center focus:outline-none focus:border-primary/50"
+                                        />
+                                        <span className="text-[8px] text-muted-foreground">
+                                            {editOffsetMinutes < 0 ? `${Math.abs(editOffsetMinutes)} mins before` : `${editOffsetMinutes} mins after`} {editRelativeToPrayer}
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        ) : (
+                            /* Time picker */
+                            <div className="space-y-1.5">
+                                <input
+                                    type="time"
+                                    value={editTime}
+                                    onChange={(e) => setEditTime(e.target.value)}
+                                    className="w-full rounded-xl px-3 py-2 text-2xl font-bold tabular-nums bg-transparent border border-border/40 text-foreground focus:outline-none focus:border-primary/50"
+                                    autoFocus
+                                />
+                                {/* Quick adjust buttons */}
+                                <div className="grid grid-cols-4 gap-1.5">
+                                    <button
+                                        type="button"
+                                        onClick={() => handleAdjustTime(-60)}
+                                        className="py-1 px-2 text-[10px] font-semibold rounded-lg border border-border/30 bg-muted/20 text-muted-foreground hover:bg-muted/40 transition-colors"
+                                    >
+                                        -1h
+                                    </button>
+                                    <button
+                                        type="button"
+                                        onClick={() => handleAdjustTime(-15)}
+                                        className="py-1 px-2 text-[10px] font-semibold rounded-lg border border-border/30 bg-muted/20 text-muted-foreground hover:bg-muted/40 transition-colors"
+                                    >
+                                        -15m
+                                    </button>
+                                    <button
+                                        type="button"
+                                        onClick={() => handleAdjustTime(15)}
+                                        className="py-1 px-2 text-[10px] font-semibold rounded-lg border border-border/30 bg-muted/20 text-muted-foreground hover:bg-muted/40 transition-colors"
+                                    >
+                                        +15m
+                                    </button>
+                                    <button
+                                        type="button"
+                                        onClick={() => handleAdjustTime(60)}
+                                        className="py-1 px-2 text-[10px] font-semibold rounded-lg border border-border/30 bg-muted/20 text-muted-foreground hover:bg-muted/40 transition-colors"
+                                    >
+                                        +1h
+                                    </button>
+                                </div>
+                            </div>
+                        )}
                         
                         <input
                             type="text"
@@ -888,18 +1057,22 @@ function ReminderCard({ reminder, index, onToggle, onDelete }: {
                                             <p className="text-[11px] font-semibold text-foreground truncate">{opt.label}</p>
                                             <p className="text-[9px] text-muted-foreground truncate">{opt.desc}</p>
                                         </div>
-                                        {opt.value !== 'default' && (
-                                            <button
-                                                type="button"
-                                                onClick={(e) => {
-                                                    e.stopPropagation();
+                                        <button
+                                            type="button"
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                if (opt.value === 'default') {
+                                                    const voiceOptions = ['subhanallah', 'alhamdulillah', 'astaghfirullah', 'salawat'];
+                                                    const randomVoice = voiceOptions[Math.floor(Math.random() * voiceOptions.length)];
+                                                    SoundManager.playVoiceReminder(randomVoice);
+                                                } else {
                                                     SoundManager.playVoiceReminder(opt.value);
-                                                }}
-                                                className="p-1 rounded-full hover:bg-primary/20 text-primary transition-colors ml-1"
-                                            >
-                                                <Play size={10} className="fill-primary text-primary" />
-                                            </button>
-                                        )}
+                                                }
+                                            }}
+                                            className="p-1 rounded-full hover:bg-primary/20 text-primary transition-colors ml-1"
+                                        >
+                                            <Play size={10} className="fill-primary text-primary" />
+                                        </button>
                                     </div>
                                 ))}
                             </div>
@@ -922,6 +1095,8 @@ function ReminderCard({ reminder, index, onToggle, onDelete }: {
                                     setEditTime(reminder.time);
                                     setEditDays(reminder.days);
                                     setEditSoundType(reminder.soundType || 'default');
+                                    setEditRelativeToPrayer(reminder.relativeToPrayer);
+                                    setEditOffsetMinutes(reminder.offsetMinutes || 0);
                                 }}
                                 className="flex-1 py-2 rounded-xl text-xs font-semibold border border-border/40 text-muted-foreground"
                             >
@@ -956,14 +1131,19 @@ function ReminderCard({ reminder, index, onToggle, onDelete }: {
                                 {reminder.label}
                             </p>
 
-                            {reminder.soundType && reminder.soundType !== 'default' && (
-                                <div className="mt-1">
-                                    <span className="text-[10px] bg-primary/10 border border-primary/20 text-primary font-medium px-2 py-0.5 rounded-full inline-flex items-center gap-1">
-                                        <Volume2 size={10} />
-                                        {reminder.soundType.charAt(0).toUpperCase() + reminder.soundType.slice(1)} Voice
+                            <div className="mt-1 flex flex-wrap gap-1.5">
+                                <span className="text-[10px] bg-primary/10 border border-primary/20 text-primary font-medium px-2 py-0.5 rounded-full inline-flex items-center gap-1">
+                                    <Volume2 size={10} />
+                                    {(!reminder.soundType || reminder.soundType === 'default')
+                                        ? 'Auto Random Voice'
+                                        : `${reminder.soundType.charAt(0).toUpperCase() + reminder.soundType.slice(1)} Voice`}
+                                </span>
+                                {reminder.relativeToPrayer && (
+                                    <span className="text-[10px] bg-amber-500/10 border border-amber-500/20 text-amber-600 dark:text-amber-400 font-medium px-2 py-0.5 rounded-full inline-flex items-center gap-1 uppercase">
+                                        ⏱️ {reminder.offsetMinutes !== 0 ? (reminder.offsetMinutes! < 0 ? `${Math.abs(reminder.offsetMinutes!)}m before` : `${reminder.offsetMinutes!}m after`) : ''} {reminder.relativeToPrayer}
                                     </span>
-                                </div>
-                            )}
+                                )}
+                            </div>
 
                             {/* Day pills */}
                             <div className="flex gap-1 mt-2 flex-wrap">
@@ -989,7 +1169,15 @@ function ReminderCard({ reminder, index, onToggle, onDelete }: {
                         {/* Action buttons */}
                         <div className="flex flex-col gap-1 shrink-0">
                             <button
-                                onClick={() => setEditing(true)}
+                                onClick={() => {
+                                    setEditing(true);
+                                    setEditLabel(reminder.label);
+                                    setEditTime(reminder.time);
+                                    setEditDays(reminder.days);
+                                    setEditSoundType(reminder.soundType || 'default');
+                                    setEditRelativeToPrayer(reminder.relativeToPrayer);
+                                    setEditOffsetMinutes(reminder.offsetMinutes || 0);
+                                }}
                                 className="p-1.5 rounded-lg text-muted-foreground hover:text-primary transition-colors"
                             >
                                 <Pencil size={13} />

@@ -68,13 +68,16 @@ const useForegroundReminders = () => {
 
       if (activeReminder) {
         lastPlayedRef.current = playKey;
-        if (activeReminder.soundType && activeReminder.soundType !== 'default') {
-          SoundManager.playVoiceReminder(activeReminder.soundType);
-          toast(`Time for Dhikr: ${activeReminder.label}`, {
-            description: "A gentle spoken reminder to remember Allah.",
-            duration: 5000,
-          });
+        let soundType = activeReminder.soundType || 'default';
+        if (soundType === 'default') {
+          const voiceOptions = ['subhanallah', 'alhamdulillah', 'astaghfirullah', 'salawat'];
+          soundType = voiceOptions[Math.floor(Math.random() * voiceOptions.length)] as any;
         }
+        SoundManager.playVoiceReminder(soundType);
+        toast(`Time for Dhikr: ${activeReminder.label}`, {
+          description: "A gentle spoken reminder to remember Allah.",
+          duration: 5000,
+        });
       }
     };
 

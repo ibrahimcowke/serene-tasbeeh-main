@@ -72,10 +72,6 @@ export function SettingsViewContent({ defaultTab, setOpen }: SettingsViewContent
     setCounterScale,
     zenMode,
     setZenMode,
-    breathingGuideEnabled,
-    setBreathingGuide,
-    breathingGuideSpeed,
-    setBreathingGuideSpeed,
     autoThemeSwitch,
     setAutoThemeSwitch,
     autoThemeDawnDusk,
@@ -132,10 +128,6 @@ export function SettingsViewContent({ defaultTab, setOpen }: SettingsViewContent
     setDhikrFontSize: state.setDhikrFontSize,
     zenMode: state.zenMode,
     setZenMode: state.setZenMode,
-    breathingGuideEnabled: state.breathingGuideEnabled,
-    setBreathingGuide: state.setBreathingGuide,
-    breathingGuideSpeed: state.breathingGuideSpeed,
-    setBreathingGuideSpeed: state.setBreathingGuideSpeed,
     autoThemeSwitch: state.autoThemeSwitch,
     setAutoThemeSwitch: state.setAutoThemeSwitch,
     autoThemeDawnDusk: state.autoThemeDawnDusk,
@@ -169,7 +161,6 @@ export function SettingsViewContent({ defaultTab, setOpen }: SettingsViewContent
   const [localDhikrVerticalOffset, setLocalDhikrVerticalOffset] = useState(dhikrVerticalOffset);
   const [localCounterVerticalOffset, setLocalCounterVerticalOffset] = useState(counterVerticalOffset);
   const [localCounterScale, setLocalCounterScale] = useState(counterScale);
-  const [localBreathingSpeed, setLocalBreathingSpeed] = useState(breathingGuideSpeed);
   const [localHadithSlideDuration, setLocalHadithSlideDuration] = useState(hadithSlideDuration);
 
   // Synchronize local states when store state changes externally
@@ -177,7 +168,6 @@ export function SettingsViewContent({ defaultTab, setOpen }: SettingsViewContent
   useEffect(() => { setLocalDhikrVerticalOffset(dhikrVerticalOffset); }, [dhikrVerticalOffset]);
   useEffect(() => { setLocalCounterVerticalOffset(counterVerticalOffset); }, [counterVerticalOffset]);
   useEffect(() => { setLocalCounterScale(counterScale); }, [counterScale]);
-  useEffect(() => { setLocalBreathingSpeed(breathingGuideSpeed); }, [breathingGuideSpeed]);
   useEffect(() => { setLocalHadithSlideDuration(hadithSlideDuration); }, [hadithSlideDuration]);
 
   const handleExport = () => {
