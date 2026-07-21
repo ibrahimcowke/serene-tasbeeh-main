@@ -157,19 +157,24 @@ export function BedtimeModeView({ onClose }: BedtimeModeViewProps) {
         )}
       </AnimatePresence>
 
-      {/* Close button */}
-      <button
-        onClick={e => { e.stopPropagation(); onClose(); }}
-        className="absolute right-4 sm:right-[calc(50%-176px)] p-2.5 rounded-full bg-white/10 text-white/70 hover:bg-white/20 hover:text-white border border-white/5 backdrop-blur-md transition-all z-20 flex items-center justify-center cursor-pointer"
+      {/* Header bar */}
+      <div
+        className="absolute left-0 right-0 z-20 flex justify-between items-center w-full max-w-sm mx-auto px-4"
         style={{ top: 'max(32px, calc(env(safe-area-inset-top) + 12px))' }}
       >
-        <X size={20} />
-      </button>
+        {/* Mode label */}
+        <div className="flex items-center gap-2">
+          <Moon className="w-4 h-4 text-blue-400/60" />
+          <span className="text-[10px] font-bold text-white/40 uppercase tracking-[0.2em]">Bedtime Mode</span>
+        </div>
 
-      {/* Mode label */}
-      <div className="absolute left-4 sm:left-[calc(50%-176px)] flex items-center gap-2 z-20" style={{ top: 'max(32px, calc(env(safe-area-inset-top) + 12px))' }}>
-        <Moon className="w-4 h-4 text-blue-400/60" />
-        <span className="text-[10px] font-bold text-white/40 uppercase tracking-[0.2em]">Bedtime Mode</span>
+        {/* Close button */}
+        <button
+          onClick={e => { e.stopPropagation(); onClose(); }}
+          className="p-2.5 rounded-full bg-white/10 text-white/70 hover:bg-white/20 hover:text-white border border-white/5 backdrop-blur-md transition-all flex items-center justify-center cursor-pointer"
+        >
+          <X size={20} />
+        </button>
       </div>
 
       {completed ? (
