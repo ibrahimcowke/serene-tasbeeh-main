@@ -141,7 +141,7 @@ export function BedtimeModeView({ onClose }: BedtimeModeViewProps) {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      className="fixed inset-0 z-50 flex flex-col items-center justify-center"
+      className="fixed inset-0 z-[100] flex flex-col items-center justify-center"
       style={{ background: '#050208' }}
       onClick={dimmed ? resetDimTimer : handleTap}
     >
