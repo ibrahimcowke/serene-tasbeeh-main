@@ -1,12 +1,14 @@
-import { forwardRef } from 'react';
+import { forwardRef, lazy, Suspense } from 'react';
 import { BookOpen, Target, Bell, Grid, Compass } from "lucide-react";
-import { DhikrSelector } from "./DhikrSelector";
-import { TargetSelector } from "./TargetSelector";
-import { RemindersView } from "./RemindersView";
-import { QiblaCompass } from "./QiblaCompass";
 import { useSidebar } from "@/components/ui/sidebar";
 import { motion } from "framer-motion";
 import { useTranslation } from "@/lib/i18n";
+
+const DhikrSelector = lazy(() => import("./DhikrSelector").then(m => ({ default: m.DhikrSelector })));
+const TargetSelector = lazy(() => import("./TargetSelector").then(m => ({ default: m.TargetSelector })));
+const RemindersView = lazy(() => import("./RemindersView").then(m => ({ default: m.RemindersView })));
+const QiblaCompass = lazy(() => import("./QiblaCompass").then(m => ({ default: m.QiblaCompass })));
+
 // forwardRef so Radix UI dialogs (DhikrSelector, TargetSelector, RemindersView) can attach their ref
 const NavItem = forwardRef<HTMLButtonElement, {
   label: string;
@@ -40,21 +42,29 @@ export function MobileNavBar() {
       }}
     >
       <div className="flex justify-around items-center h-14 px-2">
-        <DhikrSelector>
-          <NavItem label={t('nav.dhikr')} icon={BookOpen} />
-        </DhikrSelector>
+        <Suspense fallback={<NavItem label={t('nav.dhikr')} icon={BookOpen} />}>
+          <DhikrSelector>
+            <NavItem label={t('nav.dhikr')} icon={BookOpen} />
+          </DhikrSelector>
+        </Suspense>
 
-        <TargetSelector>
-          <NavItem label={t('nav.target')} icon={Target} />
-        </TargetSelector>
+        <Suspense fallback={<NavItem label={t('nav.target')} icon={Target} />}>
+          <TargetSelector>
+            <NavItem label={t('nav.target')} icon={Target} />
+          </TargetSelector>
+        </Suspense>
 
-        <RemindersView>
-          <NavItem label={t('nav.reminders')} icon={Bell} />
-        </RemindersView>
+        <Suspense fallback={<NavItem label={t('nav.reminders')} icon={Bell} />}>
+          <RemindersView>
+            <NavItem label={t('nav.reminders')} icon={Bell} />
+          </RemindersView>
+        </Suspense>
 
-        <QiblaCompass>
-          <NavItem label={t('nav.qibla')} icon={Compass} />
-        </QiblaCompass>
+        <Suspense fallback={<NavItem label={t('nav.qibla')} icon={Compass} />}>
+          <QiblaCompass>
+            <NavItem label={t('nav.qibla')} icon={Compass} />
+          </QiblaCompass>
+        </Suspense>
 
         <motion.button
           whileTap={{ scale: 0.95 }}

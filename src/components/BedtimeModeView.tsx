@@ -160,16 +160,16 @@ export function BedtimeModeView({ onClose }: BedtimeModeViewProps) {
       {/* Close button */}
       <button
         onClick={e => { e.stopPropagation(); onClose(); }}
-        className="absolute top-safe-top right-4 p-2 rounded-xl bg-white/5 text-white/30 hover:text-white/70 transition-colors z-20 cursor-pointer"
-        style={{ top: 'max(16px, env(safe-area-inset-top))' }}
+        className="absolute right-4 p-2.5 rounded-full bg-white/10 text-white/70 hover:bg-white/20 hover:text-white border border-white/5 backdrop-blur-md transition-all z-20 flex items-center justify-center cursor-pointer"
+        style={{ top: 'max(32px, calc(env(safe-area-inset-top) + 12px))' }}
       >
-        <X size={18} />
+        <X size={20} />
       </button>
 
       {/* Mode label */}
-      <div className="absolute top-safe-top left-4 flex items-center gap-2 z-20" style={{ top: 'max(16px, env(safe-area-inset-top))' }}>
+      <div className="absolute left-4 flex items-center gap-2 z-20" style={{ top: 'max(32px, calc(env(safe-area-inset-top) + 12px))' }}>
         <Moon className="w-4 h-4 text-blue-400/60" />
-        <span className="text-[10px] font-bold text-white/20 uppercase tracking-[0.2em]">Bedtime Mode</span>
+        <span className="text-[10px] font-bold text-white/40 uppercase tracking-[0.2em]">Bedtime Mode</span>
       </div>
 
       {completed ? (

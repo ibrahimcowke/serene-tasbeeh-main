@@ -55,6 +55,27 @@ const translations: Record<string, Partial<Record<Lang, string>>> = {
   'nav.ambient': {
     en: 'Ambient', ar: 'الأجواء', hi: 'परिवेश', ur: 'ماحول', tr: 'Ortam', ms: 'Suasana', id: 'Ambient', fr: 'Ambiance', so: 'Jawiga'
   },
+  'nav.planner': {
+    en: 'Daily Planner', ar: 'المخطط اليومي', hi: 'दैनिक योजनाकार', ur: 'روزانہ کا منصوبہ ساز', tr: 'Günlük Planlayıcı', ms: 'Perancang Harian', id: 'Perencana Harian', fr: 'Planificateur quotidien', so: 'Qorsheeyaha Maalinlaha'
+  },
+  'nav.prayer_times': {
+    en: 'Prayer Times', ar: 'أوقات الصلاة', hi: 'प्रार्थنا का समय', ur: 'نماز کے اوقات', tr: 'Namaz Vakitleri', ms: 'Waktu Solat', id: 'Waktu Shalat', fr: 'Horaires de prière', so: 'Wakhtiyada Salaadda'
+  },
+  'nav.salatul_tasbeeh': {
+    en: 'Salatul Tasbeeh', ar: 'صلاة التسبيح', hi: 'सलातुल तस्बीह', ur: 'صلوٰۃ التسبیح', tr: 'Tesbih Namazı', ms: 'Solat Tasbih', id: 'Shalat Tasbih', fr: 'Salatul Tasbeeh', so: 'Salatul Tasbiix'
+  },
+  'nav.bedtime_dhikr': {
+    en: 'Bedtime Dhikr', ar: 'أذكار النوم', hi: 'सोने के समय का ज़िक्र', ur: 'سونے کے وقت کا ذکر', tr: 'Uyku Zikirleri', ms: 'Zikir Tidur', id: 'Dzikir Sebelum Tidur', fr: 'Dhikr du soir', so: 'Xusuusta Hurdada'
+  },
+  'nav.ai_companion': {
+    en: 'AI Companion', ar: 'رفيق الذكاء الاصطناعي', hi: 'एआई साथी', ur: 'اے آئی ساتھی', tr: 'Yapay Zeka Arkadaşı', ms: 'Teman AI', id: 'Pendamping AI', fr: 'Compagnon IA', so: 'Wehelka AI'
+  },
+  'nav.spiritual_journey': {
+    en: 'Spiritual Journey', ar: 'الرحلة الروحية', hi: 'आध्यात्मिक यात्रा', ur: 'روحانی سفر', tr: 'Manevi Yolculuk', ms: 'Perjalanan Rohani', id: 'Perjalanan Spiritual', fr: 'Voyage spirituel', so: 'Socdaalka Ruuxiga'
+  },
+  'nav.weekly_report': {
+    en: 'Weekly Report', ar: 'التقرير الأسبوعي', hi: 'साप्ताहिक रिपोर्ट', ur: 'ہفتہ وار رپورٹ', tr: 'Haftalık Rapor', ms: 'Laporan Mingguan', id: 'Laporan Mingguan', fr: 'Rapport hebdomadaire', so: 'Warbixinta Toddobaadlaha'
+  },
 
   // --- Dua Library ---
   'duas.title': {

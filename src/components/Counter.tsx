@@ -1,4 +1,4 @@
-import { useEffect, memo, useState, useRef, useMemo } from 'react';
+import { useEffect, memo, useState, useRef, useMemo, lazy, Suspense } from 'react';
 import { useTasbeehStore, defaultThemeSettings } from '@/store/tasbeehStore';
 import { SoundManager } from '@/lib/sound';
 import { initShakeDetection, isShakeDetectionSupported } from '@/lib/shakeDetection';
@@ -8,12 +8,12 @@ import { DhikrHeader } from './counter/DhikrHeader';
 import { CounterDisplay } from './counter/CounterDisplay';
 import { CounterActions } from './counter/CounterActions';
 import { CounterFooter } from './counter/CounterFooter';
-import { WisdomModal } from './WisdomModal';
-import { NiyyahModal } from './NiyyahModal';
-import { MoodTracker } from './MoodTracker';
 import { useTranslation } from '@/lib/i18n';
 import { motion } from 'framer-motion';
-import { HadithSlider } from './HadithSlider';
+
+const WisdomModal = lazy(() => import('./WisdomModal').then(m => ({ default: m.WisdomModal })));
+const NiyyahModal = lazy(() => import('./NiyyahModal').then(m => ({ default: m.NiyyahModal })));
+const MoodTracker = lazy(() => import('./MoodTracker').then(m => ({ default: m.MoodTracker })));
 import { HandPlatter } from 'lucide-react';
 import { SessionTimer } from './SessionTimer';
 
@@ -207,13 +207,13 @@ export const Counter = memo(function Counter({ className = "" }: { className?: s
       </div>
 
       {/* Center: Bead ring + action buttons */}
-      <div className={`relative flex ${(isShortScreen && sessionModeType !== 'tasbih100' && sessionModeType !== 'tasbih1000') ? 'flex-row' : 'flex-col'} sm:flex-row items-center justify-center w-full z-20 flex-1 gap-2 sm:gap-6 px-2`}>
+      <div className="relative flex flex-col sm:flex-row items-center justify-center w-full z-20 flex-1 gap-2 sm:gap-6 px-2">
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-8">
           <CounterDisplay />
           <CounterActions />
         </div>
         {(isShortScreen && sessionModeType !== 'tasbih100' && sessionModeType !== 'tasbih1000') && (
-          <div className="flex flex-col justify-center items-center gap-5 pl-3 border-l border-primary/15 min-w-[70px]">
+          <div className="flex flex-row justify-around items-center gap-6 pt-3 border-t border-primary/15 w-full max-w-[280px]">
             {/* All time count */}
             <div className="flex flex-col items-center">
               <span
@@ -271,24 +271,36 @@ export const Counter = memo(function Counter({ className = "" }: { className?: s
       </div>
 
       {/* Wisdom Modal */}
-      <WisdomModal
-        open={showWisdom}
-        onClose={() => setShowWisdom(false)}
-      />
+      {showWisdom && (
+        <Suspense fallback={null}>
+          <WisdomModal
+            open={showWisdom}
+            onClose={() => setShowWisdom(false)}
+          />
+        </Suspense>
+      )}
 
       {/* Niyyah Modal */}
-      <NiyyahModal
-        open={showNiyyah}
-        onClose={() => setShowNiyyah(false)}
-      />
+      {showNiyyah && (
+        <Suspense fallback={null}>
+          <NiyyahModal
+            open={showNiyyah}
+            onClose={() => setShowNiyyah(false)}
+          />
+        </Suspense>
+      )}
 
       {/* Mood Tracker */}
-      <MoodTracker
-        open={showMood}
-        onClose={() => setShowMood(false)}
-        sessionId={lastSessionId}
-        countCompleted={lastCount}
-      />
+      {showMood && (
+        <Suspense fallback={null}>
+          <MoodTracker
+            open={showMood}
+            onClose={() => setShowMood(false)}
+            sessionId={lastSessionId}
+            countCompleted={lastCount}
+          />
+        </Suspense>
+      )}
 
     </div>
   );
