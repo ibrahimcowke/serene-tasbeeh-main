@@ -96,10 +96,12 @@ export const Counter = memo(function Counter({ className = "" }: { className?: s
   const roundsDone = Math.floor(currentCount / ROUND_SIZE);
 
   const [isShortScreen, setIsShortScreen] = useState(false);
+  const [isDesktop, setIsDesktop] = useState(false);
   useEffect(() => {
     const checkSize = () => {
       const heightThreshold = sessionModeType !== 'free' ? 820 : 760;
       setIsShortScreen(window.innerHeight < heightThreshold && window.innerWidth < 768);
+      setIsDesktop(window.innerWidth >= 1024);
     };
     checkSize();
     window.addEventListener('resize', checkSize);
@@ -267,7 +269,7 @@ export const Counter = memo(function Counter({ className = "" }: { className?: s
 
       {/* Bottom: Footer stats */}
       <div className="w-full flex flex-col items-center justify-center z-10 pb-3 sm:pb-2 animate-fade-in-up gap-3 mt-3 sm:mt-6">
-        <CounterFooter hideStats={isShortScreen} />
+        <CounterFooter hideStats={isShortScreen || isDesktop} />
       </div>
 
       {/* Wisdom Modal */}
