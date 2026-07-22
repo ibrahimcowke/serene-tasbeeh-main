@@ -71,7 +71,7 @@ const Index = () => {
 
   return (
     <>
-      <SidebarProvider defaultOpen={false}>
+      <SidebarProvider defaultOpen={true}>
         <AppSidebar onTriggerBedtime={() => setShowBedtime(true)} />
         <SidebarInset className="h-dvh overflow-hidden">
 
@@ -113,7 +113,7 @@ const Index = () => {
                 </div>
 
                 {/* Sidebar trigger */}
-                <SidebarTrigger className="h-9 w-9 rounded-full flex items-center justify-center text-primary/80 hover:text-primary transition-colors shrink-0"
+                <SidebarTrigger className="lg:hidden h-9 w-9 rounded-full flex items-center justify-center text-primary/80 hover:text-primary transition-colors shrink-0"
                   style={{
                     background: 'hsl(var(--foreground) / 0.05)',
                     border: '1px solid hsl(var(--primary) / 0.2)',

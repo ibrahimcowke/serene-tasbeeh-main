@@ -65,10 +65,10 @@ export function AppSidebar({ onTriggerBedtime }: { onTriggerBedtime?: () => void
     const startTasbih100 = useTasbeehStore((s) => s.startTasbih100);
     const theme = useTasbeehStore((s) => s.theme);
     const { t } = useTranslation();
-    const { setOpenMobile } = useSidebar();
+    const { setOpenMobile, isMobile } = useSidebar();
     return (
       <>
-        <Sidebar collapsible="icon">
+        <Sidebar collapsible={isMobile ? "icon" : "none"}>
             {/* Header with brand */}
             <SidebarHeader
                 className="flex items-center justify-center py-4 px-2"
