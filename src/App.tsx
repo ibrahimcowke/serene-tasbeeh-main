@@ -55,6 +55,7 @@ const useForegroundReminders = () => {
     // local notifications are natively presented with sound and banner at the exact scheduled time.
     if (Capacitor.isNativePlatform()) return;
     if (!reminderEnabled) return;
+    if (!Array.isArray(reminders)) return;
 
     const checkReminders = () => {
       const now = new Date();
@@ -67,7 +68,7 @@ const useForegroundReminders = () => {
       if (lastPlayedRef.current === playKey) return;
 
       const activeReminder = reminders.find(
-        (r) => r.enabled && r.time === currentTimeString && r.days.includes(currentDay)
+        (r) => r && r.enabled && r.time === currentTimeString && Array.isArray(r.days) && r.days.includes(currentDay)
       );
 
       if (activeReminder) {
@@ -78,7 +79,7 @@ const useForegroundReminders = () => {
           soundType = voiceOptions[Math.floor(Math.random() * voiceOptions.length)] as any;
         }
         SoundManager.playVoiceReminder(soundType);
-        toast(`Time for Dhikr: ${activeReminder.label}`, {
+        toast(`Time for Dhikr: ${activeReminder.label || 'Reminder'}`, {
           description: "A gentle spoken reminder to remember Allah.",
           duration: 5000,
         });
@@ -273,37 +274,55 @@ const App = () => {
     let unsubscribeAuth: (() => void) | null = null;
     
     const initAuth = async () => {
-      const { auth } = await import("./lib/firebase");
-      unsubscribeAuth = auth.onAuthStateChanged(async (user) => {
-        const store = useTasbeehStore.getState();
-        if (user) {
-          // Block unverified email/password accounts
-          const isEmailAuth = user.providerData.some(p => p.providerId === 'password');
-          if (isEmailAuth && !user.emailVerified) {
-            await auth.signOut();
-            setAuthState(false);
-            return;
+      // Set a fallback timer in case firebase import or auth response hangs
+      const timeoutId = setTimeout(() => {
+        setAuthState((current) => {
+          if (current === null) {
+            console.warn("Firebase auth state check timed out, falling back to false");
+            return false;
           }
-          setAuthState(true);
-          localStorage.removeItem('tasbeehly_guest_mode');
-          setIsGuest(false);
+          return current;
+        });
+      }, 4000);
 
-          const cloudUuid = `auth_user_${user.uid}`;
-          if (store.deviceUuid !== cloudUuid) {
-            store.setDeviceUuid(cloudUuid);
-          }
-          import("./lib/cloudSync").then(({ syncFromCloud, startCloudSync }) => {
-            syncFromCloud(user.uid).then(() => {
-              startCloudSync(user.uid);
+      try {
+        const { auth } = await import("./lib/firebase");
+        unsubscribeAuth = auth.onAuthStateChanged(async (user) => {
+          clearTimeout(timeoutId);
+          const store = useTasbeehStore.getState();
+          if (user) {
+            // Block unverified email/password accounts
+            const isEmailAuth = user.providerData?.some(p => p.providerId === 'password') || false;
+            if (isEmailAuth && !user.emailVerified) {
+              await auth.signOut();
+              setAuthState(false);
+              return;
+            }
+            setAuthState(true);
+            localStorage.removeItem('tasbeehly_guest_mode');
+            setIsGuest(false);
+
+            const cloudUuid = `auth_user_${user.uid}`;
+            if (store.deviceUuid !== cloudUuid) {
+              store.setDeviceUuid(cloudUuid);
+            }
+            import("./lib/cloudSync").then(({ syncFromCloud, startCloudSync }) => {
+              syncFromCloud(user.uid).then(() => {
+                startCloudSync(user.uid);
+              });
             });
-          });
-        } else {
-          setAuthState(false);
-          import("./lib/cloudSync").then(({ stopCloudSync }) => {
-            stopCloudSync();
-          });
-        }
-      });
+          } else {
+            setAuthState(false);
+            import("./lib/cloudSync").then(({ stopCloudSync }) => {
+              stopCloudSync();
+            });
+          }
+        });
+      } catch (err) {
+        clearTimeout(timeoutId);
+        console.error("Firebase auth initialization failed:", err);
+        setAuthState(false);
+      }
     };
 
     initAuth();

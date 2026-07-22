@@ -223,7 +223,7 @@ export function SettingsViewContent({ defaultTab, setOpen }: SettingsViewContent
         <Tabs defaultValue={defaultTab === 'appearance' ? 'themes' : defaultTab} className="flex-1 flex flex-col h-full">
           <div className="px-6 pt-2 pb-4 shrink-0 bg-background/50 backdrop-blur-sm z-10">
             <TabsList className="grid w-full grid-cols-4">
-              <TabsTrigger value="themes" className="text-xs">{t('settings.themes')} ({t(`theme.${theme}.label`)})</TabsTrigger>
+              <TabsTrigger value="themes" className="text-xs">{t('settings.themes')}</TabsTrigger>
               <TabsTrigger value="counter" className="text-xs">{t('settings.counter')}</TabsTrigger>
               <TabsTrigger value="system" className="text-xs">{t('settings.behavior')}</TabsTrigger>
               <TabsTrigger value="data" className="text-xs">{t('settings.data')}</TabsTrigger>
