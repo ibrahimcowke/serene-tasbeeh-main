@@ -1,4 +1,4 @@
-import { lazy, Suspense, useMemo } from 'react';
+import { lazy, Suspense, useMemo, useState } from 'react';
 import { useTasbeehStore } from '@/store/tasbeehStore';
 import { useShallow } from 'zustand/react/shallow';
 import { SidebarProvider, SidebarInset, SidebarTrigger } from '@/components/ui/sidebar';
@@ -7,12 +7,15 @@ import { MobileNavBar } from '@/components/MobileNavBar';
 import { Counter } from '@/components/Counter';
 import { DateBanner } from '@/components/DateBanner';
 import { LazyDayBanner } from '@/components/LazyDayBanner';
+import { AnimatePresence } from 'framer-motion';
 
 // Lazy-load overlay components — they are never shown on first paint
 const ScreenOffMode = lazy(() => import('@/components/ScreenOffMode').then(m => ({ default: m.ScreenOffMode })));
 const WhatsNew = lazy(() => import('@/components/WhatsNew').then(m => ({ default: m.WhatsNew })));
+const BedtimeModeView = lazy(() => import('@/components/BedtimeModeView').then(m => ({ default: m.BedtimeModeView })));
 
 const Index = () => {
+  const [showBedtime, setShowBedtime] = useState(false);
   const { zenMode, setZenMode, screenOffMode, lastSeenVersion } = useTasbeehStore(
     useShallow(state => ({
       zenMode: state.zenMode,
@@ -40,7 +43,7 @@ const Index = () => {
   return (
     <>
       <SidebarProvider defaultOpen={false}>
-        <AppSidebar />
+        <AppSidebar onTriggerBedtime={() => setShowBedtime(true)} />
         <SidebarInset className="h-dvh overflow-hidden">
 
           {/* Full screen deep background */}
@@ -119,6 +122,14 @@ const Index = () => {
           </div>
         </SidebarInset>
       </SidebarProvider>
+
+      <AnimatePresence>
+        {showBedtime && (
+          <Suspense fallback={null}>
+            <BedtimeModeView onClose={() => setShowBedtime(false)} />
+          </Suspense>
+        )}
+      </AnimatePresence>
     </>
   );
 };

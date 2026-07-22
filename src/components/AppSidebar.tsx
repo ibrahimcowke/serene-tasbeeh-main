@@ -35,7 +35,6 @@ const AiCompanionView = lazy(() => import("./AiCompanionView").then(m => ({ defa
 const PrayerTimesView = lazy(() => import("./PrayerTimesView").then(m => ({ default: m.PrayerTimesView })));
 const SalatulTasbeehView = lazy(() => import("./SalatulTasbeehView").then(m => ({ default: m.SalatulTasbeehView })));
 const WeeklyReportView = lazy(() => import("./WeeklyReportView").then(m => ({ default: m.WeeklyReportView })));
-const BedtimeModeView = lazy(() => import("./BedtimeModeView").then(m => ({ default: m.BedtimeModeView })));
 const JourneyMapView = lazy(() => import("./JourneyMapView").then(m => ({ default: m.JourneyMapView })));
 
 // Zero layout shift Suspense fallback wrapper
@@ -62,12 +61,11 @@ function LazyWrapper({
   );
 }
 
-export function AppSidebar() {
+export function AppSidebar({ onTriggerBedtime }: { onTriggerBedtime: () => void }) {
     const startTasbih100 = useTasbeehStore((s) => s.startTasbih100);
     const theme = useTasbeehStore((s) => s.theme);
     const { t } = useTranslation();
     const { setOpenMobile } = useSidebar();
-    const [showBedtime, setShowBedtime] = useState(false);
     return (
       <>
         <Sidebar collapsible="icon">
@@ -309,7 +307,7 @@ export function AppSidebar() {
                                     <button
                                         className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-left transition-all"
                                         style={{ color: "hsl(var(--sidebar-foreground) / 0.85)" }}
-                                        onClick={() => { setShowBedtime(true); setOpenMobile(false); }}
+                                        onClick={() => { onTriggerBedtime(); setOpenMobile(false); }}
                                     >
                                         <Moon className="w-4 h-4 text-primary/70 shrink-0" />
                                         <span className="text-sm font-light tracking-wide">{t('nav.bedtime_dhikr')}</span>
@@ -466,13 +464,6 @@ export function AppSidebar() {
             </SidebarFooter>
         </Sidebar>
 
-        <AnimatePresence>
-            {showBedtime && (
-                <Suspense fallback={null}>
-                    <BedtimeModeView onClose={() => setShowBedtime(false)} />
-                </Suspense>
-            )}
-        </AnimatePresence>
       </>
     );
 }
