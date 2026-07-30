@@ -118,7 +118,7 @@ export const CounterVisuals = memo(({
     if (counterShape === 'digital-tally') {
         return (
             <motion.div
-                className="relative flex items-center justify-center w-[min(80vw,50vh)] h-[min(80vw,50vh)] sm:w-[300px] sm:h-[300px] max-w-[320px] max-h-[320px]"
+                className="relative flex items-center justify-center w-[min(68vw,42vh)] h-[min(68vw,42vh)] sm:w-[240px] sm:h-[240px] max-w-[250px] max-h-[250px]"
                 style={{
                     transform: `translateY(${counterVerticalOffset}px) scale(${counterScale})`,
                     color: shapeColor
@@ -131,7 +131,7 @@ export const CounterVisuals = memo(({
 
     return (
         <motion.div
-            className="relative flex items-center justify-center w-[min(80vw,50vh)] h-[min(80vw,50vh)] sm:w-[300px] sm:h-[300px] max-w-[320px] max-h-[320px]"
+            className="relative flex items-center justify-center w-[min(68vw,42vh)] h-[min(68vw,42vh)] sm:w-[240px] sm:h-[240px] max-w-[250px] max-h-[250px]"
             style={{
                 transform: `translateY(${counterVerticalOffset}px) scale(${counterScale})`,
                 color: shapeColor

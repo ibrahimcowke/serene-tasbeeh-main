@@ -172,7 +172,7 @@ export const CounterDisplay = memo(function CounterDisplay() {
           whileTap={{ scale: 0.97 }}
           onClick={handleTap}
           className="relative cursor-pointer select-none"
-          style={{ width: 'min(78vw, 40vh, 320px)', height: 'min(78vw, 40vh, 320px)' }}
+          style={{ width: 'min(68vw, 42vh, 250px)', height: 'min(68vw, 42vh, 250px)' }}
         >
           {/* Outer ambient glow — CSS animation restart, no DOM remount */}
           <div
