@@ -118,7 +118,7 @@ export const CounterVisuals = memo(({
     if (counterShape === 'digital-tally') {
         return (
             <motion.div
-                className="relative flex items-center justify-center w-52 h-52 sm:w-56 sm:h-56 max-w-[230px] max-h-[230px]"
+                className="relative flex items-center justify-center w-56 h-56 sm:w-64 sm:h-64 max-w-[260px] max-h-[260px]"
                 style={{
                     transform: `translateY(${counterVerticalOffset}px) scale(${counterScale})`,
                     color: shapeColor
@@ -131,7 +131,7 @@ export const CounterVisuals = memo(({
 
     return (
         <motion.div
-            className="relative flex items-center justify-center w-52 h-52 sm:w-56 sm:h-56 max-w-[230px] max-h-[230px]"
+            className="relative flex items-center justify-center w-56 h-56 sm:w-64 sm:h-64 max-w-[260px] max-h-[260px]"
             style={{
                 transform: `translateY(${counterVerticalOffset}px) scale(${counterScale})`,
                 color: shapeColor
@@ -164,7 +164,7 @@ export const CounterVisuals = memo(({
 
                 {counterShape === 'modern-ring' && <ModernRingVisuals />}
 
-                <div className="absolute inset-0 flex items-center justify-center pointer-events-none -z-10 scale-90 sm:scale-95">
+                <div className="absolute inset-0 flex items-center justify-center pointer-events-none -z-10 scale-95 sm:scale-100">
                         {counterShape === 'halo-ring' && <HaloRing progress={progress} currentCount={currentCount} />}
                         {counterShape === 'bead-ring' && <BeadRing currentCount={currentCount} />}
                         {counterShape === 'smart-ring' && <SmartRing currentCount={currentCount} />}
@@ -197,7 +197,7 @@ export const CounterVisuals = memo(({
                 onClick={handleTap}
                 disabled={disabled}
                 className={`
-        w-52 h-52 sm:w-56 sm:h-56
+        w-56 h-56 sm:w-64 sm:h-64
         ${counterShape === 'plain' ? 'bg-transparent' : ''}
         ${counterShape === 'minimal' ? 'rounded-full bg-counter-bg' : ''}
         ${counterShape === 'ring-light' ? 'rounded-full bg-transparent flex items-center justify-center' : ''}

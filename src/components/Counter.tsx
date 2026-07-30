@@ -14,7 +14,7 @@ import { motion } from 'framer-motion';
 const WisdomModal = lazy(() => import('./WisdomModal').then(m => ({ default: m.WisdomModal })));
 const NiyyahModal = lazy(() => import('./NiyyahModal').then(m => ({ default: m.NiyyahModal })));
 const MoodTracker = lazy(() => import('./MoodTracker').then(m => ({ default: m.MoodTracker })));
-import { HandPlatter } from 'lucide-react';
+import { Heart, BookOpen } from 'lucide-react';
 import { SessionTimer } from './SessionTimer';
 
 
@@ -185,25 +185,25 @@ export const Counter = memo(function Counter({ className = "" }: { className?: s
 
           {/* Intention Pill */}
           <motion.button
-            whileHover={{ scale: 1.03 }}
-            whileTap={{ scale: 0.97 }}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
             onClick={() => setShowNiyyah(true)}
-            className="px-2.5 py-0.5 sm:px-3 sm:py-1 rounded-full text-[10px] sm:text-xs font-semibold tracking-wide bg-primary/10 border border-primary/20 text-primary/90 hover:bg-primary/15 transition-all flex items-center gap-1 cursor-pointer"
+            className="px-3 py-1 rounded-full text-xs font-semibold tracking-wide bg-gradient-to-r from-rose-500/10 via-primary/10 to-rose-500/10 border border-rose-500/30 text-rose-300 hover:border-rose-400/50 shadow-[0_2px_10px_rgba(244,63,94,0.15)] backdrop-blur-md transition-all flex items-center gap-1.5 cursor-pointer"
             title="Set Intention / Niyyah"
           >
-            <span>❤️</span>
+            <Heart className="w-3.5 h-3.5 text-rose-400 fill-rose-400/30" />
             <span>Niyyah</span>
           </motion.button>
 
           {/* Wisdom Pill */}
           <motion.button
-            whileHover={{ scale: 1.03 }}
-            whileTap={{ scale: 0.97 }}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
             onClick={() => setShowWisdom(true)}
-            className="px-2.5 py-0.5 sm:px-3 sm:py-1 rounded-full text-[10px] sm:text-xs font-semibold tracking-wide bg-primary/10 border border-primary/20 text-primary/90 hover:bg-primary/15 transition-all flex items-center gap-1 cursor-pointer"
+            className="px-3 py-1 rounded-full text-xs font-semibold tracking-wide bg-gradient-to-r from-amber-500/10 via-primary/10 to-amber-500/10 border border-amber-500/30 text-amber-300 hover:border-amber-400/50 shadow-[0_2px_10px_rgba(245,158,11,0.15)] backdrop-blur-md transition-all flex items-center gap-1.5 cursor-pointer"
             title="Spiritual Wisdom / Hadith"
           >
-            <span>📖</span>
+            <BookOpen className="w-3.5 h-3.5 text-amber-400 fill-amber-400/30" />
             <span>Wisdom</span>
           </motion.button>
         </div>
