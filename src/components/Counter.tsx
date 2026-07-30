@@ -14,7 +14,7 @@ import { motion } from 'framer-motion';
 const WisdomModal = lazy(() => import('./WisdomModal').then(m => ({ default: m.WisdomModal })));
 const NiyyahModal = lazy(() => import('./NiyyahModal').then(m => ({ default: m.NiyyahModal })));
 const MoodTracker = lazy(() => import('./MoodTracker').then(m => ({ default: m.MoodTracker })));
-import { Heart, BookOpen } from 'lucide-react';
+import { HandPlatter } from 'lucide-react';
 import { SessionTimer } from './SessionTimer';
 
 
@@ -185,26 +185,25 @@ export const Counter = memo(function Counter({ className = "" }: { className?: s
 
           {/* Intention Pill */}
           <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
+            whileHover={{ scale: 1.03 }}
+            whileTap={{ scale: 0.97 }}
             onClick={() => setShowNiyyah(true)}
-            className="px-3 py-1 rounded-full text-xs font-semibold tracking-wide bg-gradient-to-r from-rose-500/10 via-primary/10 to-rose-500/10 border border-rose-500/30 text-rose-300 hover:border-rose-400/50 shadow-[0_2px_10px_rgba(244,63,94,0.15)] backdrop-blur-md transition-all flex items-center gap-1.5 cursor-pointer"
-            title="Set Intention / Niyyah"
+            className="px-3 py-1 rounded-full text-[10px] sm:text-xs font-medium tracking-wide bg-primary/10 border border-primary/20 text-primary/80 hover:bg-primary/15 transition-all flex items-center gap-1.5 cursor-pointer"
           >
-            <Heart className="w-3.5 h-3.5 text-rose-400 fill-rose-400/30" />
-            <span>Niyyah</span>
+            <span>❤️</span>
+            <span>{niyyah ? t('niyyah.intention_set') : t('niyyah.set_intention')}</span>
           </motion.button>
+
 
           {/* Wisdom Pill */}
           <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
+            whileHover={{ scale: 1.03 }}
+            whileTap={{ scale: 0.97 }}
             onClick={() => setShowWisdom(true)}
-            className="px-3 py-1 rounded-full text-xs font-semibold tracking-wide bg-gradient-to-r from-amber-500/10 via-primary/10 to-amber-500/10 border border-amber-500/30 text-amber-300 hover:border-amber-400/50 shadow-[0_2px_10px_rgba(245,158,11,0.15)] backdrop-blur-md transition-all flex items-center gap-1.5 cursor-pointer"
-            title="Spiritual Wisdom / Hadith"
+            className="px-3 py-1 rounded-full text-[10px] sm:text-xs font-medium tracking-wide bg-primary/10 border border-primary/20 text-primary/80 hover:bg-primary/15 transition-all flex items-center gap-1.5 cursor-pointer animate-pulse"
           >
-            <BookOpen className="w-3.5 h-3.5 text-amber-400 fill-amber-400/30" />
-            <span>Wisdom</span>
+            <span>📖</span>
+            <span>{t('hadith.title')}</span>
           </motion.button>
         </div>
       </div>
@@ -269,7 +268,7 @@ export const Counter = memo(function Counter({ className = "" }: { className?: s
       </div>
 
       {/* Bottom: Footer stats */}
-      <div className="w-full flex flex-col items-center justify-center z-10 pb-3 sm:pb-2 animate-fade-in-up gap-3 mt-2 sm:mt-4">
+      <div className="w-full flex flex-col items-center justify-center z-10 pb-3 sm:pb-2 animate-fade-in-up gap-3 mt-3 sm:mt-6">
         <CounterFooter hideStats={false} />
       </div>
 
