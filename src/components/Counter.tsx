@@ -188,22 +188,23 @@ export const Counter = memo(function Counter({ className = "" }: { className?: s
             whileHover={{ scale: 1.03 }}
             whileTap={{ scale: 0.97 }}
             onClick={() => setShowNiyyah(true)}
-            className="px-3 py-1 rounded-full text-[10px] sm:text-xs font-medium tracking-wide bg-primary/10 border border-primary/20 text-primary/80 hover:bg-primary/15 transition-all flex items-center gap-1.5 cursor-pointer"
+            className="px-2.5 py-0.5 sm:px-3 sm:py-1 rounded-full text-[10px] sm:text-xs font-semibold tracking-wide bg-primary/10 border border-primary/20 text-primary/90 hover:bg-primary/15 transition-all flex items-center gap-1 cursor-pointer"
+            title="Set Intention / Niyyah"
           >
             <span>❤️</span>
-            <span>{niyyah ? t('niyyah.intention_set') : t('niyyah.set_intention')}</span>
+            <span>Niyyah</span>
           </motion.button>
-
 
           {/* Wisdom Pill */}
           <motion.button
             whileHover={{ scale: 1.03 }}
             whileTap={{ scale: 0.97 }}
             onClick={() => setShowWisdom(true)}
-            className="px-3 py-1 rounded-full text-[10px] sm:text-xs font-medium tracking-wide bg-primary/10 border border-primary/20 text-primary/80 hover:bg-primary/15 transition-all flex items-center gap-1.5 cursor-pointer animate-pulse"
+            className="px-2.5 py-0.5 sm:px-3 sm:py-1 rounded-full text-[10px] sm:text-xs font-semibold tracking-wide bg-primary/10 border border-primary/20 text-primary/90 hover:bg-primary/15 transition-all flex items-center gap-1 cursor-pointer"
+            title="Spiritual Wisdom / Hadith"
           >
             <span>📖</span>
-            <span>{t('hadith.title')}</span>
+            <span>Wisdom</span>
           </motion.button>
         </div>
       </div>

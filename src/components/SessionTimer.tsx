@@ -102,8 +102,8 @@ export function SessionTimer() {
             }`}
           >
             {isCountdown ? <Timer className="w-3 h-3 animate-pulse" /> : <Clock className="w-3 h-3" />}
-            <span className="font-mono tabular-nums">
-              {isCountdown ? `${getDisplayTime()} remaining` : (t('timer.off') || 'Off')}
+            <span className="font-mono tabular-nums font-semibold">
+              {isCountdown ? getDisplayTime() : 'Time'}
             </span>
           </motion.button>
         </SheetTrigger>

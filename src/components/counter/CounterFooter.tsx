@@ -1,7 +1,7 @@
 import { memo } from 'react';
 import { useTasbeehStore } from '@/store/tasbeehStore';
 import { useTranslation } from '@/lib/i18n';
-import { Target, Flame, Trophy, Star, Sparkles, Layers, CheckCircle2 } from 'lucide-react';
+import { Target, Flame, Star } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 const toArabicNumerals = (n: number, isRTL: boolean): string => {
@@ -21,7 +21,6 @@ export const CounterFooter = memo(function CounterFooter({ hideStats = false }: 
   const sessionMode = useTasbeehStore(state => state.sessionMode);
   const zenMode = useTasbeehStore(state => state.zenMode);
   const totalAllTime = useTasbeehStore(state => state.totalAllTime);
-  const totalHasanat = useTasbeehStore(state => state.totalHasanat);
   const streakDays = useTasbeehStore(state => state.streakDays);
   const { t, isRTL } = useTranslation();
 
@@ -36,105 +35,102 @@ export const CounterFooter = memo(function CounterFooter({ hideStats = false }: 
     targetCount > 0;
 
   const targetTitle = 
-    sessionMode.type === 'tasbih100' ? '100 Sprint Challenge' :
-    sessionMode.type === 'tasbih1000' ? '1000 Endurance Challenge' :
-    sessionMode.type === 'salatul-tasbeeh' ? `Salatul Tasbeeh (Rak'ah ${sessionMode.rakah || 1}/4)` :
-    sessionMode.type === 'routine' ? 'Custom Routine Mode' :
-    targetCount > 0 ? `Target Preset: ${targetCount}` : 'Free Dhikr Mode';
+    sessionMode.type === 'tasbih100' ? '100 Sprint' :
+    sessionMode.type === 'tasbih1000' ? '1000 Endurance' :
+    sessionMode.type === 'salatul-tasbeeh' ? `Salatul Tasbeeh (${sessionMode.rakah || 1}/4)` :
+    sessionMode.type === 'routine' ? 'Custom Routine' :
+    targetCount > 0 ? `Preset Target ${targetCount}` : 'Free Dhikr Mode';
 
   const progressPercent = targetCount > 0 ? Math.min(100, Math.round((currentCount / targetCount) * 100)) : 0;
 
   if (zenMode) return null;
 
   return (
-    <div className="w-full flex flex-col items-center gap-3 sm:gap-4 pb-2 px-2">
+    <div className="w-full flex flex-col items-center gap-2 sm:gap-3 pb-1 px-2">
       {/* Translation of current dhikr */}
       {currentDhikr?.translation && (
-        <p className="text-muted-foreground/70 text-[10px] sm:text-xs italic text-center px-4 max-w-sm leading-relaxed">
+        <p className="text-muted-foreground/75 text-[10px] sm:text-xs italic text-center px-4 max-w-sm leading-relaxed truncate">
           "{currentDhikr.translation}"
         </p>
       )}
 
-      {/* Target Mode Quick Preset Dashboard View */}
+      {/* Target Mode & Quick Preset Dashboard View */}
       {isPresetTargetMode && !hideStats && (
         <motion.div
-          initial={{ opacity: 0, y: 10 }}
+          initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
-          className="w-full max-w-md p-4 rounded-3xl border bg-card/60 border-primary/25 backdrop-blur-xl shadow-lg space-y-3"
-          style={{
-            boxShadow: '0 8px 32px rgba(0,0,0,0.25), inset 0 1px 1px rgba(255,255,255,0.08)',
-          }}
+          className="w-full max-w-md p-3 sm:p-3.5 rounded-2xl border bg-card/70 border-primary/20 backdrop-blur-md shadow-md space-y-2"
         >
-          {/* Preset Title Header & Progress Status */}
-          <div className="flex items-center justify-between gap-2 border-b border-border/20 pb-2.5">
-            <div className="flex items-center gap-2 min-w-0">
-              <div className="p-1.5 rounded-xl bg-primary/15 text-primary border border-primary/30 shrink-0">
-                <Target size={14} />
+          {/* Title & Progress Header */}
+          <div className="flex items-center justify-between gap-2 border-b border-border/20 pb-1.5">
+            <div className="flex items-center gap-1.5 min-w-0">
+              <div className="p-1 rounded-lg bg-primary/15 text-primary border border-primary/25 shrink-0">
+                <Target size={12} />
               </div>
               <div className="min-w-0">
-                <span className="text-[9px] font-black text-primary uppercase tracking-widest block">Quick Target Preset</span>
-                <p className="text-xs font-bold text-foreground truncate">{targetTitle}</p>
+                <span className="text-[8px] font-black text-primary uppercase tracking-wider block leading-none">Target Preset</span>
+                <p className="text-xs font-bold text-foreground truncate leading-tight">{targetTitle}</p>
               </div>
             </div>
 
             <div className="text-right shrink-0">
-              <span className="text-sm font-black text-primary tabular-nums">{progressPercent}%</span>
-              <p className="text-[9px] text-muted-foreground font-semibold">{currentCount}/{targetCount || '∞'}</p>
+              <span className="text-xs font-black text-primary tabular-nums">{progressPercent}%</span>
+              <p className="text-[8px] text-muted-foreground font-semibold">{currentCount}/{targetCount || '∞'}</p>
             </div>
           </div>
 
           {/* Progress Bar */}
           {targetCount > 0 && (
-            <div className="w-full h-2 rounded-full bg-foreground/10 overflow-hidden border border-border/20 p-0.5">
+            <div className="w-full h-1.5 rounded-full bg-foreground/10 overflow-hidden border border-border/20">
               <motion.div
                 className="h-full rounded-full bg-gradient-to-r from-primary via-emerald-400 to-primary"
                 initial={{ width: 0 }}
                 animate={{ width: `${progressPercent}%` }}
-                transition={{ duration: 0.35, ease: "easeOut" }}
+                transition={{ duration: 0.3, ease: "easeOut" }}
               />
             </div>
           )}
 
-          {/* All Items Grid — Footer Counters (Total, Rounds, Streak, Hasanat) */}
-          <div className="grid grid-cols-4 gap-2 pt-1">
-            {/* 1. All-time Total */}
-            <div className="flex flex-col items-center justify-center p-2 rounded-2xl bg-foreground/[0.03] border border-border/20">
-              <span className="text-[9px] text-muted-foreground/80 font-bold uppercase tracking-wider mb-0.5">
+          {/* All 4 Footer Items Grid (Total, Rounds, Streak, Hasanat) */}
+          <div className="grid grid-cols-4 gap-1.5 pt-0.5">
+            {/* Total */}
+            <div className="flex flex-col items-center justify-center p-1.5 rounded-xl bg-foreground/[0.03] border border-border/20">
+              <span className="text-[8px] text-muted-foreground/80 font-bold uppercase tracking-tight mb-0.5">
                 {t('counter.total')}
               </span>
-              <span className="text-xs font-black text-primary tabular-nums">
+              <span className="text-xs font-bold text-primary tabular-nums">
                 {toArabicNumerals(totalAllTime, isRTL)}
               </span>
             </div>
 
-            {/* 2. Current Session Rounds */}
-            <div className="flex flex-col items-center justify-center p-2 rounded-2xl bg-foreground/[0.03] border border-border/20">
-              <span className="text-[9px] text-muted-foreground/80 font-bold uppercase tracking-wider mb-0.5">
+            {/* Rounds */}
+            <div className="flex flex-col items-center justify-center p-1.5 rounded-xl bg-foreground/[0.03] border border-border/20">
+              <span className="text-[8px] text-muted-foreground/80 font-bold uppercase tracking-tight mb-0.5">
                 {t('counter.rounds')}
               </span>
-              <span className="text-xs font-black text-primary tabular-nums">
+              <span className="text-xs font-bold text-primary tabular-nums">
                 {toArabicNumerals(roundsDone, isRTL)} ×33
               </span>
             </div>
 
-            {/* 3. Daily Streak */}
-            <div className="flex flex-col items-center justify-center p-2 rounded-2xl bg-foreground/[0.03] border border-border/20">
-              <span className="text-[9px] text-muted-foreground/80 font-bold uppercase tracking-wider mb-0.5 flex items-center gap-0.5">
-                <Flame size={10} className="text-orange-500 fill-orange-500" />
+            {/* Streak */}
+            <div className="flex flex-col items-center justify-center p-1.5 rounded-xl bg-foreground/[0.03] border border-border/20">
+              <span className="text-[8px] text-muted-foreground/80 font-bold uppercase tracking-tight mb-0.5 flex items-center gap-0.5">
+                <Flame size={9} className="text-orange-500 fill-orange-500" />
                 {t('counter.streak')}
               </span>
-              <span className="text-xs font-black text-orange-500 tabular-nums">
+              <span className="text-xs font-bold text-orange-500 tabular-nums">
                 {toArabicNumerals(streakDays, isRTL)}d
               </span>
             </div>
 
-            {/* 4. Hasanat Earned */}
-            <div className="flex flex-col items-center justify-center p-2 rounded-2xl bg-foreground/[0.03] border border-border/20">
-              <span className="text-[9px] text-muted-foreground/80 font-bold uppercase tracking-wider mb-0.5 flex items-center gap-0.5">
-                <Star size={10} className="text-yellow-400 fill-yellow-400" />
+            {/* Hasanat */}
+            <div className="flex flex-col items-center justify-center p-1.5 rounded-xl bg-foreground/[0.03] border border-border/20">
+              <span className="text-[8px] text-muted-foreground/80 font-bold uppercase tracking-tight mb-0.5 flex items-center gap-0.5">
+                <Star size={9} className="text-yellow-400 fill-yellow-400" />
                 Hasanat
               </span>
-              <span className="text-xs font-black text-yellow-400 tabular-nums">
+              <span className="text-xs font-bold text-yellow-400 tabular-nums">
                 +{toArabicNumerals(currentCount * 10, isRTL)}
               </span>
             </div>
@@ -144,63 +140,52 @@ export const CounterFooter = memo(function CounterFooter({ hideStats = false }: 
 
       {/* Free Mode Footer Stats Strip */}
       {!isPresetTargetMode && !hideStats && (
-        <div className="flex items-center gap-5 sm:gap-8">
-          {/* All time count */}
+        <div className="flex items-center gap-4 sm:gap-6">
           <div className="flex flex-col items-center">
             <span
-              className={`${isRTL ? 'font-arabic' : 'font-sans'} text-base sm:text-lg font-bold`}
+              className={`${isRTL ? 'font-arabic' : 'font-sans'} text-sm sm:text-base font-bold`}
               style={{
                 color: 'hsl(var(--primary))',
-                textShadow: '0 0 12px hsl(var(--primary) / 0.4)'
+                textShadow: '0 0 10px hsl(var(--primary) / 0.4)'
               }}
             >
               {toArabicNumerals(totalAllTime, isRTL)}
             </span>
-            <span className="text-foreground/75 text-[10px] font-semibold uppercase tracking-wider mt-0.5">
+            <span className="text-foreground/75 text-[9px] font-semibold uppercase tracking-wider">
               {t('counter.total')}
             </span>
           </div>
 
-          {/* Divider dot */}
-          <div
-            className="w-1 h-1 rounded-full"
-            style={{ backgroundColor: 'hsl(var(--primary) / 0.4)' }}
-          />
+          <div className="w-1 h-1 rounded-full bg-primary/40" />
 
-          {/* Current session rounds */}
           <div className="flex flex-col items-center">
             <span
-              className={`${isRTL ? 'font-arabic' : 'font-sans'} text-base sm:text-lg font-bold`}
+              className={`${isRTL ? 'font-arabic' : 'font-sans'} text-sm sm:text-base font-bold`}
               style={{
                 color: 'hsl(var(--primary))',
-                textShadow: '0 0 12px hsl(var(--primary) / 0.4)'
+                textShadow: '0 0 10px hsl(var(--primary) / 0.4)'
               }}
             >
               {toArabicNumerals(roundsDone, isRTL)}
             </span>
-            <span className="text-foreground/75 text-[10px] font-semibold uppercase tracking-wider mt-0.5">
+            <span className="text-foreground/75 text-[9px] font-semibold uppercase tracking-wider">
               {t('counter.rounds')}
             </span>
           </div>
 
-          {/* Divider dot */}
-          <div
-            className="w-1 h-1 rounded-full"
-            style={{ backgroundColor: 'hsl(var(--primary) / 0.4)' }}
-          />
+          <div className="w-1 h-1 rounded-full bg-primary/40" />
 
-          {/* Streak */}
           <div className="flex flex-col items-center">
             <span
-              className={`${isRTL ? 'font-arabic' : 'font-sans'} text-base sm:text-lg font-bold`}
+              className={`${isRTL ? 'font-arabic' : 'font-sans'} text-sm sm:text-base font-bold`}
               style={{
                 color: 'hsl(var(--primary))',
-                textShadow: '0 0 12px hsl(var(--primary) / 0.4)'
+                textShadow: '0 0 10px hsl(var(--primary) / 0.4)'
               }}
             >
               {toArabicNumerals(streakDays, isRTL)}
             </span>
-            <span className="text-foreground/75 text-[10px] font-semibold uppercase tracking-wider mt-0.5">
+            <span className="text-foreground/75 text-[9px] font-semibold uppercase tracking-wider">
               {t('counter.streak')}
             </span>
           </div>
