@@ -268,8 +268,8 @@ export const Counter = memo(function Counter({ className = "" }: { className?: s
       </div>
 
       {/* Bottom: Footer stats */}
-      <div className="w-full flex flex-col items-center justify-center z-10 pb-3 sm:pb-2 animate-fade-in-up gap-3 mt-3 sm:mt-6">
-        <CounterFooter hideStats={isShortScreen || isDesktop} />
+      <div className="w-full flex flex-col items-center justify-center z-10 pb-3 sm:pb-2 animate-fade-in-up gap-3 mt-2 sm:mt-4">
+        <CounterFooter hideStats={false} />
       </div>
 
       {/* Wisdom Modal */}
