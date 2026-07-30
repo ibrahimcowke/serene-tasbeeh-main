@@ -164,7 +164,7 @@ export const CounterVisuals = memo(({
 
                 {counterShape === 'modern-ring' && <ModernRingVisuals />}
 
-                <div className="absolute inset-0 flex items-center justify-center pointer-events-none -z-10 scale-90">
+                <div className="absolute inset-0 flex items-center justify-center pointer-events-none -z-10 w-full h-full">
                         {counterShape === 'halo-ring' && <HaloRing progress={progress} currentCount={currentCount} />}
                         {counterShape === 'bead-ring' && <BeadRing currentCount={currentCount} />}
                         {counterShape === 'smart-ring' && <SmartRing currentCount={currentCount} />}
@@ -197,22 +197,22 @@ export const CounterVisuals = memo(({
                 onClick={handleTap}
                 disabled={disabled}
                 className={`
-        ${counterShape === 'plain' ? 'w-64 h-64 bg-transparent' : ''}
-        ${counterShape === 'minimal' ? 'rounded-full bg-counter-bg w-64 h-64' : ''}
-        ${counterShape === 'ring-light' ? 'w-64 h-64 rounded-full bg-transparent flex items-center justify-center' : ''}
-        ${counterShape === 'classic' ? 'w-64 h-64 rounded-2xl bg-gradient-to-br from-card to-background shadow-inner flex flex-col items-center justify-center border-2 border-border/50' : ''}
-        ${counterShape === 'beads' ? 'w-64 h-64 rounded-full bg-transparent flex items-center justify-center' : ''}
-        ${counterShape === 'flower' ? 'w-64 h-64 rounded-full bg-background/50 backdrop-blur-sm border border-primary/20 flex items-center justify-center shadow-lg' : ''}
-        ${counterShape === 'waveform' ? 'w-64 h-64 rounded-full flex items-center justify-center backdrop-blur-sm' : ''}
-        ${counterShape === 'digital' ? 'w-64 h-64 flex items-center justify-center bg-transparent z-10' : ''}
-        ${counterShape === 'modern-ring' ? 'w-64 h-64 rounded-full bg-background/80 backdrop-blur-xl border border-primary/50 shadow-[0_0_30px_rgba(var(--primary),0.2)]' : ''}
-        ${counterShape === 'halo-ring' ? 'w-64 h-64 rounded-full flex items-center justify-center bg-transparent z-10' : ''}
+        ${counterShape === 'plain' ? 'w-full h-full bg-transparent' : ''}
+        ${counterShape === 'minimal' ? 'rounded-full bg-counter-bg w-full h-full' : ''}
+        ${counterShape === 'ring-light' ? 'w-full h-full rounded-full bg-transparent flex items-center justify-center' : ''}
+        ${counterShape === 'classic' ? 'w-full h-full rounded-2xl bg-gradient-to-br from-card to-background shadow-inner flex flex-col items-center justify-center border-2 border-border/50' : ''}
+        ${counterShape === 'beads' ? 'w-full h-full rounded-full bg-transparent flex items-center justify-center' : ''}
+        ${counterShape === 'flower' ? 'w-full h-full rounded-full bg-background/50 backdrop-blur-sm border border-primary/20 flex items-center justify-center shadow-lg' : ''}
+        ${counterShape === 'waveform' ? 'w-full h-full rounded-full flex items-center justify-center backdrop-blur-sm' : ''}
+        ${counterShape === 'digital' ? 'w-full h-full flex items-center justify-center bg-transparent z-10' : ''}
+        ${counterShape === 'modern-ring' ? 'w-full h-full rounded-full bg-background/80 backdrop-blur-xl border border-primary/50 shadow-[0_0_30px_rgba(var(--primary),0.2)]' : ''}
+        ${counterShape === 'halo-ring' ? 'w-full h-full rounded-full flex items-center justify-center bg-transparent z-10' : ''}
 
-        ${counterShape === 'vertical-capsules' ? 'w-64 h-64 flex items-center justify-center bg-transparent z-10' : ''}
-        ${counterShape === 'luminous-beads' ? 'w-64 h-64 rounded-full flex items-center justify-center bg-transparent z-10' : ''}
+        ${counterShape === 'vertical-capsules' ? 'w-full h-full flex items-center justify-center bg-transparent z-10' : ''}
+        ${counterShape === 'luminous-beads' ? 'w-full h-full rounded-full flex items-center justify-center bg-transparent z-10' : ''}
         
-        ${counterShape === 'bead-ring' ? 'w-64 h-64 flex items-center justify-center bg-transparent z-10' : ''}
-        ${['emerald-loop', 'smart-ring', 'moon-phase', 'star-burst', 'crystal-prism', 'tally-clicker', 'neumorph', 'digital-watch', 'sunset-horizon', 'crystal-orbit', 'aurora-glow', 'diamond-prism', 'golden-spiral'].includes(counterShape) ? 'w-64 h-64 flex items-center justify-center bg-transparent z-10' : ''}
+        ${counterShape === 'bead-ring' ? 'w-full h-full flex items-center justify-center bg-transparent z-10' : ''}
+        ${['emerald-loop', 'smart-ring', 'moon-phase', 'star-burst', 'crystal-prism', 'tally-clicker', 'neumorph', 'digital-watch', 'sunset-horizon', 'crystal-orbit', 'aurora-glow', 'diamond-prism', 'golden-spiral'].includes(counterShape) ? 'w-full h-full flex items-center justify-center bg-transparent z-10' : ''}
 
         flex items-center justify-center
         cursor-pointer

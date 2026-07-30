@@ -33,10 +33,15 @@ interface RemindersViewProps {
 
 const SOUND_OPTIONS = [
     { value: 'default', label: '🔀 Auto Random Voice', desc: 'Random voice reminder' },
-    { value: 'subhanallah', label: '🗣️ SubhanAllah', desc: 'Male voice (peaceful)' },
-    { value: 'alhamdulillah', label: '🗣️ Alhamdulillah', desc: 'Female voice (gentle)' },
-    { value: 'astaghfirullah', label: '🗣️ Astaghfirullah', desc: 'Male voice (quiet reminder)' },
-    { value: 'salawat', label: '🗣️ Salawat', desc: 'Spoken recitation' },
+    { value: 'subhanallah', label: '🗣️ SubhanAllah', desc: 'Peaceful recitation' },
+    { value: 'alhamdulillah', label: '🗣️ Alhamdulillah', desc: 'Gentle recitation' },
+    { value: 'astaghfirullah', label: '🗣️ Astaghfirullah', desc: 'Quiet istighfar reminder' },
+    { value: 'salawat', label: '🗣️ Salawat', desc: 'Blessings upon the Prophet' },
+    { value: 'ayat_kursi', label: '📖 Ayat al-Kursi', desc: 'Short Dua — Protection' },
+    { value: 'hasbunallah', label: '🤲 Hasbunallah', desc: 'Short Dua — Sufficiency & Trust' },
+    { value: 'rabbi_zidni', label: '📚 Rabbi Zidni \'Ilma', desc: 'Short Dua — Seeking Knowledge' },
+    { value: 'subhanallahi_wabihamdihi', label: '✨ SubhanAllahi Wa Bihamdihi', desc: 'Short Dua — Praise & Glory' },
+    { value: 'rabbana_atina', label: '🌟 Rabbana Atina', desc: 'Short Dua — Comprehensive Good' },
 ] as const;
 
 export function RemindersView({ children }: RemindersViewProps) {

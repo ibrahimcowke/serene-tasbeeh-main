@@ -4,6 +4,7 @@ import { Check, Download, Upload, Trash2, Zap, ExternalLink, ChevronRight, Bell,
 import { useTasbeehStore } from '@/store/tasbeehStore';
 import { useShallow } from 'zustand/react/shallow';
 import { useTranslation } from '@/lib/i18n';
+import { toast } from 'sonner';
 import { SheetHeader, SheetTitle, SheetDescription } from '@/components/ui/sheet';
 import { Switch } from '@/components/ui/switch';
 import {
@@ -171,16 +172,21 @@ export function SettingsViewContent({ defaultTab, setOpen }: SettingsViewContent
   useEffect(() => { setLocalHadithSlideDuration(hadithSlideDuration); }, [hadithSlideDuration]);
 
   const handleExport = () => {
-    const data = exportData();
-    const blob = new Blob([data], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `tasbeeh-backup-${new Date().toISOString().split('T')[0]}.json`;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
+    try {
+      const data = exportData();
+      const blob = new Blob([data], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `tasbeeh-backup-${new Date().toISOString().split('T')[0]}.json`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      toast.success('JSON backup exported successfully! 📁');
+    } catch (e) {
+      toast.error('Failed to export JSON backup.');
+    }
   };
 
   const handleImport = () => {
@@ -194,7 +200,13 @@ export function SettingsViewContent({ defaultTab, setOpen }: SettingsViewContent
         reader.onload = (e) => {
           const data = e.target?.result as string;
           const success = importData(data);
-          setImportStatus(success ? 'success' : 'error');
+          if (success) {
+            setImportStatus('success');
+            toast.success('JSON backup imported successfully! 🎉');
+          } else {
+            setImportStatus('error');
+            toast.error('Failed to import JSON file. Please check file format.');
+          }
           setTimeout(() => setImportStatus('idle'), 3000);
         };
         reader.readAsText(file);

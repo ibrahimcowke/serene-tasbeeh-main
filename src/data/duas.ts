@@ -1,10 +1,11 @@
-﻿export interface Dua {
+export interface Dua {
   id: string;
   arabic: string;
   transliteration: string;
   translation: string;
   source: string;
-  category: 'morning' | 'evening' | 'protection' | 'gratitude' | 'general' | 'prayer';
+  category: 'morning' | 'evening' | 'protection' | 'gratitude' | 'general' | 'prayer' | 'special';
+  audioKey?: string;
 }
 
 export const duas: Dua[] = [
@@ -18,10 +19,10 @@ export const duas: Dua[] = [
   },
   {
     id: 'morning_bismillah',
-    arabic: 'بِسْمِ اللَّهِ الَّذِي لَا يَضُرُّ مَعَ اسْمِهِ شَيْءٌ فِي الْأَرْضِ وَلَا فِي السَّمَاءِ',
-    transliteration: "Bismillahil-ladhi la yadurru ma'a ismihi shay'un fil-ardi wa la fis-sama'",
-    translation: 'In the name of Allah with whose name nothing is harmed on earth or in heaven.',
-    source: 'Abu Dawud',
+    arabic: 'بِسْمِ اللَّهِ الَّذِي لَا يَضُرُّ مَعَ اسْمِهِ شَيْءٌ فِي الْأَرْضِ وَلَا فِي السَّمَاءِ وَهُوَ السَّمِيعُ الْعَلِيمُ',
+    transliteration: "Bismillahil-ladhi la yadurru ma'a ismihi shay'un fil-ardi wa la fis-sama'i wa huwas-Sami'ul-'Alim",
+    translation: 'In the name of Allah with whose name nothing is harmed on earth or in heaven, and He is the All-Hearing, All-Knowing.',
+    source: 'Abu Dawud & Tirmidhi',
     category: 'morning',
   },
   {
@@ -31,6 +32,38 @@ export const duas: Dua[] = [
     translation: 'O Allah, by You we enter the morning and by You we enter the evening, by You we live and by You we die.',
     source: 'Tirmidhi',
     category: 'morning',
+  },
+  {
+    id: 'sayyidul_istighfar',
+    arabic: 'اللَّهُمَّ أَنْتَ رَبِّي لَا إِلَهَ إِلَّا أَنْتَ خَلَقْتَنِي وَأَنَا عَبْدُكَ وَأَنَا عَلَى عَهْدِكَ وَوَعْدِكَ مَا اسْتَطَعْتُ أَعُوذُ بِكَ مِنْ شَرِّ مَا صَنَعْتُ أَبُوءُ لَكَ بِنِعْمَتِكَ عَلَيَّ وَأَبُوءُ بِذَنْبِي فَاغْفِرْ لِي فَإِنَّهُ لَا يَغْفِرُ الذُّنُوبَ إِلَّا أَنْتَ',
+    transliteration: "Allahumma anta Rabbi la ilaha illa anta, khalaqtani wa ana 'abduka, wa ana 'ala 'ahdika wa wa'dika mas-tata'tu, a'udhu bika min sharri ma sana'tu, abu'u laka bini'matika 'alayya wa abu'u bidhanbi faghfir li fa-innahu la yaghfirudh-dhunuba illa anta",
+    translation: 'O Allah, You are my Lord. There is no god but You. You created me and I am Your servant, and I abide by Your covenant and promise as best I can. I seek refuge in You from the evil of what I have done. I acknowledge Your favors upon me and I acknowledge my sin, so forgive me, for none forgives sins except You.',
+    source: 'Bukhari (Sayyidul Istighfar)',
+    category: 'prayer',
+  },
+  {
+    id: 'dua_istikhara',
+    arabic: 'اللَّهُمَّ إِنِّي أَسْتَخِيرُكَ بِعِلْمِكَ وَأَسْتَقْدِرُكَ بِقُدْرَتِكَ وَأَسْأَلُكَ مِنْ فَضْلِكَ الْعَظِيمِ فَإِنَّكَ تَقْدِرُ وَلَا أَقْدِرُ وَتَعْلَمُ وَلَا أَعْلَمُ وَأَنْتَ عَلَّامُ الْغُيُوبِ',
+    transliteration: "Allahumma inni astakhiruka bi'ilmika wa astaqdiruka biqudratika wa as'aluka min fadlikal-'adhim, fa-innaka taqdiru wa la aqdiru wa ta'lamu wa la a'lamu wa anta 'Allamul-ghuyub",
+    translation: 'O Allah, I seek Your guidance through Your knowledge, and I seek ability through Your power, and I ask You from Your great favor. For You are capable and I am not, and You know and I do not, and You are the Knower of the unseen.',
+    source: 'Bukhari (Dua Istikhara)',
+    category: 'special',
+  },
+  {
+    id: 'dua_qunut',
+    arabic: 'اللَّهُمَّ اهْدِنِي فِيمَنْ هَدَيْتَ وَعَافِنِي فِيمَنْ عَافَيْتَ وَتَوَلَّنِي فِيمَنْ تَوَلَّيْتَ وَبَارِكْ لِي فِيمَا أَعْطَيْتَ وَقِنِي شَرَّ مَا قَضَيْتَ',
+    transliteration: "Allahummahdini fiman hadayt, wa 'afini fiman 'afayt, wa tawallani fiman tawallayt, wa barik li fiman a'tayt, wa qini sharra ma qadayt",
+    translation: 'O Allah, guide me among those You have guided, grant me wellness among those You have granted wellness, take me into Your care among those You have taken, bless for me in what You have given, and save me from the evil of what You have decreed.',
+    source: 'Abu Dawud & Tirmidhi (Qunut)',
+    category: 'special',
+  },
+  {
+    id: 'anxiety_distress',
+    arabic: 'اللَّهُمَّ إِنِّي أَعُوذُ بِكَ مِنَ الْهَمِّ وَالْحَزَنِ وَالْعَجْزِ وَالْكَسَلِ وَالْبُخْلِ وَالْجُبْنِ وَضَلَعِ الدَّيْنِ وَغَلَبَةِ الرِّجَالِ',
+    transliteration: "Allahumma inni a'udhu bika minal-hammi wal-hazani, wal-'ajzi wal-kasali, wal-bukhli wal-jubni, wa dala'id-dayni wa ghalabatir-rijal",
+    translation: 'O Allah, I seek refuge in You from anxiety and grief, helplessness and laziness, stinginess and cowardice, the burden of debt and being overpowered by men.',
+    source: 'Bukhari',
+    category: 'protection',
   },
   {
     id: 'evening_sleep',
@@ -65,12 +98,44 @@ export const duas: Dua[] = [
     category: 'protection',
   },
   {
+    id: 'protection_illness',
+    arabic: 'اللَّهُمَّ إِنِّي أَعُوذُ بِكَ مِنَ الْبَرَصِ وَالْجُنُونِ وَالْجُذَامِ وَمِنْ سَيِّئِ الأَسْقَامِ',
+    transliteration: "Allahumma inni a'udhu bika minal-barasi wal-jununi wal-judhami wa min sayyi'il-asqam",
+    translation: 'O Allah, I seek refuge in You from leucoderma, insanity, leprosy and all evil diseases.',
+    source: 'Abu Dawud',
+    category: 'protection',
+  },
+  {
     id: 'gratitude_food',
     arabic: 'الْحَمْدُ لِلَّهِ الَّذِي أَطْعَمَنَا وَسَقَانَا وَجَعَلَنَا مُسْلِمِينَ',
-    transliteration: 'Alhamdu lillahil-ladhi at\'amana wa saqana wa ja\'alana muslimin',
+    transliteration: "Alhamdu lillahil-ladhi at'amana wa saqana wa ja'alana muslimin",
     translation: 'Praise be to Allah who fed us and gave us drink and made us Muslims.',
     source: 'Abu Dawud',
     category: 'gratitude',
+  },
+  {
+    id: 'iftar_dua',
+    arabic: 'ذَهَبَ الظَّمَأُ وَابْتَلَّتِ الْعُرُوقُ وَثَبَتَ الأَجْرُ إِنْ شَاءَ اللَّهُ',
+    transliteration: "Dhahabadh-dhama'u wabtallatil-'uruqu wa thabatal-ajru in sha'Allah",
+    translation: 'The thirst is gone, the veins are moistened, and the reward is confirmed, if Allah wills.',
+    source: 'Abu Dawud (Breaking Fast)',
+    category: 'special',
+  },
+  {
+    id: 'entering_masjid',
+    arabic: 'اللَّهُمَّ افْتَحْ لِي أَبْوَابَ رَحْمَتِكَ',
+    transliteration: "Allahummaf-tah li abwaba rahmatik",
+    translation: 'O Allah, open for me the doors of Your mercy.',
+    source: 'Muslim',
+    category: 'prayer',
+  },
+  {
+    id: 'leaving_masjid',
+    arabic: 'اللَّهُمَّ إِنِّي أَسْأَلُكَ مِنْ فَضْلِكَ',
+    transliteration: "Allahumma inni as'aluka min fadlik",
+    translation: 'O Allah, I ask You for Your favor.',
+    source: 'Muslim',
+    category: 'prayer',
   },
   {
     id: 'general_istighfar',
@@ -105,14 +170,6 @@ export const duas: Dua[] = [
     category: 'prayer',
   },
   {
-    id: 'prayer_sayyid_istighfar',
-    arabic: 'اللَّهُمَّ أَنْتَ رَبِّي لَا إِلَهَ إِلَّا أَنْتَ خَلَقْتَنِي وَأَنَا عَبْدُكَ',
-    transliteration: "Allahumma anta rabbi la ilaha illa anta khalaqtani wa ana 'abduk",
-    translation: 'O Allah, You are my Lord. There is no god but You. You created me and I am Your servant.',
-    source: 'Bukhari',
-    category: 'prayer',
-  },
-  {
     id: 'general_stress',
     arabic: 'لَا إِلَهَ إِلَّا اللَّهُ الْعَظِيمُ الْحَلِيمُ، لَا إِلَهَ إِلَّا اللَّهُ رَبُّ الْعَرْشِ الْعَظِيمِ',
     transliteration: "La ilaha illallahul-'adhimul-halim, la ilaha illallahu rabbul-'arshil-'adhim",
@@ -123,18 +180,10 @@ export const duas: Dua[] = [
   {
     id: 'general_entering_home',
     arabic: 'بِسْمِ اللَّهِ وَلَجْنَا وَبِسْمِ اللَّهِ خَرَجْنَا وَعَلَى اللَّهِ رَبِّنَا تَوَكَّلْنَا',
-    transliteration: 'Bismillahi walajna wa bismillahi kharajna wa \'alallahi rabbina tawakkalna',
+    transliteration: "Bismillahi walajna wa bismillahi kharajna wa 'alallahi rabbina tawakkalna",
     translation: 'In the Name of Allah we enter and in the Name of Allah we leave, and upon our Lord Allah we rely.',
     source: 'Abu Dawud',
     category: 'general',
-  },
-  {
-    id: 'morning_forgiveness',
-    arabic: 'اللَّهُمَّ اغْفِرْ لِي وَتُبْ عَلَيَّ إِنَّكَ أَنْتَ التَّوَّابُ الرَّحِيمُ',
-    transliteration: "Allahummaghfir li wa tub 'alayya innaka antat-tawwabur-rahim",
-    translation: 'O Allah, forgive me and accept my repentance. Indeed, You are the Accepting of repentance, the Merciful.',
-    source: 'Tirmidhi',
-    category: 'morning',
   },
   {
     id: 'general_travel',
@@ -145,14 +194,6 @@ export const duas: Dua[] = [
     category: 'general',
   },
   {
-    id: 'evening_protection',
-    arabic: 'أَمْسَيْنَا وَأَمْسَى الْمُلْكُ لِلَّهِ، وَالْحَمْدُ لِلَّهِ، لَا إِلَهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ',
-    transliteration: 'Amsayna wa amsal-mulku lillah, walhamdu lillah, la ilaha illallahu wahdahu la sharika lah',
-    translation: 'We have reached the evening and sovereignty belongs to Allah. Praise be to Allah. There is no god but Allah alone, without partner.',
-    source: 'Abu Dawud',
-    category: 'evening',
-  },
-  {
     id: 'general_dua_parents',
     arabic: 'رَّبِّ ارْحَمْهُمَا كَمَا رَبَّيَانِي صَغِيرًا',
     transliteration: 'Rabbir hamhuma kama rabbayani saghira',
@@ -161,21 +202,23 @@ export const duas: Dua[] = [
     category: 'general',
   },
   {
-    id: 'prayer_guidance',
-    arabic: 'اللَّهُمَّ اهْدِنِي فِيمَنْ هَدَيْتَ وَعَافِنِي فِيمَنْ عَافَيْتَ',
-    transliteration: "Allahummahdini fiman hadayta wa 'afini fiman 'afayta",
-    translation: 'O Allah, guide me among those You have guided, and grant me wellness among those You have granted wellness.',
-    source: 'Abu Dawud, Tirmidhi',
-    category: 'prayer',
-  },
+    id: 'dua_knowledge',
+    arabic: 'رَبِّ زِدْنِي عِلْمًا',
+    transliteration: 'Rabbi zidni \'ilma',
+    translation: 'My Lord, increase me in knowledge.',
+    source: 'Quran 20:114',
+    category: 'general',
+  }
 ];
 
 export const duaCategories = [
   { id: 'all', label: 'All Duas' },
+  { id: 'favorites', label: 'Favorites' },
   { id: 'morning', label: 'Morning' },
   { id: 'evening', label: 'Evening' },
   { id: 'prayer', label: 'After Prayer' },
   { id: 'protection', label: 'Protection' },
+  { id: 'special', label: 'Special & Sunnah' },
   { id: 'gratitude', label: 'Gratitude' },
   { id: 'general', label: 'General' },
 ] as const;

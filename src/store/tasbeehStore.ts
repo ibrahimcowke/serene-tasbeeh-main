@@ -766,20 +766,101 @@ export const useTasbeehStore = create<TasbeehState>()(
       setVibrationIntensity: (intensity) => set((state) => ({ themeSettings: { ...state.themeSettings, [state.theme]: { ...state.themeSettings[state.theme], vibrationIntensity: intensity } } })),
       setFontScale: (scale) => set((state) => ({ themeSettings: { ...state.themeSettings, [state.theme]: { ...state.themeSettings[state.theme], fontScale: scale } } })),
       setSoundType: (type) => set((state) => ({ themeSettings: { ...state.themeSettings, [state.theme]: { ...state.themeSettings[state.theme], soundType: type } } })),
-      exportData: () => JSON.stringify({ dailyRecords: get().dailyRecords, totalAllTime: get().totalAllTime, customDhikrs: get().customDhikrs, streakDays: get().streakDays, settings: { counterShape: get().counterShape, target: get().targetCount, themeSettings: get().themeSettings } }),
-      importData: (data) => {
+      exportData: () => {
+        const s = get();
+        return JSON.stringify({
+          version: '2.5.0',
+          exportedAt: new Date().toISOString(),
+          dailyRecords: s.dailyRecords || [],
+          sessions: s.sessions || [],
+          sessionMoodRatings: s.sessionMoodRatings || [],
+          totalAllTime: s.totalAllTime || 0,
+          totalHasanat: s.totalHasanat || 0,
+          personalBest: s.personalBest || 0,
+          streakDays: s.streakDays || 0,
+          longestStreak: s.longestStreak || 0,
+          lastActiveDate: s.lastActiveDate || null,
+          unlockedAchievements: s.unlockedAchievements || [],
+          dhikrs: s.dhikrs || [],
+          customDhikrs: s.customDhikrs || [],
+          favoriteDhikrIds: s.favoriteDhikrIds || [],
+          favoriteDuaIds: s.favoriteDuaIds || [],
+          customRoutines: s.customRoutines || [],
+          khatmLog: s.khatmLog || [],
+          niyyah: s.niyyah || '',
+          reminders: s.reminders || [],
+          reminderEnabled: s.reminderEnabled ?? true,
+          syncPrayerTimes: s.syncPrayerTimes ?? false,
+          autoStartPostPrayerTasbeeh: s.autoStartPostPrayerTasbeeh ?? false,
+          lazyDayRecoveryEnabled: s.lazyDayRecoveryEnabled ?? false,
+          theme: s.theme,
+          themeSettings: s.themeSettings,
+          language: s.language,
+          dailyGoal: s.dailyGoal,
+          counterShape: s.counterShape,
+          showTransliteration: s.showTransliteration,
+          dhikrTextPosition: s.dhikrTextPosition,
+          hadithSlidePosition: s.hadithSlidePosition,
+          hadithSlideDuration: s.hadithSlideDuration,
+          ambientSoundType: s.ambientSoundType,
+          ambientSoundVolume: s.ambientSoundVolume,
+          voiceAnnouncementsEnabled: s.voiceAnnouncementsEnabled,
+          hapticPattern: s.hapticPattern,
+          volumeButtonCounting: s.volumeButtonCounting,
+          wakeLockEnabled: s.wakeLockEnabled,
+          settings: {
+            counterShape: s.counterShape,
+            target: s.targetCount,
+            themeSettings: s.themeSettings,
+            theme: s.theme,
+            language: s.language,
+          }
+        }, null, 2);
+      },
+      importData: (dataStr) => {
         try {
-          const p = JSON.parse(data);
-          set(s => ({
-            ...s,
-            ...p,
-            theme: p.settings?.theme || s.theme,
-            counterShape: p.settings?.counterShape || s.counterShape,
-            themeSettings: p.settings?.themeSettings || s.themeSettings
-          }));
+          const p = JSON.parse(dataStr);
+          if (!p || typeof p !== 'object') return false;
+
+          const s = get();
+          const patch: Partial<TasbeehState> = {};
+
+          if (Array.isArray(p.dailyRecords)) patch.dailyRecords = p.dailyRecords;
+          if (Array.isArray(p.sessions)) patch.sessions = p.sessions;
+          if (Array.isArray(p.sessionMoodRatings)) patch.sessionMoodRatings = p.sessionMoodRatings;
+          if (typeof p.totalAllTime === 'number') patch.totalAllTime = Math.max(s.totalAllTime, p.totalAllTime);
+          if (typeof p.totalHasanat === 'number') patch.totalHasanat = Math.max(s.totalHasanat, p.totalHasanat);
+          if (typeof p.personalBest === 'number') patch.personalBest = Math.max(s.personalBest, p.personalBest);
+          if (typeof p.streakDays === 'number') patch.streakDays = Math.max(s.streakDays, p.streakDays);
+          if (typeof p.longestStreak === 'number') patch.longestStreak = Math.max(s.longestStreak, p.longestStreak);
+          if (p.lastActiveDate) patch.lastActiveDate = p.lastActiveDate;
+
+          if (Array.isArray(p.unlockedAchievements)) {
+            patch.unlockedAchievements = Array.from(new Set([...s.unlockedAchievements, ...p.unlockedAchievements]));
+          }
+          if (Array.isArray(p.customDhikrs)) patch.customDhikrs = p.customDhikrs;
+          if (Array.isArray(p.favoriteDhikrIds)) patch.favoriteDhikrIds = p.favoriteDhikrIds;
+          if (Array.isArray(p.favoriteDuaIds)) patch.favoriteDuaIds = p.favoriteDuaIds;
+          if (Array.isArray(p.customRoutines)) patch.customRoutines = p.customRoutines;
+          if (Array.isArray(p.khatmLog)) patch.khatmLog = p.khatmLog;
+          if (typeof p.niyyah === 'string') patch.niyyah = p.niyyah;
+          if (Array.isArray(p.reminders)) patch.reminders = p.reminders;
+
+          const settingsObj = p.settings || {};
+          patch.counterShape = p.counterShape || settingsObj.counterShape || s.counterShape;
+          patch.theme = p.theme || settingsObj.theme || s.theme;
+          patch.language = p.language || settingsObj.language || s.language;
+          patch.themeSettings = p.themeSettings || settingsObj.themeSettings || s.themeSettings;
+          if (typeof p.dailyGoal === 'number') patch.dailyGoal = p.dailyGoal;
+          if (typeof p.reminderEnabled === 'boolean') patch.reminderEnabled = p.reminderEnabled;
+          if (typeof p.syncPrayerTimes === 'boolean') patch.syncPrayerTimes = p.syncPrayerTimes;
+          if (typeof p.showTransliteration === 'boolean') patch.showTransliteration = p.showTransliteration;
+
+          set((state) => ({ ...state, ...patch }));
           get().checkAchievements();
           return true;
-        } catch {
+        } catch (err) {
+          console.error('Import backup failed:', err);
           return false;
         }
       },

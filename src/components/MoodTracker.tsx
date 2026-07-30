@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Smile, X, Star, Sparkles, BookOpen } from 'lucide-react';
+import { Smile, X, Star, Sparkles, BookOpen, Volume2 } from 'lucide-react';
 import { useTasbeehStore } from '@/store/tasbeehStore';
 import { useTranslation } from '@/lib/i18n';
+import { speakArabic } from '@/lib/audioRecitations';
 import { toast } from 'sonner';
 
 interface MoodTrackerProps {
@@ -282,9 +283,18 @@ export function MoodTracker({ open, onClose, sessionId, countCompleted }: MoodTr
                       <Sparkles className="w-3.5 h-3.5" />
                       <span>{isRTL ? "توصية ذكر" : "Dhikr Recommendation"}</span>
                     </div>
-                    <span className="text-[10px] text-muted-foreground font-semibold px-2 py-0.5 rounded-full bg-foreground/5">
-                      {recommendations[selectedMood].title[isRTL ? 'ar' : 'en']}
-                    </span>
+                    <div className="flex items-center gap-2">
+                      <button
+                        onClick={() => speakArabic(recommendations[selectedMood].arabic)}
+                        className="p-1 rounded-full text-primary hover:bg-primary/20 transition-colors"
+                        title="Listen to recitation"
+                      >
+                        <Volume2 className="w-3.5 h-3.5" />
+                      </button>
+                      <span className="text-[10px] text-muted-foreground font-semibold px-2 py-0.5 rounded-full bg-foreground/5">
+                        {recommendations[selectedMood].title[isRTL ? 'ar' : 'en']}
+                      </span>
+                    </div>
                   </div>
 
                   <div className="flex flex-col gap-2 text-center" dir={isRTL ? 'rtl' : 'ltr'}>

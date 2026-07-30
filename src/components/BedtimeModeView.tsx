@@ -1,8 +1,10 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Moon, X, ChevronRight, CheckCircle2, Volume2 } from 'lucide-react';
+import { Moon, X, Volume2, Sparkles, Wind, CheckCircle2 } from 'lucide-react';
 import { useTasbeehStore } from '@/store/tasbeehStore';
 import { useShallow } from 'zustand/react/shallow';
+import { speakArabic } from '@/lib/audioRecitations';
+import { ambientEngine } from '@/lib/sound';
 import { toast } from 'sonner';
 
 interface BedtimeModeViewProps {
@@ -16,55 +18,55 @@ interface BedtimeStep {
   transliteration: string;
   meaning: string;
   count: number;
-  repetitions: number; // how many times to complete `count`
+  repetitions: number;
 }
 
 const BEDTIME_STEPS: BedtimeStep[] = [
   {
     id: 'ayat-kursi', title: 'Ayat al-Kursi',
-    arabic: 'ٱللَّهُ لَآ إِلَٰهَ إِلَّا هُوَ ٱلْحَىُّ ٱلْقَيُّومُ',
-    transliteration: 'Allahu la ilaha illa huwal-Hayyul-Qayyum...',
-    meaning: 'The Throne Verse — the greatest verse of the Quran',
+    arabic: 'اللَّهُ لَا إِلَهَ إِلَّا هُوَ الْحَيُّ الْقَيُّومُ لَا تَأْخُذُهُ سِنَةٌ وَلَا نَوْمٌ',
+    transliteration: 'Allahu la ilaha illa huwal-Hayyul-Qayyum, la ta\'khudhuhus-sinatuw-wa la nawm...',
+    meaning: 'The Throne Verse — recite before sleep for continuous divine protection through the night',
     count: 1, repetitions: 1,
   },
   {
     id: 'ikhlas', title: 'Surah Al-Ikhlas',
-    arabic: 'قُلْ هُوَ ٱللَّهُ أَحَدٌ ٱللَّهُ ٱلصَّمَدُ',
+    arabic: 'قُلْ هُوَ اللَّهُ أَحَدٌ ۞ اللَّهُ الصَّمَدُ ۞ لَمْ يَلِدْ وَلَمْ يُولَدْ ۞ وَلَمْ يَكُن لَّهُ كُفُوًا أَحَدٌ',
     transliteration: 'Qul huwallahu ahad, Allahus-samad...',
-    meaning: 'Say: He is Allah, the One — equivalent to a third of the Quran',
+    meaning: 'Say: He is Allah, the One — equivalent to a third of the Quran (recite 3 times)',
     count: 1, repetitions: 3,
   },
   {
     id: 'falaq', title: 'Surah Al-Falaq',
-    arabic: 'قُلْ أَعُوذُ بِرَبِّ ٱلْفَلَقِ',
+    arabic: 'قُلْ أَعُوذُ بِرَبِّ الْفَلَقِ ۞ مِن شَرِّ مَا خَلَقَ',
     transliteration: "Qul a'udhu birabbil-falaq...",
-    meaning: 'Say: I seek refuge in the Lord of the daybreak',
+    meaning: 'Say: I seek refuge in the Lord of the daybreak (recite 3 times)',
     count: 1, repetitions: 3,
   },
   {
     id: 'nas', title: 'Surah An-Nas',
-    arabic: 'قُلْ أَعُوذُ بِرَبِّ ٱلنَّاسِ',
+    arabic: 'قُلْ أَعُوذُ بِرَبِّ النَّاسِ ۞ مَلِكِ النَّاسِ ۞ إِلَٰهِ النَّاسِ',
     transliteration: "Qul a'udhu birabbin-nas...",
-    meaning: 'Say: I seek refuge in the Lord of mankind',
+    meaning: 'Say: I seek refuge in the Lord of mankind (recite 3 times)',
     count: 1, repetitions: 3,
   },
   {
     id: 'subhan', title: 'Subhan-Allah',
-    arabic: 'سُبْحَانَ ٱللَّٰهِ',
+    arabic: 'سُبْحَانَ اللَّهِ',
     transliteration: 'Subhan-Allah',
     meaning: 'Glory be to Allah — recite 33 times before sleep',
     count: 33, repetitions: 1,
   },
   {
     id: 'alhamd', title: 'Alhamdulillah',
-    arabic: 'ٱلْحَمْدُ لِلَّٰهِ',
+    arabic: 'الْحَمْدُ لِلَّهِ',
     transliteration: 'Alhamdulillah',
     meaning: 'Praise be to Allah — recite 33 times before sleep',
     count: 33, repetitions: 1,
   },
   {
     id: 'akbar', title: 'Allahu Akbar',
-    arabic: 'ٱللَّٰهُ أَكْبَرُ',
+    arabic: 'اللَّهُ أَكْبَرُ',
     transliteration: 'Allahu Akbar',
     meaning: 'Allah is the Greatest — recite 34 times before sleep',
     count: 34, repetitions: 1,
@@ -77,6 +79,8 @@ export function BedtimeModeView({ onClose }: BedtimeModeViewProps) {
   const [tapCount, setTapCount] = useState(0);
   const [dimmed, setDimmed] = useState(false);
   const [completed, setCompleted] = useState(false);
+  const [isPlayingAudio, setIsPlayingAudio] = useState(false);
+  const [ambientActive, setAmbientActive] = useState(false);
   const dimTimer = useRef<ReturnType<typeof setTimeout>>();
 
   const { increment } = useTasbeehStore(useShallow(s => ({ increment: s.increment })));
@@ -86,17 +90,39 @@ export function BedtimeModeView({ onClose }: BedtimeModeViewProps) {
   const overallCount = repIndex * (step?.count ?? 0) + tapCount;
   const progress = step ? Math.min(overallCount / totalRepsTarget, 1) : 0;
 
-  // Auto-dim after 20s inactivity
   const resetDimTimer = useCallback(() => {
     setDimmed(false);
     clearTimeout(dimTimer.current);
-    dimTimer.current = setTimeout(() => setDimmed(true), 20_000);
+    dimTimer.current = setTimeout(() => setDimmed(true), 15_000);
   }, []);
 
   useEffect(() => {
     resetDimTimer();
-    return () => clearTimeout(dimTimer.current);
-  }, []);
+    return () => {
+      clearTimeout(dimTimer.current);
+      ambientEngine.stop();
+    };
+  }, [resetDimTimer]);
+
+  const toggleAmbient = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (ambientActive) {
+      ambientEngine.stop();
+      setAmbientActive(false);
+    } else {
+      ambientEngine.play('rain', 0.25);
+      setAmbientActive(true);
+      toast.success('🌧️ Soft rain ambient sound playing');
+    }
+  };
+
+  const handlePlayAudio = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (!step) return;
+    setIsPlayingAudio(true);
+    speakArabic(step.arabic);
+    setTimeout(() => setIsPlayingAudio(false), 4000);
+  };
 
   const handleTap = useCallback(() => {
     if (!step) return;
@@ -104,13 +130,12 @@ export function BedtimeModeView({ onClose }: BedtimeModeViewProps) {
     const next = tapCount + 1;
 
     if (next >= step.count) {
-      // Completed one repetition
       const nextRep = repIndex + 1;
       if (nextRep >= step.repetitions) {
-        // Step complete
         const nextStep = stepIndex + 1;
         if (nextStep >= BEDTIME_STEPS.length) {
           setCompleted(true);
+          ambientEngine.stop();
           toast.success('🌙 Bedtime adhkar complete. Sleep in peace, in sha Allah.');
         } else {
           setStepIndex(nextStep);
@@ -130,7 +155,10 @@ export function BedtimeModeView({ onClose }: BedtimeModeViewProps) {
   useEffect(() => {
     const handleKey = (e: KeyboardEvent) => {
       if (e.code === 'Space' || e.code === 'Enter') handleTap();
-      if (e.code === 'Escape') onClose();
+      if (e.code === 'Escape') {
+        ambientEngine.stop();
+        onClose();
+      }
     };
     window.addEventListener('keydown', handleKey);
     return () => window.removeEventListener('keydown', handleKey);
@@ -141,8 +169,8 @@ export function BedtimeModeView({ onClose }: BedtimeModeViewProps) {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      className="fixed inset-0 z-[100] flex flex-col items-center justify-center"
-      style={{ background: '#050208' }}
+      className="fixed inset-0 z-[100] flex flex-col items-center justify-center select-none"
+      style={{ background: '#04020a' }}
       onClick={dimmed ? resetDimTimer : handleTap}
     >
       {/* Dim overlay */}
@@ -150,7 +178,7 @@ export function BedtimeModeView({ onClose }: BedtimeModeViewProps) {
         {dimmed && (
           <motion.div
             initial={{ opacity: 0 }}
-            animate={{ opacity: 0.85 }}
+            animate={{ opacity: 0.88 }}
             exit={{ opacity: 0 }}
             className="absolute inset-0 bg-black z-10 pointer-events-none"
           />
@@ -159,45 +187,56 @@ export function BedtimeModeView({ onClose }: BedtimeModeViewProps) {
 
       {/* Header bar */}
       <div
-        className="absolute left-0 right-0 z-20 flex justify-between items-center w-full max-w-sm mx-auto px-4"
-        style={{ top: 'max(32px, calc(env(safe-area-inset-top) + 12px))' }}
+        className="absolute left-0 right-0 z-20 flex justify-between items-center w-full max-w-md mx-auto px-6"
+        style={{ top: 'max(24px, calc(env(safe-area-inset-top) + 12px))' }}
       >
-        {/* Mode label */}
         <div className="flex items-center gap-2">
-          <Moon className="w-4 h-4 text-blue-400/60" />
-          <span className="text-[10px] font-bold text-white/40 uppercase tracking-[0.2em]">Bedtime Mode</span>
+          <Moon className="w-5 h-5 text-blue-400" />
+          <span className="text-xs font-bold text-white/50 uppercase tracking-[0.2em]">Bedtime Adhkar</span>
         </div>
 
-        {/* Close button */}
-        <button
-          onClick={e => { e.stopPropagation(); onClose(); }}
-          className="p-2.5 rounded-full bg-white/10 text-white/70 hover:bg-white/20 hover:text-white border border-white/5 backdrop-blur-md transition-all flex items-center justify-center cursor-pointer"
-        >
-          <X size={20} />
-        </button>
+        <div className="flex items-center gap-2">
+          <button
+            onClick={toggleAmbient}
+            className={`p-2.5 rounded-full border backdrop-blur-md transition-all cursor-pointer ${
+              ambientActive ? 'bg-blue-500/20 text-blue-300 border-blue-400/40' : 'bg-white/10 text-white/60 border-white/5 hover:bg-white/20'
+            }`}
+            title="Toggle Ambient Rain Sound"
+          >
+            <Wind size={16} />
+          </button>
+          <button
+            onClick={e => { e.stopPropagation(); ambientEngine.stop(); onClose(); }}
+            className="p-2.5 rounded-full bg-white/10 text-white/70 hover:bg-white/20 hover:text-white border border-white/5 backdrop-blur-md transition-all flex items-center justify-center cursor-pointer"
+          >
+            <X size={18} />
+          </button>
+        </div>
       </div>
 
       {completed ? (
-        /* Completion screen */
-        <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="text-center px-8 space-y-4">
+        <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="text-center px-8 space-y-4 z-20">
           <span className="text-6xl">🌙</span>
-          <h2 className="text-2xl font-black text-white/90">Adhkar Complete</h2>
-          <p className="text-sm text-white/40 max-w-[240px] mx-auto">
-            May Allah bless your night and grant you peaceful sleep. In sha Allah.
+          <h2 className="text-2xl font-bold text-white/90">Bedtime Adhkar Complete</h2>
+          <p className="text-sm text-white/50 max-w-[260px] mx-auto leading-relaxed">
+            May Allah protect your night, forgive your sins, and grant you peaceful sleep. In sha Allah.
           </p>
-          <button onClick={onClose} className="mt-4 px-6 py-3 rounded-2xl bg-white/10 text-white/70 text-xs font-black uppercase tracking-wider hover:bg-white/15 transition-all">
+          <button
+            onClick={() => { ambientEngine.stop(); onClose(); }}
+            className="mt-4 px-8 py-3.5 rounded-2xl bg-white/15 text-white text-xs font-bold uppercase tracking-wider hover:bg-white/25 transition-all cursor-pointer"
+          >
             Close
           </button>
         </motion.div>
       ) : (
-        <div className="w-full max-w-sm px-6 space-y-8 text-center">
+        <div className="w-full max-w-sm px-6 space-y-7 text-center z-20">
           {/* Step progress dots */}
-          <div className="flex items-center justify-center gap-1.5">
+          <div className="flex items-center justify-center gap-2">
             {BEDTIME_STEPS.map((s, i) => (
               <div key={s.id} className={`transition-all rounded-full ${
-                i < stepIndex ? 'w-2 h-2 bg-blue-400/60' :
-                i === stepIndex ? 'w-4 h-2 bg-blue-400' :
-                'w-2 h-2 bg-white/10'
+                i < stepIndex ? 'w-2.5 h-2.5 bg-blue-400' :
+                i === stepIndex ? 'w-5 h-2.5 bg-blue-400 shadow-[0_0_10px_rgba(96,165,250,0.8)]' :
+                'w-2.5 h-2.5 bg-white/10'
               }`} />
             ))}
           </div>
@@ -211,24 +250,35 @@ export function BedtimeModeView({ onClose }: BedtimeModeViewProps) {
               exit={{ opacity: 0, y: -12 }}
               className="space-y-4"
             >
-              <p className="text-[9px] font-black text-white/20 uppercase tracking-[0.25em]">{step?.title}</p>
+              <div className="flex items-center justify-center gap-2">
+                <p className="text-[10px] font-bold text-blue-400/80 uppercase tracking-[0.25em]">{step?.title}</p>
+                <button
+                  onClick={handlePlayAudio}
+                  className={`p-1.5 rounded-full transition-colors cursor-pointer ${
+                    isPlayingAudio ? 'text-blue-300 animate-pulse' : 'text-white/40 hover:text-white/80'
+                  }`}
+                  title="Listen to recitation"
+                >
+                  <Volume2 size={14} />
+                </button>
+              </div>
 
               {/* Arabic text */}
               <p
-                className="text-3xl leading-loose text-blue-300/90"
+                className="text-2xl sm:text-3xl leading-loose text-blue-200/90 font-bold"
                 style={{ fontFamily: "'Amiri','Traditional Arabic',serif", direction: 'rtl' }}
               >
                 {step?.arabic}
               </p>
 
-              <p className="text-xs text-white/30 italic">{step?.meaning}</p>
+              <p className="text-xs text-white/40 italic leading-relaxed px-2">{step?.meaning}</p>
             </motion.div>
           </AnimatePresence>
 
           {/* Circular progress + count */}
           <div className="relative flex items-center justify-center mx-auto" style={{ width: 140, height: 140 }}>
             <svg className="absolute inset-0 -rotate-90" width={140} height={140}>
-              <circle cx={70} cy={70} r={62} fill="none" stroke="rgba(255,255,255,0.05)" strokeWidth={4} />
+              <circle cx={70} cy={70} r={62} fill="none" stroke="rgba(255,255,255,0.08)" strokeWidth={4} />
               <circle
                 cx={70} cy={70} r={62}
                 fill="none"
@@ -241,19 +291,18 @@ export function BedtimeModeView({ onClose }: BedtimeModeViewProps) {
               />
             </svg>
             <div className="text-center">
-              <p className="text-4xl font-black text-white/90 tabular-nums">{tapCount}</p>
-              <p className="text-[10px] text-white/30">of {step?.count}</p>
+              <p className="text-4xl font-bold text-white/90 tabular-nums">{tapCount}</p>
+              <p className="text-[10px] text-white/40">of {step?.count}</p>
               {step && step.repetitions > 1 && (
-                <p className="text-[9px] text-blue-400/60">Rep {repIndex + 1}/{step.repetitions}</p>
+                <p className="text-[10px] text-blue-400 font-semibold mt-0.5">Rep {repIndex + 1}/{step.repetitions}</p>
               )}
             </div>
           </div>
 
-          {/* Tap instruction */}
           <motion.p
             animate={{ opacity: [0.3, 0.7, 0.3] }}
             transition={{ repeat: Infinity, duration: 2.5 }}
-            className="text-[10px] text-white/25 uppercase tracking-[0.2em]"
+            className="text-[10px] text-white/30 uppercase tracking-[0.2em]"
           >
             Tap anywhere to count
           </motion.p>

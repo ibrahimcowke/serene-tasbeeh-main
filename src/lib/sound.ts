@@ -107,17 +107,37 @@ export class SoundManager {
 
   private static activeAudio: HTMLAudioElement | null = null;
 
-  public static playVoiceReminder(type: 'subhanallah' | 'alhamdulillah' | 'astaghfirullah' | 'salawat' | string) {
+  public static playVoiceReminder(type: string) {
+    const textMap: Record<string, string> = {
+      subhanallah: 'سُبْحَانَ اللَّهِ',
+      alhamdulillah: 'الْحَمْدُ لِلَّهِ',
+      astaghfirullah: 'أَسْتَغْفِرُ اللَّهَ',
+      salawat: 'اللَّهُمَّ صَلِّ عَلَى مُحَمَّدٍ وَعَلَى آلِ مُحَمَّدٍ',
+      ayat_kursi: 'اللَّهُ لَا إِلَهَ إِلَّا هُوَ الْحَيُّ الْقَيُّومُ',
+      hasbunallah: 'حَسْبُنَا اللَّهُ وَنِعْمَ الْوَكِيلُ',
+      rabbi_zidni: 'رَبِّ زِدْنِي عِلْمًا',
+      bismillah: 'بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ',
+      subhanallahi_wabihamdihi: 'سُبْحَانَ اللَّهِ وَبِحَمْدِهِ سُبْحَانَ اللَّهِ الْعَظِيمِ',
+      rabbana_atina: 'رَبَّنَا آتِنَا فِي الدُّنْيَا حَسَنَةً وَفِي الْآخِرَةِ حَسَنَةً',
+    };
+
     try {
       if (this.activeAudio) {
         this.activeAudio.pause();
         this.activeAudio = null;
       }
+
       const audio = new Audio(`/sounds/${type}.mp3`);
       this.activeAudio = audio;
-      audio.play().catch((err) => console.warn('Failed to play voice preview:', err));
+      audio.play().catch((err) => {
+        console.warn(`Local audio /sounds/${type}.mp3 not found, using speech synthesis recitation.`, err);
+        const text = textMap[type] || 'سُبْحَانَ اللَّهِ وَبِحَمْدِهِ';
+        speakArabic(text);
+      });
     } catch (e) {
       console.error('Failed to play voice reminder:', e);
+      const text = textMap[type] || 'سُبْحَانَ اللَّهِ وَبِحَمْدِهِ';
+      speakArabic(text);
     }
   }
 }

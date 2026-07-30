@@ -6,7 +6,7 @@ export interface Reminder {
   label: string;
   enabled: boolean;
   days: number[]; // 0-6 (0 = Sunday, ..., 6 = Saturday)
-  soundType?: 'default' | 'subhanallah' | 'alhamdulillah' | 'astaghfirullah' | 'salawat';
+  soundType?: 'default' | 'subhanallah' | 'alhamdulillah' | 'astaghfirullah' | 'salawat' | 'ayat_kursi' | 'hasbunallah' | 'rabbi_zidni' | 'bismillah' | 'subhanallahi_wabihamdihi' | 'rabbana_atina';
 }
 
 
