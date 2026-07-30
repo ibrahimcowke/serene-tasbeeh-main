@@ -101,15 +101,15 @@ export const BeadsDecorator = memo(() => (
 ));
 
 export const MinimalBorder = memo(() => (
-  <div className="absolute inset-4 rounded-full border border-border/50" />
+  <div className="absolute inset-4 rounded-full border-2 border-primary/40 shadow-[0_0_15px_hsl(var(--primary)/0.2)]" />
 ));
 
 export const ClassicBody = memo(() => (
-  <div className="absolute inset-x-0 -top-4 bottom-0 bg-original-secondary/30 rounded-3xl border-4 border-original-muted flex items-center justify-center -z-10 flex-col">
-    <div className="absolute top-3 left-3 w-3 h-3 rounded-full bg-original-muted/30" />
-    <div className="absolute top-3 right-3 w-3 h-3 rounded-full bg-original-muted/30" />
-    <div className="absolute bottom-3 left-3 w-3 h-3 rounded-full bg-original-muted/30" />
-    <div className="absolute bottom-3 right-3 w-3 h-3 rounded-full bg-original-muted/30" />
+  <div className="absolute inset-x-0 -top-4 bottom-0 bg-primary/10 rounded-3xl border-4 border-primary/50 shadow-[0_0_20px_hsl(var(--primary)/0.25)] flex items-center justify-center -z-10 flex-col">
+    <div className="absolute top-3 left-3 w-3 h-3 rounded-full bg-primary/40" />
+    <div className="absolute top-3 right-3 w-3 h-3 rounded-full bg-primary/40" />
+    <div className="absolute bottom-3 left-3 w-3 h-3 rounded-full bg-primary/40" />
+    <div className="absolute bottom-3 right-3 w-3 h-3 rounded-full bg-primary/40" />
   </div>
 ));
 

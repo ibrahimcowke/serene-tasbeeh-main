@@ -60,8 +60,7 @@ export const CounterNumber = memo(({
     currentSettings: ThemeSettings;
     countFontSize: number;
 }) => {
-    const shapeData = counterShapes.find(s => s.id === counterShape);
-    const shapeColor = shapeData?.color || 'currentColor';
+    const shapeColor = 'hsl(var(--primary))';
     const language = useTasbeehStore(state => state.language);
     const displayCount = language === 'ar' ? currentCount.toLocaleString('ar-EG') : currentCount;
 
@@ -112,8 +111,7 @@ export const CounterVisuals = memo(({
     disabled,
     hideNumber
 }: CounterVisualsProps) => {
-    const shapeData = counterShapes.find(s => s.id === counterShape);
-    const shapeColor = shapeData?.color || 'hsl(var(--original-primary))';
+    const shapeColor = 'hsl(var(--primary))';
 
     if (counterShape === 'digital-tally') {
         return (
