@@ -87,21 +87,28 @@ export const DhikrHeader = memo(function DhikrHeader() {
       </AnimatePresence>
 
       {/* Phase indicator for tasbih100 */}
+      {/* Phase indicator for tasbih100 */}
       {sessionMode.type === 'tasbih100' && (
-        <div className="flex flex-col items-center mt-2 gap-1.5">
-          <div className="flex justify-center gap-2">
-            {[0, 1, 2, 3].map((phase) => (
-              <div
-                key={phase}
-                className={`w-1.5 h-1.5 rounded-full transition-all duration-500 ${
-                  phase < sessionMode.currentPhase
-                    ? 'bg-primary'
-                    : phase === sessionMode.currentPhase
-                    ? 'bg-primary animate-pulse scale-150'
-                    : 'bg-white/15'
-                }`}
-              />
-            ))}
+        <div className="flex flex-col items-center mt-1.5 gap-1.5">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 border border-primary/20 text-primary text-[10px] sm:text-xs font-medium backdrop-blur-sm shadow-sm">
+            <div className="flex justify-center gap-1">
+              {[0, 1, 2, 3].map((phase) => (
+                <div
+                  key={phase}
+                  className={`h-1.5 rounded-full transition-all duration-300 ${
+                    phase < sessionMode.currentPhase
+                      ? 'w-2.5 bg-primary'
+                      : phase === sessionMode.currentPhase
+                      ? 'w-4 bg-primary shadow-[0_0_8px_hsl(var(--primary))]'
+                      : 'w-1.5 bg-primary/20'
+                  }`}
+                />
+              ))}
+            </div>
+            <span className="opacity-30">•</span>
+            <span>Phase {sessionMode.currentPhase + 1} / 4</span>
+            <span className="opacity-30">•</span>
+            <span className="font-semibold">{sessionMode.currentPhase === 3 ? '1' : '33'} dhikr</span>
           </div>
           {totalProgress !== null && (
             <div
@@ -123,15 +130,24 @@ export const DhikrHeader = memo(function DhikrHeader() {
               />
             </div>
           )}
-          <p className="text-primary/50 text-[10px] tracking-wide">
-            Phase {sessionMode.currentPhase + 1} / 4 • {sessionMode.currentPhase === 3 ? '١' : '٣٣'} dhikr
-          </p>
         </div>
       )}
 
       {/* Phase indicator for tasbih1000 */}
       {sessionMode.type === 'tasbih1000' && (
-        <div className="flex flex-col items-center mt-2 gap-1.5">
+        <div className="flex flex-col items-center mt-1.5 gap-1.5">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 border border-primary/20 text-primary text-[10px] sm:text-xs font-medium backdrop-blur-sm shadow-sm">
+            <span>
+              {isRTL
+                ? `المجموعة ${toArabicNumerals(sessionMode.currentPhase + 1, isRTL)} / ${toArabicNumerals(4, isRTL)}`
+                : `Set ${sessionMode.currentPhase + 1} / 4`
+              }
+            </span>
+            <span className="opacity-30">•</span>
+            <span className="font-bold font-mono">
+              {toArabicNumerals(Math.floor(([0, 333, 666, 999][sessionMode.currentPhase] || 0) + currentCount), isRTL)} / {toArabicNumerals(1000, isRTL)}
+            </span>
+          </div>
           {totalProgress !== null && (
             <div
               className="w-44 h-1 backdrop-blur-sm rounded-full overflow-hidden"
@@ -152,12 +168,6 @@ export const DhikrHeader = memo(function DhikrHeader() {
               />
             </div>
           )}
-          <p className="text-primary/50 text-[10px] tracking-wide">
-            {isRTL 
-              ? `المجموعة ${toArabicNumerals(sessionMode.currentPhase + 1, isRTL)} / ${toArabicNumerals(4, isRTL)} • ${toArabicNumerals(Math.floor(([0, 333, 666, 999][sessionMode.currentPhase] || 0) + currentCount), isRTL)} / ${toArabicNumerals(1000, isRTL)}`
-              : `Set ${sessionMode.currentPhase + 1} / 4 • ${toArabicNumerals(Math.floor(([0, 333, 666, 999][sessionMode.currentPhase] || 0) + currentCount), isRTL)} / 1000`
-            }
-          </p>
         </div>
       )}
 
@@ -166,7 +176,7 @@ export const DhikrHeader = memo(function DhikrHeader() {
         <motion.div
           initial={{ opacity: 0, y: 4 }}
           animate={{ opacity: 1, y: 0 }}
-          className="mt-2 flex items-center gap-2 text-xs text-primary/60"
+          className="mt-1.5 inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 border border-primary/20 text-primary text-[10px] sm:text-xs font-medium backdrop-blur-sm"
         >
           <span>
             {isRTL
@@ -176,35 +186,37 @@ export const DhikrHeader = memo(function DhikrHeader() {
           </span>
           {sessionMode.steps[sessionMode.currentStepIndex].description && (
             <>
-              <span className="opacity-40">•</span>
-              <span className="text-primary/40">{sessionMode.steps[sessionMode.currentStepIndex].description}</span>
+              <span className="opacity-30">•</span>
+              <span className="text-foreground/80">{sessionMode.steps[sessionMode.currentStepIndex].description}</span>
             </>
           )}
         </motion.div>
       )}
+
       {/* Salatul Tasbeeh indicator */}
       {sessionMode.type === 'salatul-tasbeeh' && (
-        <div className="flex flex-col items-center mt-2 gap-1.5">
-          <div className="flex justify-center gap-1.5">
-            {[1, 2, 3, 4].map((rakah) => (
-              <div
-                key={rakah}
-                className={`w-2.5 h-1 rounded-full transition-all duration-500 ${
-                  rakah < sessionMode.rakah
-                    ? 'bg-green-500'
-                    : rakah === sessionMode.rakah
-                    ? 'bg-primary animate-pulse w-4'
-                    : 'bg-white/15'
-                }`}
-              />
-            ))}
-          </div>
-          <div className="flex items-center gap-1.5 text-[10px] font-bold text-primary bg-primary/10 border border-primary/20 px-3 py-1 rounded-full">
-            <span>Rak'ah {sessionMode.rakah}/4</span>
-            <span className="opacity-40">•</span>
-            <span>{['Qiyam', 'Ruku', "I'tidal", 'Sujud', 'Jalsah'][sessionMode.phase]}</span>
-            <span className="opacity-40">•</span>
-            <span className="font-black tabular-nums">{currentCount}/10</span>
+        <div className="flex flex-col items-center mt-1.5 gap-1.5">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/25 text-emerald-400 text-[11px] font-medium backdrop-blur-md shadow-sm">
+            <div className="flex items-center gap-1">
+              {[1, 2, 3, 4].map((rakah) => (
+                <div
+                  key={rakah}
+                  className={`h-1.5 rounded-full transition-all duration-300 ${
+                    rakah < sessionMode.rakah
+                      ? 'w-2 bg-emerald-400'
+                      : rakah === sessionMode.rakah
+                      ? 'w-4 bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.8)]'
+                      : 'w-1.5 bg-emerald-400/20'
+                  }`}
+                />
+              ))}
+            </div>
+            <span className="opacity-30">•</span>
+            <span className="font-semibold">Rak'ah {sessionMode.rakah}/4</span>
+            <span className="opacity-30">•</span>
+            <span className="text-foreground/90 font-medium">{['Qiyam', 'Ruku', "I'tidal", 'Sujud', 'Jalsah'][sessionMode.phase]}</span>
+            <span className="opacity-30">•</span>
+            <span className="font-bold font-mono text-emerald-300 px-1.5 py-0.5 rounded-md bg-emerald-500/20">{currentCount}/10</span>
           </div>
         </div>
       )}

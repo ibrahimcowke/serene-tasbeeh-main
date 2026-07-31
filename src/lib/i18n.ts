@@ -730,6 +730,33 @@ en: 'Developed by Ibrahim Cowke', ar: 'تطوير إبراهيم عوكى', hi: 
   'hadith.title': {
     en: 'Spiritual Wisdom', ar: 'الحكمة الروحية', hi: 'आध्यात्मिक ज्ञान', ur: 'روحانی حکمت', tr: 'Manevi Hikmet', ms: 'Kebijaksanaan Rohani', id: 'Hikmah Spiritual', fr: 'Sagesse spirituelle', so: 'Xikmadda Ruuxiga'
   },
+  'timer.off': {
+    en: 'Off', ar: 'إيقاف', hi: 'बंद', ur: 'بند', tr: 'Kapalı', ms: 'Mati', id: 'Mati', fr: 'Désactivé', so: 'Daboolan'
+  },
+  'timer.title': {
+    en: 'Session Timer', ar: 'مؤقت الجلسة', hi: 'ستر टाइमर', ur: 'سیشن ٹائمر', tr: 'Oturum Zamanlayıcısı', ms: 'Pemasa Sesi', id: 'Pengukur Waktu Sesi', fr: 'Minuteur de session', so: 'Waqtiyeeyaha Fadhiga'
+  },
+  'timer.5min': {
+    en: '5 Minutes', ar: '٥ دقائق', hi: '5 मिनट', ur: '5 منٹ', tr: '5 Dakika', ms: '5 Minit', id: '5 Menit', fr: '5 Minutes', so: '5 Daqiiqo'
+  },
+  'timer.10min': {
+    en: '10 Minutes', ar: '١٠ دقائق', hi: '10 मिनट', ur: '10 منٹ', tr: '10 Dakika', ms: '10 Minit', id: '10 Menit', fr: '10 Minutes', so: '10 Daqiiqo'
+  },
+  'timer.20min': {
+    en: '20 Minutes', ar: '٢٠ دقيقة', hi: '20 मिनट', ur: '20 منٹ', tr: '20 Dakika', ms: '20 Minit', id: '20 Menit', fr: '20 Minutes', so: '20 Daqiiqo'
+  },
+  'timer.custom': {
+    en: 'Custom', ar: 'مخصص', hi: 'कस्टम', ur: 'حسب ضرورت', tr: 'Özel', ms: 'Kustom', id: 'Kustom', fr: 'Personnalisé', so: 'Kastam'
+  },
+  'timer.done': {
+    en: 'Session Complete!', ar: 'اكتملت الجلسة!', hi: 'सत्र पूरा हुआ!', ur: 'سیشن مکمل ہوا!', tr: 'Oturum Tamamlandı!', ms: 'Sesi Selesai!', id: 'Sesi Selesai!', fr: 'Session terminée !', so: 'Fadhigii waa dhamaaday!'
+  },
+  'timer.counted': {
+    en: 'You counted', ar: 'لقد سبّحت', hi: 'आपने गिना', ur: 'آپ نے گنا', tr: 'Saydınız', ms: 'Anda telah mengira', id: 'Anda telah menghitung', fr: 'Vous avez compté', so: 'Waxaad tirisay'
+  },
+  'timer.times': {
+    en: 'times', ar: 'مرة', hi: 'بار', ur: 'بار', tr: 'kez', ms: 'kali', id: 'kali', fr: 'fois', so: 'jeer'
+  },
   'hadith.next': {
     en: 'Next Quote', ar: 'الحكمة التالية', hi: 'अगला उद्धरण', ur: 'اگला اقتباس', tr: 'Sonraki Alıntı', ms: 'Petikan Seterusnya', id: 'Kutipan Berikutnya', fr: 'Prochaine citation', so: 'Xigta Xikmadda'
   },

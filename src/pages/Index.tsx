@@ -16,10 +16,13 @@ import { Trophy, Star, Flame, Target, ChevronRight } from 'lucide-react';
 const ScreenOffMode = lazy(() => import('@/components/ScreenOffMode').then(m => ({ default: m.ScreenOffMode })));
 const WhatsNew = lazy(() => import('@/components/WhatsNew').then(m => ({ default: m.WhatsNew })));
 const BedtimeModeView = lazy(() => import('@/components/BedtimeModeView').then(m => ({ default: m.BedtimeModeView })));
+const SereneArchDashboard = lazy(() => import('@/components/dashboards/SereneArchDashboard').then(m => ({ default: m.SereneArchDashboard })));
 
 const Index = () => {
   const [showBedtime, setShowBedtime] = useState(false);
   const { t } = useTranslation();
+  const dashboardLayout = useTasbeehStore(state => state.dashboardLayout);
+  const setDashboardLayout = useTasbeehStore(state => state.setDashboardLayout);
   const {
     zenMode,
     setZenMode,
@@ -69,6 +72,19 @@ const Index = () => {
     />
   )), []);
 
+  if (dashboardLayout === 'serene-arch' && !zenMode) {
+    return (
+      <SidebarProvider defaultOpen={true}>
+        <AppSidebar onTriggerBedtime={() => setShowBedtime(true)} />
+        <SidebarInset className="h-dvh overflow-hidden">
+          <Suspense fallback={<div className="h-full w-full bg-[#F7F8F4] flex items-center justify-center text-[#1b4332] text-sm animate-pulse">Loading Serene Arch...</div>}>
+            <SereneArchDashboard />
+          </Suspense>
+        </SidebarInset>
+      </SidebarProvider>
+    );
+  }
+
   return (
     <>
       <SidebarProvider defaultOpen={true}>
@@ -101,7 +117,7 @@ const Index = () => {
             {/* Top navigation bar */}
             {!zenMode && (
               <div
-                className="relative z-50 flex items-center justify-between px-4 sm:px-6 pt-safe gap-4"
+                className="relative z-50 flex items-center justify-between px-4 sm:px-6 pt-safe gap-3"
                 style={{
                   height: 'calc(64px + env(safe-area-inset-top, 0px))',
                   background: 'linear-gradient(to bottom, hsl(var(--background) / 0.95) 0%, transparent 100%)',
@@ -133,78 +149,78 @@ const Index = () => {
 
               {/* Right Spiritual Dashboard (only visible on desktop, lg:flex, when NOT in Zen Mode) */}
               {!zenMode && (
-                <div className="hidden lg:flex lg:w-[54%] xl:w-[58%] flex-col overflow-y-auto p-8 gap-6 bg-card/15 backdrop-blur-xl">
+                <div className="hidden lg:flex lg:w-[54%] xl:w-[58%] flex-col overflow-y-auto p-5 lg:p-6 gap-3.5 bg-card/15 backdrop-blur-xl">
                   {/* Dashboard Header */}
-                  <div className="flex items-center justify-between pb-2 border-b border-border/20">
+                  <div className="flex items-center justify-between pb-2.5 border-b border-border/20">
                     <div>
-                      <h2 className="text-2xl font-bold tracking-tight bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text text-transparent" style={{ fontFamily: "'Outfit', sans-serif" }}>
+                      <h2 className="text-xl font-bold tracking-tight bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text text-transparent" style={{ fontFamily: "'Outfit', sans-serif" }}>
                         Spiritual Dashboard
                       </h2>
-                      <p className="text-xs text-muted-foreground">{t('welcome.tagline') || 'Your daily stats and devotion goals'}</p>
+                      <p className="text-[11px] text-muted-foreground">{t('welcome.tagline') || 'Your daily stats and devotion goals'}</p>
                     </div>
                     <div className="text-right">
-                      <span className="text-xs font-semibold text-primary/80 bg-primary/10 px-3 py-1 rounded-full border border-primary/20">
+                      <span className="text-[11px] font-semibold text-primary/80 bg-primary/10 px-3 py-1 rounded-full border border-primary/20">
                         Desktop Workspace
                       </span>
                     </div>
                   </div>
 
                   {/* Top Stats Cards */}
-                  <div className="grid grid-cols-3 gap-4">
+                  <div className="grid grid-cols-3 gap-3.5">
                     {/* Hasanat Card */}
-                    <div className="bg-card/30 border border-border/40 rounded-3xl p-5 flex flex-col justify-between shadow-lg shadow-primary/5 hover:border-primary/20 transition-all">
+                    <div className="bg-card/30 border border-border/40 rounded-2xl p-4 flex flex-col justify-between shadow-lg shadow-primary/5 hover:border-primary/20 transition-all">
                       <div className="flex items-center justify-between">
                         <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Hasanat</span>
-                        <Star className="w-5 h-5 text-yellow-400 fill-yellow-400/20" />
+                        <Star className="w-4 h-4 text-yellow-400 fill-yellow-400/20" />
                       </div>
-                      <div className="mt-4">
-                        <span className="text-3xl font-black text-primary">{totalHasanat.toLocaleString()}</span>
-                        <p className="text-[9px] text-muted-foreground mt-1">Spiritual rewards earned</p>
+                      <div className="mt-3">
+                        <span className="text-2xl font-black text-primary">{totalHasanat.toLocaleString()}</span>
+                        <p className="text-[9px] text-muted-foreground mt-0.5">Spiritual rewards earned</p>
                       </div>
                     </div>
 
                     {/* Streak Card */}
-                    <div className="bg-card/30 border border-border/40 rounded-3xl p-5 flex flex-col justify-between shadow-lg shadow-primary/5 hover:border-primary/20 transition-all">
+                    <div className="bg-card/30 border border-border/40 rounded-2xl p-4 flex flex-col justify-between shadow-lg shadow-primary/5 hover:border-primary/20 transition-all">
                       <div className="flex items-center justify-between">
                         <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">{t('counter.streak')}</span>
-                        <Flame className="w-5 h-5 text-orange-500 fill-orange-500/20 animate-pulse" />
+                        <Flame className="w-4 h-4 text-orange-500 fill-orange-500/20 animate-pulse" />
                       </div>
-                      <div className="mt-4">
-                        <span className="text-3xl font-black text-orange-500">{streakDays} {streakDays === 1 ? 'Day' : 'Days'}</span>
-                        <p className="text-[9px] text-muted-foreground mt-1">Keep it up consistently</p>
+                      <div className="mt-3">
+                        <span className="text-2xl font-black text-orange-500">{streakDays} {streakDays === 1 ? 'Day' : 'Days'}</span>
+                        <p className="text-[9px] text-muted-foreground mt-0.5">Keep it up consistently</p>
                       </div>
                     </div>
 
                     {/* Total Count Card */}
-                    <div className="bg-card/30 border border-border/40 rounded-3xl p-5 flex flex-col justify-between shadow-lg shadow-primary/5 hover:border-primary/20 transition-all">
+                    <div className="bg-card/30 border border-border/40 rounded-2xl p-4 flex flex-col justify-between shadow-lg shadow-primary/5 hover:border-primary/20 transition-all">
                       <div className="flex items-center justify-between">
                         <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">{t('counter.total')}</span>
-                        <Trophy className="w-5 h-5 text-primary fill-primary/10" />
+                        <Trophy className="w-4 h-4 text-primary fill-primary/10" />
                       </div>
-                      <div className="mt-4">
-                        <span className="text-3xl font-black text-primary">{totalAllTime.toLocaleString()}</span>
-                        <p className="text-[9px] text-muted-foreground mt-1">All-time count</p>
+                      <div className="mt-3">
+                        <span className="text-2xl font-black text-primary">{totalAllTime.toLocaleString()}</span>
+                        <p className="text-[9px] text-muted-foreground mt-0.5">All-time count</p>
                       </div>
                     </div>
                   </div>
 
                   {/* Daily Goal & Streak Calendar Row */}
-                  <div className="grid grid-cols-1 xl:grid-cols-2 gap-6 items-stretch">
+                  <div className="grid grid-cols-1 xl:grid-cols-2 gap-3.5 items-stretch">
                     {/* Today's Progress widget */}
-                    <div className="bg-card/30 border border-border/40 rounded-3xl p-6 shadow-lg shadow-primary/5 hover:border-primary/20 transition-all flex flex-col justify-between">
+                    <div className="bg-card/30 border border-border/40 rounded-2xl p-4 shadow-lg shadow-primary/5 hover:border-primary/20 transition-all flex flex-col justify-between">
                       <div>
-                        <div className="flex items-center justify-between mb-4">
-                          <span className="text-sm font-bold text-foreground">Today's Devotion</span>
-                          <Target className="w-4.5 h-4.5 text-primary" />
+                        <div className="flex items-center justify-between mb-3">
+                          <span className="text-xs font-bold text-foreground">Today's Devotion</span>
+                          <Target className="w-4 h-4 text-primary" />
                         </div>
-                        <div className="space-y-4">
+                        <div className="space-y-3">
                           <div className="flex items-baseline justify-between">
-                            <span className="text-2xl font-black text-foreground">{todayCount} / {dailyGoal}</span>
+                            <span className="text-xl font-black text-foreground">{todayCount} / {dailyGoal}</span>
                             <span className="text-xs font-semibold text-muted-foreground">
                               {dailyGoal > 0 ? Math.round((todayCount / dailyGoal) * 100) : 0}%
                             </span>
                           </div>
-                          <div className="h-2.5 w-full bg-foreground/5 rounded-full overflow-hidden border border-border/20">
+                          <div className="h-2 w-full bg-foreground/5 rounded-full overflow-hidden border border-border/20">
                             <div 
                               className="h-full rounded-full bg-gradient-to-r from-primary via-accent to-primary transition-all duration-500"
                               style={{ width: `${Math.min(100, dailyGoal > 0 ? (todayCount / dailyGoal) * 100 : 0)}%` }}
@@ -213,19 +229,19 @@ const Index = () => {
                         </div>
                       </div>
 
-                      <div className="mt-6 border-t border-border/20 pt-4 space-y-3">
+                      <div className="mt-4 border-t border-border/20 pt-3 space-y-2">
                         <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest block">Quick Challenges</span>
                         <div className="grid grid-cols-2 gap-2">
                           <button
                             onClick={() => startTasbih100()}
-                            className="p-3 text-left rounded-2xl bg-foreground/5 border border-border/40 hover:bg-foreground/10 hover:border-primary/20 transition-all text-xs font-medium flex items-center justify-between group cursor-pointer"
+                            className="p-2.5 text-left rounded-xl bg-foreground/5 border border-border/40 hover:bg-foreground/10 hover:border-primary/20 transition-all text-xs font-medium flex items-center justify-between group cursor-pointer"
                           >
                             <span>100 Sprint</span>
                             <ChevronRight className="w-3.5 h-3.5 text-primary group-hover:translate-x-1 transition-transform" />
                           </button>
                           <button
                             onClick={() => startTasbih1000()}
-                            className="p-3 text-left rounded-2xl bg-foreground/5 border border-border/40 hover:bg-foreground/10 hover:border-primary/20 transition-all text-xs font-medium flex items-center justify-between group cursor-pointer"
+                            className="p-2.5 text-left rounded-xl bg-foreground/5 border border-border/40 hover:bg-foreground/10 hover:border-primary/20 transition-all text-xs font-medium flex items-center justify-between group cursor-pointer"
                           >
                             <span>1000 Endurance</span>
                             <ChevronRight className="w-3.5 h-3.5 text-primary group-hover:translate-x-1 transition-transform" />
@@ -235,8 +251,8 @@ const Index = () => {
                     </div>
 
                     {/* Streak Calendar widget */}
-                    <div className="bg-card/30 border border-border/40 rounded-3xl p-6 shadow-lg shadow-primary/5 hover:border-primary/20 transition-all flex flex-col justify-center">
-                      <h3 className="text-sm font-bold text-foreground mb-2 px-1 flex items-center gap-2">
+                    <div className="bg-card/30 border border-border/40 rounded-2xl p-4 shadow-lg shadow-primary/5 hover:border-primary/20 transition-all flex flex-col justify-center">
+                      <h3 className="text-xs font-bold text-foreground mb-2 px-1 flex items-center gap-2">
                         <span>📅</span> Hijri Devotion Calendar
                       </h3>
                       <StreakCalendar />

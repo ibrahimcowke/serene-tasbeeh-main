@@ -298,6 +298,8 @@ export interface TasbeehState {
   closeCongrats: () => void;
   updateStreak: () => void;
   checkAchievements: () => void;
+  dashboardLayout: 'classic' | 'serene-arch';
+  setDashboardLayout: (layout: 'classic' | 'serene-arch') => void;
 }
 
 export const defaultDhikrs: Dhikr[] = [
@@ -420,6 +422,8 @@ export const useTasbeehStore = create<TasbeehState>()(
       autoThemeDawnDusk: false,
       khatmLog: [],
       sessionNotes: {},
+      dashboardLayout: 'classic',
+      setDashboardLayout: (layout: 'classic' | 'serene-arch') => set({ dashboardLayout: layout }),
 
       journeyStage: 1,
       journeyProgress: {},
@@ -819,8 +823,13 @@ export const useTasbeehStore = create<TasbeehState>()(
       },
       importData: (dataStr) => {
         try {
-          const p = JSON.parse(dataStr);
+          let p = typeof dataStr === 'string' ? JSON.parse(dataStr) : dataStr;
           if (!p || typeof p !== 'object') return false;
+
+          // Unwrap if nested in backup/state wrapper
+          if (p.data && typeof p.data === 'object') p = p.data;
+          else if (p.state && typeof p.state === 'object') p = p.state;
+          else if (p.backup && typeof p.backup === 'object') p = p.backup;
 
           const s = get();
           const patch: Partial<TasbeehState> = {};

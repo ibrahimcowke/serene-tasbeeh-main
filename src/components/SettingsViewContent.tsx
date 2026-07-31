@@ -100,6 +100,8 @@ export function SettingsViewContent({ defaultTab, setOpen }: SettingsViewContent
     setCountFontSize,
     dhikrFontSize,
     setDhikrFontSize,
+    dashboardLayout,
+    setDashboardLayout,
   } = useTasbeehStore(useShallow(state => ({
     theme: state.theme,
     themeSettings: state.themeSettings,
@@ -152,6 +154,8 @@ export function SettingsViewContent({ defaultTab, setOpen }: SettingsViewContent
     setVoiceAnnouncements: state.setVoiceAnnouncements,
     hapticPattern: state.hapticPattern,
     setHapticPattern: state.setHapticPattern,
+    dashboardLayout: state.dashboardLayout,
+    setDashboardLayout: state.setDashboardLayout,
   })));
   const { t } = useTranslation();
 
@@ -171,20 +175,54 @@ export function SettingsViewContent({ defaultTab, setOpen }: SettingsViewContent
   useEffect(() => { setLocalCounterScale(counterScale); }, [counterScale]);
   useEffect(() => { setLocalHadithSlideDuration(hadithSlideDuration); }, [hadithSlideDuration]);
 
-  const handleExport = () => {
+  const handleExport = async () => {
     try {
       const data = exportData();
+      const s = JSON.parse(data);
+      const filename = `tasbeeh-backup-${new Date().toISOString().split('T')[0]}.json`;
+      const recordCount = Array.isArray(s.dailyRecords) ? s.dailyRecords.length : 0;
+      const totalCount = typeof s.totalAllTime === 'number' ? s.totalAllTime : 0;
+      const customCount = Array.isArray(s.customDhikrs) ? s.customDhikrs.length : 0;
+      const summaryMsg = `${recordCount} daily records, ${customCount} custom dhikrs, and ${totalCount.toLocaleString()} total count`;
+
+      // 1. Try Native Share API on mobile devices
+      if (typeof navigator !== 'undefined' && navigator.share && /Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
+        try {
+          const file = new File([data], filename, { type: 'application/json' });
+          if (navigator.canShare && navigator.canShare({ files: [file] })) {
+            await navigator.share({
+              files: [file],
+              title: 'Tasbeehly Backup',
+              text: `Tasbeehly App Data Backup (${summaryMsg})`,
+            });
+            toast.success(`Exported backup: ${summaryMsg}! 📁`);
+            return;
+          }
+        } catch (shareErr) {
+          console.log('Native share bypassed or cancelled, proceeding with standard download:', shareErr);
+        }
+      }
+
+      // 2. Standard Browser Blob Download
       const blob = new Blob([data], { type: 'application/json' });
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = `tasbeeh-backup-${new Date().toISOString().split('T')[0]}.json`;
+      a.download = filename;
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
       URL.revokeObjectURL(url);
-      toast.success('JSON backup exported successfully! 📁');
+
+      // Copy text to clipboard as an extra safety measure
+      try {
+        await navigator.clipboard.writeText(data);
+        toast.success(`Backup exported & copied to clipboard! 📁 (${summaryMsg})`);
+      } catch {
+        toast.success(`Backup exported successfully! 📁 (${summaryMsg})`);
+      }
     } catch (e) {
+      console.error('Export error:', e);
       toast.error('Failed to export JSON backup.');
     }
   };
@@ -192,20 +230,30 @@ export function SettingsViewContent({ defaultTab, setOpen }: SettingsViewContent
   const handleImport = () => {
     const input = document.createElement('input');
     input.type = 'file';
-    input.accept = '.json';
+    input.accept = '.json,application/json';
     input.onchange = (e) => {
       const file = (e.target as HTMLInputElement).files?.[0];
       if (file) {
         const reader = new FileReader();
         reader.onload = (e) => {
-          const data = e.target?.result as string;
-          const success = importData(data);
-          if (success) {
-            setImportStatus('success');
-            toast.success('JSON backup imported successfully! 🎉');
-          } else {
+          try {
+            const data = e.target?.result as string;
+            const parsed = JSON.parse(data);
+            const success = importData(data);
+            if (success) {
+              setImportStatus('success');
+              const inner = parsed.data || parsed.state || parsed.backup || parsed;
+              const recordCount = Array.isArray(inner.dailyRecords) ? inner.dailyRecords.length : 0;
+              const totalCount = typeof inner.totalAllTime === 'number' ? inner.totalAllTime : 0;
+              const customCount = Array.isArray(inner.customDhikrs) ? inner.customDhikrs.length : 0;
+              toast.success(`Imported backup successfully! 🎉 Restored ${recordCount} records, ${customCount} custom dhikrs, and ${totalCount.toLocaleString()} total count.`);
+            } else {
+              setImportStatus('error');
+              toast.error('Failed to import JSON file. Invalid backup format.');
+            }
+          } catch (err) {
             setImportStatus('error');
-            toast.error('Failed to import JSON file. Please check file format.');
+            toast.error('Failed to read backup file. Make sure it is a valid JSON file.');
           }
           setTimeout(() => setImportStatus('idle'), 3000);
         };
@@ -245,6 +293,54 @@ export function SettingsViewContent({ defaultTab, setOpen }: SettingsViewContent
           <div className="flex-1 overflow-y-auto px-1 py-1 custom-scrollbar">
             {/* THEMES TAB */}
             <TabsContent value="themes" className="space-y-6 mt-0 pb-6 px-4 overflow-x-hidden">
+              {/* Dashboard Layout Selector */}
+              <div className="space-y-1">
+                <p className="text-xs text-muted-foreground uppercase tracking-wide mb-3 px-1">Dashboard Style</p>
+                <div className="grid grid-cols-2 gap-2.5 pb-2">
+                  <button
+                    onClick={() => setDashboardLayout('classic')}
+                    className={`
+                      p-3 rounded-2xl text-left border transition-all active:scale-[0.98] duration-150 cursor-pointer
+                      ${dashboardLayout === 'classic'
+                        ? 'bg-primary/10 border-primary shadow-sm'
+                        : 'bg-card border-border hover:bg-secondary'
+                      }
+                    `}
+                  >
+                    <div className="flex items-center justify-between gap-1 mb-1">
+                      <p className={`text-xs font-bold ${dashboardLayout === 'classic' ? 'text-primary' : 'text-foreground'}`}>
+                        Classic Modern
+                      </p>
+                      {dashboardLayout === 'classic' && (
+                        <Check className="w-3.5 h-3.5 text-primary shrink-0" />
+                      )}
+                    </div>
+                    <p className="text-[10px] text-muted-foreground leading-tight">Standard Tasbeehly workspace & stats dashboard</p>
+                  </button>
+
+                  <button
+                    onClick={() => setDashboardLayout('serene-arch')}
+                    className={`
+                      p-3 rounded-2xl text-left border transition-all active:scale-[0.98] duration-150 cursor-pointer
+                      ${dashboardLayout === 'serene-arch'
+                        ? 'bg-primary/10 border-primary shadow-sm'
+                        : 'bg-card border-border hover:bg-secondary'
+                      }
+                    `}
+                  >
+                    <div className="flex items-center justify-between gap-1 mb-1">
+                      <p className={`text-xs font-bold ${dashboardLayout === 'serene-arch' ? 'text-primary' : 'text-foreground'}`}>
+                        Serene Arch 🕌
+                      </p>
+                      {dashboardLayout === 'serene-arch' && (
+                        <Check className="w-3.5 h-3.5 text-primary shrink-0" />
+                      )}
+                    </div>
+                    <p className="text-[10px] text-muted-foreground leading-tight">Light mosque arch frame with ring counter & controls</p>
+                  </button>
+                </div>
+              </div>
+
               <div className="space-y-1">
                 <p className="text-xs text-muted-foreground uppercase tracking-wide mb-3 px-1">{t('settings.visual_theme')}</p>
                 <div className="grid grid-cols-2 gap-2 pb-2">

@@ -22,6 +22,7 @@ import { SoundManager } from "./lib/sound";
 import { scheduleLazyDayNotification, cancelLazyDayNotification } from "./lib/lazyDayRecovery";
 import { ErrorBoundary } from "./components/ErrorBoundary";
 import { startAutoThemeScheduler, stopAutoThemeScheduler } from "./lib/autoThemeScheduler";
+import { initDeepLinking } from "./lib/deepLinking";
 const GoogleLoginScreen = lazy(() => import("./components/GoogleLoginScreen").then(m => ({ default: m.GoogleLoginScreen })));
 import { toast } from "sonner";
 
@@ -105,6 +106,11 @@ const App = () => {
   });
 
   const autoThemeDawnDusk = useTasbeehStore((s) => s.autoThemeDawnDusk);
+
+  // Initialize Deep Linking & Deferred Deep Link Handler
+  useEffect(() => {
+    initDeepLinking();
+  }, []);
 
   // Schedule or cancel Lazy Day Recovery notification
   useEffect(() => {

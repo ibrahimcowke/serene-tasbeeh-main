@@ -95,15 +95,15 @@ export function SessionTimer() {
           <motion.button
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
-            className={`px-3 py-1 rounded-full text-[10px] sm:text-xs font-light tracking-wide flex items-center gap-1.5 backdrop-blur-sm transition-all border ${
+            className={`px-2.5 py-1 rounded-full text-[10px] sm:text-xs font-medium tracking-wide flex items-center gap-1.5 transition-all cursor-pointer whitespace-nowrap ${
               isCountdown
-                ? 'bg-amber-500/10 border-amber-500/30 text-amber-500 hover:bg-amber-500/20'
-                : 'bg-white/5 border-white/10 text-muted-foreground hover:bg-white/10'
+                ? 'bg-amber-500/15 border border-amber-500/30 text-amber-400'
+                : 'text-foreground/80 hover:text-primary hover:bg-primary/10'
             }`}
           >
-            {isCountdown ? <Timer className="w-3 h-3 animate-pulse" /> : <Clock className="w-3 h-3" />}
-            <span className="font-mono tabular-nums">
-              {isCountdown ? `${getDisplayTime()} remaining` : (t('timer.off') || 'Off')}
+            {isCountdown ? <Timer className="w-3 h-3 text-amber-400 animate-pulse" /> : <Clock className="w-3 h-3 text-primary/70" />}
+            <span className="font-medium font-sans">
+              {isCountdown ? getDisplayTime() : (t('timer.title') || 'Timer')}
             </span>
           </motion.button>
         </SheetTrigger>

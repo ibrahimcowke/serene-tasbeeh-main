@@ -67,8 +67,11 @@ export function LoginView({ children }: LoginViewProps) {
         setSyncing(true);
         try {
             const data = store.exportData(); // Export local Zustand store data as string
+            const s = JSON.parse(data);
+            const recordCount = Array.isArray(s.dailyRecords) ? s.dailyRecords.length : 0;
+            const totalCount = typeof s.totalAllTime === 'number' ? s.totalAllTime : 0;
             await uploadBackup(token, data);
-            toast.success("Data successfully backed up to your Google Drive!");
+            toast.success(`Data backed up to Google Drive! ☁️ (${recordCount} records, ${totalCount.toLocaleString()} total count)`);
         } catch (error: any) {
             console.error("Backup error:", error);
             toast.error("Failed to backup data to Google Drive. Check permissions.");
@@ -88,9 +91,13 @@ export function LoginView({ children }: LoginViewProps) {
         setSyncing(true);
         try {
             const dataStr = await downloadBackup(token);
+            const parsed = JSON.parse(dataStr);
             const success = store.importData(dataStr);
             if (success) {
-                toast.success("Data successfully restored from Google Drive!");
+                const inner = parsed.data || parsed.state || parsed.backup || parsed;
+                const recordCount = Array.isArray(inner.dailyRecords) ? inner.dailyRecords.length : 0;
+                const totalCount = typeof inner.totalAllTime === 'number' ? inner.totalAllTime : 0;
+                toast.success(`Data restored from Google Drive! 🎉 (Restored ${recordCount} records, ${totalCount.toLocaleString()} total count)`);
             } else {
                 toast.error("Failed to parse the backup file.");
             }

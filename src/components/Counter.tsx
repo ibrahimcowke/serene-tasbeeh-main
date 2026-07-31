@@ -14,7 +14,7 @@ import { motion } from 'framer-motion';
 const WisdomModal = lazy(() => import('./WisdomModal').then(m => ({ default: m.WisdomModal })));
 const NiyyahModal = lazy(() => import('./NiyyahModal').then(m => ({ default: m.NiyyahModal })));
 const MoodTracker = lazy(() => import('./MoodTracker').then(m => ({ default: m.MoodTracker })));
-import { HandPlatter } from 'lucide-react';
+import { HandPlatter, Heart, BookOpen } from 'lucide-react';
 import { SessionTimer } from './SessionTimer';
 
 
@@ -179,30 +179,37 @@ export const Counter = memo(function Counter({ className = "" }: { className?: s
       <div className="w-full flex flex-col items-center justify-center z-10 pt-2 sm:pt-4 animate-fade-in-down">
         <DhikrHeader />
         
-        {/* Session Timer & Wisdom Pills */}
-        <div className="flex flex-wrap items-center justify-center gap-2 mt-1.5 sm:mt-2.5">
+        {/* Unified Header Action Toolbar Capsule */}
+        <div className="mt-2 sm:mt-2.5 px-2.5 py-1 rounded-full bg-background/50 backdrop-blur-md border border-primary/20 shadow-sm flex items-center justify-center gap-1 sm:gap-1.5 max-w-[95vw] overflow-x-auto no-scrollbar">
           <SessionTimer />
+
+          <div className="h-3.5 w-px bg-primary/20 shrink-0" />
 
           {/* Intention Pill */}
           <motion.button
-            whileHover={{ scale: 1.03 }}
-            whileTap={{ scale: 0.97 }}
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
             onClick={() => setShowNiyyah(true)}
-            className="px-3 py-1 rounded-full text-[10px] sm:text-xs font-medium tracking-wide bg-primary/10 border border-primary/20 text-primary/80 hover:bg-primary/15 transition-all flex items-center gap-1.5 cursor-pointer"
+            className={`px-2.5 py-1 rounded-full text-[10px] sm:text-xs font-medium tracking-wide transition-all flex items-center gap-1.5 cursor-pointer whitespace-nowrap ${
+              niyyah
+                ? 'bg-rose-500/15 text-rose-400 border border-rose-500/30'
+                : 'text-foreground/85 hover:text-primary hover:bg-primary/10'
+            }`}
           >
-            <span>❤️</span>
+            <Heart className={`w-3 h-3 ${niyyah ? 'text-rose-400 fill-rose-400' : 'text-rose-400/80'}`} />
             <span>{niyyah ? t('niyyah.intention_set') : t('niyyah.set_intention')}</span>
           </motion.button>
 
+          <div className="h-3.5 w-px bg-primary/20 shrink-0" />
 
           {/* Wisdom Pill */}
           <motion.button
-            whileHover={{ scale: 1.03 }}
-            whileTap={{ scale: 0.97 }}
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
             onClick={() => setShowWisdom(true)}
-            className="px-3 py-1 rounded-full text-[10px] sm:text-xs font-medium tracking-wide bg-primary/10 border border-primary/20 text-primary/80 hover:bg-primary/15 transition-all flex items-center gap-1.5 cursor-pointer animate-pulse"
+            className="px-2.5 py-1 rounded-full text-[10px] sm:text-xs font-medium tracking-wide text-foreground/85 hover:text-primary hover:bg-primary/10 transition-all flex items-center gap-1.5 cursor-pointer whitespace-nowrap"
           >
-            <span>📖</span>
+            <BookOpen className="w-3 h-3 text-amber-400" />
             <span>{t('hadith.title')}</span>
           </motion.button>
         </div>

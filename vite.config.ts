@@ -51,6 +51,7 @@ export default defineConfig(({ mode }) => ({
         iarc_rating_id: "e84b072d-71b3-4d3e-86ae-31a8ce4e53b7",
         scope_extensions: [
           { origin: "https://*.tasbeehdikr.com" },
+          { origin: "https://*.vercel.app" },
           { origin: "https://*.netlify.app" },
           { origin: "https://*.lovable.app" }
         ],
