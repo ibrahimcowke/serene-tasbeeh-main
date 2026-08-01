@@ -293,53 +293,6 @@ export function SettingsViewContent({ defaultTab, setOpen }: SettingsViewContent
           <div className="flex-1 overflow-y-auto px-1 py-1 custom-scrollbar">
             {/* THEMES TAB */}
             <TabsContent value="themes" className="space-y-6 mt-0 pb-6 px-4 overflow-x-hidden">
-              {/* Dashboard Layout Selector */}
-              <div className="space-y-1">
-                <p className="text-xs text-muted-foreground uppercase tracking-wide mb-3 px-1">Dashboard Style</p>
-                <div className="grid grid-cols-2 gap-2.5 pb-2">
-                  <button
-                    onClick={() => setDashboardLayout('classic')}
-                    className={`
-                      p-3 rounded-2xl text-left border transition-all active:scale-[0.98] duration-150 cursor-pointer
-                      ${dashboardLayout === 'classic'
-                        ? 'bg-primary/10 border-primary shadow-sm'
-                        : 'bg-card border-border hover:bg-secondary'
-                      }
-                    `}
-                  >
-                    <div className="flex items-center justify-between gap-1 mb-1">
-                      <p className={`text-xs font-bold ${dashboardLayout === 'classic' ? 'text-primary' : 'text-foreground'}`}>
-                        Classic Modern
-                      </p>
-                      {dashboardLayout === 'classic' && (
-                        <Check className="w-3.5 h-3.5 text-primary shrink-0" />
-                      )}
-                    </div>
-                    <p className="text-[10px] text-muted-foreground leading-tight">Standard Tasbeehly workspace & stats dashboard</p>
-                  </button>
-
-                  <button
-                    onClick={() => setDashboardLayout('serene-arch')}
-                    className={`
-                      p-3 rounded-2xl text-left border transition-all active:scale-[0.98] duration-150 cursor-pointer
-                      ${dashboardLayout === 'serene-arch'
-                        ? 'bg-primary/10 border-primary shadow-sm'
-                        : 'bg-card border-border hover:bg-secondary'
-                      }
-                    `}
-                  >
-                    <div className="flex items-center justify-between gap-1 mb-1">
-                      <p className={`text-xs font-bold ${dashboardLayout === 'serene-arch' ? 'text-primary' : 'text-foreground'}`}>
-                        Serene Arch 🕌
-                      </p>
-                      {dashboardLayout === 'serene-arch' && (
-                        <Check className="w-3.5 h-3.5 text-primary shrink-0" />
-                      )}
-                    </div>
-                    <p className="text-[10px] text-muted-foreground leading-tight">Light mosque arch frame with ring counter & controls</p>
-                  </button>
-                </div>
-              </div>
 
               <div className="space-y-1">
                 <p className="text-xs text-muted-foreground uppercase tracking-wide mb-3 px-1">{t('settings.visual_theme')}</p>

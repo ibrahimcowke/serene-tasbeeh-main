@@ -19,15 +19,26 @@ const NavItem = forwardRef<HTMLButtonElement, {
   <motion.button
     ref={ref}
     onClick={onClick}
-    whileTap={{ scale: 0.95 }}
-    className={`flex flex-col items-center justify-center w-full h-[46px] gap-0.5 px-2 rounded-xl transition-all duration-200 cursor-pointer bg-transparent border-none outline-none group ${
+    whileTap={{ scale: 0.92 }}
+    className={`relative flex flex-col items-center justify-center flex-1 h-12 gap-0.5 px-2 rounded-2xl transition-all duration-300 cursor-pointer border-none outline-none group ${
       isActive
-        ? 'bg-gradient-to-br from-[#1b4332] via-[#245842] to-[#2d6a4f] text-white shadow-md shadow-[#1b4332]/25 scale-[1.02]'
-        : 'text-primary/70 hover:text-primary hover:bg-primary/10'
+        ? 'text-primary font-bold shadow-md shadow-primary/20'
+        : 'text-muted-foreground hover:text-foreground'
     }`}
+    style={{
+      background: isActive ? 'hsl(var(--primary) / 0.15)' : 'transparent',
+    }}
   >
-    <Icon className={`w-4.5 h-4.5 transition-colors ${isActive ? 'text-amber-300' : 'text-primary/80 group-hover:text-primary'}`} />
-    <span className={`text-[9px] tracking-wider uppercase ${isActive ? 'font-extrabold text-white' : 'font-semibold text-primary/80 group-hover:text-primary'}`}>{label}</span>
+    {isActive && (
+      <motion.div
+        layoutId="activeDockIndicator"
+        className="absolute inset-0 rounded-2xl border border-primary/30"
+        style={{ background: 'hsl(var(--primary) / 0.12)' }}
+        transition={{ type: 'spring', stiffness: 400, damping: 30 }}
+      />
+    )}
+    <Icon className={`w-4.5 h-4.5 z-10 transition-transform group-hover:scale-110 ${isActive ? 'text-primary' : 'text-muted-foreground'}`} />
+    <span className={`text-[9px] tracking-wider uppercase z-10 ${isActive ? 'font-extrabold text-primary' : 'font-medium text-muted-foreground'}`}>{label}</span>
   </motion.button>
 ));
 NavItem.displayName = 'NavItem';
@@ -38,16 +49,17 @@ export function MobileNavBar() {
   const [activeTab, setActiveTab] = useState<string>('dhikr');
 
   return (
-    <div
-      className="lg:hidden fixed bottom-0 left-0 right-0 z-50 pb-safe"
-      style={{
-        background: 'hsl(var(--card) / 0.95)',
-        borderTop: '1px solid hsl(var(--primary) / 0.25)',
-        backdropFilter: 'blur(16px)',
-        WebkitBackdropFilter: 'blur(16px)',
-      }}
-    >
-      <div className="flex justify-around items-center h-14 px-2">
+    <div className="lg:hidden fixed bottom-3 left-3 right-3 z-50 pb-safe pointer-events-auto">
+      <div
+        className="flex justify-around items-center h-15 px-2.5 rounded-3xl border shadow-2xl transition-all"
+        style={{
+          background: 'hsl(var(--card) / 0.7)',
+          borderColor: 'hsl(var(--primary) / 0.25)',
+          backdropFilter: 'blur(24px)',
+          WebkitBackdropFilter: 'blur(24px)',
+          boxShadow: '0 16px 40px -8px rgba(0, 0, 0, 0.4), inset 0 1px 1px 0 rgba(255, 255, 255, 0.15)',
+        }}
+      >
         <Suspense fallback={<NavItem label={t('nav.dhikr')} icon={BookOpen} />}>
           <DhikrSelector>
             <NavItem
@@ -92,21 +104,15 @@ export function MobileNavBar() {
           </QiblaCompass>
         </Suspense>
 
-        <motion.button
-          whileTap={{ scale: 0.95 }}
+        <NavItem
+          label={t('nav.menu')}
+          icon={Grid}
+          isActive={activeTab === 'menu'}
           onClick={() => {
             setActiveTab('menu');
             setOpenMobile(true);
           }}
-          className={`flex flex-col items-center justify-center w-full h-[46px] gap-0.5 px-2 rounded-xl transition-all duration-200 cursor-pointer border-none outline-none group ${
-            activeTab === 'menu'
-              ? 'bg-gradient-to-br from-[#1b4332] via-[#245842] to-[#2d6a4f] text-white shadow-md shadow-[#1b4332]/25 scale-[1.02]'
-              : 'text-primary/70 hover:text-primary hover:bg-primary/10'
-          }`}
-        >
-          <Grid className={`w-4.5 h-4.5 transition-colors ${activeTab === 'menu' ? 'text-amber-300' : 'text-primary/80 group-hover:text-primary'}`} />
-          <span className={`text-[9px] tracking-wider uppercase ${activeTab === 'menu' ? 'font-extrabold text-white' : 'font-semibold text-primary/80 group-hover:text-primary'}`}>{t('nav.menu')}</span>
-        </motion.button>
+        />
       </div>
     </div>
   );
