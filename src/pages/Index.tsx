@@ -16,6 +16,7 @@ import { Trophy, Star, Flame, Target, ChevronRight, Volume2, VolumeX, Maximize2,
 const ScreenOffMode = lazy(() => import('@/components/ScreenOffMode').then(m => ({ default: m.ScreenOffMode })));
 const WhatsNew = lazy(() => import('@/components/WhatsNew').then(m => ({ default: m.WhatsNew })));
 const BedtimeModeView = lazy(() => import('@/components/BedtimeModeView').then(m => ({ default: m.BedtimeModeView })));
+const SereneArchDashboard = lazy(() => import('@/components/dashboards/SereneArchDashboard').then(m => ({ default: m.SereneArchDashboard })));
 
 const Index = () => {
   const [showBedtime, setShowBedtime] = useState(false);
@@ -35,7 +36,8 @@ const Index = () => {
     dailyRecords,
     startTasbih100,
     startTasbih1000,
-    currentCount
+    currentCount,
+    dashboardLayout
   } = useTasbeehStore(
     useShallow(state => ({
       theme: state.theme,
@@ -52,6 +54,7 @@ const Index = () => {
       startTasbih100: state.startTasbih100,
       startTasbih1000: state.startTasbih1000,
       currentCount: state.currentCount,
+      dashboardLayout: state.dashboardLayout,
     }))
   );
 
@@ -79,6 +82,19 @@ const Index = () => {
     e.stopPropagation();
     toggleSound();
   };
+
+  if (dashboardLayout === 'serene-arch') {
+    return (
+      <SidebarProvider defaultOpen={false}>
+        <AppSidebar onTriggerBedtime={() => setShowBedtime(true)} />
+        <SidebarInset className="h-dvh overflow-hidden">
+          <Suspense fallback={null}>
+            <SereneArchDashboard />
+          </Suspense>
+        </SidebarInset>
+      </SidebarProvider>
+    );
+  }
 
   return (
     <>

@@ -1,12 +1,12 @@
-import React, { useState, lazy, Suspense } from 'react';
+import React, { useState, lazy, Suspense, useMemo } from 'react';
 import { useTasbeehStore, defaultThemeSettings } from '@/store/tasbeehStore';
 import { useTranslation } from '@/lib/i18n';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { 
   RotateCcw, Minus, Plus, Settings as SettingsIcon, 
   Clock, Heart, BookOpen, Calendar, 
   BarChart2, RefreshCw, Flame, Target, Bell, Compass, Menu, PanelLeft,
-  ChevronDown, Volume2, VolumeX, Sparkles
+  ChevronDown, Volume2, VolumeX, Sparkles, Star, Zap
 } from 'lucide-react';
 import { SoundManager } from '@/lib/sound';
 import hijriConverter from 'hijri-converter';
@@ -23,7 +23,7 @@ const WisdomModal = lazy(() => import('../WisdomModal').then(m => ({ default: m.
 const NiyyahModal = lazy(() => import('../NiyyahModal').then(m => ({ default: m.NiyyahModal })));
 
 export function SereneArchDashboard() {
-  const { t } = useTranslation();
+  const { t, isRTL } = useTranslation();
   const { toggleSidebar } = useSidebar();
   
   // Active tab state for bottom menu bar selection
@@ -38,6 +38,7 @@ export function SereneArchDashboard() {
   const reset = useTasbeehStore(state => state.reset);
   const totalAllTime = useTasbeehStore(state => state.totalAllTime);
   const streakDays = useTasbeehStore(state => state.streakDays);
+  const totalHasanat = useTasbeehStore(state => state.totalHasanat);
   const niyyah = useTasbeehStore(state => state.niyyah);
   const theme = useTasbeehStore(state => state.theme);
   const themeSettings = useTasbeehStore(state => state.themeSettings[theme] || defaultThemeSettings);
@@ -56,18 +57,21 @@ export function SereneArchDashboard() {
   const roundsDone = Math.floor(currentCount / ROUND_SIZE);
 
   // Date banner calculations
-  const today = new Date();
-  const options: Intl.DateTimeFormatOptions = { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' };
-  const gregorianStr = today.toLocaleDateString('en-US', options);
+  const today = useMemo(() => new Date(), []);
+  const gregorianStr = useMemo(() => {
+    const options: Intl.DateTimeFormatOptions = { weekday: 'short', day: 'numeric', month: 'short' };
+    return today.toLocaleDateString('en-US', options);
+  }, [today]);
   
-  let hijriStr = '';
-  try {
-    const h = hijriConverter.toHijri(today.getFullYear(), today.getMonth() + 1, today.getDate());
-    const hijriMonths = ['Muharram', 'Safar', 'Rabi I', 'Rabi II', 'Jumada I', 'Jumada II', 'Rajab', 'Sha\'ban', 'Ramadan', 'Shawwal', 'Dhu al-Qi\'dah', 'Dhu al-Hijjah'];
-    hijriStr = `${h.hd} ${hijriMonths[h.hm - 1] || 'Safar'} ${h.hy}`;
-  } catch {
-    hijriStr = '16 Safar 1448';
-  }
+  const hijriStr = useMemo(() => {
+    try {
+      const h = hijriConverter.toHijri(today.getFullYear(), today.getMonth() + 1, today.getDate());
+      const hijriMonths = ['Muharram', 'Safar', 'Rabi I', 'Rabi II', 'Jumada I', 'Jumada II', 'Rajab', 'Sha\'ban', 'Ramadan', 'Shawwal', 'Dhu al-Qi\'dah', 'Dhu al-Hijjah'];
+      return `${h.hd} ${hijriMonths[h.hm - 1] || 'Safar'} ${h.hy}`;
+    } catch {
+      return '16 Safar 1448';
+    }
+  }, [today]);
 
   // Handle tap count with sound
   const handleTapCount = () => {
@@ -86,132 +90,119 @@ export function SereneArchDashboard() {
   // Progress percent
   const progressPercent = Math.min(100, Math.max(0, (currentCount / (targetCount || 33)) * 100));
 
+  // Calculated Hasanat points
+  const calculatedHasanat = totalHasanat > 0 ? totalHasanat : (totalAllTime * 10);
+
   return (
-    <div className="h-dvh w-full bg-background text-foreground flex flex-col items-center justify-between overflow-hidden relative select-none pt-safe pt-4 sm:pt-6 pb-[calc(4.8rem+env(safe-area-inset-bottom,0px))]">
+    <div className="h-dvh w-full bg-background text-foreground flex flex-col items-center justify-between overflow-hidden relative select-none pt-safe pt-3 sm:pt-5 pb-[calc(5rem+env(safe-area-inset-bottom,0px))]">
       
-      {/* 1. Top Header Bar (With generous top breathing space) */}
-      <div className="w-full max-w-md flex items-center justify-between gap-2 z-20 px-3 pt-2 pb-1 shrink-0">
+      {/* Dynamic Liquid Glass Background Mesh */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden z-0">
+        <div className="absolute -top-24 -left-20 w-80 h-80 rounded-full bg-emerald-500/10 blur-[90px]" />
+        <div className="absolute top-1/3 -right-20 w-80 h-80 rounded-full bg-amber-500/10 blur-[90px]" />
+        <div className="absolute -bottom-24 left-1/4 w-96 h-96 rounded-full bg-teal-500/10 blur-[100px]" />
+      </div>
+
+      {/* 1. iOS 27 Glass Floating Top Bar */}
+      <header className="w-full max-w-md flex items-center justify-between gap-2 z-20 px-3 shrink-0">
         {/* Left: Menu Sidebar Trigger */}
-        <button
+        <motion.button
+          whileTap={{ scale: 0.94 }}
           onClick={toggleSidebar}
-          className="flex items-center gap-1.5 bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 px-2.5 py-1 rounded-xl shadow-2xs hover:bg-emerald-100 dark:hover:bg-emerald-900/60 active:scale-95 transition-all text-xs font-semibold text-emerald-700 dark:text-emerald-300 cursor-pointer group"
+          className="flex items-center gap-1.5 px-3 py-1.5 rounded-2xl border border-white/20 dark:border-white/10 bg-white/40 dark:bg-white/5 backdrop-blur-xl shadow-lg shadow-black/5 hover:bg-white/60 dark:hover:bg-white/10 transition-all text-xs font-semibold text-foreground cursor-pointer group"
           title="Open Sidebar"
         >
-          <PanelLeft className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400 group-hover:scale-110 transition-transform" />
-          <span className="font-bold text-[10px] text-emerald-700 dark:text-emerald-300">Menu</span>
-        </button>
+          <PanelLeft className="w-3.5 h-3.5 text-primary group-hover:scale-110 transition-transform" />
+          <span className="font-bold text-[11px]">Menu</span>
+        </motion.button>
 
-        {/* Center: Date Banner */}
-        <div className="flex items-center gap-1.5 bg-amber-50/80 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-800 px-2.5 py-1 rounded-xl shadow-2xs text-xs">
-          <Calendar className="w-3.5 h-3.5 text-amber-500" />
-          <div className="flex flex-col leading-none">
-            <span className="font-bold text-[10px] text-amber-700 dark:text-amber-300">{hijriStr}</span>
-            <span className="text-[8px] text-slate-500 dark:text-slate-400 font-medium">{gregorianStr}</span>
+        {/* Center: Minimal Date Pill */}
+        <div className="flex items-center gap-2 px-3.5 py-1.5 rounded-2xl border border-white/20 dark:border-white/10 bg-white/40 dark:bg-white/5 backdrop-blur-xl shadow-lg shadow-black/5 text-xs">
+          <Calendar className="w-3.5 h-3.5 text-amber-500 shrink-0" />
+          <div className="flex items-baseline gap-1.5 leading-none">
+            <span className="font-extrabold text-[11px] text-foreground">{hijriStr}</span>
+            <span className="text-[9px] text-muted-foreground font-medium hidden sm:inline">• {gregorianStr}</span>
           </div>
         </div>
 
-        {/* Right: Quick Sound Toggle Shortcut */}
-        <button
+        {/* Right: Quick Sound Toggle */}
+        <motion.button
+          whileTap={{ scale: 0.94 }}
           onClick={toggleSound}
-          className={`flex items-center gap-1 px-2.5 py-1 rounded-xl border shadow-2xs transition-all text-[10px] font-bold cursor-pointer active:scale-95 ${
+          className={`flex items-center gap-1.5 px-3 py-1.5 rounded-2xl border border-white/20 dark:border-white/10 backdrop-blur-xl shadow-lg shadow-black/5 transition-all text-[11px] font-bold cursor-pointer ${
             themeSettings?.soundEnabled
-              ? 'bg-teal-50 dark:bg-teal-950/40 border-teal-200 dark:border-teal-800 text-teal-700 dark:text-teal-300'
-              : 'bg-slate-100 dark:bg-slate-900 border-slate-200 dark:border-slate-800 text-slate-500 dark:text-slate-400'
+              ? 'bg-primary/20 text-primary border-primary/30'
+              : 'bg-white/30 dark:bg-white/5 text-muted-foreground'
           }`}
           title={themeSettings?.soundEnabled ? 'Mute Sound' : 'Enable Sound'}
         >
           {themeSettings?.soundEnabled ? (
             <>
-              <Volume2 className="w-3.5 h-3.5 text-teal-500" />
-              <span>Sound</span>
+              <Volume2 className="w-3.5 h-3.5 text-primary" />
+              <span className="text-[10px]">Sound</span>
             </>
           ) : (
             <>
-              <VolumeX className="w-3.5 h-3.5 text-slate-400" />
-              <span>Muted</span>
+              <VolumeX className="w-3.5 h-3.5 text-muted-foreground" />
+              <span className="text-[10px]">Muted</span>
             </>
           )}
-        </button>
-      </div>
+        </motion.button>
+      </header>
 
-      {/* 2. Main Dashboard Content (Positioned towards bottom near bottom menu bar) */}
-      <div className="flex-1 w-full max-w-md overflow-y-auto px-3 py-1 space-y-2 custom-scrollbar flex flex-col items-center justify-end z-10 my-auto">
+      {/* 2. Main Dashboard Scrollable Content */}
+      <main className="flex-1 w-full max-w-md overflow-y-auto px-3 py-2 space-y-2.5 custom-scrollbar flex flex-col items-center justify-between z-10 my-auto">
         
-        {/* Dhikr Switcher Card */}
+        {/* iOS 27 Hero Dhikr Card */}
         <DhikrSelector>
-          <div className="w-full bg-card/95 border border-border/80 shadow-sm rounded-2xl p-2.5 flex flex-col items-center text-center gap-1 cursor-pointer hover:border-emerald-500/40 transition-all group shrink-0">
-            <div className="flex items-center gap-1.5 opacity-75">
-              <div className="h-px w-5 bg-amber-400" />
-              <span className="text-[9px] tracking-widest text-amber-600 dark:text-amber-400 uppercase font-bold">Selected Dhikr</span>
-              <div className="h-px w-5 bg-amber-400" />
+          <motion.div
+            whileHover={{ scale: 1.01 }}
+            whileTap={{ scale: 0.98 }}
+            className="w-full rounded-3xl p-3.5 flex flex-col items-center text-center gap-1.5 cursor-pointer border border-white/25 dark:border-white/10 bg-white/40 dark:bg-white/5 backdrop-blur-2xl shadow-xl shadow-black/5 hover:border-primary/40 transition-all group shrink-0 relative overflow-hidden"
+          >
+            <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-br from-primary/20 to-transparent rounded-bl-full pointer-events-none" />
+
+            <div className="flex items-center gap-2">
+              <span className="h-1.5 w-1.5 rounded-full bg-primary animate-pulse" />
+              <span className="text-[9px] tracking-widest text-primary uppercase font-black">ACTIVE DHIKR</span>
+              <span className="h-1.5 w-1.5 rounded-full bg-primary animate-pulse" />
             </div>
 
-            <motion.h1
-              key={currentDhikr.id}
-              initial={{ scale: 0.95, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              className="font-arabic text-xl sm:text-2xl text-emerald-800 dark:text-emerald-200 font-bold leading-tight my-0"
-            >
-              {currentDhikr.arabic}
-            </motion.h1>
+            <AnimatePresence mode="wait">
+              <motion.h1
+                key={currentDhikr.id}
+                initial={{ opacity: 0, y: 6 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -6 }}
+                transition={{ duration: 0.2 }}
+                className="font-arabic text-2xl sm:text-3xl font-bold leading-relaxed text-foreground tracking-wide my-0.5"
+              >
+                {currentDhikr.arabic}
+              </motion.h1>
+            </AnimatePresence>
 
-            <div className="flex items-center gap-1 text-[11px] font-semibold text-amber-700 dark:text-amber-300 italic">
+            <div className="flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-primary/10 border border-primary/20 text-[11px] font-bold text-primary">
               <span>{currentDhikr.transliteration}</span>
-              <ChevronDown className="w-3 h-3 text-amber-500 group-hover:translate-y-0.5 transition-transform" />
+              <ChevronDown className="w-3.5 h-3.5 text-primary group-hover:translate-y-0.5 transition-transform" />
             </div>
             
-            <p className="text-[9px] text-slate-600 dark:text-slate-400 line-clamp-1">
+            <p className="text-[10px] text-muted-foreground line-clamp-1 font-medium px-2">
               {currentDhikr.translation}
             </p>
-          </div>
+          </motion.div>
         </DhikrSelector>
 
-        {/* 3 Action Utility Cards (Timer, Intention, Wisdom) */}
-        <div className="w-full grid grid-cols-3 gap-1.5 shrink-0">
-          {/* Card 1: Timer (Sky Blue) */}
-          <div className="bg-sky-50/70 dark:bg-sky-950/40 border border-sky-200 dark:border-sky-800/60 rounded-xl p-1.5 flex items-center gap-1 shadow-2xs cursor-pointer hover:border-sky-400 transition-all">
-            <Clock className="w-3.5 h-3.5 text-sky-500 shrink-0" />
-            <div className="flex flex-col min-w-0 leading-none">
-              <span className="text-[9px] font-bold text-sky-700 dark:text-sky-300 truncate">Timer</span>
-              <span className="text-[7.5px] text-sky-600/80 dark:text-sky-400/80 truncate">Off</span>
-            </div>
-          </div>
-
-          {/* Card 2: Set Intention (Rose Ruby) */}
-          <div
-            onClick={() => setShowNiyyah(true)}
-            className="bg-rose-50/70 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-800/60 rounded-xl p-1.5 flex items-center gap-1 shadow-2xs cursor-pointer hover:border-rose-400 transition-all"
-          >
-            <Heart className={`w-3.5 h-3.5 shrink-0 ${niyyah ? 'text-rose-500 fill-rose-500' : 'text-rose-500'}`} />
-            <div className="flex flex-col min-w-0 leading-none">
-              <span className="text-[9px] font-bold text-rose-700 dark:text-rose-300 truncate">Intention</span>
-              <span className="text-[7.5px] text-rose-600/80 dark:text-rose-400/80 truncate">{niyyah ? 'Active' : 'Start'}</span>
-            </div>
-          </div>
-
-          {/* Card 3: Spiritual Wisdom (Violet Purple) */}
-          <div
-            onClick={() => setShowWisdom(true)}
-            className="bg-purple-50/70 dark:bg-purple-950/40 border border-purple-200 dark:border-purple-800/60 rounded-xl p-1.5 flex items-center gap-1 shadow-2xs cursor-pointer hover:border-purple-400 transition-all"
-          >
-            <BookOpen className="w-3.5 h-3.5 text-purple-500 shrink-0" />
-            <div className="flex flex-col min-w-0 leading-none">
-              <span className="text-[9px] font-bold text-purple-700 dark:text-purple-300 truncate">Wisdom</span>
-              <span className="text-[7.5px] text-purple-600/80 dark:text-purple-400/80 truncate">Insight</span>
-            </div>
-          </div>
-        </div>
-
-        {/* Counter Workspace Box (Renders all shapes & adapts to all themes) */}
-        <div className="w-full bg-card/95 border border-border shadow-md rounded-2xl p-3 flex flex-col items-center justify-center relative shrink-0">
+        {/* iOS 27 Minimal Glass Counter Ring Box */}
+        <div className="w-full rounded-3xl p-3 flex flex-col items-center justify-center relative shrink-0 border border-white/25 dark:border-white/10 bg-white/40 dark:bg-white/5 backdrop-blur-2xl shadow-2xl shadow-black/10">
           
-          {/* Crescent Moon Apex Decor */}
-          <div className="absolute -top-2.5 left-1/2 -translate-x-1/2 bg-background border border-amber-300 dark:border-amber-700 rounded-full px-2 py-0 text-[10px] text-amber-400 shadow-2xs">
-            ✨
+          {/* Glass Specular Top Notch */}
+          <div className="absolute -top-2.5 left-1/2 -translate-x-1/2 bg-background/90 backdrop-blur-md border border-white/20 dark:border-white/10 rounded-full px-3 py-0.5 text-[10px] font-extrabold text-primary shadow-sm flex items-center gap-1">
+            <Sparkles className="w-3 h-3 text-amber-400 fill-amber-400" />
+            <span>iOS 27 Glass</span>
           </div>
 
-          {/* Render Counter Shape Visual */}
-          <div className="relative w-full flex items-center justify-center min-h-[165px] sm:min-h-[185px] max-h-[200px] overflow-hidden py-1">
+          {/* Interactive Counter Ring Container */}
+          <div className="relative w-full flex items-center justify-center min-h-[160px] sm:min-h-[180px] max-h-[195px] overflow-hidden py-1">
             <CounterVisuals
               counterShape={counterShape}
               counterVerticalOffset={counterVerticalOffset || 0}
@@ -226,172 +217,243 @@ export function SereneArchDashboard() {
             />
           </div>
 
-          {/* Target Progress Pill */}
+          {/* Target Progress Glass Pill */}
           <TargetSelector>
-            <div className="flex items-center gap-1.5 mt-1 bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-200 dark:border-emerald-800 px-3 py-0.5 rounded-full shadow-2xs cursor-pointer hover:border-emerald-400 transition-colors">
-              <Target className="w-3.5 h-3.5 text-emerald-500" />
-              <span className="text-[11px] font-extrabold text-emerald-700 dark:text-emerald-300">
+            <motion.div
+              whileTap={{ scale: 0.95 }}
+              className="flex items-center gap-2 mt-1.5 px-3.5 py-1 rounded-full border border-primary/30 bg-primary/10 backdrop-blur-md shadow-sm cursor-pointer hover:bg-primary/20 transition-all"
+            >
+              <Target className="w-3.5 h-3.5 text-primary" />
+              <span className="text-xs font-black text-primary tracking-wide">
                 {currentCount} / {targetCount}
               </span>
-            </div>
+            </motion.div>
           </TargetSelector>
 
-          {/* 5 Ergonomic Action Buttons */}
-          <div className="w-full flex items-center justify-around gap-1.5 px-1 mt-2">
-            {/* Reset (Amber Orange) */}
-            <button
+          {/* iOS 27 Ergonomic Glass Control Pill Dock */}
+          <div className="w-full flex items-center justify-around gap-2 px-2 mt-3 pt-2 border-t border-white/15 dark:border-white/5">
+            {/* Reset Action */}
+            <motion.button
+              whileTap={{ scale: 0.88 }}
               onClick={reset}
-              className="w-8 h-8 rounded-full bg-amber-100 dark:bg-amber-950/60 border border-amber-300 dark:border-amber-800 flex items-center justify-center text-amber-600 dark:text-amber-400 hover:bg-amber-200 active:scale-95 transition-all cursor-pointer shadow-2xs"
-              title="Reset"
+              className="w-9 h-9 rounded-2xl bg-amber-500/15 border border-amber-500/30 flex items-center justify-center text-amber-500 hover:bg-amber-500/25 transition-all cursor-pointer shadow-sm"
+              title="Reset Counter"
             >
-              <RotateCcw className="w-3.5 h-3.5" />
-            </button>
+              <RotateCcw className="w-4 h-4" />
+            </motion.button>
 
-            {/* Undo (Rose Pink) */}
-            <button
+            {/* Undo / Decrement Action */}
+            <motion.button
+              whileTap={{ scale: 0.88 }}
               onClick={decrement}
-              className="w-8 h-8 rounded-full bg-rose-100 dark:bg-rose-950/60 border border-rose-300 dark:border-rose-800 flex items-center justify-center text-rose-600 dark:text-rose-400 hover:bg-rose-200 active:scale-95 transition-all cursor-pointer shadow-2xs"
-              title="Undo"
+              className="w-9 h-9 rounded-2xl bg-rose-500/15 border border-rose-500/30 flex items-center justify-center text-rose-500 hover:bg-rose-500/25 transition-all cursor-pointer shadow-sm"
+              title="Undo Count"
             >
-              <Minus className="w-3.5 h-3.5" />
-            </button>
+              <Minus className="w-4 h-4" />
+            </motion.button>
 
-            {/* Center Main Circular Bead Action Button (Vibrant Emerald Gradient) */}
-            <button
+            {/* Main Center Floating Glass Count Button */}
+            <motion.button
+              whileTap={{ scale: 0.92 }}
               onClick={handleTapCount}
-              className="w-11 h-11 rounded-full bg-gradient-to-br from-emerald-600 via-teal-600 to-emerald-800 border-2 border-emerald-300/60 shadow-md shadow-emerald-700/30 flex items-center justify-center text-white active:scale-95 transition-all cursor-pointer"
+              className="w-12 h-12 rounded-full bg-gradient-to-tr from-primary to-accent border-2 border-white/40 shadow-xl shadow-primary/30 flex items-center justify-center text-white cursor-pointer relative overflow-hidden"
               title="Tap to Count"
             >
-              <span className="text-xl">📿</span>
-            </button>
+              <motion.span
+                animate={{ scale: [1, 1.15, 1] }}
+                transition={{ repeat: Infinity, duration: 2.5 }}
+                className="text-2xl"
+              >
+                📿
+              </motion.span>
+            </motion.button>
 
-            {/* Add (Emerald Green) */}
-            <button
+            {/* Add / Increment Action */}
+            <motion.button
+              whileTap={{ scale: 0.88 }}
               onClick={increment}
-              className="w-8 h-8 rounded-full bg-emerald-100 dark:bg-emerald-950/60 border border-emerald-300 dark:border-emerald-800 flex items-center justify-center text-emerald-600 dark:text-emerald-400 hover:bg-emerald-200 active:scale-95 transition-all cursor-pointer shadow-2xs"
-              title="Add"
+              className="w-9 h-9 rounded-2xl bg-emerald-500/15 border border-emerald-500/30 flex items-center justify-center text-emerald-500 hover:bg-emerald-500/25 transition-all cursor-pointer shadow-sm"
+              title="Add Count"
             >
-              <Plus className="w-3.5 h-3.5" />
-            </button>
+              <Plus className="w-4 h-4" />
+            </motion.button>
 
-            {/* Settings (Indigo Blue) */}
+            {/* Settings Action */}
             <SettingsView>
-              <button
-                className="w-8 h-8 rounded-full bg-indigo-100 dark:bg-indigo-950/60 border border-indigo-300 dark:border-indigo-800 flex items-center justify-center text-indigo-600 dark:text-indigo-400 hover:bg-indigo-200 active:scale-95 transition-all cursor-pointer shadow-2xs"
+              <motion.button
+                whileTap={{ scale: 0.88 }}
+                className="w-9 h-9 rounded-2xl bg-indigo-500/15 border border-indigo-500/30 flex items-center justify-center text-indigo-500 hover:bg-indigo-500/25 transition-all cursor-pointer shadow-sm"
                 title="Settings"
               >
-                <SettingsIcon className="w-3.5 h-3.5" />
-              </button>
+                <SettingsIcon className="w-4 h-4" />
+              </motion.button>
             </SettingsView>
           </div>
         </div>
 
-        {/* Daily Stats Summary Strip */}
-        <div className="w-full bg-card border border-border shadow-2xs rounded-xl p-2 grid grid-cols-3 gap-1.5 text-center shrink-0">
-          <div className="flex flex-col items-center bg-indigo-50/50 dark:bg-indigo-950/20 p-1 rounded-lg border border-indigo-100 dark:border-indigo-900/40">
-            <BarChart2 className="w-3.5 h-3.5 text-indigo-500 mb-0.5" />
-            <span className="text-xs font-extrabold text-indigo-700 dark:text-indigo-300">{totalAllTime}</span>
-            <span className="text-[7.5px] font-bold text-indigo-500/80 uppercase">TOTAL Today</span>
+        {/* 3 Quick Utility Capsules Grid (Timer, Niyyah, Wisdom) */}
+        <div className="w-full grid grid-cols-3 gap-2 shrink-0">
+          {/* Card 1: Session Timer */}
+          <motion.div
+            whileTap={{ scale: 0.95 }}
+            className="rounded-2xl p-2 flex items-center gap-2 border border-sky-500/30 bg-sky-500/10 backdrop-blur-xl shadow-sm cursor-pointer hover:bg-sky-500/20 transition-all"
+          >
+            <div className="w-7 h-7 rounded-xl bg-sky-500/20 flex items-center justify-center shrink-0">
+              <Clock className="w-3.5 h-3.5 text-sky-400" />
+            </div>
+            <div className="flex flex-col min-w-0 leading-none">
+              <span className="text-[10px] font-bold text-sky-400 truncate">Timer</span>
+              <span className="text-[8px] text-sky-300/80 truncate">Session</span>
+            </div>
+          </motion.div>
+
+          {/* Card 2: Intention / Niyyah */}
+          <motion.div
+            whileTap={{ scale: 0.95 }}
+            onClick={() => setShowNiyyah(true)}
+            className="rounded-2xl p-2 flex items-center gap-2 border border-rose-500/30 bg-rose-500/10 backdrop-blur-xl shadow-sm cursor-pointer hover:bg-rose-500/20 transition-all"
+          >
+            <div className="w-7 h-7 rounded-xl bg-rose-500/20 flex items-center justify-center shrink-0">
+              <Heart className={`w-3.5 h-3.5 ${niyyah ? 'text-rose-400 fill-rose-400' : 'text-rose-400'}`} />
+            </div>
+            <div className="flex flex-col min-w-0 leading-none">
+              <span className="text-[10px] font-bold text-rose-400 truncate">Intention</span>
+              <span className="text-[8px] text-rose-300/80 truncate">{niyyah ? 'Active' : 'Set'}</span>
+            </div>
+          </motion.div>
+
+          {/* Card 3: Spiritual Wisdom */}
+          <motion.div
+            whileTap={{ scale: 0.95 }}
+            onClick={() => setShowWisdom(true)}
+            className="rounded-2xl p-2 flex items-center gap-2 border border-purple-500/30 bg-purple-500/10 backdrop-blur-xl shadow-sm cursor-pointer hover:bg-purple-500/20 transition-all"
+          >
+            <div className="w-7 h-7 rounded-xl bg-purple-500/20 flex items-center justify-center shrink-0">
+              <BookOpen className="w-3.5 h-3.5 text-purple-400" />
+            </div>
+            <div className="flex flex-col min-w-0 leading-none">
+              <span className="text-[10px] font-bold text-purple-400 truncate">Wisdom</span>
+              <span className="text-[8px] text-purple-300/80 truncate">Hadith</span>
+            </div>
+          </motion.div>
+        </div>
+
+        {/* iOS 27 Glass Stats Widget Grid (4 Tiles) */}
+        <div className="w-full grid grid-cols-4 gap-2 text-center shrink-0">
+          {/* Tile 1: Hasanat */}
+          <div className="rounded-2xl p-2 flex flex-col items-center border border-amber-500/25 bg-amber-500/10 backdrop-blur-xl shadow-sm">
+            <Star className="w-4 h-4 text-amber-400 fill-amber-400/30 mb-0.5" />
+            <span className="text-xs font-black text-amber-400">{calculatedHasanat}</span>
+            <span className="text-[7.5px] font-extrabold text-amber-400/80 uppercase">HASANAT</span>
           </div>
 
-          <div className="flex flex-col items-center bg-teal-50/50 dark:bg-teal-950/20 p-1 rounded-lg border border-teal-100 dark:border-teal-900/40">
-            <RefreshCw className="w-3.5 h-3.5 text-teal-500 mb-0.5" />
-            <span className="text-xs font-extrabold text-teal-700 dark:text-teal-300">{roundsDone}</span>
-            <span className="text-[7.5px] font-bold text-teal-500/80 uppercase">ROUNDS</span>
+          {/* Tile 2: Total Today */}
+          <div className="rounded-2xl p-2 flex flex-col items-center border border-indigo-500/25 bg-indigo-500/10 backdrop-blur-xl shadow-sm">
+            <BarChart2 className="w-4 h-4 text-indigo-400 mb-0.5" />
+            <span className="text-xs font-black text-indigo-400">{totalAllTime}</span>
+            <span className="text-[7.5px] font-extrabold text-indigo-400/80 uppercase">TOTAL</span>
           </div>
 
-          <div className="flex flex-col items-center bg-orange-50/50 dark:bg-orange-950/20 p-1 rounded-lg border border-orange-100 dark:border-orange-900/40">
-            <Flame className="w-3.5 h-3.5 text-orange-500 mb-0.5" />
-            <span className="text-xs font-extrabold text-orange-600 dark:text-orange-400">{streakDays}</span>
-            <span className="text-[7.5px] font-bold text-orange-500/80 uppercase">STREAK</span>
+          {/* Tile 3: Rounds */}
+          <div className="rounded-2xl p-2 flex flex-col items-center border border-teal-500/25 bg-teal-500/10 backdrop-blur-xl shadow-sm">
+            <RefreshCw className="w-4 h-4 text-teal-400 mb-0.5" />
+            <span className="text-xs font-black text-teal-400">{roundsDone}</span>
+            <span className="text-[7.5px] font-extrabold text-teal-400/80 uppercase">ROUNDS</span>
+          </div>
+
+          {/* Tile 4: Streak */}
+          <div className="rounded-2xl p-2 flex flex-col items-center border border-orange-500/25 bg-orange-500/10 backdrop-blur-xl shadow-sm">
+            <Flame className="w-4 h-4 text-orange-400 fill-orange-400/30 mb-0.5" />
+            <span className="text-xs font-black text-orange-400">{streakDays}d</span>
+            <span className="text-[7.5px] font-extrabold text-orange-400/80 uppercase">STREAK</span>
           </div>
         </div>
 
-        {/* Quran Verse Inspiration Card */}
-        <div className="w-full bg-emerald-50/50 dark:bg-emerald-950/20 border border-emerald-200/60 dark:border-emerald-800/40 shadow-2xs rounded-xl p-2 text-center relative overflow-hidden shrink-0">
-          <span className="text-base text-amber-500/40 font-serif absolute top-0.5 left-2">“</span>
-          <p className="font-arabic text-sm text-emerald-800 dark:text-emerald-200 leading-snug mb-0.5">
+        {/* Daily Inspiration Glass Quote Block */}
+        <div className="w-full rounded-2xl p-2.5 border border-white/20 dark:border-white/10 bg-white/30 dark:bg-white/5 backdrop-blur-xl text-center relative overflow-hidden shrink-0">
+          <span className="text-xl text-amber-400/40 font-serif absolute top-0.5 left-2">“</span>
+          <p className="font-arabic text-sm text-foreground leading-snug mb-0.5">
             أَلَا بِذِكْرِ اللَّهِ تَطْمَئِنُّ الْقُلُوبُ
           </p>
-          <p className="text-[9px] text-teal-800/80 dark:text-teal-200/80 italic mb-0.5 leading-tight">
+          <p className="text-[9px] text-muted-foreground italic leading-tight">
             Verily, in the remembrance of Allah do hearts find rest.
           </p>
-          <span className="text-[7.5px] font-bold text-amber-600 dark:text-amber-400 block">(Quran 13:28)</span>
+          <span className="text-[8px] font-bold text-amber-500 block mt-0.5">(Quran 13:28)</span>
         </div>
-      </div>
+      </main>
 
-      {/* 3. Fixed Bottom Navigation Bar (5 Color Accent Themes) */}
-      <div className="fixed bottom-2 left-1/2 -translate-x-1/2 w-[calc(100%-1.5rem)] max-w-md bg-card/95 backdrop-blur-md border border-border shadow-lg rounded-2xl p-1.5 grid grid-cols-5 gap-1 text-center z-50">
+      {/* 3. Floating iOS 27 Glass Dock (Bottom Nav) */}
+      <nav className="fixed bottom-3 left-1/2 -translate-x-1/2 w-[calc(100%-1.5rem)] max-w-md rounded-3xl p-1.5 grid grid-cols-5 gap-1 text-center z-50 border border-white/30 dark:border-white/15 bg-white/60 dark:bg-black/60 backdrop-blur-3xl shadow-2xl shadow-black/20">
         <DhikrSelector>
           <button
             onClick={() => setActiveTab('dhikr')}
-            className={`flex flex-col items-center py-1.5 rounded-xl transition-all duration-200 cursor-pointer w-full ${
+            className={`flex flex-col items-center py-2 rounded-2xl transition-all duration-300 cursor-pointer w-full ${
               activeTab === 'dhikr'
-                ? 'bg-gradient-to-br from-emerald-600 to-teal-800 text-white shadow-md shadow-emerald-700/25 scale-[1.03]'
-                : 'text-emerald-600 dark:text-emerald-400 hover:bg-emerald-50 dark:hover:bg-emerald-950/40'
+                ? 'bg-gradient-to-tr from-emerald-600 to-teal-700 text-white shadow-lg shadow-emerald-600/30 scale-[1.04]'
+                : 'text-muted-foreground hover:text-foreground hover:bg-white/20 dark:hover:bg-white/5'
             }`}
           >
-            <BookOpen className={`w-4 h-4 mt-0.5 ${activeTab === 'dhikr' ? 'text-amber-300' : 'text-emerald-600 dark:text-emerald-400'}`} />
-            <span className={`text-[9px] uppercase mt-0.5 ${activeTab === 'dhikr' ? 'font-extrabold text-white tracking-wider' : 'font-bold'}`}>DHIKR</span>
+            <BookOpen className="w-4 h-4" />
+            <span className="text-[9px] font-extrabold uppercase mt-0.5 tracking-wider">DHIKR</span>
           </button>
         </DhikrSelector>
 
         <TargetSelector>
           <button
             onClick={() => setActiveTab('target')}
-            className={`flex flex-col items-center py-1.5 rounded-xl transition-all duration-200 cursor-pointer w-full ${
+            className={`flex flex-col items-center py-2 rounded-2xl transition-all duration-300 cursor-pointer w-full ${
               activeTab === 'target'
-                ? 'bg-gradient-to-br from-sky-600 to-blue-700 text-white shadow-md shadow-sky-600/25 scale-[1.03]'
-                : 'text-sky-600 dark:text-sky-400 hover:bg-sky-50 dark:hover:bg-sky-950/40'
+                ? 'bg-gradient-to-tr from-sky-600 to-blue-700 text-white shadow-lg shadow-sky-600/30 scale-[1.04]'
+                : 'text-muted-foreground hover:text-foreground hover:bg-white/20 dark:hover:bg-white/5'
             }`}
           >
-            <Target className={`w-4 h-4 mt-0.5 ${activeTab === 'target' ? 'text-sky-200' : 'text-sky-600 dark:text-sky-400'}`} />
-            <span className={`text-[9px] uppercase mt-0.5 ${activeTab === 'target' ? 'font-extrabold text-white tracking-wider' : 'font-bold'}`}>TARGET</span>
+            <Target className="w-4 h-4" />
+            <span className="text-[9px] font-extrabold uppercase mt-0.5 tracking-wider">TARGET</span>
           </button>
         </TargetSelector>
 
         <RemindersView>
           <button
             onClick={() => setActiveTab('reminders')}
-            className={`flex flex-col items-center py-1.5 rounded-xl transition-all duration-200 cursor-pointer w-full ${
+            className={`flex flex-col items-center py-2 rounded-2xl transition-all duration-300 cursor-pointer w-full ${
               activeTab === 'reminders'
-                ? 'bg-gradient-to-br from-amber-500 to-orange-700 text-white shadow-md shadow-amber-600/25 scale-[1.03]'
-                : 'text-amber-600 dark:text-amber-400 hover:bg-amber-50 dark:hover:bg-amber-950/40'
+                ? 'bg-gradient-to-tr from-amber-500 to-orange-600 text-white shadow-lg shadow-amber-600/30 scale-[1.04]'
+                : 'text-muted-foreground hover:text-foreground hover:bg-white/20 dark:hover:bg-white/5'
             }`}
           >
-            <Bell className={`w-4 h-4 mt-0.5 ${activeTab === 'reminders' ? 'text-amber-200' : 'text-amber-600 dark:text-amber-400'}`} />
-            <span className={`text-[9px] uppercase mt-0.5 ${activeTab === 'reminders' ? 'font-extrabold text-white tracking-wider' : 'font-bold'}`}>REMINDERS</span>
+            <Bell className="w-4 h-4" />
+            <span className="text-[9px] font-extrabold uppercase mt-0.5 tracking-wider">NOTIFS</span>
           </button>
         </RemindersView>
 
         <QiblaCompass>
           <button
             onClick={() => setActiveTab('qibla')}
-            className={`flex flex-col items-center py-1.5 rounded-xl transition-all duration-200 cursor-pointer w-full ${
+            className={`flex flex-col items-center py-2 rounded-2xl transition-all duration-300 cursor-pointer w-full ${
               activeTab === 'qibla'
-                ? 'bg-gradient-to-br from-purple-600 to-indigo-700 text-white shadow-md shadow-purple-600/25 scale-[1.03]'
-                : 'text-purple-600 dark:text-purple-400 hover:bg-purple-50 dark:hover:bg-purple-950/40'
+                ? 'bg-gradient-to-tr from-purple-600 to-indigo-700 text-white shadow-lg shadow-purple-600/30 scale-[1.04]'
+                : 'text-muted-foreground hover:text-foreground hover:bg-white/20 dark:hover:bg-white/5'
             }`}
           >
-            <Compass className={`w-4 h-4 mt-0.5 ${activeTab === 'qibla' ? 'text-purple-200' : 'text-purple-600 dark:text-purple-400'}`} />
-            <span className={`text-[9px] uppercase mt-0.5 ${activeTab === 'qibla' ? 'font-extrabold text-white tracking-wider' : 'font-bold'}`}>QIBLA</span>
+            <Compass className="w-4 h-4" />
+            <span className="text-[9px] font-extrabold uppercase mt-0.5 tracking-wider">QIBLA</span>
           </button>
         </QiblaCompass>
 
         <SettingsView>
           <button
             onClick={() => setActiveTab('menu')}
-            className={`flex flex-col items-center py-1.5 rounded-xl transition-all duration-200 cursor-pointer w-full ${
+            className={`flex flex-col items-center py-2 rounded-2xl transition-all duration-300 cursor-pointer w-full ${
               activeTab === 'menu'
-                ? 'bg-gradient-to-br from-indigo-600 to-blue-800 text-white shadow-md shadow-indigo-600/25 scale-[1.03]'
-                : 'text-indigo-600 dark:text-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-950/40'
+                ? 'bg-gradient-to-tr from-indigo-600 to-blue-800 text-white shadow-lg shadow-indigo-600/30 scale-[1.04]'
+                : 'text-muted-foreground hover:text-foreground hover:bg-white/20 dark:hover:bg-white/5'
             }`}
           >
-            <Menu className={`w-4 h-4 mt-0.5 ${activeTab === 'menu' ? 'text-indigo-200' : 'text-indigo-600 dark:text-indigo-400'}`} />
-            <span className={`text-[9px] uppercase mt-0.5 ${activeTab === 'menu' ? 'font-extrabold text-white tracking-wider' : 'font-bold'}`}>MENU</span>
+            <Menu className="w-4 h-4" />
+            <span className="text-[9px] font-extrabold uppercase mt-0.5 tracking-wider">MENU</span>
           </button>
         </SettingsView>
-      </div>
+      </nav>
 
       {/* Modals */}
       {showWisdom && (
