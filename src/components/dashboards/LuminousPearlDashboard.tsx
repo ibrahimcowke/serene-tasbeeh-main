@@ -1,4 +1,4 @@
-import React, { useState, lazy, Suspense } from 'react';
+import React, { useState, useMemo, lazy, Suspense } from 'react';
 import { useTasbeehStore, defaultThemeSettings } from '@/store/tasbeehStore';
 import { useTranslation } from '@/lib/i18n';
 import { motion, AnimatePresence } from 'framer-motion';
