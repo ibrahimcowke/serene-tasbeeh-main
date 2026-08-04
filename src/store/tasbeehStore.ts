@@ -298,8 +298,8 @@ export interface TasbeehState {
   closeCongrats: () => void;
   updateStreak: () => void;
   checkAchievements: () => void;
-  dashboardLayout: 'classic' | 'serene-arch';
-  setDashboardLayout: (layout: 'classic' | 'serene-arch') => void;
+  dashboardLayout: 'classic' | 'serene-arch' | 'pearl-luminous';
+  setDashboardLayout: (layout: 'classic' | 'serene-arch' | 'pearl-luminous') => void;
 }
 
 export const defaultDhikrs: Dhikr[] = [
@@ -423,7 +423,7 @@ export const useTasbeehStore = create<TasbeehState>()(
       khatmLog: [],
       sessionNotes: {},
       dashboardLayout: 'classic',
-      setDashboardLayout: (layout: 'classic' | 'serene-arch') => set({ dashboardLayout: layout }),
+      setDashboardLayout: (layout: 'classic' | 'serene-arch' | 'pearl-luminous') => set({ dashboardLayout: layout }),
 
       journeyStage: 1,
       journeyProgress: {},
@@ -1134,6 +1134,7 @@ export const useTasbeehStore = create<TasbeehState>()(
         autoThemeDawnDusk: state.autoThemeDawnDusk,
         khatmLog: state.khatmLog,
         sessionNotes: state.sessionNotes,
+        dashboardLayout: state.dashboardLayout,
       }),
     }
   )

@@ -351,29 +351,41 @@ export function SettingsViewContent({ defaultTab, setOpen }: SettingsViewContent
               <div className="space-y-1">
                 <p className="text-xs text-muted-foreground uppercase tracking-wide mb-3 px-1">Dashboard Layout</p>
                 <div className="p-4 rounded-2xl bg-card border border-border/50 space-y-3">
-                  <div className="grid grid-cols-2 gap-2.5">
+                  <div className="grid grid-cols-3 gap-2">
                     <button
                       onClick={() => setDashboardLayout('classic')}
-                      className={`flex flex-col items-center p-3 rounded-xl border text-xs font-semibold transition-all ${
+                      className={`flex flex-col items-center p-2.5 rounded-xl border text-[11px] font-semibold transition-all ${
                         dashboardLayout === 'classic'
-                          ? 'bg-primary/10 border-primary text-primary shadow-xs'
+                          ? 'bg-primary/10 border-primary text-primary shadow-xs font-bold'
                           : 'bg-background border-border text-muted-foreground hover:text-foreground'
                       }`}
                     >
                       <span className="text-base mb-1">📊</span>
-                      <span>Dashboard 1 (Classic)</span>
+                      <span className="text-center leading-tight">Dashboard 1 (Classic)</span>
                     </button>
 
                     <button
                       onClick={() => setDashboardLayout('serene-arch')}
-                      className={`flex flex-col items-center p-3 rounded-xl border text-xs font-semibold transition-all ${
+                      className={`flex flex-col items-center p-2.5 rounded-xl border text-[11px] font-semibold transition-all ${
                         dashboardLayout === 'serene-arch'
-                          ? 'bg-primary/10 border-primary text-primary shadow-xs'
+                          ? 'bg-primary/10 border-primary text-primary shadow-xs font-bold'
                           : 'bg-background border-border text-muted-foreground hover:text-foreground'
                       }`}
                     >
                       <span className="text-base mb-1">🕌</span>
-                      <span>Dashboard 2 (Serene Arch)</span>
+                      <span className="text-center leading-tight">Dashboard 2 (Serene Arch)</span>
+                    </button>
+
+                    <button
+                      onClick={() => setDashboardLayout('pearl-luminous')}
+                      className={`flex flex-col items-center p-2.5 rounded-xl border text-[11px] font-semibold transition-all ${
+                        dashboardLayout === 'pearl-luminous'
+                          ? 'bg-primary/10 border-primary text-primary shadow-xs font-bold'
+                          : 'bg-background border-border text-muted-foreground hover:text-foreground'
+                      }`}
+                    >
+                      <span className="text-base mb-1">📿</span>
+                      <span className="text-center leading-tight">Dashboard 3 (Luminous Pearl)</span>
                     </button>
                   </div>
                 </div>

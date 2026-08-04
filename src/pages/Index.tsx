@@ -17,6 +17,7 @@ const ScreenOffMode = lazy(() => import('@/components/ScreenOffMode').then(m => 
 const WhatsNew = lazy(() => import('@/components/WhatsNew').then(m => ({ default: m.WhatsNew })));
 const BedtimeModeView = lazy(() => import('@/components/BedtimeModeView').then(m => ({ default: m.BedtimeModeView })));
 const SereneArchDashboard = lazy(() => import('@/components/dashboards/SereneArchDashboard').then(m => ({ default: m.SereneArchDashboard })));
+const LuminousPearlDashboard = lazy(() => import('@/components/dashboards/LuminousPearlDashboard').then(m => ({ default: m.LuminousPearlDashboard })));
 
 const Index = () => {
   const [showBedtime, setShowBedtime] = useState(false);
@@ -91,6 +92,10 @@ const Index = () => {
           {dashboardLayout === 'serene-arch' ? (
             <Suspense fallback={null}>
               <SereneArchDashboard />
+            </Suspense>
+          ) : dashboardLayout === 'pearl-luminous' ? (
+            <Suspense fallback={null}>
+              <LuminousPearlDashboard />
             </Suspense>
           ) : (
             <div
