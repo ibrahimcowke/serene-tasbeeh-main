@@ -87,11 +87,10 @@ const Index = () => {
     return (
       <SidebarProvider defaultOpen={false}>
         <AppSidebar onTriggerBedtime={() => setShowBedtime(true)} />
-        <SidebarInset className="h-dvh overflow-hidden relative">
+        <SidebarInset className="h-dvh overflow-hidden">
           <Suspense fallback={null}>
             <SereneArchDashboard />
           </Suspense>
-          {!zenMode && <MobileNavBar />}
         </SidebarInset>
       </SidebarProvider>
     );

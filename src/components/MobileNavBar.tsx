@@ -9,7 +9,7 @@ const TargetSelector = lazy(() => import("./TargetSelector").then(m => ({ defaul
 const RemindersView = lazy(() => import("./RemindersView").then(m => ({ default: m.RemindersView })));
 const QiblaCompass = lazy(() => import("./QiblaCompass").then(m => ({ default: m.QiblaCompass })));
 
-// forwardRef so Radix UI dialogs (DhikrSelector, TargetSelector, RemindersView, QiblaCompass) can attach their ref
+// forwardRef so Radix UI dialogs (DhikrSelector, TargetSelector, RemindersView) can attach their ref
 const NavItem = forwardRef<HTMLButtonElement, {
   label: string;
   icon: React.ComponentType<{ className?: string }>;
@@ -20,25 +20,25 @@ const NavItem = forwardRef<HTMLButtonElement, {
     ref={ref}
     onClick={onClick}
     whileTap={{ scale: 0.92 }}
-    className={`relative flex flex-col items-center justify-center flex-1 h-11 gap-0.5 px-1.5 rounded-2xl transition-all duration-300 cursor-pointer border-none outline-none group ${
+    className={`relative flex flex-col items-center justify-center flex-1 h-12 gap-0.5 px-2 rounded-2xl transition-all duration-300 cursor-pointer border-none outline-none group ${
       isActive
-        ? 'text-primary font-bold'
+        ? 'text-primary font-bold shadow-md shadow-primary/20'
         : 'text-muted-foreground hover:text-foreground'
     }`}
+    style={{
+      background: isActive ? 'hsl(var(--primary) / 0.15)' : 'transparent',
+    }}
   >
     {isActive && (
       <motion.div
         layoutId="activeDockIndicator"
         className="absolute inset-0 rounded-2xl border border-primary/30"
-        style={{
-          background: 'hsl(var(--primary) / 0.15)',
-          boxShadow: '0 4px 14px 0 hsl(var(--primary) / 0.25)',
-        }}
-        transition={{ type: 'spring', stiffness: 450, damping: 32 }}
+        style={{ background: 'hsl(var(--primary) / 0.12)' }}
+        transition={{ type: 'spring', stiffness: 400, damping: 30 }}
       />
     )}
-    <Icon className={`w-4 h-4 z-10 transition-transform group-hover:scale-110 ${isActive ? 'text-primary' : 'text-muted-foreground'}`} />
-    <span className={`text-[9px] tracking-wider uppercase z-10 ${isActive ? 'font-black text-primary' : 'font-semibold text-muted-foreground'}`}>{label}</span>
+    <Icon className={`w-4.5 h-4.5 z-10 transition-transform group-hover:scale-110 ${isActive ? 'text-primary' : 'text-muted-foreground'}`} />
+    <span className={`text-[9px] tracking-wider uppercase z-10 ${isActive ? 'font-extrabold text-primary' : 'font-medium text-muted-foreground'}`}>{label}</span>
   </motion.button>
 ));
 NavItem.displayName = 'NavItem';
@@ -49,15 +49,15 @@ export function MobileNavBar() {
   const [activeTab, setActiveTab] = useState<string>('dhikr');
 
   return (
-    <div className="fixed bottom-3 left-3 right-3 z-50 pb-safe pointer-events-auto max-w-md mx-auto">
+    <div className="lg:hidden fixed bottom-3 left-3 right-3 z-50 pb-safe pointer-events-auto">
       <div
-        className="flex justify-around items-center h-14 px-2 rounded-3xl border transition-all"
+        className="flex justify-around items-center h-15 px-2.5 rounded-3xl border shadow-2xl transition-all"
         style={{
-          background: 'hsl(var(--card) / 0.65)',
+          background: 'hsl(var(--card) / 0.7)',
           borderColor: 'hsl(var(--primary) / 0.25)',
-          backdropFilter: 'blur(28px)',
-          WebkitBackdropFilter: 'blur(28px)',
-          boxShadow: '0 16px 40px -8px rgba(0, 0, 0, 0.35), inset 0 1px 1px 0 rgba(255, 255, 255, 0.2)',
+          backdropFilter: 'blur(24px)',
+          WebkitBackdropFilter: 'blur(24px)',
+          boxShadow: '0 16px 40px -8px rgba(0, 0, 0, 0.4), inset 0 1px 1px 0 rgba(255, 255, 255, 0.15)',
         }}
       >
         <Suspense fallback={<NavItem label={t('nav.dhikr')} icon={BookOpen} />}>

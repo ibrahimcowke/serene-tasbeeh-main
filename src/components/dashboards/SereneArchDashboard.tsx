@@ -22,6 +22,40 @@ import { SettingsView } from '../SettingsView';
 const WisdomModal = lazy(() => import('../WisdomModal').then(m => ({ default: m.WisdomModal })));
 const NiyyahModal = lazy(() => import('../NiyyahModal').then(m => ({ default: m.NiyyahModal })));
 
+// forwardRef so Radix UI dialog triggers can attach their DOM ref without warnings
+const DockNavItem = React.forwardRef<HTMLButtonElement, {
+  label: string;
+  icon: React.ComponentType<{ className?: string }>;
+  onClick?: React.MouseEventHandler<HTMLButtonElement>;
+  isActive?: boolean;
+}>(({ label, icon: Icon, onClick, isActive }, ref) => (
+  <motion.button
+    ref={ref}
+    onClick={onClick}
+    whileTap={{ scale: 0.92 }}
+    className={`relative flex flex-col items-center justify-center flex-1 h-12 gap-0.5 px-2 rounded-2xl transition-all duration-300 cursor-pointer border-none outline-none group ${
+      isActive
+        ? 'text-primary font-black shadow-lg shadow-primary/20'
+        : 'text-muted-foreground hover:text-foreground'
+    }`}
+  >
+    {isActive && (
+      <motion.div
+        layoutId="sereneDockPill"
+        className="absolute inset-0 rounded-2xl border border-primary/35 shadow-md shadow-primary/25"
+        style={{
+          background: 'radial-gradient(circle at center, hsl(var(--primary) / 0.22), hsl(var(--primary) / 0.12))',
+          backdropFilter: 'blur(16px)',
+        }}
+        transition={{ type: 'spring', stiffness: 450, damping: 32 }}
+      />
+    )}
+    <Icon className={`w-4 h-4 z-10 transition-transform group-hover:scale-110 ${isActive ? 'text-primary drop-shadow-[0_0_8px_hsl(var(--primary)/0.5)]' : 'text-muted-foreground'}`} />
+    <span className={`text-[9px] tracking-wider uppercase z-10 ${isActive ? 'font-black text-primary' : 'font-semibold text-muted-foreground'}`}>{label}</span>
+  </motion.button>
+));
+DockNavItem.displayName = 'DockNavItem';
+
 export function SereneArchDashboard() {
   const { t, isRTL } = useTranslation();
   const { toggleSidebar } = useSidebar();
@@ -381,6 +415,55 @@ export function SereneArchDashboard() {
           <span className="text-[8px] font-bold text-amber-500 block mt-0.5">(Quran 13:28)</span>
         </div>
       </main>
+
+      {/* 3. Floating iOS 27 Glass Dock (Bottom Nav) */}
+      <nav className="fixed bottom-3 left-1/2 -translate-x-1/2 w-[calc(100%-1.5rem)] max-w-md rounded-3xl p-1.5 flex justify-around items-center h-15 z-50 border border-white/25 dark:border-white/10 bg-white/40 dark:bg-black/50 backdrop-blur-3xl shadow-2xl shadow-black/30">
+        <DhikrSelector>
+          <DockNavItem
+            label={t('nav.dhikr') || 'DHIKR'}
+            icon={BookOpen}
+            isActive={activeTab === 'dhikr'}
+            onClick={() => setActiveTab('dhikr')}
+          />
+        </DhikrSelector>
+
+        <TargetSelector>
+          <DockNavItem
+            label={t('nav.target') || 'TARGET'}
+            icon={Target}
+            isActive={activeTab === 'target'}
+            onClick={() => setActiveTab('target')}
+          />
+        </TargetSelector>
+
+        <RemindersView>
+          <DockNavItem
+            label={t('nav.reminders') || 'NOTIFS'}
+            icon={Bell}
+            isActive={activeTab === 'reminders'}
+            onClick={() => setActiveTab('reminders')}
+          />
+        </RemindersView>
+
+        <QiblaCompass>
+          <DockNavItem
+            label={t('nav.qibla') || 'QIBLA'}
+            icon={Compass}
+            isActive={activeTab === 'qibla'}
+            onClick={() => setActiveTab('qibla')}
+          />
+        </QiblaCompass>
+
+        <DockNavItem
+          label={t('nav.menu') || 'MENU'}
+          icon={Menu}
+          isActive={activeTab === 'menu'}
+          onClick={() => {
+            setActiveTab('menu');
+            toggleSidebar();
+          }}
+        />
+      </nav>
 
       {/* Modals */}
       {showWisdom && (
