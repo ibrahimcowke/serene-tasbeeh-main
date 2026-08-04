@@ -376,7 +376,7 @@ export function LuminousPearlDashboard() {
 
         {/* COUNTER WIDGET (Supports Pearl Ring & all user-selected counter shapes) */}
         <div className="shrink-0 flex items-center justify-center py-0 w-full">
-          {(!counterShape || counterShape === 'bead-ring' || counterShape === 'pearl-ring') ? (
+          {(!counterShape || counterShape === 'bead-ring' || (counterShape as string) === 'pearl-ring') ? (
             <PearlBeadRingVisual
               currentCount={currentCount}
               targetCount={targetCount || 33}
