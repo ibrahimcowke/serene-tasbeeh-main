@@ -83,32 +83,22 @@ const Index = () => {
     toggleSound();
   };
 
-  if (dashboardLayout === 'serene-arch') {
-    return (
-      <SidebarProvider defaultOpen={false}>
-        <AppSidebar onTriggerBedtime={() => setShowBedtime(true)} />
-        <SidebarInset className="h-dvh overflow-hidden">
-          <Suspense fallback={null}>
-            <SereneArchDashboard />
-          </Suspense>
-        </SidebarInset>
-      </SidebarProvider>
-    );
-  }
-
   return (
     <>
       <SidebarProvider defaultOpen={true}>
         <AppSidebar onTriggerBedtime={() => setShowBedtime(true)} />
         <SidebarInset className="h-dvh overflow-hidden">
-
-          {/* iOS Glass Ambient Background Workspace */}
-          <div
-            className="h-dvh w-full flex flex-col overflow-hidden relative select-none"
-            style={{
-              background: 'radial-gradient(circle at 15% 15%, hsl(var(--primary) / 0.15), transparent 45%), radial-gradient(circle at 85% 85%, hsl(var(--accent) / 0.12), transparent 45%), hsl(var(--background))',
-            }}
-          >
+          {dashboardLayout === 'serene-arch' ? (
+            <Suspense fallback={null}>
+              <SereneArchDashboard />
+            </Suspense>
+          ) : (
+            <div
+              className="h-dvh w-full flex flex-col overflow-hidden relative select-none"
+              style={{
+                background: 'radial-gradient(circle at 15% 15%, hsl(var(--primary) / 0.15), transparent 45%), radial-gradient(circle at 85% 85%, hsl(var(--accent) / 0.12), transparent 45%), hsl(var(--background))',
+              }}
+            >
             {/* Ambient Glass Glow Orbs */}
             <div className="absolute top-[-10%] left-[20%] w-[450px] h-[450px] bg-primary/10 rounded-full blur-[100px] pointer-events-none" />
             <div className="absolute bottom-[-10%] right-[15%] w-[400px] h-[400px] bg-amber-500/10 rounded-full blur-[90px] pointer-events-none" />
@@ -217,12 +207,6 @@ const Index = () => {
                         </h2>
                         <p className="text-xs text-muted-foreground">{t('welcome.tagline') || 'Your daily stats and devotion goals'}</p>
                       </div>
-                    </div>
-
-                    <div className="flex items-center gap-2">
-                      <span className="text-[10px] font-extrabold tracking-widest uppercase text-primary bg-primary/10 px-3 py-1.5 rounded-full border border-primary/20 shadow-xs">
-                        iOS Glass Mode
-                      </span>
                     </div>
                   </div>
 
@@ -406,6 +390,7 @@ const Index = () => {
               </motion.button>
             )}
           </div>
+          )}
         </SidebarInset>
       </SidebarProvider>
 

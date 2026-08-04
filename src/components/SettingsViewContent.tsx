@@ -348,51 +348,34 @@ export function SettingsViewContent({ defaultTab, setOpen }: SettingsViewContent
                 </div>
               </div>
 
-              {/* Dashboard Layout Selection */}
               <div className="space-y-1">
-                <p className="text-xs text-muted-foreground uppercase tracking-wide mb-3 px-1">Dashboard Experience</p>
-                <div className="grid grid-cols-2 gap-2">
-                  <button
-                    onClick={() => setDashboardLayout('classic')}
-                    className={`
-                      p-3 rounded-2xl text-left border transition-all active:scale-[0.98] duration-150
-                      ${dashboardLayout === 'classic'
-                        ? 'bg-primary/10 border-primary shadow-sm'
-                        : 'bg-card border-border hover:bg-secondary'
-                      }
-                    `}
-                  >
-                    <div className="flex items-center justify-between gap-1">
-                      <div>
-                        <p className={`text-[13px] font-medium ${dashboardLayout === 'classic' ? 'text-primary' : 'text-foreground'}`}>
-                          Classic Workspace
-                        </p>
-                        <p className="text-[10px] text-muted-foreground">Standard counter</p>
-                      </div>
-                      {dashboardLayout === 'classic' && <Check className="w-3.5 h-3.5 text-primary shrink-0" />}
-                    </div>
-                  </button>
+                <p className="text-xs text-muted-foreground uppercase tracking-wide mb-3 px-1">Dashboard Layout</p>
+                <div className="p-4 rounded-2xl bg-card border border-border/50 space-y-3">
+                  <div className="grid grid-cols-2 gap-2.5">
+                    <button
+                      onClick={() => setDashboardLayout('classic')}
+                      className={`flex flex-col items-center p-3 rounded-xl border text-xs font-semibold transition-all ${
+                        dashboardLayout === 'classic'
+                          ? 'bg-primary/10 border-primary text-primary shadow-xs'
+                          : 'bg-background border-border text-muted-foreground hover:text-foreground'
+                      }`}
+                    >
+                      <span className="text-base mb-1">📊</span>
+                      <span>Dashboard 1 (Classic)</span>
+                    </button>
 
-                  <button
-                    onClick={() => setDashboardLayout('serene-arch')}
-                    className={`
-                      p-3 rounded-2xl text-left border transition-all active:scale-[0.98] duration-150
-                      ${dashboardLayout === 'serene-arch'
-                        ? 'bg-primary/10 border-primary shadow-sm'
-                        : 'bg-card border-border hover:bg-secondary'
-                      }
-                    `}
-                  >
-                    <div className="flex items-center justify-between gap-1">
-                      <div>
-                        <p className={`text-[13px] font-medium ${dashboardLayout === 'serene-arch' ? 'text-primary' : 'text-foreground'}`}>
-                          iOS 27 Glass
-                        </p>
-                        <p className="text-[10px] text-muted-foreground">Minimal glass dashboard</p>
-                      </div>
-                      {dashboardLayout === 'serene-arch' && <Check className="w-3.5 h-3.5 text-primary shrink-0" />}
-                    </div>
-                  </button>
+                    <button
+                      onClick={() => setDashboardLayout('serene-arch')}
+                      className={`flex flex-col items-center p-3 rounded-xl border text-xs font-semibold transition-all ${
+                        dashboardLayout === 'serene-arch'
+                          ? 'bg-primary/10 border-primary text-primary shadow-xs'
+                          : 'bg-background border-border text-muted-foreground hover:text-foreground'
+                      }`}
+                    >
+                      <span className="text-base mb-1">🕌</span>
+                      <span>Dashboard 2 (Serene Arch)</span>
+                    </button>
+                  </div>
                 </div>
               </div>
 

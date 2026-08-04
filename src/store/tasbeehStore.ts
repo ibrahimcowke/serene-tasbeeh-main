@@ -85,7 +85,7 @@ export interface Reminder {
   label: string;
   enabled: boolean;
   days: number[]; // 0-6 for Sunday-Saturday
-  soundType?: 'default' | 'subhanallah' | 'alhamdulillah' | 'astaghfirullah' | 'salawat';
+  soundType?: 'default' | 'subhanallah' | 'alhamdulillah' | 'astaghfirullah' | 'salawat' | 'ayat_kursi' | 'hasbunallah' | 'rabbi_zidni' | 'subhanallahi_wabihamdihi' | 'rabbana_atina' | string;
   relativeToPrayer?: 'fajr' | 'dhuhr' | 'asr' | 'maghrib' | 'isha';
   offsetMinutes?: number;
 }

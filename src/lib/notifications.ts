@@ -1,13 +1,7 @@
 import { LocalNotifications } from '@capacitor/local-notifications';
+import { Reminder } from '@/store/tasbeehStore';
 
-export interface Reminder {
-  id: string;
-  time: string; // "HH:MM"
-  label: string;
-  enabled: boolean;
-  days: number[]; // 0-6 (0 = Sunday, ..., 6 = Saturday)
-  soundType?: 'default' | 'subhanallah' | 'alhamdulillah' | 'astaghfirullah' | 'salawat' | 'ayat_kursi' | 'hasbunallah' | 'rabbi_zidni' | 'bismillah' | 'subhanallahi_wabihamdihi' | 'rabbana_atina';
-}
+export type { Reminder };
 
 
 

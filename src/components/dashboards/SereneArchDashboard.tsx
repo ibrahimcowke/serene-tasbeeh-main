@@ -1,4 +1,4 @@
-import React, { useState, lazy, Suspense, useMemo } from 'react';
+import React, { useState, lazy, Suspense, useEffect } from 'react';
 import { useTasbeehStore, defaultThemeSettings } from '@/store/tasbeehStore';
 import { useTranslation } from '@/lib/i18n';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -6,11 +6,12 @@ import {
   RotateCcw, Minus, Plus, Settings as SettingsIcon, 
   Clock, Heart, BookOpen, Calendar, 
   BarChart2, RefreshCw, Flame, Target, Bell, Compass, Menu, PanelLeft,
-  ChevronDown, Volume2, VolumeX, Sparkles, Star, Zap
+  ChevronDown, Volume2, VolumeX, Sparkles, ShieldCheck, Check
 } from 'lucide-react';
 import { SoundManager } from '@/lib/sound';
 import hijriConverter from 'hijri-converter';
 import { useSidebar } from '@/components/ui/sidebar';
+import { getPrayerTimesForToday } from '@/lib/prayerTimes';
 
 import { CounterVisuals } from '../CounterVisuals';
 import { DhikrSelector } from '../DhikrSelector';
@@ -22,8 +23,8 @@ import { SettingsView } from '../SettingsView';
 const WisdomModal = lazy(() => import('../WisdomModal').then(m => ({ default: m.WisdomModal })));
 const NiyyahModal = lazy(() => import('../NiyyahModal').then(m => ({ default: m.NiyyahModal })));
 
-// forwardRef so Radix UI dialog triggers can attach their DOM ref without warnings
-const DockNavItem = React.forwardRef<HTMLButtonElement, {
+// Nav item component with Radix ref forwarding
+const SereneNavItem = React.forwardRef<HTMLButtonElement, {
   label: string;
   icon: React.ComponentType<{ className?: string }>;
   onClick?: React.MouseEventHandler<HTMLButtonElement>;
@@ -35,35 +36,35 @@ const DockNavItem = React.forwardRef<HTMLButtonElement, {
     whileTap={{ scale: 0.92 }}
     className={`relative flex flex-col items-center justify-center flex-1 h-12 gap-0.5 px-2 rounded-2xl transition-all duration-300 cursor-pointer border-none outline-none group ${
       isActive
-        ? 'text-primary font-black shadow-lg shadow-primary/20'
+        ? 'text-primary font-bold'
         : 'text-muted-foreground hover:text-foreground'
     }`}
   >
     {isActive && (
       <motion.div
-        layoutId="sereneDockPill"
-        className="absolute inset-0 rounded-2xl border border-primary/35 shadow-md shadow-primary/25"
+        layoutId="activeDockIndicatorSerenePro"
+        className="absolute inset-0 rounded-2xl border border-primary/40"
         style={{
-          background: 'radial-gradient(circle at center, hsl(var(--primary) / 0.22), hsl(var(--primary) / 0.12))',
-          backdropFilter: 'blur(16px)',
+          background: 'radial-gradient(circle at center, hsl(var(--primary) / 0.22), hsl(var(--primary) / 0.08))',
+          boxShadow: '0 4px 18px 0 hsl(var(--primary) / 0.3)',
         }}
         transition={{ type: 'spring', stiffness: 450, damping: 32 }}
       />
     )}
-    <Icon className={`w-4 h-4 z-10 transition-transform group-hover:scale-110 ${isActive ? 'text-primary drop-shadow-[0_0_8px_hsl(var(--primary)/0.5)]' : 'text-muted-foreground'}`} />
-    <span className={`text-[9px] tracking-wider uppercase z-10 ${isActive ? 'font-black text-primary' : 'font-semibold text-muted-foreground'}`}>{label}</span>
+    <Icon className={`w-4.5 h-4.5 z-10 transition-transform duration-200 group-hover:scale-110 ${isActive ? 'text-primary' : 'text-muted-foreground'}`} />
+    <span className={`text-[9px] tracking-wider uppercase z-10 ${isActive ? 'font-extrabold text-primary' : 'font-semibold text-muted-foreground'}`}>{label}</span>
   </motion.button>
 ));
-DockNavItem.displayName = 'DockNavItem';
+SereneNavItem.displayName = 'SereneNavItem';
 
 export function SereneArchDashboard() {
-  const { t, isRTL } = useTranslation();
+  const { t } = useTranslation();
   const { toggleSidebar } = useSidebar();
   
-  // Active tab state for bottom menu bar selection
+  // Active bottom dock selection
   const [activeTab, setActiveTab] = useState<'dhikr' | 'target' | 'reminders' | 'qibla' | 'menu'>('dhikr');
   
-  // Store selectors
+  // Store state & selectors
   const currentCount = useTasbeehStore(state => state.currentCount);
   const targetCount = useTasbeehStore(state => state.targetCount);
   const currentDhikr = useTasbeehStore(state => state.currentDhikr);
@@ -72,40 +73,51 @@ export function SereneArchDashboard() {
   const reset = useTasbeehStore(state => state.reset);
   const totalAllTime = useTasbeehStore(state => state.totalAllTime);
   const streakDays = useTasbeehStore(state => state.streakDays);
-  const totalHasanat = useTasbeehStore(state => state.totalHasanat);
   const niyyah = useTasbeehStore(state => state.niyyah);
   const theme = useTasbeehStore(state => state.theme);
   const themeSettings = useTasbeehStore(state => state.themeSettings[theme] || defaultThemeSettings);
-  const setSoundEnabled = useTasbeehStore(state => state.setSoundEnabled);
+  const toggleSoundAction = useTasbeehStore(state => state.toggleSound);
   const counterShape = useTasbeehStore(state => state.counterShape);
   const counterVerticalOffset = useTasbeehStore(state => state.counterVerticalOffset);
   const counterScale = useTasbeehStore(state => state.counterScale);
   const countFontSize = useTasbeehStore(state => state.countFontSize);
 
-  // Modal triggers
+  // Modals
   const [showWisdom, setShowWisdom] = useState(false);
   const [showNiyyah, setShowNiyyah] = useState(false);
+  const [nextPrayer, setNextPrayer] = useState<{ name: string; time: string } | null>(null);
 
   // Calculate rounds
   const ROUND_SIZE = 33;
   const roundsDone = Math.floor(currentCount / ROUND_SIZE);
 
   // Date banner calculations
-  const today = useMemo(() => new Date(), []);
-  const gregorianStr = useMemo(() => {
-    const options: Intl.DateTimeFormatOptions = { weekday: 'short', day: 'numeric', month: 'short' };
-    return today.toLocaleDateString('en-US', options);
-  }, [today]);
+  const today = new Date();
+  const options: Intl.DateTimeFormatOptions = { weekday: 'short', day: 'numeric', month: 'short' };
+  const gregorianStr = today.toLocaleDateString('en-US', options);
   
-  const hijriStr = useMemo(() => {
-    try {
-      const h = hijriConverter.toHijri(today.getFullYear(), today.getMonth() + 1, today.getDate());
-      const hijriMonths = ['Muharram', 'Safar', 'Rabi I', 'Rabi II', 'Jumada I', 'Jumada II', 'Rajab', 'Sha\'ban', 'Ramadan', 'Shawwal', 'Dhu al-Qi\'dah', 'Dhu al-Hijjah'];
-      return `${h.hd} ${hijriMonths[h.hm - 1] || 'Safar'} ${h.hy}`;
-    } catch {
-      return '16 Safar 1448';
-    }
-  }, [today]);
+  let hijriStr = '';
+  try {
+    const h = hijriConverter.toHijri(today.getFullYear(), today.getMonth() + 1, today.getDate());
+    const hijriMonths = ['Muharram', 'Safar', 'Rabi I', 'Rabi II', 'Jumada I', 'Jumada II', 'Rajab', 'Sha\'ban', 'Ramadan', 'Shawwal', 'Dhu al-Qi\'dah', 'Dhu al-Hijjah'];
+    hijriStr = `${h.hd} ${hijriMonths[h.hm - 1] || 'Safar'} ${h.hy}`;
+  } catch {
+    hijriStr = '16 Safar 1448';
+  }
+
+  // Fetch next prayer time
+  useEffect(() => {
+    getPrayerTimesForToday().then(times => {
+      if (!times || times.length === 0) return;
+      const now = new Date();
+      const currentMin = now.getHours() * 60 + now.getMinutes();
+      const upcoming = times.find(p => {
+        const [h, m] = p.time.split(':').map(Number);
+        return h * 60 + m > currentMin;
+      }) || times[0];
+      if (upcoming) setNextPrayer(upcoming);
+    }).catch(console.error);
+  }, []);
 
   // Handle tap count with sound
   const handleTapCount = () => {
@@ -118,129 +130,132 @@ export function SereneArchDashboard() {
   // Toggle sound shortcut
   const toggleSound = (e: React.MouseEvent) => {
     e.stopPropagation();
-    setSoundEnabled(!themeSettings?.soundEnabled);
+    toggleSoundAction();
   };
 
   // Progress percent
   const progressPercent = Math.min(100, Math.max(0, (currentCount / (targetCount || 33)) * 100));
 
-  // Calculated Hasanat points
-  const calculatedHasanat = totalHasanat > 0 ? totalHasanat : (totalAllTime * 10);
-
   return (
-    <div className="h-dvh w-full bg-background text-foreground flex flex-col items-center justify-between overflow-hidden relative select-none pt-safe pt-3 sm:pt-5 pb-[calc(5rem+env(safe-area-inset-bottom,0px))]">
+    <div className="h-dvh w-full bg-background text-foreground flex flex-col items-center justify-between overflow-hidden relative select-none pt-safe pt-3 pb-[calc(4.8rem+env(safe-area-inset-bottom,0px))]">
       
-      {/* Dynamic Liquid Glass Background Mesh */}
-      <div className="absolute inset-0 pointer-events-none overflow-hidden z-0">
-        <div className="absolute -top-24 -left-20 w-80 h-80 rounded-full bg-emerald-500/10 blur-[90px]" />
-        <div className="absolute top-1/3 -right-20 w-80 h-80 rounded-full bg-amber-500/10 blur-[90px]" />
-        <div className="absolute -bottom-24 left-1/4 w-96 h-96 rounded-full bg-teal-500/10 blur-[100px]" />
-      </div>
+      {/* Ambient Arch Glow Orbs */}
+      <div className="absolute top-[5%] left-1/2 -translate-x-1/2 w-[350px] sm:w-[480px] h-[350px] bg-primary/10 rounded-full blur-[100px] pointer-events-none z-0" />
+      <div className="absolute bottom-[10%] right-[10%] w-[250px] h-[250px] bg-amber-500/10 rounded-full blur-[90px] pointer-events-none z-0" />
 
-      {/* 1. iOS 27 Glass Floating Top Bar */}
-      <header className="w-full max-w-md flex items-center justify-between gap-2 z-20 px-3 shrink-0">
+      {/* ─────────────────────────────────────────────────────────────────────────── */}
+      {/* 1. TOP HEADER BAR                                                           */}
+      {/* ─────────────────────────────────────────────────────────────────────────── */}
+      <div className="w-full max-w-md flex items-center justify-between gap-2 z-20 px-4 pt-1 pb-2 shrink-0">
+        
         {/* Left: Menu Sidebar Trigger */}
-        <motion.button
-          whileTap={{ scale: 0.94 }}
+        <button
           onClick={toggleSidebar}
-          className="flex items-center gap-1.5 px-3 py-1.5 rounded-2xl border border-white/20 dark:border-white/10 bg-white/40 dark:bg-white/5 backdrop-blur-xl shadow-lg shadow-black/5 hover:bg-white/60 dark:hover:bg-white/10 transition-all text-xs font-semibold text-foreground cursor-pointer group"
+          className="flex items-center gap-1.5 bg-card/80 border border-border/60 px-3 py-1.5 rounded-2xl shadow-xs hover:bg-card hover:border-primary/40 active:scale-95 transition-all text-xs font-bold text-foreground cursor-pointer group"
           title="Open Sidebar"
         >
-          <PanelLeft className="w-3.5 h-3.5 text-primary group-hover:scale-110 transition-transform" />
-          <span className="font-bold text-[11px]">Menu</span>
-        </motion.button>
+          <PanelLeft className="w-4 h-4 text-primary group-hover:scale-110 transition-transform" />
+          <span className="text-[11px] font-extrabold">Menu</span>
+        </button>
 
-        {/* Center: Minimal Date Pill */}
-        <div className="flex items-center gap-2 px-3.5 py-1.5 rounded-2xl border border-white/20 dark:border-white/10 bg-white/40 dark:bg-white/5 backdrop-blur-xl shadow-lg shadow-black/5 text-xs">
+        {/* Center: Hijri & Gregorian Date Banner */}
+        <div className="flex items-center gap-2 bg-gradient-to-r from-amber-500/10 via-primary/10 to-amber-500/10 border border-amber-500/25 px-3 py-1 rounded-2xl shadow-xs">
           <Calendar className="w-3.5 h-3.5 text-amber-500 shrink-0" />
-          <div className="flex items-baseline gap-1.5 leading-none">
-            <span className="font-extrabold text-[11px] text-foreground">{hijriStr}</span>
-            <span className="text-[9px] text-muted-foreground font-medium hidden sm:inline">• {gregorianStr}</span>
+          <div className="flex flex-col items-center leading-none">
+            <span className="font-extrabold text-[10px] text-amber-700 dark:text-amber-300 tracking-wide">{hijriStr}</span>
+            <span className="text-[8.5px] text-muted-foreground font-semibold mt-0.5">{gregorianStr}</span>
           </div>
         </div>
 
-        {/* Right: Quick Sound Toggle */}
-        <motion.button
-          whileTap={{ scale: 0.94 }}
+        {/* Right: Sound Toggle Button */}
+        <button
           onClick={toggleSound}
-          className={`flex items-center gap-1.5 px-3 py-1.5 rounded-2xl border border-white/20 dark:border-white/10 backdrop-blur-xl shadow-lg shadow-black/5 transition-all text-[11px] font-bold cursor-pointer ${
+          className={`flex items-center gap-1.5 px-3 py-1.5 rounded-2xl border shadow-xs transition-all text-[11px] font-bold cursor-pointer active:scale-95 ${
             themeSettings?.soundEnabled
-              ? 'bg-primary/20 text-primary border-primary/30'
-              : 'bg-white/30 dark:bg-white/5 text-muted-foreground'
+              ? 'bg-primary/15 border-primary/30 text-primary'
+              : 'bg-card/60 border-border/50 text-muted-foreground'
           }`}
           title={themeSettings?.soundEnabled ? 'Mute Sound' : 'Enable Sound'}
         >
           {themeSettings?.soundEnabled ? (
             <>
               <Volume2 className="w-3.5 h-3.5 text-primary" />
-              <span className="text-[10px]">Sound</span>
+              <span>Sound</span>
             </>
           ) : (
             <>
               <VolumeX className="w-3.5 h-3.5 text-muted-foreground" />
-              <span className="text-[10px]">Muted</span>
+              <span>Muted</span>
             </>
           )}
-        </motion.button>
-      </header>
+        </button>
+      </div>
 
-      {/* 2. Main Dashboard Scrollable Content */}
-      <main className="flex-1 w-full max-w-md overflow-y-auto px-3 py-2 space-y-2.5 custom-scrollbar flex flex-col items-center justify-between z-10 my-auto">
-        
-        {/* iOS 27 Hero Dhikr Card */}
+      {/* ─────────────────────────────────────────────────────────────────────────── */}
+      {/* 2. MAIN DASHBOARD CONTENT AREA                                             */}
+      {/* ─────────────────────────────────────────────────────────────────────────── */}
+      <div className="flex-1 w-full max-w-md overflow-y-auto px-4 py-1 space-y-3 custom-scrollbar flex flex-col justify-between z-10 my-auto">
+
+        {/* Selected Dhikr Banner Card */}
         <DhikrSelector>
-          <motion.div
+          <motion.div 
             whileHover={{ scale: 1.01 }}
-            whileTap={{ scale: 0.98 }}
-            className="w-full rounded-3xl p-3.5 flex flex-col items-center text-center gap-1.5 cursor-pointer border border-white/25 dark:border-white/10 bg-white/40 dark:bg-white/5 backdrop-blur-2xl shadow-xl shadow-black/5 hover:border-primary/40 transition-all group shrink-0 relative overflow-hidden"
+            whileTap={{ scale: 0.99 }}
+            className="w-full bg-gradient-to-b from-card/95 to-card/80 border border-primary/25 shadow-md rounded-3xl p-3.5 flex flex-col items-center text-center gap-1.5 cursor-pointer hover:border-primary/50 transition-all group shrink-0 relative overflow-hidden"
           >
-            <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-br from-primary/20 to-transparent rounded-bl-full pointer-events-none" />
-
-            <div className="flex items-center gap-2">
-              <span className="h-1.5 w-1.5 rounded-full bg-primary animate-pulse" />
-              <span className="text-[9px] tracking-widest text-primary uppercase font-black">ACTIVE DHIKR</span>
-              <span className="h-1.5 w-1.5 rounded-full bg-primary animate-pulse" />
+            {/* Top Arch Floral Ornament */}
+            <div className="flex items-center gap-2 opacity-80">
+              <div className="h-px w-8 bg-gradient-to-r from-transparent to-amber-500" />
+              <span className="text-[9.5px] tracking-widest text-amber-600 dark:text-amber-400 uppercase font-black">
+                ✨ Selected Dhikr
+              </span>
+              <div className="h-px w-8 bg-gradient-to-l from-transparent to-amber-500" />
             </div>
 
-            <AnimatePresence mode="wait">
-              <motion.h1
-                key={currentDhikr.id}
-                initial={{ opacity: 0, y: 6 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -6 }}
-                transition={{ duration: 0.2 }}
-                className="font-arabic text-2xl sm:text-3xl font-bold leading-relaxed text-foreground tracking-wide my-0.5"
-              >
-                {currentDhikr.arabic}
-              </motion.h1>
-            </AnimatePresence>
+            {/* Arabic Calligraphy */}
+            <motion.h1
+              key={currentDhikr.id}
+              initial={{ scale: 0.95, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              className="font-arabic text-2xl sm:text-3xl text-foreground font-bold leading-relaxed my-0 drop-shadow-xs"
+            >
+              {currentDhikr.arabic}
+            </motion.h1>
 
-            <div className="flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-primary/10 border border-primary/20 text-[11px] font-bold text-primary">
+            {/* Transliteration & Switch Pill */}
+            <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary/10 border border-primary/20 text-xs font-bold text-primary italic">
               <span>{currentDhikr.transliteration}</span>
               <ChevronDown className="w-3.5 h-3.5 text-primary group-hover:translate-y-0.5 transition-transform" />
             </div>
             
-            <p className="text-[10px] text-muted-foreground line-clamp-1 font-medium px-2">
+            <p className="text-[10px] text-muted-foreground line-clamp-1 max-w-xs font-medium">
               {currentDhikr.translation}
             </p>
           </motion.div>
         </DhikrSelector>
 
-        {/* iOS 27 Minimal Glass Counter Ring Box */}
-        <div className="w-full rounded-3xl p-3 flex flex-col items-center justify-center relative shrink-0 border border-white/25 dark:border-white/10 bg-white/40 dark:bg-white/5 backdrop-blur-2xl shadow-2xl shadow-black/10">
+        {/* PRO ISLAMIC ARCH HERO COUNTER WIDGET */}
+        <div className="w-full bg-gradient-to-b from-card/90 via-card/95 to-card/90 border border-border/80 shadow-xl rounded-3xl p-4 flex flex-col items-center justify-between relative shrink-0 overflow-hidden">
           
-          {/* Glass Specular Top Notch */}
-          <div className="absolute -top-2.5 left-1/2 -translate-x-1/2 bg-background/90 backdrop-blur-md border border-white/20 dark:border-white/10 rounded-full px-3 py-0.5 text-[10px] font-extrabold text-primary shadow-sm flex items-center gap-1">
-            <Sparkles className="w-3 h-3 text-amber-400 fill-amber-400" />
-            <span>iOS 27 Glass</span>
+          {/* Architectural Arch Mihrab Apex Badge */}
+          <div className="flex items-center gap-1 bg-background/90 border border-amber-500/40 rounded-full px-3 py-0.5 text-[10px] font-bold text-amber-600 dark:text-amber-300 shadow-xs z-10">
+            <span>🕌</span>
+            <span className="uppercase tracking-wider">Mihrab Counter</span>
           </div>
 
-          {/* Interactive Counter Ring Container */}
-          <div className="relative w-full flex items-center justify-center min-h-[160px] sm:min-h-[180px] max-h-[195px] overflow-hidden py-1">
+          {/* Mihrab Arch SVG Outline Background */}
+          <div className="absolute inset-0 flex items-center justify-center opacity-10 pointer-events-none">
+            <svg width="260" height="260" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M50 5 C25 25 15 40 15 90 L85 90 C85 40 75 25 50 5 Z" stroke="currentColor" strokeWidth="2" className="text-primary" />
+            </svg>
+          </div>
+
+          {/* Interactive Counter Shape Display */}
+          <div className="relative w-full flex items-center justify-center min-h-[175px] sm:min-h-[195px] max-h-[210px] overflow-hidden py-1 z-10">
             <CounterVisuals
               counterShape={counterShape}
               counterVerticalOffset={counterVerticalOffset || 0}
-              counterScale={(counterScale || 1) * 0.85}
+              counterScale={(counterScale || 1) * 0.88}
               progress={progressPercent}
               currentCount={currentCount}
               currentSettings={themeSettings}
@@ -251,219 +266,205 @@ export function SereneArchDashboard() {
             />
           </div>
 
-          {/* Target Progress Glass Pill */}
+          {/* Target Progress Pill & Selector */}
           <TargetSelector>
-            <motion.div
-              whileTap={{ scale: 0.95 }}
-              className="flex items-center gap-2 mt-1.5 px-3.5 py-1 rounded-full border border-primary/30 bg-primary/10 backdrop-blur-md shadow-sm cursor-pointer hover:bg-primary/20 transition-all"
-            >
-              <Target className="w-3.5 h-3.5 text-primary" />
-              <span className="text-xs font-black text-primary tracking-wide">
+            <div className="flex items-center gap-2 bg-gradient-to-r from-primary/15 to-emerald-500/15 border border-primary/30 px-4 py-1 rounded-full shadow-xs cursor-pointer hover:border-primary transition-all z-10">
+              <Target className="w-4 h-4 text-primary" />
+              <span className="text-xs font-black text-foreground">
                 {currentCount} / {targetCount}
               </span>
-            </motion.div>
+              <span className="text-[10px] text-muted-foreground font-bold font-mono">
+                ({Math.round(progressPercent)}%)
+              </span>
+            </div>
           </TargetSelector>
 
-          {/* iOS 27 Ergonomic Glass Control Pill Dock */}
-          <div className="w-full flex items-center justify-around gap-2 px-2 mt-3 pt-2 border-t border-white/15 dark:border-white/5">
-            {/* Reset Action */}
-            <motion.button
-              whileTap={{ scale: 0.88 }}
+          {/* 5 Ergonomic Touch Action Buttons */}
+          <div className="w-full flex items-center justify-around gap-2 px-1 mt-3 z-10">
+            {/* Reset */}
+            <button
               onClick={reset}
-              className="w-9 h-9 rounded-2xl bg-amber-500/15 border border-amber-500/30 flex items-center justify-center text-amber-500 hover:bg-amber-500/25 transition-all cursor-pointer shadow-sm"
+              className="w-9 h-9 rounded-2xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-600 dark:text-amber-400 hover:bg-amber-500/20 active:scale-92 transition-all cursor-pointer shadow-xs"
               title="Reset Counter"
             >
               <RotateCcw className="w-4 h-4" />
-            </motion.button>
+            </button>
 
-            {/* Undo / Decrement Action */}
-            <motion.button
-              whileTap={{ scale: 0.88 }}
+            {/* Undo */}
+            <button
               onClick={decrement}
-              className="w-9 h-9 rounded-2xl bg-rose-500/15 border border-rose-500/30 flex items-center justify-center text-rose-500 hover:bg-rose-500/25 transition-all cursor-pointer shadow-sm"
+              className="w-9 h-9 rounded-2xl bg-rose-500/10 border border-rose-500/30 flex items-center justify-center text-rose-600 dark:text-rose-400 hover:bg-rose-500/20 active:scale-92 transition-all cursor-pointer shadow-xs"
               title="Undo Count"
             >
               <Minus className="w-4 h-4" />
-            </motion.button>
+            </button>
 
-            {/* Main Center Floating Glass Count Button */}
-            <motion.button
-              whileTap={{ scale: 0.92 }}
+            {/* Center Master Bead Tap Button */}
+            <button
               onClick={handleTapCount}
-              className="w-12 h-12 rounded-full bg-gradient-to-tr from-primary to-accent border-2 border-white/40 shadow-xl shadow-primary/30 flex items-center justify-center text-white cursor-pointer relative overflow-hidden"
+              className="w-13 h-13 rounded-full bg-gradient-to-br from-primary via-emerald-600 to-teal-700 border-2 border-primary-foreground/30 shadow-lg shadow-primary/30 flex items-center justify-center text-white active:scale-92 transition-all cursor-pointer"
               title="Tap to Count"
             >
-              <motion.span
-                animate={{ scale: [1, 1.15, 1] }}
-                transition={{ repeat: Infinity, duration: 2.5 }}
-                className="text-2xl"
-              >
-                📿
-              </motion.span>
-            </motion.button>
+              <span className="text-2xl">📿</span>
+            </button>
 
-            {/* Add / Increment Action */}
-            <motion.button
-              whileTap={{ scale: 0.88 }}
+            {/* Add */}
+            <button
               onClick={increment}
-              className="w-9 h-9 rounded-2xl bg-emerald-500/15 border border-emerald-500/30 flex items-center justify-center text-emerald-500 hover:bg-emerald-500/25 transition-all cursor-pointer shadow-sm"
+              className="w-9 h-9 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-600 dark:text-emerald-400 hover:bg-emerald-500/20 active:scale-92 transition-all cursor-pointer shadow-xs"
               title="Add Count"
             >
               <Plus className="w-4 h-4" />
-            </motion.button>
+            </button>
 
-            {/* Settings Action */}
+            {/* Settings */}
             <SettingsView>
-              <motion.button
-                whileTap={{ scale: 0.88 }}
-                className="w-9 h-9 rounded-2xl bg-indigo-500/15 border border-indigo-500/30 flex items-center justify-center text-indigo-500 hover:bg-indigo-500/25 transition-all cursor-pointer shadow-sm"
-                title="Settings"
+              <button
+                className="w-9 h-9 rounded-2xl bg-indigo-500/10 border border-indigo-500/30 flex items-center justify-center text-indigo-600 dark:text-indigo-400 hover:bg-indigo-500/20 active:scale-92 transition-all cursor-pointer shadow-xs"
+                title="Open Settings"
               >
                 <SettingsIcon className="w-4 h-4" />
-              </motion.button>
+              </button>
             </SettingsView>
           </div>
         </div>
 
-        {/* 3 Quick Utility Capsules Grid (Timer, Niyyah, Wisdom) */}
-        <div className="w-full grid grid-cols-3 gap-2 shrink-0">
-          {/* Card 1: Session Timer */}
-          <motion.div
-            whileTap={{ scale: 0.95 }}
-            className="rounded-2xl p-2 flex items-center gap-2 border border-sky-500/30 bg-sky-500/10 backdrop-blur-xl shadow-sm cursor-pointer hover:bg-sky-500/20 transition-all"
-          >
-            <div className="w-7 h-7 rounded-xl bg-sky-500/20 flex items-center justify-center shrink-0">
-              <Clock className="w-3.5 h-3.5 text-sky-400" />
-            </div>
-            <div className="flex flex-col min-w-0 leading-none">
-              <span className="text-[10px] font-bold text-sky-400 truncate">Timer</span>
-              <span className="text-[8px] text-sky-300/80 truncate">Session</span>
-            </div>
-          </motion.div>
-
-          {/* Card 2: Intention / Niyyah */}
-          <motion.div
-            whileTap={{ scale: 0.95 }}
+        {/* 4 PRO QUICK UTILITY CARDS GRID */}
+        <div className="w-full grid grid-cols-4 gap-2 shrink-0">
+          {/* Intention (Niyyah) */}
+          <div
             onClick={() => setShowNiyyah(true)}
-            className="rounded-2xl p-2 flex items-center gap-2 border border-rose-500/30 bg-rose-500/10 backdrop-blur-xl shadow-sm cursor-pointer hover:bg-rose-500/20 transition-all"
+            className="p-2 rounded-2xl bg-rose-500/10 border border-rose-500/25 flex flex-col items-center justify-center text-center cursor-pointer hover:border-rose-500/50 transition-all shadow-xs"
           >
-            <div className="w-7 h-7 rounded-xl bg-rose-500/20 flex items-center justify-center shrink-0">
-              <Heart className={`w-3.5 h-3.5 ${niyyah ? 'text-rose-400 fill-rose-400' : 'text-rose-400'}`} />
-            </div>
-            <div className="flex flex-col min-w-0 leading-none">
-              <span className="text-[10px] font-bold text-rose-400 truncate">Intention</span>
-              <span className="text-[8px] text-rose-300/80 truncate">{niyyah ? 'Active' : 'Set'}</span>
-            </div>
-          </motion.div>
+            <Heart className={`w-4 h-4 mb-0.5 ${niyyah ? 'text-rose-500 fill-rose-500' : 'text-rose-500'}`} />
+            <span className="text-[10px] font-extrabold text-foreground leading-none">Intention</span>
+            <span className="text-[8px] text-muted-foreground font-semibold mt-0.5">{niyyah ? 'Active' : 'Set'}</span>
+          </div>
 
-          {/* Card 3: Spiritual Wisdom */}
-          <motion.div
-            whileTap={{ scale: 0.95 }}
+          {/* Spiritual Wisdom */}
+          <div
             onClick={() => setShowWisdom(true)}
-            className="rounded-2xl p-2 flex items-center gap-2 border border-purple-500/30 bg-purple-500/10 backdrop-blur-xl shadow-sm cursor-pointer hover:bg-purple-500/20 transition-all"
+            className="p-2 rounded-2xl bg-purple-500/10 border border-purple-500/25 flex flex-col items-center justify-center text-center cursor-pointer hover:border-purple-500/50 transition-all shadow-xs"
           >
-            <div className="w-7 h-7 rounded-xl bg-purple-500/20 flex items-center justify-center shrink-0">
-              <BookOpen className="w-3.5 h-3.5 text-purple-400" />
+            <BookOpen className="w-4 h-4 text-purple-500 mb-0.5" />
+            <span className="text-[10px] font-extrabold text-foreground leading-none">Wisdom</span>
+            <span className="text-[8px] text-muted-foreground font-semibold mt-0.5">Insight</span>
+          </div>
+
+          {/* Reminders View */}
+          <RemindersView>
+            <div className="p-2 rounded-2xl bg-amber-500/10 border border-amber-500/25 flex flex-col items-center justify-center text-center cursor-pointer hover:border-amber-500/50 transition-all shadow-xs">
+              <Bell className="w-4 h-4 text-amber-500 mb-0.5" />
+              <span className="text-[10px] font-extrabold text-foreground leading-none">Alarms</span>
+              <span className="text-[8px] text-muted-foreground font-semibold mt-0.5">Voice</span>
             </div>
-            <div className="flex flex-col min-w-0 leading-none">
-              <span className="text-[10px] font-bold text-purple-400 truncate">Wisdom</span>
-              <span className="text-[8px] text-purple-300/80 truncate">Hadith</span>
+          </RemindersView>
+
+          {/* Qibla Compass */}
+          <QiblaCompass>
+            <div className="p-2 rounded-2xl bg-teal-500/10 border border-teal-500/25 flex flex-col items-center justify-center text-center cursor-pointer hover:border-teal-500/50 transition-all shadow-xs">
+              <Compass className="w-4 h-4 text-teal-500 mb-0.5" />
+              <span className="text-[10px] font-extrabold text-foreground leading-none">Qibla</span>
+              <span className="text-[8px] text-muted-foreground font-semibold mt-0.5">
+                {nextPrayer ? nextPrayer.name : 'Kaaba'}
+              </span>
             </div>
-          </motion.div>
+          </QiblaCompass>
         </div>
 
-        {/* iOS 27 Glass Stats Widget Grid (4 Tiles) */}
-        <div className="w-full grid grid-cols-4 gap-2 text-center shrink-0">
-          {/* Tile 1: Hasanat */}
-          <div className="rounded-2xl p-2 flex flex-col items-center border border-amber-500/25 bg-amber-500/10 backdrop-blur-xl shadow-sm">
-            <Star className="w-4 h-4 text-amber-400 fill-amber-400/30 mb-0.5" />
-            <span className="text-xs font-black text-amber-400">{calculatedHasanat}</span>
-            <span className="text-[7.5px] font-extrabold text-amber-400/80 uppercase">HASANAT</span>
+        {/* 3-STAT SUMMARY STRIP */}
+        <div className="w-full bg-card/90 border border-border shadow-xs rounded-2xl p-2.5 grid grid-cols-3 gap-2 text-center shrink-0">
+          <div className="flex flex-col items-center bg-indigo-500/10 p-1.5 rounded-xl border border-indigo-500/20">
+            <BarChart2 className="w-4 h-4 text-indigo-500 mb-0.5" />
+            <span className="text-sm font-black text-foreground tabular-nums">{totalAllTime}</span>
+            <span className="text-[8px] font-extrabold text-muted-foreground uppercase tracking-wider">Total Today</span>
           </div>
 
-          {/* Tile 2: Total Today */}
-          <div className="rounded-2xl p-2 flex flex-col items-center border border-indigo-500/25 bg-indigo-500/10 backdrop-blur-xl shadow-sm">
-            <BarChart2 className="w-4 h-4 text-indigo-400 mb-0.5" />
-            <span className="text-xs font-black text-indigo-400">{totalAllTime}</span>
-            <span className="text-[7.5px] font-extrabold text-indigo-400/80 uppercase">TOTAL</span>
+          <div className="flex flex-col items-center bg-teal-500/10 p-1.5 rounded-xl border border-teal-500/20">
+            <RefreshCw className="w-4 h-4 text-teal-500 mb-0.5" />
+            <span className="text-sm font-black text-foreground tabular-nums">{roundsDone}</span>
+            <span className="text-[8px] font-extrabold text-muted-foreground uppercase tracking-wider">Rounds (33s)</span>
           </div>
 
-          {/* Tile 3: Rounds */}
-          <div className="rounded-2xl p-2 flex flex-col items-center border border-teal-500/25 bg-teal-500/10 backdrop-blur-xl shadow-sm">
-            <RefreshCw className="w-4 h-4 text-teal-400 mb-0.5" />
-            <span className="text-xs font-black text-teal-400">{roundsDone}</span>
-            <span className="text-[7.5px] font-extrabold text-teal-400/80 uppercase">ROUNDS</span>
-          </div>
-
-          {/* Tile 4: Streak */}
-          <div className="rounded-2xl p-2 flex flex-col items-center border border-orange-500/25 bg-orange-500/10 backdrop-blur-xl shadow-sm">
-            <Flame className="w-4 h-4 text-orange-400 fill-orange-400/30 mb-0.5" />
-            <span className="text-xs font-black text-orange-400">{streakDays}d</span>
-            <span className="text-[7.5px] font-extrabold text-orange-400/80 uppercase">STREAK</span>
+          <div className="flex flex-col items-center bg-orange-500/10 p-1.5 rounded-xl border border-orange-500/20">
+            <Flame className="w-4 h-4 text-orange-500 mb-0.5" />
+            <span className="text-sm font-black text-foreground tabular-nums">{streakDays}</span>
+            <span className="text-[8px] font-extrabold text-muted-foreground uppercase tracking-wider">Day Streak</span>
           </div>
         </div>
 
-        {/* Daily Inspiration Glass Quote Block */}
-        <div className="w-full rounded-2xl p-2.5 border border-white/20 dark:border-white/10 bg-white/30 dark:bg-white/5 backdrop-blur-xl text-center relative overflow-hidden shrink-0">
-          <span className="text-xl text-amber-400/40 font-serif absolute top-0.5 left-2">“</span>
-          <p className="font-arabic text-sm text-foreground leading-snug mb-0.5">
+        {/* QURANIC VERSE BANNER */}
+        <div className="w-full bg-gradient-to-r from-emerald-500/10 via-primary/10 to-amber-500/10 border border-primary/20 shadow-xs rounded-2xl p-2.5 text-center relative overflow-hidden shrink-0">
+          <p className="font-arabic text-base text-foreground font-bold leading-tight mb-0.5">
             أَلَا بِذِكْرِ اللَّهِ تَطْمَئِنُّ الْقُلُوبُ
           </p>
-          <p className="text-[9px] text-muted-foreground italic leading-tight">
-            Verily, in the remembrance of Allah do hearts find rest.
+          <p className="text-[10px] text-muted-foreground italic font-medium leading-tight">
+            Verily, in the remembrance of Allah do hearts find rest. <span className="text-amber-500 font-bold font-mono text-[9px]">(13:28)</span>
           </p>
-          <span className="text-[8px] font-bold text-amber-500 block mt-0.5">(Quran 13:28)</span>
         </div>
-      </main>
 
-      {/* 3. Floating iOS 27 Glass Dock (Bottom Nav) */}
-      <nav className="fixed bottom-3 left-1/2 -translate-x-1/2 w-[calc(100%-1.5rem)] max-w-md rounded-3xl p-1.5 flex justify-around items-center h-15 z-50 border border-white/25 dark:border-white/10 bg-white/40 dark:bg-black/50 backdrop-blur-3xl shadow-2xl shadow-black/30">
-        <DhikrSelector>
-          <DockNavItem
-            label={t('nav.dhikr') || 'DHIKR'}
-            icon={BookOpen}
-            isActive={activeTab === 'dhikr'}
-            onClick={() => setActiveTab('dhikr')}
-          />
-        </DhikrSelector>
+      </div>
 
-        <TargetSelector>
-          <DockNavItem
-            label={t('nav.target') || 'TARGET'}
-            icon={Target}
-            isActive={activeTab === 'target'}
-            onClick={() => setActiveTab('target')}
-          />
-        </TargetSelector>
-
-        <RemindersView>
-          <DockNavItem
-            label={t('nav.reminders') || 'NOTIFS'}
-            icon={Bell}
-            isActive={activeTab === 'reminders'}
-            onClick={() => setActiveTab('reminders')}
-          />
-        </RemindersView>
-
-        <QiblaCompass>
-          <DockNavItem
-            label={t('nav.qibla') || 'QIBLA'}
-            icon={Compass}
-            isActive={activeTab === 'qibla'}
-            onClick={() => setActiveTab('qibla')}
-          />
-        </QiblaCompass>
-
-        <DockNavItem
-          label={t('nav.menu') || 'MENU'}
-          icon={Menu}
-          isActive={activeTab === 'menu'}
-          onClick={() => {
-            setActiveTab('menu');
-            toggleSidebar();
+      {/* ─────────────────────────────────────────────────────────────────────────── */}
+      {/* 3. FIXED BOTTOM NAVIGATION GLASS DOCK                                       */}
+      {/* ─────────────────────────────────────────────────────────────────────────── */}
+      <div className="fixed bottom-3 left-1/2 -translate-x-1/2 w-[calc(100%-1.5rem)] max-w-md z-50 pb-safe">
+        <div
+          className="flex justify-around items-center h-15 px-3 rounded-3xl border transition-all duration-300 shadow-2xl"
+          style={{
+            background: 'hsl(var(--card) / 0.85)',
+            borderColor: 'hsl(var(--primary) / 0.3)',
+            backdropFilter: 'blur(28px)',
+            WebkitBackdropFilter: 'blur(28px)',
+            boxShadow: '0 20px 48px -8px rgba(0, 0, 0, 0.5), inset 0 1px 1px 0 rgba(255, 255, 255, 0.2)',
           }}
-        />
-      </nav>
+        >
+          <DhikrSelector>
+            <SereneNavItem
+              label={t('nav.dhikr') || 'DHIKR'}
+              icon={BookOpen}
+              isActive={activeTab === 'dhikr'}
+              onClick={() => setActiveTab('dhikr')}
+            />
+          </DhikrSelector>
+
+          <TargetSelector>
+            <SereneNavItem
+              label={t('nav.target') || 'TARGET'}
+              icon={Target}
+              isActive={activeTab === 'target'}
+              onClick={() => setActiveTab('target')}
+            />
+          </TargetSelector>
+
+          <RemindersView>
+            <SereneNavItem
+              label={t('nav.reminders') || 'REMINDERS'}
+              icon={Bell}
+              isActive={activeTab === 'reminders'}
+              onClick={() => setActiveTab('reminders')}
+            />
+          </RemindersView>
+
+          <QiblaCompass>
+            <SereneNavItem
+              label={t('nav.qibla') || 'QIBLA'}
+              icon={Compass}
+              isActive={activeTab === 'qibla'}
+              onClick={() => setActiveTab('qibla')}
+            />
+          </QiblaCompass>
+
+          <SettingsView>
+            <SereneNavItem
+              label={t('nav.menu') || 'MENU'}
+              icon={Menu}
+              isActive={activeTab === 'menu'}
+              onClick={() => setActiveTab('menu')}
+            />
+          </SettingsView>
+        </div>
+      </div>
 
       {/* Modals */}
       {showWisdom && (
