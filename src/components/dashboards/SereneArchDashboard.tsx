@@ -137,7 +137,7 @@ export function SereneArchDashboard() {
   const progressPercent = Math.min(100, Math.max(0, (currentCount / (targetCount || 33)) * 100));
 
   return (
-    <div className="h-dvh w-full bg-background text-foreground flex flex-col items-center justify-between overflow-hidden relative select-none pt-safe pt-3 pb-[calc(4.8rem+env(safe-area-inset-bottom,0px))]">
+    <div className="h-dvh w-full bg-background text-foreground flex flex-col items-center justify-between overflow-hidden relative select-none pt-safe pt-3 pb-[calc(5.8rem+env(safe-area-inset-bottom,16px))]">
       
       {/* Ambient Arch Glow Orbs */}
       <div className="absolute top-[5%] left-1/2 -translate-x-1/2 w-[350px] sm:w-[480px] h-[350px] bg-primary/10 rounded-full blur-[100px] pointer-events-none z-0" />
@@ -408,7 +408,12 @@ export function SereneArchDashboard() {
       {/* ─────────────────────────────────────────────────────────────────────────── */}
       {/* 3. FIXED BOTTOM NAVIGATION GLASS DOCK                                       */}
       {/* ─────────────────────────────────────────────────────────────────────────── */}
-      <div className="fixed bottom-3 left-1/2 -translate-x-1/2 w-[calc(100%-1.5rem)] max-w-md z-50 pb-safe">
+      <div 
+        className="fixed left-1/2 -translate-x-1/2 w-[calc(100%-1.5rem)] max-w-md z-50 pointer-events-auto"
+        style={{
+          bottom: 'calc(0.75rem + env(safe-area-inset-bottom, 0px))'
+        }}
+      >
         <div
           className="flex justify-around items-center h-15 px-3 rounded-3xl border transition-all duration-300 shadow-2xl"
           style={{

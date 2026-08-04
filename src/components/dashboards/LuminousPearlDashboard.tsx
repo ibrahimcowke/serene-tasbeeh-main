@@ -281,7 +281,7 @@ export function LuminousPearlDashboard() {
   const progressPercent = Math.min(100, Math.max(0, (currentCount / (targetCount || 33)) * 100));
 
   return (
-    <div className="h-dvh w-full bg-background text-foreground flex flex-col items-center justify-between overflow-hidden relative select-none pt-safe pt-3 pb-[calc(4.8rem+env(safe-area-inset-bottom,0px))]">
+    <div className="h-dvh w-full bg-background text-foreground flex flex-col items-center justify-between overflow-hidden relative select-none pt-safe pt-3 pb-[calc(5.8rem+env(safe-area-inset-bottom,16px))]">
       
       {/* Ambient Glow Orbs using Theme Primary Color */}
       <div className="absolute top-[10%] left-1/2 -translate-x-1/2 w-[340px] sm:w-[460px] h-[340px] bg-primary/10 rounded-full blur-[110px] pointer-events-none z-0" />
@@ -492,7 +492,12 @@ export function LuminousPearlDashboard() {
       {/* ─────────────────────────────────────────────────────────────────────────── */}
       {/* 3. FIXED BOTTOM FLOATING NAVIGATION DOCK                                   */}
       {/* ─────────────────────────────────────────────────────────────────────────── */}
-      <div className="fixed bottom-3 left-1/2 -translate-x-1/2 w-[calc(100%-1.5rem)] max-w-md z-50 pb-safe">
+      <div 
+        className="fixed left-1/2 -translate-x-1/2 w-[calc(100%-1.5rem)] max-w-md z-50 pointer-events-auto"
+        style={{
+          bottom: 'calc(0.75rem + env(safe-area-inset-bottom, 0px))'
+        }}
+      >
         <div
           className="flex justify-around items-center h-16 px-2.5 rounded-3xl border transition-all duration-300 shadow-2xl"
           style={{

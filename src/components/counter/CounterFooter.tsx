@@ -26,7 +26,7 @@ export const CounterFooter = memo(function CounterFooter({ hideStats = false }: 
   const roundsDone = Math.floor(currentCount / ROUND_SIZE);
 
   return (
-    <div className="w-full flex flex-col items-center gap-3 sm:gap-5 pb-2">
+    <div className="w-full flex flex-col items-center gap-3 sm:gap-5 pb-[calc(0.75rem+env(safe-area-inset-bottom,0px))]">
       {/* Translation of dhikr */}
       {currentDhikr?.translation && (
         <p className="text-muted-foreground/60 text-[10px] sm:text-xs italic text-center px-6 max-w-xs leading-relaxed mt-2">

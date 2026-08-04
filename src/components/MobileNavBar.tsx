@@ -49,7 +49,12 @@ export function MobileNavBar() {
   const [activeTab, setActiveTab] = useState<string>('dhikr');
 
   return (
-    <div className="lg:hidden fixed bottom-3 left-3 right-3 z-50 pb-safe pointer-events-auto">
+    <div 
+      className="lg:hidden fixed left-3 right-3 z-50 pointer-events-auto"
+      style={{
+        bottom: 'calc(0.75rem + env(safe-area-inset-bottom, 0px))'
+      }}
+    >
       <div
         className="flex justify-around items-center h-15 px-2.5 rounded-3xl border transition-all duration-300"
         style={{
